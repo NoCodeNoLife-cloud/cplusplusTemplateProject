@@ -29,4 +29,4 @@ namespace common::crypto {
         /// @return true if strings are equal, false otherwise
         [[nodiscard]] static auto secure_compare(const std::string &a, const std::string &b) noexcept -> bool;
     };
-} // common
+}
