@@ -27,6 +27,7 @@ include_directories(proto)
 include_directories(log)
 include_directories(client)
 include_directories(server)
+include_directories(ci)
 
 # Vcpkg dependencies
 find_package(boost CONFIG REQUIRED)
@@ -49,3 +50,4 @@ add_subdirectory(proto)
 add_subdirectory(log)
 add_subdirectory(client)
 add_subdirectory(server)
+add_subdirectory(ci)
