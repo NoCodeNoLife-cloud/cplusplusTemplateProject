@@ -2,6 +2,12 @@
 cmake_minimum_required(VERSION 3.30)
 set(CMAKE_CXX_STANDARD 26)
 
+if (MSVC)
+    add_compile_options("/source-charset:utf-8")
+    add_compile_options("/execution-charset:utf-8")
+    add_compile_options("/utf-8")
+endif()
+
 set(default_build_type "Debug")
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
