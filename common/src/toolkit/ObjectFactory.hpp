@@ -1,18 +1,18 @@
 #pragma once
 #include <functional>
 #include <memory>
+#include <mutex>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
-#include <stdexcept>
-#include <mutex>
 
-#include "src/service/interface/IStartupTask.hpp"
+#include "service/interface/IStartupTask.hpp"
 
 namespace common::toolkit {
     /// @brief A factory class for creating objects of type T.
     /// @tparam T The base type of objects that this factory can create.
     template<typename T>
-    class ObjectFactory : public service::IStartupTask {
+    class ObjectFactory : public service::interfaces::IStartupTask {
     public:
         /// @brief Registers a type with the factory.
         /// @tparam V The type to register.
