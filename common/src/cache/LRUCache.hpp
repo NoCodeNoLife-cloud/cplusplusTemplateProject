@@ -18,7 +18,7 @@ namespace common::cache {
         /// @brief Constructs an LRU cache with the specified capacity
         /// @param capacity The maximum number of entries the cache can hold
         /// @throw std::invalid_argument if capacity is 0 or less
-        explicit LRUCache(size_t capacity);
+        explicit LRUCache(int capacity);
 
         /// @brief Retrieves a value from the cache (const version)
         /// @param key The key to look up in the cache
@@ -94,9 +94,9 @@ namespace common::cache {
     };
 
     template<typename Key, typename Value, typename Map>
-    LRUCache<Key, Value, Map>::LRUCache(const size_t capacity) : capacity_(capacity) {
-        if (capacity_ <= 0) {
-            throw std::invalid_argument(fmt::format("Cache capacity must be greater than 0, got {}", capacity_));
+    LRUCache<Key, Value, Map>::LRUCache(const int capacity) : capacity_(static_cast<size_t>(capacity)) {
+        if (capacity <= 0) {
+            throw std::invalid_argument(fmt::format("Cache capacity must be greater than 0, got {}", capacity));
         }
     }
 
