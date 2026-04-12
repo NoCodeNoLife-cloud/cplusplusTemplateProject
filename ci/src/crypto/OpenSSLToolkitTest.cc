@@ -21,15 +21,15 @@ using namespace common::crypto;
  */
 TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput) {
     const std::string password = "test_password";
-    std::array<unsigned char, 16> salt{};
+    std::array < unsigned char, 16 > salt{};
     salt.fill(0x42); // Fixed salt for reproducibility
-    
-    std::array<unsigned char, 32> key1{};
-    std::array<unsigned char, 32> key2{};
-    
+
+    std::array < unsigned char, 32 > key1{};
+    std::array < unsigned char, 32 > key2{};
+
     OpenSSLToolkit::deriveKey(password, key1, salt);
     OpenSSLToolkit::deriveKey(password, key2, salt);
-    
+
     EXPECT_EQ(key1, key2);
 }
 
@@ -38,15 +38,15 @@ TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput) {
  * @details Verifies that different passwords result in different derived keys
  */
 TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys) {
-    std::array<unsigned char, 16> salt{};
+    std::array < unsigned char, 16 > salt{};
     salt.fill(0x42);
-    
-    std::array<unsigned char, 32> key1{};
-    std::array<unsigned char, 32> key2{};
-    
+
+    std::array < unsigned char, 32 > key1{};
+    std::array < unsigned char, 32 > key2{};
+
     OpenSSLToolkit::deriveKey("password1", key1, salt);
     OpenSSLToolkit::deriveKey("password2", key2, salt);
-    
+
     EXPECT_NE(key1, key2);
 }
 
@@ -56,19 +56,19 @@ TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys) {
  */
 TEST(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys) {
     const std::string password = "same_password";
-    
-    std::array<unsigned char, 16> salt1{};
+
+    std::array < unsigned char, 16 > salt1{};
     salt1.fill(0x42);
-    
-    std::array<unsigned char, 16> salt2{};
+
+    std::array < unsigned char, 16 > salt2{};
     salt2.fill(0x99);
-    
-    std::array<unsigned char, 32> key1{};
-    std::array<unsigned char, 32> key2{};
-    
+
+    std::array < unsigned char, 32 > key1{};
+    std::array < unsigned char, 32 > key2{};
+
     OpenSSLToolkit::deriveKey(password, key1, salt1);
     OpenSSLToolkit::deriveKey(password, key2, salt2);
-    
+
     EXPECT_NE(key1, key2);
 }
 
@@ -80,7 +80,7 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException) {
     // Create a minimal valid ciphertext structure (salt + IV + some data)
     std::vector<unsigned char> ciphertext(48, 0x42); // 16 salt + 16 IV + 16 data
     const std::string wrongPassword = "wrong_password";
-    
+
     // This should throw because padding will be invalid
     EXPECT_THROW(OpenSSLToolkit::decryptAES256CBC(ciphertext, wrongPassword), std::runtime_error);
 }
@@ -93,7 +93,7 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException) {
     // Create ciphertext that's too short (less than salt + IV)
     std::vector<unsigned char> truncated(10, 0x42);
     const std::string password = "password";
-    
+
     EXPECT_THROW(OpenSSLToolkit::decryptAES256CBC(truncated, password), std::runtime_error);
 }
 
@@ -104,7 +104,7 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException) {
 TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException) {
     const std::vector<unsigned char> emptyCiphertext;
     const std::string password = "password";
-    
+
     EXPECT_THROW(OpenSSLToolkit::decryptAES256CBC(emptyCiphertext, password), std::runtime_error);
 }
 
@@ -116,7 +116,7 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException) {
 TEST(OpenSSLToolkitTest, EncryptAES256CBC_APIValidation) {
     const std::string plaintext = "Test";
     const std::string password = "password";
-    
+
     // Just verify the function can be called without crashing
     // Actual success depends on OpenSSL implementation
     try {

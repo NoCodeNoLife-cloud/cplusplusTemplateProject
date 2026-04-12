@@ -19,7 +19,7 @@ using namespace common::toolkit;
 TEST(ArraysToolkitTest, AsList_BasicConversion) {
     int arr[] = {1, 2, 3, 4, 5};
     auto result = ArraysToolkit::asList(arr, 5);
-    
+
     EXPECT_EQ(result.size(), 5);
     EXPECT_EQ(result[0], 1);
     EXPECT_EQ(result[4], 5);
@@ -108,7 +108,7 @@ TEST(ArraysToolkitTest, BinarySearch_WithRange_InvalidRange_ThrowsException) {
 TEST(ArraysToolkitTest, CopyOf_SameLength) {
     int arr[] = {1, 2, 3, 4, 5};
     auto result = ArraysToolkit::copyOf(arr, 5, 5);
-    
+
     EXPECT_EQ(result.size(), 5);
     for (int i = 0; i < 5; ++i) {
         EXPECT_EQ(result[i], arr[i]);
@@ -122,7 +122,7 @@ TEST(ArraysToolkitTest, CopyOf_SameLength) {
 TEST(ArraysToolkitTest, CopyOf_LongerLength) {
     int arr[] = {1, 2, 3};
     auto result = ArraysToolkit::copyOf(arr, 3, 5);
-    
+
     EXPECT_EQ(result.size(), 5);
     EXPECT_EQ(result[0], 1);
     EXPECT_EQ(result[2], 3);
@@ -137,7 +137,7 @@ TEST(ArraysToolkitTest, CopyOf_LongerLength) {
 TEST(ArraysToolkitTest, CopyOf_ShorterLength) {
     int arr[] = {1, 2, 3, 4, 5};
     auto result = ArraysToolkit::copyOf(arr, 5, 3);
-    
+
     EXPECT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], 1);
     EXPECT_EQ(result[2], 3);
@@ -150,7 +150,7 @@ TEST(ArraysToolkitTest, CopyOf_ShorterLength) {
 TEST(ArraysToolkitTest, CopyOfRange_BasicRange) {
     int arr[] = {1, 2, 3, 4, 5};
     auto result = ArraysToolkit::copyOfRange(arr, 1, 4);
-    
+
     EXPECT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], 2);
     EXPECT_EQ(result[2], 4);
@@ -163,7 +163,7 @@ TEST(ArraysToolkitTest, CopyOfRange_BasicRange) {
 TEST(ArraysToolkitTest, CopyOfRange_FullRange) {
     int arr[] = {1, 2, 3};
     auto result = ArraysToolkit::copyOfRange(arr, 0, 3);
-    
+
     EXPECT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], 1);
     EXPECT_EQ(result[2], 3);
@@ -223,7 +223,7 @@ TEST(ArraysToolkitTest, Equals_EmptyArrays) {
 TEST(ArraysToolkitTest, Fill_BasicFill) {
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::fill(arr, 5, 0);
-    
+
     for (int i = 0; i < 5; ++i) {
         EXPECT_EQ(arr[i], 0);
     }
@@ -245,7 +245,7 @@ TEST(ArraysToolkitTest, Fill_EmptyArray) {
 TEST(ArraysToolkitTest, Sort_UnsortedArray) {
     int arr[] = {5, 2, 8, 1, 9};
     ArraysToolkit::sort(arr, 5);
-    
+
     EXPECT_EQ(arr[0], 1);
     EXPECT_EQ(arr[1], 2);
     EXPECT_EQ(arr[2], 5);
@@ -260,7 +260,7 @@ TEST(ArraysToolkitTest, Sort_UnsortedArray) {
 TEST(ArraysToolkitTest, Sort_AlreadySorted) {
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::sort(arr, 5);
-    
+
     EXPECT_EQ(arr[0], 1);
     EXPECT_EQ(arr[4], 5);
 }
@@ -272,12 +272,12 @@ TEST(ArraysToolkitTest, Sort_AlreadySorted) {
 TEST(ArraysToolkitTest, Sort_WithRange) {
     int arr[] = {5, 3, 1, 4, 2};
     ArraysToolkit::sort(arr, 1, 4);
-    
-    EXPECT_EQ(arr[0], 5);      // Unchanged
-    EXPECT_EQ(arr[1], 1);      // Sorted range
+
+    EXPECT_EQ(arr[0], 5); // Unchanged
+    EXPECT_EQ(arr[1], 1); // Sorted range
     EXPECT_EQ(arr[2], 3);
     EXPECT_EQ(arr[3], 4);
-    EXPECT_EQ(arr[4], 2);      // Unchanged
+    EXPECT_EQ(arr[4], 2); // Unchanged
 }
 
 /**

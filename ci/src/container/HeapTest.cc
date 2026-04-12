@@ -30,7 +30,7 @@ TEST(HeapTest, DefaultConstructor_EmptyHeap) {
 TEST(HeapTest, IteratorConstructor_BuildsValidHeap) {
     std::vector<int> data = {5, 3, 8, 1, 9, 2};
     Heap<int> heap(data.begin(), data.end());
-    
+
     EXPECT_EQ(heap.size(), 6);
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), 9); // Max-heap: largest element at top
@@ -45,13 +45,13 @@ TEST(HeapTest, CopyConstructor_IndependentCopy) {
     heap1.push(10);
     heap1.push(20);
     heap1.push(30);
-    
+
     Heap<int> heap2(heap1);
-    
+
     EXPECT_EQ(heap2.size(), heap1.size());
     EXPECT_EQ(heap2.top(), heap1.top());
     EXPECT_TRUE(heap2.is_valid());
-    
+
     // Modify original should not affect copy
     heap1.pop();
     EXPECT_EQ(heap2.size(), 3);
@@ -67,9 +67,9 @@ TEST(HeapTest, MoveConstructor_TransfersOwnership) {
     heap1.push(10);
     heap1.push(20);
     heap1.push(30);
-    
+
     Heap<int> heap2(std::move(heap1));
-    
+
     EXPECT_EQ(heap2.size(), 3);
     EXPECT_EQ(heap2.top(), 30);
     EXPECT_TRUE(heap2.is_valid());
@@ -84,12 +84,12 @@ TEST(HeapTest, CopyAssignment_CorrectBehavior) {
     Heap<int> heap1;
     heap1.push(10);
     heap1.push(20);
-    
+
     Heap<int> heap2;
     heap2.push(30);
-    
+
     heap2 = heap1;
-    
+
     EXPECT_EQ(heap2.size(), 2);
     EXPECT_EQ(heap2.top(), 20);
     EXPECT_TRUE(heap2.is_valid());
@@ -104,10 +104,10 @@ TEST(HeapTest, MoveAssignment_TransfersOwnership) {
     heap1.push(10);
     heap1.push(20);
     heap1.push(30);
-    
+
     Heap<int> heap2;
     heap2 = std::move(heap1);
-    
+
     EXPECT_EQ(heap2.size(), 3);
     EXPECT_EQ(heap2.top(), 30);
     EXPECT_TRUE(heap1.empty());
@@ -119,13 +119,13 @@ TEST(HeapTest, MoveAssignment_TransfersOwnership) {
  */
 TEST(HeapTest, Push_MaintainsMaxHeapProperty) {
     Heap<int> heap;
-    
+
     heap.push(5);
     heap.push(3);
     heap.push(8);
     heap.push(1);
     heap.push(9);
-    
+
     EXPECT_EQ(heap.size(), 5);
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), 9);
@@ -137,11 +137,11 @@ TEST(HeapTest, Push_MaintainsMaxHeapProperty) {
  */
 TEST(HeapTest, Push_RvalueReference) {
     Heap<std::string> heap;
-    
+
     std::string str = "hello";
     heap.push(std::move(str));
     heap.push("world");
-    
+
     EXPECT_EQ(heap.size(), 2);
     EXPECT_TRUE(heap.is_valid());
 }
@@ -152,11 +152,11 @@ TEST(HeapTest, Push_RvalueReference) {
  */
 TEST(HeapTest, Emplace_ConstructsInPlace) {
     Heap<std::string> heap;
-    
+
     heap.emplace("hello");
     heap.emplace("world");
     heap.emplace("abc");
-    
+
     EXPECT_EQ(heap.size(), 3);
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), "world"); // Lexicographically largest
@@ -173,14 +173,14 @@ TEST(HeapTest, Pop_RemovesTopElement) {
     heap.push(30);
     heap.push(40);
     heap.push(50);
-    
+
     EXPECT_EQ(heap.top(), 50);
-    
+
     heap.pop();
     EXPECT_EQ(heap.size(), 4);
     EXPECT_EQ(heap.top(), 40);
     EXPECT_TRUE(heap.is_valid());
-    
+
     heap.pop();
     EXPECT_EQ(heap.top(), 30);
     EXPECT_TRUE(heap.is_valid());
@@ -204,9 +204,9 @@ TEST(HeapTest, Top_ReturnsMaximumElement) {
     heap.push(15);
     heap.push(25);
     heap.push(10);
-    
+
     EXPECT_EQ(heap.top(), 25);
-    
+
     // Test non-const access
     heap.top() = 100;
     EXPECT_EQ(heap.top(), 100);
@@ -230,8 +230,8 @@ TEST(HeapTest, Top_ConstAccessor) {
     Heap<int> heap;
     heap.push(10);
     heap.push(20);
-    
-    const Heap<int>& constHeap = heap;
+
+    const Heap<int> &constHeap = heap;
     EXPECT_EQ(constHeap.top(), 20);
 }
 
@@ -242,14 +242,14 @@ TEST(HeapTest, Top_ConstAccessor) {
 TEST(HeapTest, Size_CorrectCount) {
     Heap<int> heap;
     EXPECT_EQ(heap.size(), 0);
-    
+
     heap.push(10);
     EXPECT_EQ(heap.size(), 1);
-    
+
     heap.push(20);
     heap.push(30);
     EXPECT_EQ(heap.size(), 3);
-    
+
     heap.pop();
     EXPECT_EQ(heap.size(), 2);
 }
@@ -261,10 +261,10 @@ TEST(HeapTest, Size_CorrectCount) {
 TEST(HeapTest, Empty_CorrectState) {
     Heap<int> heap;
     EXPECT_TRUE(heap.empty());
-    
+
     heap.push(10);
     EXPECT_FALSE(heap.empty());
-    
+
     heap.pop();
     EXPECT_TRUE(heap.empty());
 }
@@ -278,9 +278,9 @@ TEST(HeapTest, Clear_RemovesAllElements) {
     heap.push(10);
     heap.push(20);
     heap.push(30);
-    
+
     EXPECT_EQ(heap.size(), 3);
-    
+
     heap.clear();
     EXPECT_TRUE(heap.empty());
     EXPECT_EQ(heap.size(), 0);
@@ -296,7 +296,7 @@ TEST(HeapTest, IsValid_ValidHeap) {
     heap.push(3);
     heap.push(8);
     heap.push(1);
-    
+
     EXPECT_TRUE(heap.is_valid());
 }
 
@@ -306,7 +306,7 @@ TEST(HeapTest, IsValid_ValidHeap) {
  */
 TEST(HeapTest, IsValid_AfterOperations) {
     Heap<int> heap;
-    
+
     // Perform various operations
     heap.push(10);
     heap.push(20);
@@ -314,7 +314,7 @@ TEST(HeapTest, IsValid_AfterOperations) {
     heap.push(30);
     heap.pop();
     heap.push(15);
-    
+
     EXPECT_TRUE(heap.is_valid());
 }
 
@@ -323,18 +323,18 @@ TEST(HeapTest, IsValid_AfterOperations) {
  * @details Verifies heap works with different comparison functions
  */
 TEST(HeapTest, MinHeap_CustomComparator) {
-    Heap<int, std::greater<int>> heap;
-    
+    Heap<int, std::greater<int> > heap;
+
     heap.push(5);
     heap.push(3);
     heap.push(8);
     heap.push(1);
     heap.push(9);
-    
+
     EXPECT_EQ(heap.size(), 5);
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), 1); // Min-heap: smallest element at top
-    
+
     heap.pop();
     EXPECT_EQ(heap.top(), 3);
 }
@@ -345,15 +345,15 @@ TEST(HeapTest, MinHeap_CustomComparator) {
  */
 TEST(HeapTest, StringElements_LexicographicOrder) {
     Heap<std::string> heap;
-    
+
     heap.emplace("banana");
     heap.emplace("apple");
     heap.emplace("cherry");
     heap.emplace("date");
-    
+
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), "date"); // Lexicographically largest
-    
+
     heap.pop();
     EXPECT_EQ(heap.top(), "cherry");
 }
@@ -364,17 +364,17 @@ TEST(HeapTest, StringElements_LexicographicOrder) {
  */
 TEST(HeapTest, DuplicateValues_CorrectHandling) {
     Heap<int> heap;
-    
+
     heap.push(5);
     heap.push(5);
     heap.push(5);
     heap.push(3);
     heap.push(5);
-    
+
     EXPECT_EQ(heap.size(), 5);
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), 5);
-    
+
     heap.pop();
     EXPECT_EQ(heap.top(), 5);
 }
@@ -386,11 +386,11 @@ TEST(HeapTest, DuplicateValues_CorrectHandling) {
 TEST(HeapTest, SingleElement_CorrectBehavior) {
     Heap<int> heap;
     heap.push(42);
-    
+
     EXPECT_EQ(heap.size(), 1);
     EXPECT_EQ(heap.top(), 42);
     EXPECT_TRUE(heap.is_valid());
-    
+
     heap.pop();
     EXPECT_TRUE(heap.empty());
 }
@@ -401,21 +401,21 @@ TEST(HeapTest, SingleElement_CorrectBehavior) {
  */
 TEST(HeapTest, LargeNumberOfElements_Correctness) {
     Heap<int> heap;
-    
+
     // Add 1000 elements
     for (int i = 0; i < 1000; ++i) {
         heap.push(i);
     }
-    
+
     EXPECT_EQ(heap.size(), 1000);
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), 999);
-    
+
     // Remove half
     for (int i = 0; i < 500; ++i) {
         heap.pop();
     }
-    
+
     EXPECT_EQ(heap.size(), 500);
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), 499);
@@ -427,20 +427,20 @@ TEST(HeapTest, LargeNumberOfElements_Correctness) {
  */
 TEST(HeapTest, MultiplePushPopCycles_MaintainsValidity) {
     Heap<int> heap;
-    
+
     for (int cycle = 0; cycle < 10; ++cycle) {
         // Push phase
         for (int i = 0; i < 20; ++i) {
             heap.push(i);
         }
-        
+
         EXPECT_TRUE(heap.is_valid());
-        
+
         // Pop phase
         for (int i = 0; i < 15; ++i) {
             heap.pop();
         }
-        
+
         EXPECT_TRUE(heap.is_valid());
     }
 }
@@ -452,7 +452,7 @@ TEST(HeapTest, MultiplePushPopCycles_MaintainsValidity) {
 TEST(HeapTest, IteratorConstructor_SortedInput) {
     std::vector<int> sorted = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     Heap<int> heap(sorted.begin(), sorted.end());
-    
+
     EXPECT_EQ(heap.size(), 10);
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), 10);
@@ -465,7 +465,7 @@ TEST(HeapTest, IteratorConstructor_SortedInput) {
 TEST(HeapTest, IteratorConstructor_ReverseSortedInput) {
     std::vector<int> reverseSorted = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     Heap<int> heap(reverseSorted.begin(), reverseSorted.end());
-    
+
     EXPECT_EQ(heap.size(), 10);
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), 10);
@@ -477,16 +477,16 @@ TEST(HeapTest, IteratorConstructor_ReverseSortedInput) {
  */
 TEST(HeapTest, NegativeNumbers_CorrectHandling) {
     Heap<int> heap;
-    
+
     heap.push(-10);
     heap.push(-5);
     heap.push(-20);
     heap.push(-1);
     heap.push(-15);
-    
+
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), -1); // Largest (least negative)
-    
+
     heap.pop();
     EXPECT_EQ(heap.top(), -5);
 }
@@ -497,16 +497,16 @@ TEST(HeapTest, NegativeNumbers_CorrectHandling) {
  */
 TEST(HeapTest, MixedSignNumbers_CorrectHandling) {
     Heap<int> heap;
-    
+
     heap.push(-100);
     heap.push(50);
     heap.push(-50);
     heap.push(100);
     heap.push(0);
-    
+
     EXPECT_TRUE(heap.is_valid());
     EXPECT_EQ(heap.top(), 100);
-    
+
     heap.pop();
     EXPECT_EQ(heap.top(), 50);
 }

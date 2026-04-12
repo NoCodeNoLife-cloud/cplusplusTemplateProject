@@ -19,7 +19,7 @@ using namespace common::time;
  */
 TEST(ClockTest, GetCurrentDateTimeString_ValidFormat) {
     const auto dateTimeStr = Clock::getCurrentDateTimeString();
-    
+
     // Expected format: YYYY-MM-DD HH:MM:SS
     const std::regex pattern(R"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})");
     EXPECT_TRUE(std::regex_match(dateTimeStr, pattern));
@@ -40,7 +40,7 @@ TEST(ClockTest, GetCurrentDateTimeString_NonEmpty) {
  */
 TEST(ClockTest, GetCompressedCurrentDateTimeString_ValidFormat) {
     const auto dateTimeStr = Clock::getCompressedCurrentDateTimeString();
-    
+
     // Expected format: YYYYMMDD_HHMMSS
     const std::regex pattern(R"(\d{8}_\d{6})");
     EXPECT_TRUE(std::regex_match(dateTimeStr, pattern));
@@ -102,7 +102,7 @@ TEST(ClockTest, GetCurrentTimestamp_ReasonableValue) {
 TEST(ClockTest, TimestampRelationship_MsAndSeconds) {
     const auto timestampMs = Clock::getCurrentTimestampMs();
     const auto timestampSec = Clock::getCurrentTimestamp();
-    
+
     // Millisecond timestamp divided by 1000 should be close to second timestamp
     const auto msToSec = timestampMs / 1000;
     EXPECT_NEAR(msToSec, timestampSec, 1);
@@ -114,7 +114,7 @@ TEST(ClockTest, TimestampRelationship_MsAndSeconds) {
  */
 TEST(ClockTest, FormatCurrentTime_StandardFormat) {
     const auto formatted = Clock::formatCurrentTime("%Y-%m-%d %H:%M:%S");
-    
+
     const std::regex pattern(R"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})");
     EXPECT_TRUE(std::regex_match(formatted, pattern));
 }
@@ -125,7 +125,7 @@ TEST(ClockTest, FormatCurrentTime_StandardFormat) {
  */
 TEST(ClockTest, FormatCurrentTime_DateOnly) {
     const auto formatted = Clock::formatCurrentTime("%Y/%m/%d");
-    
+
     const std::regex pattern(R"(\d{4}/\d{2}/\d{2})");
     EXPECT_TRUE(std::regex_match(formatted, pattern));
 }
@@ -136,7 +136,7 @@ TEST(ClockTest, FormatCurrentTime_DateOnly) {
  */
 TEST(ClockTest, FormatCurrentTime_TimeOnly) {
     const auto formatted = Clock::formatCurrentTime("%H:%M:%S");
-    
+
     const std::regex pattern(R"(\d{2}:\d{2}:\d{2})");
     EXPECT_TRUE(std::regex_match(formatted, pattern));
 }
@@ -158,7 +158,7 @@ TEST(ClockTest, TimestampMonotonicity_Milliseconds) {
     const auto timestamp1 = Clock::getCurrentTimestampMs();
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     const auto timestamp2 = Clock::getCurrentTimestampMs();
-    
+
     EXPECT_GE(timestamp2, timestamp1);
 }
 
@@ -170,7 +170,7 @@ TEST(ClockTest, Consistency_BetweenMethods) {
     const auto dateTimeStr = Clock::getCurrentDateTimeString();
     const auto compressedStr = Clock::getCompressedCurrentDateTimeString();
     const auto timestamp = Clock::getCurrentTimestamp();
-    
+
     // All should return valid values
     EXPECT_FALSE(dateTimeStr.empty());
     EXPECT_FALSE(compressedStr.empty());

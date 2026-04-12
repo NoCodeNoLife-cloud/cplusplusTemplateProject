@@ -2,6 +2,7 @@
 #include <list>
 #include <optional>
 #include <stdexcept>
+#include <type_traits>
 #include <unordered_map>
 #include <fmt/format.h>
 
@@ -18,7 +19,7 @@ namespace common::cache {
         /// @brief Constructs an LFU cache with the specified capacity
         /// @param capacity The maximum number of entries the cache can hold
         /// @throw std::invalid_argument if capacity is 0 or less
-        explicit LFUCache(size_t capacity);
+        explicit LFUCache(int capacity);
 
         /// @brief Retrieves a value from the cache (const version)
         /// @param key The key to look up in the cache
@@ -95,7 +96,7 @@ namespace common::cache {
 
         /// @brief Updates the frequency of a key after access
         /// @param it Iterator to the element in the cache
-        auto update_frequency(std::list<std::pair<Key, std::pair<Value, size_t> > >::iterator it) const -> void;
+        auto update_frequency(std::list<std::pair<Key, std::pair<Value, size_t> > >::iterator it) -> void;
 
         /// @brief Evicts the least frequently used item when cache is at capacity
         /// @return true if eviction was successful, false otherwise
@@ -112,9 +113,9 @@ namespace common::cache {
     };
 
     template<typename Key, typename Value, typename Map>
-    LFUCache<Key, Value, Map>::LFUCache(const size_t capacity) : capacity_(capacity), min_freq_(0) {
-        if (capacity_ <= 0) {
-            throw std::invalid_argument(fmt::format("LFUCache::LFUCache: Cache capacity must be greater than 0, got {}", capacity_));
+    LFUCache<Key, Value, Map>::LFUCache(const int capacity) : capacity_(static_cast<size_t>(capacity)), min_freq_(0) {
+        if (capacity <= 0) {
+            throw std::invalid_argument(fmt::format("LFUCache::LFUCache: Cache capacity must be greater than 0, got {}", capacity));
         }
     }
 
@@ -130,8 +131,10 @@ namespace common::cache {
         auto cache_entry_it = it->second;
         Value value = cache_entry_it->second.first; // Store value to return
 
-        // Update frequency of accessed item
-        cache.update_frequency(cache_entry_it);
+        // Update frequency of accessed item (only for non-const version)
+        if constexpr (!std::is_const_v<CacheType>) {
+            cache.update_frequency(cache_entry_it);
+        }
 
         return value;
     }
@@ -296,7 +299,7 @@ namespace common::cache {
     }
 
     template<typename Key, typename Value, typename Map>
-    auto LFUCache<Key, Value, Map>::update_frequency(typename std::list<std::pair<Key, std::pair<Value, size_t> > >::iterator it) const -> void {
+    auto LFUCache<Key, Value, Map>::update_frequency(typename std::list<std::pair<Key, std::pair<Value, size_t> > >::iterator it) -> void {
         Key key = it->first;
         Value value = it->second.first;
         size_t old_freq = it->second.second;

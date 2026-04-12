@@ -17,7 +17,7 @@ using namespace common::toolkit;
  */
 TEST(StringToolkitTest, SplitByChar_Basic) {
     const auto result = StringToolkit::split("apple,banana,cherry", ',');
-    
+
     ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], "apple");
     EXPECT_EQ(result[1], "banana");
@@ -26,14 +26,14 @@ TEST(StringToolkitTest, SplitByChar_Basic) {
 
 TEST(StringToolkitTest, SplitByChar_NoDelimiter) {
     const auto result = StringToolkit::split("hello", ',');
-    
+
     ASSERT_EQ(result.size(), 1);
     EXPECT_EQ(result[0], "hello");
 }
 
 TEST(StringToolkitTest, SplitByChar_EmptyString) {
     const auto result = StringToolkit::split("", ',');
-    
+
     ASSERT_EQ(result.size(), 1);
     EXPECT_EQ(result[0], "");
 }
@@ -44,7 +44,7 @@ TEST(StringToolkitTest, SplitByChar_EmptyString) {
  */
 TEST(StringToolkitTest, SplitWithEmpty_ConsecutiveDelimiters) {
     const auto result = StringToolkit::splitWithEmpty("a,,b,c", ',');
-    
+
     ASSERT_EQ(result.size(), 4);
     EXPECT_EQ(result[0], "a");
     EXPECT_EQ(result[1], "");
@@ -54,7 +54,7 @@ TEST(StringToolkitTest, SplitWithEmpty_ConsecutiveDelimiters) {
 
 TEST(StringToolkitTest, SplitWithEmpty_TrailingDelimiter) {
     const auto result = StringToolkit::splitWithEmpty("a,b,", ',');
-    
+
     ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], "a");
     EXPECT_EQ(result[1], "b");
@@ -64,7 +64,7 @@ TEST(StringToolkitTest, SplitWithEmpty_TrailingDelimiter) {
 // Test split with string delimiter
 TEST(StringToolkitTest, SplitByString_Basic) {
     const auto result = StringToolkit::split("one::two::three", "::");
-    
+
     ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], "one");
     EXPECT_EQ(result[1], "two");
@@ -73,14 +73,14 @@ TEST(StringToolkitTest, SplitByString_Basic) {
 
 TEST(StringToolkitTest, SplitByString_EmptyDelimiter) {
     const auto result = StringToolkit::split("hello", "");
-    
+
     ASSERT_EQ(result.size(), 1);
     EXPECT_EQ(result[0], "hello");
 }
 
 TEST(StringToolkitTest, SplitByString_NoMatch) {
     const auto result = StringToolkit::split("hello world", "::");
-    
+
     ASSERT_EQ(result.size(), 1);
     EXPECT_EQ(result[0], "hello world");
 }
@@ -92,21 +92,21 @@ TEST(StringToolkitTest, SplitByString_NoMatch) {
 TEST(StringToolkitTest, ConcatenateByChar_Basic) {
     const std::vector<std::string> parts = {"apple", "banana", "cherry"};
     const auto result = StringToolkit::concatenate(parts, ',');
-    
+
     EXPECT_EQ(result, "apple,banana,cherry");
 }
 
 TEST(StringToolkitTest, ConcatenateByChar_EmptyVector) {
     const std::vector<std::string> parts;
     const auto result = StringToolkit::concatenate(parts, ',');
-    
+
     EXPECT_EQ(result, "");
 }
 
 TEST(StringToolkitTest, ConcatenateByChar_SingleElement) {
     const std::vector<std::string> parts = {"hello"};
     const auto result = StringToolkit::concatenate(parts, ',');
-    
+
     EXPECT_EQ(result, "hello");
 }
 
@@ -114,14 +114,14 @@ TEST(StringToolkitTest, ConcatenateByChar_SingleElement) {
 TEST(StringToolkitTest, ConcatenateByString_Basic) {
     const std::vector<std::string> parts = {"one", "two", "three"};
     const auto result = StringToolkit::concatenate(parts, "::");
-    
+
     EXPECT_EQ(result, "one::two::three");
 }
 
 TEST(StringToolkitTest, ConcatenateByString_EmptyVector) {
     const std::vector<std::string> parts;
     const auto result = StringToolkit::concatenate(parts, "::");
-    
+
     EXPECT_EQ(result, "");
 }
 
@@ -230,13 +230,13 @@ TEST(StringToolkitTest, ReplaceAll_OverlappingReplacement) {
 TEST(StringToolkitTest, Join_Basic) {
     const std::vector<std::string> parts = {"2024", "01", "15"};
     const auto result = StringToolkit::join(parts, "-");
-    
+
     EXPECT_EQ(result, "2024-01-15");
 }
 
 TEST(StringToolkitTest, Join_EmptyVector) {
     const std::vector<std::string> parts;
     const auto result = StringToolkit::join(parts, ",");
-    
+
     EXPECT_EQ(result, "");
 }

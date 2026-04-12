@@ -53,7 +53,7 @@ TEST(RegexToolkitTest, IsSearch_InvalidPattern) {
  */
 TEST(RegexToolkitTest, GetMatches_MultipleNumbers) {
     const auto matches = RegexToolkit::get_matches("a1b2c3d4", R"(\d)");
-    
+
     ASSERT_EQ(matches.size(), 4);
     EXPECT_EQ(matches[0], "1");
     EXPECT_EQ(matches[1], "2");
@@ -63,7 +63,7 @@ TEST(RegexToolkitTest, GetMatches_MultipleNumbers) {
 
 TEST(RegexToolkitTest, GetMatches_Words) {
     const auto matches = RegexToolkit::get_matches("hello world foo bar", R"(\w+)");
-    
+
     ASSERT_EQ(matches.size(), 4);
     EXPECT_EQ(matches[0], "hello");
     EXPECT_EQ(matches[1], "world");
@@ -86,7 +86,7 @@ TEST(RegexToolkitTest, GetMatches_InvalidPattern) {
  */
 TEST(RegexToolkitTest, GetMatchesWithGroups_DatePattern) {
     const auto matches = RegexToolkit::get_matches_with_groups("2024-01-15 and 2023-12-25", R"((\d{4})-(\d{2})-(\d{2}))");
-    
+
     ASSERT_EQ(matches.size(), 2);
     // First match: full match + 3 groups
     ASSERT_EQ(matches[0].size(), 4);
@@ -94,7 +94,7 @@ TEST(RegexToolkitTest, GetMatchesWithGroups_DatePattern) {
     EXPECT_EQ(matches[0][1], "2024");
     EXPECT_EQ(matches[0][2], "01");
     EXPECT_EQ(matches[0][3], "15");
-    
+
     // Second match
     ASSERT_EQ(matches[1].size(), 4);
     EXPECT_EQ(matches[1][0], "2023-12-25");
@@ -105,7 +105,7 @@ TEST(RegexToolkitTest, GetMatchesWithGroups_DatePattern) {
 
 TEST(RegexToolkitTest, GetMatchesWithGroups_EmailPattern) {
     const auto matches = RegexToolkit::get_matches_with_groups("user@example.com", R"((\w+)@(\w+)\.(\w+))");
-    
+
     ASSERT_EQ(matches.size(), 1);
     ASSERT_EQ(matches[0].size(), 4);
     EXPECT_EQ(matches[0][0], "user@example.com");
@@ -147,7 +147,7 @@ TEST(RegexToolkitTest, ReplaceAll_InvalidPattern) {
  */
 TEST(RegexToolkitTest, Split_ByComma) {
     const auto parts = RegexToolkit::split("apple,banana,cherry", R"(,)");
-    
+
     ASSERT_EQ(parts.size(), 3);
     EXPECT_EQ(parts[0], "apple");
     EXPECT_EQ(parts[1], "banana");
@@ -156,7 +156,7 @@ TEST(RegexToolkitTest, Split_ByComma) {
 
 TEST(RegexToolkitTest, Split_ByWhitespace) {
     const auto parts = RegexToolkit::split("hello   world\tfoo\nbar", R"(\s+)");
-    
+
     ASSERT_EQ(parts.size(), 4);
     EXPECT_EQ(parts[0], "hello");
     EXPECT_EQ(parts[1], "world");
@@ -166,7 +166,7 @@ TEST(RegexToolkitTest, Split_ByWhitespace) {
 
 TEST(RegexToolkitTest, Split_ByMultipleDelimiters) {
     const auto parts = RegexToolkit::split("a,b;c.d", R"([,;.])");
-    
+
     ASSERT_EQ(parts.size(), 4);
     EXPECT_EQ(parts[0], "a");
     EXPECT_EQ(parts[1], "b");

@@ -23,7 +23,7 @@ TEST(SubstitutionCipherTest, ExplicitMapping_ValidBijective) {
         {'A', 'Q'}, {'B', 'W'}, {'C', 'E'},
         {'a', 'q'}, {'b', 'w'}, {'c', 'e'}
     };
-    
+
     EXPECT_NO_THROW(SubstitutionCipher cipher(mapping));
 }
 
@@ -36,7 +36,7 @@ TEST(SubstitutionCipherTest, ExplicitMapping_RejectsNonAlpha) {
         {'A', '1'}, {'B', 'W'}
     };
     EXPECT_THROW(SubstitutionCipher cipher(invalid_mapping1), std::invalid_argument);
-    
+
     std::unordered_map<char, char> invalid_mapping2 = {
         {'1', 'A'}, {'B', 'W'}
     };
@@ -49,7 +49,7 @@ TEST(SubstitutionCipherTest, ExplicitMapping_RejectsNonAlpha) {
  */
 TEST(SubstitutionCipherTest, ExplicitMapping_RejectsNonInjective) {
     std::unordered_map<char, char> invalid_mapping = {
-        {'A', 'Q'}, {'B', 'Q'}  // Both A and B map to Q
+        {'A', 'Q'}, {'B', 'Q'} // Both A and B map to Q
     };
     EXPECT_THROW(SubstitutionCipher cipher(invalid_mapping), std::invalid_argument);
 }
@@ -91,10 +91,10 @@ TEST(SubstitutionCipherTest, RandomSeed_Construction) {
 TEST(SubstitutionCipherTest, RandomSeed_Deterministic) {
     const SubstitutionCipher cipher1(42u);
     const SubstitutionCipher cipher2(42u);
-    
+
     const auto mapping1 = cipher1.GetMapping();
     const auto mapping2 = cipher2.GetMapping();
-    
+
     EXPECT_EQ(mapping1, mapping2);
 }
 
@@ -105,10 +105,10 @@ TEST(SubstitutionCipherTest, RandomSeed_Deterministic) {
 TEST(SubstitutionCipherTest, RandomSeed_DifferentMappings) {
     const SubstitutionCipher cipher1(42u);
     const SubstitutionCipher cipher2(123u);
-    
+
     const auto mapping1 = cipher1.GetMapping();
     const auto mapping2 = cipher2.GetMapping();
-    
+
     EXPECT_NE(mapping1, mapping2);
 }
 
@@ -121,12 +121,12 @@ TEST(SubstitutionCipherTest, Encrypt_ExplicitMapping) {
     // Build complete alphabet mapping for testing
     for (char c = 'A'; c <= 'Z'; ++c) {
         mapping[c] = static_cast<char>('A' + (c - 'A' + 5) % 26);
-        mapping[static_cast<char>(std::tolower(c))] = 
-            static_cast<char>(std::tolower(mapping[c]));
+        mapping[static_cast<char>(std::tolower(c))] =
+                static_cast<char>(std::tolower(mapping[c]));
     }
-    
+
     const SubstitutionCipher cipher(mapping);
-    
+
     EXPECT_EQ(cipher.Encrypt("ABC"), "FGH");
     EXPECT_EQ(cipher.Encrypt("abc"), "fgh");
 }
@@ -137,7 +137,7 @@ TEST(SubstitutionCipherTest, Encrypt_ExplicitMapping) {
  */
 TEST(SubstitutionCipherTest, Encrypt_PreservesCase) {
     const SubstitutionCipher cipher(3);
-    
+
     EXPECT_EQ(cipher.Encrypt("Hello"), "Khoor");
     EXPECT_EQ(cipher.Encrypt("ABCxyz"), "DEFabc");
 }
@@ -148,7 +148,7 @@ TEST(SubstitutionCipherTest, Encrypt_PreservesCase) {
  */
 TEST(SubstitutionCipherTest, Encrypt_PreservesNonAlpha) {
     const SubstitutionCipher cipher(3);
-    
+
     EXPECT_EQ(cipher.Encrypt("Hello, World!"), "Khoor, Zruog!");
     EXPECT_EQ(cipher.Encrypt("Test 123"), "Whvw 123");
     EXPECT_EQ(cipher.Encrypt("ABC@#$"), "DEF@#$");
@@ -169,11 +169,11 @@ TEST(SubstitutionCipherTest, Encrypt_EmptyString) {
  */
 TEST(SubstitutionCipherTest, Decrypt_ReversesEncryption) {
     const SubstitutionCipher cipher(7);
-    
+
     const std::string plaintext = "Hello, World! 123";
     const std::string ciphertext = cipher.Encrypt(plaintext);
     const std::string decrypted = cipher.Decrypt(ciphertext);
-    
+
     EXPECT_EQ(decrypted, plaintext);
 }
 
@@ -185,16 +185,16 @@ TEST(SubstitutionCipherTest, Decrypt_ExplicitMapping) {
     std::unordered_map<char, char> mapping;
     for (char c = 'A'; c <= 'Z'; ++c) {
         mapping[c] = static_cast<char>('A' + (c - 'A' + 10) % 26);
-        mapping[static_cast<char>(std::tolower(c))] = 
-            static_cast<char>(std::tolower(mapping[c]));
+        mapping[static_cast<char>(std::tolower(c))] =
+                static_cast<char>(std::tolower(mapping[c]));
     }
-    
+
     const SubstitutionCipher cipher(mapping);
-    
+
     const std::string plaintext = "TestData";
     const std::string ciphertext = cipher.Encrypt(plaintext);
     const std::string decrypted = cipher.Decrypt(ciphertext);
-    
+
     EXPECT_EQ(decrypted, plaintext);
 }
 
@@ -204,11 +204,11 @@ TEST(SubstitutionCipherTest, Decrypt_ExplicitMapping) {
  */
 TEST(SubstitutionCipherTest, RoundTrip_RandomSeed) {
     const SubstitutionCipher cipher(98765u);
-    
+
     const std::string plaintext = "The Quick Brown Fox Jumps Over The Lazy Dog!";
     const std::string ciphertext = cipher.Encrypt(plaintext);
     const std::string decrypted = cipher.Decrypt(ciphertext);
-    
+
     EXPECT_EQ(decrypted, plaintext);
 }
 
@@ -218,12 +218,12 @@ TEST(SubstitutionCipherTest, RoundTrip_RandomSeed) {
  */
 TEST(SubstitutionCipherTest, RoundTrip_VariousShifts) {
     const std::string plaintext = "Test Message 123!";
-    
+
     for (int shift = 0; shift < 26; ++shift) {
         const SubstitutionCipher cipher(shift);
         const auto ciphertext = cipher.Encrypt(plaintext);
         const auto decrypted = cipher.Decrypt(ciphertext);
-        
+
         EXPECT_EQ(decrypted, plaintext) << "Failed for shift=" << shift;
     }
 }
@@ -234,8 +234,8 @@ TEST(SubstitutionCipherTest, RoundTrip_VariousShifts) {
  */
 TEST(SubstitutionCipherTest, GetMapping_ReturnsEncodingMap) {
     const SubstitutionCipher cipher(3);
-    const auto& mapping = cipher.GetMapping();
-    
+    const auto &mapping = cipher.GetMapping();
+
     // Verify some known mappings for Caesar shift=3
     EXPECT_EQ(mapping.at('A'), 'D');
     EXPECT_EQ(mapping.at('B'), 'E');
@@ -248,8 +248,8 @@ TEST(SubstitutionCipherTest, GetMapping_ReturnsEncodingMap) {
  */
 TEST(SubstitutionCipherTest, GetMapping_ConstReference) {
     const SubstitutionCipher cipher(5);
-    const auto& mapping = cipher.GetMapping();
-    
+    const auto &mapping = cipher.GetMapping();
+
     // Should compile: reading from const reference
     EXPECT_FALSE(mapping.empty());
 }
@@ -262,10 +262,10 @@ TEST(SubstitutionCipherTest, MoveConstructor_TransfersState) {
     SubstitutionCipher original(10);
     const std::string plaintext = "MoveTest";
     const auto encrypted_original = original.Encrypt(plaintext);
-    
+
     SubstitutionCipher moved(std::move(original));
     const auto encrypted_moved = moved.Encrypt(plaintext);
-    
+
     EXPECT_EQ(encrypted_original, encrypted_moved);
 }
 
@@ -276,13 +276,13 @@ TEST(SubstitutionCipherTest, MoveConstructor_TransfersState) {
 TEST(SubstitutionCipherTest, MoveAssignment_TransfersState) {
     SubstitutionCipher source(15);
     SubstitutionCipher target(0);
-    
+
     const std::string plaintext = "AssignTest";
     const auto encrypted_source = source.Encrypt(plaintext);
-    
+
     target = std::move(source);
     const auto encrypted_target = target.Encrypt(plaintext);
-    
+
     EXPECT_EQ(encrypted_source, encrypted_target);
 }
 
@@ -302,7 +302,7 @@ TEST(SubstitutionCipherTest, CopyOperations_Deleted) {
  */
 TEST(SubstitutionCipherTest, WrapAround_CaesarShift) {
     const SubstitutionCipher cipher(1);
-    
+
     EXPECT_EQ(cipher.Encrypt("Z"), "A");
     EXPECT_EQ(cipher.Encrypt("z"), "a");
     EXPECT_EQ(cipher.Decrypt("A"), "Z");
@@ -315,10 +315,10 @@ TEST(SubstitutionCipherTest, WrapAround_CaesarShift) {
  */
 TEST(SubstitutionCipherTest, LargeText_Encryption) {
     const SubstitutionCipher cipher(5);
-    
+
     std::string largeText(10000, 'A');
     const auto encrypted = cipher.Encrypt(largeText);
-    
+
     EXPECT_EQ(encrypted.length(), largeText.length());
     EXPECT_EQ(encrypted, std::string(10000, 'F'));
 }

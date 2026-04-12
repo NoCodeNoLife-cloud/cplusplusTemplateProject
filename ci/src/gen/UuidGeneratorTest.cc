@@ -28,7 +28,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_NonEmpty) {
  */
 TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectFormat) {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
-    
+
     // Standard UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     const std::regex uuidPattern(R"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})");
     EXPECT_TRUE(std::regex_match(uuid, uuidPattern));
@@ -40,8 +40,8 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectFormat) {
  */
 TEST(UuidGeneratorTest, GenerateRandomUuid_LowercaseHex) {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
-    
-    for (const char c : uuid) {
+
+    for (const char c: uuid) {
         if (c != '-') {
             EXPECT_TRUE(std::isxdigit(static_cast<unsigned char>(c)));
             EXPECT_TRUE(std::islower(static_cast<unsigned char>(c)) || std::isdigit(static_cast<unsigned char>(c)));
@@ -64,12 +64,12 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectLength) {
  */
 TEST(UuidGeneratorTest, GenerateRandomUuid_UniqueValues) {
     std::set<std::string> uniqueUuids;
-    
+
     for (int i = 0; i < 1000; ++i) {
         const auto uuid = UuidGenerator::GenerateRandomUuid();
         uniqueUuids.insert(uuid);
     }
-    
+
     // All UUIDs should be unique
     EXPECT_EQ(uniqueUuids.size(), 1000);
 }
@@ -80,7 +80,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_UniqueValues) {
  */
 TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectHyphenPositions) {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
-    
+
     EXPECT_EQ(uuid[8], '-');
     EXPECT_EQ(uuid[13], '-');
     EXPECT_EQ(uuid[18], '-');
@@ -93,7 +93,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectHyphenPositions) {
  */
 TEST(UuidGeneratorTest, GenerateRandomUuid_Version4Indicator) {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
-    
+
     // UUID version 4 has '4' at position 14 (0-indexed)
     EXPECT_EQ(uuid[14], '4');
 }
@@ -104,10 +104,10 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_Version4Indicator) {
  */
 TEST(UuidGeneratorTest, GenerateRandomUuid_VariantIndicator) {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
-    
+
     // RFC 4122 variant has bits 10xx at position 19
     const char variantChar = uuid[19];
-    EXPECT_TRUE(variantChar == '8' || variantChar == '9' || 
+    EXPECT_TRUE(variantChar == '8' || variantChar == '9' ||
                 variantChar == 'a' || variantChar == 'b');
 }
 
@@ -119,7 +119,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_DifferentInSequence) {
     const auto uuid1 = UuidGenerator::GenerateRandomUuid();
     const auto uuid2 = UuidGenerator::GenerateRandomUuid();
     const auto uuid3 = UuidGenerator::GenerateRandomUuid();
-    
+
     EXPECT_NE(uuid1, uuid2);
     EXPECT_NE(uuid2, uuid3);
     EXPECT_NE(uuid1, uuid3);
@@ -135,7 +135,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_ThreadSafety) {
     std::mutex uuidsMutex;
     constexpr int threadCount = 8;
     constexpr int uuidsPerThread = 100;
-    
+
     std::vector<std::thread> threads;
     for (int t = 0; t < threadCount; ++t) {
         threads.emplace_back([&uniqueUuids, &uuidsMutex]() {
@@ -146,11 +146,11 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_ThreadSafety) {
             }
         });
     }
-    
-    for (auto &thread : threads) {
+
+    for (auto &thread: threads) {
         thread.join();
     }
-    
+
     // Most UUIDs should be unique (allowing for very rare collisions due to static generator)
     const int expectedTotal = threadCount * uuidsPerThread;
     const double uniquenessRate = static_cast<double>(uniqueUuids.size()) / expectedTotal;
@@ -163,7 +163,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_ThreadSafety) {
  */
 TEST(UuidGeneratorTest, GenerateRandomUuid_NoExceptions) {
     EXPECT_NO_THROW(UuidGenerator::GenerateRandomUuid());
-    
+
     // Test multiple calls to ensure stability
     for (int i = 0; i < 100; ++i) {
         EXPECT_NO_THROW(UuidGenerator::GenerateRandomUuid());
@@ -176,17 +176,17 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_NoExceptions) {
  */
 TEST(UuidGeneratorTest, GenerateRandomUuid_GoodDistribution) {
     std::set<char> uniqueChars;
-    
+
     // Generate many UUIDs and collect unique characters
     for (int i = 0; i < 100; ++i) {
         const auto uuid = UuidGenerator::GenerateRandomUuid();
-        for (const char c : uuid) {
+        for (const char c: uuid) {
             if (c != '-') {
                 uniqueChars.insert(c);
             }
         }
     }
-    
+
     // Should use most hexadecimal characters (good distribution)
     EXPECT_GE(uniqueChars.size(), 10); // At least 10 different hex chars
 }

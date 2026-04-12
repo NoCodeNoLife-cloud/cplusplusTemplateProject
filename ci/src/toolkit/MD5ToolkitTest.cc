@@ -123,7 +123,7 @@ TEST(MD5ToolkitTest, Hash_BinaryData_BinaryContent) {
     EXPECT_FALSE(hash.empty());
 
     // Verify all characters are lowercase hex
-    for (char c : hash) {
+    for (char c: hash) {
         EXPECT_TRUE((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'));
     }
 }
@@ -192,8 +192,8 @@ TEST(MD5ToolkitTest, IncrementalHash_MixedUpdates) {
  */
 TEST(MD5ToolkitTest, IncrementalHash_EmptyUpdates) {
     MD5Toolkit toolkit;
-    toolkit.update("");  // Empty string
-    toolkit.update(nullptr, 0);  // Null pointer with zero length
+    toolkit.update(""); // Empty string
+    toolkit.update(nullptr, 0); // Null pointer with zero length
     const auto hash = toolkit.finalize();
 
     EXPECT_EQ(hash.length(), 32);
@@ -226,7 +226,7 @@ TEST(MD5ToolkitTest, Reset_AfterFinalize) {
 TEST(MD5ToolkitTest, Reset_MidComputation) {
     MD5Toolkit toolkit;
     toolkit.update("partial");
-    toolkit.reset();  // Reset before finalizing
+    toolkit.reset(); // Reset before finalizing
     toolkit.update("complete");
     const auto hash = toolkit.finalize();
 
@@ -264,9 +264,9 @@ TEST(MD5ToolkitTest, HashFormat_LowercaseHex) {
     EXPECT_EQ(hash.length(), 32);
 
     // Verify all characters are lowercase hexadecimal
-    for (char c : hash) {
+    for (char c: hash) {
         EXPECT_TRUE((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))
-            << "Character '" << c << "' is not lowercase hex";
+                << "Character '" << c << "' is not lowercase hex";
     }
 }
 
@@ -304,6 +304,6 @@ TEST(MD5ToolkitTest, ConstructorAvailable) {
     static_assert(std::is_default_constructible_v<MD5Toolkit>,
                   "MD5Toolkit should be default constructible");
 
-    MD5Toolkit toolkit;  // Should compile without errors
+    MD5Toolkit toolkit; // Should compile without errors
     SUCCEED() << "MD5Toolkit can be instantiated";
 }

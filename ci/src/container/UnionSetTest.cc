@@ -27,9 +27,9 @@ TEST(UnionSetTest, DefaultConstructor_EmptyUnionSet) {
  */
 TEST(UnionSetTest, Find_SingleElement_ReturnsSelf) {
     UnionSet<int> unionSet;
-    
+
     int root = unionSet.find(5);
-    
+
     EXPECT_EQ(root, 5);
 }
 
@@ -39,15 +39,15 @@ TEST(UnionSetTest, Find_SingleElement_ReturnsSelf) {
  */
 TEST(UnionSetTest, Find_PathCompression) {
     UnionSet<int> unionSet;
-    
+
     // Create a chain: 1 -> 2 -> 3 -> 4
     unionSet.unionSets(1, 2);
     unionSet.unionSets(2, 3);
     unionSet.unionSets(3, 4);
-    
+
     // Find should compress the path
     int root = unionSet.find(1);
-    
+
     EXPECT_EQ(root, unionSet.find(4));
     // After path compression, subsequent finds should be faster
     EXPECT_EQ(unionSet.find(1), unionSet.find(2));
@@ -59,9 +59,9 @@ TEST(UnionSetTest, Find_PathCompression) {
  */
 TEST(UnionSetTest, UnionSets_MergesTwoSets) {
     UnionSet<int> unionSet;
-    
+
     bool result = unionSet.unionSets(1, 2);
-    
+
     EXPECT_TRUE(result);
     EXPECT_TRUE(unionSet.connected(1, 2));
 }
@@ -72,10 +72,10 @@ TEST(UnionSetTest, UnionSets_MergesTwoSets) {
  */
 TEST(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse) {
     UnionSet<int> unionSet;
-    
+
     unionSet.unionSets(1, 2);
     bool result = unionSet.unionSets(1, 2);
-    
+
     EXPECT_FALSE(result);
 }
 
@@ -85,11 +85,11 @@ TEST(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse) {
  */
 TEST(UnionSetTest, UnionSets_MultipleElements_TransitiveConnectivity) {
     UnionSet<int> unionSet;
-    
+
     unionSet.unionSets(1, 2);
     unionSet.unionSets(2, 3);
     unionSet.unionSets(3, 4);
-    
+
     EXPECT_TRUE(unionSet.connected(1, 4));
     EXPECT_TRUE(unionSet.connected(1, 3));
     EXPECT_TRUE(unionSet.connected(2, 4));
@@ -101,10 +101,10 @@ TEST(UnionSetTest, UnionSets_MultipleElements_TransitiveConnectivity) {
  */
 TEST(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected) {
     UnionSet<int> unionSet;
-    
+
     unionSet.unionSets(1, 2);
     unionSet.unionSets(3, 4);
-    
+
     EXPECT_FALSE(unionSet.connected(1, 3));
     EXPECT_FALSE(unionSet.connected(2, 4));
     EXPECT_TRUE(unionSet.connected(1, 2));
@@ -117,7 +117,7 @@ TEST(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected) {
  */
 TEST(UnionSetTest, Connected_SameElement_ReturnsTrue) {
     UnionSet<int> unionSet;
-    
+
     EXPECT_TRUE(unionSet.connected(5, 5));
 }
 
@@ -127,7 +127,7 @@ TEST(UnionSetTest, Connected_SameElement_ReturnsTrue) {
  */
 TEST(UnionSetTest, Connected_UnconnectedElements_ReturnsFalse) {
     UnionSet<int> unionSet;
-    
+
     EXPECT_FALSE(unionSet.connected(1, 2));
 }
 
@@ -137,10 +137,10 @@ TEST(UnionSetTest, Connected_UnconnectedElements_ReturnsFalse) {
  */
 TEST(UnionSetTest, Connected_AfterUnion_ReturnsTrue) {
     UnionSet<int> unionSet;
-    
+
     unionSet.unionSets(10, 20);
     unionSet.unionSets(20, 30);
-    
+
     EXPECT_TRUE(unionSet.connected(10, 30));
     EXPECT_TRUE(unionSet.connected(10, 20));
     EXPECT_TRUE(unionSet.connected(20, 30));
@@ -152,12 +152,12 @@ TEST(UnionSetTest, Connected_AfterUnion_ReturnsTrue) {
  */
 TEST(UnionSetTest, Connected_ConstReference_CorrectBehavior) {
     UnionSet<int> unionSet;
-    
+
     unionSet.unionSets(1, 2);
     unionSet.unionSets(3, 4);
-    
-    const UnionSet<int>& constUnionSet = unionSet;
-    
+
+    const UnionSet<int> &constUnionSet = unionSet;
+
     EXPECT_TRUE(constUnionSet.connected(1, 2));
     EXPECT_FALSE(constUnionSet.connected(1, 3));
 }
@@ -168,19 +168,19 @@ TEST(UnionSetTest, Connected_ConstReference_CorrectBehavior) {
  */
 TEST(UnionSetTest, UnionByRank_BalancedStructure) {
     UnionSet<int> unionSet;
-    
+
     // Create two chains
     for (int i = 0; i < 10; ++i) {
         unionSet.unionSets(i, i + 1);
     }
-    
+
     for (int i = 10; i < 20; ++i) {
         unionSet.unionSets(i, i + 1);
     }
-    
+
     // Unite the two chains
     unionSet.unionSets(0, 10);
-    
+
     // All elements should be connected
     EXPECT_TRUE(unionSet.connected(0, 20));
     EXPECT_TRUE(unionSet.connected(5, 15));
@@ -192,10 +192,10 @@ TEST(UnionSetTest, UnionByRank_BalancedStructure) {
  */
 TEST(UnionSetTest, StringElements_CorrectBehavior) {
     UnionSet<std::string> unionSet;
-    
+
     unionSet.unionSets("apple", "banana");
     unionSet.unionSets("banana", "cherry");
-    
+
     EXPECT_TRUE(unionSet.connected("apple", "cherry"));
     EXPECT_TRUE(unionSet.connected("apple", "banana"));
     EXPECT_FALSE(unionSet.connected("apple", "date"));
@@ -207,16 +207,16 @@ TEST(UnionSetTest, StringElements_CorrectBehavior) {
  */
 TEST(UnionSetTest, LargeNumberOfElements_Correctness) {
     UnionSet<int> unionSet;
-    
+
     // Create 100 separate sets
     for (int i = 0; i < 100; ++i) {
         unionSet.unionSets(i, i + 1);
     }
-    
+
     // All should be connected
     EXPECT_TRUE(unionSet.connected(0, 100));
     EXPECT_TRUE(unionSet.connected(50, 99));
-    
+
     // Elements outside range should not be connected
     EXPECT_FALSE(unionSet.connected(0, 200));
 }
@@ -227,23 +227,23 @@ TEST(UnionSetTest, LargeNumberOfElements_Correctness) {
  */
 TEST(UnionSetTest, MultipleIndependentComponents_CorrectHandling) {
     UnionSet<int> unionSet;
-    
+
     // Component 1: 1-2-3
     unionSet.unionSets(1, 2);
     unionSet.unionSets(2, 3);
-    
+
     // Component 2: 10-11-12
     unionSet.unionSets(10, 11);
     unionSet.unionSets(11, 12);
-    
+
     // Component 3: 100-101
     unionSet.unionSets(100, 101);
-    
+
     // Verify within-component connectivity
     EXPECT_TRUE(unionSet.connected(1, 3));
     EXPECT_TRUE(unionSet.connected(10, 12));
     EXPECT_TRUE(unionSet.connected(100, 101));
-    
+
     // Verify between-component disconnection
     EXPECT_FALSE(unionSet.connected(1, 10));
     EXPECT_FALSE(unionSet.connected(1, 100));
@@ -256,10 +256,10 @@ TEST(UnionSetTest, MultipleIndependentComponents_CorrectHandling) {
  */
 TEST(UnionSetTest, NegativeNumbers_CorrectHandling) {
     UnionSet<int> unionSet;
-    
+
     unionSet.unionSets(-10, -5);
     unionSet.unionSets(-5, -1);
-    
+
     EXPECT_TRUE(unionSet.connected(-10, -1));
     EXPECT_FALSE(unionSet.connected(-10, 0));
 }
@@ -270,11 +270,11 @@ TEST(UnionSetTest, NegativeNumbers_CorrectHandling) {
  */
 TEST(UnionSetTest, MixedSignNumbers_CorrectHandling) {
     UnionSet<int> unionSet;
-    
+
     unionSet.unionSets(-100, 50);
     unionSet.unionSets(50, -50);
     unionSet.unionSets(-50, 100);
-    
+
     EXPECT_TRUE(unionSet.connected(-100, 100));
     EXPECT_TRUE(unionSet.connected(50, -50));
 }
@@ -285,11 +285,11 @@ TEST(UnionSetTest, MixedSignNumbers_CorrectHandling) {
  */
 TEST(UnionSetTest, RepeatedUnions_Idempotent) {
     UnionSet<int> unionSet;
-    
+
     unionSet.unionSets(1, 2);
     unionSet.unionSets(1, 2);
     unionSet.unionSets(1, 2);
-    
+
     EXPECT_TRUE(unionSet.connected(1, 2));
 }
 
@@ -299,19 +299,19 @@ TEST(UnionSetTest, RepeatedUnions_Idempotent) {
  */
 TEST(UnionSetTest, EquivalenceClasses_CorrectProperties) {
     UnionSet<int> unionSet;
-    
+
     unionSet.unionSets(1, 2);
     unionSet.unionSets(2, 3);
-    
+
     // Reflexive
     EXPECT_TRUE(unionSet.connected(1, 1));
     EXPECT_TRUE(unionSet.connected(2, 2));
     EXPECT_TRUE(unionSet.connected(3, 3));
-    
+
     // Symmetric
     EXPECT_TRUE(unionSet.connected(1, 3));
     EXPECT_TRUE(unionSet.connected(3, 1));
-    
+
     // Transitive
     EXPECT_TRUE(unionSet.connected(1, 2));
     EXPECT_TRUE(unionSet.connected(2, 3));

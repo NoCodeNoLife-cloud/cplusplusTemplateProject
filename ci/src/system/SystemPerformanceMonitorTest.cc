@@ -17,7 +17,7 @@ using namespace common::system;
  */
 TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ReturnsValidStructure) {
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
-    
+
     // All fields should be accessible
     EXPECT_GE(memUsage.total_memory, 0);
     EXPECT_GE(memUsage.available_memory, 0);
@@ -31,7 +31,7 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ReturnsValidStructure) {
  */
 TEST(SystemPerformanceMonitorTest, GetMemoryUsage_TotalMemoryReasonable) {
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
-    
+
     // Total memory should be at least 1GB (1073741824 bytes) on modern systems
     const ULONGLONG minMemory = 1073741824ULL; // 1 GB
     EXPECT_GE(memUsage.total_memory, minMemory);
@@ -43,7 +43,7 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_TotalMemoryReasonable) {
  */
 TEST(SystemPerformanceMonitorTest, GetMemoryUsage_AvailableNotExceedTotal) {
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
-    
+
     EXPECT_LE(memUsage.available_memory, memUsage.total_memory);
 }
 
@@ -53,7 +53,7 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_AvailableNotExceedTotal) {
  */
 TEST(SystemPerformanceMonitorTest, GetMemoryUsage_UsedMemoryCalculation) {
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
-    
+
     const ULONGLONG calculatedUsed = memUsage.total_memory - memUsage.available_memory;
     EXPECT_EQ(memUsage.used_memory, calculatedUsed);
 }
@@ -64,7 +64,7 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_UsedMemoryCalculation) {
  */
 TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageInRange) {
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
-    
+
     EXPECT_GE(memUsage.memory_usage_percent, 0.0);
     EXPECT_LE(memUsage.memory_usage_percent, 100.0);
 }
@@ -75,9 +75,9 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageInRange) {
  */
 TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageAccuracy) {
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
-    
+
     if (memUsage.total_memory > 0) {
-        const double expectedPercent = static_cast<double>(memUsage.used_memory) / 
+        const double expectedPercent = static_cast<double>(memUsage.used_memory) /
                                        static_cast<double>(memUsage.total_memory) * 100.0;
         EXPECT_NEAR(memUsage.memory_usage_percent, expectedPercent, 0.01);
     }
@@ -90,15 +90,13 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageAccuracy) {
 TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ConsistentResults) {
     const MemoryUsage memUsage1 = SystemPerformanceMonitor::GetMemoryUsage();
     const MemoryUsage memUsage2 = SystemPerformanceMonitor::GetMemoryUsage();
-    
+
     // Total memory should remain constant
     EXPECT_EQ(memUsage1.total_memory, memUsage2.total_memory);
-    
+
     // Available memory may vary slightly but should be close (within 100MB)
     const ULONGLONG tolerance = 100ULL * 1024 * 1024; // 100 MB
-    const auto diff = memUsage1.available_memory > memUsage2.available_memory ?
-                      memUsage1.available_memory - memUsage2.available_memory :
-                      memUsage2.available_memory - memUsage1.available_memory;
+    const auto diff = memUsage1.available_memory > memUsage2.available_memory ? memUsage1.available_memory - memUsage2.available_memory : memUsage2.available_memory - memUsage1.available_memory;
     EXPECT_LT(diff, tolerance);
 }
 
@@ -108,7 +106,7 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ConsistentResults) {
  */
 TEST(SystemPerformanceMonitorTest, GetCpuUsage_DefaultInterval_ValidResult) {
     const CpuUsage cpuUsage = SystemPerformanceMonitor::GetCpuUsage();
-    
+
     EXPECT_GE(cpuUsage.cpu_usage_percent, 0.0);
     EXPECT_LE(cpuUsage.cpu_usage_percent, 100.0);
 }
@@ -119,7 +117,7 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_DefaultInterval_ValidResult) {
  */
 TEST(SystemPerformanceMonitorTest, GetCpuUsage_CustomInterval_ValidResult) {
     const CpuUsage cpuUsage = SystemPerformanceMonitor::GetCpuUsage(2);
-    
+
     EXPECT_GE(cpuUsage.cpu_usage_percent, 0.0);
     EXPECT_LE(cpuUsage.cpu_usage_percent, 100.0);
 }
@@ -130,7 +128,7 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_CustomInterval_ValidResult) {
  */
 TEST(SystemPerformanceMonitorTest, GetCpuUsage_MinimumInterval) {
     const CpuUsage cpuUsage = SystemPerformanceMonitor::GetCpuUsage(1);
-    
+
     EXPECT_GE(cpuUsage.cpu_usage_percent, 0.0);
     EXPECT_LE(cpuUsage.cpu_usage_percent, 100.0);
 }
@@ -141,7 +139,7 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_MinimumInterval) {
  */
 TEST(SystemPerformanceMonitorTest, GetCpuUsage_PercentageInRange) {
     const CpuUsage cpuUsage = SystemPerformanceMonitor::GetCpuUsage(1);
-    
+
     EXPECT_GE(cpuUsage.cpu_usage_percent, 0.0);
     EXPECT_LE(cpuUsage.cpu_usage_percent, 100.0);
 }
@@ -152,20 +150,20 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_PercentageInRange) {
  */
 TEST(SystemPerformanceMonitorTest, GetCpuUsage_ExecutionTimeMatchesInterval) {
     const int32_t interval = 1;
-    
+
     const auto start = std::chrono::steady_clock::now();
     const CpuUsage cpuUsage = SystemPerformanceMonitor::GetCpuUsage(interval);
     const auto end = std::chrono::steady_clock::now();
-    
+
     const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     const auto expectedDuration = interval * 1000; // Convert seconds to milliseconds
-    
+
     // Allow 20% tolerance for timing variations
     const auto tolerance = expectedDuration * 0.2;
     EXPECT_NEAR(duration, expectedDuration, tolerance);
-    
+
     // Suppress unused variable warning
-    (void)cpuUsage;
+    (void) cpuUsage;
 }
 
 /**
@@ -175,7 +173,7 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_ExecutionTimeMatchesInterval) {
 TEST(SystemPerformanceMonitorTest, GetCpuUsage_DifferentIntervals) {
     const CpuUsage cpuUsage1 = SystemPerformanceMonitor::GetCpuUsage(1);
     const CpuUsage cpuUsage2 = SystemPerformanceMonitor::GetCpuUsage(2);
-    
+
     // Both should return valid percentages
     EXPECT_GE(cpuUsage1.cpu_usage_percent, 0.0);
     EXPECT_LE(cpuUsage1.cpu_usage_percent, 100.0);
@@ -198,12 +196,12 @@ TEST(SystemPerformanceMonitorTest, AllMethods_ExecuteWithoutCrash) {
  */
 TEST(SystemPerformanceMonitorTest, MemoryUsage_StructFieldsAccessible) {
     MemoryUsage memUsage{};
-    
+
     memUsage.total_memory = 16000000000ULL;
     memUsage.available_memory = 8000000000ULL;
     memUsage.used_memory = 8000000000ULL;
     memUsage.memory_usage_percent = 50.0;
-    
+
     EXPECT_EQ(memUsage.total_memory, 16000000000ULL);
     EXPECT_EQ(memUsage.available_memory, 8000000000ULL);
     EXPECT_EQ(memUsage.used_memory, 8000000000ULL);
@@ -216,9 +214,9 @@ TEST(SystemPerformanceMonitorTest, MemoryUsage_StructFieldsAccessible) {
  */
 TEST(SystemPerformanceMonitorTest, CpuUsage_StructFieldsAccessible) {
     CpuUsage cpuUsage{};
-    
+
     cpuUsage.cpu_usage_percent = 75.5;
-    
+
     EXPECT_DOUBLE_EQ(cpuUsage.cpu_usage_percent, 75.5);
 }
 
@@ -228,7 +226,7 @@ TEST(SystemPerformanceMonitorTest, CpuUsage_StructFieldsAccessible) {
  */
 TEST(SystemPerformanceMonitorTest, MemoryUsage_DefaultInitialization) {
     const MemoryUsage memUsage{};
-    
+
     EXPECT_EQ(memUsage.total_memory, 0ULL);
     EXPECT_EQ(memUsage.available_memory, 0ULL);
     EXPECT_EQ(memUsage.used_memory, 0ULL);
@@ -241,6 +239,6 @@ TEST(SystemPerformanceMonitorTest, MemoryUsage_DefaultInitialization) {
  */
 TEST(SystemPerformanceMonitorTest, CpuUsage_DefaultInitialization) {
     const CpuUsage cpuUsage{};
-    
+
     EXPECT_DOUBLE_EQ(cpuUsage.cpu_usage_percent, 0.0);
 }

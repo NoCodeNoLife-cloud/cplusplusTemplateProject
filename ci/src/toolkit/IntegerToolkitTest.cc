@@ -124,7 +124,7 @@ TEST(IntegerToolkitTest, RomanToInt_InvalidNumeral_ThrowsException) {
 TEST(IntegerToolkitTest, RoundTrip_IntToRomanAndBack) {
     const int test_values[] = {1, 4, 9, 58, 100, 400, 900, 1994, 3999};
 
-    for (const auto value : test_values) {
+    for (const auto value: test_values) {
         const auto roman = IntegerToolkit::intToRoman(value);
         const auto converted_back = IntegerToolkit::romanToInt(roman);
         EXPECT_EQ(converted_back, value);
@@ -138,7 +138,7 @@ TEST(IntegerToolkitTest, RoundTrip_IntToRomanAndBack) {
 TEST(IntegerToolkitTest, RoundTrip_RomanToIntAndBack) {
     const auto test_romans = {"I", "IV", "IX", "LVIII", "C", "CD", "CM", "MCMXCIV", "MMMCMXCIX"};
 
-    for (const auto &roman : test_romans) {
+    for (const auto &roman: test_romans) {
         const auto value = IntegerToolkit::romanToInt(roman);
         const auto converted_back = IntegerToolkit::intToRoman(value);
         EXPECT_EQ(converted_back, roman);
@@ -150,11 +150,11 @@ TEST(IntegerToolkitTest, RoundTrip_RomanToIntAndBack) {
  * @details Verifies correct identification of 2^n values
  */
 TEST(IntegerToolkitTest, IsPowerOfTwo_PowersOfTwo) {
-    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(1));   // 2^0
-    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(2));   // 2^1
-    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(4));   // 2^2
-    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(8));   // 2^3
-    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(16));  // 2^4
+    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(1)); // 2^0
+    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(2)); // 2^1
+    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(4)); // 2^2
+    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(8)); // 2^3
+    EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(16)); // 2^4
     EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(1024)); // 2^10
 }
 
@@ -186,11 +186,11 @@ TEST(IntegerToolkitTest, IsPowerOfTwo_NegativeNumbers) {
  */
 TEST(IntegerToolkitTest, CountSetBits_BasicNumbers) {
     EXPECT_EQ(IntegerToolkit::countSetBits(0), 0);
-    EXPECT_EQ(IntegerToolkit::countSetBits(1), 1);  // binary: 1
-    EXPECT_EQ(IntegerToolkit::countSetBits(2), 1);  // binary: 10
-    EXPECT_EQ(IntegerToolkit::countSetBits(3), 2);  // binary: 11
-    EXPECT_EQ(IntegerToolkit::countSetBits(7), 3);  // binary: 111
-    EXPECT_EQ(IntegerToolkit::countSetBits(8), 1);  // binary: 1000
+    EXPECT_EQ(IntegerToolkit::countSetBits(1), 1); // binary: 1
+    EXPECT_EQ(IntegerToolkit::countSetBits(2), 1); // binary: 10
+    EXPECT_EQ(IntegerToolkit::countSetBits(3), 2); // binary: 11
+    EXPECT_EQ(IntegerToolkit::countSetBits(7), 3); // binary: 111
+    EXPECT_EQ(IntegerToolkit::countSetBits(8), 1); // binary: 1000
 }
 
 /**
@@ -212,8 +212,8 @@ TEST(IntegerToolkitTest, CountSetBits_PowersOfTwo) {
  * @details Verifies correct counting for maximum bit patterns
  */
 TEST(IntegerToolkitTest, CountSetBits_AllBitsSet) {
-    EXPECT_EQ(IntegerToolkit::countSetBits(0xFF), 8);      // 8 bits set
-    EXPECT_EQ(IntegerToolkit::countSetBits(0xFFFF), 16);   // 16 bits set
+    EXPECT_EQ(IntegerToolkit::countSetBits(0xFF), 8); // 8 bits set
+    EXPECT_EQ(IntegerToolkit::countSetBits(0xFFFF), 16); // 16 bits set
 }
 
 /**

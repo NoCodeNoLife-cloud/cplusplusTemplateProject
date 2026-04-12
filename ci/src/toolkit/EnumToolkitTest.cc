@@ -22,9 +22,7 @@ enum class Color {
 };
 
 enum class Status : int {
-    Success = 0,
-    Failed = -1,
-    Pending = 1,
+    Success = 0, Failed = -1, Pending = 1,
 };
 
 /**

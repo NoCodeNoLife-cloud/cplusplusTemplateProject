@@ -28,7 +28,7 @@ TEST(SystemInfoTest, GetCpuModelFromRegistry_NonEmpty) {
  */
 TEST(SystemInfoTest, GetCpuModelFromRegistry_ReasonableValue) {
     const auto cpuModel = SystemInfo::GetCpuModelFromRegistry();
-    
+
     // On most Windows systems with proper registry access, should get actual CPU model
     // If registry access fails, it returns "Unknown CPU Model"
     EXPECT_FALSE(cpuModel.empty());
@@ -58,7 +58,7 @@ TEST(SystemInfoTest, GetOSVersion_NonEmpty) {
  */
 TEST(SystemInfoTest, GetOSVersion_ContainsWindowsInfo) {
     const auto osVersion = SystemInfo::GetOSVersion();
-    
+
     // Should contain either "Windows" or at least not be the fallback message
     if (osVersion != "Windows OS Information Not Available") {
         EXPECT_FALSE(osVersion.empty());
@@ -71,7 +71,7 @@ TEST(SystemInfoTest, GetOSVersion_ContainsWindowsInfo) {
  */
 TEST(SystemInfoTest, GetMotherboardInfo_ValidStructure) {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
-    
+
     // At least some fields should be populated on a real system
     // Empty strings are acceptable if registry access fails
     EXPECT_TRUE(true); // Structure creation itself is a success
@@ -83,7 +83,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_ValidStructure) {
  */
 TEST(SystemInfoTest, GetMotherboardInfo_ManufacturerField) {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
-    
+
     // Field should be accessible (may be empty if registry unavailable)
     const std::string manufacturer = info.manufacturer;
     EXPECT_TRUE(true); // Accessibility test
@@ -95,7 +95,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_ManufacturerField) {
  */
 TEST(SystemInfoTest, GetMotherboardInfo_ModelField) {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
-    
+
     // Field should be accessible (may be empty if registry unavailable)
     const std::string model = info.model;
     EXPECT_TRUE(true); // Accessibility test
@@ -107,7 +107,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_ModelField) {
  */
 TEST(SystemInfoTest, GetMotherboardInfo_BiosVersionField) {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
-    
+
     // Field should be accessible (may be empty if registry unavailable)
     const std::string biosVersion = info.biosVersion;
     EXPECT_TRUE(true); // Accessibility test
@@ -119,7 +119,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_BiosVersionField) {
  */
 TEST(SystemInfoTest, GetMotherboardInfo_SystemSerialField) {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
-    
+
     // Field should be accessible (may be empty if registry unavailable)
     const std::string systemSerial = info.systemSerial;
     EXPECT_TRUE(true); // Accessibility test
@@ -140,7 +140,7 @@ TEST(SystemInfoTest, GetGraphicsCardInfo_NonEmpty) {
  */
 TEST(SystemInfoTest, GetDiskDriveInfo_ReturnsVector) {
     const auto diskInfo = SystemInfo::GetDiskDriveInfo();
-    
+
     // Should return a valid vector (may be empty if no disks found or registry unavailable)
     EXPECT_TRUE(true); // Vector creation itself is a success
 }
@@ -151,7 +151,7 @@ TEST(SystemInfoTest, GetDiskDriveInfo_ReturnsVector) {
  */
 TEST(SystemInfoTest, GetDiskDriveInfo_ReasonableSize) {
     const auto diskInfo = SystemInfo::GetDiskDriveInfo();
-    
+
     // Should have between 0 and 100 disk entries (reasonable upper bound)
     EXPECT_LE(diskInfo.size(), 100);
 }
@@ -162,7 +162,7 @@ TEST(SystemInfoTest, GetDiskDriveInfo_ReasonableSize) {
  */
 TEST(SystemInfoTest, GetBIOSInfo_ReturnsVector) {
     const auto biosInfo = SystemInfo::GetBIOSInfo();
-    
+
     // Should return a valid vector (may be empty if no adapters found or registry unavailable)
     EXPECT_TRUE(true); // Vector creation itself is a success
 }
@@ -173,7 +173,7 @@ TEST(SystemInfoTest, GetBIOSInfo_ReturnsVector) {
  */
 TEST(SystemInfoTest, GetBIOSInfo_ReasonableSize) {
     const auto biosInfo = SystemInfo::GetBIOSInfo();
-    
+
     // Should have between 0 and 100 adapter entries (reasonable upper bound)
     EXPECT_LE(biosInfo.size(), 100);
 }
@@ -199,7 +199,7 @@ TEST(SystemInfoTest, AllMethods_ExecuteWithoutCrash) {
 TEST(SystemInfoTest, GetCpuModelFromRegistry_ConsistentResults) {
     const auto result1 = SystemInfo::GetCpuModelFromRegistry();
     const auto result2 = SystemInfo::GetCpuModelFromRegistry();
-    
+
     EXPECT_EQ(result1, result2);
 }
 
@@ -210,7 +210,7 @@ TEST(SystemInfoTest, GetCpuModelFromRegistry_ConsistentResults) {
 TEST(SystemInfoTest, GetOSVersion_ConsistentResults) {
     const auto result1 = SystemInfo::GetOSVersion();
     const auto result2 = SystemInfo::GetOSVersion();
-    
+
     EXPECT_EQ(result1, result2);
 }
 
@@ -221,7 +221,7 @@ TEST(SystemInfoTest, GetOSVersion_ConsistentResults) {
 TEST(SystemInfoTest, GetMotherboardInfo_ConsistentResults) {
     const auto result1 = SystemInfo::GetMotherboardInfo();
     const auto result2 = SystemInfo::GetMotherboardInfo();
-    
+
     EXPECT_EQ(result1.manufacturer, result2.manufacturer);
     EXPECT_EQ(result1.model, result2.model);
     EXPECT_EQ(result1.biosVersion, result2.biosVersion);
@@ -244,7 +244,7 @@ TEST(SystemInfoTest, RegistryKey_DefaultConstructor) {
 TEST(SystemInfoTest, RegistryKey_BoolConversion) {
     const RegistryKey nullKey(nullptr);
     EXPECT_FALSE(nullKey);
-    
+
     // Note: We cannot easily test with a valid HKEY without actually opening a registry key
     // The RAII behavior is tested implicitly through SystemInfo methods
 }
@@ -256,7 +256,7 @@ TEST(SystemInfoTest, RegistryKey_BoolConversion) {
 TEST(SystemInfoTest, RegistryKey_MoveConstructor) {
     RegistryKey key1(nullptr);
     RegistryKey key2(std::move(key1));
-    
+
     EXPECT_FALSE(key2); // Moved-to key should still be nullptr
     EXPECT_FALSE(key1); // Moved-from key should be nullptr
 }
@@ -268,9 +268,9 @@ TEST(SystemInfoTest, RegistryKey_MoveConstructor) {
 TEST(SystemInfoTest, RegistryKey_MoveAssignment) {
     RegistryKey key1(nullptr);
     RegistryKey key2(nullptr);
-    
+
     key2 = std::move(key1);
-    
+
     EXPECT_FALSE(key2);
     EXPECT_FALSE(key1);
 }
@@ -285,6 +285,6 @@ TEST(SystemInfoTest, RegistryKey_CopyOperationsDeleted) {
     // If the following lines would compile, it would indicate a design flaw
     // static_assert(!std::is_copy_constructible_v<RegistryKey>, "RegistryKey should not be copy constructible");
     // static_assert(!std::is_copy_assignable_v<RegistryKey>, "RegistryKey should not be copy assignable");
-    
+
     EXPECT_TRUE(true); // Compile-time check passed
 }

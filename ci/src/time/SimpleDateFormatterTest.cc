@@ -19,7 +19,7 @@ using namespace common::time;
  */
 TEST(SimpleDateFormatterTest, Constructor_ValidPattern) {
     EXPECT_NO_THROW(SimpleDateFormatter("%Y-%m-%d"));
-    
+
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
     EXPECT_EQ(formatter.toPattern(), "%Y-%m-%d %H:%M:%S");
 }
@@ -39,7 +39,7 @@ TEST(SimpleDateFormatterTest, Constructor_EmptyPattern_ThrowsException) {
 TEST(SimpleDateFormatterTest, ApplyPattern_ValidPattern) {
     SimpleDateFormatter formatter("%Y-%m-%d");
     EXPECT_EQ(formatter.toPattern(), "%Y-%m-%d");
-    
+
     formatter.applyPattern("%Y/%m/%d");
     EXPECT_EQ(formatter.toPattern(), "%Y/%m/%d");
 }
@@ -51,7 +51,7 @@ TEST(SimpleDateFormatterTest, ApplyPattern_ValidPattern) {
 TEST(SimpleDateFormatterTest, ApplyPattern_EmptyPattern_ThrowsException) {
     SimpleDateFormatter formatter("%Y-%m-%d");
     EXPECT_THROW(formatter.applyPattern(""), std::invalid_argument);
-    
+
     // Original pattern should remain unchanged
     EXPECT_EQ(formatter.toPattern(), "%Y-%m-%d");
 }
@@ -71,12 +71,12 @@ TEST(SimpleDateFormatterTest, ToPattern_ReturnsCurrentPattern) {
  */
 TEST(SimpleDateFormatterTest, Format_Tm_DateOnly) {
     const SimpleDateFormatter formatter("%Y-%m-%d");
-    
+
     std::tm date = {};
     date.tm_year = 2024 - 1900; // Years since 1900
-    date.tm_mon = 6 - 1;        // Months since January (0-11)
+    date.tm_mon = 6 - 1; // Months since January (0-11)
     date.tm_mday = 15;
-    
+
     const auto result = formatter.format(date);
     EXPECT_EQ(result, "2024-06-15");
 }
@@ -87,7 +87,7 @@ TEST(SimpleDateFormatterTest, Format_Tm_DateOnly) {
  */
 TEST(SimpleDateFormatterTest, Format_Tm_DateTime) {
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
-    
+
     std::tm date = {};
     date.tm_year = 2024 - 1900;
     date.tm_mon = 12 - 1;
@@ -95,7 +95,7 @@ TEST(SimpleDateFormatterTest, Format_Tm_DateTime) {
     date.tm_hour = 14;
     date.tm_min = 30;
     date.tm_sec = 45;
-    
+
     const auto result = formatter.format(date);
     EXPECT_EQ(result, "2024-12-25 14:30:45");
 }
@@ -106,12 +106,12 @@ TEST(SimpleDateFormatterTest, Format_Tm_DateTime) {
  */
 TEST(SimpleDateFormatterTest, Format_Tm_CustomSeparator) {
     const SimpleDateFormatter formatter("%Y/%m/%d");
-    
+
     std::tm date = {};
     date.tm_year = 2024 - 1900;
     date.tm_mon = 1 - 1;
     date.tm_mday = 1;
-    
+
     const auto result = formatter.format(date);
     EXPECT_EQ(result, "2024/01/01");
 }
@@ -122,7 +122,7 @@ TEST(SimpleDateFormatterTest, Format_Tm_CustomSeparator) {
  */
 TEST(SimpleDateFormatterTest, Format_TimePoint_Success) {
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
-    
+
     // Create a specific time point: 2024-06-15 10:30:00 UTC
     std::tm timeinfo = {};
     timeinfo.tm_year = 2024 - 1900;
@@ -131,12 +131,12 @@ TEST(SimpleDateFormatterTest, Format_TimePoint_Success) {
     timeinfo.tm_hour = 10;
     timeinfo.tm_min = 30;
     timeinfo.tm_sec = 0;
-    
+
     const std::time_t time = mktime(&timeinfo);
     const auto tp = std::chrono::system_clock::from_time_t(time);
-    
+
     const auto result = formatter.format(tp);
-    
+
     // Verify the format matches expected pattern (may vary by timezone)
     const std::regex pattern(R"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})");
     EXPECT_TRUE(std::regex_match(result, pattern));
@@ -148,9 +148,9 @@ TEST(SimpleDateFormatterTest, Format_TimePoint_Success) {
  */
 TEST(SimpleDateFormatterTest, Parse_DateOnly_Success) {
     const SimpleDateFormatter formatter("%Y-%m-%d");
-    
+
     const auto result = formatter.parse("2024-06-15");
-    
+
     EXPECT_EQ(result.tm_year, 2024 - 1900);
     EXPECT_EQ(result.tm_mon, 6 - 1);
     EXPECT_EQ(result.tm_mday, 15);
@@ -162,9 +162,9 @@ TEST(SimpleDateFormatterTest, Parse_DateOnly_Success) {
  */
 TEST(SimpleDateFormatterTest, Parse_DateTime_Success) {
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
-    
+
     const auto result = formatter.parse("2024-12-25 14:30:45");
-    
+
     EXPECT_EQ(result.tm_year, 2024 - 1900);
     EXPECT_EQ(result.tm_mon, 12 - 1);
     EXPECT_EQ(result.tm_mday, 25);
@@ -179,7 +179,7 @@ TEST(SimpleDateFormatterTest, Parse_DateTime_Success) {
  */
 TEST(SimpleDateFormatterTest, Parse_InvalidFormat_ThrowsException) {
     const SimpleDateFormatter formatter("%Y-%m-%d");
-    
+
     EXPECT_THROW(formatter.parse("2024/06/15"), std::runtime_error);
     EXPECT_THROW(formatter.parse("invalid-date"), std::runtime_error);
 }
@@ -190,7 +190,7 @@ TEST(SimpleDateFormatterTest, Parse_InvalidFormat_ThrowsException) {
  */
 TEST(SimpleDateFormatterTest, Parse_ExtraCharacters_ThrowsException) {
     const SimpleDateFormatter formatter("%Y-%m-%d");
-    
+
     EXPECT_THROW(formatter.parse("2024-06-15 extra"), std::runtime_error);
 }
 
@@ -200,7 +200,7 @@ TEST(SimpleDateFormatterTest, Parse_ExtraCharacters_ThrowsException) {
  */
 TEST(SimpleDateFormatterTest, RoundTrip_FormatThenParse) {
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
-    
+
     std::tm original = {};
     original.tm_year = 2024 - 1900;
     original.tm_mon = 6 - 1;
@@ -208,10 +208,10 @@ TEST(SimpleDateFormatterTest, RoundTrip_FormatThenParse) {
     original.tm_hour = 10;
     original.tm_min = 30;
     original.tm_sec = 45;
-    
+
     const auto formatted = formatter.format(original);
     const auto parsed = formatter.parse(formatted);
-    
+
     EXPECT_EQ(parsed.tm_year, original.tm_year);
     EXPECT_EQ(parsed.tm_mon, original.tm_mon);
     EXPECT_EQ(parsed.tm_mday, original.tm_mday);
@@ -227,7 +227,7 @@ TEST(SimpleDateFormatterTest, RoundTrip_FormatThenParse) {
 TEST(SimpleDateFormatterTest, Equals_IdenticalPatterns) {
     const SimpleDateFormatter formatter1("%Y-%m-%d");
     const SimpleDateFormatter formatter2("%Y-%m-%d");
-    
+
     EXPECT_TRUE(formatter1.equals(formatter2));
 }
 
@@ -238,7 +238,7 @@ TEST(SimpleDateFormatterTest, Equals_IdenticalPatterns) {
 TEST(SimpleDateFormatterTest, Equals_DifferentPatterns) {
     const SimpleDateFormatter formatter1("%Y-%m-%d");
     const SimpleDateFormatter formatter2("%Y/%m/%d");
-    
+
     EXPECT_FALSE(formatter1.equals(formatter2));
 }
 
@@ -249,7 +249,7 @@ TEST(SimpleDateFormatterTest, Equals_DifferentPatterns) {
 TEST(SimpleDateFormatterTest, HashCode_ConsistentForEqualFormatters) {
     const SimpleDateFormatter formatter1("%Y-%m-%d %H:%M:%S");
     const SimpleDateFormatter formatter2("%Y-%m-%d %H:%M:%S");
-    
+
     EXPECT_EQ(formatter1.hashCode(), formatter2.hashCode());
 }
 
@@ -260,7 +260,7 @@ TEST(SimpleDateFormatterTest, HashCode_ConsistentForEqualFormatters) {
 TEST(SimpleDateFormatterTest, HashCode_DifferentForDifferentPatterns) {
     const SimpleDateFormatter formatter1("%Y-%m-%d");
     const SimpleDateFormatter formatter2("%Y/%m/%d");
-    
+
     EXPECT_NE(formatter1.hashCode(), formatter2.hashCode());
 }
 
@@ -276,21 +276,21 @@ TEST(SimpleDateFormatterTest, Format_VariousPatterns) {
     date.tm_hour = 14;
     date.tm_min = 30;
     date.tm_sec = 45;
-    
+
     // Test year-month-day format
     {
         const SimpleDateFormatter formatter("%Y-%m-%d");
         const auto result = formatter.format(date);
         EXPECT_EQ(result, "2024-06-15");
     }
-    
+
     // Test month/day/year format
     {
         const SimpleDateFormatter formatter("%m/%d/%Y");
         const auto result = formatter.format(date);
         EXPECT_EQ(result, "06/15/2024");
     }
-    
+
     // Test time-only format
     {
         const SimpleDateFormatter formatter("%H:%M:%S");
@@ -312,7 +312,7 @@ TEST(SimpleDateFormatterTest, Parse_VariousFormats) {
         EXPECT_EQ(result.tm_mon, 6 - 1);
         EXPECT_EQ(result.tm_mday, 15);
     }
-    
+
     // Test US format
     {
         const SimpleDateFormatter formatter("%m/%d/%Y");

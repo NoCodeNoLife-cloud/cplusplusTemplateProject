@@ -29,7 +29,7 @@ TEST(StackTest, DefaultConstructor_EmptyStack) {
 TEST(StackTest, IteratorConstructor_InitializesCorrectly) {
     std::vector<int> data = {1, 2, 3, 4, 5};
     Stack<int> stack(data.begin(), data.end());
-    
+
     EXPECT_EQ(stack.size(), 5);
     EXPECT_EQ(stack.top(), 5); // Last element should be on top
 }
@@ -41,7 +41,7 @@ TEST(StackTest, IteratorConstructor_InitializesCorrectly) {
 TEST(StackTest, IteratorConstructor_EmptyRange) {
     std::vector<int> data;
     Stack<int> stack(data.begin(), data.end());
-    
+
     EXPECT_TRUE(stack.empty());
     EXPECT_EQ(stack.size(), 0);
 }
@@ -53,9 +53,9 @@ TEST(StackTest, IteratorConstructor_EmptyRange) {
 TEST(StackTest, Push_LvalueReference) {
     Stack<int> stack;
     int value = 42;
-    
+
     stack.push(value);
-    
+
     EXPECT_EQ(stack.size(), 1);
     EXPECT_EQ(stack.top(), 42);
 }
@@ -66,10 +66,10 @@ TEST(StackTest, Push_LvalueReference) {
  */
 TEST(StackTest, Push_RvalueReference) {
     Stack<std::string> stack;
-    
+
     stack.push(std::string("hello"));
     stack.push("world");
-    
+
     EXPECT_EQ(stack.size(), 2);
     EXPECT_EQ(stack.top(), "world");
 }
@@ -80,11 +80,11 @@ TEST(StackTest, Push_RvalueReference) {
  */
 TEST(StackTest, Push_MaintainsLIFOOrder) {
     Stack<int> stack;
-    
+
     stack.push(10);
     stack.push(20);
     stack.push(30);
-    
+
     EXPECT_EQ(stack.size(), 3);
     EXPECT_EQ(stack.top(), 30);
 }
@@ -95,11 +95,11 @@ TEST(StackTest, Push_MaintainsLIFOOrder) {
  */
 TEST(StackTest, Emplace_ConstructsInPlace) {
     Stack<std::string> stack;
-    
+
     stack.emplace("hello");
     stack.emplace("world");
     stack.emplace("test");
-    
+
     EXPECT_EQ(stack.size(), 3);
     EXPECT_EQ(stack.top(), "test");
 }
@@ -110,9 +110,9 @@ TEST(StackTest, Emplace_ConstructsInPlace) {
  */
 TEST(StackTest, Emplace_ComplexConstruction) {
     Stack<std::string> stack;
-    
+
     stack.emplace(5, 'a'); // Constructs string "aaaaa"
-    
+
     EXPECT_EQ(stack.size(), 1);
     EXPECT_EQ(stack.top(), "aaaaa");
 }
@@ -126,13 +126,13 @@ TEST(StackTest, Pop_RemovesTopElement) {
     stack.push(10);
     stack.push(20);
     stack.push(30);
-    
+
     EXPECT_EQ(stack.top(), 30);
-    
+
     stack.pop();
     EXPECT_EQ(stack.size(), 2);
     EXPECT_EQ(stack.top(), 20);
-    
+
     stack.pop();
     EXPECT_EQ(stack.top(), 10);
 }
@@ -154,10 +154,10 @@ TEST(StackTest, Pop_UntilEmpty) {
     Stack<int> stack;
     stack.push(10);
     stack.push(20);
-    
+
     stack.pop();
     stack.pop();
-    
+
     EXPECT_TRUE(stack.empty());
     EXPECT_EQ(stack.size(), 0);
 }
@@ -171,9 +171,9 @@ TEST(StackTest, Top_ReturnsTopElement) {
     stack.push(10);
     stack.push(20);
     stack.push(30);
-    
+
     EXPECT_EQ(stack.top(), 30);
-    
+
     // Test non-const access allows modification
     stack.top() = 300;
     EXPECT_EQ(stack.top(), 300);
@@ -196,8 +196,8 @@ TEST(StackTest, Top_ConstAccessor) {
     Stack<int> stack;
     stack.push(10);
     stack.push(20);
-    
-    const Stack<int>& constStack = stack;
+
+    const Stack<int> &constStack = stack;
     EXPECT_EQ(constStack.top(), 20);
 }
 
@@ -208,10 +208,10 @@ TEST(StackTest, Top_ConstAccessor) {
 TEST(StackTest, Empty_CorrectState) {
     Stack<int> stack;
     EXPECT_TRUE(stack.empty());
-    
+
     stack.push(10);
     EXPECT_FALSE(stack.empty());
-    
+
     stack.pop();
     EXPECT_TRUE(stack.empty());
 }
@@ -223,17 +223,17 @@ TEST(StackTest, Empty_CorrectState) {
 TEST(StackTest, Size_CorrectCount) {
     Stack<int> stack;
     EXPECT_EQ(stack.size(), 0);
-    
+
     stack.push(10);
     EXPECT_EQ(stack.size(), 1);
-    
+
     stack.push(20);
     stack.push(30);
     EXPECT_EQ(stack.size(), 3);
-    
+
     stack.pop();
     EXPECT_EQ(stack.size(), 2);
-    
+
     stack.pop();
     stack.pop();
     EXPECT_EQ(stack.size(), 0);
@@ -245,14 +245,14 @@ TEST(StackTest, Size_CorrectCount) {
  */
 TEST(StackTest, StringElements_CorrectBehavior) {
     Stack<std::string> stack;
-    
+
     stack.emplace("hello");
     stack.emplace("world");
     stack.emplace("test");
-    
+
     EXPECT_EQ(stack.size(), 3);
     EXPECT_EQ(stack.top(), "test");
-    
+
     stack.pop();
     EXPECT_EQ(stack.top(), "world");
 }
@@ -263,16 +263,16 @@ TEST(StackTest, StringElements_CorrectBehavior) {
  */
 TEST(StackTest, DuplicateValues_CorrectHandling) {
     Stack<int> stack;
-    
+
     stack.push(5);
     stack.push(5);
     stack.push(5);
     stack.push(10);
     stack.push(5);
-    
+
     EXPECT_EQ(stack.size(), 5);
     EXPECT_EQ(stack.top(), 5);
-    
+
     stack.pop();
     EXPECT_EQ(stack.top(), 10);
 }
@@ -283,15 +283,15 @@ TEST(StackTest, DuplicateValues_CorrectHandling) {
  */
 TEST(StackTest, NegativeNumbers_CorrectHandling) {
     Stack<int> stack;
-    
+
     stack.push(-10);
     stack.push(-5);
     stack.push(-20);
     stack.push(-1);
-    
+
     EXPECT_EQ(stack.size(), 4);
     EXPECT_EQ(stack.top(), -1);
-    
+
     stack.pop();
     EXPECT_EQ(stack.top(), -20);
 }
@@ -302,13 +302,13 @@ TEST(StackTest, NegativeNumbers_CorrectHandling) {
  */
 TEST(StackTest, MixedSignNumbers_CorrectHandling) {
     Stack<int> stack;
-    
+
     stack.push(-100);
     stack.push(50);
     stack.push(-50);
     stack.push(100);
     stack.push(0);
-    
+
     EXPECT_EQ(stack.size(), 5);
     EXPECT_EQ(stack.top(), 0);
 }
@@ -319,20 +319,20 @@ TEST(StackTest, MixedSignNumbers_CorrectHandling) {
  */
 TEST(StackTest, LargeNumberOfElements_Correctness) {
     Stack<int> stack;
-    
+
     // Add 1000 elements
     for (int i = 0; i < 1000; ++i) {
         stack.push(i);
     }
-    
+
     EXPECT_EQ(stack.size(), 1000);
     EXPECT_EQ(stack.top(), 999);
-    
+
     // Remove half
     for (int i = 0; i < 500; ++i) {
         stack.pop();
     }
-    
+
     EXPECT_EQ(stack.size(), 500);
     EXPECT_EQ(stack.top(), 499);
 }
@@ -343,7 +343,7 @@ TEST(StackTest, LargeNumberOfElements_Correctness) {
  */
 TEST(StackTest, AlternatingPushPop_Correctness) {
     Stack<int> stack;
-    
+
     stack.push(1);
     stack.push(2);
     stack.pop();
@@ -351,7 +351,7 @@ TEST(StackTest, AlternatingPushPop_Correctness) {
     stack.push(4);
     stack.pop();
     stack.pop();
-    
+
     EXPECT_EQ(stack.size(), 1);
     EXPECT_EQ(stack.top(), 1);
 }
@@ -362,7 +362,7 @@ TEST(StackTest, AlternatingPushPop_Correctness) {
  */
 TEST(StackTest, SingleElementCycle_Correctness) {
     Stack<int> stack;
-    
+
     for (int i = 0; i < 10; ++i) {
         stack.push(i);
         EXPECT_EQ(stack.size(), 1);
@@ -378,19 +378,19 @@ TEST(StackTest, SingleElementCycle_Correctness) {
  */
 TEST(StackTest, PreservesLIFOProperty) {
     Stack<int> stack;
-    
+
     std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
-    
-    for (int val : input) {
+
+    for (int val: input) {
         stack.push(val);
     }
-    
+
     // Should come out in reverse order
     for (auto it = input.rbegin(); it != input.rend(); ++it) {
         EXPECT_EQ(stack.top(), *it);
         stack.pop();
     }
-    
+
     EXPECT_TRUE(stack.empty());
 }
 
@@ -399,12 +399,12 @@ TEST(StackTest, PreservesLIFOProperty) {
  * @details Verifies stack works with different underlying container types
  */
 TEST(StackTest, CustomContainer_CorrectBehavior) {
-    Stack<int, std::vector<int>> stack;
-    
+    Stack<int, std::vector<int> > stack;
+
     stack.push(10);
     stack.push(20);
     stack.push(30);
-    
+
     EXPECT_EQ(stack.size(), 3);
     EXPECT_EQ(stack.top(), 30);
 }

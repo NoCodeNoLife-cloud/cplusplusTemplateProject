@@ -19,7 +19,7 @@ using namespace common::time;
 TEST(DateTest, DefaultConstructor_CurrentTime) {
     const Date now;
     const auto timestamp = now.getTime();
-    
+
     // Should be a reasonable modern timestamp (after year 2020)
     const auto minTimestamp = 1577836800000LL; // 2020-01-01 in milliseconds
     EXPECT_GT(timestamp, minTimestamp);
@@ -31,7 +31,7 @@ TEST(DateTest, DefaultConstructor_CurrentTime) {
  */
 TEST(DateTest, Constructor_YearMonthDay) {
     const Date date(2024, 1, 15);
-    
+
     EXPECT_EQ(date.getYear(), 2024);
     EXPECT_EQ(date.getMonth(), 1);
     EXPECT_EQ(date.getDay(), 15);
@@ -46,7 +46,7 @@ TEST(DateTest, Constructor_YearMonthDay) {
  */
 TEST(DateTest, Constructor_FullDateTime) {
     const Date date(2024, 6, 15, 14, 30, 45);
-    
+
     EXPECT_EQ(date.getYear(), 2024);
     EXPECT_EQ(date.getMonth(), 6);
     EXPECT_EQ(date.getDay(), 15);
@@ -62,7 +62,7 @@ TEST(DateTest, Constructor_FullDateTime) {
 TEST(DateTest, Constructor_FromTimestamp) {
     const int64_t timestamp = 1705276800000LL; // 2024-01-15 00:00:00 UTC (approximate)
     const Date date(timestamp);
-    
+
     EXPECT_EQ(date.getTime(), timestamp);
 }
 
@@ -99,7 +99,7 @@ TEST(DateTest, Constructor_InvalidHour_ThrowsException) {
  */
 TEST(DateTest, Constructor_LeapYear_ValidFeb29) {
     EXPECT_NO_THROW(Date(2024, 2, 29)); // 2024 is a leap year
-    
+
     const Date date(2024, 2, 29);
     EXPECT_EQ(date.getYear(), 2024);
     EXPECT_EQ(date.getMonth(), 2);
@@ -121,7 +121,7 @@ TEST(DateTest, Constructor_NonLeapYear_InvalidFeb29) {
 TEST(DateTest, Clone_CreatesIndependentCopy) {
     const Date original(2024, 6, 15, 10, 30, 0);
     const Date cloned = original.clone();
-    
+
     EXPECT_TRUE(original.equals(cloned));
     EXPECT_EQ(original.getTime(), cloned.getTime());
 }
@@ -133,7 +133,7 @@ TEST(DateTest, Clone_CreatesIndependentCopy) {
 TEST(DateTest, Equals_IdenticalDates) {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 0);
-    
+
     EXPECT_TRUE(date1.equals(date2));
 }
 
@@ -144,7 +144,7 @@ TEST(DateTest, Equals_IdenticalDates) {
 TEST(DateTest, Equals_DifferentDates) {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 1);
-    
+
     EXPECT_FALSE(date1.equals(date2));
 }
 
@@ -155,7 +155,7 @@ TEST(DateTest, Equals_DifferentDates) {
 TEST(DateTest, After_LaterDate) {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
-    
+
     EXPECT_TRUE(later.after(earlier));
     EXPECT_FALSE(earlier.after(later));
 }
@@ -167,7 +167,7 @@ TEST(DateTest, After_LaterDate) {
 TEST(DateTest, Before_EarlierDate) {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
-    
+
     EXPECT_TRUE(earlier.before(later));
     EXPECT_FALSE(later.before(earlier));
 }
@@ -179,7 +179,7 @@ TEST(DateTest, Before_EarlierDate) {
 TEST(DateTest, GetTime_ReturnsTimestamp) {
     const Date date(2024, 1, 15, 12, 0, 0);
     const auto timestamp = date.getTime();
-    
+
     // Should be a positive value representing milliseconds since epoch
     EXPECT_GT(timestamp, 0);
 }
@@ -190,7 +190,7 @@ TEST(DateTest, GetTime_ReturnsTimestamp) {
  */
 TEST(DateTest, Getters_AllComponents) {
     const Date date(2024, 6, 15, 14, 30, 45);
-    
+
     EXPECT_EQ(date.getYear(), 2024);
     EXPECT_EQ(date.getMonth(), 6);
     EXPECT_EQ(date.getDay(), 15);
@@ -206,7 +206,7 @@ TEST(DateTest, Getters_AllComponents) {
 TEST(DateTest, ToString_FormattedString) {
     const Date date(2024, 6, 15, 14, 30, 45);
     const auto str = date.toString();
-    
+
     EXPECT_EQ(str, "2024-06-15 14:30:45");
 }
 
@@ -217,7 +217,7 @@ TEST(DateTest, ToString_FormattedString) {
 TEST(DateTest, HashCode_ConsistentForEqualDates) {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 0);
-    
+
     EXPECT_EQ(date1.hashCode(), date2.hashCode());
 }
 
@@ -228,7 +228,7 @@ TEST(DateTest, HashCode_ConsistentForEqualDates) {
 TEST(DateTest, HashCode_DifferentForDifferentDates) {
     const Date date1(2024, 1, 1);
     const Date date2(2024, 12, 31);
-    
+
     EXPECT_NE(date1.hashCode(), date2.hashCode());
 }
 
@@ -240,7 +240,7 @@ TEST(DateTest, OperatorEquals) {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 0);
     const Date date3(2024, 6, 15, 10, 30, 1);
-    
+
     EXPECT_TRUE(date1 == date2);
     EXPECT_FALSE(date1 == date3);
 }
@@ -252,7 +252,7 @@ TEST(DateTest, OperatorEquals) {
 TEST(DateTest, OperatorNotEquals) {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 1);
-    
+
     EXPECT_TRUE(date1 != date2);
     EXPECT_FALSE(date1 != date1);
 }
@@ -264,7 +264,7 @@ TEST(DateTest, OperatorNotEquals) {
 TEST(DateTest, OperatorLessThan) {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
-    
+
     EXPECT_TRUE(earlier < later);
     EXPECT_FALSE(later < earlier);
     EXPECT_FALSE(earlier < earlier);
@@ -278,7 +278,7 @@ TEST(DateTest, OperatorLessThanOrEqual) {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
     const Date same(2024, 1, 1);
-    
+
     EXPECT_TRUE(earlier <= later);
     EXPECT_TRUE(earlier <= same);
     EXPECT_FALSE(later <= earlier);
@@ -291,7 +291,7 @@ TEST(DateTest, OperatorLessThanOrEqual) {
 TEST(DateTest, OperatorGreaterThan) {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
-    
+
     EXPECT_TRUE(later > earlier);
     EXPECT_FALSE(earlier > later);
     EXPECT_FALSE(earlier > earlier);
@@ -305,7 +305,7 @@ TEST(DateTest, OperatorGreaterThanOrEqual) {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
     const Date same(2024, 12, 31);
-    
+
     EXPECT_TRUE(later >= earlier);
     EXPECT_TRUE(later >= same);
     EXPECT_FALSE(earlier >= later);
@@ -318,7 +318,7 @@ TEST(DateTest, OperatorGreaterThanOrEqual) {
 TEST(DateTest, Comparison_DifferentMonths) {
     const Date jan(2024, 1, 15);
     const Date dec(2024, 12, 15);
-    
+
     EXPECT_TRUE(jan < dec);
     EXPECT_TRUE(dec > jan);
 }
@@ -330,7 +330,7 @@ TEST(DateTest, Comparison_DifferentMonths) {
 TEST(DateTest, Comparison_DifferentYears) {
     const Date year2023(2023, 12, 31);
     const Date year2024(2024, 1, 1);
-    
+
     EXPECT_TRUE(year2023 < year2024);
     EXPECT_TRUE(year2024 > year2023);
 }
@@ -342,7 +342,7 @@ TEST(DateTest, Comparison_DifferentYears) {
 TEST(DateTest, Constructor_LastDayOfMonth) {
     EXPECT_NO_THROW(Date(2024, 1, 31));
     EXPECT_NO_THROW(Date(2024, 4, 30));
-    
+
     const Date date(2024, 1, 31);
     EXPECT_EQ(date.getDay(), 31);
 }
@@ -353,7 +353,7 @@ TEST(DateTest, Constructor_LastDayOfMonth) {
  */
 TEST(DateTest, Constructor_FirstDayOfMonth) {
     EXPECT_NO_THROW(Date(2024, 1, 1));
-    
+
     const Date date(2024, 1, 1);
     EXPECT_EQ(date.getDay(), 1);
     EXPECT_EQ(date.getMonth(), 1);

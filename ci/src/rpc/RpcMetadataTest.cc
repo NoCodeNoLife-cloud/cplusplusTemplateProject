@@ -175,7 +175,7 @@ TEST(RpcMetadataTest, RoundTrip_GrpcToInternalToString) {
     const auto internalEnum = RpcMetadata::grpcStateToEnum(grpcState);
     const auto strFromInternal = RpcMetadata::grpcStateToString(internalEnum);
     const auto strFromGrpc = RpcMetadata::grpcStateToString(grpcState);
-    
+
     EXPECT_EQ(strFromInternal, strFromGrpc);
     EXPECT_EQ(strFromInternal, "READY");
 }
@@ -191,28 +191,28 @@ TEST(RpcMetadataTest, Consistency_AllStates) {
         const auto viaEnum = RpcMetadata::grpcStateToString(RpcMetadata::grpcStateToEnum(GRPC_CHANNEL_IDLE));
         EXPECT_EQ(direct, viaEnum);
     }
-    
+
     // Test CONNECTING
     {
         const auto direct = RpcMetadata::grpcStateToString(GRPC_CHANNEL_CONNECTING);
         const auto viaEnum = RpcMetadata::grpcStateToString(RpcMetadata::grpcStateToEnum(GRPC_CHANNEL_CONNECTING));
         EXPECT_EQ(direct, viaEnum);
     }
-    
+
     // Test READY
     {
         const auto direct = RpcMetadata::grpcStateToString(GRPC_CHANNEL_READY);
         const auto viaEnum = RpcMetadata::grpcStateToString(RpcMetadata::grpcStateToEnum(GRPC_CHANNEL_READY));
         EXPECT_EQ(direct, viaEnum);
     }
-    
+
     // Test TRANSIENT_FAILURE
     {
         const auto direct = RpcMetadata::grpcStateToString(GRPC_CHANNEL_TRANSIENT_FAILURE);
         const auto viaEnum = RpcMetadata::grpcStateToString(RpcMetadata::grpcStateToEnum(GRPC_CHANNEL_TRANSIENT_FAILURE));
         EXPECT_EQ(direct, viaEnum);
     }
-    
+
     // Test SHUTDOWN
     {
         const auto direct = RpcMetadata::grpcStateToString(GRPC_CHANNEL_SHUTDOWN);
@@ -231,7 +231,7 @@ TEST(RpcMetadataTest, NonEmpty_Results) {
     EXPECT_FALSE(RpcMetadata::grpcStateToString(GRPC_CHANNEL_READY).empty());
     EXPECT_FALSE(RpcMetadata::grpcStateToString(GRPC_CHANNEL_TRANSIENT_FAILURE).empty());
     EXPECT_FALSE(RpcMetadata::grpcStateToString(GRPC_CHANNEL_SHUTDOWN).empty());
-    
+
     EXPECT_FALSE(RpcMetadata::grpcStateToString(GrpcConnectivityState::IDLE).empty());
     EXPECT_FALSE(RpcMetadata::grpcStateToString(GrpcConnectivityState::CONNECTING).empty());
     EXPECT_FALSE(RpcMetadata::grpcStateToString(GrpcConnectivityState::READY).empty());
