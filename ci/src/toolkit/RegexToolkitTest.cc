@@ -1,3 +1,9 @@
+/**
+ * @file RegexToolkitTest.cc
+ * @brief Unit tests for the RegexToolkit class
+ * @details Tests cover pattern matching, search, extraction, replacement, and splitting.
+ */
+
 #include <gtest/gtest.h>
 #include "toolkit/RegexToolkit.hpp"
 #include <string>
@@ -6,7 +12,10 @@
 
 using namespace common::toolkit;
 
-// Test is_match - full string matching
+/**
+ * @brief Test is_match for full string matching
+ * @details Verifies entire string must match the pattern
+ */
 TEST(RegexToolkitTest, IsMatch_ValidPattern) {
     EXPECT_TRUE(RegexToolkit::is_match("hello123", R"(\w+\d+)"));
     EXPECT_FALSE(RegexToolkit::is_match("hello123!", R"(\w+\d+)"));
@@ -21,7 +30,10 @@ TEST(RegexToolkitTest, IsMatch_InvalidPattern) {
     EXPECT_THROW(RegexToolkit::is_match("test", "["), std::invalid_argument);
 }
 
-// Test is_search - partial matching
+/**
+ * @brief Test is_search for partial matching when found
+ * @details Verifies substring match returns true
+ */
 TEST(RegexToolkitTest, IsSearch_Found) {
     EXPECT_TRUE(RegexToolkit::is_search("abc123def", R"(\d+)"));
     EXPECT_TRUE(RegexToolkit::is_search("hello world", R"(world)"));
@@ -35,7 +47,10 @@ TEST(RegexToolkitTest, IsSearch_InvalidPattern) {
     EXPECT_THROW(RegexToolkit::is_search("test", "("), std::invalid_argument);
 }
 
-// Test get_matches - extract all matches
+/**
+ * @brief Test get_matches to extract all matches
+ * @details Verifies all occurrences are extracted correctly
+ */
 TEST(RegexToolkitTest, GetMatches_MultipleNumbers) {
     const auto matches = RegexToolkit::get_matches("a1b2c3d4", R"(\d)");
     
@@ -65,7 +80,10 @@ TEST(RegexToolkitTest, GetMatches_InvalidPattern) {
     EXPECT_THROW(RegexToolkit::get_matches("test", "*"), std::invalid_argument);
 }
 
-// Test get_matches_with_groups - extract matches with capture groups
+/**
+ * @brief Test get_matches_with_groups to extract capture groups
+ * @details Verifies both full match and capture groups are returned
+ */
 TEST(RegexToolkitTest, GetMatchesWithGroups_DatePattern) {
     const auto matches = RegexToolkit::get_matches_with_groups("2024-01-15 and 2023-12-25", R"((\d{4})-(\d{2})-(\d{2}))");
     
@@ -100,7 +118,10 @@ TEST(RegexToolkitTest, GetMatchesWithGroups_InvalidPattern) {
     EXPECT_THROW(RegexToolkit::get_matches_with_groups("test", "[invalid"), std::invalid_argument);
 }
 
-// Test replace_all - replace all occurrences
+/**
+ * @brief Test replace_all to replace all occurrences
+ * @details Verifies all pattern matches are replaced
+ */
 TEST(RegexToolkitTest, ReplaceAll_SimpleReplacement) {
     const auto result = RegexToolkit::replace_all("hello world hello", R"(hello)", "hi");
     EXPECT_EQ(result, "hi world hi");
@@ -120,7 +141,10 @@ TEST(RegexToolkitTest, ReplaceAll_InvalidPattern) {
     EXPECT_THROW(RegexToolkit::replace_all("test", "(", "replacement"), std::invalid_argument);
 }
 
-// Test split - split string by regex delimiter
+/**
+ * @brief Test split to split string by regex delimiter
+ * @details Verifies string is correctly split by pattern
+ */
 TEST(RegexToolkitTest, Split_ByComma) {
     const auto parts = RegexToolkit::split("apple,banana,cherry", R"(,)");
     

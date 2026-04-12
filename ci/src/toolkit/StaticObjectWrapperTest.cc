@@ -1,3 +1,9 @@
+/**
+ * @file StaticObjectWrapperTest.cc
+ * @brief Unit tests for the StaticObjectWrapper class
+ * @details Tests cover initialization, retrieval, destruction, and state management.
+ */
+
 #include <gtest/gtest.h>
 #include "toolkit/StaticObjectWrapper.hpp"
 #include <string>
@@ -5,7 +11,9 @@
 
 using namespace common::toolkit;
 
-// Simple test class for wrapper tests
+/**
+ * @brief Simple test class for wrapper tests
+ */
 struct TestConfig {
     std::string name;
     int value;
@@ -22,7 +30,9 @@ struct NoDefaultConfig {
     NoDefaultConfig(const std::string &n, int v) : name(n), value(v) {}
 };
 
-// Wrapper classes to create distinct types for test isolation
+/**
+ * @brief Wrapper classes to create distinct types for test isolation
+ */
 class TestConfigWrapper1 {};
 class TestConfigWrapper2 {};
 class TestConfigWrapper3 {};
@@ -32,7 +42,9 @@ class TestConfigWrapper8 {};
 class NoDefaultConfigWrapper4 {};
 class NoDefaultConfigWrapper5 {};
 
-// Type aliases with unique wrapper types to isolate static state between tests
+/**
+ * @brief Type aliases with unique wrapper types to isolate static state between tests
+ */
 using Wrapper1 = StaticObjectWrapper<TestConfig>;
 using Wrapper2 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper2>>;
 using Wrapper3 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper3>>;
@@ -42,7 +54,10 @@ using Wrapper6 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper6>>;
 using Wrapper7 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper7>>;
 using Wrapper8 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper8>>;
 
-// Test init with parameters and get
+/**
+ * @brief Test init with parameters and get
+ * @details Verifies parameterized initialization and retrieval
+ */
 TEST(StaticObjectWrapperTest, InitWithParamsAndGet) {
     // Clean state
     Wrapper1::destroy();
@@ -125,7 +140,10 @@ TEST(StaticObjectWrapperTest, InitNonDefaultConstructible) {
     Wrapper5::destroy();
 }
 
-// Test destroy functionality
+/**
+ * @brief Test destroy functionality
+ * @details Verifies object can be destroyed and state is reset
+ */
 TEST(StaticObjectWrapperTest, Destroy) {
     // Initialize with explicit pair construction
     const auto config_pair = std::make_pair(TestConfig{"test", 123}, TestConfigWrapper6{});
@@ -175,7 +193,10 @@ TEST(StaticObjectWrapperTest, MultipleInitCalls) {
     Wrapper8::destroy();
 }
 
-// Test that constructor is deleted (compile-time check)
+/**
+ * @brief Test that constructor is deleted (compile-time check)
+ * @details Verifies StaticObjectWrapper cannot be instantiated
+ */
 TEST(StaticObjectWrapperTest, ConstructorDeleted) {
     // This test verifies at compile time that StaticObjectWrapper cannot be instantiated
     static_assert(std::is_constructible_v<StaticObjectWrapper<TestConfig>> == false,

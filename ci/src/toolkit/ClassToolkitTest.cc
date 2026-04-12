@@ -1,3 +1,9 @@
+/**
+ * @file ClassToolkitTest.cc
+ * @brief Unit tests for the ClassToolkit class
+ * @details Tests cover type identification, reflection, and field extraction functionality.
+ */
+
 #include <gtest/gtest.h>
 #include "toolkit/ClassToolkit.hpp"
 #include <string>
@@ -5,14 +11,19 @@
 
 using namespace common::toolkit;
 
-// Simple test class for reflection tests
+/**
+ * @brief Simple test class for reflection tests
+ */
 struct TestPerson {
     std::string name;
     int age;
     double score;
 };
 
-// ReflectTraits specialization for TestPerson
+/**
+ * @brief ReflectTraits specialization for TestPerson
+ * @details Defines metadata for reflection including field count and member pointers
+ */
 template<>
 struct ReflectTraits<TestPerson> {
     static constexpr std::size_t field_count = 3;
@@ -23,7 +34,10 @@ struct ReflectTraits<TestPerson> {
     );
 };
 
-// Test getTypeId with object instance
+/**
+ * @brief Test getTypeId with basic types
+ * @details Verifies type name extraction for fundamental types
+ */
 TEST(ClassToolkitTest, GetTypeId_BasicTypes) {
     constexpr int int_val = 42;
     constexpr double double_val = 3.14;
@@ -42,6 +56,10 @@ TEST(ClassToolkitTest, GetTypeId_BasicTypes) {
     EXPECT_NE(double_type.find("double"), std::string::npos);
 }
 
+/**
+ * @brief Test getTypeId with custom class
+ * @details Verifies type name extraction includes class name
+ */
 TEST(ClassToolkitTest, GetTypeId_CustomClass) {
     const TestPerson person{"Alice", 25, 95.5};
     auto type_name = ClassToolkit::getTypeId(person);
@@ -50,7 +68,10 @@ TEST(ClassToolkitTest, GetTypeId_CustomClass) {
     EXPECT_NE(type_name.find("TestPerson"), std::string::npos);
 }
 
-// Test getTypeIdWithCvr with object instance
+/**
+ * @brief Test getTypeIdWithCvr with basic types
+ * @details Verifies CVR (const/volatile/reference) qualifiers are handled correctly
+ */
 TEST(ClassToolkitTest, GetTypeIdWithCvr_BasicTypes) {
     constexpr int const_int = 100;
     // Note: getTypeIdWithCvr deduces T from parameter type
@@ -62,7 +83,10 @@ TEST(ClassToolkitTest, GetTypeIdWithCvr_BasicTypes) {
     EXPECT_NE(type_with_cvr.find("int"), std::string::npos);
 }
 
-// Test getTypeIdByClass without instance
+/**
+ * @brief Test getTypeIdByClass without instance for int type
+ * @details Verifies template-based type identification
+ */
 TEST(ClassToolkitTest, GetTypeIdByClass_IntType) {
     auto type_name = ClassToolkit::getTypeIdByClass<int>();
 
@@ -70,6 +94,10 @@ TEST(ClassToolkitTest, GetTypeIdByClass_IntType) {
     EXPECT_NE(type_name.find("int"), std::string::npos);
 }
 
+/**
+ * @brief Test getTypeIdByClass for double type
+ * @details Verifies floating-point type identification
+ */
 TEST(ClassToolkitTest, GetTypeIdByClass_DoubleType) {
     auto type_name = ClassToolkit::getTypeIdByClass<double>();
 
@@ -77,6 +105,10 @@ TEST(ClassToolkitTest, GetTypeIdByClass_DoubleType) {
     EXPECT_NE(type_name.find("double"), std::string::npos);
 }
 
+/**
+ * @brief Test getTypeIdByClass for string type
+ * @details Verifies standard library type identification
+ */
 TEST(ClassToolkitTest, GetTypeIdByClass_StringType) {
     auto type_name = ClassToolkit::getTypeIdByClass<std::string>();
 
@@ -84,6 +116,10 @@ TEST(ClassToolkitTest, GetTypeIdByClass_StringType) {
     EXPECT_NE(type_name.find("string"), std::string::npos);
 }
 
+/**
+ * @brief Test getTypeIdByClass for custom class
+ * @details Verifies user-defined type identification
+ */
 TEST(ClassToolkitTest, GetTypeIdByClass_CustomClass) {
     auto type_name = ClassToolkit::getTypeIdByClass<TestPerson>();
 
@@ -91,7 +127,10 @@ TEST(ClassToolkitTest, GetTypeIdByClass_CustomClass) {
     EXPECT_NE(type_name.find("TestPerson"), std::string::npos);
 }
 
-// Test getTypeIdWithCvrByClass without instance
+/**
+ * @brief Test getTypeIdWithCvrByClass with const qualifier
+ * @details Verifies const qualifier is preserved in type name
+ */
 TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_ConstInt) {
     auto type_name = ClassToolkit::getTypeIdWithCvrByClass<const int>();
 
@@ -100,6 +139,10 @@ TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_ConstInt) {
     EXPECT_NE(type_name.find("int"), std::string::npos);
 }
 
+/**
+ * @brief Test getTypeIdWithCvrByClass with volatile qualifier
+ * @details Verifies volatile qualifier is preserved in type name
+ */
 TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_VolatileDouble) {
     auto type_name = ClassToolkit::getTypeIdWithCvrByClass<volatile double>();
 
@@ -108,7 +151,10 @@ TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_VolatileDouble) {
     EXPECT_NE(type_name.find("double"), std::string::npos);
 }
 
-// Test consistency between different methods
+/**
+ * @brief Test consistency between by-class and by-object methods
+ * @details Verifies both approaches produce identical type names
+ */
 TEST(ClassToolkitTest, Consistency_ByClassVsByObject) {
     constexpr int value = 42;
 
@@ -118,6 +164,10 @@ TEST(ClassToolkitTest, Consistency_ByClassVsByObject) {
     EXPECT_EQ(by_class, by_object);
 }
 
+/**
+ * @brief Test consistency of CVR methods
+ * @details Verifies CVR handling is consistent across different APIs
+ */
 TEST(ClassToolkitTest, Consistency_CvrMethods) {
     constexpr int const_value = 100;
 
@@ -128,7 +178,10 @@ TEST(ClassToolkitTest, Consistency_CvrMethods) {
     EXPECT_EQ(by_class, by_object);
 }
 
-// Test getFields functionality
+/**
+ * @brief Test getFields basic structure extraction
+ * @details Verifies all fields are extracted with correct string representations
+ */
 TEST(ClassToolkitTest, GetFields_BasicStructure) {
     const TestPerson person{"Bob", 30, 88.5};
     auto fields = ClassToolkit::getFields(person);
@@ -139,6 +192,10 @@ TEST(ClassToolkitTest, GetFields_BasicStructure) {
     EXPECT_EQ(fields["score"], "88.5");
 }
 
+/**
+ * @brief Test getFields with empty string and zero values
+ * @details Verifies edge case handling for default/empty values
+ */
 TEST(ClassToolkitTest, GetFields_EmptyString) {
     const TestPerson person{"", 0, 0.0};
     auto fields = ClassToolkit::getFields(person);
@@ -149,6 +206,10 @@ TEST(ClassToolkitTest, GetFields_EmptyString) {
     EXPECT_EQ(fields["score"], "0");
 }
 
+/**
+ * @brief Test getFields with negative values
+ * @details Verifies correct string representation of negative numbers
+ */
 TEST(ClassToolkitTest, GetFields_NegativeValues) {
     const TestPerson person{"Charlie", -5, -10.5};
     auto fields = ClassToolkit::getFields(person);
@@ -159,7 +220,10 @@ TEST(ClassToolkitTest, GetFields_NegativeValues) {
     EXPECT_EQ(fields["score"], "-10.5");
 }
 
-// Test that constructor is deleted (compile-time check)
+/**
+ * @brief Test that constructor is deleted (compile-time check)
+ * @details Verifies ClassToolkit cannot be instantiated as it's a utility class
+ */
 TEST(ClassToolkitTest, ConstructorDeleted) {
     // This test verifies at compile time that ClassToolkit cannot be instantiated
     // If the following line compiles, the test fails

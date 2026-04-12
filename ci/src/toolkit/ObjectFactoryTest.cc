@@ -1,3 +1,9 @@
+/**
+ * @file ObjectFactoryTest.cc
+ * @brief Unit tests for the ObjectFactory class
+ * @details Tests cover object registration, creation, error handling, and polymorphic behavior.
+ */
+
 #include <gtest/gtest.h>
 #include "toolkit/ObjectFactory.hpp"
 #include <string>
@@ -6,7 +12,9 @@
 
 using namespace common::toolkit;
 
-// Test interface for factory pattern
+/**
+ * @brief Test interface for factory pattern
+ */
 class IShape {
 public:
     virtual ~IShape() = default;
@@ -14,7 +22,9 @@ public:
     [[nodiscard]] virtual auto getArea() const -> double = 0;
 };
 
-// Concrete implementations for testing
+/**
+ * @brief Concrete implementations for testing
+ */
 class Circle : public IShape {
 public:
     explicit Circle(double radius = 1.0) : radius_(radius) {}
@@ -67,7 +77,9 @@ private:
     double height_;
 };
 
-// Concrete factory implementation for testing
+/**
+ * @brief Concrete factory implementation for testing
+ */
 class ShapeFactory : public ObjectFactory<IShape> {
 protected:
     auto registerAll() -> void override {
@@ -77,7 +89,10 @@ protected:
     }
 };
 
-// Test registration and creation
+/**
+ * @brief Test registration and creation of basic types
+ * @details Verifies types can be registered and queried
+ */
 TEST(ObjectFactoryTest, RegisterAndCreate_BasicTypes) {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -91,6 +106,10 @@ TEST(ObjectFactoryTest, RegisterAndCreate_BasicTypes) {
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Triangle"));
 }
 
+/**
+ * @brief Test object creation for valid registered types
+ * @details Verifies created objects have correct properties
+ */
 TEST(ObjectFactoryTest, CreateObject_ValidTypes) {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -115,6 +134,10 @@ TEST(ObjectFactoryTest, CreateObject_ValidTypes) {
     EXPECT_NEAR(triangle->getArea(), 6.0, 0.0001);
 }
 
+/**
+ * @brief Test creation of multiple instances of same type
+ * @details Verifies each call creates a new independent instance
+ */
 TEST(ObjectFactoryTest, CreateObject_MultipleInstances) {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -130,7 +153,10 @@ TEST(ObjectFactoryTest, CreateObject_MultipleInstances) {
     EXPECT_EQ(circle1->getArea(), circle2->getArea());
 }
 
-// Test error handling
+/**
+ * @brief Test error handling for unregistered type
+ * @details Verifies std::runtime_error is thrown for unknown types
+ */
 TEST(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException) {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -142,6 +168,10 @@ TEST(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException) {
     );
 }
 
+/**
+ * @brief Test error handling for empty type name
+ * @details Verifies std::invalid_argument is thrown for empty string
+ */
 TEST(ObjectFactoryTest, CreateObject_EmptyTypeName_ThrowsException) {
     EXPECT_THROW(
         ObjectFactory<IShape>::createObject(""),
@@ -158,7 +188,10 @@ TEST(ObjectFactoryTest, RegisterType_EmptyTypeName_ThrowsException) {
     );
 }
 
-// Test isRegistered functionality
+/**
+ * @brief Test isRegistered functionality after execution
+ * @details Verifies registration state changes correctly before and after execute
+ */
 TEST(ObjectFactoryTest, IsRegistered_AfterExecution) {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -185,7 +218,10 @@ TEST(ObjectFactoryTest, IsRegistered_NonExistentType) {
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered("Hexagon"));
 }
 
-// Test execute functionality
+/**
+ * @brief Test execute functionality for successful registration
+ * @details Verifies execute returns true and types are registered
+ */
 TEST(ObjectFactoryTest, Execute_SuccessfulRegistration) {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -211,7 +247,10 @@ TEST(ObjectFactoryTest, Execute_MultipleCalls) {
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Circle"));
 }
 
-// Test clearRegistry functionality
+/**
+ * @brief Test clearRegistry functionality after registration
+ * @details Verifies registry can be cleared and types become unregistered
+ */
 TEST(ObjectFactoryTest, ClearRegistry_AfterRegistration) {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -280,7 +319,10 @@ TEST(ObjectFactoryTest, RegisterWithDifferentArguments) {
     EXPECT_NEAR(square->getArea(), 25.0, 0.0001);
 }
 
-// Test polymorphic behavior
+/**
+ * @brief Test polymorphic behavior of created objects
+ * @details Verifies virtual methods work correctly on factory-created objects
+ */
 TEST(ObjectFactoryTest, PolymorphicBehavior) {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -318,7 +360,10 @@ TEST(ObjectFactoryTest, ThreadSafety_BasicOperations) {
     }
 }
 
-// Test that ObjectFactory inherits from IStartupTask
+/**
+ * @brief Test that ObjectFactory inherits from IStartupTask
+ * @details Verifies inheritance relationship and interface compatibility
+ */
 TEST(ObjectFactoryTest, Inheritance_FromIStartupTask) {
     ObjectFactory<IShape>::clearRegistry();
     static_assert(

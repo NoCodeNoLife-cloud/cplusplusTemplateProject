@@ -1,3 +1,9 @@
+/**
+ * @file StringToolkitTest.cc
+ * @brief Unit tests for the StringToolkit class
+ * @details Tests cover string splitting, concatenation, trimming, replacement, and prefix/suffix checking.
+ */
+
 #include <gtest/gtest.h>
 #include "toolkit/StringToolkit.hpp"
 #include <string>
@@ -5,7 +11,10 @@
 
 using namespace common::toolkit;
 
-// Test split with char delimiter
+/**
+ * @brief Test split with char delimiter - basic case
+ * @details Verifies string is correctly split by character delimiter
+ */
 TEST(StringToolkitTest, SplitByChar_Basic) {
     const auto result = StringToolkit::split("apple,banana,cherry", ',');
     
@@ -29,7 +38,10 @@ TEST(StringToolkitTest, SplitByChar_EmptyString) {
     EXPECT_EQ(result[0], "");
 }
 
-// Test splitWithEmpty with char delimiter
+/**
+ * @brief Test splitWithEmpty with char delimiter for consecutive delimiters
+ * @details Verifies empty strings are preserved between consecutive delimiters
+ */
 TEST(StringToolkitTest, SplitWithEmpty_ConsecutiveDelimiters) {
     const auto result = StringToolkit::splitWithEmpty("a,,b,c", ',');
     
@@ -73,7 +85,10 @@ TEST(StringToolkitTest, SplitByString_NoMatch) {
     EXPECT_EQ(result[0], "hello world");
 }
 
-// Test concatenate with char
+/**
+ * @brief Test concatenate with char delimiter - basic case
+ * @details Verifies vector of strings is joined with character delimiter
+ */
 TEST(StringToolkitTest, ConcatenateByChar_Basic) {
     const std::vector<std::string> parts = {"apple", "banana", "cherry"};
     const auto result = StringToolkit::concatenate(parts, ',');
@@ -110,7 +125,10 @@ TEST(StringToolkitTest, ConcatenateByString_EmptyVector) {
     EXPECT_EQ(result, "");
 }
 
-// Test startsWith
+/**
+ * @brief Test startsWith functionality
+ * @details Verifies prefix detection works correctly
+ */
 TEST(StringToolkitTest, StartsWith_Match) {
     EXPECT_TRUE(StringToolkit::startsWith("hello world", "hello"));
 }
@@ -127,7 +145,10 @@ TEST(StringToolkitTest, StartsWith_EmptyPrefix) {
     EXPECT_TRUE(StringToolkit::startsWith("hello", ""));
 }
 
-// Test endsWith
+/**
+ * @brief Test endsWith functionality
+ * @details Verifies suffix detection works correctly
+ */
 TEST(StringToolkitTest, EndsWith_Match) {
     EXPECT_TRUE(StringToolkit::endsWith("hello world", "world"));
 }
@@ -144,7 +165,10 @@ TEST(StringToolkitTest, EndsWith_EmptySuffix) {
     EXPECT_TRUE(StringToolkit::endsWith("hello", ""));
 }
 
-// Test trim
+/**
+ * @brief Test trim functionality for both sides
+ * @details Verifies leading and trailing whitespace is removed
+ */
 TEST(StringToolkitTest, Trim_BothSides) {
     const auto result = StringToolkit::trim("  hello world  ");
     EXPECT_EQ(result, "hello world");
@@ -175,7 +199,10 @@ TEST(StringToolkitTest, Trim_EmptyString) {
     EXPECT_EQ(result, "");
 }
 
-// Test replaceAll
+/**
+ * @brief Test replaceAll functionality for multiple occurrences
+ * @details Verifies all occurrences are replaced
+ */
 TEST(StringToolkitTest, ReplaceAll_MultipleOccurrences) {
     const auto result = StringToolkit::replaceAll("hello world hello", "hello", "hi");
     EXPECT_EQ(result, "hi world hi");
@@ -196,7 +223,10 @@ TEST(StringToolkitTest, ReplaceAll_OverlappingReplacement) {
     EXPECT_EQ(result, "bba");
 }
 
-// Test join (alias for concatenate with string delimiter)
+/**
+ * @brief Test join (alias for concatenate with string delimiter)
+ * @details Verifies string joining with custom delimiter
+ */
 TEST(StringToolkitTest, Join_Basic) {
     const std::vector<std::string> parts = {"2024", "01", "15"};
     const auto result = StringToolkit::join(parts, "-");

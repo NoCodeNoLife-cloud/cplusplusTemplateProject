@@ -1,3 +1,9 @@
+/**
+ * @file MD5ToolkitTest.cc
+ * @brief Unit tests for the MD5Toolkit class
+ * @details Tests cover one-shot hashing, incremental hashing, and hash format validation.
+ */
+
 #include <gtest/gtest.h>
 #include "toolkit/MD5Toolkit.hpp"
 #include <string>
@@ -5,7 +11,10 @@
 
 using namespace common;
 
-// Test one-shot hash for string
+/**
+ * @brief Test one-shot hash for string with basic cases
+ * @details Verifies hash generation for various string inputs
+ */
 TEST(MD5ToolkitTest, Hash_String_BasicCases) {
     const auto hash1 = MD5Toolkit::hash("hello");
     const auto hash2 = MD5Toolkit::hash("world");
@@ -27,6 +36,10 @@ TEST(MD5ToolkitTest, Hash_String_BasicCases) {
     EXPECT_EQ(MD5Toolkit::hash("hello"), hash1);
 }
 
+/**
+ * @brief Test one-shot hash for string with known values
+ * @details Verifies hash output matches standard MD5 reference values
+ */
 TEST(MD5ToolkitTest, Hash_String_KnownValues) {
     // Known MD5 hash values for verification
     EXPECT_EQ(MD5Toolkit::hash(""), "d41d8cd98f00b204e9800998ecf8427e");
@@ -36,6 +49,10 @@ TEST(MD5ToolkitTest, Hash_String_KnownValues) {
               "9e107d9d372bb6826bd81d3542a419d6");
 }
 
+/**
+ * @brief Test one-shot hash case sensitivity
+ * @details Verifies different cases produce different hashes
+ */
 TEST(MD5ToolkitTest, Hash_String_CaseSensitive) {
     const auto hash_lower = MD5Toolkit::hash("hello");
     const auto hash_upper = MD5Toolkit::hash("HELLO");
@@ -45,7 +62,10 @@ TEST(MD5ToolkitTest, Hash_String_CaseSensitive) {
     EXPECT_EQ(hash_upper.length(), 32);
 }
 
-// Test one-shot hash for binary data
+/**
+ * @brief Test one-shot hash for binary data with basic cases
+ * @details Verifies hashing works for raw byte arrays
+ */
 TEST(MD5ToolkitTest, Hash_BinaryData_BasicCases) {
     const char data1[] = "test";
     const char data2[] = "test";
@@ -66,6 +86,10 @@ TEST(MD5ToolkitTest, Hash_BinaryData_BasicCases) {
     EXPECT_NE(hash1, hash3);
 }
 
+/**
+ * @brief Test one-shot hash for binary data with known values
+ * @details Verifies binary hash output matches standard MD5 reference values
+ */
 TEST(MD5ToolkitTest, Hash_BinaryData_KnownValues) {
     const char empty[] = "";
     const char hello[] = "hello";
@@ -74,6 +98,10 @@ TEST(MD5ToolkitTest, Hash_BinaryData_KnownValues) {
     EXPECT_EQ(MD5Toolkit::hash(hello, 5), "5d41402abc4b2a76b9719d911017c592");
 }
 
+/**
+ * @brief Test one-shot hash with null pointer and zero length
+ * @details Verifies safe handling of null input with zero size
+ */
 TEST(MD5ToolkitTest, Hash_BinaryData_NullPointer_ZeroLength) {
     // Null pointer with zero length should not crash
     const auto hash = MD5Toolkit::hash(nullptr, 0);
@@ -82,6 +110,10 @@ TEST(MD5ToolkitTest, Hash_BinaryData_NullPointer_ZeroLength) {
     EXPECT_EQ(hash, "d41d8cd98f00b204e9800998ecf8427e");
 }
 
+/**
+ * @brief Test one-shot hash with actual binary content
+ * @details Verifies hashing works for non-printable byte values
+ */
 TEST(MD5ToolkitTest, Hash_BinaryData_BinaryContent) {
     // Test with actual binary data (non-printable characters)
     const unsigned char binary_data[] = {0x00, 0x01, 0x02, 0xFF, 0xFE};
@@ -96,7 +128,10 @@ TEST(MD5ToolkitTest, Hash_BinaryData_BinaryContent) {
     }
 }
 
-// Test incremental hashing with update/finalize
+/**
+ * @brief Test incremental hashing with single update
+ * @details Verifies single-call incremental hashing produces correct result
+ */
 TEST(MD5ToolkitTest, IncrementalHash_SingleUpdate) {
     MD5Toolkit toolkit;
     toolkit.update("hello");
@@ -106,6 +141,10 @@ TEST(MD5ToolkitTest, IncrementalHash_SingleUpdate) {
     EXPECT_EQ(hash, "5d41402abc4b2a76b9719d911017c592");
 }
 
+/**
+ * @brief Test incremental hashing with multiple updates
+ * @details Verifies multiple update calls produce correct combined hash
+ */
 TEST(MD5ToolkitTest, IncrementalHash_MultipleUpdates) {
     MD5Toolkit toolkit;
     toolkit.update("hello");
@@ -118,6 +157,10 @@ TEST(MD5ToolkitTest, IncrementalHash_MultipleUpdates) {
     EXPECT_EQ(hash, MD5Toolkit::hash("hello world"));
 }
 
+/**
+ * @brief Test incremental hashing with binary data update
+ * @details Verifies binary data can be used in incremental hashing
+ */
 TEST(MD5ToolkitTest, IncrementalHash_BinaryUpdate) {
     MD5Toolkit toolkit;
     const char data[] = "test";
@@ -128,6 +171,10 @@ TEST(MD5ToolkitTest, IncrementalHash_BinaryUpdate) {
     EXPECT_EQ(hash, MD5Toolkit::hash("test"));
 }
 
+/**
+ * @brief Test incremental hashing with mixed string and binary updates
+ * @details Verifies both update overloads work together correctly
+ */
 TEST(MD5ToolkitTest, IncrementalHash_MixedUpdates) {
     MD5Toolkit toolkit;
     toolkit.update(std::string("hello"));
@@ -139,6 +186,10 @@ TEST(MD5ToolkitTest, IncrementalHash_MixedUpdates) {
     EXPECT_EQ(hash, MD5Toolkit::hash("hello world"));
 }
 
+/**
+ * @brief Test incremental hashing with empty updates
+ * @details Verifies empty inputs don't affect hash calculation
+ */
 TEST(MD5ToolkitTest, IncrementalHash_EmptyUpdates) {
     MD5Toolkit toolkit;
     toolkit.update("");  // Empty string
@@ -150,7 +201,10 @@ TEST(MD5ToolkitTest, IncrementalHash_EmptyUpdates) {
     EXPECT_EQ(hash, "d41d8cd98f00b204e9800998ecf8427e");
 }
 
-// Test reset functionality
+/**
+ * @brief Test reset functionality after finalize
+ * @details Verifies toolkit can be reused after reset
+ */
 TEST(MD5ToolkitTest, Reset_AfterFinalize) {
     MD5Toolkit toolkit;
     toolkit.update("first");
@@ -165,6 +219,10 @@ TEST(MD5ToolkitTest, Reset_AfterFinalize) {
     EXPECT_EQ(hash2, MD5Toolkit::hash("second"));
 }
 
+/**
+ * @brief Test reset functionality mid-computation
+ * @details Verifies reset clears partial computation state
+ */
 TEST(MD5ToolkitTest, Reset_MidComputation) {
     MD5Toolkit toolkit;
     toolkit.update("partial");
@@ -177,6 +235,10 @@ TEST(MD5ToolkitTest, Reset_MidComputation) {
     EXPECT_NE(hash, MD5Toolkit::hash("partial"));
 }
 
+/**
+ * @brief Test reset functionality called multiple times
+ * @details Verifies multiple resets don't cause issues
+ */
 TEST(MD5ToolkitTest, Reset_MultipleTimes) {
     MD5Toolkit toolkit;
 
@@ -192,7 +254,10 @@ TEST(MD5ToolkitTest, Reset_MultipleTimes) {
     EXPECT_EQ(hash, MD5Toolkit::hash("test3"));
 }
 
-// Test hash format (lowercase hexadecimal)
+/**
+ * @brief Test hash format is lowercase hexadecimal
+ * @details Verifies all hash characters are valid lowercase hex digits
+ */
 TEST(MD5ToolkitTest, HashFormat_LowercaseHex) {
     const auto hash = MD5Toolkit::hash("test data");
 
@@ -205,7 +270,10 @@ TEST(MD5ToolkitTest, HashFormat_LowercaseHex) {
     }
 }
 
-// Test consistency between incremental and one-shot hashing
+/**
+ * @brief Test consistency between incremental and one-shot hashing
+ * @details Verifies both approaches produce identical results
+ */
 TEST(MD5ToolkitTest, Consistency_IncrementalVsOneShot) {
     const std::string test_data = "consistency test data";
 
@@ -228,7 +296,10 @@ TEST(MD5ToolkitTest, Consistency_IncrementalVsOneShot) {
     EXPECT_EQ(oneshot_hash, incremental_hash2);
 }
 
-// Test constructor availability (should be constructible)
+/**
+ * @brief Test constructor availability
+ * @details Verifies MD5Toolkit can be instantiated (unlike utility classes)
+ */
 TEST(MD5ToolkitTest, ConstructorAvailable) {
     static_assert(std::is_default_constructible_v<MD5Toolkit>,
                   "MD5Toolkit should be default constructible");
