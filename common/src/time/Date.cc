@@ -10,20 +10,22 @@
 #include <ctime>
 
 namespace common::time {
-    // Helper function to check if a year is a leap year
-    static auto isLeapYear(const int32_t year) -> bool {
-        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-    }
-
-    // Helper function to get days in a month
-    static auto getDaysInMonth(const int32_t year, const int32_t month) -> int32_t {
-        static const int32_t daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        int32_t days = daysInMonth[month];
-        if (month == 2 && isLeapYear(year)) {
-            days = 29;
+    namespace {
+        // Helper function to check if a year is a leap year
+        auto isLeapYear(const int32_t year) -> bool {
+            return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
         }
 
-        return days;
+        // Helper function to get days in a month
+        auto getDaysInMonth(const int32_t year, const int32_t month) -> int32_t {
+            static const int32_t daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+            int32_t days = daysInMonth[month];
+            if (month == 2 && isLeapYear(year)) {
+                days = 29;
+            }
+
+            return days;
+        }
     }
 
     auto Date::isValidDate(const int32_t year, const int32_t month, const int32_t day, const int32_t hours, const int32_t minutes, const int32_t seconds) -> bool {
