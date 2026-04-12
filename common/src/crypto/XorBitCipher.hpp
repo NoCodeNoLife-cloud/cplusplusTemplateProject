@@ -56,7 +56,7 @@ namespace common {
          *
          * @note This method processes full bytes. Use processBits() for arbitrary bit lengths.
          */
-        [[nodiscard]] auto process(const std::vector<uint8_t> &data) -> std::vector<uint8_t>;
+        [[nodiscard]] auto process(const std::vector<uint8_t> &data) const -> std::vector<uint8_t>;
 
         /**
          * @brief Process data in-place for memory efficiency.

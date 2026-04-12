@@ -1,14 +1,101 @@
-#include "src/container/BloomFilter.hpp"
+#include "BloomFilter.hpp"
 
+#include <algorithm>
+#include <cstring>
 #include <iterator>
+#include <limits>
 #include <random>
 #include <string>
 #include <vector>
-#include <algorithm>
 
-#include "src/container/BloomParameters.hpp"
+namespace common::toolkit {
+    // BloomParameters implementation
+    BloomParameters::BloomParameters() noexcept : minimum_size(1), maximum_size(std::numeric_limits<uint64_t>::max()), minimum_number_of_hashes(1), maximum_number_of_hashes(std::numeric_limits<uint32_t>::max()), projected_element_count(10000), false_positive_probability(1.0 / static_cast<double>(projected_element_count)), random_seed(0xA5A5A5A55A5A5A5AULL) {
+    }
 
-namespace common::container {
+    auto BloomParameters::operator!() const noexcept -> bool {
+        return minimum_size > maximum_size || minimum_number_of_hashes > maximum_number_of_hashes || minimum_number_of_hashes < 1 || 0 == maximum_number_of_hashes || 0 == projected_element_count || false_positive_probability < 0.0 || std::numeric_limits<double>::infinity() == std::abs(false_positive_probability) || 0 == random_seed || 0xFFFFFFFFFFFFFFFFULL == random_seed;
+    }
+
+    BloomParameters::optimal_parameters_t::optimal_parameters_t() noexcept = default;
+
+    auto BloomParameters::compute_optimal_parameters() noexcept -> bool {
+        if (!*this) return false;
+
+        // Additional validation for mathematical soundness
+        if (projected_element_count == 0 || false_positive_probability <= 0.0 || false_positive_probability >= 1.0) {
+            return false;
+        }
+
+        double min_m = std::numeric_limits<double>::infinity();
+        double min_k = 0.0;
+        double k = 1.0;
+
+        while (k < 1000.0) {
+            // Check for mathematical validity before computation
+            const double prob_power = std::pow(false_positive_probability, 1.0 / k);
+            if (prob_power >= 1.0) {
+                // This would lead to invalid logarithm computation
+                k += 1.0;
+                continue;
+            }
+
+            const double denominator = safe_log(1.0 - prob_power);
+            if (denominator == 0.0) {
+                // Avoid division by zero
+                k += 1.0;
+                continue;
+            }
+
+            const double numerator = -k * static_cast<double>(projected_element_count);
+            if (const double curr_m = numerator / denominator; curr_m < min_m && curr_m > 0) {
+                min_m = curr_m;
+                min_k = k;
+            }
+
+            k += 1.0;
+        }
+
+        // Check if valid parameters were found
+        if (min_m == std::numeric_limits<double>::infinity() || min_k <= 0) {
+            return false;
+        }
+
+        optimal_parameters_t &parameters = optimal_parameters;
+
+        parameters.number_of_hashes = static_cast<uint32_t>(min_k);
+
+        parameters.table_size = static_cast<uint64_t>(min_m);
+
+        // Round up to nearest multiple of BITS_PER_CHAR
+        if (parameters.table_size % BITS_PER_CHAR != 0) {
+            parameters.table_size += BITS_PER_CHAR - parameters.table_size % BITS_PER_CHAR;
+        }
+
+        // Clamp to specified bounds
+        if (parameters.number_of_hashes < minimum_number_of_hashes) {
+            parameters.number_of_hashes = minimum_number_of_hashes;
+        } else if (parameters.number_of_hashes > maximum_number_of_hashes) {
+            parameters.number_of_hashes = maximum_number_of_hashes;
+        }
+
+        if (parameters.table_size < minimum_size) {
+            parameters.table_size = minimum_size;
+        } else if (parameters.table_size > maximum_size) {
+            parameters.table_size = maximum_size;
+        }
+
+        return true;
+    }
+
+    auto BloomParameters::safe_log(const double value) noexcept -> double {
+        if (value <= 0.0) {
+            return 0.0;
+        }
+        return std::log(value);
+    }
+
+    // BloomFilter implementation
     BloomFilter::BloomFilter(const BloomParameters &p) noexcept : salt_count_(p.optimal_parameters.number_of_hashes), table_size_(p.optimal_parameters.table_size), projected_element_count_(p.projected_element_count), random_seed_(p.random_seed * 0xA5A5A5A5 + 1), desired_false_positive_probability_(p.false_positive_probability) {
         generate_unique_salt();
         bit_table_.resize(table_size_ / 8, 0x00);
@@ -80,27 +167,21 @@ namespace common::container {
         ++inserted_element_count_;
     }
 
-    template<typename T>
-    auto BloomFilter::insert(const T &t) -> void {
-        insert(reinterpret_cast<const unsigned char *>(&t), sizeof(T));
-    }
+    // Template implementations moved to header file for proper instantiation
 
     auto BloomFilter::insert(const std::string &key) -> void {
         insert(reinterpret_cast<const unsigned char *>(key.data()), key.size());
+    }
+
+    auto BloomFilter::insert(const char *data) -> void {
+        insert(reinterpret_cast<const unsigned char *>(data), std::strlen(data));
     }
 
     auto BloomFilter::insert(const char *data, const std::size_t length) -> void {
         insert(reinterpret_cast<const unsigned char *>(data), length);
     }
 
-    template<typename InputIterator>
-    auto BloomFilter::insert(InputIterator begin, InputIterator end) -> void {
-        InputIterator itr = begin;
-
-        while (end != itr) {
-            insert(*itr++);
-        }
-    }
+    // Template implementations moved to header file for proper instantiation
 
     auto BloomFilter::contains(const unsigned char *key_begin, const std::size_t length) const -> bool {
         std::size_t bit_index = 0;
@@ -117,48 +198,23 @@ namespace common::container {
         return true;
     }
 
-    template<typename T>
-    auto BloomFilter::contains(const T &t) const -> bool {
-        return contains(reinterpret_cast<const unsigned char *>(&t), sizeof(T));
-    }
+    // Template implementations moved to header file for proper instantiation
 
     auto BloomFilter::contains(const std::string &key) const -> bool {
         return contains(reinterpret_cast<const unsigned char *>(key.data()), key.size());
+    }
+
+    auto BloomFilter::contains(const char *data) const -> bool {
+        return contains(reinterpret_cast<const unsigned char *>(data), std::strlen(data));
     }
 
     auto BloomFilter::contains(const char *data, const std::size_t length) const -> bool {
         return contains(reinterpret_cast<const unsigned char *>(data), length);
     }
 
-    template<typename InputIterator>
-    auto BloomFilter::contains_all(InputIterator begin, InputIterator end) const -> InputIterator {
-        InputIterator itr = begin;
+    // Template implementations moved to header file for proper instantiation
 
-        while (end != itr) {
-            if (!contains(*itr)) {
-                return itr;
-            }
-
-            ++itr;
-        }
-
-        return end;
-    }
-
-    template<typename InputIterator>
-    auto BloomFilter::contains_none(InputIterator begin, InputIterator end) const -> InputIterator {
-        InputIterator itr = begin;
-
-        while (end != itr) {
-            if (contains(*itr)) {
-                return itr;
-            }
-
-            ++itr;
-        }
-
-        return end;
-    }
+    // Template implementations moved to header file for proper instantiation
 
     auto BloomFilter::size() const noexcept -> uint64_t {
         return table_size_;

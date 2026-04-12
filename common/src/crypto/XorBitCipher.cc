@@ -48,7 +48,7 @@ namespace common {
         return bit;
     }
 
-    auto XorBitCipher::process(const std::vector<uint8_t> &data) -> std::vector<uint8_t> {
+    auto XorBitCipher::process(const std::vector<uint8_t> &data) const -> std::vector<uint8_t> {
         std::vector<uint8_t> result;
         result.reserve(data.size());
 
@@ -90,8 +90,13 @@ namespace common {
 
         // Simple deterministic generation for demonstration only
         // In production, use crypto-secure RNG (e.g., std::random_device with proper seeding)
+        // Use different seeds based on key_length to ensure different keys for different lengths
+        const uint32_t seed = static_cast<uint32_t>(key_length * 2654435761u);
+        uint32_t state = seed;
         for (size_t i = 0; i < key_length; ++i) {
-            random_key.push_back(static_cast<uint8_t>((i * 1103515245 + 12345) & 0xFF));
+            // Linear congruential generator with length-dependent seed
+            state = state * 1103515245 + 12345;
+            random_key.push_back(static_cast<uint8_t>((state >> 16) & 0xFF));
         }
 
         return XorBitCipher(std::move(random_key));
