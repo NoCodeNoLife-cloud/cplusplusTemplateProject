@@ -13,9 +13,9 @@ namespace app_server::task {
     ServerTask::ServerTask(ServerTask &&) noexcept = default;
 
     auto ServerTask::init() -> void {
-        const glog::config::GLogConfigurator log_configurator{application_dev_config_path_};
+        const glog::config::GLogConfigurator log_configurator{glog_config_path_};
         log_configurator.execute();
-        LOG(INFO) << fmt::format("Initializing ServerTask with config path: {}, loading gRPC configuration from: {}", application_dev_config_path_, application_dev_config_path_);
+        LOG(INFO) << fmt::format("Initializing ServerTask with glog config path: {}, loading gRPC configuration from: {}", glog_config_path_, application_dev_config_path_);
 
         grpc_options_.deserializedFromYamlFile(application_dev_config_path_);
 

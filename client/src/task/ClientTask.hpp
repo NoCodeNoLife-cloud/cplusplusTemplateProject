@@ -79,6 +79,7 @@ namespace app_client::task {
         /// @details Logs OS version and CPU model to the application log
         static auto logClientInfo() noexcept -> void;
 
+        const std::string glog_config_path_{"../../log/src/config/glog-dev.yml"};
         const std::string application_dev_config_path_{"../../client/src/application-dev.yml"};
         mutable auth::AuthRpcClientOptions rpc_options_;
         mutable common::time::FunctionProfiler timer_;

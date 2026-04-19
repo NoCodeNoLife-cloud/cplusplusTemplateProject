@@ -16,9 +16,9 @@ namespace app_client::task {
     }
 
     auto ClientTask::init() const noexcept -> void {
-        const glog::config::GLogConfigurator log_configurator{application_dev_config_path_};
+        const glog::config::GLogConfigurator log_configurator{glog_config_path_};
         log_configurator.execute();
-        LOG(INFO) << fmt::format("Initializing GLog configuration from: {}, RPC Options - Keepalive Time: {}ms, Timeout: {}ms, Permit Without Calls: {}, configuration initialized successfully", application_dev_config_path_, application_dev_config_path_, rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls());
+        LOG(INFO) << fmt::format("Initializing GLog configuration from: {}, RPC Options - Keepalive Time: {}ms, Timeout: {}ms, Permit Without Calls: {}, configuration initialized successfully", glog_config_path_, rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls());
 
         LOG(INFO) << "Application starting...";
         logClientInfo();

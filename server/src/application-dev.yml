@@ -1,8 +1,3 @@
-glog:
-  minLogLevel: 0
-  logName: glog_main
-  logToStderr: true
-  customLogFormat: true
 grpc:
   maxConnectionIdleMs: 3600000
   maxConnectionAgeMs: 7200000
