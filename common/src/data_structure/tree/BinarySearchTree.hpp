@@ -4,7 +4,7 @@
 
 #include "TreeNode.hpp"
 
-namespace fox::data_structure {
+namespace common::data_structure::tree {
     /// @brief A binary search tree implementation.
     /// @tparam T The type of data stored in the tree.
     template<typename T>

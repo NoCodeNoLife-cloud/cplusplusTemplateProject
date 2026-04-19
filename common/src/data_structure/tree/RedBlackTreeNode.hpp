@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-namespace fox::data_structure {
+namespace common::data_structure::tree {
     /// @brief A node in a Red-Black Tree
     /// @tparam T The type of data stored in the node
     template<typename T>

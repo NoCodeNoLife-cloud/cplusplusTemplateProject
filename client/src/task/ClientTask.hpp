@@ -8,7 +8,7 @@
 #include "src/time/FunctionProfiler.hpp"
 #include "task/interface/ITask.h"
 
-namespace app_client::task {
+namespace client_app::task {
     class ClientTask final : public common::interfaces::ITask {
     public:
         /// @brief Default constructor explicitly deleted to enforce parameterized construction

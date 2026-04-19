@@ -6,7 +6,7 @@
 #include "config/GLogConfigurator.hpp"
 #include "src/auth/AuthRpcService.hpp"
 
-namespace app_server::task {
+namespace server_app::task {
     ServerTask::ServerTask(std::string name) noexcept : timer_(std::move(name)) {
     }
 

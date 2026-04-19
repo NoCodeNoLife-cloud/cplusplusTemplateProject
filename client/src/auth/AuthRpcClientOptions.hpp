@@ -7,7 +7,7 @@
 #include "src/serializer/interface/IYamlConfigurable.hpp"
 #include "src/filesystem/type/YamlToolkit.hpp"
 
-namespace app_client::auth {
+namespace client_app::auth {
     /// @brief A class that holds gRPC configuration options for the client
     /// @details This class encapsulates all the gRPC configuration parameters
     /// that can be used to customize the behavior of gRPC channels and connections.

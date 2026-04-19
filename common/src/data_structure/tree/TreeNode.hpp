@@ -2,7 +2,7 @@
 #include <memory>
 #include <cstdint>
 
-namespace fox::data_structure {
+namespace common::data_structure::tree {
     /// @brief A tree node class that contains a value and pointers to left and right children.
     /// @tparam T The type of the value stored in the node.
     template<typename T>

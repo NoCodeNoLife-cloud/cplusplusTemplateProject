@@ -3,7 +3,7 @@
 #include <glog/logging.h>
 #include <chrono>  // C++20
 
-namespace app_client::auth {
+namespace client_app::auth {
     AuthRpcClientOptions::AuthRpcClientOptions(const int32_t keepalive_time_ms, const int32_t keepalive_timeout_ms, const int32_t keepalive_permit_without_calls, std::string server_address) noexcept : keepalive_time_ms_(keepalive_time_ms), keepalive_timeout_ms_(keepalive_timeout_ms), keepalive_permit_without_calls_(keepalive_permit_without_calls), server_address_(std::move(server_address)) {
         validate(); // Validate parameters after construction
     }
@@ -123,7 +123,7 @@ namespace app_client::auth {
     }
 }
 
-auto YAML::convert<app_client::auth::AuthRpcClientOptions>::decode(const YAML::Node &node, app_client::auth::AuthRpcClientOptions &rhs) -> bool {
+auto YAML::convert<client_app::auth::AuthRpcClientOptions>::decode(const YAML::Node &node, client_app::auth::AuthRpcClientOptions &rhs) -> bool {
     if (const auto keepaliveTimeMsNode = node["keepaliveTimeMs"]; keepaliveTimeMsNode) {
         rhs.keepaliveTimeMs(keepaliveTimeMsNode.as<int32_t>());
     }
@@ -139,7 +139,7 @@ auto YAML::convert<app_client::auth::AuthRpcClientOptions>::decode(const YAML::N
     return true;
 }
 
-auto YAML::convert<app_client::auth::AuthRpcClientOptions>::encode(const app_client::auth::AuthRpcClientOptions &rhs) -> YAML::Node {
+auto YAML::convert<client_app::auth::AuthRpcClientOptions>::encode(const client_app::auth::AuthRpcClientOptions &rhs) -> YAML::Node {
     YAML::Node node;
     node["keepaliveTimeMs"] = rhs.keepaliveTimeMs();
     node["keepaliveTimeoutMs"] = rhs.keepaliveTimeoutMs();

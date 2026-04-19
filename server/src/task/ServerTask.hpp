@@ -7,7 +7,7 @@
 #include "src/time/FunctionProfiler.hpp"
 #include "task/interface/ITask.h"
 
-namespace app_server::task {
+namespace server_app::task {
     /// @brief ServerTask is responsible for managing the main service loop
     /// @details This class coordinates various subsystems within the application server,
     /// initializes the gRPC server, loads configurations, and manages the server lifecycle.

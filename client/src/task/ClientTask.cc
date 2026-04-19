@@ -10,7 +10,7 @@
 #include "src/filesystem/io/Console.hpp"
 #include "src/system/SystemInfo.hpp"
 
-namespace app_client::task {
+namespace client_app::task {
     ClientTask::ClientTask(const std::string &project_name_) noexcept : rpc_options_{auth::AuthRpcClientOptions::builder().build()}, timer_{project_name_} {
         timer_.recordStart();
     }
