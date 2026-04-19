@@ -7,9 +7,9 @@
 #include <gtest/gtest.h>
 #include <string>
 
-#include "toolkit/hash/MD5Toolkit.hpp"
+#include "crypto/hash/MD5Toolkit.hpp"
 
-using namespace common::toolkit::hash;
+using namespace common::crypto::hash;
 
 /**
  * @brief Test one-shot hash for string with basic cases

@@ -3,21 +3,21 @@
 #include <sstream>
 #include <iomanip>
 
-namespace common::toolkit::hash {
+namespace common::crypto::hash {
     /// @brief Append string data to hash computation
     /// @param data The string data to hash
     auto MD5Toolkit::update(const std::string &data) -> void {
         if (!data.empty()) {
-            md5.process_bytes(data.data(), data.size());
+            md5_.process_bytes(data.data(), data.size());
         }
     }
 
     /// @brief Append binary data to hash computation
     /// @param data Pointer to the binary data
     /// @param length Length of the binary data in bytes
-    auto MD5Toolkit::update(const void *data, size_t length) -> void {
+    auto MD5Toolkit::update(const void *data, const size_t length) -> void {
         if (data && length > 0) {
-            md5.process_bytes(data, length);
+            md5_.process_bytes(data, length);
         }
     }
 
@@ -25,7 +25,7 @@ namespace common::toolkit::hash {
     /// @return MD5 hash as a 32-character lowercase hexadecimal string
     auto MD5Toolkit::finalize() -> std::string {
         boost::uuids::detail::md5::digest_type digest;
-        md5.get_digest(digest);
+        md5_.get_digest(digest);
 
         // Convert 16 bytes (4 uint32_t) to hex string
         const auto *bytes = reinterpret_cast<const unsigned char *>(digest);
@@ -41,13 +41,13 @@ namespace common::toolkit::hash {
 
     /// @brief Reset internal state for reuse
     auto MD5Toolkit::reset() -> void {
-        md5 = boost::uuids::detail::md5();
+        md5_ = boost::uuids::detail::md5();
     }
 
     /// @brief One-shot hash for string
     /// @param data The string data to hash
     /// @return MD5 hash as a 32-character lowercase hexadecimal string
-    auto MD5Toolkit::hash(const std::string &data) -> std::string {
+    [[nodiscard]] auto MD5Toolkit::hash(const std::string &data) -> std::string {
         MD5Toolkit toolkit;
         toolkit.update(data);
         return toolkit.finalize();
@@ -57,7 +57,7 @@ namespace common::toolkit::hash {
     /// @param data Pointer to the binary data
     /// @param length Length of the binary data in bytes
     /// @return MD5 hash as a 32-character lowercase hexadecimal string
-    auto MD5Toolkit::hash(const void *data, size_t length) -> std::string {
+    [[nodiscard]] auto MD5Toolkit::hash(const void *data, const size_t length) -> std::string {
         MD5Toolkit toolkit;
         toolkit.update(data, length);
         return toolkit.finalize();

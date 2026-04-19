@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <memory>
 
-namespace common {
+namespace common::crypto::cipher {
     /**
      * @class XorBitCipher
      * @brief A stream cipher implementation using XOR operations on bit sequences.
@@ -16,7 +16,7 @@ namespace common {
      * @note This is a basic stream cipher. For production use, ensure key stream is generated
      *       by a cryptographically secure pseudo-random number generator (CSPRNG).
      */
-    class XorBitCipher {
+    class XorBitCipher final {
     public:
         /**
          * @brief Default constructor. Initializes cipher with empty key.
@@ -31,9 +31,9 @@ namespace common {
         }
 
         /**
-         * @brief Virtual destructor for potential inheritance.
+         * @brief Destructor.
          */
-        virtual ~XorBitCipher() = default;
+        ~XorBitCipher() noexcept = default;
 
         /**
          * @brief Set or update the encryption/decryption key.
@@ -128,4 +128,4 @@ namespace common {
          */
         [[nodiscard]] auto nextKeyBit() const -> bool;
     };
-} // namespace common
+} // namespace common::crypto::cipher

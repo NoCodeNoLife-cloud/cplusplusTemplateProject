@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <random>
 
-namespace common {
+namespace common::crypto::cipher {
     /**
      * @class SubstitutionCipher
      * @brief Monoalphabetic Substitution Cipher
@@ -32,7 +32,7 @@ namespace common {
      * @invariant encode_map_ and decode_map_ are inverse mappings satisfying:\n
      *            ∀c ∈ [A-Za-z], decode_map_[encode_map_[c]] == c
      */
-    class SubstitutionCipher {
+    class SubstitutionCipher final {
     public:
         /** @name Construction/Destruction */
         /**@{*/
@@ -86,16 +86,16 @@ namespace common {
         SubstitutionCipher(const SubstitutionCipher &) = delete;
 
         /** Disabled copy assignment (key material protection) */
-        SubstitutionCipher &operator=(const SubstitutionCipher &) = delete;
+        auto operator=(const SubstitutionCipher &) -> SubstitutionCipher & = delete;
 
         /** Default move constructor (noexcept guarantee) */
         SubstitutionCipher(SubstitutionCipher &&) noexcept = default;
 
         /** Default move assignment (noexcept guarantee) */
-        SubstitutionCipher &operator=(SubstitutionCipher &&) noexcept = default;
+        auto operator=(SubstitutionCipher &&) noexcept -> SubstitutionCipher & = default;
 
         /** Default destructor (no dynamic resources to release) */
-        ~SubstitutionCipher() = default;
+        ~SubstitutionCipher() noexcept = default;
 
         /**@}*/
 
@@ -175,4 +175,4 @@ namespace common {
         std::unordered_map<char, char> encode_map_; ///< Forward encryption mapping (plaintext → ciphertext)
         std::unordered_map<char, char> decode_map_; ///< Reverse decryption mapping (ciphertext → plaintext)
     };
-} // namespace common
+} // namespace common::crypto::cipher

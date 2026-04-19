@@ -1,8 +1,7 @@
-#pragma once
 #include "SubstitutionCipher.hpp"
 #include <cctype>
 
-namespace common {
+namespace common::crypto::cipher {
     void SubstitutionCipher::ValidateAndBuildReverseMap() {
         // Verify bijectivity: encoded values must be unique and alphabetic
         std::unordered_map<char, char> reverse_check;
@@ -22,19 +21,19 @@ namespace common {
         ValidateAndBuildReverseMap();
     }
 
-    SubstitutionCipher::SubstitutionCipher(int shift) {
-        shift = shift % 26;
-        if (shift < 0) shift += 26;
+    SubstitutionCipher::SubstitutionCipher(const int shift) {
+        auto normalized_shift = shift % 26;
+        if (normalized_shift < 0) normalized_shift += 26;
 
         for (char c = 'A'; c <= 'Z'; ++c) {
-            char encoded = static_cast<char>('A' + (c - 'A' + shift) % 26);
+            const char encoded = static_cast<char>('A' + (c - 'A' + normalized_shift) % 26);
             encode_map_[c] = encoded;
             encode_map_[static_cast<char>(std::tolower(c))] = static_cast<char>(std::tolower(encoded));
         }
         ValidateAndBuildReverseMap();
     }
 
-    SubstitutionCipher::SubstitutionCipher(unsigned int seed) {
+    SubstitutionCipher::SubstitutionCipher(const unsigned int seed) {
         std::string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         std::string shuffled = upper;
 
@@ -48,17 +47,17 @@ namespace common {
         ValidateAndBuildReverseMap();
     }
 
-    auto SubstitutionCipher::TransformChar(char c, const std::unordered_map<char, char> &map) -> char {
+    auto SubstitutionCipher::TransformChar(const char c, const std::unordered_map<char, char> &map) -> char {
         if (!std::isalpha(c)) return c;
 
-        auto it = map.find(c);
+        const auto it = map.find(c);
         return (it != map.end()) ? it->second : c;
     }
 
     auto SubstitutionCipher::Encrypt(const std::string &plaintext) const -> std::string {
         std::string result;
         result.reserve(plaintext.size());
-        for (char c: plaintext) {
+        for (const char c: plaintext) {
             result.push_back(TransformChar(c, encode_map_));
         }
         return result;
@@ -67,9 +66,9 @@ namespace common {
     auto SubstitutionCipher::Decrypt(const std::string &ciphertext) const -> std::string {
         std::string result;
         result.reserve(ciphertext.size());
-        for (char c: ciphertext) {
+        for (const char c: ciphertext) {
             result.push_back(TransformChar(c, decode_map_));
         }
         return result;
     }
-} // namespace common
+} // namespace common::crypto::cipher

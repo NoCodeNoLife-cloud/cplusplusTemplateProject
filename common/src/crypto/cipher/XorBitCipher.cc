@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace common {
+namespace common::crypto::cipher {
     auto XorBitCipher::setKey(std::vector<uint8_t> key) noexcept -> XorBitCipher & {
         key_stream_ = std::move(key);
         key_pos_ = 0;
@@ -28,7 +28,7 @@ namespace common {
         if (key_stream_.empty()) {
             throw std::invalid_argument("Key stream is empty. Set key before processing.");
         }
-        uint8_t byte = key_stream_[key_pos_];
+        const uint8_t byte = key_stream_[key_pos_];
         key_pos_ = (key_pos_ + 1) % key_stream_.size();
         bit_pos_ = 0;
         return byte;
@@ -38,8 +38,8 @@ namespace common {
         if (key_stream_.empty()) {
             throw std::invalid_argument("Key stream is empty. Set key before processing.");
         }
-        uint8_t current_byte = key_stream_[key_pos_];
-        bool bit = (current_byte >> (7 - bit_pos_)) & 0x01;
+        const uint8_t current_byte = key_stream_[key_pos_];
+        const bool bit = (current_byte >> (7 - bit_pos_)) & 0x01;
         bit_pos_++;
         if (bit_pos_ >= 8) {
             bit_pos_ = 0;
@@ -52,7 +52,7 @@ namespace common {
         std::vector<uint8_t> result;
         result.reserve(data.size());
 
-        for (uint8_t byte: data) {
+        for (const uint8_t byte: data) {
             result.push_back(byte ^ nextKeyByte());
         }
         return result;
@@ -68,13 +68,13 @@ namespace common {
         std::vector<bool> result;
         result.reserve(bits.size());
 
-        for (bool bit: bits) {
+        for (const bool bit: bits) {
             result.push_back(bit ^ nextKeyBit());
         }
         return result;
     }
 
-    auto XorBitCipher::generateKeyStream(size_t length) const -> std::vector<uint8_t> {
+    auto XorBitCipher::generateKeyStream(const size_t length) const -> std::vector<uint8_t> {
         std::vector<uint8_t> stream;
         stream.reserve(length);
 
@@ -84,7 +84,7 @@ namespace common {
         return stream;
     }
 
-    auto XorBitCipher::createWithRandomKey(size_t key_length) -> XorBitCipher {
+    auto XorBitCipher::createWithRandomKey(const size_t key_length) -> XorBitCipher {
         std::vector<uint8_t> random_key;
         random_key.reserve(key_length);
 
@@ -101,4 +101,4 @@ namespace common {
 
         return XorBitCipher(std::move(random_key));
     }
-} // namespace common
+} // namespace common::crypto::cipher
