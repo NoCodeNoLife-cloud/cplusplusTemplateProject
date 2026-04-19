@@ -5,6 +5,11 @@
 #include <mutex>
 
 namespace common::gen {
+    /// @brief A thread-safe random number generator using Mersenne Twister engine
+    /// @details This class provides various methods for generating random numbers,
+    ///          including integers, booleans, doubles, strings, and Gaussian distributed values.
+    ///          All operations are thread-safe through internal mutex synchronization.
+    /// @note For cryptographically secure random numbers, use a dedicated cryptographic library
     class RandomGenerator {
     public:
         /// @brief Default constructor: initializes seed using random device
