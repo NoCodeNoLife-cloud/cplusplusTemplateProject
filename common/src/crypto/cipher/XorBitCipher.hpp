@@ -1,4 +1,6 @@
 #pragma once
+#include "StreamCipher.hpp"
+
 #include <vector>
 #include <cstdint>
 #include <algorithm>
@@ -15,11 +17,13 @@ namespace common::crypto::cipher {
      *
      * @note This is a basic stream cipher. For production use, ensure key stream is generated
      *       by a cryptographically secure pseudo-random number generator (CSPRNG).
+     * @implements StreamCipher
      */
-    class XorBitCipher final {
+    class XorBitCipher final : public StreamCipher {
     public:
         /**
          * @brief Default constructor. Initializes cipher with empty key.
+         * @note Must call initialize() before encrypt/decrypt operations.
          */
         XorBitCipher() noexcept = default;
 
@@ -27,26 +31,74 @@ namespace common::crypto::cipher {
          * @brief Constructor with key initialization.
          * @param key The initial key stream as byte vector.
          */
-        explicit XorBitCipher(std::vector<uint8_t> key) noexcept : key_stream_(std::move(key)), key_pos_(0), bit_pos_(0) {
+        explicit XorBitCipher(std::vector<uint8_t> key) noexcept 
+            : key_stream_(std::move(key)), key_pos_(0), bit_pos_(0) {
         }
 
-        /**
-         * @brief Destructor.
-         */
-        ~XorBitCipher() noexcept = default;
+        /// @brief Destructor
+        ~XorBitCipher() noexcept override = default;
 
         /**
-         * @brief Set or update the encryption/decryption key.
-         * @param key The key stream as byte vector.
-         * @return Reference to this cipher instance for method chaining.
+         * @brief Initialize the cipher with key.
+         * @param key The encryption/decryption key as byte vector.
+         * @param nonce Unused parameter (kept for interface compatibility).
+         * @throws std::invalid_argument if key is empty.
+         * @note For XorBitCipher, nonce is ignored. Only key is used.
          */
-        [[nodiscard]] auto setKey(std::vector<uint8_t> key) noexcept -> XorBitCipher &;
+        void initialize(const std::vector<uint8_t>& key, 
+                       const std::vector<uint8_t>& nonce) override;
+
+        /**
+         * @brief Encrypt data using XOR with key stream.
+         * @param plaintext Data to encrypt.
+         * @return Encrypted ciphertext.
+         * @throws std::runtime_error if cipher not initialized.
+         *
+         * @note After encryption, the key stream position advances. For decryption,
+         *       create a NEW cipher instance with the same key instead of
+         *       calling reset() on the same instance.
+         */
+        [[nodiscard]] auto encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t> override;
+
+        /**
+         * @brief Decrypt data using XOR with key stream.
+         * @param ciphertext Data to decrypt.
+         * @return Decrypted plaintext.
+         * @throws std::runtime_error if cipher not initialized.
+         *
+         * @note Use a FRESH cipher instance initialized with the same key
+         *       that was used for encryption. Do NOT reuse the encryption instance.
+         */
+        [[nodiscard]] auto decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t> override;
+
+        /**
+         * @brief Generate keystream of specified length.
+         * @param length Number of bytes to generate.
+         * @return Generated keystream.
+         * @throws std::runtime_error if cipher not initialized.
+         */
+        [[nodiscard]] auto generateKeystream(size_t length) -> std::vector<uint8_t> override;
 
         /**
          * @brief Reset the key stream position to the beginning.
-         * @return Reference to this cipher instance for method chaining.
+         * @note Resets key_pos_ and bit_pos_ to 0, allowing the cipher to restart
+         *       from the beginning of the key stream. Useful for re-encrypting data
+         *       with the same key. NOT recommended for encryption/decryption
+         *       roundtrip - use separate instances instead.
          */
-        [[nodiscard]] auto resetPosition() noexcept -> XorBitCipher &;
+        void reset() override;
+
+        /**
+         * @brief Get algorithm name.
+         * @return "XorBitCipher"
+         */
+        [[nodiscard]] auto getAlgorithmName() const noexcept -> std::string override;
+
+        /**
+         * @brief Check if cipher is initialized (has key).
+         * @return true if key is set, false otherwise.
+         */
+        [[nodiscard]] auto isInitialized() const noexcept -> bool override;
 
         /**
          * @brief Process (encrypt/decrypt) data using XOR with key stream.
@@ -113,6 +165,12 @@ namespace common::crypto::cipher {
 
         /** @brief Current bit position within current byte (0-7) */
         mutable uint8_t bit_pos_{0};
+
+        /**
+         * @brief Validate that cipher is initialized.
+         * @throws std::runtime_error if not initialized.
+         */
+        void validateInitialized() const;
 
         /**
          * @brief Get next key byte and advance position.

@@ -1,19 +1,52 @@
 #include "XorBitCipher.hpp"
 
 #include <stdexcept>
+#include <string>
 
 namespace common::crypto::cipher {
-    auto XorBitCipher::setKey(std::vector<uint8_t> key) noexcept -> XorBitCipher & {
-        key_stream_ = std::move(key);
+    void XorBitCipher::initialize(const std::vector<uint8_t>& key, 
+                                 const std::vector<uint8_t>& /* nonce */) {
+        if (key.empty()) {
+            throw std::invalid_argument("XorBitCipher requires a non-empty key.");
+        }
+        key_stream_ = key;
         key_pos_ = 0;
         bit_pos_ = 0;
-        return *this;
     }
 
-    auto XorBitCipher::resetPosition() noexcept -> XorBitCipher & {
+    auto XorBitCipher::encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t> {
+        validateInitialized();
+        return process(plaintext);
+    }
+
+    auto XorBitCipher::decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t> {
+        validateInitialized();
+        // For XOR cipher, decryption is identical to encryption
+        return process(ciphertext);
+    }
+
+    auto XorBitCipher::generateKeystream(size_t length) -> std::vector<uint8_t> {
+        validateInitialized();
+        return generateKeyStream(length);
+    }
+
+    void XorBitCipher::reset() {
         key_pos_ = 0;
         bit_pos_ = 0;
-        return *this;
+    }
+
+    auto XorBitCipher::getAlgorithmName() const noexcept -> std::string {
+        return "XorBitCipher";
+    }
+
+    auto XorBitCipher::isInitialized() const noexcept -> bool {
+        return hasKey();
+    }
+
+    void XorBitCipher::validateInitialized() const {
+        if (!hasKey()) {
+            throw std::runtime_error("XorBitCipher not initialized. Call initialize() first.");
+        }
     }
 
     auto XorBitCipher::getCurrentPosition() const noexcept -> size_t {
@@ -91,7 +124,7 @@ namespace common::crypto::cipher {
         // Simple deterministic generation for demonstration only
         // In production, use crypto-secure RNG (e.g., std::random_device with proper seeding)
         // Use different seeds based on key_length to ensure different keys for different lengths
-        const uint32_t seed = static_cast<uint32_t>(key_length * 2654435761u);
+        const auto seed = static_cast<uint32_t>(key_length * 2654435761u);
         uint32_t state = seed;
         for (size_t i = 0; i < key_length; ++i) {
             // Linear congruential generator with length-dependent seed
@@ -101,4 +134,4 @@ namespace common::crypto::cipher {
 
         return XorBitCipher(std::move(random_key));
     }
-} // namespace common::crypto::cipher
+}
