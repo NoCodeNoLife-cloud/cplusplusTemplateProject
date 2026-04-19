@@ -2,7 +2,7 @@
 #include <boost/uuid/detail/md5.hpp>
 #include <string>
 
-namespace common {
+namespace common::toolkit::hash {
     class MD5Toolkit {
     public:
         MD5Toolkit() = default;

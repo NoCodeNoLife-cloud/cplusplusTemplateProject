@@ -5,11 +5,11 @@
  */
 
 #include <gtest/gtest.h>
-#include "toolkit/MD5Toolkit.hpp"
 #include <string>
-#include <cstring>
 
-using namespace common;
+#include "toolkit/hash/MD5Toolkit.hpp"
+
+using namespace common::toolkit::hash;
 
 /**
  * @brief Test one-shot hash for string with basic cases

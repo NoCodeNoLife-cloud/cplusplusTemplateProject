@@ -1,8 +1,9 @@
 #include "MD5Toolkit.hpp"
+
 #include <sstream>
 #include <iomanip>
 
-namespace common {
+namespace common::toolkit::hash {
     /// @brief Append string data to hash computation
     /// @param data The string data to hash
     auto MD5Toolkit::update(const std::string &data) -> void {
