@@ -1,10 +1,11 @@
 #pragma once
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <list>
 #include <optional>
 #include <stdexcept>
 #include <type_traits>
 #include <unordered_map>
-#include <fmt/format.h>
 
 #include "interface/ICache.hpp"
 
@@ -115,8 +116,10 @@ namespace common::cache {
     template<typename Key, typename Value, typename Map>
     LFUCache<Key, Value, Map>::LFUCache(const int capacity) : capacity_(static_cast<size_t>(capacity)), min_freq_(0) {
         if (capacity <= 0) {
+            DLOG(ERROR) << fmt::format("LFUCache initialization failed - invalid capacity: {}", capacity);
             throw std::invalid_argument(fmt::format("LFUCache::LFUCache: Cache capacity must be greater than 0, got {}", capacity));
         }
+        DLOG(INFO) << fmt::format("LFUCache initialized with capacity: {}", capacity_);
     }
 
     template<typename Key, typename Value, typename Map>
@@ -124,6 +127,7 @@ namespace common::cache {
     auto LFUCache<Key, Value, Map>::get_impl(CacheType &cache, const Key &key) -> std::optional<Value> {
         auto it = cache.key_map_.find(key);
         if (it == cache.key_map_.end()) {
+            DLOG(INFO) << fmt::format("LFUCache miss - key not found: {}", key);
             return std::nullopt;
         }
 
@@ -134,6 +138,9 @@ namespace common::cache {
         // Update frequency of accessed item (only for non-const version)
         if constexpr (!std::is_const_v<CacheType>) {
             cache.update_frequency(cache_entry_it);
+            DLOG(INFO) << fmt::format("LFUCache hit - key retrieved and frequency updated: {}", key);
+        } else {
+            DLOG(INFO) << fmt::format("LFUCache hit (const) - key retrieved without frequency update: {}", key);
         }
 
         return value;
@@ -155,6 +162,7 @@ namespace common::cache {
         auto it = key_map_.find(key);
         if (it != key_map_.end()) {
             // Key exists, update the value and increment frequency
+            DLOG(INFO) << fmt::format("LFUCache update - key updated and frequency incremented: {}", key);
             auto cache_entry_it = it->second;
             cache_entry_it->second.first = std::forward<ValueType>(value);
             update_frequency(cache_entry_it);
@@ -163,9 +171,13 @@ namespace common::cache {
 
         // Key doesn't exist, need to insert new key
         if (key_map_.size() >= capacity_) {
-            if (capacity_ == 0) return false;
+            if (capacity_ == 0) {
+                DLOG(WARNING) << "LFUCache put failed - capacity is 0";
+                return false;
+            }
 
             if (!evict_lfu_item()) {
+                DLOG(ERROR) << "LFUCache eviction failed";
                 return false; // Failed to evict an item
             }
         }
@@ -180,6 +192,7 @@ namespace common::cache {
         // Since we added a new item with frequency 1, update min_freq_
         min_freq_ = 1;
 
+        DLOG(INFO) << fmt::format("LFUCache insert - new key added with frequency 1: {}, current size: {}/{}", key, key_map_.size(), capacity_);
         return true;
     }
 
@@ -197,6 +210,7 @@ namespace common::cache {
     [[nodiscard]] auto LFUCache<Key, Value, Map>::remove(const Key &key) -> bool {
         auto it = key_map_.find(key);
         if (it == key_map_.end()) {
+            DLOG(INFO) << fmt::format("LFUCache remove failed - key not found: {}", key);
             return false;
         }
 
@@ -212,14 +226,19 @@ namespace common::cache {
 
         // Remove from key map
         key_map_.erase(it);
+        DLOG(INFO) << fmt::format("LFUCache remove - key removed successfully: {}, was at frequency: {}", key, freq);
         return true;
     }
 
     template<typename Key, typename Value, typename Map>
     void LFUCache<Key, Value, Map>::clear() noexcept {
+        const size_t previous_size = key_map_.size();
         freq_list_map_.clear();
         key_map_.clear();
         min_freq_ = 0;
+        if (previous_size > 0) {
+            DLOG(INFO) << fmt::format("LFUCache cleared - removed {} entries", previous_size);
+        }
     }
 
     template<typename Key, typename Value, typename Map>
@@ -247,6 +266,7 @@ namespace common::cache {
         // Find the list with minimum frequency
         auto min_freq_it = freq_list_map_.find(min_freq_);
         if (min_freq_it == freq_list_map_.end()) {
+            DLOG(ERROR) << "LFUCache eviction failed - min_freq list not found";
             return false; // Shouldn't happen if capacity > 0 and cache is not empty
         }
 
@@ -259,6 +279,7 @@ namespace common::cache {
         }
 
         Key key_to_remove = lfu_it->first;
+        DLOG(INFO) << fmt::format("LFUCache eviction - removing LFU key: {}, frequency: {}", key_to_remove, min_freq_);
 
         // Remove from key map
         key_map_.erase(key_to_remove);
@@ -323,5 +344,7 @@ namespace common::cache {
         if (min_freq_ == 0 || new_freq < min_freq_) {
             min_freq_ = new_freq;
         }
+        
+        DLOG(INFO) << fmt::format("LFUCache frequency updated - key: {}, old freq: {}, new freq: {}", key, old_freq, new_freq);
     }
 }

@@ -1,4 +1,6 @@
 #pragma once
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <unordered_map>
 #include <cstdint>
 
@@ -53,6 +55,7 @@ namespace common::container {
         if (parent_[x] != x) {
             parent_[x] = find(parent_[x]); // Path compression
         }
+        DLOG(INFO) << fmt::format("UnionSet find - element: {}, root: {}", x, parent_[x]);
         return parent_[x];
     }
 
@@ -61,7 +64,10 @@ namespace common::container {
         T rootX = find(x);
         T rootY = find(y);
 
-        if (rootX == rootY) return false;
+        if (rootX == rootY) {
+            DLOG(INFO) << fmt::format("UnionSet union - elements already in same set: {}, {}", x, y);
+            return false;
+        }
 
         if (rank_[rootX] < rank_[rootY]) {
             parent_[rootX] = rootY;
@@ -71,6 +77,7 @@ namespace common::container {
             parent_[rootY] = rootX;
             ++rank_[rootX];
         }
+        DLOG(INFO) << fmt::format("UnionSet union - sets merged: {} (root {}) with {} (root {})", x, rootX, y, rootY);
         return true;
     }
 
@@ -81,7 +88,9 @@ namespace common::container {
         auto *self = const_cast<UnionSet *>(this);
         self->ensureRegistered(x);
         self->ensureRegistered(y);
-        return self->find(x) == self->find(y);
+        const bool result = self->find(x) == self->find(y);
+        DLOG(INFO) << fmt::format("UnionSet connected - checking {} and {}: {}", x, y, result ? "connected" : "not connected");
+        return result;
     }
 
     template<typename T>
@@ -89,6 +98,7 @@ namespace common::container {
         if (!parent_.contains(x)) {
             parent_[x] = x;
             rank_[x] = 0;
+            DLOG(INFO) << fmt::format("UnionSet registered new element: {}", x);
         }
     }
 }

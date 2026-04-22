@@ -1,4 +1,6 @@
 #pragma once
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <memory>
 #include <stdexcept>
 #include <utility>
@@ -143,11 +145,13 @@ namespace common::container {
             tail_ = head_.get();
         }
         ++queue_size_;
+        DLOG(INFO) << fmt::format("Queue push - element added to back, size: {}", queue_size_);
     }
 
     template<typename T>
     auto Queue<T>::pop() -> void {
         if (empty()) {
+            DLOG(ERROR) << "Queue pop failed - queue is empty";
             throw std::out_of_range("Queue is empty");
         }
         head_ = std::move(head_->next_);
@@ -155,11 +159,13 @@ namespace common::container {
             tail_ = nullptr;
         }
         --queue_size_;
+        DLOG(INFO) << fmt::format("Queue pop - front element removed, remaining size: {}", queue_size_);
     }
 
     template<typename T>
     auto Queue<T>::front() -> T & {
         if (empty()) {
+            DLOG(ERROR) << "Queue front access failed - queue is empty";
             throw std::out_of_range("Queue is empty");
         }
         return head_->data_;
@@ -168,6 +174,7 @@ namespace common::container {
     template<typename T>
     auto Queue<T>::front() const -> const T & {
         if (empty()) {
+            DLOG(ERROR) << "Queue front access failed - queue is empty";
             throw std::out_of_range("Queue is empty");
         }
         return head_->data_;
@@ -176,6 +183,7 @@ namespace common::container {
     template<typename T>
     auto Queue<T>::back() -> T & {
         if (empty()) {
+            DLOG(ERROR) << "Queue back access failed - queue is empty";
             throw std::out_of_range("Queue is empty");
         }
         return tail_->data_;
@@ -184,6 +192,7 @@ namespace common::container {
     template<typename T>
     auto Queue<T>::back() const -> const T & {
         if (empty()) {
+            DLOG(ERROR) << "Queue back access failed - queue is empty";
             throw std::out_of_range("Queue is empty");
         }
         return tail_->data_;

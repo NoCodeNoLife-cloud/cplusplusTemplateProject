@@ -1,9 +1,10 @@
 #pragma once
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <list>
 #include <optional>
 #include <stdexcept>
 #include <unordered_map>
-#include <fmt/format.h>
 
 #include "interface/ICache.hpp"
 
@@ -96,8 +97,10 @@ namespace common::cache {
     template<typename Key, typename Value, typename Map>
     LRUCache<Key, Value, Map>::LRUCache(const int capacity) : capacity_(static_cast<size_t>(capacity)) {
         if (capacity <= 0) {
+            DLOG(ERROR) << fmt::format("LRUCache initialization failed - invalid capacity: {}", capacity);
             throw std::invalid_argument(fmt::format("Cache capacity must be greater than 0, got {}", capacity));
         }
+        DLOG(INFO) << fmt::format("LRUCache initialized with capacity: {}", capacity_);
     }
 
     template<typename Key, typename Value, typename Map>
@@ -105,10 +108,12 @@ namespace common::cache {
     auto LRUCache<Key, Value, Map>::get_impl(CacheType &cache, const Key &key) -> std::optional<Value> {
         auto it = cache.cache_map_.find(key);
         if (it == cache.cache_map_.end()) {
+            DLOG(INFO) << fmt::format("LRUCache miss - key not found: {}", key);
             return std::nullopt;
         }
 
         cache.move_to_front(it->second);
+        DLOG(INFO) << fmt::format("LRUCache hit - key retrieved and moved to front: {}", key);
         return it->second->second;
     }
 
@@ -127,22 +132,28 @@ namespace common::cache {
     auto LRUCache<Key, Value, Map>::put_impl(const Key &key, ValueType &&value) -> bool {
         auto it = cache_map_.find(key);
         if (it != cache_map_.end()) {
+            DLOG(INFO) << fmt::format("LRUCache update - key updated and moved to front: {}", key);
             it->second->second = std::forward<ValueType>(value);
             move_to_front(it->second);
             return true;
         }
 
         if (cache_list_.size() >= capacity_) {
-            if (capacity_ == 0) return false;
+            if (capacity_ == 0) {
+                DLOG(WARNING) << "LRUCache put failed - capacity is 0";
+                return false;
+            }
 
             auto last_it = cache_list_.end();
             --last_it;
+            DLOG(INFO) << fmt::format("LRUCache eviction - removing LRU key: {}", last_it->first);
             cache_map_.erase(last_it->first);
             cache_list_.pop_back();
         }
 
         cache_list_.emplace_front(key, std::forward<ValueType>(value));
         cache_map_[key] = cache_list_.begin();
+        DLOG(INFO) << fmt::format("LRUCache insert - new key added: {}, current size: {}/{}", key, cache_list_.size(), capacity_);
         return true;
     }
 
@@ -160,18 +171,24 @@ namespace common::cache {
     [[nodiscard]] auto LRUCache<Key, Value, Map>::remove(const Key &key) -> bool {
         auto it = cache_map_.find(key);
         if (it == cache_map_.end()) {
+            DLOG(INFO) << fmt::format("LRUCache remove failed - key not found: {}", key);
             return false;
         }
 
         cache_list_.erase(it->second);
         cache_map_.erase(it);
+        DLOG(INFO) << fmt::format("LRUCache remove - key removed successfully: {}, remaining size: {}", key, cache_list_.size());
         return true;
     }
 
     template<typename Key, typename Value, typename Map>
     void LRUCache<Key, Value, Map>::clear() noexcept {
+        const size_t previous_size = cache_list_.size();
         cache_list_.clear();
         cache_map_.clear();
+        if (previous_size > 0) {
+            DLOG(INFO) << fmt::format("LRUCache cleared - removed {} entries", previous_size);
+        }
     }
 
     template<typename Key, typename Value, typename Map>

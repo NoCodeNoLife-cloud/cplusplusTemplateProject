@@ -2,6 +2,8 @@
 #include <windows.h>
 #include <openssl/evp.h>
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <array>
 #include <chrono>
 #include <filesystem>
@@ -66,34 +68,42 @@ namespace common::filesystem {
 
     auto File::createNewFile() const -> bool {
         if (std::filesystem::exists(file_path_)) {
+            DLOG(WARNING) << fmt::format("File createNewFile failed - file already exists: {}", file_path_.string());
             return false;
         }
+        DLOG(INFO) << fmt::format("File createNewFile - creating file: {}", file_path_.string());
         const std::ofstream file(file_path_);
         return file.good();
     }
 
     auto File::deleteFile() const noexcept -> bool {
         try {
+            DLOG(INFO) << fmt::format("File deleteFile - deleting file: {}", file_path_.string());
             return std::filesystem::remove(file_path_);
         } catch (...) {
+            DLOG(ERROR) << fmt::format("File deleteFile failed - path: {}", file_path_.string());
             return false;
         }
     }
 
     auto File::renameTo(const File &dest) const noexcept -> bool {
         try {
+            DLOG(INFO) << fmt::format("File renameTo - renaming from {} to {}", file_path_.string(), dest.file_path_.string());
             std::filesystem::rename(file_path_, dest.file_path_);
             return true;
         } catch (const std::filesystem::filesystem_error &) {
+            DLOG(ERROR) << fmt::format("File renameTo failed - from {} to {}", file_path_.string(), dest.file_path_.string());
             return false;
         }
     }
 
     auto File::copyTo(const File &dest) const -> bool {
         try {
+            DLOG(INFO) << fmt::format("File copyTo - copying from {} to {}", file_path_.string(), dest.file_path_.string());
             std::filesystem::copy_file(file_path_, dest.file_path_, std::filesystem::copy_options::overwrite_existing);
             return true;
         } catch (const std::filesystem::filesystem_error &) {
+            DLOG(ERROR) << fmt::format("File copyTo failed - from {} to {}", file_path_.string(), dest.file_path_.string());
             return false;
         }
     }
@@ -241,9 +251,11 @@ namespace common::filesystem {
 
     auto File::printFilesWithDepth(const std::filesystem::path &file_path) -> void {
         if (!std::filesystem::exists(file_path) || !std::filesystem::is_directory(file_path)) {
+            DLOG(ERROR) << fmt::format("File printFilesWithDepth failed - invalid directory path: {}", file_path.string());
             throw std::runtime_error("Invalid directory path: " + file_path.string());
         }
 
+        DLOG(INFO) << fmt::format("File printFilesWithDepth - printing directory tree: {}", file_path.string());
         for (auto it_entry = std::filesystem::recursive_directory_iterator(file_path); it_entry != std::filesystem::recursive_directory_iterator{}; ++it_entry) {
             const auto &entry = *it_entry;
             const auto depth = it_entry.depth();
@@ -259,17 +271,21 @@ namespace common::filesystem {
     }
 
     auto File::getFileMD5(const std::filesystem::path &filePath) -> std::string {
+        DLOG(INFO) << fmt::format("File getFileMD5 - calculating MD5 for: {}", filePath.string());
         std::ifstream file(filePath, std::ios::binary);
         if (!file) {
+            DLOG(ERROR) << fmt::format("File getFileMD5 failed - cannot open file: {}", filePath.string());
             throw std::runtime_error("Failed to open file: " + filePath.string());
         }
 
         const auto mdContext = std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)>(EVP_MD_CTX_new(), EVP_MD_CTX_free);
         if (!mdContext) {
+            DLOG(ERROR) << "File getFileMD5 failed - cannot create MD5 context";
             throw std::runtime_error("Failed to create MD5 context");
         }
 
         if (EVP_DigestInit_ex(mdContext.get(), EVP_md5(), nullptr) != 1) {
+            DLOG(ERROR) << "File getFileMD5 failed - cannot initialize MD5 context";
             throw std::runtime_error("Failed to initialize MD5 context");
         }
 
@@ -277,11 +293,14 @@ namespace common::filesystem {
         std::array<char, bufferSize> buffer{};
         while (file.read(buffer.data(), bufferSize)) {
             if (const auto bytesRead = static_cast<size_t>(file.gcount()); EVP_DigestUpdate(mdContext.get(), buffer.data(), bytesRead) != 1) {
+                const auto position = static_cast<int64_t>(file.tellg());
+                DLOG(ERROR) << fmt::format("File getFileMD5 failed - MD5 update error at position {}", position);
                 throw std::runtime_error("MD5 update failed");
             }
         }
         if (const auto bytesRead = static_cast<size_t>(file.gcount()); bytesRead > 0) {
             if (EVP_DigestUpdate(mdContext.get(), buffer.data(), bytesRead) != 1) {
+                DLOG(ERROR) << "File getFileMD5 failed - final MD5 update error";
                 throw std::runtime_error("MD5 update failed");
             }
         }
@@ -289,6 +308,7 @@ namespace common::filesystem {
         std::array<unsigned char, EVP_MAX_MD_SIZE> digest{};
         unsigned int digestLength = 0;
         if (EVP_DigestFinal_ex(mdContext.get(), digest.data(), &digestLength) != 1) {
+            DLOG(ERROR) << "File getFileMD5 failed - MD5 finalization error";
             throw std::runtime_error("MD5 finalization failed");
         }
 
@@ -298,6 +318,8 @@ namespace common::filesystem {
             oss << std::setw(2) << static_cast<unsigned>(digest[i]);
         }
 
-        return oss.str();
+        const auto md5Result = oss.str();
+        DLOG(INFO) << fmt::format("File getFileMD5 completed - MD5: {}", md5Result);
+        return md5Result;
     }
 }

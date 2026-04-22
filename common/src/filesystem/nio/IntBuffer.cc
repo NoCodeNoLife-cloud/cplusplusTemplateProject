@@ -1,5 +1,7 @@
 #include "src/filesystem/nio/IntBuffer.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <algorithm>
 
 namespace common::filesystem {
@@ -26,6 +28,7 @@ namespace common::filesystem {
 
     auto IntBuffer::compact() -> void {
         if (position_ > 0) {
+            DLOG(INFO) << fmt::format("IntBuffer compact - moving {} integers, new limit: {}", limit_ - position_, limit_ - position_);
             std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_), buffer_.begin());
             limit_ -= position_;
             position_ = 0;
@@ -34,6 +37,7 @@ namespace common::filesystem {
 
     auto IntBuffer::get() -> int32_t {
         if (!hasRemaining()) {
+            DLOG(ERROR) << fmt::format("IntBuffer get failed - buffer underflow: position={}, limit={}", position_, limit_);
             throw std::underflow_error("IntBuffer::get: Buffer underflow.");
         }
         return buffer_[position_++];
@@ -41,6 +45,7 @@ namespace common::filesystem {
 
     auto IntBuffer::get(const size_t index) const -> int32_t {
         if (index >= limit_) {
+            DLOG(ERROR) << fmt::format("IntBuffer get failed - index out of bounds: index={}, limit={}", index, limit_);
             throw std::out_of_range("IntBuffer::get: Index out of bounds.");
         }
         return buffer_[index];
@@ -48,6 +53,7 @@ namespace common::filesystem {
 
     auto IntBuffer::put(const int32_t value) -> void {
         if (!hasRemaining()) {
+            DLOG(ERROR) << fmt::format("IntBuffer put failed - buffer overflow: position={}, limit={}", position_, limit_);
             throw std::overflow_error("IntBuffer::put: Buffer overflow.");
         }
         buffer_[position_++] = value;
@@ -55,6 +61,7 @@ namespace common::filesystem {
 
     auto IntBuffer::put(const size_t index, const int32_t value) -> void {
         if (index >= limit_) {
+            DLOG(ERROR) << fmt::format("IntBuffer put failed - index out of bounds: index={}, limit={}", index, limit_);
             throw std::out_of_range("IntBuffer::put: Index out of bounds.");
         }
         buffer_[index] = value;
@@ -73,8 +80,10 @@ namespace common::filesystem {
 
     auto IntBuffer::position(const size_t newPosition) -> void {
         if (newPosition > limit_) {
+            DLOG(ERROR) << fmt::format("IntBuffer position failed - position exceeds limit: newPosition={}, limit={}", newPosition, limit_);
             throw std::out_of_range("IntBuffer::position: Position exceeds limit.");
         }
+        DLOG(INFO) << fmt::format("IntBuffer position set to {}", newPosition);
         position_ = newPosition;
     }
 
@@ -84,8 +93,10 @@ namespace common::filesystem {
 
     auto IntBuffer::limit(const size_t newLimit) -> void {
         if (newLimit > capacity_) {
+            DLOG(ERROR) << fmt::format("IntBuffer limit failed - limit exceeds capacity: newLimit={}, capacity={}", newLimit, capacity_);
             throw std::out_of_range("IntBuffer::limit: Limit exceeds capacity.");
         }
+        DLOG(INFO) << fmt::format("IntBuffer limit set to {} (was {})", newLimit, limit_);
         if (position_ > newLimit) {
             position_ = newLimit;
         }

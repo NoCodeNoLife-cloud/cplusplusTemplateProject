@@ -1,5 +1,7 @@
 #include "XorBitCipher.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <string>
 
@@ -7,20 +9,24 @@ namespace common::crypto::cipher {
     void XorBitCipher::initialize(const std::vector<uint8_t>& key, 
                                  const std::vector<uint8_t>& /* nonce */) {
         if (key.empty()) {
+            DLOG(ERROR) << "XorBitCipher initialization failed - empty key";
             throw std::invalid_argument("XorBitCipher requires a non-empty key.");
         }
         key_stream_ = key;
         key_pos_ = 0;
         bit_pos_ = 0;
+        DLOG(INFO) << fmt::format("XorBitCipher initialized with key length: {} bytes", key.size());
     }
 
     auto XorBitCipher::encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t> {
         validateInitialized();
+        DLOG(INFO) << fmt::format("XorBitCipher encrypt - input size: {} bytes, current position: {}", plaintext.size(), key_pos_);
         return process(plaintext);
     }
 
     auto XorBitCipher::decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t> {
         validateInitialized();
+        DLOG(INFO) << fmt::format("XorBitCipher decrypt - input size: {} bytes, current position: {}", ciphertext.size(), key_pos_);
         // For XOR cipher, decryption is identical to encryption
         return process(ciphertext);
     }
@@ -31,6 +37,7 @@ namespace common::crypto::cipher {
     }
 
     void XorBitCipher::reset() {
+        DLOG(INFO) << fmt::format("XorBitCipher reset - previous position: {}, bit position: {}", key_pos_, bit_pos_);
         key_pos_ = 0;
         bit_pos_ = 0;
     }
@@ -45,6 +52,7 @@ namespace common::crypto::cipher {
 
     void XorBitCipher::validateInitialized() const {
         if (!hasKey()) {
+            DLOG(ERROR) << "XorBitCipher operation failed - not initialized";
             throw std::runtime_error("XorBitCipher not initialized. Call initialize() first.");
         }
     }

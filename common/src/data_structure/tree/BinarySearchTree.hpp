@@ -1,4 +1,6 @@
 #pragma once
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <iostream>
 #include <memory>
 
@@ -64,16 +66,20 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto BinarySearchTree<T>::insert(T value) -> void {
+        DLOG(INFO) << fmt::format("BinarySearchTree insert - value: {}", value);
         root_ = insertRecursive(root_, value);
     }
 
     template<typename T>
     auto BinarySearchTree<T>::find(T value) const -> bool {
-        return findRecursive(root_, value);
+        const bool found = findRecursive(root_, value);
+        DLOG(INFO) << fmt::format("BinarySearchTree find - value: {}, result: {}", value, found ? "found" : "not found");
+        return found;
     }
 
     template<typename T>
     auto BinarySearchTree<T>::remove(T value) -> void {
+        DLOG(INFO) << fmt::format("BinarySearchTree remove - value: {}", value);
         root_ = removeRecursive(root_, value);
     }
 
@@ -85,9 +91,15 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto BinarySearchTree<T>::insertRecursive(std::shared_ptr<TreeNode<T> > node, T value) -> std::shared_ptr<TreeNode<T> > {
-        if (!node) return std::make_shared<TreeNode<T> >(value);
+        if (!node) {
+            DLOG(INFO) << fmt::format("BinarySearchTree insertRecursive - creating new node with value: {}", value);
+            return std::make_shared<TreeNode<T> >(value);
+        }
         if (value < node->data) node->left = insertRecursive(node->left, value);
         else if (value > node->data) node->right = insertRecursive(node->right, value);
+        else {
+            DLOG(INFO) << fmt::format("BinarySearchTree insertRecursive - duplicate value ignored: {}", value);
+        }
         return node;
     }
 
@@ -101,10 +113,14 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto BinarySearchTree<T>::removeRecursive(std::shared_ptr<TreeNode<T> > node, T value) -> std::shared_ptr<TreeNode<T> > {
-        if (!node) return nullptr;
+        if (!node) {
+            DLOG(WARNING) << fmt::format("BinarySearchTree removeRecursive - value not found: {}", value);
+            return nullptr;
+        }
         if (value < node->data) node->left = removeRecursive(node->left, value);
         else if (value > node->data) node->right = removeRecursive(node->right, value);
         else {
+            DLOG(INFO) << fmt::format("BinarySearchTree removeRecursive - removing node with value: {}", value);
             if (!node->left) return node->right;
             if (!node->right) return node->left;
             node->data = minValueNode(node->right)->data;

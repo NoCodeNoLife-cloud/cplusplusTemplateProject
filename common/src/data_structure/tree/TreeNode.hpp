@@ -1,4 +1,6 @@
 #pragma once
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <memory>
 #include <cstdint>
 
@@ -20,5 +22,6 @@ namespace common::data_structure::tree {
 
     template<typename T>
     TreeNode<T>::TreeNode(T value) noexcept : data(value) {
+        DLOG(INFO) << fmt::format("TreeNode created with value: {}", value);
     }
 }

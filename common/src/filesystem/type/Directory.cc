@@ -1,5 +1,7 @@
 #include "src/filesystem/type/Directory.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <filesystem>
 #include <queue>
 #include <utility>
@@ -14,31 +16,37 @@ namespace common::filesystem {
 
     auto Directory::mkdir() const noexcept -> bool {
         try {
+            DLOG(INFO) << fmt::format("Directory mkdir - creating directory: {}", dir_path_.string());
             return std::filesystem::create_directory(dir_path_);
         } catch (...) {
+            DLOG(ERROR) << fmt::format("Directory mkdir failed - path: {}", dir_path_.string());
             return false;
         }
     }
 
     auto Directory::mkdirs(const bool exist_ok) const -> bool {
         try {
+            DLOG(INFO) << fmt::format("Directory mkdirs - creating directories recursively: {}, exist_ok={}", dir_path_.string(), exist_ok);
             if (exist_ok) {
                 return std::filesystem::create_directories(dir_path_);
             }
             // Check if any part of the path already exists
             if (std::filesystem::exists(dir_path_)) {
+                DLOG(WARNING) << fmt::format("Directory mkdirs failed - path already exists: {}", dir_path_.string());
                 return false;
             }
             // For parent directories, we need to check recursively
             auto parent = dir_path_.parent_path();
             while (!parent.empty() && parent != dir_path_.root_path()) {
                 if (std::filesystem::exists(parent) && !std::filesystem::is_directory(parent)) {
+                    DLOG(ERROR) << fmt::format("Directory mkdirs failed - parent is not a directory: {}", parent.string());
                     return false;
                 }
                 parent = parent.parent_path();
             }
             return std::filesystem::create_directories(dir_path_);
         } catch (...) {
+            DLOG(ERROR) << fmt::format("Directory mkdirs failed - exception occurred: {}", dir_path_.string());
             return false;
         }
     }
@@ -61,45 +69,58 @@ namespace common::filesystem {
 
     auto Directory::remove() const noexcept -> bool {
         try {
+            DLOG(INFO) << fmt::format("Directory remove - removing directory: {}", dir_path_.string());
             return std::filesystem::remove(dir_path_);
         } catch (...) {
+            DLOG(ERROR) << fmt::format("Directory remove failed - path: {}", dir_path_.string());
             return false;
         }
     }
 
     auto Directory::removeAll() const noexcept -> std::uintmax_t {
         try {
+            DLOG(INFO) << fmt::format("Directory removeAll - removing all contents: {}", dir_path_.string());
             return std::filesystem::remove_all(dir_path_);
         } catch (...) {
+            DLOG(ERROR) << fmt::format("Directory removeAll failed - path: {}", dir_path_.string());
             return 0;
         }
     }
 
     auto Directory::move(const std::filesystem::path &destination) const noexcept -> bool {
         try {
+            DLOG(INFO) << fmt::format("Directory move - moving from {} to {}", dir_path_.string(), destination.string());
             std::filesystem::rename(dir_path_, destination);
             return true;
         } catch (...) {
+            DLOG(ERROR) << fmt::format("Directory move failed - from {} to {}", dir_path_.string(), destination.string());
             return false;
         }
     }
 
     auto Directory::rename(const std::string &newName) const noexcept -> bool {
         try {
+            DLOG(INFO) << fmt::format("Directory rename - renaming to: {}", newName);
             auto newPath = dir_path_;
             newPath.replace_filename(newName);
             std::filesystem::rename(dir_path_, newPath);
             return true;
         } catch (...) {
+            DLOG(ERROR) << fmt::format("Directory rename failed - new name: {}", newName);
             return false;
         }
     }
 
     auto Directory::copy(const std::filesystem::path &destination) const -> bool {
         try {
-            if (!exists() || !isDirectory()) return false;
+            if (!exists() || !isDirectory()) {
+                DLOG(ERROR) << fmt::format("Directory copy failed - source does not exist or is not a directory: {}", dir_path_.string());
+                return false;
+            }
 
+            DLOG(INFO) << fmt::format("Directory copy - copying from {} to {}", dir_path_.string(), destination.string());
             if (!std::filesystem::create_directories(destination)) {
+                DLOG(ERROR) << fmt::format("Directory copy failed - cannot create destination: {}", destination.string());
                 return false;
             }
 
@@ -117,6 +138,7 @@ namespace common::filesystem {
 
                     if (entry.is_directory()) {
                         if (!std::filesystem::create_directory(targetPath)) {
+                            DLOG(ERROR) << fmt::format("Directory copy failed - cannot create subdirectory: {}", targetPath.string());
                             return false;
                         }
                         dirQueue.emplace(entryPath, targetPath);
@@ -125,8 +147,10 @@ namespace common::filesystem {
                     }
                 }
             }
+            DLOG(INFO) << fmt::format("Directory copy completed successfully");
             return true;
         } catch (...) {
+            DLOG(ERROR) << fmt::format("Directory copy failed - exception occurred");
             return false;
         }
     }

@@ -1,4 +1,7 @@
 #include "RpcMetadata.hpp"
+
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <unordered_map>
 #include <utility>
 
@@ -11,35 +14,66 @@ namespace common::rpc {
         const auto it = stateToStringMap.find(state);
         if (it != stateToStringMap.end()) {
             // Found a matching state, return its string representation
+            DLOG(INFO) << fmt::format("RpcMetadata grpcStateToString - gRPC state {} converted to string: {}", static_cast<int>(state), it->second);
             return it->second;
         }
         // State not found in map, return default unknown value
+        DLOG(WARNING) << fmt::format("RpcMetadata grpcStateToString - unknown gRPC state: {}", static_cast<int>(state));
         return "UNKNOWN";
     }
 
     auto RpcMetadata::grpcStateToEnum(const grpc_connectivity_state state) -> GrpcConnectivityState {
         // Map grpc_connectivity_state to our internal GrpcConnectivityState enum
+        GrpcConnectivityState result;
         switch (state) {
-            case GRPC_CHANNEL_IDLE: return GrpcConnectivityState::IDLE;
-            case GRPC_CHANNEL_CONNECTING: return GrpcConnectivityState::CONNECTING;
-            case GRPC_CHANNEL_READY: return GrpcConnectivityState::READY;
-            case GRPC_CHANNEL_TRANSIENT_FAILURE: return GrpcConnectivityState::TRANSIENT_FAILURE;
-            case GRPC_CHANNEL_SHUTDOWN: return GrpcConnectivityState::SHUTDOWN;
+            case GRPC_CHANNEL_IDLE:
+                result = GrpcConnectivityState::IDLE;
+                break;
+            case GRPC_CHANNEL_CONNECTING:
+                result = GrpcConnectivityState::CONNECTING;
+                break;
+            case GRPC_CHANNEL_READY:
+                result = GrpcConnectivityState::READY;
+                break;
+            case GRPC_CHANNEL_TRANSIENT_FAILURE:
+                result = GrpcConnectivityState::TRANSIENT_FAILURE;
+                break;
+            case GRPC_CHANNEL_SHUTDOWN:
+                result = GrpcConnectivityState::SHUTDOWN;
+                break;
             default:
                 // Return IDLE as default for unknown states
-                return GrpcConnectivityState::IDLE;
+                DLOG(WARNING) << fmt::format("RpcMetadata grpcStateToEnum - unknown gRPC state: {}, defaulting to IDLE", static_cast<int>(state));
+                result = GrpcConnectivityState::IDLE;
         }
+        DLOG(INFO) << fmt::format("RpcMetadata grpcStateToEnum - gRPC state {} converted to enum: {}", static_cast<int>(state), static_cast<int>(result));
+        return result;
     }
 
     auto RpcMetadata::grpcStateToString(const GrpcConnectivityState state) -> std::string {
+        std::string result;
         // Convert our internal GrpcConnectivityState enum to string
         switch (state) {
-            case GrpcConnectivityState::IDLE: return "IDLE";
-            case GrpcConnectivityState::CONNECTING: return "CONNECTING";
-            case GrpcConnectivityState::READY: return "READY";
-            case GrpcConnectivityState::TRANSIENT_FAILURE: return "TRANSIENT_FAILURE";
-            case GrpcConnectivityState::SHUTDOWN: return "SHUTDOWN";
-            default: return "UNKNOWN";
+            case GrpcConnectivityState::IDLE:
+                result = "IDLE";
+                break;
+            case GrpcConnectivityState::CONNECTING:
+                result = "CONNECTING";
+                break;
+            case GrpcConnectivityState::READY:
+                result = "READY";
+                break;
+            case GrpcConnectivityState::TRANSIENT_FAILURE:
+                result = "TRANSIENT_FAILURE";
+                break;
+            case GrpcConnectivityState::SHUTDOWN:
+                result = "SHUTDOWN";
+                break;
+            default:
+                result = "UNKNOWN";
+                DLOG(WARNING) << fmt::format("RpcMetadata grpcStateToString - unknown GrpcConnectivityState enum: {}", static_cast<int>(state));
         }
+        DLOG(INFO) << fmt::format("RpcMetadata grpcStateToString - enum state {} converted to string: {}", static_cast<int>(state), result);
+        return result;
     }
 } // common

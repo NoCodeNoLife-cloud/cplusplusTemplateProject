@@ -1,5 +1,7 @@
 #include "src/filesystem/type/BmpImage.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <fstream>
 #include <stdexcept>
 #include <vector>
@@ -7,9 +9,11 @@
 namespace common::filesystem {
     BmpImage::BmpImage(const int32_t width, const int32_t height) : width_(width), height_(height) {
         if (width <= 0 || height <= 0) {
+            DLOG(ERROR) << fmt::format("BmpImage initialization failed - invalid dimensions: width={}, height={}", width, height);
             throw std::invalid_argument("Invalid image dimensions");
         }
         pixels_.resize(static_cast<size_t>(width) * static_cast<size_t>(height) * 3, 0);
+        DLOG(INFO) << fmt::format("BmpImage created - width={}, height={}, total_pixels={}", width, height, width * height);
     }
 
     BmpImage::BmpImage(const std::string &filename) {
@@ -40,6 +44,7 @@ namespace common::filesystem {
     }
 
     auto BmpImage::save(const std::string &filename) const -> void {
+        DLOG(INFO) << fmt::format("BmpImage save - saving to file: {}", filename);
         const int32_t rowSize = width_ * 3 + 3 & ~3;
         const int32_t pixelDataSize = rowSize * height_;
         const uint64_t fileSize = sizeof(BitMapFileHeader) + sizeof(BitmapInfoHeader) + static_cast<uint64_t>(pixelDataSize);
@@ -57,6 +62,7 @@ namespace common::filesystem {
         infoHeader.bi_size_image_ = pixelDataSize;
         std::ofstream file(filename, std::ios::binary | std::ios::trunc);
         if (!file) {
+            DLOG(ERROR) << fmt::format("BmpImage save failed - cannot create file: {}", filename);
             throw std::runtime_error("can't create file: " + filename);
         }
         file.write(reinterpret_cast<const char *>(&fileHeader), sizeof(fileHeader));
@@ -67,6 +73,7 @@ namespace common::filesystem {
             file.write(reinterpret_cast<const char *>(&pixels_[rowStart]), width_ * 3);
             file.write(padding, rowSize - width_ * 3);
         }
+        DLOG(INFO) << fmt::format("BmpImage saved successfully - file_size={} bytes", fileSize);
     }
 
     auto BmpImage::getWidth() const noexcept -> int32_t {
@@ -78,8 +85,10 @@ namespace common::filesystem {
     }
 
     auto BmpImage::load(const std::string &filename) -> void {
+        DLOG(INFO) << fmt::format("BmpImage load - loading from file: {}", filename);
         std::ifstream file(filename, std::ios::binary);
         if (!file) {
+            DLOG(ERROR) << fmt::format("BmpImage load failed - cannot open file: {}", filename);
             throw std::runtime_error("Cannot open file: " + filename);
         }
 
@@ -89,17 +98,20 @@ namespace common::filesystem {
         file.read(reinterpret_cast<char *>(&fileHeader), sizeof(fileHeader));
         if (file.gcount() != sizeof(fileHeader) || fileHeader.bf_type_ != 0x4D42) // Check 'BM' signature
         {
+            DLOG(ERROR) << fmt::format("BmpImage load failed - invalid BMP file signature: {}", filename);
             throw std::runtime_error("Invalid BMP file: " + filename);
         }
 
         file.read(reinterpret_cast<char *>(&infoHeader), sizeof(infoHeader));
         if (file.gcount() != sizeof(infoHeader) || infoHeader.bi_bit_count_ != 24) // Only support 24-bit BMP
         {
+            DLOG(ERROR) << fmt::format("BmpImage load failed - unsupported BMP format (bit_count={}): {}", infoHeader.bi_bit_count_, filename);
             throw std::runtime_error("Unsupported BMP format (only 24-bit BMP is supported): " + filename);
         }
 
         width_ = infoHeader.bi_width_;
         height_ = infoHeader.bi_height_;
+        DLOG(INFO) << fmt::format("BmpImage loaded - width={}, height={}", width_, height_);
 
         // Resize pixel data
         pixels_.resize(static_cast<size_t>(width_) * static_cast<size_t>(height_) * 3);
@@ -116,6 +128,7 @@ namespace common::filesystem {
         for (int32_t y = height_ - 1; y >= 0; --y) {
             file.read(rowBuffer.data(), static_cast<std::streamsize>(rowBuffer.size()));
             if (file.gcount() != static_cast<std::streamsize>(rowBuffer.size())) {
+                DLOG(ERROR) << fmt::format("BmpImage load failed - error reading pixel data at row {}: {}", y, filename);
                 throw std::runtime_error("Error reading pixel data from file: " + filename);
             }
 
@@ -135,5 +148,6 @@ namespace common::filesystem {
                 file.ignore(static_cast<std::streamsize>(padding));
             }
         }
+        DLOG(INFO) << fmt::format("BmpImage loaded successfully - total_pixels={}", width_ * height_);
     }
 }

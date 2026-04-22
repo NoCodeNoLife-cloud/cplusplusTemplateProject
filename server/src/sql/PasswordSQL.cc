@@ -19,7 +19,7 @@ namespace server_app::sql {
             LOG(ERROR) << "Failed to initialize users table in database: " << db_path;
             throw std::runtime_error("Failed to initialize users table");
         }
-        LOG(INFO) << "PasswordSQL initialized with database: " << db_path;
+        DLOG(INFO) << "PasswordSQL initialized with database: " << db_path;
     }
 
     auto PasswordSQL::RegisterUser(const std::string &username, const std::string &password) const noexcept -> bool {
@@ -35,7 +35,7 @@ namespace server_app::sql {
             )";
 
             if (const auto result = sqlite_manager_.exec(insert_sql.data(), {username, password}); result > 0) {
-                LOG(INFO) << "User registered successfully: " << username;
+                DLOG(INFO) << "User registered successfully: " << username;
                 return true;
             } else {
                 LOG(WARNING) << "User registration affected no rows for user: " << username;
@@ -63,7 +63,7 @@ namespace server_app::sql {
             const bool authenticated = !result.empty();
 
             if (authenticated) {
-                LOG(INFO) << "User authenticated successfully: " << username;
+                DLOG(INFO) << "User authenticated successfully: " << username;
             } else {
                 LOG(WARNING) << "Authentication failed for user: " << username;
             }
@@ -94,7 +94,7 @@ namespace server_app::sql {
             )";
 
             if (const auto affected_rows = sqlite_manager_.exec(update_sql.data(), {new_password, username}); affected_rows > 0) {
-                LOG(INFO) << "Password changed successfully for user: " << username;
+                DLOG(INFO) << "Password changed successfully for user: " << username;
                 return true;
             }
 
@@ -119,7 +119,7 @@ namespace server_app::sql {
             )";
 
             if (const auto affected_rows = sqlite_manager_.exec(update_sql.data(), {new_password, username}); affected_rows > 0) {
-                LOG(INFO) << "Password reset successfully for user: " << username;
+                DLOG(INFO) << "Password reset successfully for user: " << username;
                 return true;
             }
 
@@ -144,7 +144,7 @@ namespace server_app::sql {
             )";
 
             if (const auto affected_rows = sqlite_manager_.exec(delete_sql.data(), {username}); affected_rows > 0) {
-                LOG(INFO) << "User deleted successfully: " << username;
+                DLOG(INFO) << "User deleted successfully: " << username;
                 return true;
             }
 
@@ -172,9 +172,9 @@ namespace server_app::sql {
             const bool exists = !result.empty();
 
             if (exists) {
-                LOG(INFO) << "User exists: " << username;
+                DLOG(INFO) << "User exists: " << username;
             } else {
-                LOG(INFO) << "User does not exist: " << username;
+                DLOG(INFO) << "User does not exist: " << username;
             }
 
             return exists;
@@ -197,7 +197,7 @@ namespace server_app::sql {
             )";
 
             if (const auto result = sqlite_manager_.query(select_sql.data(), {username}); !result.empty() && !result[0].empty()) {
-                LOG(INFO) << "User retrieved successfully: " << username;
+                DLOG(INFO) << "User retrieved successfully: " << username;
                 return result[0][0];
             }
 
@@ -225,7 +225,7 @@ namespace server_app::sql {
                 }
             }
 
-            LOG(INFO) << "Retrieved " << users.size() << " users from database";
+            DLOG(INFO) << "Retrieved " << users.size() << " users from database";
             return users;
         } catch (const std::exception &e) {
             LOG(ERROR) << "Failed to get all users: " << e.what();

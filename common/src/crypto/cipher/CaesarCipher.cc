@@ -1,17 +1,22 @@
 #include "CaesarCipher.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <algorithm>
 #include <limits>
 
 namespace common::crypto::cipher {
     CaesarCipher::CaesarCipher(const int shift) : shift_(NormalizeShift(shift)) {
+        DLOG(INFO) << fmt::format("CaesarCipher initialized with shift: {} (normalized from {})", shift_, shift);
     }
 
     auto CaesarCipher::Encrypt(const std::string_view plaintext) const -> std::string {
+        DLOG(INFO) << fmt::format("CaesarCipher encrypt - shift: {}, input length: {}", shift_, plaintext.length());
         return Transform(plaintext, shift_);
     }
 
     auto CaesarCipher::Decrypt(const std::string_view ciphertext) const -> std::string {
+        DLOG(INFO) << fmt::format("CaesarCipher decrypt - shift: {}, input length: {}", shift_, ciphertext.length());
         return Transform(ciphertext, -shift_);
     }
 
@@ -34,11 +39,14 @@ namespace common::crypto::cipher {
     }
 
     auto CaesarCipher::SetShift(const int new_shift) -> void {
+        const int old_shift = shift_;
         shift_ = NormalizeShift(new_shift);
+        DLOG(INFO) << fmt::format("CaesarCipher shift changed - old: {}, new: {} (from {})", old_shift, shift_, new_shift);
     }
 
     auto CaesarCipher::Transform(const std::string_view text, const int effective_shift) -> std::string {
         if (!IsValidInput(text)) {
+            DLOG(ERROR) << "CaesarCipher transform failed - input contains non-ASCII characters";
             throw std::invalid_argument("Input contains non-ASCII characters");
         }
 
@@ -53,6 +61,7 @@ namespace common::crypto::cipher {
             }
         }
 
+        DLOG(INFO) << fmt::format("CaesarCipher transform completed - output length: {}", result.length());
         return result;
     }
 

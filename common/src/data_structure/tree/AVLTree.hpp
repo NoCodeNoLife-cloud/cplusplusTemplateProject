@@ -1,4 +1,6 @@
 #pragma once
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <algorithm>
 #include <memory>
 #include <cstdint>
@@ -83,17 +85,21 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto AVLTree<T>::insert(T value) -> void {
+        DLOG(INFO) << fmt::format("AVLTree insert - value: {}", value);
         root_ = insert(root_, value);
     }
 
     template<typename T>
     auto AVLTree<T>::remove(T value) -> void {
+        DLOG(INFO) << fmt::format("AVLTree remove - value: {}", value);
         root_ = remove(root_, value);
     }
 
     template<typename T>
     auto AVLTree<T>::find(T value) const -> bool {
-        return find(root_, value) != nullptr;
+        const bool found = find(root_, value) != nullptr;
+        DLOG(INFO) << fmt::format("AVLTree find - value: {}, result: {}", value, found ? "found" : "not found");
+        return found;
     }
 
     template<typename T>
@@ -108,6 +114,7 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto AVLTree<T>::rotateRight(std::shared_ptr<TreeNode<T> > y) -> std::shared_ptr<TreeNode<T> > {
+        DLOG(INFO) << fmt::format("AVLTree rotateRight - node value: {}", y->data);
         auto x = y->left;
         auto T2 = x->right;
         x->right = y;
@@ -119,6 +126,7 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto AVLTree<T>::rotateLeft(std::shared_ptr<TreeNode<T> > x) -> std::shared_ptr<TreeNode<T> > {
+        DLOG(INFO) << fmt::format("AVLTree rotateLeft - node value: {}", x->data);
         auto y = x->right;
         auto T2 = y->left;
         y->left = x;
@@ -130,18 +138,34 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto AVLTree<T>::insert(std::shared_ptr<TreeNode<T> > node, T value) -> std::shared_ptr<TreeNode<T> > {
-        if (!node) return std::make_shared<TreeNode<T> >(value);
+        if (!node) {
+            DLOG(INFO) << fmt::format("AVLTree insert - creating new node with value: {}", value);
+            return std::make_shared<TreeNode<T> >(value);
+        }
         if (value < node->data) node->left = insert(node->left, value);
         else if (value > node->data) node->right = insert(node->right, value);
+        else {
+            DLOG(INFO) << fmt::format("AVLTree insert - duplicate value ignored: {}", value);
+            return node;
+        }
         node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
         const int32_t balance = getBalance(node);
-        if (balance > 1 && value < node->left->data) return rotateRight(node);
-        if (balance < -1 && value > node->right->data) return rotateLeft(node);
+        DLOG(INFO) << fmt::format("AVLTree insert - node: {}, balance factor: {}", node->data, balance);
+        if (balance > 1 && value < node->left->data) {
+            DLOG(INFO) << "AVLTree insert - performing right rotation (LL case)";
+            return rotateRight(node);
+        }
+        if (balance < -1 && value > node->right->data) {
+            DLOG(INFO) << "AVLTree insert - performing left rotation (RR case)";
+            return rotateLeft(node);
+        }
         if (balance > 1 && value > node->left->data) {
+            DLOG(INFO) << "AVLTree insert - performing left-right rotation (LR case)";
             node->left = rotateLeft(node->left);
             return rotateRight(node);
         }
         if (balance < -1 && value < node->right->data) {
+            DLOG(INFO) << "AVLTree insert - performing right-left rotation (RL case)";
             node->right = rotateRight(node->right);
             return rotateLeft(node);
         }
@@ -150,15 +174,20 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto AVLTree<T>::remove(std::shared_ptr<TreeNode<T> > node, T value) -> std::shared_ptr<TreeNode<T> > {
-        if (!node) return node;
+        if (!node) {
+            DLOG(WARNING) << fmt::format("AVLTree remove - value not found: {}", value);
+            return node;
+        }
         if (value < node->data) node->left = remove(node->left, value);
         else if (value > node->data) node->right = remove(node->right, value);
         else {
+            DLOG(INFO) << fmt::format("AVLTree remove - removing node with value: {}", value);
             if (!node->left && !node->right) node = nullptr;
             else if (!node->left) node = node->right;
             else if (!node->right) node = node->left;
             else {
                 auto successor = findMin(node->right);
+                DLOG(INFO) << fmt::format("AVLTree remove - replacing with successor: {}", successor->data);
                 node->data = successor->data;
                 node->right = remove(node->right, successor->data);
             }
@@ -166,13 +195,22 @@ namespace common::data_structure::tree {
         if (!node) return node;
         node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
         const int32_t balance = getBalance(node);
+        DLOG(INFO) << fmt::format("AVLTree remove - node: {}, balance factor: {}", node->data, balance);
         if (balance > 1) {
-            if (getBalance(node->left) >= 0) return rotateRight(node);
+            if (getBalance(node->left) >= 0) {
+                DLOG(INFO) << "AVLTree remove - performing right rotation (LL case)";
+                return rotateRight(node);
+            }
+            DLOG(INFO) << "AVLTree remove - performing left-right rotation (LR case)";
             node->left = rotateLeft(node->left);
             return rotateRight(node);
         }
         if (balance < -1) {
-            if (getBalance(node->right) <= 0) return rotateLeft(node);
+            if (getBalance(node->right) <= 0) {
+                DLOG(INFO) << "AVLTree remove - performing left rotation (RR case)";
+                return rotateLeft(node);
+            }
+            DLOG(INFO) << "AVLTree remove - performing right-left rotation (RL case)";
             node->right = rotateRight(node->right);
             return rotateLeft(node);
         }

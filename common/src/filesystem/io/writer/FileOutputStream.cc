@@ -1,15 +1,22 @@
 #include "src/filesystem/io/writer/FileOutputStream.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
+
 namespace common::filesystem {
     FileOutputStream::FileOutputStream(const std::string &name, const bool append) {
         if (std::filesystem::exists(name) && std::filesystem::is_directory(name)) {
+            DLOG(ERROR) << fmt::format("FileOutputStream initialization failed - path is a directory: {}", name);
             throw std::ios_base::failure("FileNotFoundException: Path is a directory.");
         }
+        DLOG(INFO) << fmt::format("FileOutputStream opening file: {}, mode: {}", name, append ? "append" : "truncate");
         file_stream_.open(name, std::ios::binary | (append ? std::ios::app : std::ios::trunc));
         if (!file_stream_.is_open()) {
+            DLOG(ERROR) << fmt::format("FileOutputStream initialization failed - unable to open or create file: {}", name);
             throw std::ios_base::failure("FileNotFoundException: Unable to open or create file.");
         }
         file_name_ = name;
+        DLOG(INFO) << fmt::format("FileOutputStream successfully opened: {}", name);
     }
 
     FileOutputStream::FileOutputStream(const char *name, const bool append) : FileOutputStream(std::string(name), append) {
@@ -45,9 +52,11 @@ namespace common::filesystem {
         }
 
         if (!buffer) {
+            DLOG(ERROR) << "FileOutputStream write failed - buffer is null";
             throw std::invalid_argument("Buffer cannot be null");
         }
 
+        DLOG(INFO) << fmt::format("FileOutputStream write - writing {} bytes", length);
         checkStreamWritable("Cannot write to closed or unwritable stream.");
         checkStreamState();
 
@@ -59,12 +68,14 @@ namespace common::filesystem {
     auto FileOutputStream::flush() -> void {
         checkStreamWritable("Cannot flush closed or unwritable stream.");
         checkStreamState();
+        DLOG(INFO) << "FileOutputStream flush - flushing file stream";
         file_stream_.flush();
         checkStreamState();
     }
 
     auto FileOutputStream::close() -> void {
         checkStreamWritable("Cannot close closed or unwritable stream.");
+        DLOG(INFO) << fmt::format("FileOutputStream close - closing file: {}", file_name_);
         file_stream_.close();
     }
 
@@ -80,9 +91,11 @@ namespace common::filesystem {
 
     auto FileOutputStream::checkStreamState() const -> void {
         if (file_stream_.bad()) {
+            DLOG(ERROR) << fmt::format("FileOutputStream checkStreamState failed - stream is in bad state: {}", file_name_);
             throw std::ios_base::failure("IOException: Stream is in bad state.");
         }
         if (file_stream_.fail()) {
+            DLOG(ERROR) << fmt::format("FileOutputStream checkStreamState failed - stream operation failed: {}", file_name_);
             throw std::ios_base::failure("IOException: Stream operation failed.");
         }
     }

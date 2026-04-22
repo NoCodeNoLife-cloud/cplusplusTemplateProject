@@ -1,5 +1,7 @@
 #include "src/system/SystemPerformanceMonitor.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <windows.h>
 
 #include <chrono>
@@ -15,6 +17,7 @@ namespace common::system {
     }
 
     auto SystemPerformanceMonitor::GetMemoryUsage() noexcept -> MemoryUsage {
+        DLOG(INFO) << "SystemPerformanceMonitor GetMemoryUsage - retrieving memory statistics";
         MemoryUsage memUsage{};
         MEMORYSTATUSEX memInfo{};
         memInfo.dwLength = sizeof(MEMORYSTATUSEX);
@@ -27,10 +30,17 @@ namespace common::system {
         memUsage.used_memory = memInfo.ullTotalPhys - memInfo.ullAvailPhys;
         memUsage.memory_usage_percent = static_cast<double>(memUsage.used_memory) / static_cast<double>(memInfo.ullTotalPhys) * 100.0;
 
+        DLOG(INFO) << fmt::format("SystemPerformanceMonitor GetMemoryUsage - total={}MB, available={}MB, used={}MB, usage={:.2f}%",
+                                  memUsage.total_memory / (1024 * 1024),
+                                  memUsage.available_memory / (1024 * 1024),
+                                  memUsage.used_memory / (1024 * 1024),
+                                  memUsage.memory_usage_percent);
+
         return memUsage;
     }
 
     auto SystemPerformanceMonitor::GetCpuUsage(const int32_t interval) noexcept -> CpuUsage {
+        DLOG(INFO) << fmt::format("SystemPerformanceMonitor GetCpuUsage - measuring CPU usage with {}s interval", interval);
         CpuUsage cpuUsage{};
 
         // Initial system times measurement
@@ -64,6 +74,8 @@ namespace common::system {
         } else {
             cpuUsage.cpu_usage_percent = 0.0;
         }
+
+        DLOG(INFO) << fmt::format("SystemPerformanceMonitor GetCpuUsage - CPU usage: {:.2f}%", cpuUsage.cpu_usage_percent);
 
         return cpuUsage;
     }

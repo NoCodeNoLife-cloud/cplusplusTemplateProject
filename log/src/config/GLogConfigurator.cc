@@ -20,7 +20,7 @@ namespace glog::config {
         if (const auto result = std::atexit(clean); result != 0) {
             throw std::runtime_error(fmt::format("Failed to register cleanup function! Error code: {}", result));
         }
-        LOG(INFO) << "glog configured...";
+        DLOG(INFO) << "glog configured...";
     }
 
     auto GLogConfigurator::getConfig() const noexcept -> const parameter::GLogParameters & {
@@ -41,7 +41,7 @@ namespace glog::config {
         // Apply custom log format if enabled
         if (config.customLogFormat()) {
             google::InstallPrefixFormatter(&formatter::CustomGlogPrefixFormatter::MyPrefixFormatter);
-            LOG(INFO) << "Custom log format enabled...";
+            DLOG(INFO) << "Custom log format enabled...";
         }
     }
 

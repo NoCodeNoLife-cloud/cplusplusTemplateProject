@@ -1,29 +1,39 @@
 #include "src/filesystem/io/reader/InputStreamReader.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
+
 namespace common::filesystem {
     InputStreamReader::InputStreamReader(std::shared_ptr<AbstractReader> input) : reader_(std::move(input)) {
         if (!reader_) {
+            DLOG(ERROR) << "InputStreamReader initialization failed - input stream is null";
             throw std::invalid_argument("InputStreamReader::InputStreamReader: Input stream cannot be null");
         }
+        DLOG(INFO) << "InputStreamReader initialized with UTF-8 charset (default)";
     }
 
     InputStreamReader::InputStreamReader(std::shared_ptr<AbstractReader> input, const std::string &charsetName) : reader_(std::move(input)) {
         if (!reader_) {
+            DLOG(ERROR) << "InputStreamReader initialization failed - input stream is null";
             throw std::invalid_argument("InputStreamReader::InputStreamReader: Input stream cannot be null");
         }
         if (charsetName != "UTF-8") {
+            DLOG(ERROR) << fmt::format("InputStreamReader initialization failed - unsupported charset: {}", charsetName);
             throw std::invalid_argument("InputStreamReader::InputStreamReader: Only UTF-8 charset is supported in this implementation");
         }
+        DLOG(INFO) << fmt::format("InputStreamReader initialized with charset: {}", charsetName);
     }
 
     auto InputStreamReader::read() -> int {
         if (closed_ || !reader_) {
+            DLOG(ERROR) << "InputStreamReader read failed - input stream is not available";
             throw std::runtime_error("InputStreamReader::read: Input stream is not available");
         }
 
         // UTF-8 character can be 1-4 bytes, read one byte at a time to determine character boundaries
         const int firstByte = reader_->read();
         if (firstByte == -1) {
+            DLOG(INFO) << "InputStreamReader read - end of stream reached";
             return -1;
         }
 
@@ -57,6 +67,7 @@ namespace common::filesystem {
 
         if (additionalBytes == -1) {
             // Invalid UTF-8 first byte
+            DLOG(ERROR) << fmt::format("InputStreamReader read failed - invalid UTF-8 first byte: 0x{:02X}", firstByteUnsigned);
             throw std::runtime_error("InputStreamReader::read: Invalid UTF-8 sequence");
         }
 
@@ -67,9 +78,11 @@ namespace common::filesystem {
         for (int i = 0; i < additionalBytes; ++i) {
             const int nextByte = reader_->read();
             if (nextByte == -1) {
+                DLOG(ERROR) << "InputStreamReader read failed - incomplete UTF-8 sequence";
                 throw std::runtime_error("InputStreamReader::read: Incomplete UTF-8 sequence");
             }
             if (const auto nextByteUnsigned = static_cast<unsigned char>(nextByte); (nextByteUnsigned & 0xC0) != 0x80) {
+                DLOG(ERROR) << fmt::format("InputStreamReader read failed - invalid UTF-8 continuation byte: 0x{:02X}", nextByteUnsigned);
                 throw std::runtime_error("InputStreamReader::read: Invalid UTF-8 sequence");
             }
             fullByteBuffer[1 + i] = static_cast<char>(nextByte);
@@ -81,8 +94,10 @@ namespace common::filesystem {
             if (chars.empty()) {
                 return -1;
             }
+            DLOG(INFO) << fmt::format("InputStreamReader read - successfully decoded UTF-8 character: U+{:04X}", static_cast<uint32_t>(chars[0]));
             return static_cast<unsigned char>(chars[0]);
         } catch (const std::exception &ex) {
+            DLOG(ERROR) << fmt::format("InputStreamReader read failed - decode error: {}", ex.what());
             throw std::runtime_error("InputStreamReader::read: Failed to decode byte to character - " + std::string(ex.what()));
         }
     }

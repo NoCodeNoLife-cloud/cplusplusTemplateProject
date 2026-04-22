@@ -1,5 +1,7 @@
 #include "UserCredentials.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <utility>
 #include <chrono>
 
@@ -26,11 +28,16 @@ namespace common::auth {
     auto UserCredentials::increment_failed_attempts() noexcept -> void {
         failed_attempts_++;
         last_failed_attempt_ = std::chrono::system_clock::now();
+        DLOG(WARNING) << fmt::format("Failed attempt incremented for user: {}, total failures: {}", username_, failed_attempts_);
     }
 
     auto UserCredentials::reset_failed_attempts() noexcept -> void {
+        const size_t previous_attempts = failed_attempts_;
         failed_attempts_ = 0;
         last_failed_attempt_ = std::chrono::system_clock::time_point::min();
+        if (previous_attempts > 0) {
+            DLOG(INFO) << fmt::format("Failed attempts reset for user: {}, previous count: {}", username_, previous_attempts);
+        }
     }
 
     auto UserCredentials::is_locked() const noexcept -> bool {
@@ -43,6 +50,13 @@ namespace common::auth {
         const auto minutes_since_last_fail = std::chrono::duration_cast<std::chrono::minutes>(time_since_last_fail);
 
         // Account locked if max attempts reached and lockout period hasn't expired
-        return failed_attempts_ >= max_attempts && minutes_since_last_fail < lockout_duration;
+        const bool locked = failed_attempts_ >= max_attempts && minutes_since_last_fail < lockout_duration;
+        
+        if (locked) {
+            DLOG(WARNING) << fmt::format("Account locked for user: {}, failed attempts: {}/{}, lockout duration: {} min, time since last fail: {} min",
+                username_, failed_attempts_, max_attempts, lockout_duration.count(), minutes_since_last_fail.count());
+        }
+        
+        return locked;
     }
 } // common

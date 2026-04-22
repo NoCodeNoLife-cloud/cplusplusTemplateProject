@@ -1,7 +1,10 @@
 #include "src/thread/AutoJoinThread.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <thread>
 #include <utility>
+#include <sstream>
 
 namespace common::thread {
     AutoJoinThread::AutoJoinThread(AutoJoinThread &&other) noexcept : thread_(std::move(other.thread_)) {
@@ -9,18 +12,23 @@ namespace common::thread {
 
     AutoJoinThread::~AutoJoinThread() {
         if (thread_.joinable()) {
+            std::ostringstream oss;
+            oss << std::this_thread::get_id();
+            DLOG(INFO) << fmt::format("AutoJoinThread destructor - auto joining thread_id={}", oss.str());
             thread_.join();
         }
     }
 
     auto AutoJoinThread::detach() -> void {
         if (thread_.joinable()) {
+            DLOG(INFO) << "AutoJoinThread detach - detaching thread";
             thread_.detach();
         }
     }
 
     auto AutoJoinThread::join() -> void {
         if (thread_.joinable()) {
+            DLOG(INFO) << "AutoJoinThread join - joining thread";
             thread_.join();
         }
     }
@@ -40,6 +48,7 @@ namespace common::thread {
     auto AutoJoinThread::operator=(AutoJoinThread &&other) noexcept -> AutoJoinThread & {
         if (this != &other) {
             if (thread_.joinable()) {
+                DLOG(INFO) << "AutoJoinThread move assignment - joining existing thread before move";
                 thread_.join();
             }
             thread_ = std::move(other.thread_);

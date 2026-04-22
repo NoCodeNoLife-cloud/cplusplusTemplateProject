@@ -1,4 +1,6 @@
 #pragma once
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <memory>
 
 namespace common::data_structure::tree {
@@ -59,6 +61,7 @@ namespace common::data_structure::tree {
 
     template<typename T>
     RedBlackTreeNode<T>::RedBlackTreeNode(const T &value) noexcept : data_(value) {
+        DLOG(INFO) << fmt::format("RedBlackTreeNode created with value: {}, color: Red", value);
     }
 
     template<typename T>

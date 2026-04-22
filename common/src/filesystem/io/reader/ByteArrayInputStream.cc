@@ -1,5 +1,7 @@
 #include "src/filesystem/io/reader/ByteArrayInputStream.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <algorithm>
 #include <cstddef>
 #include <stdexcept>
@@ -11,6 +13,7 @@ namespace common::filesystem {
 
     auto ByteArrayInputStream::read() -> std::byte {
         if (closed_ || pos_ >= buffer_.size()) {
+            DLOG(INFO) << "ByteArrayInputStream read - stream closed or end of buffer";
             return static_cast<std::byte>(-1);
         }
         return buffer_[pos_++];
@@ -18,10 +21,12 @@ namespace common::filesystem {
 
     auto ByteArrayInputStream::read(std::vector<std::byte> &cBuf, const size_t off, const size_t len) -> size_t {
         if (off > cBuf.size() || len > cBuf.size() - off) {
+            DLOG(ERROR) << fmt::format("ByteArrayInputStream read failed - offset/length out of range: off={}, len={}, buffer_size={}", off, len, cBuf.size());
             throw std::out_of_range("ByteArrayInputStream::read: Offset and length exceed the size of the buffer. off=" + std::to_string(off) + ", len=" + std::to_string(len) + ", buffer.size()=" + std::to_string(cBuf.size()));
         }
 
         if (closed_ || pos_ >= buffer_.size()) {
+            DLOG(INFO) << "ByteArrayInputStream read - stream closed or end of buffer";
             return 0;
         }
 
@@ -30,6 +35,7 @@ namespace common::filesystem {
 
         std::copy_n(buffer_.begin() + static_cast<std::ptrdiff_t>(pos_), bytesToRead, cBuf.begin() + static_cast<std::ptrdiff_t>(off));
         pos_ += bytesToRead;
+        DLOG(INFO) << fmt::format("ByteArrayInputStream read - bytes read: {}", bytesToRead);
         return bytesToRead;
     }
 
@@ -53,15 +59,19 @@ namespace common::filesystem {
 
     auto ByteArrayInputStream::reset() -> void {
         if (closed_) {
+            DLOG(ERROR) << "ByteArrayInputStream reset failed - stream is closed";
             throw std::runtime_error("ByteArrayInputStream::reset: Stream is closed");
         }
+        DLOG(INFO) << fmt::format("ByteArrayInputStream reset - position reset to {}", mark_position_);
         pos_ = mark_position_;
     }
 
     auto ByteArrayInputStream::mark(const int32_t readLimit) -> void {
         if (closed_) {
+            DLOG(ERROR) << "ByteArrayInputStream mark failed - stream is closed";
             throw std::runtime_error("ByteArrayInputStream::mark: Stream is closed");
         }
+        DLOG(INFO) << fmt::format("ByteArrayInputStream mark - position marked at {}", pos_);
         mark_position_ = pos_;
     }
 

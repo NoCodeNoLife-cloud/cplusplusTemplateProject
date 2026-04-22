@@ -1,4 +1,6 @@
 #pragma once
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <vector>
 #include <iterator>
 #include <stdexcept>
@@ -72,30 +74,36 @@ namespace common::container {
     template<typename T, typename Container>
     auto Stack<T, Container>::push(const T &value) -> void {
         data_.push_back(value);
+        DLOG(INFO) << fmt::format("Stack push - element added, size: {}", data_.size());
     }
 
     template<typename T, typename Container>
     auto Stack<T, Container>::push(T &&value) -> void {
         data_.push_back(std::move(value));
+        DLOG(INFO) << fmt::format("Stack push (move) - element added, size: {}", data_.size());
     }
 
     template<typename T, typename Container>
     template<typename... Args>
     auto Stack<T, Container>::emplace(Args &&... args) -> void {
         data_.emplace_back(std::forward<Args>(args)...);
+        DLOG(INFO) << fmt::format("Stack emplace - element constructed in-place, size: {}", data_.size());
     }
 
     template<typename T, typename Container>
     auto Stack<T, Container>::pop() -> void {
         if (data_.empty()) {
+            DLOG(ERROR) << "Stack pop failed - stack is empty";
             throw std::out_of_range("Stack is empty");
         }
         data_.pop_back();
+        DLOG(INFO) << fmt::format("Stack pop - top element removed, remaining size: {}", data_.size());
     }
 
     template<typename T, typename Container>
     auto Stack<T, Container>::top() -> T & {
         if (data_.empty()) {
+            DLOG(ERROR) << "Stack top access failed - stack is empty";
             throw std::out_of_range("Stack is empty");
         }
         return data_.back();
@@ -104,6 +112,7 @@ namespace common::container {
     template<typename T, typename Container>
     auto Stack<T, Container>::top() const -> const T & {
         if (data_.empty()) {
+            DLOG(ERROR) << "Stack top access failed - stack is empty";
             throw std::out_of_range("Stack is empty");
         }
         return data_.back();

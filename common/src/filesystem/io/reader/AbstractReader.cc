@@ -1,5 +1,7 @@
 #include "src/filesystem/io/reader/AbstractReader.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <algorithm>
 #include <vector>
 #include <stdexcept>
@@ -8,6 +10,7 @@ namespace common::filesystem {
     auto AbstractReader::read() -> int {
         std::vector<char> buffer(1);
         if (const int bytesRead = read(buffer, 0, 1); bytesRead <= 0) {
+            DLOG(INFO) << "AbstractReader read - end of stream reached";
             return -1;
         }
         return static_cast<unsigned char>(buffer[0]);

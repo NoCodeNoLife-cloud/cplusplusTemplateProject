@@ -23,4 +23,5 @@ target_link_libraries(${COMMON_FRAMEWORK} PUBLIC
         magic_enum::magic_enum
         Microsoft::DirectXMath
         unofficial::sqlite3::sqlite3
+        fmt::fmt
 )

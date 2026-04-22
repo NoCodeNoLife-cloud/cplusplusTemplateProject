@@ -1,5 +1,7 @@
 #include "src/filesystem/type/YamlToolkit.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <yaml-cpp/yaml.h>
 #include <string>
 #include <fstream>
@@ -8,6 +10,7 @@
 namespace common::filesystem {
     auto YamlToolkit::create(const std::string &filepath, const YAML::Node &data) -> bool {
         try {
+            DLOG(INFO) << fmt::format("YamlToolkit create - creating file: {}", filepath);
             // Create directory if it doesn't exist
             if (const std::filesystem::path path(filepath); !path.parent_path().empty()) {
                 std::filesystem::create_directories(path.parent_path());
@@ -20,10 +23,13 @@ namespace common::filesystem {
             if (std::ofstream file(filepath); file.is_open()) {
                 file << emitter.c_str();
                 file.close();
+                DLOG(INFO) << fmt::format("YamlToolkit create succeeded - file: {}", filepath);
                 return true;
             }
+            DLOG(ERROR) << fmt::format("YamlToolkit create failed - cannot open file for writing: {}", filepath);
             return false;
-        } catch (const std::exception &) {
+        } catch (const std::exception &e) {
+            DLOG(ERROR) << fmt::format("YamlToolkit create failed - exception: {}, reason: {}", filepath, e.what());
             return false;
         }
     }
@@ -31,10 +37,13 @@ namespace common::filesystem {
     auto YamlToolkit::read(const std::string &filepath) -> YAML::Node {
         try {
             if (std::filesystem::exists(filepath)) {
+                DLOG(INFO) << fmt::format("YamlToolkit read - reading file: {}", filepath);
                 return YAML::LoadFile(filepath);
             }
+            DLOG(WARNING) << fmt::format("YamlToolkit read - file does not exist: {}", filepath);
             return {};
-        } catch (const std::exception &) {
+        } catch (const std::exception &e) {
+            DLOG(ERROR) << fmt::format("YamlToolkit read failed - exception: {}, reason: {}", filepath, e.what());
             return {};
         }
     }
@@ -51,10 +60,13 @@ namespace common::filesystem {
     auto YamlToolkit::remove(const std::string &filepath) -> bool {
         try {
             if (std::filesystem::exists(filepath)) {
+                DLOG(INFO) << fmt::format("YamlToolkit remove - removing file: {}", filepath);
                 return std::filesystem::remove(filepath);
             }
+            DLOG(WARNING) << fmt::format("YamlToolkit remove - file does not exist: {}", filepath);
             return false;
-        } catch (const std::exception &) {
+        } catch (const std::exception &e) {
+            DLOG(ERROR) << fmt::format("YamlToolkit remove failed - exception: {}, reason: {}", filepath, e.what());
             return false;
         }
     }
@@ -72,6 +84,7 @@ namespace common::filesystem {
 
     auto YamlToolkit::setValue(const std::string &filepath, const std::string &key, const YAML::Node &value) -> bool {
         try {
+            DLOG(INFO) << fmt::format("YamlToolkit setValue - setting key '{}' in file: {}", key, filepath);
             YAML::Node root = read(filepath);
             if (!root.IsMap()) {
                 root = YAML::Node(YAML::NodeType::Map);
@@ -79,7 +92,8 @@ namespace common::filesystem {
 
             root[key] = value;
             return create(filepath, root);
-        } catch (const std::exception &) {
+        } catch (const std::exception &e) {
+            DLOG(ERROR) << fmt::format("YamlToolkit setValue failed - exception: {}, reason: {}", key, e.what());
             return false;
         }
     }
@@ -114,6 +128,7 @@ namespace common::filesystem {
 
     auto YamlToolkit::setNestedValue(const std::string &filepath, const std::string &path, const YAML::Node &value) -> bool {
         try {
+            DLOG(INFO) << fmt::format("YamlToolkit setNestedValue - setting path '{}' in file: {}", path, filepath);
             YAML::Node root = read(filepath);
             if (!root.IsMap()) {
                 root = YAML::Node(YAML::NodeType::Map);
@@ -137,7 +152,8 @@ namespace common::filesystem {
             current[key] = value;
 
             return create(filepath, root);
-        } catch (const std::exception &) {
+        } catch (const std::exception &e) {
+            DLOG(ERROR) << fmt::format("YamlToolkit setNestedValue failed - exception: {}, reason: {}", path, e.what());
             return false;
         }
     }
@@ -155,8 +171,10 @@ namespace common::filesystem {
 
     auto YamlToolkit::merge(const std::string &filepath, const YAML::Node &data) -> bool {
         try {
+            DLOG(INFO) << fmt::format("YamlToolkit merge - merging data into file: {}", filepath);
             YAML::Node root = read(filepath);
             if (!root.IsMap() && !root.IsNull()) {
+                DLOG(ERROR) << fmt::format("YamlToolkit merge failed - root is not a map or null node: {}", filepath);
                 return false; // Can only merge with a map or null node
             }
 
@@ -172,8 +190,10 @@ namespace common::filesystem {
                 return create(filepath, root);
             }
 
+            DLOG(ERROR) << fmt::format("YamlToolkit merge failed - data is not a map");
             return false;
-        } catch (const std::exception &) {
+        } catch (const std::exception &e) {
+            DLOG(ERROR) << fmt::format("YamlToolkit merge failed - exception: {}, reason: {}", filepath, e.what());
             return false;
         }
     }

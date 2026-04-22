@@ -1,5 +1,7 @@
 #include "src/filesystem/io/writer/ByteArrayOutputStream.hpp"
 
+#include <glog/logging.h>
+#include <fmt/format.h>
 #include <stdexcept>
 
 namespace common::filesystem {
@@ -8,8 +10,10 @@ namespace common::filesystem {
 
     ByteArrayOutputStream::ByteArrayOutputStream(const size_t size) : buf_(size) {
         if (size == 0) {
+            DLOG(ERROR) << "ByteArrayOutputStream initialization failed - size must be greater than zero";
             throw std::invalid_argument("Size must be greater than zero");
         }
+        DLOG(INFO) << fmt::format("ByteArrayOutputStream initialized with size: {}", size);
     }
 
     auto ByteArrayOutputStream::write(const std::byte b) -> void {
@@ -23,9 +27,11 @@ namespace common::filesystem {
         }
 
         if (offset + len > buffer.size()) {
+            DLOG(ERROR) << fmt::format("ByteArrayOutputStream write failed - buffer offset/length out of range: offset={}, len={}, buffer_size={}", offset, len, buffer.size());
             throw std::out_of_range("Buffer offset/length out of range");
         }
 
+        DLOG(INFO) << fmt::format("ByteArrayOutputStream write - writing {} bytes", len);
         ensureCapacity(len);
         std::copy_n(buffer.begin() + static_cast<std::vector<std::byte>::difference_type>(offset), len, buf_.begin() + static_cast<std::vector<std::byte>::difference_type>(count_));
         count_ += len;
@@ -37,9 +43,11 @@ namespace common::filesystem {
         }
 
         if (!buffer) {
+            DLOG(ERROR) << "ByteArrayOutputStream write failed - buffer is null";
             throw std::invalid_argument("Buffer cannot be null");
         }
 
+        DLOG(INFO) << fmt::format("ByteArrayOutputStream write - writing {} bytes from pointer", length);
         ensureCapacity(length);
         std::copy_n(buffer, length, buf_.begin() + static_cast<std::vector<std::byte>::difference_type>(count_));
         count_ += length;
@@ -52,6 +60,7 @@ namespace common::filesystem {
     }
 
     auto ByteArrayOutputStream::reset() -> void {
+        DLOG(INFO) << fmt::format("ByteArrayOutputStream reset - clearing {} bytes", count_);
         count_ = 0;
     }
 
@@ -86,10 +95,12 @@ namespace common::filesystem {
     auto ByteArrayOutputStream::ensureCapacity(const size_t additionalCapacity) -> void {
         if (count_ + additionalCapacity > buf_.size()) {
             const size_t minCapacity = count_ + additionalCapacity;
+            const size_t oldCapacity = buf_.size();
             size_t newCapacity = buf_.size() * 2;
             if (newCapacity < minCapacity) {
                 newCapacity = minCapacity;
             }
+            DLOG(INFO) << fmt::format("ByteArrayOutputStream ensureCapacity - expanding from {} to {} bytes", oldCapacity, newCapacity);
             buf_.resize(newCapacity);
         }
     }
