@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <unordered_map>
 
-#include "interface/ICache.hpp"
+#include "src/interface/ICache.hpp"
 
 namespace common::cache {
     /// @brief Template class implementing an LRU (Least Recently Used) cache

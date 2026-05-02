@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#include "interface/IBuffer.hpp"
+#include "src/interface/IBuffer.hpp"
 
 namespace common::filesystem {
     /// @brief A buffer that stores float values.

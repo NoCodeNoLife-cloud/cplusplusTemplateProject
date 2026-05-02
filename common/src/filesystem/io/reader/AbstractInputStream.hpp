@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstdint>
 
-#include "src/filesystem/io/interface/ICloseable.hpp"
+#include "src/interface/ICloseable.hpp"
 
 namespace common::filesystem {
     /// @brief Abstract base class for all input streams.

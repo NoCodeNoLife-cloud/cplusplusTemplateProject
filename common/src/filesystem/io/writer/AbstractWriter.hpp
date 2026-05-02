@@ -2,9 +2,9 @@
 #include <string>
 #include <vector>
 
-#include "src/filesystem/io/interface/IAppendable.hpp"
-#include "src/filesystem/io/interface/ICloseable.hpp"
-#include "src/filesystem/io/interface/IFlushable.hpp"
+#include "src/interface/IAppendable.hpp"
+#include "src/interface/ICloseable.hpp"
+#include "src/interface/IFlushable.hpp"
 
 namespace common::filesystem {
     /// @brief Abstract base class for writers that provides basic functionality for writing characters and strings.

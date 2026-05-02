@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <string>
 
-#include "src/serializer/interface/IYamlConfigurable.hpp"
+#include "src/interface/IYamlConfigurable.hpp"
 
 namespace glog::parameter {
     /// @brief Configuration parameters for Google Logging (glog) library.

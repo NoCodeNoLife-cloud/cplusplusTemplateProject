@@ -2,8 +2,8 @@
 #include <format>
 #include <vector>
 
-#include "src/filesystem/io/interface/ICloseable.hpp"
-#include "src/filesystem/io/interface/IFlushable.hpp"
+#include "src/interface/ICloseable.hpp"
+#include "src/interface/IFlushable.hpp"
 
 namespace common::filesystem {
     /// @brief Abstract base class for all output stream implementations.

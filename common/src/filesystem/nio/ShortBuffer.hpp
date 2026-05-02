@@ -2,7 +2,7 @@
 #include <cstring>
 #include <vector>
 
-#include "interface/IBuffer.hpp"
+#include "src/interface/IBuffer.hpp"
 
 namespace common::filesystem {
     /// @brief A buffer for short integer (int16_t) data.

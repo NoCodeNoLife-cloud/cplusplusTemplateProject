@@ -3,7 +3,7 @@
 #include <string>
 #include <yaml-cpp/node/node.h>
 
-#include "src/serializer/interface/IYamlConfigurable.hpp"
+#include "src/interface/IYamlConfigurable.hpp"
 
 namespace app_server::auth {
     /// @brief A class that holds gRPC configuration options

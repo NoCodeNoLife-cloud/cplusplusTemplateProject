@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "interface/IFlushable.hpp"
+#include "src/interface/IFlushable.hpp"
 
 namespace common::filesystem {
     /// @brief Provides console input/output operations with formatting capabilities.

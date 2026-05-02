@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "src/filesystem/io/interface/ICloseable.hpp"
-#include "src/filesystem/io/interface/IReadable.hpp"
+#include "src/interface/ICloseable.hpp"
+#include "src/interface/IReadable.hpp"
 
 namespace common::filesystem {
     /// @brief Abstract base class for reading character streams.

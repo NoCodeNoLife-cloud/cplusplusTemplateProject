@@ -370,12 +370,12 @@ TEST(ObjectFactoryTest, ThreadSafety_BasicOperations) {
 TEST(ObjectFactoryTest, Inheritance_FromIStartupTask) {
     ObjectFactory<IShape>::clearRegistry();
     static_assert(
-        std::is_base_of_v<common::service::interfaces::IStartupTask, ObjectFactory<IShape> >,
+        std::is_base_of_v<common::interfaces::IStartupTask, ObjectFactory<IShape> >,
         "ObjectFactory should inherit from IStartupTask"
     );
 
     ShapeFactory factory;
-    common::service::interfaces::IStartupTask *task = &factory;
+    common::interfaces::IStartupTask *task = &factory;
 
     EXPECT_TRUE(task->execute());
 }

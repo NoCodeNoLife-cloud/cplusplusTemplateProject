@@ -3,7 +3,7 @@
 #include <exception>
 
 #include "src/time/FunctionProfiler.hpp"
-#include "interface/IAopAspect.hpp"
+#include "src/interface/IAopAspect.hpp"
 
 namespace common::aop {
     /// @brief This class is an aspect for profiling function execution time.

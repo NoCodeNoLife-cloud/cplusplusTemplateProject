@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <string>
 
-#include "interface/IBuffer.hpp"
+#include "src/interface/IBuffer.hpp"
 
 namespace common::filesystem {
     /// @brief A character buffer that implements the IBuffer interface.

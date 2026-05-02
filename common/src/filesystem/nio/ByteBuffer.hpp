@@ -2,7 +2,7 @@
 #include <span>
 #include <vector>
 
-#include "interface/IBuffer.hpp"
+#include "src/interface/IBuffer.hpp"
 
 namespace common::filesystem {
     /// @brief A byte buffer implementation that manages a fixed-size buffer of bytes.

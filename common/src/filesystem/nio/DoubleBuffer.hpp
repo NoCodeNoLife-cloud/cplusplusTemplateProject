@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "interface/IBuffer.hpp"
+#include "src/interface/IBuffer.hpp"
 
 namespace common::filesystem {
     /// @brief A DoubleBuffer class that implements the IBuffer interface for handling double precision floating point

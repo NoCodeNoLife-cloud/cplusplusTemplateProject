@@ -6,7 +6,7 @@
 #include <memory>
 #include <stdexcept>
 
-#include "src/thread/interface/ITimerTask.hpp"
+#include "src/interface/ITimerTask.hpp"
 
 namespace common::thread {
     PeriodicActuator::PeriodicActuator(std::shared_ptr<interfaces::ITimerTask> task, const std::chrono::milliseconds interval) : task_(std::move(task)), timer_(ioContext_), interval_(interval) {

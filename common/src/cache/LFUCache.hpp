@@ -7,7 +7,7 @@
 #include <type_traits>
 #include <unordered_map>
 
-#include "interface/ICache.hpp"
+#include "src/interface/ICache.hpp"
 
 namespace common::cache {
     /// @brief Template class implementing an LFU (Least Frequently Used) cache

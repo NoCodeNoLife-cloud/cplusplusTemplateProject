@@ -6,7 +6,7 @@
 #include "src/auth/AuthRpcClient.hpp"
 #include "src/auth/AuthRpcClientOptions.hpp"
 #include "src/time/FunctionProfiler.hpp"
-#include "task/interface/ITask.h"
+#include "src/interface/ITask.hpp"
 
 namespace client_app::task {
     class ClientTask final : public common::interfaces::ITask {
