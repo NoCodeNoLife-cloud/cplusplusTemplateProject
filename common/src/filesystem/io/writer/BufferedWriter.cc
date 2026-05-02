@@ -1,21 +1,18 @@
 #include "src/filesystem/io/writer/BufferedWriter.hpp"
 
-#include <glog/logging.h>
+
 #include <fmt/format.h>
 #include <stdexcept>
 
 namespace common::filesystem {
     BufferedWriter::BufferedWriter(std::unique_ptr<std::ofstream> os, const size_t size) : output_stream_(std::move(os)), buffer_size_(size) {
         if (!output_stream_) {
-            DLOG(ERROR) << "BufferedWriter initialization failed - output stream is null";
             throw std::runtime_error("Output stream is null.");
         }
         if (!output_stream_->is_open()) {
-            DLOG(ERROR) << "BufferedWriter initialization failed - output stream is not open";
             throw std::runtime_error("Output stream is not open.");
         }
         buffer_.reserve(buffer_size_);
-        DLOG(INFO) << fmt::format("BufferedWriter initialized with buffer size: {}", size);
     }
 
     BufferedWriter::~BufferedWriter() {
@@ -28,7 +25,6 @@ namespace common::filesystem {
 
     auto BufferedWriter::write(const std::string &str) -> void {
         if (str.size() > buffer_size_) {
-            DLOG(INFO) << fmt::format("BufferedWriter write - string size {} exceeds buffer size {}, writing directly", str.size(), buffer_size_);
             flush();
             *output_stream_ << str;
         } else {
@@ -45,12 +41,10 @@ namespace common::filesystem {
         }
 
         if (off + len > cBuf.size()) {
-            DLOG(ERROR) << fmt::format("BufferedWriter write failed - offset and length out of bounds: off={}, len={}, buffer_size={}", off, len, cBuf.size());
             throw std::out_of_range("Offset and length are out of the bounds of the buffer.");
         }
 
         if (len > buffer_size_) {
-            DLOG(INFO) << fmt::format("BufferedWriter write - data size {} exceeds buffer size {}, writing directly", len, buffer_size_);
             flush();
             output_stream_->write(cBuf.data() + off, static_cast<std::streamsize>(len));
         } else {
@@ -63,7 +57,6 @@ namespace common::filesystem {
 
     auto BufferedWriter::flush() -> void {
         if (!buffer_.empty()) {
-            DLOG(INFO) << fmt::format("BufferedWriter flush - flushing {} characters to output stream", buffer_.size());
             output_stream_->write(buffer_.data(), static_cast<std::streamsize>(buffer_.size()));
             buffer_.clear();
         }
@@ -72,7 +65,6 @@ namespace common::filesystem {
 
     auto BufferedWriter::close() -> void {
         if (output_stream_ && output_stream_->is_open()) {
-            DLOG(INFO) << "BufferedWriter close - flushing and closing output stream";
             flush();
             output_stream_->close();
         }
@@ -160,7 +152,6 @@ namespace common::filesystem {
 
     auto BufferedWriter::checkAndFlush() -> void {
         if (buffer_.size() >= buffer_size_) {
-            DLOG(INFO) << fmt::format("BufferedWriter checkAndFlush - buffer full ({} chars), triggering flush", buffer_.size());
             flush();
         }
     }

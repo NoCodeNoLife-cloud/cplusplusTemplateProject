@@ -1,6 +1,5 @@
 #include "src/filesystem/io/reader/FilterInputStream.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <cstddef>
 #include <stdexcept>
@@ -11,8 +10,7 @@ namespace common::filesystem {
 
     auto FilterInputStream::validateInputStream() const -> void {
         if (!input_stream_) {
-            DLOG(ERROR) << "FilterInputStream validation failed - input stream is not available";
-            throw std::runtime_error("FilterInputStream::validateInputStream: Input stream is not available");
+throw std::runtime_error("FilterInputStream::validateInputStream: Input stream is not available");
         }
     }
 

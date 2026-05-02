@@ -1,19 +1,14 @@
 #include "PasswordPolicy.hpp"
-#include <glog/logging.h>
 #include <cctype>
 #include <fmt/format.h>
 
 namespace common::auth {
     PasswordPolicy::PasswordPolicy(const size_t min_length, const size_t max_length, const bool require_uppercase, const bool require_lowercase, const bool require_digits, const bool require_special, const size_t max_login_attempts) : min_length_(min_length), max_length_(max_length), require_uppercase_(require_uppercase), require_lowercase_(require_lowercase), require_digits_(require_digits), require_special_(require_special), max_login_attempts_(max_login_attempts) {
-        DLOG(INFO) << fmt::format("PasswordPolicy initialized - min_length: {}, max_length: {}, require_uppercase: {}, require_lowercase: {}, require_digits: {}, require_special: {}, max_login_attempts: {}", min_length_, max_length_, require_uppercase_, require_lowercase_, require_digits_, require_special_, max_login_attempts_);
     }
 
     auto PasswordPolicy::validate(const std::string &password) const noexcept -> bool {
-        DLOG(INFO) << fmt::format("Validating password with length: {}", password.length());
-
         // Check length requirements
         if (password.length() < min_length_ || password.length() > max_length_) {
-            DLOG(INFO) << fmt::format("Password validation failed - length {} not in range [{}, {}]", password.length(), min_length_, max_length_);
             return false;
         }
 
@@ -22,8 +17,6 @@ namespace common::auth {
         bool has_lower = !require_lowercase_;
         bool has_digit = !require_digits_;
         bool has_special = !require_special_;
-
-        DLOG(INFO) << fmt::format("Validation requirements - uppercase: {}, lowercase: {}, digit: {}, special: {}", require_uppercase_, require_lowercase_, require_digits_, require_special_);
 
         // Process each character in the password
         for (const char c: password) {

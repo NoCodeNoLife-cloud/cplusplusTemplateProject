@@ -1,6 +1,5 @@
 #include "src/filesystem/io/reader/PushbackInputStream.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <cstddef>
 #include <stdexcept>
@@ -19,13 +18,11 @@ namespace common::filesystem {
 
     auto PushbackInputStream::read() -> std::byte {
         if (!input_stream_) {
-            DLOG(ERROR) << "PushbackInputStream read failed - input stream is not available";
-            throw std::runtime_error("PushbackInputStream::read: Input stream is not available");
+throw std::runtime_error("PushbackInputStream::read: Input stream is not available");
         }
 
         if (buffer_pos_ < pushback_buffer_.size()) {
-            DLOG(INFO) << fmt::format("PushbackInputStream read - reading from pushback buffer at position {}", buffer_pos_);
-            return pushback_buffer_[buffer_pos_++];
+return pushback_buffer_[buffer_pos_++];
         }
         return input_stream_->read();
     }
@@ -62,29 +59,24 @@ namespace common::filesystem {
 
     void PushbackInputStream::unread(const std::vector<std::byte> &buffer, const size_t offset, const size_t len) {
         if (offset >= buffer.size() || len > buffer.size() - offset) {
-            DLOG(ERROR) << fmt::format("PushbackInputStream unread failed - buffer offset/length out of range: offset={}, len={}, buffer_size={}", offset, len, buffer.size());
-            throw std::out_of_range("PushbackInputStream::unread: Buffer offset/length out of range");
+throw std::out_of_range("PushbackInputStream::unread: Buffer offset/length out of range");
         }
 
         if (len > buffer_pos_) {
-            DLOG(ERROR) << fmt::format("PushbackInputStream unread failed - pushback buffer overflow: len={}, available_space={}", len, buffer_pos_);
-            throw std::overflow_error("PushbackInputStream::unread: Pushback buffer overflow");
+throw std::overflow_error("PushbackInputStream::unread: Pushback buffer overflow");
         }
 
         for (size_t i = 0; i < len; ++i) {
             pushback_buffer_[--buffer_pos_] = buffer[offset + len - i - 1];
         }
-        DLOG(INFO) << fmt::format("PushbackInputStream unread - pushed back {} bytes, new buffer position: {}", len, buffer_pos_);
-    }
+}
 
     void PushbackInputStream::unread(const std::byte b) {
         if (buffer_pos_ == 0) {
-            DLOG(ERROR) << "PushbackInputStream unread failed - pushback buffer overflow";
-            throw std::overflow_error("PushbackInputStream::unread: Pushback buffer overflow");
+throw std::overflow_error("PushbackInputStream::unread: Pushback buffer overflow");
         }
         pushback_buffer_[--buffer_pos_] = b;
-        DLOG(INFO) << fmt::format("PushbackInputStream unread - pushed back 1 byte, new buffer position: {}", buffer_pos_);
-    }
+}
 
     auto PushbackInputStream::isClosed() const noexcept -> bool {
         return !input_stream_ || input_stream_->isClosed();

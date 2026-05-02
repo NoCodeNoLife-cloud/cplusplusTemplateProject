@@ -1,6 +1,5 @@
 #include "src/filesystem/nio/FloatBuffer.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <algorithm>
 
@@ -32,8 +31,7 @@ namespace common::filesystem {
 
     auto FloatBuffer::compact() -> void {
         if (position_ > 0) {
-            DLOG(INFO) << fmt::format("FloatBuffer compact - moving {} floats, new limit: {}", limit_ - position_, limit_ - position_);
-            std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_), buffer_.begin());
+std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_), buffer_.begin());
             limit_ -= position_;
             position_ = 0;
         }
@@ -41,8 +39,7 @@ namespace common::filesystem {
 
     auto FloatBuffer::put(const float value) -> void {
         if (!hasRemaining()) {
-            DLOG(ERROR) << fmt::format("FloatBuffer put failed - buffer overflow: position={}, limit={}", position_, limit_);
-            throw std::overflow_error("FloatBuffer::put: Buffer overflow");
+throw std::overflow_error("FloatBuffer::put: Buffer overflow");
         }
         buffer_[position_++] = value;
     }
@@ -53,18 +50,15 @@ namespace common::filesystem {
         }
 
         if (position_ + values.size() > limit_) {
-            DLOG(ERROR) << fmt::format("FloatBuffer put failed - buffer overflow: position={}, values_size={}, limit={}", position_, values.size(), limit_);
-            throw std::overflow_error("FloatBuffer::put: Buffer overflow");
+throw std::overflow_error("FloatBuffer::put: Buffer overflow");
         }
-        DLOG(INFO) << fmt::format("FloatBuffer put - writing {} floats", values.size());
-        std::ranges::copy(values, buffer_.begin() + static_cast<std::ptrdiff_t>(position_));
+std::ranges::copy(values, buffer_.begin() + static_cast<std::ptrdiff_t>(position_));
         position_ += values.size();
     }
 
     auto FloatBuffer::get() -> float {
         if (!hasRemaining()) {
-            DLOG(ERROR) << fmt::format("FloatBuffer get failed - buffer underflow: position={}, limit={}", position_, limit_);
-            throw std::underflow_error("FloatBuffer::get: Buffer underflow");
+throw std::underflow_error("FloatBuffer::get: Buffer underflow");
         }
         return buffer_[position_++];
     }
@@ -75,11 +69,9 @@ namespace common::filesystem {
         }
 
         if (position_ + length > limit_) {
-            DLOG(ERROR) << fmt::format("FloatBuffer get failed - buffer underflow: position={}, requested={}, limit={}", position_, length, limit_);
-            throw std::underflow_error("FloatBuffer::get: Buffer underflow");
+throw std::underflow_error("FloatBuffer::get: Buffer underflow");
         }
-        DLOG(INFO) << fmt::format("FloatBuffer get - reading {} floats", length);
-        std::vector result(buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(position_ + length));
+std::vector result(buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(position_ + length));
         position_ += length;
         return result;
     }
@@ -97,11 +89,9 @@ namespace common::filesystem {
 
     auto FloatBuffer::position(const size_t newPosition) -> void {
         if (newPosition > limit_) {
-            DLOG(ERROR) << fmt::format("FloatBuffer position failed - position exceeds limit: newPosition={}, limit={}", newPosition, limit_);
-            throw std::out_of_range("FloatBuffer::position: Position exceeds limit.");
+throw std::out_of_range("FloatBuffer::position: Position exceeds limit.");
         }
-        DLOG(INFO) << fmt::format("FloatBuffer position set to {}", newPosition);
-        position_ = newPosition;
+position_ = newPosition;
     }
 
     auto FloatBuffer::limit() const noexcept -> size_t {
@@ -110,11 +100,9 @@ namespace common::filesystem {
 
     auto FloatBuffer::limit(const size_t newLimit) -> void {
         if (newLimit > capacity_) {
-            DLOG(ERROR) << fmt::format("FloatBuffer limit failed - limit exceeds capacity: newLimit={}, capacity={}", newLimit, capacity_);
-            throw std::out_of_range("FloatBuffer::limit: Limit exceeds capacity.");
+throw std::out_of_range("FloatBuffer::limit: Limit exceeds capacity.");
         }
-        DLOG(INFO) << fmt::format("FloatBuffer limit set to {} (was {})", newLimit, limit_);
-        if (position_ > newLimit) {
+if (position_ > newLimit) {
             position_ = newLimit;
         }
         limit_ = newLimit;

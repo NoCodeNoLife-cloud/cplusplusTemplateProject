@@ -1,6 +1,5 @@
 #include "src/filesystem/io/reader/BufferedReader.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <algorithm>
 #include <stdexcept>
@@ -9,12 +8,10 @@
 namespace common::filesystem {
     BufferedReader::BufferedReader(std::unique_ptr<AbstractReader> reader, const size_t size) : reader_(std::move(reader)), buffer_size_(size) {
         if (size == 0) {
-            DLOG(ERROR) << "BufferedReader initialization failed - buffer size must be greater than 0";
-            throw std::invalid_argument("Buffer size must be greater than 0");
+throw std::invalid_argument("Buffer size must be greater than 0");
         }
         buffer_.resize(size);
-        DLOG(INFO) << fmt::format("BufferedReader initialized with buffer size: {}", size);
-    }
+}
 
     auto BufferedReader::close() -> void {
         reader_->close();
@@ -40,8 +37,7 @@ namespace common::filesystem {
     auto BufferedReader::read() -> int {
         if (pos_ >= count_) {
             if (!fillBuffer()) {
-                DLOG(INFO) << "BufferedReader read - end of stream reached";
-                return -1;
+return -1;
             }
         }
         return static_cast<unsigned char>(buffer_[pos_++]);
@@ -80,8 +76,7 @@ namespace common::filesystem {
     }
 
     auto BufferedReader::readLine() -> std::string {
-        DLOG(INFO) << "BufferedReader readLine - starting to read line";
-        std::string line;
+std::string line;
 
         // Pre-allocate small buffer to avoid multiple allocations for typical lines
         line.reserve(64);
@@ -101,9 +96,7 @@ namespace common::filesystem {
                 line += ch;
             }
         }
-
-        DLOG(INFO) << fmt::format("BufferedReader readLine completed - line length: {}", line.length());
-        return line;
+return line;
     }
 
     auto BufferedReader::ready() const -> bool {
@@ -139,10 +132,8 @@ namespace common::filesystem {
         const int bytesRead = reader_->read(buffer_, 0, buffer_size_);
         count_ = bytesRead > 0 ? static_cast<size_t>(bytesRead) : 0;
         if (count_ > 0) {
-            DLOG(INFO) << fmt::format("BufferedReader fillBuffer - filled {} bytes", count_);
-        } else {
-            DLOG(INFO) << "BufferedReader fillBuffer - end of stream";
-        }
+} else {
+}
         return count_ > 0;
     }
 

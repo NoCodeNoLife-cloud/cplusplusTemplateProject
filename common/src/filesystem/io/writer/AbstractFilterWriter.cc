@@ -1,17 +1,14 @@
 #include "src/filesystem/io/writer/AbstractFilterWriter.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <stdexcept>
 
 namespace common::filesystem {
     AbstractFilterWriter::AbstractFilterWriter(std::unique_ptr<AbstractWriter> outputWriter) : output_writer_(std::move(outputWriter)) {
         if (!output_writer_) {
-            DLOG(ERROR) << "AbstractFilterWriter initialization failed - output writer is null";
-            throw std::invalid_argument("Output writer cannot be null");
+throw std::invalid_argument("Output writer cannot be null");
         }
-        DLOG(INFO) << "AbstractFilterWriter initialized successfully";
-    }
+}
 
     AbstractFilterWriter::~AbstractFilterWriter() = default;
 
@@ -53,15 +50,13 @@ namespace common::filesystem {
 
     void AbstractFilterWriter::close() {
         checkOutputStream();
-        DLOG(INFO) << "AbstractFilterWriter closing - flushing and closing underlying writer";
-        flush();
+flush();
         output_writer_->close();
     }
 
     void AbstractFilterWriter::checkOutputStream() const {
         if (!output_writer_) {
-            DLOG(ERROR) << "AbstractFilterWriter check failed - output stream is not available";
-            throw std::runtime_error("Output stream is not available");
+throw std::runtime_error("Output stream is not available");
         }
     }
 }

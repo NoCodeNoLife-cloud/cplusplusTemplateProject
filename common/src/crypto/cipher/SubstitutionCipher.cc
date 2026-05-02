@@ -1,5 +1,4 @@
 #include "SubstitutionCipher.hpp"
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <cctype>
 
@@ -9,23 +8,19 @@ namespace common::crypto::cipher {
         std::unordered_map<char, char> reverse_check;
         for (const auto &[from, to]: encode_map_) {
             if (!std::isalpha(from) || !std::isalpha(to)) {
-                DLOG(ERROR) << fmt::format("SubstitutionCipher validation failed - non-alphabetic mapping: '{}' -> '{}'", from, to);
-                throw std::invalid_argument("Mapping must contain only alphabetic characters");
+throw std::invalid_argument("Mapping must contain only alphabetic characters");
             }
             if (reverse_check.contains(to)) {
-                DLOG(ERROR) << fmt::format("SubstitutionCipher validation failed - non-bijective mapping: duplicate value '{}'", to);
-                throw std::invalid_argument("Mapping must be bijective (one-to-one)");
+throw std::invalid_argument("Mapping must be bijective (one-to-one)");
             }
             reverse_check[to] = from;
             decode_map_[to] = from; ///< Build reverse lookup table
         }
-        DLOG(INFO) << fmt::format("SubstitutionCipher mapping validated - {} entries", encode_map_.size());
-    }
+}
 
     SubstitutionCipher::SubstitutionCipher(const std::unordered_map<char, char> &mapping) : encode_map_(mapping) {
         ValidateAndBuildReverseMap();
-        DLOG(INFO) << fmt::format("SubstitutionCipher constructed with explicit mapping - {} entries", mapping.size());
-    }
+}
 
     SubstitutionCipher::SubstitutionCipher(const int shift) {
         auto normalized_shift = shift % 26;
@@ -37,8 +32,7 @@ namespace common::crypto::cipher {
             encode_map_[static_cast<char>(std::tolower(c))] = static_cast<char>(std::tolower(encoded));
         }
         ValidateAndBuildReverseMap();
-        DLOG(INFO) << fmt::format("SubstitutionCipher constructed with Caesar shift: {} (normalized)", normalized_shift);
-    }
+}
 
     SubstitutionCipher::SubstitutionCipher(const unsigned int seed) {
         std::string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -52,8 +46,7 @@ namespace common::crypto::cipher {
             encode_map_[static_cast<char>(std::tolower(upper[i]))] = static_cast<char>(std::tolower(shuffled[i]));
         }
         ValidateAndBuildReverseMap();
-        DLOG(INFO) << fmt::format("SubstitutionCipher constructed with random seed: {}", seed);
-    }
+}
 
     auto SubstitutionCipher::TransformChar(const char c, const std::unordered_map<char, char> &map) -> char {
         if (!std::isalpha(c)) return c;
@@ -63,8 +56,7 @@ namespace common::crypto::cipher {
     }
 
     auto SubstitutionCipher::Encrypt(const std::string &plaintext) const -> std::string {
-        DLOG(INFO) << fmt::format("SubstitutionCipher encrypt - input length: {}", plaintext.size());
-        std::string result;
+std::string result;
         result.reserve(plaintext.size());
         for (const char c: plaintext) {
             result.push_back(TransformChar(c, encode_map_));
@@ -73,8 +65,7 @@ namespace common::crypto::cipher {
     }
 
     auto SubstitutionCipher::Decrypt(const std::string &ciphertext) const -> std::string {
-        DLOG(INFO) << fmt::format("SubstitutionCipher decrypt - input length: {}", ciphertext.size());
-        std::string result;
+std::string result;
         result.reserve(ciphertext.size());
         for (const char c: ciphertext) {
             result.push_back(TransformChar(c, decode_map_));

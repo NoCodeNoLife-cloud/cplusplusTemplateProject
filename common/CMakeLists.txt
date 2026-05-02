@@ -15,7 +15,6 @@ target_include_directories(${COMMON_FRAMEWORK} PUBLIC
 
 # Link required libraries
 target_link_libraries(${COMMON_FRAMEWORK} PUBLIC
-        glog::glog
         Boost::headers
         yaml-cpp::yaml-cpp
         rapidjson

@@ -1,17 +1,15 @@
 #include "src/filesystem/io/writer/CharArrayWriter.hpp"
 
-#include <glog/logging.h>
+
 #include <fmt/format.h>
 #include <stdexcept>
 
 namespace common::filesystem {
     CharArrayWriter::CharArrayWriter(const int32_t initialSize) {
         if (initialSize < 0) {
-            DLOG(ERROR) << fmt::format("CharArrayWriter initialization failed - initialSize must be non-negative: {}", initialSize);
             throw std::invalid_argument("initialSize must be non-negative");
         }
         buf_.reserve(static_cast<size_t>(initialSize));
-        DLOG(INFO) << fmt::format("CharArrayWriter initialized with initial size: {}", initialSize);
     }
 
     auto CharArrayWriter::write(const char c) -> void {
@@ -26,11 +24,9 @@ namespace common::filesystem {
         }
 
         if (off + len > cBuf.size()) {
-            DLOG(ERROR) << fmt::format("CharArrayWriter write failed - invalid offset or length: off={}, len={}, buffer_size={}", off, len, cBuf.size());
             throw std::out_of_range("Invalid offset or length");
         }
 
-        DLOG(INFO) << fmt::format("CharArrayWriter write - writing {} characters", len);
         ensureCapacity(count_ + len);
         std::copy_n(cBuf.begin() + static_cast<std::ptrdiff_t>(off), len, buf_.begin() + static_cast<std::ptrdiff_t>(count_));
         count_ += len;
@@ -46,11 +42,9 @@ namespace common::filesystem {
         }
 
         if (off + len > str.size()) {
-            DLOG(ERROR) << fmt::format("CharArrayWriter write failed - invalid offset or length: off={}, len={}, string_size={}", off, len, str.size());
             throw std::out_of_range("Invalid offset or length");
         }
 
-        DLOG(INFO) << fmt::format("CharArrayWriter write - writing {} characters from string", len);
         ensureCapacity(count_ + len);
         std::copy_n(str.begin() + static_cast<std::ptrdiff_t>(off), len, buf_.begin() + static_cast<std::ptrdiff_t>(count_));
         count_ += len;
@@ -124,7 +118,6 @@ namespace common::filesystem {
     }
 
     auto CharArrayWriter::reset() -> void {
-        DLOG(INFO) << fmt::format("CharArrayWriter reset - clearing {} characters", count_);
         count_ = 0;
     }
 
@@ -155,8 +148,6 @@ namespace common::filesystem {
 
     auto CharArrayWriter::ensureCapacity(const size_t minCapacity) -> void {
         if (minCapacity > buf_.capacity()) {
-            const size_t oldCapacity = buf_.capacity();
-            DLOG(INFO) << fmt::format("CharArrayWriter ensureCapacity - expanding from {} to {} characters", oldCapacity, minCapacity);
             buf_.resize(minCapacity);
         }
     }

@@ -1,6 +1,5 @@
 #include "src/filesystem/nio/CharBuffer.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <algorithm>
 #include <stdexcept>
@@ -28,8 +27,7 @@ namespace common::filesystem {
 
     auto CharBuffer::compact() -> void {
         if (position_ > 0) {
-            DLOG(INFO) << fmt::format("CharBuffer compact - moving {} characters, new limit: {}", limit_ - position_, limit_ - position_);
-            std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_), buffer_.begin());
+std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_), buffer_.begin());
             limit_ -= position_;
             position_ = 0;
         }
@@ -37,8 +35,7 @@ namespace common::filesystem {
 
     auto CharBuffer::put(const char c) -> void {
         if (!hasRemaining()) {
-            DLOG(ERROR) << fmt::format("CharBuffer put failed - buffer overflow: position={}, limit={}", position_, limit_);
-            throw std::overflow_error("CharBuffer::put: Buffer overflow.");
+throw std::overflow_error("CharBuffer::put: Buffer overflow.");
         }
         buffer_[position_++] = c;
     }
@@ -49,18 +46,15 @@ namespace common::filesystem {
         }
 
         if (position_ + src.size() > limit_) {
-            DLOG(ERROR) << fmt::format("CharBuffer put failed - buffer overflow: position={}, src_size={}, limit={}", position_, src.size(), limit_);
-            throw std::overflow_error("CharBuffer::put: Buffer overflow.");
+throw std::overflow_error("CharBuffer::put: Buffer overflow.");
         }
-        DLOG(INFO) << fmt::format("CharBuffer put - writing {} characters", src.size());
-        std::ranges::copy(src, buffer_.begin() + static_cast<std::ptrdiff_t>(position_));
+std::ranges::copy(src, buffer_.begin() + static_cast<std::ptrdiff_t>(position_));
         position_ += src.size();
     }
 
     auto CharBuffer::get() -> char {
         if (!hasRemaining()) {
-            DLOG(ERROR) << fmt::format("CharBuffer get failed - buffer underflow: position={}, limit={}", position_, limit_);
-            throw std::underflow_error("CharBuffer::get: Buffer underflow.");
+throw std::underflow_error("CharBuffer::get: Buffer underflow.");
         }
         return buffer_[position_++];
     }
@@ -78,11 +72,9 @@ namespace common::filesystem {
 
     auto CharBuffer::position(const size_t newPosition) -> void {
         if (newPosition > limit_) {
-            DLOG(ERROR) << fmt::format("CharBuffer position failed - position exceeds limit: newPosition={}, limit={}", newPosition, limit_);
-            throw std::out_of_range("CharBuffer::position: Position exceeds limit.");
+throw std::out_of_range("CharBuffer::position: Position exceeds limit.");
         }
-        DLOG(INFO) << fmt::format("CharBuffer position set to {}", newPosition);
-        position_ = newPosition;
+position_ = newPosition;
     }
 
     auto CharBuffer::limit() const noexcept -> size_t {
@@ -91,11 +83,9 @@ namespace common::filesystem {
 
     auto CharBuffer::limit(const size_t newLimit) -> void {
         if (newLimit > capacity_) {
-            DLOG(ERROR) << fmt::format("CharBuffer limit failed - limit exceeds capacity: newLimit={}, capacity={}", newLimit, capacity_);
-            throw std::out_of_range("CharBuffer::limit: Limit exceeds capacity.");
+throw std::out_of_range("CharBuffer::limit: Limit exceeds capacity.");
         }
-        DLOG(INFO) << fmt::format("CharBuffer limit set to {} (was {})", newLimit, limit_);
-        if (position_ > newLimit) {
+if (position_ > newLimit) {
             position_ = newLimit;
         }
         limit_ = newLimit;

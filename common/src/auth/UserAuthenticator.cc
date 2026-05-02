@@ -1,6 +1,5 @@
 #include "UserAuthenticator.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include "src/exception/AuthenticationException.hpp"
 #include <sstream>
@@ -24,23 +23,18 @@ namespace common::auth {
     bool UserAuthenticator::register_user(const std::string &username, const std::string &password) {
         std::lock_guard lock(users_mutex_);
 
-        DLOG(INFO) << fmt::format("Attempting to register user: {}", username);
-
         // Validate username format
         if (!validate_username(username)) {
-            DLOG(INFO) << fmt::format("Registration failed - invalid username format: {}", username);
             throw exception::AuthenticationException(std::string("Invalid username format. Use alphanumeric characters, underscores, or hyphens (3-20 characters)."));
         }
 
         // Check if username already exists
         if (users_.contains(username) || password_sql_.UserExists(username)) {
-            DLOG(INFO) << fmt::format("Registration failed - username already exists: {}", username);
             throw exception::AuthenticationException(std::string("Username already exists"));
         }
 
         // Validate password against policy
         if (!password_policy_.validate(password)) {
-            DLOG(INFO) << fmt::format("Registration failed - password does not meet policy requirements for user: {}", username);
             throw exception::AuthenticationException(std::string("Password does not meet security requirements"));
         }
 
@@ -51,37 +45,30 @@ namespace common::auth {
         // Store user credentials in database
         const std::string credential_data = format_credentials_data(salt, hashed_password);
         if (!password_sql_.RegisterUser(username, credential_data)) {
-            DLOG(INFO) << fmt::format("Registration failed - database error for user: {}", username);
             throw exception::AuthenticationException(std::string("Failed to register user in database"));
         }
 
         // Store user credentials in memory cache
         users_[username] = std::make_unique<UserCredentials>(username, hashed_password, salt);
-        DLOG(INFO) << fmt::format("User registered successfully: {}", username);
         return true;
     }
 
     bool UserAuthenticator::authenticate(const std::string &username, const std::string &password) {
         std::lock_guard lock(users_mutex_);
 
-        DLOG(INFO) << fmt::format("Authentication attempt for user: {}", username);
-
         // Try to get user from memory cache first
         auto it = users_.find(username);
         if (it == users_.end()) {
             // If not in cache, try to load from database
-            DLOG(INFO) << fmt::format("User not in cache, loading from database: {}", username);
             auto user_opt = load_user_from_db(username);
             if (user_opt.has_value()) {
                 // Add to cache
                 users_[username] = std::make_unique<UserCredentials>(user_opt.value());
                 it = users_.find(username);
-                DLOG(INFO) << fmt::format("User loaded from database and cached: {}", username);
             }
         }
 
         if (it == users_.end()) {
-            DLOG(INFO) << fmt::format("Authentication failed - user not found: {}", username);
             throw exception::AuthenticationException(std::string("User not found"));
         }
 
@@ -89,38 +76,23 @@ namespace common::auth {
 
         // Check if account is locked
         if (user->is_locked()) {
-            DLOG(INFO) << fmt::format("Authentication failed - account locked due to too many failed attempts: {}", username);
             throw exception::AuthenticationException(std::string("Account is locked due to too many failed attempts. Please try again later."));
         }
 
         // Verify password
         if (const auto hashed_input = crypto::CryptoToolKit::hash_password(password, user->get_salt()); crypto::CryptoToolKit::secure_compare(hashed_input, user->get_hashed_password())) {
             user->reset_failed_attempts();
-            DLOG(INFO) << fmt::format("Authentication successful for user: {}", username);
             return true;
         }
         user->increment_failed_attempts();
-        DLOG(INFO) << fmt::format("Authentication failed - invalid password for user: {}, failed attempts: {}", username, user->get_failed_attempts());
         throw exception::AuthenticationException(std::string("Invalid password"));
     }
 
     bool UserAuthenticator::change_password(const std::string &username, const std::string &current_password, const std::string &new_password) {
-        DLOG(INFO) << fmt::format("Password change requested for user: {}", username);
-
         // First verify current password
-        bool auth_success = false;
         try {
-            auth_success = authenticate(username, current_password);
+            authenticate(username, current_password);
         } catch (const exception::AuthenticationException &) {
-            DLOG(INFO) << fmt::format("Password change failed - current password incorrect for user: {}", username);
-            throw exception::AuthenticationException(std::string("Current password is incorrect"));
-        }
-
-        // If we reach here, authentication was successful (auth_success will be true)
-        // The return value confirms successful authentication
-        if (!auth_success) {
-            // This case shouldn't happen given the authenticate implementation,
-            // but added for completeness since the function is marked [[nodiscard]]
             throw exception::AuthenticationException(std::string("Current password is incorrect"));
         }
 
@@ -132,7 +104,6 @@ namespace common::auth {
 
         // Validate new password
         if (!password_policy_.validate(new_password)) {
-            DLOG(INFO) << fmt::format("Password change failed - new password does not meet policy for user: {}", username);
             throw exception::AuthenticationException(std::string("New password does not meet security requirements"));
         }
 
@@ -143,24 +114,20 @@ namespace common::auth {
         // Update credentials in database
         const std::string credential_data = format_credentials_data(salt, hashed_password);
         if (!password_sql_.ResetPassword(username, credential_data)) {
-            DLOG(INFO) << fmt::format("Password change failed - database error for user: {}", username);
             throw exception::AuthenticationException(std::string("Failed to update password in database"));
         }
 
         // Update credentials in memory cache
         auto new_credentials = std::make_unique<UserCredentials>(username, hashed_password, salt);
         it->second = std::move(new_credentials);
-        DLOG(INFO) << fmt::format("Password changed successfully for user: {}", username);
         return true;
     }
 
     bool UserAuthenticator::reset_password(const std::string &username, const std::string &new_password) {
-        DLOG(INFO) << fmt::format("Password reset requested for user: {}", username);
         std::lock_guard lock(users_mutex_);
 
         // Validate new password
         if (!password_policy_.validate(new_password)) {
-            DLOG(INFO) << fmt::format("Password reset failed - new password does not meet policy for user: {}", username);
             throw exception::AuthenticationException(std::string("New password does not meet security requirements"));
         }
 
@@ -171,30 +138,25 @@ namespace common::auth {
         // Update credentials in database
         const std::string credential_data = format_credentials_data(salt, hashed_password);
         if (!password_sql_.ResetPassword(username, credential_data)) {
-            DLOG(INFO) << fmt::format("Password reset failed - database error for user: {}", username);
             throw exception::AuthenticationException(std::string("Failed to reset password in database"));
         }
 
         // Update credentials in memory cache or add if not exists
         auto new_credentials = std::make_unique<UserCredentials>(username, hashed_password, salt);
         users_[username] = std::move(new_credentials);
-        DLOG(INFO) << fmt::format("Password reset successfully for user: {}", username);
         return true;
     }
 
     bool UserAuthenticator::delete_user(const std::string &username) {
-        DLOG(INFO) << fmt::format("Deleting user: {}", username);
         std::lock_guard lock(users_mutex_);
 
         // Delete from database
         if (!password_sql_.DeleteUser(username)) {
-            DLOG(INFO) << fmt::format("Delete user failed - database error for user: {}", username);
             return false;
         }
 
         // Delete from memory cache
         users_.erase(username);
-        DLOG(INFO) << fmt::format("User deleted successfully: {}", username);
         return true;
     }
 

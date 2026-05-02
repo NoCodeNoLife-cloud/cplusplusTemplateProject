@@ -1,6 +1,6 @@
 #include "src/filesystem/io/reader/PushbackReader.hpp"
 
-#include <glog/logging.h>
+
 #include <fmt/format.h>
 #include <algorithm>
 #include <stdexcept>
@@ -46,7 +46,6 @@ namespace common::filesystem {
         validateOpen();
 
         if (buffer_pos_ < buffer_.size()) {
-            DLOG(INFO) << fmt::format("PushbackReader read - reading from pushback buffer at position {}", buffer_pos_);
             return static_cast<unsigned char>(buffer_[buffer_pos_++]);
         }
         return FilterReader::read();
@@ -108,30 +107,25 @@ namespace common::filesystem {
         validateNotClosed();
 
         if (off > cBuf.size() || len > cBuf.size() - off) {
-            DLOG(ERROR) << fmt::format("PushbackReader unread failed - buffer offset/length out of range: off={}, len={}, buffer_size={}", off, len, cBuf.size());
             throw std::out_of_range("PushbackReader::unread: Buffer offset/length out of range");
         }
 
         if (len > buffer_pos_) {
-            DLOG(ERROR) << fmt::format("PushbackReader unread failed - pushback buffer overflow: len={}, available_space={}", len, buffer_pos_);
             throw std::overflow_error("PushbackReader::unread: Pushback buffer overflow.");
         }
 
         for (size_t i = 0; i < len; ++i) {
             buffer_[--buffer_pos_] = cBuf[off + len - 1 - i];
         }
-        DLOG(INFO) << fmt::format("PushbackReader unread - pushed back {} characters, new buffer position: {}", len, buffer_pos_);
     }
 
     auto PushbackReader::unread(const int32_t c) -> void {
         validateNotClosed();
 
         if (buffer_pos_ == 0) {
-            DLOG(ERROR) << "PushbackReader unread failed - pushback buffer overflow";
             throw std::overflow_error("PushbackReader::unread: Pushback buffer overflow.");
         }
         buffer_[--buffer_pos_] = static_cast<char>(c);
-        DLOG(INFO) << fmt::format("PushbackReader unread - pushed back 1 character, new buffer position: {}", buffer_pos_);
     }
 
     auto PushbackReader::isClosed() const -> bool {

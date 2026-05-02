@@ -1,6 +1,5 @@
 #include "src/filesystem/io/writer/FilterOutputStream.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 
 namespace common::filesystem {
@@ -9,7 +8,6 @@ namespace common::filesystem {
 
     auto FilterOutputStream::write(const std::byte b) -> void {
         if (!output_stream_) {
-            DLOG(ERROR) << "FilterOutputStream write failed - output stream is not available";
             throw std::runtime_error("Output stream is not available");
         }
         output_stream_->write(b);
@@ -24,11 +22,9 @@ namespace common::filesystem {
 
     auto FilterOutputStream::write(const std::vector<std::byte> &buffer, const size_t offset, const size_t len) -> void {
         if (!output_stream_) {
-            DLOG(ERROR) << "FilterOutputStream write failed - output stream is not available";
             throw std::runtime_error("Output stream is not available");
         }
         if (offset + len > buffer.size()) {
-            DLOG(ERROR) << fmt::format("FilterOutputStream write failed - buffer overflow: offset={}, len={}, buffer_size={}", offset, len, buffer.size());
             throw std::out_of_range("Buffer overflow");
         }
         output_stream_->write(buffer, offset, len);
@@ -36,11 +32,9 @@ namespace common::filesystem {
 
     auto FilterOutputStream::write(const std::byte *buffer, const size_t length) -> void {
         if (!output_stream_) {
-            DLOG(ERROR) << "FilterOutputStream write failed - output stream is not available";
             throw std::runtime_error("Output stream is not available");
         }
         if (!buffer) {
-            DLOG(ERROR) << "FilterOutputStream write failed - buffer is null";
             throw std::invalid_argument("Buffer cannot be null");
         }
         output_stream_->write(buffer, length);
@@ -55,10 +49,8 @@ namespace common::filesystem {
 
     auto FilterOutputStream::close() -> void {
         if (!output_stream_) {
-            DLOG(ERROR) << "FilterOutputStream close failed - output stream is not available";
             throw std::runtime_error("Output stream is not available");
         }
-        DLOG(INFO) << "FilterOutputStream close - flushing and closing underlying stream";
         flush();
         output_stream_->close();
     }

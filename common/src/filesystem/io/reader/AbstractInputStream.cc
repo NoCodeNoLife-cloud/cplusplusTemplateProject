@@ -1,6 +1,6 @@
 #include "src/filesystem/io/reader/AbstractInputStream.hpp"
 
-#include <glog/logging.h>
+
 #include <fmt/format.h>
 #include <algorithm>
 #include <cstddef>
@@ -11,7 +11,6 @@
 
 namespace common::filesystem {
     auto AbstractInputStream::mark(std::int32_t readLimit) -> void {
-        DLOG(WARNING) << "AbstractInputStream mark not supported";
         throw std::runtime_error("Mark operation not supported by this input stream implementation");
     }
 
@@ -26,11 +25,9 @@ namespace common::filesystem {
     auto AbstractInputStream::read(std::vector<std::byte> &buffer, const std::size_t offset, const std::size_t len) -> size_t {
         // Check for buffer overflow
         if (offset > buffer.size() || len > buffer.size() - offset) {
-            DLOG(ERROR) << fmt::format("AbstractInputStream read failed - buffer offset/length out of range: offset={}, len={}, buffer_size={}", offset, len, buffer.size());
             throw std::out_of_range("Buffer offset/length out of range");
         }
 
-        DLOG(INFO) << fmt::format("AbstractInputStream read - requested {} bytes", len);
         std::size_t bytesRead = 0;
         for (std::size_t i = 0; i < len; ++i) {
             const std::byte byte = read();
@@ -41,12 +38,10 @@ namespace common::filesystem {
             buffer[offset + i] = byte;
             ++bytesRead;
         }
-        DLOG(INFO) << fmt::format("AbstractInputStream read completed - bytes read: {}", bytesRead);
         return bytesRead;
     }
 
     auto AbstractInputStream::reset() -> void {
-        DLOG(WARNING) << "AbstractInputStream reset not supported";
         throw std::runtime_error("Reset operation not supported by this input stream implementation");
     }
 

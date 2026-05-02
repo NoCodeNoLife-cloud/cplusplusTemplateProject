@@ -1,6 +1,5 @@
 #include "src/filesystem/io/reader/FilterReader.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <stdexcept>
 
@@ -10,11 +9,9 @@ namespace common::filesystem {
 
     auto FilterReader::close() -> void {
         if (!in_) {
-            DLOG(ERROR) << "FilterReader close failed - input stream is not available";
-            throw std::runtime_error("Input stream is not available");
+throw std::runtime_error("Input stream is not available");
         }
-        DLOG(INFO) << "FilterReader closing underlying reader";
-        in_->close();
+in_->close();
     }
 
     auto FilterReader::mark(const size_t readAheadLimit) -> void {
@@ -33,8 +30,7 @@ namespace common::filesystem {
 
     auto FilterReader::read() -> int {
         if (!in_) {
-            DLOG(ERROR) << "FilterReader read failed - input stream is not available";
-            throw std::runtime_error("Input stream is not available");
+throw std::runtime_error("Input stream is not available");
         }
         return in_->read();
     }

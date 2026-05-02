@@ -2,16 +2,10 @@
 #include "SHA256Strategy.hpp"
 #include "SHA1Strategy.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 
 namespace common::crypto::hash {
     SHAToolkit::SHAToolkit(std::unique_ptr<HashStrategy> strategy) : strategy_(std::move(strategy)) {
-        if (strategy_) {
-            DLOG(INFO) << fmt::format("SHAToolkit created with strategy - digest size: {} bytes", strategy_->getDigestSize());
-        } else {
-            DLOG(ERROR) << "SHAToolkit created with null strategy";
-        }
     }
 
     SHAToolkit::SHAToolkit(SHAToolkit &&other) noexcept : strategy_(std::move(other.strategy_)) {
@@ -42,7 +36,6 @@ namespace common::crypto::hash {
 
     auto SHAToolkit::update(const void *data, const size_t length) noexcept -> bool {
         if (!strategy_) {
-            DLOG(ERROR) << "SHAToolkit update failed - no strategy set";
             return false;
         }
         return strategy_->update(data, length);
@@ -50,7 +43,6 @@ namespace common::crypto::hash {
 
     auto SHAToolkit::update(const std::string_view data) noexcept -> bool {
         if (!strategy_) {
-            DLOG(ERROR) << "SHAToolkit update failed - no strategy set";
             return false;
         }
         return strategy_->update(data);
@@ -58,7 +50,6 @@ namespace common::crypto::hash {
 
     auto SHAToolkit::finalize() noexcept -> std::optional<std::vector<uint8_t>> {
         if (!strategy_) {
-            DLOG(ERROR) << "SHAToolkit finalize failed - no strategy set";
             return std::nullopt;
         }
         return strategy_->finalize();
@@ -66,7 +57,6 @@ namespace common::crypto::hash {
 
     auto SHAToolkit::reset() noexcept -> bool {
         if (!strategy_) {
-            DLOG(ERROR) << "SHAToolkit reset failed - no strategy set";
             return false;
         }
         return strategy_->reset();
@@ -77,12 +67,10 @@ namespace common::crypto::hash {
     }
 
     auto SHAToolkit::createSHA256() -> SHAToolkit {
-        DLOG(INFO) << "SHAToolkit creating SHA-256 instance";
         return SHAToolkit(std::make_unique<SHA256Strategy>());
     }
 
     auto SHAToolkit::createSHA1() -> SHAToolkit {
-        DLOG(WARNING) << "SHAToolkit creating SHA-1 instance - WARNING: SHA-1 is cryptographically broken";
         return SHAToolkit(std::make_unique<SHA1Strategy>());
     }
 

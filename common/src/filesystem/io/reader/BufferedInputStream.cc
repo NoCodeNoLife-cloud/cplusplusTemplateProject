@@ -1,6 +1,5 @@
 #include "src/filesystem/io/reader/BufferedInputStream.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <algorithm>
 #include <cstddef>
@@ -17,15 +16,12 @@ namespace common::filesystem {
 
     BufferedInputStream::BufferedInputStream(std::unique_ptr<AbstractInputStream> in, const size_t size) : FilterInputStream(std::move(in)), buf_(size) {
         if (!input_stream_) {
-            DLOG(ERROR) << "BufferedInputStream initialization failed - input stream is null";
-            throw std::invalid_argument("BufferedInputStream: Input stream cannot be null");
+throw std::invalid_argument("BufferedInputStream: Input stream cannot be null");
         }
         if (size == 0) {
-            DLOG(ERROR) << "BufferedInputStream initialization failed - buffer size must be greater than zero";
-            throw std::invalid_argument("BufferedInputStream: Buffer size must be greater than zero");
+throw std::invalid_argument("BufferedInputStream: Buffer size must be greater than zero");
         }
-        DLOG(INFO) << fmt::format("BufferedInputStream initialized with buffer size: {}", size);
-    }
+}
 
     auto BufferedInputStream::available() const noexcept -> size_t {
         return count_ - pos_ + input_stream_->available();
@@ -50,8 +46,7 @@ namespace common::filesystem {
         if (pos_ >= count_) {
             fillBuffer();
             if (pos_ >= count_) {
-                DLOG(INFO) << "BufferedInputStream read - end of stream reached";
-                return static_cast<std::byte>(-1);
+return static_cast<std::byte>(-1);
             }
         }
         return buf_[pos_++];
@@ -138,13 +133,10 @@ namespace common::filesystem {
     }
 
     auto BufferedInputStream::fillBuffer() -> void {
-        DLOG(INFO) << "BufferedInputStream fillBuffer - filling buffer from underlying stream";
-        count_ = input_stream_->read(buf_, 0, buf_.size());
+count_ = input_stream_->read(buf_, 0, buf_.size());
         pos_ = 0;
         if (count_ > 0) {
-            DLOG(INFO) << fmt::format("BufferedInputStream fillBuffer - filled {} bytes", count_);
-        } else {
-            DLOG(INFO) << "BufferedInputStream fillBuffer - end of stream";
-        }
+} else {
+}
     }
 }

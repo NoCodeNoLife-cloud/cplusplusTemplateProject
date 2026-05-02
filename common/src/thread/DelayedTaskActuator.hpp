@@ -1,5 +1,4 @@
 #pragma once
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <condition_variable>
 #include <functional>
@@ -50,18 +49,15 @@ namespace common::thread {
     template<typename ResultType>
     auto DelayedTaskActuator<ResultType>::scheduleTask(int32_t delayMs, std::function<ResultType()> task) -> int32_t {
         if (delayMs < 0) {
-            DLOG(ERROR) << fmt::format("DelayedTaskActuator scheduleTask failed - negative delay: {}ms", delayMs);
             throw std::invalid_argument("DelayedTaskActuator::scheduleTask: delayMs must be non-negative");
         }
 
         if (!task) {
-            DLOG(ERROR) << "DelayedTaskActuator scheduleTask failed - null task function";
             throw std::invalid_argument("DelayedTaskActuator::scheduleTask: task function cannot be null");
         }
 
         std::lock_guard lock(mutex_);
         const int32_t taskId = nextTaskId_++;
-        DLOG(INFO) << fmt::format("DelayedTaskActuator scheduleTask - taskId={}, delay={}ms", taskId, delayMs);
         
         auto packagedTask = std::make_shared<std::packaged_task<ResultType()> >(std::move(task));
         std::future<ResultType> result = packagedTask->get_future();
@@ -72,18 +68,15 @@ namespace common::thread {
         // Create a copyable lambda that captures the packaged task by shared_ptr
         std::thread([this, delayMs, packagedTask, taskId]() mutable {
             try {
-                DLOG(INFO) << fmt::format("DelayedTaskActuator task started - taskId={}, delaying for {}ms", taskId, delayMs);
                 std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
 
                 // Execute the task inside a try-catch to handle exceptions
                 try {
                     (*packagedTask)();
-                    DLOG(INFO) << fmt::format("DelayedTaskActuator task completed successfully - taskId={}", taskId);
                 }
                 // ReSharper disable once CppDFAUnreachableCode
                 catch (...) {
                     // If task throws, set exception in packaged task
-                    DLOG(ERROR) << fmt::format("DelayedTaskActuator task execution exception - taskId={}", taskId);
                     try {
                         throw;
                     } catch (...) {
@@ -101,7 +94,6 @@ namespace common::thread {
                 cv_.notify_all(); // Notify waiting threads that task state changed
             } catch (...) {
                 // Handle any unexpected exceptions during execution
-                DLOG(ERROR) << fmt::format("DelayedTaskActuator task unexpected exception - taskId={}", taskId);
                 std::lock_guard lock1(mutex_);
                 const auto it = pendingTasks_.find(taskId);
                 if (it != pendingTasks_.end()) {
@@ -117,7 +109,6 @@ namespace common::thread {
 
     template<typename ResultType>
     auto DelayedTaskActuator<ResultType>::getTaskResult(int32_t taskId) -> std::future<ResultType> {
-        DLOG(INFO) << fmt::format("DelayedTaskActuator getTaskResult - waiting for taskId={}", taskId);
         std::unique_lock lock(mutex_);
 
         // Wait until the task result is available or task has completed execution
@@ -130,11 +121,9 @@ namespace common::thread {
         if (it != results_.end()) {
             std::future<ResultType> result = std::move(it->second);
             results_.erase(it);
-            DLOG(INFO) << fmt::format("DelayedTaskActuator getTaskResult succeeded - taskId={}", taskId);
             return result;
         } else {
             // Task completed but result was already retrieved
-            DLOG(WARNING) << fmt::format("DelayedTaskActuator getTaskResult failed - taskId={} result not available", taskId);
             throw std::runtime_error("DelayedTaskActuator::getTaskResult: Task result not available, possibly already retrieved");
         }
     }
@@ -152,7 +141,6 @@ namespace common::thread {
 
     template<typename ResultType>
     bool DelayedTaskActuator<ResultType>::cancelTask(int32_t taskId) {
-        DLOG(INFO) << fmt::format("DelayedTaskActuator cancelTask - attempting to cancel taskId={}", taskId);
         std::lock_guard lock(mutex_);
         auto it = results_.find(taskId);
         if (it != results_.end()) {
@@ -165,10 +153,8 @@ namespace common::thread {
                 pendingTasks_.erase(pendingIt);
             }
 
-            DLOG(INFO) << fmt::format("DelayedTaskActuator cancelTask succeeded - taskId={}", taskId);
             return true;
         }
-        DLOG(WARNING) << fmt::format("DelayedTaskActuator cancelTask failed - taskId={} not found", taskId);
         return false;
     }
 }

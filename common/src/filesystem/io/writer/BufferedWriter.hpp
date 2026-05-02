@@ -1,5 +1,4 @@
 #pragma once
-#include <glog/logging.h>
 
 #include <fstream>
 #include <vector>

@@ -1,6 +1,6 @@
 #include "src/base_type/Object.hpp"
 
-#include <glog/logging.h>
+
 #include <fmt/format.h>
 #include <format>
 #include <typeinfo>
@@ -14,8 +14,6 @@ namespace common::base_type {
 
     auto Object::equals(const Object &other) const -> bool {
         const bool result = this == &other;
-        DLOG(INFO) << fmt::format("Object::equals - comparing {} with {}, result: {}", 
-            getClassName(), other.getClassName(), result);
         return result;
     }
 
@@ -28,7 +26,6 @@ namespace common::base_type {
     }
 
     auto Object::clone() const -> std::unique_ptr<Object> {
-        DLOG(ERROR) << fmt::format("clone() called on base Object class ({}). Derived classes must override this method.", getClassName());
         // Since Object is likely to be used as a base for polymorphic types, 
         // we throw an exception to indicate that derived classes should implement this.
         throw std::logic_error("clone() must be implemented by derived classes");
@@ -36,8 +33,6 @@ namespace common::base_type {
 
     auto Object::isInstance(const std::type_info &target_type) const noexcept -> bool {
         const bool result = target_type == typeid(*this);
-        DLOG(INFO) << fmt::format("Object::isInstance - checking if {} is instance of {}, result: {}", 
-            getClassName(), target_type.name(), result);
         return result;
     }
 
@@ -47,8 +42,6 @@ namespace common::base_type {
 
     auto Object::is(const Object &other) const noexcept -> bool {
         const bool result = this == &other;
-        DLOG(INFO) << fmt::format("Object::is - reference comparison between {} instances, result: {}", 
-            getClassName(), result);
         return result;
     }
 }

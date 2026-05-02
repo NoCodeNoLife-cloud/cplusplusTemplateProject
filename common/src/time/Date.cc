@@ -1,6 +1,5 @@
 #include "src/time/Date.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <chrono>
 #include <iomanip>
@@ -58,10 +57,8 @@ namespace common::time {
     }
 
     Date::Date(const int32_t year, const int32_t month, const int32_t day) {
-        DLOG(INFO) << fmt::format("Date constructor - creating date: {}-{}-{}", year, month, day);
-        if (!isValidDate(year, month, day)) {
-            DLOG(ERROR) << fmt::format("Date constructor failed - invalid date: {}-{}-{}", year, month, day);
-            throw std::invalid_argument("Date::Date: Invalid date components.");
+if (!isValidDate(year, month, day)) {
+throw std::invalid_argument("Date::Date: Invalid date components.");
         }
 
         std::tm tm = {};
@@ -74,18 +71,14 @@ namespace common::time {
         tm.tm_isdst = -1; // Let mktime determine if DST is in effect
         const auto timeT = std::mktime(&tm);
         if (timeT == -1) {
-            DLOG(ERROR) << fmt::format("Date constructor failed - mktime returned -1 for: {}-{}-{}", year, month, day);
-            throw std::invalid_argument("Date::Date: Invalid date components.");
+throw std::invalid_argument("Date::Date: Invalid date components.");
         }
         time_point_ = std::chrono::system_clock::from_time_t(timeT);
-        DLOG(INFO) << fmt::format("Date constructor succeeded - timestamp: {}ms", getTime());
-    }
+}
 
     Date::Date(const int32_t year, const int32_t month, const int32_t day, const int32_t hours, const int32_t minutes, const int32_t seconds) {
-        DLOG(INFO) << fmt::format("Date constructor - creating datetime: {}-{}-{} {}:{}:{}", year, month, day, hours, minutes, seconds);
-        if (!isValidDate(year, month, day, hours, minutes, seconds)) {
-            DLOG(ERROR) << fmt::format("Date constructor failed - invalid datetime: {}-{}-{} {}:{}:{}", year, month, day, hours, minutes, seconds);
-            throw std::invalid_argument("Date::Date: Invalid date-time components.");
+if (!isValidDate(year, month, day, hours, minutes, seconds)) {
+throw std::invalid_argument("Date::Date: Invalid date-time components.");
         }
 
         std::tm tm = {};
@@ -98,16 +91,13 @@ namespace common::time {
         tm.tm_isdst = -1; // Let mktime determine if DST is in effect
         const auto timeT = std::mktime(&tm);
         if (timeT == -1) {
-            DLOG(ERROR) << fmt::format("Date constructor failed - mktime returned -1 for: {}-{}-{} {}:{}:{}", year, month, day, hours, minutes, seconds);
-            throw std::invalid_argument("Date::Date: Invalid date-time components.");
+throw std::invalid_argument("Date::Date: Invalid date-time components.");
         }
         time_point_ = std::chrono::system_clock::from_time_t(timeT);
-        DLOG(INFO) << fmt::format("Date constructor succeeded - timestamp: {}ms", getTime());
-    }
+}
 
     Date::Date(const int64_t timestamp) noexcept : time_point_(std::chrono::milliseconds(timestamp)) {
-        DLOG(INFO) << fmt::format("Date constructor from timestamp - timestamp: {}ms", timestamp);
-    }
+}
 
     auto Date::clone() const -> Date {
         return Date(getTime());
@@ -158,8 +148,7 @@ namespace common::time {
         std::ostringstream oss;
         oss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
         const auto result = oss.str();
-        DLOG(INFO) << fmt::format("Date toString - formatted: {}", result);
-        return result;
+return result;
     }
 
     auto Date::hashCode() const noexcept -> size_t {

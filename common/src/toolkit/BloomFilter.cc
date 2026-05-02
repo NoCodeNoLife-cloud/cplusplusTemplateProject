@@ -1,6 +1,6 @@
 #include "BloomFilter.hpp"
 
-#include <glog/logging.h>
+
 #include <fmt/format.h>
 #include <algorithm>
 #include <cstring>
@@ -23,18 +23,13 @@ namespace common::toolkit {
 
     auto BloomParameters::compute_optimal_parameters() noexcept -> bool {
         if (!*this) {
-            DLOG(ERROR) << "BloomParameters compute_optimal_parameters failed - invalid parameters";
             return false;
         }
 
         // Additional validation for mathematical soundness
         if (projected_element_count == 0 || false_positive_probability <= 0.0 || false_positive_probability >= 1.0) {
-            DLOG(ERROR) << fmt::format("BloomParameters compute_optimal_parameters failed - invalid probability: {}", false_positive_probability);
             return false;
         }
-
-        DLOG(INFO) << fmt::format("BloomParameters computing optimal parameters - projected_elements={}, fpp={}", 
-                                  projected_element_count, false_positive_probability);
 
         double min_m = std::numeric_limits<double>::infinity();
         double min_k = 0.0;
@@ -67,7 +62,6 @@ namespace common::toolkit {
 
         // Check if valid parameters were found
         if (min_m == std::numeric_limits<double>::infinity() || min_k <= 0) {
-            DLOG(ERROR) << "BloomParameters compute_optimal_parameters failed - could not find valid parameters";
             return false;
         }
 
@@ -95,8 +89,6 @@ namespace common::toolkit {
             parameters.table_size = maximum_size;
         }
 
-        DLOG(INFO) << fmt::format("BloomParameters compute_optimal_parameters succeeded - hashes={}, table_size={}",
-                                  parameters.number_of_hashes, parameters.table_size);
         return true;
     }
 
@@ -109,11 +101,8 @@ namespace common::toolkit {
 
     // BloomFilter implementation
     BloomFilter::BloomFilter(const BloomParameters &p) noexcept : salt_count_(p.optimal_parameters.number_of_hashes), table_size_(p.optimal_parameters.table_size), projected_element_count_(p.projected_element_count), random_seed_(p.random_seed * 0xA5A5A5A5 + 1), desired_false_positive_probability_(p.false_positive_probability) {
-        DLOG(INFO) << fmt::format("BloomFilter constructor - salt_count={}, table_size={}, projected_elements={}",
-                                  salt_count_, table_size_, projected_element_count_);
         generate_unique_salt();
         bit_table_.resize(table_size_ / 8, 0x00);
-        DLOG(INFO) << "BloomFilter initialized successfully";
     }
 
     auto BloomFilter::operator==(const BloomFilter &f) const noexcept -> bool {
@@ -170,7 +159,6 @@ namespace common::toolkit {
     }
 
     auto BloomFilter::insert(const unsigned char *key_begin, const std::size_t length) -> void {
-        DLOG(INFO) << fmt::format("BloomFilter insert - key_length={}, current_elements={}", length, inserted_element_count_);
         std::size_t bit_index = 0;
         std::size_t bit = 0;
 
@@ -207,12 +195,10 @@ namespace common::toolkit {
             compute_indices(hash_ap(key_begin, length, i), bit_index, bit);
 
             if ((bit_table_[bit_index / 8] & bit_mask[bit]) != bit_mask[bit]) {
-                DLOG(INFO) << "BloomFilter contains - element NOT in set (definitely)";
                 return false;
             }
         }
 
-        DLOG(INFO) << "BloomFilter contains - element MAYBE in set (possible false positive)";
         return true;
     }
 
@@ -247,10 +233,7 @@ namespace common::toolkit {
         const auto inserted_count = static_cast<double>(inserted_element_count_);
         const auto size_val = static_cast<double>(size());
 
-        const auto fpp = std::pow(1.0 - std::exp(-salt_size * inserted_count / size_val), salt_size);
-        DLOG(INFO) << fmt::format("BloomFilter effective_fpp - calculated: {:.6f}, desired: {:.6f}, elements: {}/{}",
-                                  fpp, desired_false_positive_probability_, inserted_element_count_, projected_element_count_);
-        return fpp;
+        return std::pow(1.0 - std::exp(-salt_size * inserted_count / size_val), salt_size);
     }
 
     auto BloomFilter::table() const noexcept -> const cell_type_ * {

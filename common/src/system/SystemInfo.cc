@@ -1,6 +1,5 @@
 #include "src/system/SystemInfo.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <cwctype>
 #include <string>
@@ -21,10 +20,7 @@ namespace common::system {
     }
 
     auto SystemInfo::ReadRegistryStringValue(HKEY__ *const hKeyRoot, const wchar_t *subKey, const wchar_t *valueName) noexcept -> std::string {
-        DLOG(INFO) << fmt::format("SystemInfo ReadRegistryStringValue - reading registry value: {}\\{}", 
-                                  WideToUtf8(subKey),
-                                  WideToUtf8(valueName));
-        HKEY hKey;
+HKEY hKey;
         if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS) {
             RegistryKey keyGuard(hKey);
 
@@ -35,13 +31,11 @@ namespace common::system {
                 if (const int32_t len = WideCharToMultiByte(CP_UTF8, 0, buffer, -1, nullptr, 0, nullptr, nullptr); len > 0) {
                     std::string basic_string(len - 1, 0); // len includes null terminator, so subtract 1
                     WideCharToMultiByte(CP_UTF8, 0, buffer, -1, &basic_string[0], len, nullptr, nullptr);
-                    DLOG(INFO) << fmt::format("SystemInfo ReadRegistryStringValue - successfully read value: {}", basic_string);
-                    return basic_string;
+return basic_string;
                 }
             }
         }
-        DLOG(WARNING) << fmt::format("SystemInfo ReadRegistryStringValue - failed to read registry value");
-        return {}; // Return empty string if failed
+return {}; // Return empty string if failed
     }
 
     auto SystemInfo::EnumerateRegistryValues(HKEY__ *const hKeyRoot, const wchar_t *subKey) noexcept -> std::vector<std::string> {
@@ -73,11 +67,9 @@ namespace common::system {
     }
 
     auto SystemInfo::GetCpuModelFromRegistry() noexcept -> std::string {
-        DLOG(INFO) << "SystemInfo GetCpuModelFromRegistry - retrieving CPU model";
-        const std::string cpuModel = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", L"ProcessorNameString");
+const std::string cpuModel = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", L"ProcessorNameString");
         const std::string result = cpuModel.empty() ? "Unknown CPU Model" : cpuModel;
-        DLOG(INFO) << fmt::format("SystemInfo GetCpuModelFromRegistry - CPU model: {}", result);
-        return result;
+return result;
     }
 
     auto SystemInfo::GetMemoryDetails() noexcept -> std::string {
@@ -86,8 +78,7 @@ namespace common::system {
     }
 
     auto SystemInfo::GetOSVersion() noexcept -> std::string {
-        DLOG(INFO) << "SystemInfo GetOSVersion - retrieving OS version";
-        std::string result = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", L"ProductName");
+std::string result = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", L"ProductName");
 
         if (!result.empty()) {
             const std::string buildNum = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", L"CurrentBuildNumber");
@@ -99,13 +90,11 @@ namespace common::system {
         }
 
         const std::string finalResult = result.empty() ? "Windows OS Information Not Available" : result;
-        DLOG(INFO) << fmt::format("SystemInfo GetOSVersion - OS version: {}", finalResult);
-        return finalResult;
+return finalResult;
     }
 
     auto SystemInfo::GetMotherboardInfo() noexcept -> MotherboardInfo {
-        DLOG(INFO) << "SystemInfo GetMotherboardInfo - retrieving motherboard information";
-        MotherboardInfo info{};
+MotherboardInfo info{};
 
         // Read motherboard information from BIOS key
         info.manufacturer = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"HARDWARE\\DESCRIPTION\\System\\BIOS", L"BaseBoardManufacturer");
@@ -118,14 +107,11 @@ namespace common::system {
             serial = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", L"ProductId");
         }
         info.systemSerial = serial;
-
-        DLOG(INFO) << fmt::format("SystemInfo GetMotherboardInfo - manufacturer={}, model={}", info.manufacturer, info.model);
-        return info;
+return info;
     }
 
     auto SystemInfo::GetGraphicsCardInfo() noexcept -> std::string {
-        DLOG(INFO) << "SystemInfo GetGraphicsCardInfo - retrieving graphics card information";
-        // Open the graphics drivers devices key
+// Open the graphics drivers devices key
         HKEY hKey;
         if (const LONG result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Devices", 0, KEY_READ, &hKey); result == ERROR_SUCCESS) {
             RegistryKey keyGuard(hKey);
@@ -146,16 +132,13 @@ namespace common::system {
                         if (const int32_t len = WideCharToMultiByte(CP_UTF8, 0, deviceDesc, -1, nullptr, 0, nullptr, nullptr); len > 0) {
                             std::string basic_string(len - 1, 0); // len includes null terminator, so subtract 1
                             WideCharToMultiByte(CP_UTF8, 0, deviceDesc, -1, &basic_string[0], len, nullptr, nullptr);
-                            DLOG(INFO) << fmt::format("SystemInfo GetGraphicsCardInfo - GPU: {}", basic_string);
-                            return basic_string;
+return basic_string;
                         }
                     }
                 }
             }
         }
-
-        DLOG(WARNING) << "SystemInfo GetGraphicsCardInfo - graphics card information not available";
-        return "Graphics card information not available";
+return "Graphics card information not available";
     }
 
     auto SystemInfo::GetDiskDriveInfo() noexcept -> std::vector<std::string> {

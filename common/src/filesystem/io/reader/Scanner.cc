@@ -1,6 +1,5 @@
 #include "src/filesystem/io/reader/Scanner.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <istream>
 #include <stdexcept>
@@ -13,8 +12,7 @@ namespace common::filesystem {
     auto Scanner::nextInt() const -> int32_t {
         std::string token;
         if (!getNextToken(token)) {
-            DLOG(ERROR) << "Scanner nextInt failed - no more tokens available";
-            throw std::runtime_error("Scanner::nextInt: No more integers available.");
+throw std::runtime_error("Scanner::nextInt: No more integers available.");
         }
 
         try {
@@ -23,31 +21,24 @@ namespace common::filesystem {
             const long long_value = std::stol(token, &pos);
 
             if (pos != token.length()) {
-                DLOG(ERROR) << fmt::format("Scanner nextInt failed - non-numeric characters in token: '{}'", token);
-                throw std::invalid_argument("Scanner::nextInt: Non-numeric characters in token: '" + token + "'");
+throw std::invalid_argument("Scanner::nextInt: Non-numeric characters in token: '" + token + "'");
             }
 
             if (long_value < std::numeric_limits<int32_t>::min() || long_value > std::numeric_limits<int32_t>::max()) {
-                DLOG(ERROR) << fmt::format("Scanner nextInt failed - value out of range: '{}' (value={})", token, long_value);
-                throw std::out_of_range("Scanner::nextInt: Value out of range for int32_t: '" + token + "'");
+throw std::out_of_range("Scanner::nextInt: Value out of range for int32_t: '" + token + "'");
             }
-
-            DLOG(INFO) << fmt::format("Scanner nextInt - successfully parsed: {}", long_value);
-            return static_cast<int32_t>(long_value);
+return static_cast<int32_t>(long_value);
         } catch (const std::invalid_argument &e) {
-            DLOG(ERROR) << fmt::format("Scanner nextInt failed - invalid argument: '{}', error: {}", token, e.what());
-            throw std::invalid_argument("Scanner::nextInt: Invalid argument - '" + token + "'. Error: " + e.what());
+throw std::invalid_argument("Scanner::nextInt: Invalid argument - '" + token + "'. Error: " + e.what());
         } catch (const std::out_of_range &e) {
-            DLOG(ERROR) << fmt::format("Scanner nextInt failed - out of range: '{}', error: {}", token, e.what());
-            throw std::out_of_range("Scanner::nextInt: Out of range - '" + token + "'. Error: " + e.what());
+throw std::out_of_range("Scanner::nextInt: Out of range - '" + token + "'. Error: " + e.what());
         }
     }
 
     auto Scanner::nextDouble() const -> double {
         std::string token;
         if (!getNextToken(token)) {
-            DLOG(ERROR) << "Scanner nextDouble failed - no more tokens available";
-            throw std::runtime_error("Scanner::nextDouble: No more doubles available.");
+throw std::runtime_error("Scanner::nextDouble: No more doubles available.");
         }
 
         try {
@@ -55,18 +46,13 @@ namespace common::filesystem {
             const double result = std::stod(token, &pos);
 
             if (pos != token.length()) {
-                DLOG(ERROR) << fmt::format("Scanner nextDouble failed - non-numeric characters in token: '{}'", token);
-                throw std::invalid_argument("Scanner::nextDouble: Non-numeric characters in token: '" + token + "'");
+throw std::invalid_argument("Scanner::nextDouble: Non-numeric characters in token: '" + token + "'");
             }
-
-            DLOG(INFO) << fmt::format("Scanner nextDouble - successfully parsed: {}", result);
-            return result;
+return result;
         } catch (const std::invalid_argument &e) {
-            DLOG(ERROR) << fmt::format("Scanner nextDouble failed - invalid argument: '{}', error: {}", token, e.what());
-            throw std::invalid_argument("Scanner::nextDouble: Invalid argument - '" + token + "'. Error: " + e.what());
+throw std::invalid_argument("Scanner::nextDouble: Invalid argument - '" + token + "'. Error: " + e.what());
         } catch (const std::out_of_range &e) {
-            DLOG(ERROR) << fmt::format("Scanner nextDouble failed - out of range: '{}', error: {}", token, e.what());
-            throw std::out_of_range("Scanner::nextDouble: Out of range - '" + token + "'. Error: " + e.what());
+throw std::out_of_range("Scanner::nextDouble: Out of range - '" + token + "'. Error: " + e.what());
         }
     }
 

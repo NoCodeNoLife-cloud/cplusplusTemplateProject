@@ -1,16 +1,13 @@
 #include "src/filesystem/io/writer/OutputStreamWriter.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 
 namespace common::filesystem {
     OutputStreamWriter::OutputStreamWriter(std::unique_ptr<AbstractWriter> outputStream, const std::string &charsetName) : output_writer_(std::move(outputStream)), charset_(charsetName), closed_(false) {
         if (charsetName != "UTF-8") {
-            DLOG(ERROR) << fmt::format("OutputStreamWriter initialization failed - unsupported encoding: {}", charsetName);
-            throw std::invalid_argument("Unsupported encoding: " + charsetName);
+throw std::invalid_argument("Unsupported encoding: " + charsetName);
         }
-        DLOG(INFO) << fmt::format("OutputStreamWriter initialized with charset: {}", charsetName);
-    }
+}
 
     OutputStreamWriter::OutputStreamWriter(std::unique_ptr<AbstractWriter> outputStream) : OutputStreamWriter(std::move(outputStream), "UTF-8") {
     }
@@ -39,11 +36,9 @@ namespace common::filesystem {
 
         checkIfClosed();
         if (off + len > cBuf.size()) {
-            DLOG(ERROR) << fmt::format("OutputStreamWriter write failed - offset and length exceed buffer size: off={}, len={}, buffer_size={}", off, len, cBuf.size());
-            throw std::out_of_range("Offset and length exceed buffer size");
+throw std::out_of_range("Offset and length exceed buffer size");
         }
-        DLOG(INFO) << fmt::format("OutputStreamWriter write - writing {} characters", len);
-        output_writer_->write(cBuf, off, len);
+output_writer_->write(cBuf, off, len);
         checkOutputStream();
     }
 
@@ -59,27 +54,22 @@ namespace common::filesystem {
         }
 
         if (off + len > str.size()) {
-            DLOG(ERROR) << fmt::format("OutputStreamWriter write failed - offset and length exceed string size: off={}, len={}, string_size={}", off, len, str.size());
-            throw std::out_of_range("Offset and length exceed string size");
+throw std::out_of_range("Offset and length exceed string size");
         }
-        DLOG(INFO) << fmt::format("OutputStreamWriter write - writing {} characters from string", len);
-        write(std::vector(str.begin() + static_cast<std::string::difference_type>(off), str.begin() + static_cast<std::string::difference_type>(off + len)));
+write(std::vector(str.begin() + static_cast<std::string::difference_type>(off), str.begin() + static_cast<std::string::difference_type>(off + len)));
     }
 
     auto OutputStreamWriter::flush() -> void {
         checkIfClosed();
-        DLOG(INFO) << "OutputStreamWriter flush - flushing underlying writer";
-        output_writer_->flush();
+output_writer_->flush();
         checkOutputStream();
     }
 
     auto OutputStreamWriter::close() -> void {
         if (closed_) {
-            DLOG(INFO) << "OutputStreamWriter close - stream already closed";
-            return;
+return;
         }
-        DLOG(INFO) << "OutputStreamWriter close - flushing and closing";
-        flush();
+flush();
         closed_ = true;
     }
 
@@ -112,15 +102,13 @@ namespace common::filesystem {
 
     auto OutputStreamWriter::checkIfClosed() const -> void {
         if (closed_) {
-            DLOG(ERROR) << "OutputStreamWriter operation failed - stream is closed";
-            throw std::ios_base::failure("Stream is closed");
+throw std::ios_base::failure("Stream is closed");
         }
     }
 
     auto OutputStreamWriter::checkOutputStream() const -> void {
         if (!output_writer_) {
-            DLOG(ERROR) << "OutputStreamWriter check failed - output writer is not available";
-            throw std::ios_base::failure("Failed to write to stream");
+throw std::ios_base::failure("Failed to write to stream");
         }
     }
 }

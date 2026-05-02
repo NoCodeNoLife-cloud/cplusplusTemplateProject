@@ -1,6 +1,5 @@
 #include "src/filesystem/io/writer/BufferedOutputStream.hpp"
 
-#include <glog/logging.h>
 #include <fmt/format.h>
 
 namespace common::filesystem {
@@ -9,15 +8,12 @@ namespace common::filesystem {
 
     BufferedOutputStream::BufferedOutputStream(std::unique_ptr<AbstractOutputStream> out, const size_t size) : FilterOutputStream(std::move(out)), bufferSize_(size), buffer_(size) {
         if (!output_stream_) {
-            DLOG(ERROR) << "BufferedOutputStream initialization failed - output stream is null";
-            throw std::invalid_argument("Output stream cannot be null");
+throw std::invalid_argument("Output stream cannot be null");
         }
         if (size == 0) {
-            DLOG(ERROR) << "BufferedOutputStream initialization failed - buffer size must be greater than 0";
-            throw std::invalid_argument("Buffer size must be greater than 0");
+throw std::invalid_argument("Buffer size must be greater than 0");
         }
-        DLOG(INFO) << fmt::format("BufferedOutputStream initialized with buffer size: {}", size);
-    }
+}
 
     BufferedOutputStream::~BufferedOutputStream() {
         try {
@@ -40,12 +36,9 @@ namespace common::filesystem {
         }
 
         if (offset + len > data.size()) {
-            DLOG(ERROR) << fmt::format("BufferedOutputStream write failed - data offset/length out of range: offset={}, len={}, data_size={}", offset, len, data.size());
-            throw std::out_of_range("Data offset/length out of range");
+throw std::out_of_range("Data offset/length out of range");
         }
-
-        DLOG(INFO) << fmt::format("BufferedOutputStream write - writing {} bytes to buffer", len);
-        size_t bytesWritten = 0;
+size_t bytesWritten = 0;
         while (bytesWritten < len) {
             if (buffer_position_ == bufferSize_) {
                 flushBuffer();
@@ -79,16 +72,14 @@ namespace common::filesystem {
     }
 
     auto BufferedOutputStream::flush() -> void {
-        DLOG(INFO) << "BufferedOutputStream flush - flushing buffer and underlying stream";
-        flushBuffer();
+flushBuffer();
         if (output_stream_) {
             output_stream_->flush();
         }
     }
 
     auto BufferedOutputStream::close() -> void {
-        DLOG(INFO) << "BufferedOutputStream close - flushing and closing stream";
-        flush();
+flush();
         if (output_stream_) {
             output_stream_->close();
         }
@@ -96,8 +87,7 @@ namespace common::filesystem {
 
     auto BufferedOutputStream::flushBuffer() -> void {
         if (buffer_position_ > 0 && output_stream_) {
-            DLOG(INFO) << fmt::format("BufferedOutputStream flushBuffer - flushing {} bytes to underlying stream", buffer_position_);
-            output_stream_->write(buffer_, 0, buffer_position_);
+output_stream_->write(buffer_, 0, buffer_position_);
             buffer_position_ = 0;
         }
     }
