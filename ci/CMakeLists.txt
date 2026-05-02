@@ -3,8 +3,8 @@ set(CI_TEST_PROJECT ci_tests)
 
 # Source files collection
 file(GLOB_RECURSE CI_TEST_SRC_FILES
-        src/*.cc
-        src/*.cpp
+        ut/src/*.cc
+        ut/src/*.cpp
 )
 
 # Enable testing
