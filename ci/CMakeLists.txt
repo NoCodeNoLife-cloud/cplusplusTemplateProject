@@ -28,6 +28,7 @@ target_link_libraries(${CI_TEST_PROJECT} PRIVATE
         grpc_service
         fmt::fmt
         unofficial::sqlite3::sqlite3
+        unofficial::mysql-connector-cpp::connector
 )
 
 # Add tests
