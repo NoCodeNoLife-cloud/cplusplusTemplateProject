@@ -131,14 +131,12 @@ namespace common::container {
     auto Heap<T, Compare>::push(const T &value) -> void {
         data_.push_back(value);
         heapify_up(data_.size() - 1);
-        DLOG(INFO) << fmt::format("Heap push - element added, size: {}", data_.size());
     }
 
     template<typename T, typename Compare>
     auto Heap<T, Compare>::push(T &&value) -> void {
         data_.push_back(std::move(value));
         heapify_up(data_.size() - 1);
-        DLOG(INFO) << fmt::format("Heap push (move) - element added, size: {}", data_.size());
     }
 
     template<typename T, typename Compare>
@@ -146,13 +144,11 @@ namespace common::container {
     auto Heap<T, Compare>::emplace(Args &&... args) -> void {
         data_.emplace_back(std::forward<Args>(args)...);
         heapify_up(data_.size() - 1);
-        DLOG(INFO) << fmt::format("Heap emplace - element constructed in-place, size: {}", data_.size());
     }
 
     template<typename T, typename Compare>
     auto Heap<T, Compare>::pop() -> void {
         if (empty()) {
-            DLOG(ERROR) << "Heap pop failed - heap is empty";
             throw std::out_of_range("Heap is empty");
         }
         std::swap(data_[0], data_.back());
@@ -160,13 +156,11 @@ namespace common::container {
         if (!empty()) {
             heapify_down(0);
         }
-        DLOG(INFO) << fmt::format("Heap pop - top element removed, remaining size: {}", data_.size());
     }
 
     template<typename T, typename Compare>
     auto Heap<T, Compare>::top() const -> const T & {
         if (empty()) {
-            DLOG(ERROR) << "Heap top access failed - heap is empty";
             throw std::out_of_range("Heap is empty");
         }
         return data_[0];
@@ -175,7 +169,6 @@ namespace common::container {
     template<typename T, typename Compare>
     auto Heap<T, Compare>::top() -> T & {
         if (empty()) {
-            DLOG(ERROR) << "Heap top access failed - heap is empty";
             throw std::out_of_range("Heap is empty");
         }
         return data_[0];
@@ -196,7 +189,6 @@ namespace common::container {
         const size_t previous_size = data_.size();
         data_.clear();
         if (previous_size > 0) {
-            DLOG(INFO) << fmt::format("Heap cleared - removed {} elements", previous_size);
         }
     }
 
