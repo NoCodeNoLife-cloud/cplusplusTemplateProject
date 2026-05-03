@@ -10,14 +10,13 @@
 #include <mysqlx/xdevapi.h>
 #include <string>
 #include <vector>
-#include <thread>
 #include <chrono>
 
 using namespace common::sql::mysql;
 
 // Test database configuration
 static constexpr auto TEST_DB_HOST = "localhost";
-static constexpr auto TEST_DB_PORT = 33060;  // X Protocol port for MySQL X DevAPI
+static constexpr auto TEST_DB_PORT = 33060; // X Protocol port for MySQL X DevAPI
 static constexpr auto TEST_DB_USER = "root";
 static constexpr auto TEST_DB_PASSWORD = "123456";
 static constexpr auto TEST_DB_NAME = "test_mysql_executor";
@@ -28,7 +27,7 @@ static constexpr auto TEST_DB_NAME = "test_mysql_executor";
  */
 static auto createMySQLSession() -> std::unique_ptr<mysqlx::Session> {
     std::string last_error;
-    
+
     // Method 1: Try SessionOption format (X Protocol default port 33060)
     try {
         auto session = std::make_unique<mysqlx::Session>(
@@ -38,22 +37,22 @@ static auto createMySQLSession() -> std::unique_ptr<mysqlx::Session> {
             mysqlx::SessionOption::PWD, TEST_DB_PASSWORD
         );
         return session;
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         last_error = std::string("SessionOption: ") + e.what();
     }
-    
+
     // Method 2: Try URI format with mysqlx:// scheme
     try {
-        const std::string uri = "mysqlx://" + std::string(TEST_DB_USER) + ":" + 
-                               std::string(TEST_DB_PASSWORD) + "@" + 
-                               std::string(TEST_DB_HOST) + ":" + 
-                               std::to_string(TEST_DB_PORT);
+        const std::string uri = "mysqlx://" + std::string(TEST_DB_USER) + ":" +
+                                std::string(TEST_DB_PASSWORD) + "@" +
+                                std::string(TEST_DB_HOST) + ":" +
+                                std::to_string(TEST_DB_PORT);
         auto session = std::make_unique<mysqlx::Session>(uri);
         return session;
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         last_error += "\nURI format: " + std::string(e.what());
     }
-    
+
     // All methods failed
     throw std::runtime_error("All connection methods failed:\n" + last_error);
 }
@@ -66,7 +65,7 @@ class MySqlExecutorGlobalTest : public ::testing::Environment {
 public:
     void SetUp() override {
         try {
-            auto session = createMySQLSession();
+            const auto session = createMySQLSession();
 
             // Drop database if exists (for clean state)
             try {
@@ -100,7 +99,6 @@ public:
                 ('David', NULL, 28, 88.9),
                 ('Eve', 'eve@example.com', NULL, 91.2)
             )").execute();
-
         } catch (const std::exception &e) {
             FAIL() << "Failed to setup test database: " << e.what();
         }
@@ -108,11 +106,10 @@ public:
 
     void TearDown() override {
         try {
-            auto session = createMySQLSession();
+            const auto session = createMySQLSession();
 
             // Drop test database
             session->sql("DROP DATABASE IF EXISTS " + std::string(TEST_DB_NAME)).execute();
-
         } catch (const std::exception &e) {
             // Log error but don't fail - cleanup is best effort
             std::cerr << "Warning: Failed to cleanup test database: " << e.what() << std::endl;
@@ -152,7 +149,7 @@ protected:
  * @brief Test default constructor creates disconnected executor
  */
 TEST_F(MySqlExecutorTest, DefaultConstructor_CreatesDisconnectedExecutor) {
-    MySqlExecutor exec;
+    const MySqlExecutor exec;
     EXPECT_FALSE(exec.isConnected());
 }
 
@@ -256,7 +253,7 @@ TEST_F(MySqlExecutorTest, Execute_UpdateStatement_ReturnsAffectedRows) {
  */
 TEST_F(MySqlExecutorTest, Execute_DeleteStatement_ReturnsAffectedRows) {
     // First insert a row to delete
-    executor_->execute(
+    [[maybe_unused]] const auto insert_affected = executor_->execute(
         "INSERT INTO users (name, email, age, score) VALUES ('ToDelete', 'delete@example.com', 20, 70.0)"
     );
 
@@ -271,22 +268,22 @@ TEST_F(MySqlExecutorTest, Execute_DeleteStatement_ReturnsAffectedRows) {
  * @brief Test execute with empty SQL throws exception
  */
 TEST_F(MySqlExecutorTest, Execute_EmptySQL_ThrowsException) {
-    EXPECT_THROW(executor_->execute(""), std::invalid_argument);
+    EXPECT_THROW((void)executor_->execute(""), std::invalid_argument);
 }
 
 /**
  * @brief Test execute with invalid SQL throws exception
  */
 TEST_F(MySqlExecutorTest, Execute_InvalidSQL_ThrowsException) {
-    EXPECT_THROW(executor_->execute("INVALID SQL STATEMENT"), std::runtime_error);
+    EXPECT_THROW((void)executor_->execute("INVALID SQL STATEMENT"), std::runtime_error);
 }
 
 /**
  * @brief Test execute on disconnected executor throws exception
  */
 TEST_F(MySqlExecutorTest, Execute_Disconnected_ThrowsException) {
-    MySqlExecutor exec;
-    EXPECT_THROW(exec.execute("SELECT 1"), std::runtime_error);
+    const MySqlExecutor exec;
+    EXPECT_THROW((void)exec.execute("SELECT 1"), std::runtime_error);
 }
 
 // ==================== Query Tests (Legacy API) ====================
@@ -329,14 +326,14 @@ TEST_F(MySqlExecutorTest, Query_NULLValues_ReturnsNULLString) {
  * @brief Test query with empty SQL throws exception
  */
 TEST_F(MySqlExecutorTest, Query_EmptySQL_ThrowsException) {
-    EXPECT_THROW(executor_->query(""), std::invalid_argument);
+    EXPECT_THROW((void)executor_->query(""), std::invalid_argument);
 }
 
 /**
  * @brief Test query with invalid SQL throws exception
  */
 TEST_F(MySqlExecutorTest, Query_InvalidSQL_ThrowsException) {
-    EXPECT_THROW(executor_->query("INVALID SQL"), std::runtime_error);
+    EXPECT_THROW((void)executor_->query("INVALID SQL"), std::runtime_error);
 }
 
 // ==================== QueryWithParams Tests (Legacy API) ====================
@@ -384,7 +381,7 @@ TEST_F(MySqlExecutorTest, QueryWithParams_NoMatches_ReturnsEmptyResult) {
  */
 TEST_F(MySqlExecutorTest, QueryWithParams_EmptySQL_ThrowsException) {
     EXPECT_THROW(
-        executor_->queryWithParams("", {"param"}),
+        (void)executor_->queryWithParams("", {"param"}),
         std::invalid_argument
     );
 }
@@ -414,7 +411,7 @@ TEST_F(MySqlExecutorTest, QueryStructured_IntegerValue_IsTypedCorrectly) {
     ASSERT_FALSE(result.isEmpty());
     const auto &row = result.rows[0];
 
-    auto value = row.getColumn("column_0"); // age is the only column (index 0)
+    const auto value = row.getColumn("column_0"); // age is the only column (index 0)
     ASSERT_TRUE(value.has_value());
     EXPECT_TRUE(std::holds_alternative<int64_t>(value.value()));
     EXPECT_EQ(std::get<int64_t>(value.value()), 25);
@@ -429,7 +426,7 @@ TEST_F(MySqlExecutorTest, QueryStructured_DoubleValue_IsTypedCorrectly) {
     ASSERT_FALSE(result.isEmpty());
     const auto &row = result.rows[0];
 
-    auto value = row.getColumn("column_0"); // score is the only column (index 0)
+    const auto value = row.getColumn("column_0"); // score is the only column (index 0)
     ASSERT_TRUE(value.has_value());
     EXPECT_TRUE(std::holds_alternative<double>(value.value()));
     EXPECT_DOUBLE_EQ(std::get<double>(value.value()), 95.5);
@@ -444,7 +441,7 @@ TEST_F(MySqlExecutorTest, QueryStructured_StringValue_IsTypedCorrectly) {
     ASSERT_FALSE(result.isEmpty());
     const auto &row = result.rows[0];
 
-    auto value = row.getColumn("column_0"); // name is first column
+    const auto value = row.getColumn("column_0"); // name is first column
     ASSERT_TRUE(value.has_value());
     EXPECT_TRUE(std::holds_alternative<std::string>(value.value()));
     EXPECT_EQ(std::get<std::string>(value.value()), "Alice");
@@ -459,7 +456,7 @@ TEST_F(MySqlExecutorTest, QueryStructured_NULLValue_IsMonostate) {
     ASSERT_FALSE(result.isEmpty());
     const auto &row = result.rows[0];
 
-    auto value = row.getColumn("column_0"); // email is the only column (index 0)
+    const auto value = row.getColumn("column_0"); // email is the only column (index 0)
     ASSERT_TRUE(value.has_value());
     EXPECT_TRUE(std::holds_alternative<std::monostate>(value.value()));
 }
@@ -476,7 +473,6 @@ TEST_F(MySqlExecutorTest, QueryRow_GetString_ConvertsValues) {
     // If Alice's age was modified by another test, skip or use default values
     if (result.isEmpty()) {
         GTEST_SKIP() << "Test data was modified by previous tests";
-        return;
     }
 
     const auto &row = result.rows[0];
@@ -538,7 +534,7 @@ TEST_F(MySqlExecutorTest, QueryStructured_MultipleRows_ReturnsAllRows) {
  * @brief Test queryStructured with empty SQL throws exception
  */
 TEST_F(MySqlExecutorTest, QueryStructured_EmptySQL_ThrowsException) {
-    EXPECT_THROW(executor_->queryStructured(""), std::invalid_argument);
+    EXPECT_THROW((void)executor_->queryStructured(""), std::invalid_argument);
 }
 
 // ==================== Structured QueryWithParams Tests ====================
@@ -573,7 +569,7 @@ TEST_F(MySqlExecutorTest, QueryWithParamsStructured_MultipleParameters_ReturnsCo
  */
 TEST_F(MySqlExecutorTest, QueryWithParamsStructured_EmptySQL_ThrowsException) {
     EXPECT_THROW(
-        executor_->queryWithParamsStructured("", {"param"}),
+        (void)executor_->queryWithParamsStructured("", {"param"}),
         std::invalid_argument
     );
 }
@@ -585,7 +581,7 @@ TEST_F(MySqlExecutorTest, QueryWithParamsStructured_EmptySQL_ThrowsException) {
  */
 TEST_F(MySqlExecutorTest, GetLastError_ReturnsErrorMessage) {
     try {
-        executor_->execute("INVALID SQL STATEMENT");
+        (void)executor_->execute("INVALID SQL STATEMENT");
         FAIL() << "Expected exception was not thrown";
     } catch (const std::runtime_error &) {
         const auto error = executor_->getLastError();

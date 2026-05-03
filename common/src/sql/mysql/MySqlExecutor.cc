@@ -178,7 +178,7 @@ namespace common::sql::mysql {
                 // Escape single quotes by doubling them (SQL standard)
                 std::string escaped_param;
                 escaped_param.reserve(param.size() + 10);
-                for (char c : param) {
+                for (const char c : param) {
                     if (c == '\'') {
                         escaped_param += "''";  // Escape single quote
                     } else if (c == '\\') {
@@ -189,7 +189,7 @@ namespace common::sql::mysql {
                 }
                 
                 // Find and replace the first ? placeholder
-                auto qmark_pos = processed_sql.find('?');
+                const auto qmark_pos = processed_sql.find('?');
                 if (qmark_pos != std::string::npos) {
                     processed_sql.replace(qmark_pos, 1, "'" + escaped_param + "'");
                 }
@@ -250,7 +250,7 @@ namespace common::sql::mysql {
                 // Escape single quotes by doubling them (SQL standard)
                 std::string escaped_param;
                 escaped_param.reserve(param.size() + 10);
-                for (char c : param) {
+                for (const char c : param) {
                     if (c == '\'') {
                         escaped_param += "''";  // Escape single quote
                     } else if (c == '\\') {
@@ -261,7 +261,7 @@ namespace common::sql::mysql {
                 }
                 
                 // Find and replace the first ? placeholder
-                auto qmark_pos = processed_sql.find('?');
+                const auto qmark_pos = processed_sql.find('?');
                 if (qmark_pos != std::string::npos) {
                     processed_sql.replace(qmark_pos, 1, "'" + escaped_param + "'");
                 }
