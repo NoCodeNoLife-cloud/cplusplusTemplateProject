@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <memory>
 #include <cstdint>
+#include <optional>
 
 #include "TreeNode.hpp"
 
@@ -31,6 +32,11 @@ namespace common::data_structure::tree {
         /// @param value The value to find
         /// @return bool True if the value is found, false otherwise
         [[nodiscard]] auto find(T value) const -> bool;
+
+        /// @brief Find a value in the AVL tree and return it
+        /// @param value The value to find
+        /// @return std::optional<T> The value if found, std::nullopt otherwise
+        [[nodiscard]] auto findValue(T value) const -> std::optional<T>;
 
     private:
         std::shared_ptr<TreeNode<T> > root_{};
@@ -95,6 +101,15 @@ namespace common::data_structure::tree {
     template<typename T>
     auto AVLTree<T>::find(T value) const -> bool {
         return find(root_, value) != nullptr;
+    }
+
+    template<typename T>
+    auto AVLTree<T>::findValue(T value) const -> std::optional<T> {
+        const auto node = find(root_, value);
+        if (node) {
+            return node->data;
+        }
+        return std::nullopt;
     }
 
     template<typename T>

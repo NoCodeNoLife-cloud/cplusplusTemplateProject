@@ -75,15 +75,17 @@ namespace common::toolkit {
         return str.find(substr) != std::string::npos;
     }
 
-    auto StringToolkit::indexOf(const std::string &str, const std::string &substr, const size_t start) -> size_t {
+    auto StringToolkit::indexOf(const std::string &str, const std::string &substr, const size_t start) -> std::optional<size_t> {
         if (start > str.length()) {
             throw std::invalid_argument("Start position exceeds string length");
         }
-        return str.find(substr, start);
+        const auto pos = str.find(substr, start);
+        return (pos != std::string::npos) ? std::optional<size_t>(pos) : std::nullopt;
     }
 
-    auto StringToolkit::lastIndexOf(const std::string &str, const std::string &substr) -> size_t {
-        return str.rfind(substr);
+    auto StringToolkit::lastIndexOf(const std::string &str, const std::string &substr) -> std::optional<size_t> {
+        const auto pos = str.rfind(substr);
+        return (pos != std::string::npos) ? std::optional<size_t>(pos) : std::nullopt;
     }
 
     auto StringToolkit::substring(const std::string &str, const size_t start, const size_t length) -> std::string {

@@ -362,15 +362,20 @@ TEST(StringToolkitTest, Contains_EmptyString) {
  * @details Verifies first occurrence position is found correctly
  */
 TEST(StringToolkitTest, IndexOf_Found) {
-    EXPECT_EQ(StringToolkit::indexOf("hello world", "world"), 6);
+    auto result = StringToolkit::indexOf("hello world", "world");
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result.value(), 6);
 }
 
 TEST(StringToolkitTest, IndexOf_NotFound) {
-    EXPECT_EQ(StringToolkit::indexOf("hello world", "xyz"), std::string::npos);
+    auto result = StringToolkit::indexOf("hello world", "xyz");
+    EXPECT_FALSE(result.has_value());
 }
 
 TEST(StringToolkitTest, IndexOf_WithStartPos) {
-    EXPECT_EQ(StringToolkit::indexOf("aaa", "a", 1), 1);
+    auto result = StringToolkit::indexOf("aaa", "a", 1);
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result.value(), 1);
 }
 
 TEST(StringToolkitTest, IndexOf_InvalidStartPos) {
@@ -382,15 +387,20 @@ TEST(StringToolkitTest, IndexOf_InvalidStartPos) {
  * @details Verifies last occurrence position is found correctly
  */
 TEST(StringToolkitTest, LastIndexOf_Found) {
-    EXPECT_EQ(StringToolkit::lastIndexOf("hello world hello", "hello"), 12);
+    auto result = StringToolkit::lastIndexOf("hello world hello", "hello");
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result.value(), 12);
 }
 
 TEST(StringToolkitTest, LastIndexOf_NotFound) {
-    EXPECT_EQ(StringToolkit::lastIndexOf("hello world", "xyz"), std::string::npos);
+    auto result = StringToolkit::lastIndexOf("hello world", "xyz");
+    EXPECT_FALSE(result.has_value());
 }
 
 TEST(StringToolkitTest, LastIndexOf_SingleOccurrence) {
-    EXPECT_EQ(StringToolkit::lastIndexOf("hello", "ello"), 1);
+    auto result = StringToolkit::lastIndexOf("hello", "ello");
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(result.value(), 1);
 }
 
 /**

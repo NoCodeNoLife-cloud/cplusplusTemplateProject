@@ -3,6 +3,7 @@
 #include <fmt/format.h>
 #include <iostream>
 #include <memory>
+#include <optional>
 
 #include "TreeNode.hpp"
 
@@ -22,6 +23,11 @@ namespace common::data_structure::tree {
         /// @param value The value to be searched.
         /// @return True if the value is found, false otherwise.
         [[nodiscard]] auto find(T value) const -> bool;
+
+        /// @brief Finds a value in the binary search tree and returns it.
+        /// @param value The value to be searched.
+        /// @return std::optional<T> The value if found, std::nullopt otherwise.
+        [[nodiscard]] auto findValue(T value) const -> std::optional<T>;
 
         /// @brief Removes a value from the binary search tree.
         /// @param value The value to be removed.
@@ -75,6 +81,24 @@ namespace common::data_structure::tree {
         const bool found = findRecursive(root_, value);
         DLOG(INFO) << fmt::format("BinarySearchTree find - value: {}, result: {}", value, found ? "found" : "not found");
         return found;
+    }
+
+    template<typename T>
+    auto BinarySearchTree<T>::findValue(T value) const -> std::optional<T> {
+        auto node = root_;
+        while (node) {
+            if (value == node->data) {
+                DLOG(INFO) << fmt::format("BinarySearchTree findValue - value: {}, result: found", value);
+                return node->data;
+            }
+            if (value < node->data) {
+                node = node->left;
+            } else {
+                node = node->right;
+            }
+        }
+        DLOG(INFO) << fmt::format("BinarySearchTree findValue - value: {}, result: not found", value);
+        return std::nullopt;
     }
 
     template<typename T>

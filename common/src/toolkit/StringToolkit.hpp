@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <optional>
 
 namespace common::toolkit {
     /// @brief A utility class for string manipulation operations.
@@ -93,14 +94,14 @@ namespace common::toolkit {
         /// @param str The string to search in.
         /// @param substr The substring to search for.
         /// @param start The position to start searching from (default is 0).
-        /// @return The position of the first occurrence, or std::string::npos if not found.
-        [[nodiscard]] static auto indexOf(const std::string &str, const std::string &substr, size_t start = 0) -> size_t;
+        /// @return The position of the first occurrence, or std::nullopt if not found.
+        [[nodiscard]] static auto indexOf(const std::string &str, const std::string &substr, size_t start = 0) -> std::optional<size_t>;
 
         /// @brief Finds the last occurrence of a substring in a string.
         /// @param str The string to search in.
         /// @param substr The substring to search for.
-        /// @return The position of the last occurrence, or std::string::npos if not found.
-        [[nodiscard]] static auto lastIndexOf(const std::string &str, const std::string &substr) -> size_t;
+        /// @return The position of the last occurrence, or std::nullopt if not found.
+        [[nodiscard]] static auto lastIndexOf(const std::string &str, const std::string &substr) -> std::optional<size_t>;
 
         /// @brief Extracts a substring from a string.
         /// @param str The source string.
