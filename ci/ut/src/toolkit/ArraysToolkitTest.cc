@@ -49,17 +49,18 @@ TEST(ArraysToolkitTest, AsList_NullPointerWithSize_ThrowsException) {
 TEST(ArraysToolkitTest, BinarySearch_KeyFound) {
     int arr[] = {1, 3, 5, 7, 9};
     auto index = ArraysToolkit::binarySearch(arr, 5, 5);
-    EXPECT_EQ(index, 2);
+    ASSERT_TRUE(index.has_value());
+    EXPECT_EQ(index.value(), 2);
 }
 
 /**
  * @brief Test binarySearch when key is not found
- * @details Verifies -1 is returned for non-existent elements
+ * @details Verifies std::nullopt is returned for non-existent elements
  */
 TEST(ArraysToolkitTest, BinarySearch_KeyNotFound) {
     int arr[] = {1, 3, 5, 7, 9};
     auto index = ArraysToolkit::binarySearch(arr, 5, 6);
-    EXPECT_EQ(index, -1);
+    EXPECT_FALSE(index.has_value());
 }
 
 /**
@@ -69,7 +70,8 @@ TEST(ArraysToolkitTest, BinarySearch_KeyNotFound) {
 TEST(ArraysToolkitTest, BinarySearch_FirstElement) {
     int arr[] = {1, 3, 5, 7, 9};
     auto index = ArraysToolkit::binarySearch(arr, 5, 1);
-    EXPECT_EQ(index, 0);
+    ASSERT_TRUE(index.has_value());
+    EXPECT_EQ(index.value(), 0);
 }
 
 /**
@@ -79,7 +81,8 @@ TEST(ArraysToolkitTest, BinarySearch_FirstElement) {
 TEST(ArraysToolkitTest, BinarySearch_LastElement) {
     int arr[] = {1, 3, 5, 7, 9};
     auto index = ArraysToolkit::binarySearch(arr, 5, 9);
-    EXPECT_EQ(index, 4);
+    ASSERT_TRUE(index.has_value());
+    EXPECT_EQ(index.value(), 4);
 }
 
 /**
@@ -89,7 +92,8 @@ TEST(ArraysToolkitTest, BinarySearch_LastElement) {
 TEST(ArraysToolkitTest, BinarySearch_WithRange_KeyFound) {
     int arr[] = {1, 3, 5, 7, 9, 11, 13};
     auto index = ArraysToolkit::binarySearch(arr, 2, 5, 7);
-    EXPECT_EQ(index, 3);
+    ASSERT_TRUE(index.has_value());
+    EXPECT_EQ(index.value(), 3);
 }
 
 /**
@@ -389,17 +393,18 @@ TEST(ArraysToolkitTest, Contains_EmptyArray) {
 TEST(ArraysToolkitTest, LinearSearch_KeyFound) {
     int arr[] = {5, 3, 8, 1, 9};
     auto index = ArraysToolkit::linearSearch(arr, 5, 8);
-    EXPECT_EQ(index, 2);
+    ASSERT_TRUE(index.has_value());
+    EXPECT_EQ(index.value(), 2);
 }
 
 /**
  * @brief Test linearSearch when key is not found
- * @details Verifies -1 is returned for non-existent element
+ * @details Verifies std::nullopt is returned for non-existent element
  */
 TEST(ArraysToolkitTest, LinearSearch_KeyNotFound) {
     int arr[] = {5, 3, 8, 1, 9};
     auto index = ArraysToolkit::linearSearch(arr, 5, 7);
-    EXPECT_EQ(index, -1);
+    EXPECT_FALSE(index.has_value());
 }
 
 /**
@@ -409,7 +414,8 @@ TEST(ArraysToolkitTest, LinearSearch_KeyNotFound) {
 TEST(ArraysToolkitTest, LinearSearch_FirstOccurrence) {
     int arr[] = {1, 2, 3, 2, 4};
     auto index = ArraysToolkit::linearSearch(arr, 5, 2);
-    EXPECT_EQ(index, 1);
+    ASSERT_TRUE(index.has_value());
+    EXPECT_EQ(index.value(), 1);
 }
 
 /**
@@ -419,17 +425,18 @@ TEST(ArraysToolkitTest, LinearSearch_FirstOccurrence) {
 TEST(ArraysToolkitTest, MaxElement_FindsMaximum) {
     int arr[] = {5, 2, 8, 1, 9};
     auto index = ArraysToolkit::maxElement(arr, 5);
-    EXPECT_EQ(index, 4);
-    EXPECT_EQ(arr[index], 9);
+    ASSERT_TRUE(index.has_value());
+    EXPECT_EQ(index.value(), 4);
+    EXPECT_EQ(arr[index.value()], 9);
 }
 
 /**
  * @brief Test maxElement with empty array
- * @details Verifies -1 is returned for empty array
+ * @details Verifies std::nullopt is returned for empty array
  */
 TEST(ArraysToolkitTest, MaxElement_EmptyArray) {
     auto index = ArraysToolkit::maxElement<int>(nullptr, 0);
-    EXPECT_EQ(index, -1);
+    EXPECT_FALSE(index.has_value());
 }
 
 /**
@@ -439,17 +446,18 @@ TEST(ArraysToolkitTest, MaxElement_EmptyArray) {
 TEST(ArraysToolkitTest, MinElement_FindsMinimum) {
     int arr[] = {5, 2, 8, 1, 9};
     auto index = ArraysToolkit::minElement(arr, 5);
-    EXPECT_EQ(index, 3);
-    EXPECT_EQ(arr[index], 1);
+    ASSERT_TRUE(index.has_value());
+    EXPECT_EQ(index.value(), 3);
+    EXPECT_EQ(arr[index.value()], 1);
 }
 
 /**
  * @brief Test minElement with empty array
- * @details Verifies -1 is returned for empty array
+ * @details Verifies std::nullopt is returned for empty array
  */
 TEST(ArraysToolkitTest, MinElement_EmptyArray) {
     auto index = ArraysToolkit::minElement<int>(nullptr, 0);
-    EXPECT_EQ(index, -1);
+    EXPECT_FALSE(index.has_value());
 }
 
 /**

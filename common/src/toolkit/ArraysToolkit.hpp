@@ -9,6 +9,7 @@
 #include <functional>
 #include <set>
 #include <random>
+#include <optional>
 
 namespace common::toolkit {
     /// @brief Utility class for array operations.
@@ -30,9 +31,9 @@ namespace common::toolkit {
         /// @param array Pointer to the sorted array.
         /// @param size Size of the array.
         /// @param key The value to search for.
-        /// @return Index of the key if found, otherwise -1.
+        /// @return Index of the key if found, std::nullopt otherwise.
         template<typename T>
-        [[nodiscard]] static auto binarySearch(const T *array, size_t size, const T &key) -> int32_t;
+        [[nodiscard]] static auto binarySearch(const T *array, size_t size, const T &key) -> std::optional<size_t>;
 
         /// @brief Searches for a key in a sorted subarray using binary search.
         /// @tparam T The type of elements in the array.
@@ -40,10 +41,10 @@ namespace common::toolkit {
         /// @param fromIndex Starting index of the subarray (inclusive).
         /// @param toIndex Ending index of the subarray (exclusive).
         /// @param key The value to search for.
-        /// @return Index of the key if found, otherwise -1.
+        /// @return Index of the key if found, std::nullopt otherwise.
         /// @throws std::out_of_range If fromIndex >= toIndex
         template<typename T>
-        [[nodiscard]] static auto binarySearch(const T *array, size_t fromIndex, size_t toIndex, const T &key) -> int32_t;
+        [[nodiscard]] static auto binarySearch(const T *array, size_t fromIndex, size_t toIndex, const T &key) -> std::optional<size_t>;
 
         /// @brief Copies an array to a new vector of specified length.
         /// @tparam T The type of elements in the array.
@@ -128,25 +129,25 @@ namespace common::toolkit {
         /// @param array Pointer to the array.
         /// @param size Size of the array.
         /// @param key The value to search for.
-        /// @return Index of the key if found, otherwise -1.
+        /// @return Index of the key if found, std::nullopt otherwise.
         template<typename T>
-        [[nodiscard]] static auto linearSearch(const T *array, size_t size, const T &key) -> int32_t;
+        [[nodiscard]] static auto linearSearch(const T *array, size_t size, const T &key) -> std::optional<size_t>;
 
         /// @brief Finds the index of the maximum element in the array.
         /// @tparam T The type of elements in the array.
         /// @param array Pointer to the array.
         /// @param size Size of the array.
-        /// @return Index of the maximum element, or -1 if array is empty.
+        /// @return Index of the maximum element, or std::nullopt if array is empty.
         template<typename T>
-        [[nodiscard]] static auto maxElement(const T *array, size_t size) -> int32_t;
+        [[nodiscard]] static auto maxElement(const T *array, size_t size) -> std::optional<size_t>;
 
         /// @brief Finds the index of the minimum element in the array.
         /// @tparam T The type of elements in the array.
         /// @param array Pointer to the array.
         /// @param size Size of the array.
-        /// @return Index of the minimum element, or -1 if array is empty.
+        /// @return Index of the minimum element, or std::nullopt if array is empty.
         template<typename T>
-        [[nodiscard]] static auto minElement(const T *array, size_t size) -> int32_t;
+        [[nodiscard]] static auto minElement(const T *array, size_t size) -> std::optional<size_t>;
 
         /// @brief Counts occurrences of a value in the array.
         /// @tparam T The type of elements in the array.
@@ -332,19 +333,19 @@ namespace common::toolkit {
     }
 
     template<typename T>
-    auto ArraysToolkit::binarySearch(const T *array, size_t size, const T &key) -> int32_t {
+    auto ArraysToolkit::binarySearch(const T *array, size_t size, const T &key) -> std::optional<size_t> {
         if (!array && size > 0) {
             throw std::invalid_argument("ArraysToolkit::binarySearch: Array cannot be null when size > 0");
         }
         auto it = std::lower_bound(array, array + size, key);
         if (it != array + size && *it == key) {
-            return static_cast<int32_t>(it - array);
+            return static_cast<size_t>(it - array);
         }
-        return -1;
+        return std::nullopt;
     }
 
     template<typename T>
-    auto ArraysToolkit::binarySearch(const T *array, size_t fromIndex, size_t toIndex, const T &key) -> int32_t {
+    auto ArraysToolkit::binarySearch(const T *array, size_t fromIndex, size_t toIndex, const T &key) -> std::optional<size_t> {
         if (!array) {
             throw std::invalid_argument("ArraysToolkit::binarySearch: Array cannot be null");
         }
@@ -355,9 +356,9 @@ namespace common::toolkit {
         auto end = array + toIndex;
         auto it = std::lower_bound(start, end, key);
         if (it != end && *it == key) {
-            return static_cast<int32_t>(it - array);
+            return static_cast<size_t>(it - array);
         }
-        return -1;
+        return std::nullopt;
     }
 
     template<typename T>
@@ -457,40 +458,40 @@ namespace common::toolkit {
     }
 
     template<typename T>
-    auto ArraysToolkit::linearSearch(const T *array, size_t size, const T &key) -> int32_t {
+    auto ArraysToolkit::linearSearch(const T *array, size_t size, const T &key) -> std::optional<size_t> {
         if (!array && size > 0) {
             throw std::invalid_argument("ArraysToolkit::linearSearch: Array cannot be null when size > 0");
         }
         for (size_t i = 0; i < size; ++i) {
             if (array[i] == key) {
-                return static_cast<int32_t>(i);
+                return i;
             }
         }
-        return -1;
+        return std::nullopt;
     }
 
     template<typename T>
-    auto ArraysToolkit::maxElement(const T *array, size_t size) -> int32_t {
+    auto ArraysToolkit::maxElement(const T *array, size_t size) -> std::optional<size_t> {
         if (!array && size > 0) {
             throw std::invalid_argument("ArraysToolkit::maxElement: Array cannot be null when size > 0");
         }
         if (size == 0) {
-            return -1;
+            return std::nullopt;
         }
         auto it = std::max_element(array, array + size);
-        return static_cast<int32_t>(it - array);
+        return static_cast<size_t>(it - array);
     }
 
     template<typename T>
-    auto ArraysToolkit::minElement(const T *array, size_t size) -> int32_t {
+    auto ArraysToolkit::minElement(const T *array, size_t size) -> std::optional<size_t> {
         if (!array && size > 0) {
             throw std::invalid_argument("ArraysToolkit::minElement: Array cannot be null when size > 0");
         }
         if (size == 0) {
-            return -1;
+            return std::nullopt;
         }
         auto it = std::min_element(array, array + size);
-        return static_cast<int32_t>(it - array);
+        return static_cast<size_t>(it - array);
     }
 
     template<typename T>
