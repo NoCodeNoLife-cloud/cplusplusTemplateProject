@@ -58,8 +58,9 @@ TEST(SHAToolkitTest, SHA256_StaticMethods) {
     ASSERT_TRUE(hash.has_value());
     
     const auto hex = SHAToolkit::hashStringToHexSHA256("hello");
-    EXPECT_EQ(hex.length(), 64);
-    EXPECT_EQ(hex, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824");
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(hex->length(), 64);
+    EXPECT_EQ(*hex, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824");
 }
 
 /**
@@ -72,9 +73,10 @@ TEST(SHAToolkitTest, SHA1_StaticMethods) {
     EXPECT_EQ(hash->size(), 20);
     
     const auto hex = SHAToolkit::hashStringToHexSHA1("hello");
-    EXPECT_EQ(hex.length(), 40);
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(hex->length(), 40);
     // Known SHA-1 hash for "hello"
-    EXPECT_EQ(hex, "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d");
+    EXPECT_EQ(*hex, "aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d");
 }
 
 /**
@@ -129,10 +131,12 @@ TEST(SHAToolkitTest, FileHash_SHA256) {
     ofs.close();
     
     const auto hex = SHAToolkit::hashFileToHexSHA256(temp_file);
-    EXPECT_EQ(hex.length(), 64);
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(hex->length(), 64);
     
     const auto expected_hex = SHAToolkit::hashStringToHexSHA256(content);
-    EXPECT_EQ(hex, expected_hex);
+    ASSERT_TRUE(expected_hex.has_value());
+    EXPECT_EQ(*hex, *expected_hex);
     
     std::filesystem::remove(temp_file);
 }

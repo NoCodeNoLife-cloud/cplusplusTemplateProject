@@ -62,7 +62,7 @@ namespace common::crypto::hash {
         return strategy_->reset();
     }
 
-    auto SHAToolkit::toHexString(const std::vector<uint8_t> &digest, const size_t expected_size) -> std::string {
+    auto SHAToolkit::toHexString(const std::vector<uint8_t> &digest, const size_t expected_size) -> std::optional<std::string> {
         return HashStrategy::toHexString(digest, expected_size);
     }
 
@@ -90,19 +90,19 @@ namespace common::crypto::hash {
         return HashStrategy::hashFile(std::make_unique<SHA1Strategy>(), filePath, chunkSize);
     }
 
-    auto SHAToolkit::hashStringToHexSHA256(const std::string_view input) noexcept -> std::string {
+    auto SHAToolkit::hashStringToHexSHA256(const std::string_view input) noexcept -> std::optional<std::string> {
         return HashStrategy::hashStringToHex(std::make_unique<SHA256Strategy>(), input);
     }
 
-    auto SHAToolkit::hashStringToHexSHA1(const std::string_view input) noexcept -> std::string {
+    auto SHAToolkit::hashStringToHexSHA1(const std::string_view input) noexcept -> std::optional<std::string> {
         return HashStrategy::hashStringToHex(std::make_unique<SHA1Strategy>(), input);
     }
 
-    auto SHAToolkit::hashFileToHexSHA256(const std::string &filePath) -> std::string {
+    auto SHAToolkit::hashFileToHexSHA256(const std::string &filePath) -> std::optional<std::string> {
         return HashStrategy::hashFileToHex(std::make_unique<SHA256Strategy>(), filePath);
     }
 
-    auto SHAToolkit::hashFileToHexSHA1(const std::string &filePath) -> std::string {
+    auto SHAToolkit::hashFileToHexSHA1(const std::string &filePath) -> std::optional<std::string> {
         return HashStrategy::hashFileToHex(std::make_unique<SHA1Strategy>(), filePath);
     }
 }

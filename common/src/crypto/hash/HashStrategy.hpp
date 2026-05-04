@@ -71,9 +71,9 @@ namespace common::crypto::hash {
          * @brief Converts binary digest to hexadecimal string representation.
          * 
          * @param digest Binary digest bytes (must match getDigestSize()).
-         * @return Hexadecimal string of length getHexDigestSize().
+         * @return Optional containing hexadecimal string of length getHexDigestSize(), or nullopt on failure.
          */
-        [[nodiscard]] static auto toHexString(const std::vector<uint8_t> &digest, size_t expected_size) -> std::string;
+        [[nodiscard]] static auto toHexString(const std::vector<uint8_t> &digest, size_t expected_size) -> std::optional<std::string>;
 
         /**
          * @brief Computes hash of a string in one operation.
@@ -96,16 +96,16 @@ namespace common::crypto::hash {
          * @brief Computes hash of a string and returns hex representation.
          * 
          * @param input String to hash.
-         * @return Hexadecimal hash string, or empty string on failure.
+         * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static auto hashStringToHex(std::unique_ptr<HashStrategy> strategy, std::string_view input) noexcept -> std::string;
+        [[nodiscard]] static auto hashStringToHex(std::unique_ptr<HashStrategy> strategy, std::string_view input) noexcept -> std::optional<std::string>;
 
         /**
          * @brief Computes hash of a file and returns hex representation.
          * 
          * @param filePath Path to the file to hash.
-         * @return Hexadecimal hash string, or empty string on failure.
+         * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static auto hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string &filePath) -> std::string;
+        [[nodiscard]] static auto hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string &filePath) -> std::optional<std::string>;
     };
 }

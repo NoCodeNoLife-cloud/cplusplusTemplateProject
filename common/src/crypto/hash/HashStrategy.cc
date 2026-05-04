@@ -7,9 +7,9 @@
 #include <iomanip>
 
 namespace common::crypto::hash {
-    auto HashStrategy::toHexString(const std::vector<uint8_t> &digest, const size_t expected_size) -> std::string {
+    auto HashStrategy::toHexString(const std::vector<uint8_t> &digest, const size_t expected_size) -> std::optional<std::string> {
         if (digest.size() != expected_size) {
-            return "";
+            return std::nullopt;
         }
 
         std::ostringstream oss;
@@ -52,20 +52,20 @@ namespace common::crypto::hash {
         return strategy->finalize();
     }
 
-    auto HashStrategy::hashStringToHex(std::unique_ptr<HashStrategy> strategy, const std::string_view input) noexcept -> std::string {
+    auto HashStrategy::hashStringToHex(std::unique_ptr<HashStrategy> strategy, const std::string_view input) noexcept -> std::optional<std::string> {
         const auto digest_size = strategy->getDigestSize();
         const auto digest = hashString(std::move(strategy), input);
         if (!digest) {
-            return "";
+            return std::nullopt;
         }
         return toHexString(*digest, digest_size);
     }
 
-    auto HashStrategy::hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string &filePath) -> std::string {
+    auto HashStrategy::hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string &filePath) -> std::optional<std::string> {
         const auto digest_size = strategy->getDigestSize();
         const auto digest = hashFile(std::move(strategy), filePath);
         if (!digest) {
-            return "";
+            return std::nullopt;
         }
         return toHexString(*digest, digest_size);
     }

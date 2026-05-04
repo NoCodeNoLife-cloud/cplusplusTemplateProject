@@ -110,9 +110,9 @@ namespace common::crypto::hash {
          * @brief Converts binary digest to hexadecimal string representation.
          * 
          * @param digest Binary digest bytes.
-         * @return Hexadecimal string.
+         * @return Optional containing hexadecimal string, or nullopt on failure.
          */
-        [[nodiscard]] static auto toHexString(const std::vector<uint8_t> &digest, size_t expected_size) -> std::string;
+        [[nodiscard]] static auto toHexString(const std::vector<uint8_t> &digest, size_t expected_size) -> std::optional<std::string>;
 
         /**
          * @brief Creates a SHAToolkit configured for SHA-256.
@@ -165,33 +165,33 @@ namespace common::crypto::hash {
          * @brief Computes SHA-256 hash of a string and returns hex representation.
          * 
          * @param input String to hash.
-         * @return Hexadecimal hash string, or empty string on failure.
+         * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static auto hashStringToHexSHA256(std::string_view input) noexcept -> std::string;
+        [[nodiscard]] static auto hashStringToHexSHA256(std::string_view input) noexcept -> std::optional<std::string>;
 
         /**
          * @brief Computes SHA-1 hash of a string and returns hex representation.
          * 
          * @param input String to hash.
-         * @return Hexadecimal hash string, or empty string on failure.
+         * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static auto hashStringToHexSHA1(std::string_view input) noexcept -> std::string;
+        [[nodiscard]] static auto hashStringToHexSHA1(std::string_view input) noexcept -> std::optional<std::string>;
 
         /**
          * @brief Computes SHA-256 hash of a file and returns hex representation.
          * 
          * @param filePath Path to the file to hash.
-         * @return Hexadecimal hash string, or empty string on failure.
+         * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static auto hashFileToHexSHA256(const std::string &filePath) -> std::string;
+        [[nodiscard]] static auto hashFileToHexSHA256(const std::string &filePath) -> std::optional<std::string>;
 
         /**
          * @brief Computes SHA-1 hash of a file and returns hex representation.
          * 
          * @param filePath Path to the file to hash.
-         * @return Hexadecimal hash string, or empty string on failure.
+         * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static auto hashFileToHexSHA1(const std::string &filePath) -> std::string;
+        [[nodiscard]] static auto hashFileToHexSHA1(const std::string &filePath) -> std::optional<std::string>;
 
     private:
         std::unique_ptr<HashStrategy> strategy_;
