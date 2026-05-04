@@ -21,6 +21,12 @@ namespace common::crypto::cipher {
      */
     class XorBitCipher final : public StreamCipher {
     public:
+        /// @brief Number of bits in a byte
+        static constexpr uint8_t BITS_PER_BYTE = 8;
+        
+        /// @brief Most significant bit position (0-indexed from left)
+        static constexpr uint8_t MSB_POSITION = 7;
+
         /**
          * @brief Default constructor. Initializes cipher with empty key.
          * @note Must call initialize() before encrypt/decrypt operations.

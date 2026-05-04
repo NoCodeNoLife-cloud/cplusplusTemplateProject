@@ -8,6 +8,10 @@ namespace common::toolkit {
     /// @brief A utility class for integer operations
     /// @details Provides various integer conversion and manipulation functions
     class IntegerToolkit {
+        /// @brief Roman numeral conversion range constants
+        static constexpr int32_t ROMAN_MIN_VALUE = 1;
+        static constexpr int32_t ROMAN_MAX_VALUE = 3999;
+        
         static const inline std::pair<int32_t, std::string> valueSymbols[] = {{1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"}, {100, "C"}, {90, "XC"}, {50, "L"}, {40, "XL"}, {10, "X"}, {9, "IX"}, {5, "V"}, {4, "IV"}, {1, "I"},};
 
     public:

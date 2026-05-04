@@ -3,16 +3,17 @@
 #include <cstdint>
 
 namespace common::gen {
-    /// @brief A class to generate unique IDs using the Snowflake algorithm.
-    /// The Snowflake algorithm generates IDs that are roughly ordered by time,
-    /// and consist of a timestamp, machine ID, datacenter ID, and a sequence number.
-    /// This implementation ensures thread-safety through mutex locking.
+    /// @brief Configuration options for Snowflake ID generation
     struct SnowflakeOption {
         static constexpr int64_t machine_bits_ = 10;
         static constexpr int64_t sequence_bits_ = 12;
         static constexpr int64_t max_sequence_ = ~(-1LL << sequence_bits_);
         static constexpr int64_t max_machine_id_ = ~(-1LL << 5);
         static constexpr int64_t max_datacenter_id_ = ~(-1LL << 5);
+        
+        /// @brief Twitter Snowflake epoch (2010-11-04 09:42:54.657 UTC)
+        /// This is the starting timestamp from which all generated IDs are relative
+        static constexpr int64_t TWEPOCH = 1288855200000LL;
     };
 
     /// @brief A utility class for generating unique IDs based on the Snowflake algorithm.

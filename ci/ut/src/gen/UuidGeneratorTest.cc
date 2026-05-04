@@ -55,7 +55,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_LowercaseHex) {
  */
 TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectLength) {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
-    EXPECT_EQ(uuid.length(), 36);
+    EXPECT_EQ(uuid.length(), UuidGenerator::UUID_STRING_LENGTH);
 }
 
 /**
@@ -81,10 +81,10 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_UniqueValues) {
 TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectHyphenPositions) {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
 
-    EXPECT_EQ(uuid[8], '-');
-    EXPECT_EQ(uuid[13], '-');
-    EXPECT_EQ(uuid[18], '-');
-    EXPECT_EQ(uuid[23], '-');
+    EXPECT_EQ(uuid[UuidGenerator::HYPHEN_POSITION_1], '-');
+    EXPECT_EQ(uuid[UuidGenerator::HYPHEN_POSITION_2], '-');
+    EXPECT_EQ(uuid[UuidGenerator::HYPHEN_POSITION_3], '-');
+    EXPECT_EQ(uuid[UuidGenerator::HYPHEN_POSITION_4], '-');
 }
 
 /**

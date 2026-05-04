@@ -8,8 +8,10 @@
 
 namespace common::toolkit {
     auto IntegerToolkit::intToRoman(const int32_t num) -> std::string {
-        if (num < 1 || num > 3999) {
-throw std::out_of_range("IntegerToolkit::intToRoman: Number must be between 1 and 3999");
+        if (num < ROMAN_MIN_VALUE || num > ROMAN_MAX_VALUE) {
+throw std::out_of_range("IntegerToolkit::intToRoman: Number must be between " + 
+                                   std::to_string(ROMAN_MIN_VALUE) + " and " + 
+                                   std::to_string(ROMAN_MAX_VALUE));
         }
 std::string roman;
         int32_t remaining = num;
@@ -26,7 +28,7 @@ return roman;
     }
 
     auto IntegerToolkit::tryIntToRoman(const int32_t num) noexcept -> std::optional<std::string> {
-        if (num < 1 || num > 3999) {
+        if (num < ROMAN_MIN_VALUE || num > ROMAN_MAX_VALUE) {
 return std::nullopt;
         }
 

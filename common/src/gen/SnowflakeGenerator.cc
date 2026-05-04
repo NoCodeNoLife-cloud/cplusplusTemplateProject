@@ -40,8 +40,7 @@ namespace common::gen {
         const auto now = std::chrono::system_clock::now();
         const auto duration = now.time_since_epoch();
         const int64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-        constexpr int64_t start_time = 1288855200000LL;
-        return timestamp - start_time;
+        return timestamp - SnowflakeOption::TWEPOCH;
     }
 
     auto SnowflakeGenerator::TilNextMillis(const int64_t last_timestamp) noexcept -> int64_t {

@@ -23,11 +23,11 @@ throw std::invalid_argument("Mapping must be bijective (one-to-one)");
 }
 
     SubstitutionCipher::SubstitutionCipher(const int shift) {
-        auto normalized_shift = shift % 26;
-        if (normalized_shift < 0) normalized_shift += 26;
+        auto normalized_shift = shift % ALPHABET_SIZE;
+        if (normalized_shift < 0) normalized_shift += ALPHABET_SIZE;
 
         for (char c = 'A'; c <= 'Z'; ++c) {
-            const char encoded = static_cast<char>('A' + (c - 'A' + normalized_shift) % 26);
+            const char encoded = static_cast<char>('A' + (c - 'A' + normalized_shift) % ALPHABET_SIZE);
             encode_map_[c] = encoded;
             encode_map_[static_cast<char>(std::tolower(c))] = static_cast<char>(std::tolower(encoded));
         }
@@ -41,7 +41,7 @@ throw std::invalid_argument("Mapping must be bijective (one-to-one)");
         std::mt19937 gen(seed);
         std::ranges::shuffle(shuffled, gen);
 
-        for (size_t i = 0; i < 26; ++i) {
+        for (size_t i = 0; i < ALPHABET_SIZE; ++i) {
             encode_map_[upper[i]] = shuffled[i];
             encode_map_[static_cast<char>(std::tolower(upper[i]))] = static_cast<char>(std::tolower(shuffled[i]));
         }

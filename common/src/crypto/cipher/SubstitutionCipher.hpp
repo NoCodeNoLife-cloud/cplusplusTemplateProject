@@ -34,6 +34,9 @@ namespace common::crypto::cipher {
      */
     class SubstitutionCipher final {
     public:
+        /// @brief Size of English alphabet (A-Z)
+        static constexpr size_t ALPHABET_SIZE = 26;
+
         /** @name Construction/Destruction */
         /**@{*/
 

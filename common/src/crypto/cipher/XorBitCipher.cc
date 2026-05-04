@@ -73,9 +73,9 @@ namespace common::crypto::cipher {
             throw std::invalid_argument("Key stream is empty. Set key before processing.");
         }
         const uint8_t current_byte = key_stream_[key_pos_];
-        const bool bit = (current_byte >> (7 - bit_pos_)) & 0x01;
+        const bool bit = (current_byte >> (MSB_POSITION - bit_pos_)) & 0x01;
         bit_pos_++;
-        if (bit_pos_ >= 8) {
+        if (bit_pos_ >= BITS_PER_BYTE) {
             bit_pos_ = 0;
             key_pos_ = (key_pos_ + 1) % key_stream_.size();
         }
