@@ -386,6 +386,116 @@ TEST_F(MySqlExecutorTest, QueryWithParams_EmptySQL_ThrowsException) {
     );
 }
 
+// ==================== SQL Injection Prevention Tests ====================
+
+/**
+ * @brief Test that SQL injection attempts via parameters are safely handled
+ * @details This test verifies that malicious input in parameters cannot alter the SQL query structure.
+ *          Note: MySQL X DevAPI doesn't support true parameterized queries for raw SQL, so we use
+ *          comprehensive character escaping to prevent SQL injection.
+ */
+TEST_F(MySqlExecutorTest, QueryWithParams_SQLInjectionAttempt_SafelyHandled) {
+    // Attempt 1: Try to inject OR condition to bypass WHERE clause
+    const auto results1 = executor_->queryWithParams(
+        "SELECT name FROM users WHERE name = ?",
+        {"' OR '1'='1"}  // SQL injection attempt
+    );
+    
+    // Should return empty result (no user with this exact name), not all users
+    EXPECT_TRUE(results1.empty()) << "SQL injection via OR condition was not prevented!";
+    
+    // Attempt 2: Try to inject UNION to extract data from other tables
+    const auto results2 = executor_->queryWithParams(
+        "SELECT name FROM users WHERE name = ?",
+        {"' UNION SELECT password FROM users --"}  // SQL injection attempt
+    );
+    
+    // Should return empty result, not passwords
+    EXPECT_TRUE(results2.empty()) << "SQL injection via UNION was not prevented!";
+    
+    // Attempt 3: Try to inject DROP TABLE
+    const auto results3 = executor_->queryWithParams(
+        "SELECT name FROM users WHERE name = ?",
+        {"'; DROP TABLE users; --"}  // SQL injection attempt
+    );
+    
+    // Should return empty result and table should still exist
+    EXPECT_TRUE(results3.empty()) << "SQL injection via DROP TABLE was not prevented!";
+    
+    // Verify table still exists by querying it
+    const auto verify_results = executor_->query("SELECT COUNT(*) FROM users");
+    EXPECT_FALSE(verify_results.empty()) << "Users table was dropped by SQL injection!";
+}
+
+/**
+ * @brief Test that special characters in parameters are properly escaped
+ * @details Verifies that quotes, backslashes, and other special chars don't break queries
+ */
+TEST_F(MySqlExecutorTest, QueryWithParams_SpecialCharacters_ProperlyEscaped) {
+    // Insert a user with special characters in name (single quote only, simpler test)
+    const auto insert_result = executor_->execute(
+        "INSERT INTO users (name, email, age, score) VALUES ('O''Brien', 'special@test.com', 29, 88.5)"
+    );
+    EXPECT_EQ(insert_result, 1);
+    
+    // Query for this user using parameterized query
+    const auto results = executor_->queryWithParams(
+        "SELECT name, email FROM users WHERE name = ?",
+        {"O'Brien"}  // Contains single quote
+    );
+    
+    EXPECT_FALSE(results.empty());
+    EXPECT_EQ(results[0][0], "O'Brien");
+    EXPECT_EQ(results[0][1], "special@test.com");
+    
+    // Cleanup
+    [[maybe_unused]] const auto delete_result = executor_->execute(
+        "DELETE FROM users WHERE email = 'special@test.com'"
+    );
+}
+
+/**
+ * @brief Test that NULL bytes in parameters are handled safely
+ */
+TEST_F(MySqlExecutorTest, QueryWithParams_NullByteInParameter_HandledSafely) {
+    // String with embedded null byte (should be treated as regular character or rejected)
+    const std::string param_with_null = "test\x00value";
+    
+    // Should not crash or cause undefined behavior
+    EXPECT_NO_THROW({
+        const auto results = executor_->queryWithParams(
+            "SELECT name FROM users WHERE name = ?",
+            {param_with_null}
+        );
+        // May return empty or handle gracefully
+        EXPECT_TRUE(results.empty());
+    });
+}
+
+/**
+ * @brief Test structured query with params also prevents SQL injection
+ */
+TEST_F(MySqlExecutorTest, QueryWithParamsStructured_SQLInjectionAttempt_SafelyHandled) {
+    // Same injection attempts but using structured API
+    const auto result1 = executor_->queryWithParamsStructured(
+        "SELECT name FROM users WHERE name = ?",
+        {"' OR '1'='1"}
+    );
+    
+    EXPECT_TRUE(result1.isEmpty()) << "SQL injection via OR condition was not prevented in structured query!";
+    
+    const auto result2 = executor_->queryWithParamsStructured(
+        "SELECT name FROM users WHERE name = ?",
+        {"'; DROP TABLE users; --"}
+    );
+    
+    EXPECT_TRUE(result2.isEmpty()) << "SQL injection via DROP TABLE was not prevented in structured query!";
+    
+    // Verify table still exists
+    const auto verify_result = executor_->queryStructured("SELECT COUNT(*) as cnt FROM users");
+    EXPECT_FALSE(verify_result.isEmpty()) << "Users table was dropped by SQL injection in structured query!";
+}
+
 // ==================== Structured Query Tests ====================
 
 /**

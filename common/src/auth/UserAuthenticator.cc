@@ -53,7 +53,7 @@ namespace common::auth {
         return true;
     }
 
-    bool UserAuthenticator::authenticate(const std::string &username, const std::string &password) {
+    auto UserAuthenticator::authenticate(const std::string &username, const std::string &password) -> AuthResult {
         std::lock_guard lock(users_mutex_);
 
         // Try to get user from memory cache first
@@ -69,31 +69,32 @@ namespace common::auth {
         }
 
         if (it == users_.end()) {
-            throw exception::AuthenticationException(std::string("User not found"));
+            return AuthResult::failure_result("User not found");
         }
 
         const auto &user = it->second;
 
         // Check if account is locked
         if (user->is_locked()) {
-            throw exception::AuthenticationException(std::string("Account is locked due to too many failed attempts. Please try again later."));
+            return AuthResult::failure_result("Account is locked due to too many failed attempts. Please try again later.");
         }
 
         // Verify password
-        if (const auto hashed_input = crypto::CryptoToolKit::hash_password(password, user->get_salt()); crypto::CryptoToolKit::secure_compare(hashed_input, user->get_hashed_password())) {
+        const auto hashed_input = crypto::CryptoToolKit::hash_password(password, user->get_salt());
+        if (crypto::CryptoToolKit::secure_compare(hashed_input, user->get_hashed_password())) {
             user->reset_failed_attempts();
-            return true;
+            return AuthResult::success_result(user.get());
         }
+        
         user->increment_failed_attempts();
-        throw exception::AuthenticationException(std::string("Invalid password"));
+        return AuthResult::failure_result("Invalid password");
     }
 
     bool UserAuthenticator::change_password(const std::string &username, const std::string &current_password, const std::string &new_password) {
         // First verify current password
-        try {
-            authenticate(username, current_password);
-        } catch (const exception::AuthenticationException &) {
-            throw exception::AuthenticationException(std::string("Current password is incorrect"));
+        const auto auth_result = authenticate(username, current_password);
+        if (!auth_result.is_success()) {
+            throw exception::AuthenticationException("Current password is incorrect: " + auth_result.error_message);
         }
 
         std::lock_guard lock(users_mutex_);

@@ -1,6 +1,7 @@
 #pragma once
 #include <type_traits>
 #include <mutex>
+#include <memory>
 #include <stdexcept>
 
 namespace common::toolkit {
@@ -35,7 +36,7 @@ namespace common::toolkit {
         [[nodiscard]] static auto isInitialized() -> bool;
 
     private:
-        static inline T *instance_ = nullptr;
+        static inline std::unique_ptr<T> instance_ = nullptr;
         static inline std::once_flag init_flag_;
 
         /// @brief Construct the object with provided arguments
@@ -55,7 +56,7 @@ namespace common::toolkit {
     auto StaticObjectWrapper<T>::get() -> T & {
         if constexpr (std::is_default_constructible_v<T>) {
             std::call_once(init_flag_, [] {
-                instance_ = new T();
+                instance_ = std::make_unique<T>();
             });
         }
 
@@ -67,10 +68,7 @@ namespace common::toolkit {
 
     template<typename T>
     void StaticObjectWrapper<T>::destroy() noexcept {
-        if (instance_) {
-            delete instance_;
-            instance_ = nullptr;
-        }
+        instance_.reset();  // Automatically deletes and sets to nullptr
     }
 
     template<typename T>
@@ -81,6 +79,6 @@ namespace common::toolkit {
     template<typename T>
     template<typename... Args>
     void StaticObjectWrapper<T>::construct(Args &&... args) {
-        instance_ = new T(std::forward<Args>(args)...);
+        instance_ = std::make_unique<T>(std::forward<Args>(args)...);
     }
 }

@@ -3,12 +3,35 @@
 #include <regex>
 #include <unordered_map>
 #include <optional>
+#include <memory>
 
 #include "PasswordPolicy.hpp"
 #include "UserCredentials.hpp"
 #include "src/sql/PasswordSQL.hpp"
 
 namespace common::auth {
+    /// @brief Result of an authentication attempt
+    struct AuthResult {
+        bool success; ///< Whether authentication was successful
+        std::string error_message; ///< Error message if authentication failed
+        UserCredentials *user = nullptr; ///< Pointer to user credentials (only valid if success is true)
+
+        /// @brief Create a successful auth result
+        static auto success_result(UserCredentials *user) -> AuthResult {
+            return AuthResult{true, "", user};
+        }
+
+        /// @brief Create a failed auth result
+        static auto failure_result(const std::string &error) -> AuthResult {
+            return AuthResult{false, error, nullptr};
+        }
+
+        /// @brief Check if authentication was successful
+        [[nodiscard]] auto is_success() const -> bool {
+            return success;
+        }
+    };
+
     /// @brief Main authentication class providing user management and verification
     class UserAuthenticator {
     public:
@@ -27,9 +50,9 @@ namespace common::auth {
         /// @brief Authenticate user with username and password
         /// @param username User identifier
         /// @param password Plaintext password to verify
-        /// @return true if authentication successful
-        /// @throws AuthenticationException if user not found, password incorrect, or account locked
-        [[nodiscard]] bool authenticate(const std::string &username, const std::string &password);
+        /// @return AuthResult containing success status, error message (if any), and user pointer (if successful)
+        /// @note This method does NOT throw exceptions for authentication failures. Use the returned AuthResult to check status.
+        [[nodiscard]] auto authenticate(const std::string &username, const std::string &password) -> AuthResult;
 
         /// @brief Change user password after verifying current password
         /// @param username User identifier

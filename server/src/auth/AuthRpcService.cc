@@ -68,9 +68,10 @@ namespace server_app::auth {
         try {
             const auto &username = request->username();
             const auto &password = request->password();
-            const bool success = authenticator_.authenticate(username, password);
-            response->set_success(success);
-            response->set_message(success ? "Authentication successful" : "Invalid credentials");
+            const auto auth_result = authenticator_.authenticate(username, password);
+            
+            response->set_success(auth_result.is_success());
+            response->set_message(auth_result.error_message.empty() ? "Authentication successful" : auth_result.error_message);
             return ::grpc::Status::OK;
         } catch (const common::exception::AuthenticationException &e) {
             return HandleAuthException(e, response);

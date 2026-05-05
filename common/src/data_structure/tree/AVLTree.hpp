@@ -114,33 +114,33 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto AVLTree<T>::getHeight(const std::shared_ptr<TreeNode<T> > &node) const noexcept -> int32_t {
-        return node ? node->height : 0;
+        return node ? node->height_ : 0;
     }
 
     template<typename T>
     auto AVLTree<T>::getBalance(const std::shared_ptr<TreeNode<T> > &node) const noexcept -> int32_t {
-        return node ? getHeight(node->left) - getHeight(node->right) : 0;
+        return node ? getHeight(node->left_) - getHeight(node->right_) : 0;
     }
 
     template<typename T>
     auto AVLTree<T>::rotateRight(std::shared_ptr<TreeNode<T> > y) -> std::shared_ptr<TreeNode<T> > {
-        auto x = y->left;
-        auto T2 = x->right;
-        x->right = y;
-        y->left = T2;
-        y->height = 1 + std::max(getHeight(y->left), getHeight(y->right));
-        x->height = 1 + std::max(getHeight(x->left), getHeight(x->right));
+        auto x = y->left_;
+        auto T2 = x->right_;
+        x->right_ = y;
+        y->left_ = T2;
+        y->height_ = 1 + std::max(getHeight(y->left_), getHeight(y->right_));
+        x->height_ = 1 + std::max(getHeight(x->left_), getHeight(x->right_));
         return x;
     }
 
     template<typename T>
     auto AVLTree<T>::rotateLeft(std::shared_ptr<TreeNode<T> > x) -> std::shared_ptr<TreeNode<T> > {
-        auto y = x->right;
-        auto T2 = y->left;
-        y->left = x;
-        x->right = T2;
-        x->height = 1 + std::max(getHeight(x->left), getHeight(x->right));
-        y->height = 1 + std::max(getHeight(y->left), getHeight(y->right));
+        auto y = x->right_;
+        auto T2 = y->left_;
+        y->left_ = x;
+        x->right_ = T2;
+        x->height_ = 1 + std::max(getHeight(x->left_), getHeight(x->right_));
+        y->height_ = 1 + std::max(getHeight(y->left_), getHeight(y->right_));
         return y;
     }
 
@@ -149,25 +149,25 @@ namespace common::data_structure::tree {
         if (!node) {
             return std::make_shared<TreeNode<T> >(value);
         }
-        if (value < node->data) node->left = insert(node->left, value);
-        else if (value > node->data) node->right = insert(node->right, value);
+        if (value < node->data) node->left_ = insert(node->left_, value);
+        else if (value > node->data) node->right_ = insert(node->right_, value);
         else {
             return node;
         }
-        node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
+        node->height_ = 1 + std::max(getHeight(node->left_), getHeight(node->right_));
         const int32_t balance = getBalance(node);
-        if (balance > 1 && value < node->left->data) {
+        if (balance > 1 && value < node->left_->data) {
             return rotateRight(node);
         }
-        if (balance < -1 && value > node->right->data) {
+        if (balance < -1 && value > node->right_->data) {
             return rotateLeft(node);
         }
-        if (balance > 1 && value > node->left->data) {
-            node->left = rotateLeft(node->left);
+        if (balance > 1 && value > node->left_->data) {
+            node->left_ = rotateLeft(node->left_);
             return rotateRight(node);
         }
-        if (balance < -1 && value < node->right->data) {
-            node->right = rotateRight(node->right);
+        if (balance < -1 && value < node->right_->data) {
+            node->right_ = rotateRight(node->right_);
             return rotateLeft(node);
         }
         return node;
@@ -178,33 +178,33 @@ namespace common::data_structure::tree {
         if (!node) {
             return node;
         }
-        if (value < node->data) node->left = remove(node->left, value);
-        else if (value > node->data) node->right = remove(node->right, value);
+        if (value < node->data) node->left_ = remove(node->left_, value);
+        else if (value > node->data) node->right_ = remove(node->right_, value);
         else {
-            if (!node->left && !node->right) node = nullptr;
-            else if (!node->left) node = node->right;
-            else if (!node->right) node = node->left;
+            if (!node->left_ && !node->right_) node = nullptr;
+            else if (!node->left_) node = node->right_;
+            else if (!node->right_) node = node->left_;
             else {
-                auto successor = findMin(node->right);
+                auto successor = findMin(node->right_);
                 node->data = successor->data;
-                node->right = remove(node->right, successor->data);
+                node->right_ = remove(node->right_, successor->data);
             }
         }
         if (!node) return node;
-        node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
+        node->height = 1 + std::max(getHeight(node->left_), getHeight(node->right_));
         const int32_t balance = getBalance(node);
         if (balance > 1) {
-            if (getBalance(node->left) >= 0) {
+            if (getBalance(node->left_) >= 0) {
                 return rotateRight(node);
             }
-            node->left = rotateLeft(node->left);
+            node->left_ = rotateLeft(node->left_);
             return rotateRight(node);
         }
         if (balance < -1) {
-            if (getBalance(node->right) <= 0) {
+            if (getBalance(node->right_) <= 0) {
                 return rotateLeft(node);
             }
-            node->right = rotateRight(node->right);
+            node->right_ = rotateRight(node->right_);
             return rotateLeft(node);
         }
         return node;
@@ -213,7 +213,7 @@ namespace common::data_structure::tree {
     template<typename T>
     auto AVLTree<T>::findMin(const std::shared_ptr<TreeNode<T> > &node) const -> std::shared_ptr<TreeNode<T> > {
         auto current = node;
-        while (current->left) current = current->left;
+        while (current->left_) current = current->left_;
         return current;
     }
 
@@ -221,6 +221,6 @@ namespace common::data_structure::tree {
     auto AVLTree<T>::find(const std::shared_ptr<TreeNode<T> > &node, T value) const -> std::shared_ptr<TreeNode<T> > {
         if (!node) return nullptr;
         if (value == node->data) return node;
-        return value < node->data ? find(node->left, value) : find(node->right, value);
+        return value < node->data ? find(node->left_, value) : find(node->right_, value);
     }
 }

@@ -72,14 +72,12 @@ namespace common::data_structure::tree {
 
     template<typename T>
     auto BinarySearchTree<T>::insert(T value) -> void {
-        DLOG(INFO) << fmt::format("BinarySearchTree insert - value: {}", value);
         root_ = insertRecursive(root_, value);
     }
 
     template<typename T>
     auto BinarySearchTree<T>::find(T value) const -> bool {
         const bool found = findRecursive(root_, value);
-        DLOG(INFO) << fmt::format("BinarySearchTree find - value: {}, result: {}", value, found ? "found" : "not found");
         return found;
     }
 
@@ -88,22 +86,19 @@ namespace common::data_structure::tree {
         auto node = root_;
         while (node) {
             if (value == node->data) {
-                DLOG(INFO) << fmt::format("BinarySearchTree findValue - value: {}, result: found", value);
                 return node->data;
             }
             if (value < node->data) {
-                node = node->left;
+                node = node->left_;
             } else {
-                node = node->right;
+                node = node->right_;
             }
         }
-        DLOG(INFO) << fmt::format("BinarySearchTree findValue - value: {}, result: not found", value);
         return std::nullopt;
     }
 
     template<typename T>
     auto BinarySearchTree<T>::remove(T value) -> void {
-        DLOG(INFO) << fmt::format("BinarySearchTree remove - value: {}", value);
         root_ = removeRecursive(root_, value);
     }
 
@@ -116,14 +111,10 @@ namespace common::data_structure::tree {
     template<typename T>
     auto BinarySearchTree<T>::insertRecursive(std::shared_ptr<TreeNode<T> > node, T value) -> std::shared_ptr<TreeNode<T> > {
         if (!node) {
-            DLOG(INFO) << fmt::format("BinarySearchTree insertRecursive - creating new node with value: {}", value);
             return std::make_shared<TreeNode<T> >(value);
         }
-        if (value < node->data) node->left = insertRecursive(node->left, value);
-        else if (value > node->data) node->right = insertRecursive(node->right, value);
-        else {
-            DLOG(INFO) << fmt::format("BinarySearchTree insertRecursive - duplicate value ignored: {}", value);
-        }
+        if (value < node->data) node->left_ = insertRecursive(node->left_, value);
+        else if (value > node->data) node->right_ = insertRecursive(node->right_, value);
         return node;
     }
 
@@ -131,24 +122,22 @@ namespace common::data_structure::tree {
     auto BinarySearchTree<T>::findRecursive(const std::shared_ptr<TreeNode<T> > &node, T value) const -> bool {
         if (!node) return false;
         if (value == node->data) return true;
-        if (value < node->data) return findRecursive(node->left, value);
-        return findRecursive(node->right, value);
+        if (value < node->data) return findRecursive(node->left_, value);
+        return findRecursive(node->right_, value);
     }
 
     template<typename T>
     auto BinarySearchTree<T>::removeRecursive(std::shared_ptr<TreeNode<T> > node, T value) -> std::shared_ptr<TreeNode<T> > {
         if (!node) {
-            DLOG(WARNING) << fmt::format("BinarySearchTree removeRecursive - value not found: {}", value);
             return nullptr;
         }
-        if (value < node->data) node->left = removeRecursive(node->left, value);
-        else if (value > node->data) node->right = removeRecursive(node->right, value);
+        if (value < node->data) node->left_ = removeRecursive(node->left_, value);
+        else if (value > node->data) node->right_ = removeRecursive(node->right_, value);
         else {
-            DLOG(INFO) << fmt::format("BinarySearchTree removeRecursive - removing node with value: {}", value);
-            if (!node->left) return node->right;
-            if (!node->right) return node->left;
-            node->data = minValueNode(node->right)->data;
-            node->right = removeRecursive(node->right, node->data);
+            if (!node->left_) return node->right_;
+            if (!node->right_) return node->left_;
+            node->data = minValueNode(node->right_)->data;
+            node->right_ = removeRecursive(node->right_, node->data);
         }
         return node;
     }
@@ -156,15 +145,15 @@ namespace common::data_structure::tree {
     template<typename T>
     auto BinarySearchTree<T>::minValueNode(std::shared_ptr<TreeNode<T> > node) -> std::shared_ptr<TreeNode<T> > {
         auto current = node;
-        while (current && current->left) current = current->left;
+        while (current && current->left_) current = current->left_;
         return current;
     }
 
     template<typename T>
     auto BinarySearchTree<T>::inorderTraversalRecursive(const std::shared_ptr<TreeNode<T> > &node) const -> void {
         if (!node) return;
-        inorderTraversalRecursive(node->left);
+        inorderTraversalRecursive(node->left_);
         std::cout << node->data << " ";
-        inorderTraversalRecursive(node->right);
+        inorderTraversalRecursive(node->right_);
     }
 }

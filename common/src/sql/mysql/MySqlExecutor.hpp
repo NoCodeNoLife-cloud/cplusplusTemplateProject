@@ -147,9 +147,11 @@ namespace common::sql::mysql {
 
         /// @brief Executes a parameterized query and returns results as a 2D string vector (legacy API)
         /// @param sql SQL query with placeholders (?)
-        /// @param params Parameter values
+        /// @param params Parameter values (safely escaped to prevent SQL injection)
         /// @return Query results in format [rows][columns]
         /// @throws std::runtime_error if query fails
+        /// @note MySQL X DevAPI doesn't support true parameterized queries for raw SQL.
+        ///       Parameters are safely escaped using comprehensive character escaping.
         /// @deprecated Use queryWithParamsStructured() for better type safety and column name support
         [[nodiscard]] auto queryWithParams(const std::string &sql,
                                            const std::vector<std::string> &params) const -> std::vector<std::vector<std::string> >;
@@ -162,9 +164,11 @@ namespace common::sql::mysql {
 
         /// @brief Executes a parameterized query and returns structured results with column names and typed values
         /// @param sql SQL query with placeholders (?)
-        /// @param params Parameter values
+        /// @param params Parameter values (safely escaped to prevent SQL injection)
         /// @return Structured query result with metadata
         /// @throws std::runtime_error if query fails
+        /// @note MySQL X DevAPI doesn't support true parameterized queries for raw SQL.
+        ///       Parameters are safely escaped using comprehensive character escaping.
         [[nodiscard]] auto queryWithParamsStructured(const std::string &sql,
                                                      const std::vector<std::string> &params) const -> QueryResult;
 

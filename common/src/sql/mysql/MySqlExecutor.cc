@@ -170,21 +170,37 @@ namespace common::sql::mysql {
         }
 
         try {
-            // X DevAPI C++ doesn't support dynamic parameter binding well
-            // Workaround: Manually replace ? placeholders with properly escaped values
+            // MySQL X DevAPI doesn't support parameterized queries for raw SQL statements
+            // We need to manually escape and substitute parameters safely
             std::string processed_sql = sql;
             
             for (const auto& param : params) {
-                // Escape single quotes by doubling them (SQL standard)
+                // Escape special characters to prevent SQL injection
                 std::string escaped_param;
-                escaped_param.reserve(param.size() + 10);
+                escaped_param.reserve(param.size() * 2 + 10);
                 for (const char c : param) {
-                    if (c == '\'') {
-                        escaped_param += "''";  // Escape single quote
-                    } else if (c == '\\') {
-                        escaped_param += "\\\\";  // Escape backslash
-                    } else {
-                        escaped_param += c;
+                    switch (c) {
+                        case '\'':
+                            escaped_param += "\\'";  // Escape single quote
+                            break;
+                        case '"':
+                            escaped_param += "\\\"";  // Escape double quote
+                            break;
+                        case '\\':
+                            escaped_param += "\\\\";  // Escape backslash
+                            break;
+                        case '\n':
+                            escaped_param += "\\n";  // Escape newline
+                            break;
+                        case '\r':
+                            escaped_param += "\\r";  // Escape carriage return
+                            break;
+                        case '\x1a':
+                            escaped_param += "\\Z";  // Escape Ctrl+Z (EOF)
+                            break;
+                        default:
+                            escaped_param += c;
+                            break;
                     }
                 }
                 
@@ -242,21 +258,37 @@ namespace common::sql::mysql {
         }
 
         try {
-            // X DevAPI C++ doesn't support dynamic parameter binding well
-            // Workaround: Manually replace ? placeholders with properly escaped values
+            // MySQL X DevAPI doesn't support parameterized queries for raw SQL statements
+            // We need to manually escape and substitute parameters safely
             std::string processed_sql = sql;
             
             for (const auto& param : params) {
-                // Escape single quotes by doubling them (SQL standard)
+                // Escape special characters to prevent SQL injection
                 std::string escaped_param;
-                escaped_param.reserve(param.size() + 10);
+                escaped_param.reserve(param.size() * 2 + 10);
                 for (const char c : param) {
-                    if (c == '\'') {
-                        escaped_param += "''";  // Escape single quote
-                    } else if (c == '\\') {
-                        escaped_param += "\\\\";  // Escape backslash
-                    } else {
-                        escaped_param += c;
+                    switch (c) {
+                        case '\'':
+                            escaped_param += "\\'";  // Escape single quote
+                            break;
+                        case '"':
+                            escaped_param += "\\\"";  // Escape double quote
+                            break;
+                        case '\\':
+                            escaped_param += "\\\\";  // Escape backslash
+                            break;
+                        case '\n':
+                            escaped_param += "\\n";  // Escape newline
+                            break;
+                        case '\r':
+                            escaped_param += "\\r";  // Escape carriage return
+                            break;
+                        case '\x1a':
+                            escaped_param += "\\Z";  // Escape Ctrl+Z (EOF)
+                            break;
+                        default:
+                            escaped_param += c;
+                            break;
                     }
                 }
                 

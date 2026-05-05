@@ -1,6 +1,4 @@
 #pragma once
-#include <glog/logging.h>
-#include <fmt/format.h>
 #include <memory>
 #include <cstdint>
 
@@ -15,13 +13,12 @@ namespace common::data_structure::tree {
         explicit TreeNode(T value) noexcept;
 
         T data{};
-        std::shared_ptr<TreeNode> left_{};
-        std::shared_ptr<TreeNode> right_{};
+        std::shared_ptr<TreeNode<T>> left_{};
+        std::shared_ptr<TreeNode<T>> right_{};
         int32_t height_{1};
     };
 
     template<typename T>
-    TreeNode<T>::TreeNode(T value) noexcept : data(value) {
-        DLOG(INFO) << fmt::format("TreeNode created with value: {}", value);
+    TreeNode<T>::TreeNode(T value) noexcept : data(value), left_(nullptr), right_(nullptr), height_(1) {
     }
 }
