@@ -15,22 +15,22 @@ namespace common::base_type {
     }
 
     auto BigDecimal::operator+(const BigDecimal &other) const noexcept -> BigDecimal {
-        return BigDecimal((value_ + other.value_).convert_to<std::string>());
+        return BigDecimal(value_ + other.value_);
     }
 
     auto BigDecimal::operator-(const BigDecimal &other) const noexcept -> BigDecimal {
-        return BigDecimal((value_ - other.value_).convert_to<std::string>());
+        return BigDecimal(value_ - other.value_);
     }
 
     auto BigDecimal::operator*(const BigDecimal &other) const noexcept -> BigDecimal {
-        return BigDecimal((value_ * other.value_).convert_to<std::string>());
+        return BigDecimal(value_ * other.value_);
     }
 
     auto BigDecimal::operator/(const BigDecimal &other) const -> BigDecimal {
         if (other.value_ == 0) {
             throw std::invalid_argument("Division by zero is not allowed.");
         }
-        return BigDecimal((value_ / other.value_).convert_to<std::string>());
+        return BigDecimal(value_ / other.value_);
     }
 
     auto BigDecimal::operator<=>(const BigDecimal &other) const noexcept -> std::strong_ordering {

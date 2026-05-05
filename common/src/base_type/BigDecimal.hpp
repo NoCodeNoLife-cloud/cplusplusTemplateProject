@@ -49,6 +49,11 @@ namespace common::base_type {
         [[nodiscard]] auto operator==(const BigDecimal &other) const noexcept -> bool;
 
     private:
+        /// @brief Internal constructor from cpp_dec_float_100 (avoids string conversion overhead)
+        /// @param value The cpp_dec_float_100 value to wrap
+        explicit BigDecimal(boost::multiprecision::cpp_dec_float_100 value) noexcept
+            : value_(std::move(value)) {}
+
         boost::multiprecision::cpp_dec_float_100 value_{};
     };
 }

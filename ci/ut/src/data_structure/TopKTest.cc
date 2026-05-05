@@ -14,21 +14,29 @@
 using namespace common::data_structure;
 
 /**
- * @brief Test constructor with valid k value
- * @details Verifies that positive k values are accepted
+ * @brief Test default constructor (unbounded heap)
+ * @details Verifies that TopK can be created without capacity limit
  */
-TEST(TopKTest, Constructor_ValidK) {
+TEST(TopKTest, Constructor_Default_Unbounded) {
+    EXPECT_NO_THROW(TopK topK);
+}
+
+/**
+ * @brief Test constructor with valid max_capacity value
+ * @details Verifies that non-negative max_capacity values are accepted
+ */
+TEST(TopKTest, Constructor_ValidMaxCapacity) {
+    EXPECT_NO_THROW(TopK topK(0));   // Unbounded
     EXPECT_NO_THROW(TopK topK(1));
     EXPECT_NO_THROW(TopK topK(10));
     EXPECT_NO_THROW(TopK topK(100));
 }
 
 /**
- * @brief Test constructor with invalid k value throws exception
- * @details Verifies proper error handling for non-positive k values
+ * @brief Test constructor with invalid max_capacity value throws exception
+ * @details Verifies proper error handling for negative max_capacity values
  */
-TEST(TopKTest, Constructor_InvalidK_ThrowsException) {
-    EXPECT_THROW(TopK topK(0), std::invalid_argument);
+TEST(TopKTest, Constructor_InvalidMaxCapacity_ThrowsException) {
     EXPECT_THROW(TopK topK(-1), std::invalid_argument);
     EXPECT_THROW(TopK topK(-100), std::invalid_argument);
 }
@@ -407,4 +415,298 @@ TEST(TopKTest, MultipleGetTopK_Consistency) {
     EXPECT_EQ(result1, result2);
     EXPECT_EQ(result2, result3);
     EXPECT_EQ(result1.size(), 4);
+}
+
+/**
+ * @brief Test getTopK is non-destructive and heap can continue to be used
+ * @details Verifies that after calling getTopK(), the heap state is preserved
+ *          and new elements can still be added correctly
+ */
+TEST(TopKTest, GetTopK_NonDestructive_HeapUsableAfterRetrieval) {
+    TopK topK(3);
+
+    // Add initial elements
+    topK.add(10);
+    topK.add(20);
+    topK.add(30);
+
+    // First retrieval
+    const auto result1 = topK.getTopK();
+    EXPECT_EQ(result1.size(), 3);
+    EXPECT_EQ(topK.size(), 3); // Size should remain unchanged
+
+    // Add more elements after retrieval
+    topK.add(40);
+    topK.add(50);
+
+    // Second retrieval should reflect new state
+    const auto result2 = topK.getTopK();
+    EXPECT_EQ(result2.size(), 3);
+    EXPECT_EQ(topK.size(), 3); // Size should still be 3
+
+    // Verify the results are different (heap was updated)
+    EXPECT_NE(result1, result2);
+
+    // Verify second result contains the largest 3 numbers
+    std::vector<int32_t> sorted(result2.begin(), result2.end());
+    std::sort(sorted.begin(), sorted.end());
+    EXPECT_EQ(sorted[0], 30);
+    EXPECT_EQ(sorted[1], 40);
+    EXPECT_EQ(sorted[2], 50);
+}
+
+/**
+ * @brief Test getTopK with descending order parameter
+ * @details Verifies that getTopK(false) returns elements in descending order
+ */
+TEST(TopKTest, GetTopK_DescendingOrder_ReturnsLargestFirst) {
+    TopK topK(5);
+
+    // Add in random order
+    topK.add(30);
+    topK.add(10);
+    topK.add(50);
+    topK.add(20);
+    topK.add(40);
+
+    const auto result = topK.getTopK(0, false);  // All elements, descending order
+
+    // Should return in descending order (largest to smallest)
+    EXPECT_EQ(result.size(), 5);
+    EXPECT_EQ(result[0], 50);
+    EXPECT_EQ(result[1], 40);
+    EXPECT_EQ(result[2], 30);
+    EXPECT_EQ(result[3], 20);
+    EXPECT_EQ(result[4], 10);
+}
+
+/**
+ * @brief Test getTopK with ascending order parameter (explicit)
+ * @details Verifies that getTopK(true) returns elements in ascending order
+ */
+TEST(TopKTest, GetTopK_AscendingOrderExplicit_ReturnsSmallestFirst) {
+    TopK topK(5);
+
+    topK.add(30);
+    topK.add(10);
+    topK.add(50);
+    topK.add(20);
+    topK.add(40);
+
+    const auto result = topK.getTopK(0, true);  // All elements, ascending order (explicit)
+
+    // Should return in ascending order (smallest to largest)
+    EXPECT_EQ(result.size(), 5);
+    EXPECT_EQ(result[0], 10);
+    EXPECT_EQ(result[1], 20);
+    EXPECT_EQ(result[2], 30);
+    EXPECT_EQ(result[3], 40);
+    EXPECT_EQ(result[4], 50);
+}
+
+/**
+ * @brief Test getTopK default parameter is ascending
+ * @details Verifies that getTopK() without parameter defaults to ascending order
+ */
+TEST(TopKTest, GetTopK_DefaultParameter_IsAscending) {
+    TopK topK(5);
+
+    topK.add(30);
+    topK.add(10);
+    topK.add(50);
+    topK.add(20);
+    topK.add(40);
+
+    const auto result_default = topK.getTopK();       // Default parameter
+    const auto result_explicit = topK.getTopK(0, true);   // Explicit ascending
+
+    // Both should be identical (ascending order)
+    EXPECT_EQ(result_default, result_explicit);
+    EXPECT_EQ(result_default[0], 10);
+    EXPECT_EQ(result_default[4], 50);
+}
+
+/**
+ * @brief Test getTopK descending order preserves heap state
+ * @details Verifies that using descending order doesn't affect heap state
+ */
+TEST(TopKTest, GetTopK_DescendingOrder_PreservesHeapState) {
+    TopK topK(3);
+
+    topK.add(10);
+    topK.add(20);
+    topK.add(30);
+
+    // Get in descending order
+    const auto result_desc = topK.getTopK(0, false);
+    EXPECT_EQ(result_desc.size(), 3);
+    EXPECT_EQ(result_desc[0], 30);
+    EXPECT_EQ(result_desc[1], 20);
+    EXPECT_EQ(result_desc[2], 10);
+
+    // Heap state should be preserved
+    EXPECT_EQ(topK.size(), 3);
+
+    // Can still get in ascending order
+    const auto result_asc = topK.getTopK(0, true);
+    EXPECT_EQ(result_asc[0], 10);
+    EXPECT_EQ(result_asc[1], 20);
+    EXPECT_EQ(result_asc[2], 30);
+}
+
+/**
+ * @brief Test getTopK with dynamic count parameter
+ * @details Verifies that getTopK can return fewer elements than heap size
+ */
+TEST(TopKTest, GetTopK_DynamicCount_ReturnsSpecifiedNumberOfElements) {
+    TopK topK(10);  // Maintain top 10
+
+    // Add 10 numbers
+    for (int i = 1; i <= 10; ++i) {
+        topK.add(i);
+    }
+
+    EXPECT_EQ(topK.size(), 10);
+
+    // Get top 3 (largest 3, ascending order)
+    const auto top3 = topK.getTopK(3);
+    EXPECT_EQ(top3.size(), 3);
+    EXPECT_EQ(top3[0], 8);   // Smallest of the top 3
+    EXPECT_EQ(top3[1], 9);
+    EXPECT_EQ(top3[2], 10);  // Largest of the top 3
+
+    // Get top 5 (largest 5, ascending order)
+    const auto top5 = topK.getTopK(5);
+    EXPECT_EQ(top5.size(), 5);
+    EXPECT_EQ(top5[0], 6);   // Smallest of the top 5
+    EXPECT_EQ(top5[4], 10);  // Largest of the top 5
+
+    // Get all (count > heap size)
+    const auto topAll = topK.getTopK(100);
+    EXPECT_EQ(topAll.size(), 10);
+}
+
+/**
+ * @brief Test getTopK with dynamic count and descending order
+ * @details Verifies that count and order parameters work together correctly
+ */
+TEST(TopKTest, GetTopK_DynamicCountWithDescending_ReturnsLargestFirst) {
+    TopK topK(10);
+
+    for (int i = 1; i <= 10; ++i) {
+        topK.add(i);
+    }
+
+    // Get top 3 in descending order (largest 3)
+    const auto top3_desc = topK.getTopK(3, false);
+    EXPECT_EQ(top3_desc.size(), 3);
+    EXPECT_EQ(top3_desc[0], 10);  // Largest
+    EXPECT_EQ(top3_desc[1], 9);
+    EXPECT_EQ(top3_desc[2], 8);   // 3rd largest
+
+    // Get top 5 in descending order
+    const auto top5_desc = topK.getTopK(5, false);
+    EXPECT_EQ(top5_desc.size(), 5);
+    EXPECT_EQ(top5_desc[0], 10);
+    EXPECT_EQ(top5_desc[4], 6);
+}
+
+/**
+ * @brief Test getTopK with count=0 returns all elements
+ * @details Verifies that count=0 or negative returns all elements
+ */
+TEST(TopKTest, GetTopK_ZeroCount_ReturnsAllElements) {
+    TopK topK(10);
+
+    for (int i = 1; i <= 7; ++i) {
+        topK.add(i);
+    }
+
+    // count=0 should return all
+    const auto result_zero = topK.getTopK(0);
+    EXPECT_EQ(result_zero.size(), 7);
+
+    // Negative count should also return all
+    const auto result_negative = topK.getTopK(-1);
+    EXPECT_EQ(result_negative.size(), 7);
+
+    // Default parameter (count=0) should return all
+    const auto result_default = topK.getTopK();
+    EXPECT_EQ(result_default.size(), 7);
+}
+
+/**
+ * @brief Test unbounded TopK (default constructor)
+ * @details Verifies that TopK without capacity limit can grow indefinitely
+ */
+TEST(TopKTest, Unbounded_TopK_GrowsIndefinitely) {
+    TopK topK;  // No capacity limit
+
+    // Add 100 numbers
+    for (int i = 1; i <= 100; ++i) {
+        topK.add(i);
+    }
+
+    // Should contain all 100 numbers
+    EXPECT_EQ(topK.size(), 100);
+
+    // Get top 10
+    const auto top10 = topK.getTopK(10, false);  // Descending
+    EXPECT_EQ(top10.size(), 10);
+    EXPECT_EQ(top10[0], 100);  // Largest
+    EXPECT_EQ(top10[9], 91);
+}
+
+/**
+ * @brief Test unbounded TopK with getTopK dynamic count
+ * @details Verifies that unbounded TopK works correctly with dynamic count parameter
+ */
+TEST(TopKTest, Unbounded_TopK_DynamicCountWorks) {
+    TopK topK;  // Unbounded
+
+    for (int i = 1; i <= 50; ++i) {
+        topK.add(i);
+    }
+
+    EXPECT_EQ(topK.size(), 50);
+
+    // Get different counts
+    const auto top5 = topK.getTopK(5, false);
+    EXPECT_EQ(top5.size(), 5);
+    EXPECT_EQ(top5[0], 50);
+
+    const auto top20 = topK.getTopK(20, false);
+    EXPECT_EQ(top20.size(), 20);
+    EXPECT_EQ(top20[0], 50);
+
+    // Get all
+    const auto all = topK.getTopK();
+    EXPECT_EQ(all.size(), 50);
+}
+
+/**
+ * @brief Test bounded vs unbounded TopK behavior difference
+ * @details Compares behavior of bounded and unbounded TopK
+ */
+TEST(TopKTest, BoundedVsUnbounded_BehaviorComparison) {
+    TopK bounded(3);
+    TopK unbounded;
+
+    // Add same numbers to both
+    for (int i = 1; i <= 10; ++i) {
+        bounded.add(i);
+        unbounded.add(i);
+    }
+
+    // Bounded should only keep top 3
+    EXPECT_EQ(bounded.size(), 3);
+    const auto bounded_result = bounded.getTopK(3, false);
+    EXPECT_EQ(bounded_result[0], 10);
+    EXPECT_EQ(bounded_result[2], 8);
+
+    // Unbounded should keep all 10
+    EXPECT_EQ(unbounded.size(), 10);
+    const auto unbounded_result = unbounded.getTopK(10, false);
+    EXPECT_EQ(unbounded_result[0], 10);
+    EXPECT_EQ(unbounded_result[9], 1);
 }

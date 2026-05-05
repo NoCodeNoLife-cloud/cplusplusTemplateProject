@@ -18,29 +18,29 @@ namespace common::base_type {
     }
 
     auto BigInteger::operator+(const BigInteger &other) const noexcept -> BigInteger {
-        return BigInteger((value_ + other.value_).convert_to<std::string>());
+        return BigInteger(value_ + other.value_);
     }
 
     auto BigInteger::operator-(const BigInteger &other) const noexcept -> BigInteger {
-        return BigInteger((value_ - other.value_).convert_to<std::string>());
+        return BigInteger(value_ - other.value_);
     }
 
     auto BigInteger::operator*(const BigInteger &other) const noexcept -> BigInteger {
-        return BigInteger((value_ * other.value_).convert_to<std::string>());
+        return BigInteger(value_ * other.value_);
     }
 
     auto BigInteger::operator/(const BigInteger &other) const -> BigInteger {
         if (other.value_ == 0) {
             throw std::invalid_argument("Division by zero");
         }
-        return BigInteger((value_ / other.value_).convert_to<std::string>());
+        return BigInteger(value_ / other.value_);
     }
 
     auto BigInteger::operator%(const BigInteger &other) const -> BigInteger {
         if (other.value_ == 0) {
             throw std::invalid_argument("Modulo by zero");
         }
-        return BigInteger((value_ % other.value_).convert_to<std::string>());
+        return BigInteger(value_ % other.value_);
     }
 
     auto BigInteger::operator<=>(const BigInteger &other) const noexcept -> std::strong_ordering {

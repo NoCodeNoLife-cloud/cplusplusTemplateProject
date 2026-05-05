@@ -66,6 +66,11 @@ namespace common::base_type {
         [[nodiscard]] static auto fromInt(int64_t num) noexcept -> BigInteger;
 
     private:
+        /// @brief Internal constructor from cpp_int (avoids string conversion overhead)
+        /// @param value The cpp_int value to wrap
+        explicit BigInteger(boost::multiprecision::cpp_int value) noexcept
+            : value_(std::move(value)) {}
+
         boost::multiprecision::cpp_int value_{};
     };
 }

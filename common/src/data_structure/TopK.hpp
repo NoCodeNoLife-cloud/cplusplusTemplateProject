@@ -10,15 +10,26 @@ namespace common::data_structure {
     /// This ensures that the heap always contains the top K the largest numbers seen so far.
     class TopK final {
     public:
-        explicit TopK(int32_t k);
+        /// @brief Default constructor (unbounded heap, grows as elements are added).
+        TopK() noexcept;
+
+        /// @brief Constructs a TopK with a maximum capacity.
+        /// @param max_capacity Maximum number of elements to maintain in the heap.
+        ///                     If 0, the heap is unbounded.
+        explicit TopK(int32_t max_capacity);
 
         /// @brief Add a number to the TopK.
         /// @param num The number to add.
         auto add(int32_t num) -> void;
 
-        /// @brief Get the top k numbers.
-        /// @return The top k numbers.
-        [[nodiscard]] auto getTopK() -> std::vector<int32_t>;
+        /// @brief Get the top k numbers (non-destructive, read-only operation).
+        /// @param count Number of elements to return (must be <= internal heap size).
+        ///             If 0 or greater than heap size, returns all elements.
+        /// @param ascending If true, returns in ascending order (smallest to largest).
+        ///                  If false, returns in descending order (largest to smallest).
+        /// @return The top k numbers in the specified order.
+        /// @note This method does not modify the internal heap state.
+        [[nodiscard]] auto getTopK(int32_t count = 0, bool ascending = true) const -> std::vector<int32_t>;
 
         /// @brief Get the current size of the heap.
         /// @return The number of elements in the heap.
@@ -29,7 +40,7 @@ namespace common::data_structure {
         [[nodiscard]] auto empty() const -> bool;
 
     private:
-        int32_t k_;
+        int32_t max_capacity_;  // 0 means unbounded
         std::priority_queue<int32_t, std::vector<int32_t>, std::greater<> > minHeap_;
     };
 }
