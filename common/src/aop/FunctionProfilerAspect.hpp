@@ -10,6 +10,7 @@ namespace common::aop {
     /// @details It implements the IAopAspect interface to provide entry and exit points
     /// for measuring the duration of function calls. This aspect can be used
     /// with the AOP framework to automatically profile function execution.
+    /// Subclasses can override onProfileComplete() to customize how timing info is handled.
     class FunctionProfilerAspect : public interfaces::IAopAspect<FunctionProfilerAspect> {
     public:
         /// @brief Construct a FunctionProfilerAspect with the given function name
@@ -20,13 +21,19 @@ namespace common::aop {
         /// @details Called when entering the function to be profiled
         auto onEntry() -> void override;
 
-        /// @brief Exit point - records the end time of the function and prints the result
+        /// @brief Exit point - records the end time of the function
         /// @details Called when exiting the function to be profiled
         auto onExit() -> void override;
 
         /// @brief Exception point - records the end time when exception occurs
         /// @details Called when function exits with exception
         auto onException(std::exception_ptr e) -> void override;
+
+    protected:
+        /// @brief Called when profiling is complete, subclasses can override to handle timing info
+        /// @param time_info Formatted string with execution time information
+        /// @details Default implementation does nothing. Override to log, send to metrics, etc.
+        virtual auto onProfileComplete(const std::string &time_info) -> void;
 
     private:
         time::FunctionProfiler profiler_;

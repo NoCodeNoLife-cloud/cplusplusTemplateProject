@@ -13,8 +13,7 @@ namespace common::base_type {
     }
 
     auto Object::equals(const Object &other) const -> bool {
-        const bool result = this == &other;
-        return result;
+        return this == &other;
     }
 
     auto Object::hashCode() const noexcept -> size_t {
@@ -32,8 +31,7 @@ namespace common::base_type {
     }
 
     auto Object::isInstance(const std::type_info &target_type) const noexcept -> bool {
-        const bool result = target_type == typeid(*this);
-        return result;
+        return target_type == typeid(*this);
     }
 
     auto Object::getClassName() const -> std::string {
@@ -41,7 +39,6 @@ namespace common::base_type {
     }
 
     auto Object::is(const Object &other) const noexcept -> bool {
-        const bool result = this == &other;
-        return result;
+        return this == &other;
     }
 }

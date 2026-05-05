@@ -42,13 +42,15 @@ namespace common::toolkit {
         /// @param source The vector of strings to be concatenated.
         /// @param split_char The character to insert between each concatenated string.
         /// @return A single string composed of all elements in the vector separated by the specified character.
-        [[nodiscard]] static auto concatenate(const std::vector<std::string> &source, char split_char) -> std::string;
+        /// @deprecated Use join() instead for consistent naming
+        [[nodiscard]] [[deprecated("Use join() instead")]] static auto concatenate(const std::vector<std::string> &source, char split_char) -> std::string;
 
         /// @brief Concatenates a vector of strings into a single string with a specified string between each element.
         /// @param source The vector of strings to be concatenated.
         /// @param delimiter The string to insert between each concatenated string.
         /// @return A single string composed of all elements in the vector separated by the specified string.
-        [[nodiscard]] static auto concatenate(const std::vector<std::string> &source, const std::string &delimiter) -> std::string;
+        /// @deprecated Use join() instead for consistent naming
+        [[nodiscard]] [[deprecated("Use join() instead")]] static auto concatenate(const std::vector<std::string> &source, const std::string &delimiter) -> std::string;
 
         /// @brief Checks if a string starts with a specified prefix.
         /// @param str The string to check.

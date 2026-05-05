@@ -1,7 +1,6 @@
 #include "CaesarCipher.hpp"
 
 
-#include <fmt/format.h>
 #include <algorithm>
 #include <limits>
 

@@ -1,5 +1,4 @@
 #pragma once
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <iostream>
 #include <memory>

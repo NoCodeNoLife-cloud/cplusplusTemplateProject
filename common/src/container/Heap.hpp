@@ -1,5 +1,4 @@
 #pragma once
-#include <glog/logging.h>
 #include <fmt/format.h>
 #include <functional>
 #include <stdexcept>
@@ -186,10 +185,7 @@ namespace common::container {
 
     template<typename T, typename Compare>
     auto Heap<T, Compare>::clear() noexcept -> void {
-        const size_t previous_size = data_.size();
         data_.clear();
-        if (previous_size > 0) {
-        }
     }
 
     template<typename T, typename Compare>

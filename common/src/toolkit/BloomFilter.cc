@@ -3,7 +3,6 @@
 
 #include <fmt/format.h>
 #include <algorithm>
-#include <cstring>
 #include <iterator>
 #include <limits>
 #include <random>

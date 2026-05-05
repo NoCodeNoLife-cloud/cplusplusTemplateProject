@@ -9,10 +9,19 @@ namespace common::aop {
     }
 
     auto FunctionProfilerAspect::onExit() -> void {
-        profiler_.recordEnd(true);
+        profiler_.recordEnd();
+        const auto time_info = profiler_.getRunTime();
+        onProfileComplete(time_info);
     }
 
     auto FunctionProfilerAspect::onException(std::exception_ptr e) -> void {
-        profiler_.recordEnd(true);
+        profiler_.recordEnd();
+        const auto time_info = profiler_.getRunTime();
+        onProfileComplete(time_info);
+    }
+
+    auto FunctionProfilerAspect::onProfileComplete(const std::string &time_info) -> void {
+        // Default implementation does nothing
+        // Subclasses can override to log, send to metrics, etc.
     }
 }

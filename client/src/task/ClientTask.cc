@@ -133,7 +133,9 @@ namespace client_app::task {
     }
 
     auto ClientTask::exit() const noexcept -> void {
-        timer_.recordEnd(true);
+        timer_.recordEnd();
+        const auto time_info = timer_.getRunTime();
+        LOG(INFO) << time_info;
         DLOG(INFO) << "Application finished successfully.";
     }
 

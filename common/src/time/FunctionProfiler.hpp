@@ -22,13 +22,13 @@ namespace common::time {
 
         /// @brief Records the end time of the function execution.
         /// @details Captures the current time as the end time for profiling.
-        /// @param autoPrint If true, automatically prints the runtime.
-        auto recordEnd(bool autoPrint = false) -> void;
+        auto recordEnd() -> void;
 
-        /// @brief Gets and prints the runtime of the function execution.
-        /// @details Calculates the duration between start and end times and outputs it.
+        /// @brief Gets the runtime as a formatted string.
+        /// @details Calculates the duration between start and end times and returns it as a human-readable string.
+        /// @return Formatted string with execution time (e.g., "functionName finished in 0.123 s (123.456 ms)").
         /// @throws std::runtime_error If timing data is incomplete.
-        auto getRunTime() const -> void;
+        [[nodiscard]] auto getRunTime() const -> std::string;
 
         /// @brief Gets the runtime duration in milliseconds.
         /// @details Calculates the duration between start and end times.
