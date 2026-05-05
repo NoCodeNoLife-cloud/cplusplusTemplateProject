@@ -1,4 +1,5 @@
 #pragma once
+#include <concepts>
 #include <fmt/format.h>
 #include <vector>
 #include <iterator>
@@ -9,7 +10,7 @@ namespace common::container {
 /// @brief A simple stack implementation using a container.
 /// @tparam T The type of elements stored in the stack.
 /// @tparam Container The underlying container type used to store elements. Defaults to std::vector<T>.
-template <typename T, typename Container = std::vector<T> >
+template <std::movable T, typename Container = std::vector<T> >
 class Stack {
 public:
     /// @brief Default constructor creates an empty stack
@@ -19,7 +20,7 @@ public:
     /// @tparam Iterator Type of the iterators
     /// @param begin Start iterator
     /// @param end End iterator
-    template <typename Iterator>
+    template <std::input_iterator Iterator>
     Stack(Iterator begin, Iterator end);
 
     /// @brief Pushes a copy of the given value onto the stack.
@@ -62,31 +63,31 @@ private:
     Container data_{};
 };
 
-template <typename T, typename Container>
+template <std::movable T, typename Container>
 Stack<T, Container>::Stack() = default;
 
-template <typename T, typename Container>
-template <typename Iterator>
+template <std::movable T, typename Container>
+template <std::input_iterator Iterator>
 Stack<T, Container>::Stack(Iterator begin, Iterator end) : data_(begin, end) {
 }
 
-template <typename T, typename Container>
+template <std::movable T, typename Container>
 auto Stack<T, Container>::push(const T& value) -> void {
     data_.push_back(value);
 }
 
-template <typename T, typename Container>
+template <std::movable T, typename Container>
 auto Stack<T, Container>::push(T&& value) -> void {
     data_.push_back(std::move(value));
 }
 
-template <typename T, typename Container>
+template <std::movable T, typename Container>
 template <typename... Args>
 auto Stack<T, Container>::emplace(Args&&... args) -> void {
     data_.emplace_back(std::forward<Args>(args)...);
 }
 
-template <typename T, typename Container>
+template <std::movable T, typename Container>
 auto Stack<T, Container>::pop() -> void {
     if (data_.empty()) {
         throw std::out_of_range("Stack is empty");
@@ -94,7 +95,7 @@ auto Stack<T, Container>::pop() -> void {
     data_.pop_back();
 }
 
-template <typename T, typename Container>
+template <std::movable T, typename Container>
 auto Stack<T, Container>::top() -> T& {
     if (data_.empty()) {
         throw std::out_of_range("Stack is empty");
@@ -102,7 +103,7 @@ auto Stack<T, Container>::top() -> T& {
     return data_.back();
 }
 
-template <typename T, typename Container>
+template <std::movable T, typename Container>
 auto Stack<T, Container>::top() const -> const T& {
     if (data_.empty()) {
         throw std::out_of_range("Stack is empty");
@@ -110,12 +111,12 @@ auto Stack<T, Container>::top() const -> const T& {
     return data_.back();
 }
 
-template <typename T, typename Container>
+template <std::movable T, typename Container>
 auto Stack<T, Container>::empty() const noexcept -> bool {
     return data_.empty();
 }
 
-template <typename T, typename Container>
+template <std::movable T, typename Container>
 auto Stack<T, Container>::size() const noexcept -> size_t {
     return data_.size();
 }

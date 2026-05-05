@@ -1,5 +1,6 @@
 #pragma once
 #include <fmt/format.h>
+#include <concepts>
 #include <functional>
 #include <stdexcept>
 #include <vector>
@@ -12,7 +13,7 @@ namespace common::container {
 /// @brief A heap data structure implementation.
 /// @tparam T The type of elements stored in the heap.
 /// @tparam Compare The comparison function object type that defines the heap order.
-template <typename T, typename Compare = std::less<T> >
+template <std::copyable T, typename Compare = std::less<T> >
 class Heap {
 public:
     /// @brief Default constructor
@@ -22,7 +23,7 @@ public:
     /// @tparam Iterator Type of the iterators
     /// @param begin Start iterator
     /// @param end End iterator
-    template <typename Iterator>
+    template <std::input_iterator Iterator>
     Heap(Iterator begin, Iterator end);
 
     /// @brief Copy constructor
@@ -102,50 +103,50 @@ private:
     [[nodiscard]] auto validate_heap_property() const -> bool;
 };
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 Heap<T, Compare>::Heap() = default;
 
-template <typename T, typename Compare>
-template <typename Iterator>
+template <std::copyable T, typename Compare>
+template <std::input_iterator Iterator>
 Heap<T, Compare>::Heap(Iterator begin, Iterator end) : data_(begin, end) {
     heapify();
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 Heap<T, Compare>::Heap(const Heap& other) = default;
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 Heap<T, Compare>::Heap(Heap&& other) noexcept = default;
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 Heap<T, Compare>& Heap<T, Compare>::operator=(const Heap& other) = default;
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 Heap<T, Compare>& Heap<T, Compare>::operator=(Heap&& other) noexcept = default;
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 Heap<T, Compare>::~Heap() = default;
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::push(const T& value) -> void {
     data_.push_back(value);
     heapify_up(data_.size() - 1);
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::push(T&& value) -> void {
     data_.push_back(std::move(value));
     heapify_up(data_.size() - 1);
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 template <typename... Args>
 auto Heap<T, Compare>::emplace(Args&&... args) -> void {
     data_.emplace_back(std::forward<Args>(args)...);
     heapify_up(data_.size() - 1);
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::pop() -> void {
     if (empty()) {
         throw std::out_of_range("Heap is empty");
@@ -157,7 +158,7 @@ auto Heap<T, Compare>::pop() -> void {
     }
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::top() const -> const T& {
     if (empty()) {
         throw std::out_of_range("Heap is empty");
@@ -165,7 +166,7 @@ auto Heap<T, Compare>::top() const -> const T& {
     return data_[0];
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::top() -> T& {
     if (empty()) {
         throw std::out_of_range("Heap is empty");
@@ -173,27 +174,27 @@ auto Heap<T, Compare>::top() -> T& {
     return data_[0];
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::size() const noexcept -> std::size_t {
     return data_.size();
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::empty() const noexcept -> bool {
     return data_.empty();
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::clear() noexcept -> void {
     data_.clear();
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::is_valid() const -> bool {
     return validate_heap_property();
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::heapify() -> void {
     const auto size = data_.size();
     if (size <= 1) return;
@@ -204,7 +205,7 @@ auto Heap<T, Compare>::heapify() -> void {
     }
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::heapify_up(std::size_t index) -> void {
     while (index > 0) {
         const std::size_t parent = (index - 1) / 2;
@@ -216,7 +217,7 @@ auto Heap<T, Compare>::heapify_up(std::size_t index) -> void {
     }
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::heapify_down(std::size_t index) -> void {
     const auto size = data_.size();
     while (true) {
@@ -245,7 +246,7 @@ auto Heap<T, Compare>::heapify_down(std::size_t index) -> void {
     }
 }
 
-template <typename T, typename Compare>
+template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::validate_heap_property() const -> bool {
     const auto size = data_.size();
     for (std::size_t i = 0; i < size; ++i) {

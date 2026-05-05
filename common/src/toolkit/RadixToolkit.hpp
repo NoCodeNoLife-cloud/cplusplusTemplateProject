@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <charconv>
+#include <concepts>
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -35,7 +36,7 @@ public:
      * @param override_base Optional base override (0 means use default)
      * @return String representation
      */
-    template <typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
+    template <std::integral T>
     [[nodiscard]] constexpr auto to_string(T value, const int override_base = 0) const -> std::string;
 
     /**
@@ -45,7 +46,7 @@ public:
      * @param override_base Optional base override (0 means use default)
      * @return Converted integral value
      */
-    template <typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
+    template <std::integral T>
     [[nodiscard]] constexpr auto from_string(const std::string_view str, const int override_base = 0) const -> T;
 
     /**
@@ -57,8 +58,7 @@ public:
      * @return String representation in specified base
      * @throws std::invalid_argument For invalid base/charset combination
      */
-    template <typename T, typename CharSet = std::string_view,
-              std::enable_if_t<std::is_integral_v<T>, int> = 0>
+    template <std::integral T, typename CharSet = std::string_view>
     [[nodiscard]] static constexpr auto convert_to_string(
         T value,
         int base,
@@ -74,7 +74,7 @@ public:
      * @throws std::invalid_argument For invalid characters/format
      * @throws std::out_of_range For overflow beyond type limits
      */
-    template <typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
+    template <std::integral T>
     [[nodiscard]] static constexpr auto convert_from_string(
         const std::string_view str,
         int base
@@ -86,7 +86,7 @@ public:
      * @param value Value to convert
      * @return Binary string
      */
-    template <typename T>
+    template <std::integral T>
     [[nodiscard]] static constexpr auto to_binary(T value) -> std::string;
 
     /**
@@ -95,7 +95,7 @@ public:
      * @param value Value to convert
      * @return Octal string
      */
-    template <typename T>
+    template <std::integral T>
     [[nodiscard]] static constexpr auto to_octal(T value) -> std::string;
 
     /**
@@ -104,7 +104,7 @@ public:
      * @param value Value to convert
      * @return Hexadecimal string
      */
-    template <typename T>
+    template <std::integral T>
     [[nodiscard]] static constexpr auto to_hex(T value) -> std::string;
 
     /**
@@ -113,7 +113,7 @@ public:
      * @param value Value to convert
      * @return Lowercase hexadecimal string
      */
-    template <typename T>
+    template <std::integral T>
     [[nodiscard]] static constexpr auto to_hex_lower(T value) -> std::string;
 
     /**
@@ -124,7 +124,7 @@ public:
      * @param ec Error code output
      * @return Converted value or 0 on error
      */
-    template <typename T>
+    template <std::integral T>
     [[nodiscard]] static constexpr auto from_string_nothrow(
         std::string_view str,
         int base,
@@ -156,19 +156,19 @@ constexpr RadixToolkit::RadixToolkit(const int default_base, const std::string_v
     }
 }
 
-template <typename T, std::enable_if_t<std::is_integral_v<T>, int> >
+template <std::integral T>
 constexpr auto RadixToolkit::to_string(T value, const int override_base) const -> std::string {
     const int base = (override_base == 0) ? default_base_ : override_base;
     return convert_to_string(value, base, charset_);
 }
 
-template <typename T, std::enable_if_t<std::is_integral_v<T>, int> >
+template <std::integral T>
 constexpr auto RadixToolkit::from_string(const std::string_view str, const int override_base) const -> T {
     const int base = (override_base == 0) ? default_base_ : override_base;
     return convert_from_string<T>(str, base);
 }
 
-template <typename T, typename CharSet, std::enable_if_t<std::is_integral_v<T>, int> >
+template <std::integral T, typename CharSet>
 constexpr auto RadixToolkit::convert_to_string(T value, int base, const CharSet& charset) -> std::string {
     // Calculate charset size: handle both string_view and C-style arrays
     constexpr bool is_array = std::is_array_v<std::remove_reference_t<CharSet> >;
@@ -221,7 +221,7 @@ constexpr auto RadixToolkit::convert_to_string(T value, int base, const CharSet&
     return result;
 }
 
-template <typename T, std::enable_if_t<std::is_integral_v<T>, int> >
+template <std::integral T>
 constexpr auto RadixToolkit::convert_from_string(const std::string_view str, int base) -> T {
     if (base < 2 || base > 36) {
         throw std::invalid_argument("Base must be between 2 and 36");
@@ -289,27 +289,27 @@ constexpr auto RadixToolkit::convert_from_string(const std::string_view str, int
     return static_cast<T>(result);
 }
 
-template <typename T>
+template <std::integral T>
 constexpr auto RadixToolkit::to_binary(T value) -> std::string {
     return convert_to_string(value, 2, "01");
 }
 
-template <typename T>
+template <std::integral T>
 constexpr auto RadixToolkit::to_octal(T value) -> std::string {
     return convert_to_string(value, 8, "01234567");
 }
 
-template <typename T>
+template <std::integral T>
 constexpr auto RadixToolkit::to_hex(T value) -> std::string {
     return convert_to_string(value, 16, "0123456789ABCDEF");
 }
 
-template <typename T>
+template <std::integral T>
 constexpr auto RadixToolkit::to_hex_lower(T value) -> std::string {
     return convert_to_string(value, 16, "0123456789abcdef");
 }
 
-template <typename T>
+template <std::integral T>
 constexpr auto RadixToolkit::from_string_nothrow(std::string_view str, int base, std::errc& ec) noexcept -> T {
     T result{};
     const auto [ptr, err] = std::from_chars(str.data(), str.data() + str.size(), result, base);
