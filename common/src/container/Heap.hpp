@@ -83,6 +83,10 @@ public:
     /// @return True if heap property is maintained
     [[nodiscard]] auto is_valid() const -> bool;
 
+    /// @brief Swaps the contents of this heap with another heap.
+    /// @param other The heap to swap with.
+    auto swap(Heap& other) noexcept -> void;
+
 private:
     std::vector<T> data_{};
     Compare compare_{};
@@ -261,5 +265,12 @@ auto Heap<T, Compare>::validate_heap_property() const -> bool {
         }
     }
     return true;
+}
+
+template <std::copyable T, typename Compare>
+auto Heap<T, Compare>::swap(Heap& other) noexcept -> void {
+    using std::swap;
+    swap(data_, other.data_);
+    swap(compare_, other.compare_);
 }
 }

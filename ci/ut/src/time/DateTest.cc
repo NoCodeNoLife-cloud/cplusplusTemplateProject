@@ -358,3 +358,116 @@ TEST(DateTest, Constructor_FirstDayOfMonth) {
     EXPECT_EQ(date.getDay(), 1);
     EXPECT_EQ(date.getMonth(), 1);
 }
+
+/**
+ * @brief Test constructor with various year values
+ * @details Verifies handling of different years within reasonable range
+ */
+TEST(DateTest, Constructor_VariousYears) {
+    // Test modern years that should be widely supported
+    EXPECT_NO_THROW(Date(2000, 1, 1));
+    EXPECT_NO_THROW(Date(2020, 6, 15));
+    EXPECT_NO_THROW(Date(2024, 12, 31));
+    
+    // Test near future year
+    EXPECT_NO_THROW(Date(2030, 1, 1));
+}
+
+/**
+ * @brief Test constructor with various month boundaries
+ * @details Verifies last day of each month is handled correctly
+ */
+TEST(DateTest, Constructor_MonthBoundaries) {
+    // January has 31 days
+    EXPECT_NO_THROW(Date(2024, 1, 31));
+    EXPECT_THROW(Date(2024, 1, 32), std::invalid_argument);
+    
+    // April has 30 days
+    EXPECT_NO_THROW(Date(2024, 4, 30));
+    EXPECT_THROW(Date(2024, 4, 31), std::invalid_argument);
+    
+    // February in leap year
+    EXPECT_NO_THROW(Date(2024, 2, 29));
+    EXPECT_THROW(Date(2024, 2, 30), std::invalid_argument);
+    
+    // February in non-leap year
+    EXPECT_NO_THROW(Date(2023, 2, 28));
+    EXPECT_THROW(Date(2023, 2, 29), std::invalid_argument);
+}
+
+/**
+ * @brief Test time component boundaries
+ * @details Verifies hour, minute, second boundary values
+ */
+TEST(DateTest, Constructor_TimeBoundaries) {
+    // Maximum valid time
+    EXPECT_NO_THROW(Date(2024, 1, 1, 23, 59, 59));
+    
+    // Minimum valid time (midnight)
+    EXPECT_NO_THROW(Date(2024, 1, 1, 0, 0, 0));
+    
+    // Invalid hour
+    EXPECT_THROW(Date(2024, 1, 1, 24, 0, 0), std::invalid_argument);
+    
+    // Invalid minute
+    EXPECT_THROW(Date(2024, 1, 1, 12, 60, 0), std::invalid_argument);
+    
+    // Invalid second
+    EXPECT_THROW(Date(2024, 1, 1, 12, 0, 60), std::invalid_argument);
+}
+
+/**
+ * @brief Test comparison operators consistency
+ * @details Verifies that all comparison operators are consistent
+ */
+TEST(DateTest, Comparison_OperatorConsistency) {
+    const Date date1(2024, 1, 15, 10, 30, 0);
+    const Date date2(2024, 1, 15, 10, 30, 0);
+    const Date date3(2024, 6, 15, 10, 30, 0);
+    
+    // Reflexivity
+    EXPECT_TRUE(date1 == date1);
+    EXPECT_FALSE(date1 != date1);
+    EXPECT_FALSE(date1 < date1);
+    EXPECT_TRUE(date1 <= date1);
+    EXPECT_FALSE(date1 > date1);
+    EXPECT_TRUE(date1 >= date1);
+    
+    // Symmetry
+    EXPECT_TRUE(date1 == date2);
+    EXPECT_TRUE(date2 == date1);
+    
+    // Transitivity
+    EXPECT_TRUE(date1 < date3);
+    EXPECT_TRUE(date1 <= date3);
+    EXPECT_TRUE(date3 > date1);
+    EXPECT_TRUE(date3 >= date1);
+}
+
+/**
+ * @brief Test date arithmetic edge cases
+ * @details Verifies behavior near month/year boundaries
+ */
+TEST(DateTest, DateArithmetic_MonthBoundary) {
+    const Date endOfMonth(2024, 1, 31, 23, 59, 59);
+    const auto timestamp = endOfMonth.getTime();
+    
+    // Create date from timestamp should be valid
+    EXPECT_NO_THROW(Date date(timestamp));
+}
+
+/**
+ * @brief Test hashCode for different dates
+ * @details Verifies hash code generation for different dates
+ */
+TEST(DateTest, HashCode_DifferentDates) {
+    const Date date1(2000, 1, 1, 0, 0, 0);
+    const Date date2(2024, 12, 31, 23, 59, 59);
+    
+    // Hash codes should be different
+    EXPECT_NE(date1.hashCode(), date2.hashCode());
+    
+    // Same dates should have same hash
+    const Date date1_copy(2000, 1, 1, 0, 0, 0);
+    EXPECT_EQ(date1.hashCode(), date1_copy.hashCode());
+}

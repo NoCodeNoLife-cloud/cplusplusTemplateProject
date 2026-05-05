@@ -408,3 +408,79 @@ TEST(StackTest, CustomContainer_CorrectBehavior) {
     EXPECT_EQ(stack.size(), 3);
     EXPECT_EQ(stack.top(), 30);
 }
+
+/**
+ * @brief Test swap exchanges contents of two stacks
+ * @details Verifies that swap efficiently exchanges all elements
+ */
+TEST(StackTest, Swap_ExchangesContents) {
+    Stack<int> stack1;
+    stack1.push(10);
+    stack1.push(20);
+    stack1.push(30);
+
+    Stack<int> stack2;
+    stack2.push(100);
+    stack2.push(200);
+
+    stack1.swap(stack2);
+
+    EXPECT_EQ(stack1.size(), 2);
+    EXPECT_EQ(stack1.top(), 200);
+
+    EXPECT_EQ(stack2.size(), 3);
+    EXPECT_EQ(stack2.top(), 30);
+}
+
+/**
+ * @brief Test swap with empty stack
+ * @details Verifies swapping with an empty stack works correctly
+ */
+TEST(StackTest, Swap_WithEmptyStack) {
+    Stack<int> stack1;
+    stack1.push(10);
+    stack1.push(20);
+
+    Stack<int> stack2;
+
+    stack1.swap(stack2);
+
+    EXPECT_TRUE(stack1.empty());
+    EXPECT_EQ(stack2.size(), 2);
+    EXPECT_EQ(stack2.top(), 20);
+}
+
+/**
+ * @brief Test stack memory efficiency with move semantics
+ * @details Verifies that move operations are efficient
+ */
+TEST(StackTest, MoveSemantics_Efficiency) {
+    Stack<std::string> stack1;
+    for (int i = 0; i < 100; ++i) {
+        stack1.push("test_string_" + std::to_string(i));
+    }
+
+    // Move should be efficient
+    Stack<std::string> stack2(std::move(stack1));
+
+    EXPECT_EQ(stack2.size(), 100);
+    EXPECT_TRUE(stack1.empty());
+}
+
+/**
+ * @brief Test stack with zero values
+ * @details Verifies correct handling of zero elements
+ */
+TEST(StackTest, ZeroValues_CorrectHandling) {
+    Stack<int> stack;
+
+    stack.push(0);
+    stack.push(0);
+    stack.push(0);
+
+    EXPECT_EQ(stack.size(), 3);
+    EXPECT_EQ(stack.top(), 0);
+
+    stack.pop();
+    EXPECT_EQ(stack.top(), 0);
+}

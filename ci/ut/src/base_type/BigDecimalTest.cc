@@ -482,3 +482,132 @@ TEST(BigDecimalTest, Comparison_ConsistencyWithArithmetic) {
     EXPECT_TRUE(diff > BigDecimal{"0.0"});
     EXPECT_TRUE(a > b);
 }
+
+/**
+ * @brief Test constructor from empty string throws exception
+ * @details Verifies proper error handling for empty string input
+ */
+TEST(BigDecimalTest, Constructor_EmptyString_ThrowsException) {
+    EXPECT_THROW(BigDecimal big_decimal{""}, std::exception);
+}
+
+/**
+ * @brief Test constructor from invalid string throws exception
+ * @details Verifies proper error handling for non-numeric strings
+ */
+TEST(BigDecimalTest, Constructor_InvalidString_ThrowsException) {
+    EXPECT_THROW(BigDecimal big_decimal{"abc"}, std::exception);
+    EXPECT_THROW(BigDecimal big_decimal{"12.34.56"}, std::exception);
+    EXPECT_THROW(BigDecimal big_decimal{"--123"}, std::exception);
+}
+
+/**
+ * @brief Test constructor from string with only whitespace
+ * @details Verifies behavior with whitespace-only input
+ */
+TEST(BigDecimalTest, Constructor_WhitespaceString) {
+    EXPECT_THROW(BigDecimal big_decimal{"   "}, std::exception);
+}
+
+/**
+ * @brief Test constructor from very large number string
+ * @details Verifies handling of extremely large numbers
+ */
+TEST(BigDecimalTest, Constructor_VeryLargeNumber) {
+    const std::string large_num = "9" + std::string(100, '9') + "." + std::string(100, '9');
+    EXPECT_NO_THROW(BigDecimal big_decimal{large_num});
+}
+
+/**
+ * @brief Test constructor from very small number string
+ * @details Verifies handling of extremely small numbers close to zero
+ */
+TEST(BigDecimalTest, Constructor_VerySmallNumber) {
+    const std::string small_num = "0." + std::string(99, '0') + "1";
+    EXPECT_NO_THROW(BigDecimal big_decimal{small_num});
+}
+
+/**
+ * @brief Test division by very small number (near overflow)
+ * @details Verifies behavior when division result is extremely large
+ */
+TEST(BigDecimalTest, Division_ByVerySmallNumber) {
+    const BigDecimal a{"1.0"};
+    const BigDecimal b{"0.00000000000000000001"}; // 1e-20
+
+    // Should not throw, but result will be very large (1e20)
+    EXPECT_NO_THROW(const auto result = a / b);
+    const auto result = a / b;
+    
+    // 1.0 / 1e-20 = 1e20, verify it's a large positive number
+    EXPECT_TRUE(result > BigDecimal{"1.0"});
+    EXPECT_TRUE(result > BigDecimal{"1000000000.0"}); // Greater than 1 billion
+}
+
+/**
+ * @brief Test multiplication overflow behavior
+ * @details Verifies behavior with extremely large multiplication results
+ */
+TEST(BigDecimalTest, Multiplication_LargeResult) {
+    const BigDecimal a{"999999999999999999999999999999"};
+    const BigDecimal b{"999999999999999999999999999999"};
+
+    // Should handle large results without throwing
+    EXPECT_NO_THROW(const auto result = a * b);
+    const auto result = a * b;
+    EXPECT_TRUE(result > a);
+}
+
+/**
+ * @brief Test operations with negative zero
+ * @details Verifies that -0.0 is handled correctly
+ */
+TEST(BigDecimalTest, Operations_NegativeZero) {
+    const BigDecimal a{"-0.0"};
+    const BigDecimal b{"0.0"};
+
+    // -0.0 and 0.0 should be equal
+    EXPECT_EQ(a, b);
+}
+
+/**
+ * @brief Test comparison with very close values
+ * @details Verifies precision in comparing nearly equal values
+ */
+TEST(BigDecimalTest, Comparison_VeryCloseValues) {
+    const BigDecimal a{"1.00000000000000000001"};
+    const BigDecimal b{"1.00000000000000000002"};
+
+    EXPECT_TRUE(a < b);
+    EXPECT_TRUE(b > a);
+}
+
+/**
+ * @brief Test addition associativity
+ * @details Verifies that (a + b) + c == a + (b + c)
+ */
+TEST(BigDecimalTest, Addition_Associativity) {
+    const BigDecimal a{"1.1"};
+    const BigDecimal b{"2.2"};
+    const BigDecimal c{"3.3"};
+
+    const auto result1 = (a + b) + c;
+    const auto result2 = a + (b + c);
+
+    EXPECT_EQ(result1, result2);
+}
+
+/**
+ * @brief Test multiplication distributivity
+ * @details Verifies that a * (b + c) == a * b + a * c
+ */
+TEST(BigDecimalTest, Multiplication_Distributivity) {
+    const BigDecimal a{"2.5"};
+    const BigDecimal b{"3.0"};
+    const BigDecimal c{"4.0"};
+
+    const auto result1 = a * (b + c);
+    const auto result2 = a * b + a * c;
+
+    EXPECT_EQ(result1, result2);
+}

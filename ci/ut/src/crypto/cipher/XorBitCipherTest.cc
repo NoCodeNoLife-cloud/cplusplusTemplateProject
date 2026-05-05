@@ -171,3 +171,187 @@ TEST(XorBitCipherTest, Constructor_WithKey) {
 
     EXPECT_EQ(decrypted, plaintext);
 }
+
+/**
+ * @brief Test with single-byte key (minimum valid key)
+ */
+TEST(XorBitCipherTest, Initialize_SingleByteKey) {
+    XorBitCipher cipher;
+    const std::vector<uint8_t> key = {0xFF};
+    const std::vector<uint8_t> nonce;
+
+    EXPECT_NO_THROW(cipher.initialize(key, nonce));
+    EXPECT_TRUE(cipher.isInitialized());
+
+    const std::vector<uint8_t> plaintext = {0xAA, 0xBB, 0xCC};
+    const auto ciphertext = cipher.encrypt(plaintext);
+    EXPECT_EQ(ciphertext.size(), plaintext.size());
+}
+
+/**
+ * @brief Test with very large key
+ */
+TEST(XorBitCipherTest, Initialize_LargeKey) {
+    XorBitCipher cipher;
+    std::vector<uint8_t> key(10000, 0x42); // 10KB key
+    const std::vector<uint8_t> nonce;
+
+    EXPECT_NO_THROW(cipher.initialize(key, nonce));
+    EXPECT_TRUE(cipher.isInitialized());
+}
+
+/**
+ * @brief Test encryption of very large data
+ */
+TEST(XorBitCipherTest, Encrypt_LargeData) {
+    const std::vector<uint8_t> key = {0xAB, 0xCD};
+    const std::vector<uint8_t> nonce;
+
+    XorBitCipher cipher;
+    cipher.initialize(key, nonce);
+
+    std::vector<uint8_t> plaintext(100000, 0x55); // 100KB data
+    EXPECT_NO_THROW(const auto ciphertext = cipher.encrypt(plaintext));
+    const auto ciphertext = cipher.encrypt(plaintext);
+    EXPECT_EQ(ciphertext.size(), plaintext.size());
+}
+
+/**
+ * @brief Test keystream generation with zero length
+ */
+TEST(XorBitCipherTest, GenerateKeystream_ZeroLength) {
+    XorBitCipher cipher;
+    const std::vector<uint8_t> key = {0x12, 0x34};
+    const std::vector<uint8_t> nonce;
+
+    cipher.initialize(key, nonce);
+
+    const auto keystream = cipher.generateKeystream(0);
+    EXPECT_TRUE(keystream.empty());
+}
+
+/**
+ * @brief Test keystream generation with very large length
+ */
+TEST(XorBitCipherTest, GenerateKeystream_LargeLength) {
+    XorBitCipher cipher;
+    const std::vector<uint8_t> key = {0xAA, 0xBB, 0xCC, 0xDD};
+    const std::vector<uint8_t> nonce;
+
+    cipher.initialize(key, nonce);
+
+    const auto keystream = cipher.generateKeystream(50000);
+    EXPECT_EQ(keystream.size(), 50000);
+}
+
+/**
+ * @brief Test processBits functionality
+ */
+TEST(XorBitCipherTest, ProcessBits_Basic) {
+    XorBitCipher cipher;
+    const std::vector<uint8_t> key = {0xF0}; // 11110000 in binary
+    const std::vector<uint8_t> nonce;
+
+    cipher.initialize(key, nonce);
+
+    std::vector<bool> bits = {true, false, true, false, true, false, true, false};
+    const auto processed = cipher.processBits(bits);
+
+    EXPECT_EQ(processed.size(), bits.size());
+    // XOR with 11110000 should flip first 4 bits
+    EXPECT_EQ(processed[0], !bits[0]);
+    EXPECT_EQ(processed[1], !bits[1]);
+    EXPECT_EQ(processed[2], !bits[2]);
+    EXPECT_EQ(processed[3], !bits[3]);
+}
+
+/**
+ * @brief Test processBits with empty input
+ */
+TEST(XorBitCipherTest, ProcessBits_EmptyInput) {
+    XorBitCipher cipher;
+    const std::vector<uint8_t> key = {0x12};
+    const std::vector<uint8_t> nonce;
+
+    cipher.initialize(key, nonce);
+
+    const std::vector<bool> bits;
+    const auto processed = cipher.processBits(bits);
+    EXPECT_TRUE(processed.empty());
+}
+
+/**
+ * @brief Test processInPlace functionality
+ */
+TEST(XorBitCipherTest, ProcessInPlace_Basic) {
+    XorBitCipher cipher;
+    const std::vector<uint8_t> key = {0xFF}; // All bits set
+    const std::vector<uint8_t> nonce;
+
+    cipher.initialize(key, nonce);
+
+    std::vector<uint8_t> data = {0xAA, 0xBB, 0xCC};
+    cipher.processInPlace(data);
+
+    // XOR with 0xFF should complement all bits
+    EXPECT_EQ(data[0], 0x55);
+    EXPECT_EQ(data[1], 0x44);
+    EXPECT_EQ(data[2], 0x33);
+}
+
+/**
+ * @brief Test multiple reset operations
+ */
+TEST(XorBitCipherTest, Reset_MultipleTimes) {
+    XorBitCipher cipher;
+    const std::vector<uint8_t> key = {0x42};
+    const std::vector<uint8_t> nonce;
+
+    cipher.initialize(key, nonce);
+
+    const std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03};
+
+    // Encrypt, reset, encrypt again - should get same result
+    const auto ciphertext1 = cipher.encrypt(plaintext);
+    cipher.reset();
+    const auto ciphertext2 = cipher.encrypt(plaintext);
+    cipher.reset();
+    const auto ciphertext3 = cipher.encrypt(plaintext);
+
+    EXPECT_EQ(ciphertext1, ciphertext2);
+    EXPECT_EQ(ciphertext2, ciphertext3);
+}
+
+/**
+ * @brief Test getCurrentPosition during encryption
+ */
+TEST(XorBitCipherTest, GetCurrentPosition_DuringEncryption) {
+    XorBitCipher cipher;
+    const std::vector<uint8_t> key = {0x01, 0x02, 0x03, 0x04};
+    const std::vector<uint8_t> nonce;
+
+    cipher.initialize(key, nonce);
+
+    EXPECT_EQ(cipher.getCurrentPosition(), 0);
+
+    const std::vector<uint8_t> plaintext(10, 0x00);
+    cipher.encrypt(plaintext);
+
+    // After encrypting 10 bytes with 4-byte key, position should be 10 % 4 = 2
+    EXPECT_EQ(cipher.getCurrentPosition(), 2);
+}
+
+/**
+ * @brief Test hasKey before and after initialization
+ */
+TEST(XorBitCipherTest, HasKey_BeforeAndAfterInit) {
+    XorBitCipher cipher;
+
+    EXPECT_FALSE(cipher.hasKey());
+
+    const std::vector<uint8_t> key = {0x12};
+    const std::vector<uint8_t> nonce;
+    cipher.initialize(key, nonce);
+
+    EXPECT_TRUE(cipher.hasKey());
+}

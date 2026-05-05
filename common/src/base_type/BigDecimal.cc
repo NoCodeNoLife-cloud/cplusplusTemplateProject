@@ -7,7 +7,11 @@
 #include <compare>
 
 namespace common::base_type {
-BigDecimal::BigDecimal(const std::string& str) : value_(str) {
+BigDecimal::BigDecimal(const std::string& str) : value_(0) {
+    if (str.empty()) {
+        throw std::invalid_argument("Cannot construct BigDecimal from empty string");
+    }
+    value_ = boost::multiprecision::cpp_dec_float_100(str);
 }
 
 BigDecimal::BigDecimal(const double num) : value_(num) {

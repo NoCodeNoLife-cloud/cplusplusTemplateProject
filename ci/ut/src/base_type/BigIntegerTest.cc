@@ -491,3 +491,143 @@ TEST(BigIntegerTest, Operations_PreserveImmutability) {
     EXPECT_EQ(sum, BigInteger::fromInt(150));
     EXPECT_EQ(diff, BigInteger::fromInt(50));
 }
+
+/**
+ * @brief Test constructor from empty string throws exception
+ * @details Verifies proper error handling for empty string input
+ */
+TEST(BigIntegerTest, Constructor_EmptyString_ThrowsException) {
+    EXPECT_THROW(BigInteger::fromString(""), std::exception);
+}
+
+/**
+ * @brief Test constructor from invalid string throws exception
+ * @details Verifies proper error handling for non-numeric strings
+ */
+TEST(BigIntegerTest, Constructor_InvalidString_ThrowsException) {
+    EXPECT_THROW(BigInteger::fromString("abc"), std::exception);
+    EXPECT_THROW(BigInteger::fromString("12.34"), std::exception); // Decimal point not allowed
+    EXPECT_THROW(BigInteger::fromString("--123"), std::exception);
+}
+
+/**
+ * @brief Test constructor from string with only whitespace
+ * @details Verifies behavior with whitespace-only input
+ */
+TEST(BigIntegerTest, Constructor_WhitespaceString) {
+    EXPECT_THROW(BigInteger::fromString("   "), std::exception);
+}
+
+/**
+ * @brief Test constructor from extremely large number string
+ * @details Verifies handling of numbers with hundreds of digits
+ */
+TEST(BigIntegerTest, Constructor_ExtremelyLargeNumber) {
+    const std::string huge_num = std::string(500, '9'); // 500-digit number
+    EXPECT_NO_THROW(const BigInteger big_int = BigInteger::fromString(huge_num));
+    const BigInteger big_int = BigInteger::fromString(huge_num);
+    EXPECT_GT(big_int, BigInteger::fromInt(0));
+}
+
+/**
+ * @brief Test multiplication with very large numbers
+ * @details Verifies correct handling of huge multiplication results
+ */
+TEST(BigIntegerTest, Multiplication_HugeNumbers) {
+    const BigInteger a{std::string(100, '9')}; // 100-digit number
+    const BigInteger b{std::string(100, '9')};
+
+    EXPECT_NO_THROW(const auto result = a * b);
+    const auto result = a * b;
+    EXPECT_GT(result, a);
+    EXPECT_GT(result, b);
+}
+
+/**
+ * @brief Test power operation (repeated multiplication)
+ * @details Verifies that repeated multiplication works correctly
+ */
+TEST(BigIntegerTest, Power_RepeatedMultiplication) {
+    const BigInteger base{2};
+    
+    BigInteger result{1};
+    for (int i = 0; i < 100; ++i) {
+        result = result * base;
+    }
+
+    // 2^100 should be a very large number
+    EXPECT_GT(result, BigInteger::fromInt(1000000));
+}
+
+/**
+ * @brief Test division and modulus consistency
+ * @details Verifies that (a / b) * b + (a % b) == a
+ */
+TEST(BigIntegerTest, Division_Modulus_Consistency) {
+    const BigInteger a{12345};
+    const BigInteger b{67};
+
+    const auto quotient = a / b;
+    const auto remainder = a % b;
+    const auto reconstructed = quotient * b + remainder;
+
+    EXPECT_EQ(reconstructed, a);
+}
+
+/**
+ * @brief Test modulo with negative numbers
+ * @details Verifies correct behavior of modulo with negative operands
+ */
+TEST(BigIntegerTest, Modulus_NegativeNumbers) {
+    const BigInteger a{-100};
+    const BigInteger b{30};
+
+    const auto result = a % b;
+    
+    // Result sign follows dividend in C++
+    EXPECT_TRUE(result < BigInteger::fromInt(0));
+}
+
+/**
+ * @brief Test comparison with zero
+ * @details Verifies correct comparison behavior with zero
+ */
+TEST(BigIntegerTest, Comparison_WithZero) {
+    const BigInteger positive{1};
+    const BigInteger negative{-1};
+    const BigInteger zero{0};
+
+    EXPECT_TRUE(positive > zero);
+    EXPECT_TRUE(negative < zero);
+    EXPECT_FALSE(zero > zero);
+    EXPECT_FALSE(zero < zero);
+    EXPECT_TRUE(zero == zero);
+}
+
+/**
+ * @brief Test addition commutativity
+ * @details Verifies that a + b == b + a
+ */
+TEST(BigIntegerTest, Addition_Commutativity) {
+    const BigInteger a{12345};
+    const BigInteger b{67890};
+
+    const auto result1 = a + b;
+    const auto result2 = b + a;
+
+    EXPECT_EQ(result1, result2);
+}
+
+/**
+ * @brief Test multiplication commutativity
+ * @details Verifies that a * b == b * a
+ */
+TEST(BigIntegerTest, Multiplication_Commutativity) {
+    const BigInteger a{123};
+    const BigInteger b{456};
+
+    const auto result1 = a * b;
+    const auto result2 = b * a;
+
+    EXPECT_EQ(result1, result2);
+}

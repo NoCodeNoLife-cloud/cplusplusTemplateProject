@@ -59,6 +59,10 @@ public:
     /// @return The number of elements in the stack.
     [[nodiscard]] auto size() const noexcept -> size_t;
 
+    /// @brief Swaps the contents of this stack with another stack.
+    /// @param other The stack to swap with.
+    auto swap(Stack& other) noexcept -> void;
+
 private:
     Container data_{};
 };
@@ -119,5 +123,11 @@ auto Stack<T, Container>::empty() const noexcept -> bool {
 template <std::movable T, typename Container>
 auto Stack<T, Container>::size() const noexcept -> size_t {
     return data_.size();
+}
+
+template <std::movable T, typename Container>
+auto Stack<T, Container>::swap(Stack& other) noexcept -> void {
+    using std::swap;
+    swap(data_, other.data_);
 }
 }

@@ -10,7 +10,11 @@ namespace common::base_type {
 BigInteger::BigInteger() noexcept : value_(0) {
 }
 
-BigInteger::BigInteger(const std::string& str) : value_(str) {
+BigInteger::BigInteger(const std::string& str) : value_(0) {
+    if (str.empty()) {
+        throw std::invalid_argument("Cannot construct BigInteger from empty string");
+    }
+    value_ = boost::multiprecision::cpp_int(str);
 }
 
 BigInteger::BigInteger(const int64_t num) noexcept : value_(num) {

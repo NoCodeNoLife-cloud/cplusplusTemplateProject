@@ -510,3 +510,115 @@ TEST(HeapTest, MixedSignNumbers_CorrectHandling) {
     heap.pop();
     EXPECT_EQ(heap.top(), 50);
 }
+
+/**
+ * @brief Test heap with all equal elements
+ * @details Verifies correct handling when all elements are the same
+ */
+TEST(HeapTest, AllEqualElements_CorrectHandling) {
+    Heap<int> heap;
+
+    for (int i = 0; i < 10; ++i) {
+        heap.push(42);
+    }
+
+    EXPECT_EQ(heap.size(), 10);
+    EXPECT_TRUE(heap.is_valid());
+    EXPECT_EQ(heap.top(), 42);
+
+    // Pop all elements
+    for (int i = 0; i < 10; ++i) {
+        EXPECT_EQ(heap.top(), 42);
+        heap.pop();
+    }
+
+    EXPECT_TRUE(heap.empty());
+}
+
+/**
+ * @brief Test heap swap operation
+ * @details Verifies that swap exchanges contents correctly
+ */
+TEST(HeapTest, Swap_ExchangesContents) {
+    Heap<int> heap1;
+    heap1.push(10);
+    heap1.push(20);
+    heap1.push(30);
+
+    Heap<int> heap2;
+    heap2.push(100);
+    heap2.push(200);
+
+    heap1.swap(heap2);
+
+    EXPECT_EQ(heap1.size(), 2);
+    EXPECT_EQ(heap1.top(), 200);
+    EXPECT_TRUE(heap1.is_valid());
+
+    EXPECT_EQ(heap2.size(), 3);
+    EXPECT_EQ(heap2.top(), 30);
+    EXPECT_TRUE(heap2.is_valid());
+}
+
+/**
+ * @brief Test heap with zero values
+ * @details Verifies correct handling of zero elements
+ */
+TEST(HeapTest, ZeroValues_CorrectHandling) {
+    Heap<int> heap;
+
+    heap.push(0);
+    heap.push(0);
+    heap.push(0);
+
+    EXPECT_EQ(heap.size(), 3);
+    EXPECT_TRUE(heap.is_valid());
+    EXPECT_EQ(heap.top(), 0);
+}
+
+/**
+ * @brief Test heap extraction in sorted order
+ * @details Verifies that popping all elements yields sorted sequence
+ */
+TEST(HeapTest, Extraction_SortedOrder) {
+    Heap<int> heap;
+    std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
+
+    for (int val : input) {
+        heap.push(val);
+    }
+
+    std::vector<int> extracted;
+    while (!heap.empty()) {
+        extracted.push_back(heap.top());
+        heap.pop();
+    }
+
+    // Should be in descending order for max-heap
+    std::sort(input.rbegin(), input.rend());
+    EXPECT_EQ(extracted, input);
+}
+
+/**
+ * @brief Test heap with custom comparator for min-heap behavior
+ * @details Verifies that custom comparators work correctly
+ */
+TEST(HeapTest, MinHeap_ExtractionOrder) {
+    Heap<int, std::greater<int> > heap;
+
+    heap.push(5);
+    heap.push(3);
+    heap.push(8);
+    heap.push(1);
+    heap.push(9);
+
+    std::vector<int> extracted;
+    while (!heap.empty()) {
+        extracted.push_back(heap.top());
+        heap.pop();
+    }
+
+    // Should be in ascending order for min-heap
+    std::vector<int> expected = {1, 3, 5, 8, 9};
+    EXPECT_EQ(extracted, expected);
+}
