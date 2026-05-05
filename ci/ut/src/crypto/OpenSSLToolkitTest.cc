@@ -21,11 +21,11 @@ using namespace common::crypto;
  */
 TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput) {
     const std::string password = "test_password";
-    std::array < unsigned char, 16 > salt{};
+    std::array<unsigned char, 16> salt{};
     salt.fill(0x42); // Fixed salt for reproducibility
 
-    std::array < unsigned char, 32 > key1{};
-    std::array < unsigned char, 32 > key2{};
+    std::array<unsigned char, 32> key1{};
+    std::array<unsigned char, 32> key2{};
 
     OpenSSLToolkit::deriveKey(password, key1, salt);
     OpenSSLToolkit::deriveKey(password, key2, salt);
@@ -38,11 +38,11 @@ TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput) {
  * @details Verifies that different passwords result in different derived keys
  */
 TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys) {
-    std::array < unsigned char, 16 > salt{};
+    std::array<unsigned char, 16> salt{};
     salt.fill(0x42);
 
-    std::array < unsigned char, 32 > key1{};
-    std::array < unsigned char, 32 > key2{};
+    std::array<unsigned char, 32> key1{};
+    std::array<unsigned char, 32> key2{};
 
     OpenSSLToolkit::deriveKey("password1", key1, salt);
     OpenSSLToolkit::deriveKey("password2", key2, salt);
@@ -57,14 +57,14 @@ TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys) {
 TEST(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys) {
     const std::string password = "same_password";
 
-    std::array < unsigned char, 16 > salt1{};
+    std::array<unsigned char, 16> salt1{};
     salt1.fill(0x42);
 
-    std::array < unsigned char, 16 > salt2{};
+    std::array<unsigned char, 16> salt2{};
     salt2.fill(0x99);
 
-    std::array < unsigned char, 32 > key1{};
-    std::array < unsigned char, 32 > key2{};
+    std::array<unsigned char, 32> key1{};
+    std::array<unsigned char, 32> key2{};
 
     OpenSSLToolkit::deriveKey(password, key1, salt1);
     OpenSSLToolkit::deriveKey(password, key2, salt2);
@@ -123,7 +123,7 @@ TEST(OpenSSLToolkitTest, EncryptAES256CBC_APIValidation) {
         const auto ciphertext = OpenSSLToolkit::encryptAES256CBC(plaintext, password);
         // If it succeeds, ciphertext should have minimum size
         EXPECT_GE(ciphertext.size(), 32); // salt + IV minimum
-    } catch (const std::runtime_error &) {
+    } catch (const std::runtime_error&) {
         // Expected if there are implementation issues
         SUCCEED() << "Encryption failed as expected due to implementation limitations";
     }

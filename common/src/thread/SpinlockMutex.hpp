@@ -3,46 +3,46 @@
 #include <chrono>
 
 namespace common::thread {
-    /// @brief A spinlock mutex implementation using atomic_flag for synchronization.
-    /// This class provides a simple and efficient synchronization mechanism
-    /// suitable for protecting small critical sections where the lock is held
-    /// for a short duration.
-    class SpinlockMutex {
-    public:
-        /// @brief Default constructor initializes the spinlock in unlocked state.
-        SpinlockMutex() noexcept = default;
+/// @brief A spinlock mutex implementation using atomic_flag for synchronization.
+/// This class provides a simple and efficient synchronization mechanism
+/// suitable for protecting small critical sections where the lock is held
+/// for a short duration.
+class SpinlockMutex {
+public:
+    /// @brief Default constructor initializes the spinlock in unlocked state.
+    SpinlockMutex() noexcept = default;
 
-        /// @brief Copy constructor is deleted to prevent copying of mutex.
-        SpinlockMutex(const SpinlockMutex &) = delete;
+    /// @brief Copy constructor is deleted to prevent copying of mutex.
+    SpinlockMutex(const SpinlockMutex&) = delete;
 
-        /// @brief Assignment operator is deleted to prevent assignment of mutex.
-        SpinlockMutex &operator=(const SpinlockMutex &) = delete;
+    /// @brief Assignment operator is deleted to prevent assignment of mutex.
+    SpinlockMutex& operator=(const SpinlockMutex&) = delete;
 
-        /// @brief Move constructor is deleted to prevent moving of mutex.
-        SpinlockMutex(SpinlockMutex &&) = delete;
+    /// @brief Move constructor is deleted to prevent moving of mutex.
+    SpinlockMutex(SpinlockMutex&&) = delete;
 
-        /// @brief Move assignment operator is deleted to prevent moving of mutex.
-        SpinlockMutex &operator=(SpinlockMutex &&) = delete;
+    /// @brief Move assignment operator is deleted to prevent moving of mutex.
+    SpinlockMutex& operator=(SpinlockMutex&&) = delete;
 
-        /// @brief Locks the spinlock, blocking until the lock is acquired.
-        /// Uses test_and_set in a loop with yielding to reduce CPU usage.
-        auto lock() noexcept -> void;
+    /// @brief Locks the spinlock, blocking until the lock is acquired.
+    /// Uses test_and_set in a loop with yielding to reduce CPU usage.
+    auto lock() noexcept -> void;
 
-        /// @brief Attempts to lock the spinlock without blocking.
-        /// @return true if the lock was acquired, false otherwise.
-        [[nodiscard]] auto try_lock() noexcept -> bool;
+    /// @brief Attempts to lock the spinlock without blocking.
+    /// @return true if the lock was acquired, false otherwise.
+    [[nodiscard]] auto try_lock() noexcept -> bool;
 
-        /// @brief Attempts to lock the spinlock within the specified timeout period.
-        /// @param timeout_duration Maximum time to wait for the lock
-        /// @return true if the lock was acquired, false if timeout occurred
-        template<typename Rep, typename Period>
-        [[nodiscard]] auto try_lock_for(const std::chrono::duration<Rep, Period> &timeout_duration) noexcept -> bool;
+    /// @brief Attempts to lock the spinlock within the specified timeout period.
+    /// @param timeout_duration Maximum time to wait for the lock
+    /// @return true if the lock was acquired, false if timeout occurred
+    template <typename Rep, typename Period>
+    [[nodiscard]] auto try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration) noexcept -> bool;
 
-        /// @brief Unlocks the spinlock, allowing other threads to acquire it.
-        /// Clears the atomic flag with release memory ordering.
-        auto unlock() noexcept -> void;
+    /// @brief Unlocks the spinlock, allowing other threads to acquire it.
+    /// Clears the atomic flag with release memory ordering.
+    auto unlock() noexcept -> void;
 
-    private:
-        std::atomic_flag flag_{};
-    };
+private:
+    std::atomic_flag flag_{};
+};
 }

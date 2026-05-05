@@ -3,30 +3,30 @@
 #include <cstdint>
 
 namespace common::graphics {
-    Edge::Edge(const int32_t to, const int32_t weight) noexcept : to_(to), weight_(weight) {
-    }
+Edge::Edge(const int32_t to, const int32_t weight) noexcept : to_(to), weight_(weight) {
+}
 
-    auto Edge::to() const noexcept -> int32_t {
-        return to_;
-    }
+auto Edge::to() const noexcept -> int32_t {
+    return to_;
+}
 
-    auto Edge::setTo(const int32_t to) noexcept -> void {
-        to_ = to;
-    }
+auto Edge::setTo(const int32_t to) noexcept -> void {
+    to_ = to;
+}
 
-    auto Edge::weight() const noexcept -> int32_t {
-        return weight_;
-    }
+auto Edge::weight() const noexcept -> int32_t {
+    return weight_;
+}
 
-    auto Edge::setWeight(const int32_t weight) noexcept -> void {
-        weight_ = weight;
-    }
+auto Edge::setWeight(const int32_t weight) noexcept -> void {
+    weight_ = weight;
+}
 
-    auto Edge::operator==(const Edge &other) const noexcept -> bool {
-        return to_ == other.to_ && weight_ == other.weight_;
-    }
+auto Edge::operator==(const Edge& other) const noexcept -> bool {
+    return to_ == other.to_ && weight_ == other.weight_;
+}
 
-    auto Edge::operator!=(const Edge &other) const noexcept -> bool {
-        return !(*this == other);
-    }
+auto Edge::operator!=(const Edge& other) const noexcept -> bool {
+    return !(*this == other);
+}
 }

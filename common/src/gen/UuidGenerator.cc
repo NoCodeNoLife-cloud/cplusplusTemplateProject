@@ -7,11 +7,11 @@
 #include <string>
 
 namespace common::gen {
-    // ReSharper disable once CppDFAConstantFunctionResult
-    auto UuidGenerator::GenerateRandomUuid() noexcept -> std::string {
-        static auto generator = boost::uuids::random_generator();
-        const auto uuid = generator();
-        const auto uuid_str = boost::uuids::to_string(uuid);
-        return uuid_str;
-    }
+// ReSharper disable once CppDFAConstantFunctionResult
+auto UuidGenerator::GenerateRandomUuid() noexcept -> std::string {
+    static auto generator = boost::uuids::random_generator();
+    const auto uuid = generator();
+    const auto uuid_str = boost::uuids::to_string(uuid);
+    return uuid_str;
+}
 }

@@ -168,7 +168,7 @@ TEST(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException) {
     EXPECT_THROW(
         ObjectFactory<IShape>::createObject("UnknownShape"),
         std::runtime_error
-    );
+        );
 }
 
 /**
@@ -179,7 +179,7 @@ TEST(ObjectFactoryTest, CreateObject_EmptyTypeName_ThrowsException) {
     EXPECT_THROW(
         ObjectFactory<IShape>::createObject(""),
         std::invalid_argument
-    );
+        );
 }
 
 TEST(ObjectFactoryTest, RegisterType_EmptyTypeName_ThrowsException) {
@@ -188,7 +188,7 @@ TEST(ObjectFactoryTest, RegisterType_EmptyTypeName_ThrowsException) {
     EXPECT_THROW(
         ObjectFactory<IShape>::registerType<Circle>("", 1.0),
         std::invalid_argument
-    );
+        );
 }
 
 /**
@@ -334,7 +334,7 @@ TEST(ObjectFactoryTest, PolymorphicBehavior) {
     std::vector<std::string> shape_names = {"Circle", "Rectangle", "Triangle"};
     std::vector<std::unique_ptr<IShape> > shapes;
 
-    for (const auto &name: shape_names) {
+    for (const auto& name : shape_names) {
         shapes.push_back(ObjectFactory<IShape>::createObject(name));
     }
 
@@ -372,10 +372,10 @@ TEST(ObjectFactoryTest, Inheritance_FromIStartupTask) {
     static_assert(
         std::is_base_of_v<common::interfaces::IStartupTask, ObjectFactory<IShape> >,
         "ObjectFactory should inherit from IStartupTask"
-    );
+        );
 
     ShapeFactory factory;
-    common::interfaces::IStartupTask *task = &factory;
+    common::interfaces::IStartupTask* task = &factory;
 
     EXPECT_TRUE(task->execute());
 }

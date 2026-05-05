@@ -405,15 +405,15 @@ TEST(RadixToolkitTest, Boundary_UnderflowNegative_ThrowsException) {
  */
 TEST(RadixToolkitTest, TypeVariants_DifferentIntegralTypes) {
     RadixToolkit toolkit;
-    
+
     // short
     EXPECT_EQ(toolkit.to_string(static_cast<short>(100)), "100");
     EXPECT_EQ(toolkit.from_string<short>("100"), 100);
-    
+
     // long
     EXPECT_EQ(toolkit.to_string(static_cast<long>(1000)), "1000");
     EXPECT_EQ(toolkit.from_string<long>("1000"), 1000);
-    
+
     // long long
     EXPECT_EQ(toolkit.to_string(static_cast<long long>(10000)), "10000");
     EXPECT_EQ(toolkit.from_string<long long>("10000"), 10000);
@@ -438,7 +438,7 @@ TEST(RadixToolkitTest, TypeVariants_UnsignedBoundary) {
 TEST(RadixToolkitTest, RoundTrip_ConversionConsistency) {
     RadixToolkit toolkit;
     std::vector<int> test_values = {0, 1, -1, 42, -42, 100, -100, 255, 1024, -1024};
-    
+
     for (int val : test_values) {
         auto str = toolkit.to_string(val);
         auto parsed = toolkit.from_string<int>(str);
@@ -453,7 +453,7 @@ TEST(RadixToolkitTest, RoundTrip_ConversionConsistency) {
 TEST(RadixToolkitTest, RoundTrip_DifferentBases) {
     std::vector<int> bases = {2, 8, 10, 16, 32};
     std::vector<int> values = {0, 1, 42, 255, 1024};
-    
+
     for (int base : bases) {
         for (int val : values) {
             auto str = RadixToolkit::convert_to_string<int>(val, base, std::string_view("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"));

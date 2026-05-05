@@ -41,14 +41,14 @@ TEST(LFUCacheTest, Constructor_NegativeCapacity) {
  */
 TEST(LFUCacheTest, PutAndGet_Basic) {
     LFUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
-    
+
     auto result2 = cache.get(2);
     ASSERT_TRUE(result2.has_value());
     EXPECT_EQ(result2.value(), "two");
@@ -60,10 +60,10 @@ TEST(LFUCacheTest, PutAndGet_Basic) {
  */
 TEST(LFUCacheTest, Get_NonExistentKey) {
     LFUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     auto result = cache.get(999);
-    
+
     EXPECT_FALSE(result.has_value());
 }
 
@@ -73,10 +73,10 @@ TEST(LFUCacheTest, Get_NonExistentKey) {
  */
 TEST(LFUCacheTest, Put_UpdateExistingKey) {
     LFUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(1, "ONE"));
-    
+
     auto result = cache.get(1);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "ONE");
@@ -88,28 +88,28 @@ TEST(LFUCacheTest, Put_UpdateExistingKey) {
  */
 TEST(LFUCacheTest, Eviction_LFU_Policy) {
     LFUCache<int, std::string> cache(2);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     // Access key 1 twice to increase its frequency
     auto val1 = cache.get(1);
     ASSERT_TRUE(val1.has_value());
     val1 = cache.get(1);
     ASSERT_TRUE(val1.has_value());
-    
+
     // Cache is full, adding new item should evict key 2 (lower frequency)
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     // Key 2 should be evicted
     auto result2 = cache.get(2);
     EXPECT_FALSE(result2.has_value());
-    
+
     // Key 1 and 3 should still exist
     auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
-    
+
     auto result3 = cache.get(3);
     ASSERT_TRUE(result3.has_value());
     EXPECT_EQ(result3.value(), "three");
@@ -121,21 +121,21 @@ TEST(LFUCacheTest, Eviction_LFU_Policy) {
  */
 TEST(LFUCacheTest, Eviction_SameFrequency_LRUTiebreaker) {
     LFUCache<int, std::string> cache(2);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     // Both have frequency 1, key 1 was added first (LRU)
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     // Key 1 should be evicted (least recently used among frequency 1)
     auto result1 = cache.get(1);
     EXPECT_FALSE(result1.has_value());
-    
+
     auto result2 = cache.get(2);
     ASSERT_TRUE(result2.has_value());
     EXPECT_EQ(result2.value(), "two");
-    
+
     auto result3 = cache.get(3);
     ASSERT_TRUE(result3.has_value());
     EXPECT_EQ(result3.value(), "three");
@@ -147,10 +147,10 @@ TEST(LFUCacheTest, Eviction_SameFrequency_LRUTiebreaker) {
  */
 TEST(LFUCacheTest, Put_RValueReference) {
     LFUCache<int, std::string> cache(3);
-    
+
     std::string value = "test";
     EXPECT_TRUE(cache.put(1, std::move(value)));
-    
+
     auto result = cache.get(1);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "test");
@@ -162,16 +162,16 @@ TEST(LFUCacheTest, Put_RValueReference) {
  */
 TEST(LFUCacheTest, Remove_ExistingKey) {
     LFUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     bool removed = cache.remove(1);
     EXPECT_TRUE(removed);
-    
+
     auto result = cache.get(1);
     EXPECT_FALSE(result.has_value());
-    
+
     // Key 2 should still exist
     auto result2 = cache.get(2);
     ASSERT_TRUE(result2.has_value());
@@ -184,9 +184,9 @@ TEST(LFUCacheTest, Remove_ExistingKey) {
  */
 TEST(LFUCacheTest, Remove_NonExistentKey) {
     LFUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
-    
+
     bool removed = cache.remove(999);
     EXPECT_FALSE(removed);
 }
@@ -197,16 +197,16 @@ TEST(LFUCacheTest, Remove_NonExistentKey) {
  */
 TEST(LFUCacheTest, Clear_AllEntries) {
     LFUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     cache.clear();
-    
+
     EXPECT_EQ(cache.size(), 0);
     EXPECT_TRUE(cache.empty());
-    
+
     // All keys should be gone
     EXPECT_FALSE(cache.get(1).has_value());
     EXPECT_FALSE(cache.get(2).has_value());
@@ -219,17 +219,17 @@ TEST(LFUCacheTest, Clear_AllEntries) {
  */
 TEST(LFUCacheTest, Size_CorrectCount) {
     LFUCache<int, std::string> cache(5);
-    
+
     EXPECT_EQ(cache.size(), 0);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_EQ(cache.size(), 1);
-    
+
     EXPECT_TRUE(cache.put(2, "two"));
     EXPECT_EQ(cache.size(), 2);
-    
+
     EXPECT_TRUE(cache.put(1, "ONE")); // Update existing
-    EXPECT_EQ(cache.size(), 2); // Size should not change on update
+    EXPECT_EQ(cache.size(), 2);       // Size should not change on update
 }
 
 /**
@@ -248,12 +248,12 @@ TEST(LFUCacheTest, Capacity_CorrectValue) {
  */
 TEST(LFUCacheTest, Empty_CorrectState) {
     LFUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.empty());
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_FALSE(cache.empty());
-    
+
     cache.clear();
     EXPECT_TRUE(cache.empty());
 }
@@ -264,12 +264,12 @@ TEST(LFUCacheTest, Empty_CorrectState) {
  */
 TEST(LFUCacheTest, Contains_ExistingKey) {
     LFUCache<int, std::string> cache(3);
-    
+
     EXPECT_FALSE(cache.contains(1));
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.contains(1));
-    
+
     EXPECT_TRUE(cache.remove(1));
     EXPECT_FALSE(cache.contains(1));
 }
@@ -280,10 +280,10 @@ TEST(LFUCacheTest, Contains_ExistingKey) {
  */
 TEST(LFUCacheTest, FrequencyUpdate_OnGet) {
     LFUCache<int, std::string> cache(2);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     // Access key 1 multiple times
     auto val = cache.get(1);
     ASSERT_TRUE(val.has_value());
@@ -291,10 +291,10 @@ TEST(LFUCacheTest, FrequencyUpdate_OnGet) {
     ASSERT_TRUE(val.has_value());
     val = cache.get(1);
     ASSERT_TRUE(val.has_value());
-    
+
     // Add new item, should evict key 2 (lower frequency)
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     EXPECT_FALSE(cache.contains(2));
     EXPECT_TRUE(cache.contains(1));
     EXPECT_TRUE(cache.contains(3));
@@ -306,16 +306,16 @@ TEST(LFUCacheTest, FrequencyUpdate_OnGet) {
  */
 TEST(LFUCacheTest, FrequencyUpdate_OnPutUpdate) {
     LFUCache<int, std::string> cache(2);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     // Update key 1 (increases frequency)
     EXPECT_TRUE(cache.put(1, "ONE"));
-    
+
     // Add new item, should evict key 2 (lower frequency)
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     EXPECT_FALSE(cache.contains(2));
     EXPECT_TRUE(cache.contains(1));
     EXPECT_TRUE(cache.contains(3));
@@ -327,15 +327,15 @@ TEST(LFUCacheTest, FrequencyUpdate_OnPutUpdate) {
  */
 TEST(LFUCacheTest, EdgeCase_CapacityOne) {
     LFUCache<int, std::string> cache(1);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
-    
+
     // Adding second item should evict first
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     EXPECT_FALSE(cache.contains(1));
     EXPECT_TRUE(cache.contains(2));
 }
@@ -347,10 +347,10 @@ TEST(LFUCacheTest, EdgeCase_CapacityOne) {
 TEST(LFUCacheTest, Get_ConstVersion) {
     LFUCache<int, std::string> cache(3);
     EXPECT_TRUE(cache.put(1, "one"));
-    
-    const LFUCache<int, std::string> &constCache = cache;
+
+    const LFUCache<int, std::string>& constCache = cache;
     auto result = constCache.get(1);
-    
+
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "one");
 }

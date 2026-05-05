@@ -218,7 +218,7 @@ TEST(RandomGeneratorTest, NextString_ValidCharset) {
 
     const auto result = generator.nextString(1000, charset);
 
-    for (const char c: result) {
+    for (const char c : result) {
         EXPECT_NE(charset.find(c), std::string::npos);
     }
 }
@@ -234,7 +234,7 @@ TEST(RandomGeneratorTest, NextString_CustomCharset) {
     const auto result = generator.nextString(50, charset);
 
     EXPECT_EQ(result.length(), 50);
-    for (const char c: result) {
+    for (const char c : result) {
         EXPECT_TRUE(c == 'X' || c == 'Y' || c == 'Z');
     }
 }
@@ -384,7 +384,7 @@ TEST(RandomGeneratorTest, ThreadSafety_BasicTest) {
         });
     }
 
-    for (auto &thread: threads) {
+    for (auto& thread : threads) {
         thread.join();
     }
 

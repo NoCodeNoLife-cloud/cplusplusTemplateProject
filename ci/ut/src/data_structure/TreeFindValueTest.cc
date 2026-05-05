@@ -269,7 +269,7 @@ TEST(BinarySearchTreeTest, FindValue_AfterRemoval_ReturnsNullopt) {
  */
 TEST(BinarySearchTreeTest, FindValue_LargeDataset_ReturnsCorrectValue) {
     BinarySearchTree<int> tree;
-    
+
     // Insert 1000 elements
     for (int i = 0; i < 1000; ++i) {
         tree.insert(i);

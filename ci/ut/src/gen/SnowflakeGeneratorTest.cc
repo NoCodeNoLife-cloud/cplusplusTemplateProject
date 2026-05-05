@@ -160,7 +160,7 @@ TEST(SnowflakeGeneratorTest, NextId_ThreadSafety_ConcurrentGeneration) {
         });
     }
 
-    for (auto &thread: threads) {
+    for (auto& thread : threads) {
         thread.join();
     }
 
@@ -191,7 +191,7 @@ TEST(SnowflakeGeneratorTest, NextId_ThreadSafety_MaintainsOrdering) {
         });
     }
 
-    for (auto &thread: threads) {
+    for (auto& thread : threads) {
         thread.join();
     }
 
@@ -254,7 +254,7 @@ TEST(SnowflakeGeneratorTest, NextId_Consistency_MultipleCalls) {
     }
 
     // Verify all IDs are positive
-    for (const auto id: ids) {
+    for (const auto id : ids) {
         EXPECT_GT(id, 0);
     }
 
@@ -275,7 +275,7 @@ TEST(SnowflakeGeneratorTest, NextId_Consistency_MultipleCalls) {
 TEST(SnowflakeGeneratorTest, SnowflakeOption_ConstantsCorrect) {
     EXPECT_EQ(SnowflakeOption::machine_bits_, 10);
     EXPECT_EQ(SnowflakeOption::sequence_bits_, 12);
-    EXPECT_EQ(SnowflakeOption::max_sequence_, 4095); // 2^12 - 1
-    EXPECT_EQ(SnowflakeOption::max_machine_id_, 31); // 2^5 - 1
+    EXPECT_EQ(SnowflakeOption::max_sequence_, 4095);    // 2^12 - 1
+    EXPECT_EQ(SnowflakeOption::max_machine_id_, 31);    // 2^5 - 1
     EXPECT_EQ(SnowflakeOption::max_datacenter_id_, 31); // 2^5 - 1
 }

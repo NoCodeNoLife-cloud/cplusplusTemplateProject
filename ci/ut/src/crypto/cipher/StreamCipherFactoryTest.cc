@@ -15,7 +15,7 @@ using namespace common::crypto::cipher;
  */
 TEST(StreamCipherFactoryTest, CreateChaCha20) {
     auto cipher = StreamCipherFactory::create(StreamCipherFactory::Algorithm::CHACHA20);
-    
+
     ASSERT_NE(cipher, nullptr);
     EXPECT_EQ(cipher->getAlgorithmName(), "ChaCha20");
     EXPECT_FALSE(cipher->isInitialized());
@@ -26,7 +26,7 @@ TEST(StreamCipherFactoryTest, CreateChaCha20) {
  */
 TEST(StreamCipherFactoryTest, CreateChaCha20_ConvenienceMethod) {
     auto cipher = StreamCipherFactory::createChaCha20();
-    
+
     ASSERT_NE(cipher, nullptr);
     EXPECT_EQ(cipher->getAlgorithmName(), "ChaCha20");
 }
@@ -36,7 +36,7 @@ TEST(StreamCipherFactoryTest, CreateChaCha20_ConvenienceMethod) {
  */
 TEST(StreamCipherFactoryTest, GetSupportedAlgorithms) {
     const auto algorithms = StreamCipherFactory::getSupportedAlgorithms();
-    
+
     EXPECT_EQ(algorithms.size(), 1);
     EXPECT_EQ(algorithms[0], "ChaCha20");
 }
@@ -53,7 +53,7 @@ TEST(StreamCipherFactoryTest, IsSupported) {
  */
 TEST(StreamCipherFactoryTest, PolymorphicBehavior) {
     auto cipher = StreamCipherFactory::createChaCha20();
-    
+
     // Verify it implements StreamCipher interface
     StreamCipher* base_ptr = cipher.get();
     EXPECT_EQ(base_ptr->getAlgorithmName(), "ChaCha20");

@@ -534,7 +534,9 @@ TEST(ArraysToolkitTest, Distinct_RemovesDuplicates) {
  */
 TEST(ArraysToolkitTest, Map_TransformElements) {
     int arr[] = {1, 2, 3, 4, 5};
-    auto result = ArraysToolkit::map<int, int>(arr, 5, [](int x) { return x * 2; });
+    auto result = ArraysToolkit::map<int, int>(arr, 5, [](int x) {
+        return x * 2;
+    });
     ASSERT_EQ(result.size(), 5);
     EXPECT_EQ(result[0], 2);
     EXPECT_EQ(result[4], 10);
@@ -546,7 +548,9 @@ TEST(ArraysToolkitTest, Map_TransformElements) {
  */
 TEST(ArraysToolkitTest, Map_TypeConversion) {
     int arr[] = {1, 2, 3};
-    auto result = ArraysToolkit::map<int, double>(arr, 3, [](int x) { return static_cast<double>(x) * 1.5; });
+    auto result = ArraysToolkit::map<int, double>(arr, 3, [](int x) {
+        return static_cast<double>(x) * 1.5;
+    });
     ASSERT_EQ(result.size(), 3);
     EXPECT_DOUBLE_EQ(result[0], 1.5);
     EXPECT_DOUBLE_EQ(result[2], 4.5);
@@ -558,7 +562,9 @@ TEST(ArraysToolkitTest, Map_TypeConversion) {
  */
 TEST(ArraysToolkitTest, Filter_KeepsMatchingElements) {
     int arr[] = {1, 2, 3, 4, 5, 6};
-    auto result = ArraysToolkit::filter(arr, 6, [](int x) { return x % 2 == 0; });
+    auto result = ArraysToolkit::filter(arr, 6, [](int x) {
+        return x % 2 == 0;
+    });
     ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], 2);
     EXPECT_EQ(result[1], 4);
@@ -571,7 +577,9 @@ TEST(ArraysToolkitTest, Filter_KeepsMatchingElements) {
  */
 TEST(ArraysToolkitTest, Filter_NoMatches) {
     int arr[] = {1, 3, 5, 7};
-    auto result = ArraysToolkit::filter(arr, 4, [](int x) { return x % 2 == 0; });
+    auto result = ArraysToolkit::filter(arr, 4, [](int x) {
+        return x % 2 == 0;
+    });
     EXPECT_TRUE(result.empty());
 }
 
@@ -785,7 +793,7 @@ TEST(ArraysToolkitTest, Shuffle_RandomizesOrder) {
     auto original = ArraysToolkit::asList(arr, 5);
     ArraysToolkit::shuffle(arr, 5);
     auto shuffled = ArraysToolkit::asList(arr, 5);
-    
+
     // Verify same elements exist
     std::sort(shuffled.begin(), shuffled.end());
     EXPECT_EQ(original, shuffled);

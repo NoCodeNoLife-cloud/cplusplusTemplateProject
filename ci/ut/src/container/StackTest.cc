@@ -197,7 +197,7 @@ TEST(StackTest, Top_ConstAccessor) {
     stack.push(10);
     stack.push(20);
 
-    const Stack<int> &constStack = stack;
+    const Stack<int>& constStack = stack;
     EXPECT_EQ(constStack.top(), 20);
 }
 
@@ -381,7 +381,7 @@ TEST(StackTest, PreservesLIFOProperty) {
 
     std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
 
-    for (int val: input) {
+    for (int val : input) {
         stack.push(val);
     }
 

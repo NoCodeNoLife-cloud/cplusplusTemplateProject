@@ -156,7 +156,7 @@ TEST(UnionSetTest, Connected_ConstReference_CorrectBehavior) {
     unionSet.unionSets(1, 2);
     unionSet.unionSets(3, 4);
 
-    const UnionSet<int> &constUnionSet = unionSet;
+    const UnionSet<int>& constUnionSet = unionSet;
 
     EXPECT_TRUE(constUnionSet.connected(1, 2));
     EXPECT_FALSE(constUnionSet.connected(1, 3));

@@ -19,15 +19,16 @@ using namespace common::base_type;
  */
 class TestDerivedObject : public Object {
 public:
-    explicit TestDerivedObject(int value = 0) : m_value(value) {}
+    explicit TestDerivedObject(int value = 0) : m_value(value) {
+    }
 
     /**
      * @brief Override equals to compare by value
      * @param[in] other The object to compare with
      * @return true if values are equal, false otherwise
      */
-    [[nodiscard]] auto equals(const Object &other) const -> bool override {
-        const auto *derived = dynamic_cast<const TestDerivedObject *>(&other);
+    [[nodiscard]] auto equals(const Object& other) const -> bool override {
+        const auto* derived = dynamic_cast<const TestDerivedObject*>(&other);
         return derived != nullptr && m_value == derived->m_value;
     }
 
@@ -55,7 +56,9 @@ public:
         return std::make_unique<TestDerivedObject>(m_value);
     }
 
-    [[nodiscard]] auto getValue() const -> int { return m_value; }
+    [[nodiscard]] auto getValue() const -> int {
+        return m_value;
+    }
 
 private:
     int m_value;
@@ -67,9 +70,9 @@ private:
  */
 TEST(ObjectTest, GetClass_ReturnsCorrectTypeInfo) {
     TestDerivedObject obj{42};
-    
-    const auto &type_info = obj.getClass();
-    
+
+    const auto& type_info = obj.getClass();
+
     EXPECT_EQ(type_info, typeid(TestDerivedObject));
 }
 
@@ -79,7 +82,7 @@ TEST(ObjectTest, GetClass_ReturnsCorrectTypeInfo) {
  */
 TEST(ObjectTest, Equals_SameReference_ReturnsTrue) {
     TestDerivedObject obj{10};
-    
+
     EXPECT_TRUE(obj.equals(obj));
 }
 
@@ -90,7 +93,7 @@ TEST(ObjectTest, Equals_SameReference_ReturnsTrue) {
 TEST(ObjectTest, Equals_DifferentObjectsSameValue_ReturnsTrue) {
     TestDerivedObject obj1{42};
     TestDerivedObject obj2{42};
-    
+
     EXPECT_TRUE(obj1.equals(obj2));
 }
 
@@ -101,7 +104,7 @@ TEST(ObjectTest, Equals_DifferentObjectsSameValue_ReturnsTrue) {
 TEST(ObjectTest, Equals_DifferentObjectsDifferentValues_ReturnsFalse) {
     TestDerivedObject obj1{42};
     TestDerivedObject obj2{43};
-    
+
     EXPECT_FALSE(obj1.equals(obj2));
 }
 
@@ -112,19 +115,24 @@ TEST(ObjectTest, Equals_DifferentObjectsDifferentValues_ReturnsFalse) {
 TEST(ObjectTest, Equals_IncompatibleTypes_ReturnsFalse) {
     TestDerivedObject obj1{42};
     TestDerivedObject obj2{42};
-    const Object &base_ref = obj2;
-    
+    const Object& base_ref = obj2;
+
     // Create another derived object to test type checking
     class AnotherDerived : public Object {
     public:
-        explicit AnotherDerived(int val) : m_val(val) {}
-        [[nodiscard]] auto equals(const Object &) const -> bool override { return false; }
+        explicit AnotherDerived(int val) : m_val(val) {
+        }
+
+        [[nodiscard]] auto equals(const Object&) const -> bool override {
+            return false;
+        }
+
     private:
         int m_val;
     };
-    
+
     AnotherDerived another{42};
-    
+
     EXPECT_FALSE(obj1.equals(another));
 }
 
@@ -134,10 +142,10 @@ TEST(ObjectTest, Equals_IncompatibleTypes_ReturnsFalse) {
  */
 TEST(ObjectTest, HashCode_ConsistentForSameState) {
     TestDerivedObject obj{100};
-    
+
     const auto hash1 = obj.hashCode();
     const auto hash2 = obj.hashCode();
-    
+
     EXPECT_EQ(hash1, hash2);
 }
 
@@ -148,7 +156,7 @@ TEST(ObjectTest, HashCode_ConsistentForSameState) {
 TEST(ObjectTest, HashCode_EqualObjectsHaveEqualHashCodes) {
     TestDerivedObject obj1{50};
     TestDerivedObject obj2{50};
-    
+
     EXPECT_EQ(obj1.hashCode(), obj2.hashCode());
 }
 
@@ -159,7 +167,7 @@ TEST(ObjectTest, HashCode_EqualObjectsHaveEqualHashCodes) {
 TEST(ObjectTest, HashCode_DifferentValuesProduceDifferentHashCodes) {
     TestDerivedObject obj1{1};
     TestDerivedObject obj2{2};
-    
+
     EXPECT_NE(obj1.hashCode(), obj2.hashCode());
 }
 
@@ -169,9 +177,9 @@ TEST(ObjectTest, HashCode_DifferentValuesProduceDifferentHashCodes) {
  */
 TEST(ObjectTest, ToString_ProvidesMeaningfulRepresentation) {
     TestDerivedObject obj{123};
-    
+
     const auto str = obj.toString();
-    
+
     EXPECT_NE(str.find("TestDerivedObject"), std::string::npos);
     EXPECT_NE(str.find("123"), std::string::npos);
 }
@@ -183,10 +191,10 @@ TEST(ObjectTest, ToString_ProvidesMeaningfulRepresentation) {
 TEST(ObjectTest, ToString_DifferentObjectsProduceDifferentStrings) {
     TestDerivedObject obj1{10};
     TestDerivedObject obj2{20};
-    
+
     const auto str1 = obj1.toString();
     const auto str2 = obj2.toString();
-    
+
     EXPECT_NE(str1, str2);
 }
 
@@ -196,9 +204,9 @@ TEST(ObjectTest, ToString_DifferentObjectsProduceDifferentStrings) {
  */
 TEST(ObjectTest, Clone_CreatesIndependentCopy) {
     TestDerivedObject original{99};
-    
+
     auto cloned = original.clone();
-    
+
     ASSERT_NE(cloned, nullptr);
     EXPECT_TRUE(original.equals(*cloned));
     EXPECT_FALSE(original.is(*cloned));
@@ -210,10 +218,10 @@ TEST(ObjectTest, Clone_CreatesIndependentCopy) {
  */
 TEST(ObjectTest, Clone_PreservesObjectState) {
     TestDerivedObject original{77};
-    
+
     auto cloned = original.clone();
-    const auto *cloned_derived = dynamic_cast<TestDerivedObject *>(cloned.get());
-    
+    const auto* cloned_derived = dynamic_cast<TestDerivedObject*>(cloned.get());
+
     ASSERT_NE(cloned_derived, nullptr);
     EXPECT_EQ(cloned_derived->getValue(), original.getValue());
 }
@@ -227,9 +235,9 @@ TEST(ObjectTest, Clone_BaseObjectThrowsException) {
     public:
         // Does not override clone, so should use base implementation
     };
-    
+
     SimpleObject obj;
-    
+
     EXPECT_THROW(obj.clone(), std::logic_error);
 }
 
@@ -239,7 +247,7 @@ TEST(ObjectTest, Clone_BaseObjectThrowsException) {
  */
 TEST(ObjectTest, InstanceOf_MatchingType_ReturnsTrue) {
     TestDerivedObject obj{42};
-    
+
     EXPECT_TRUE(obj.instanceOf<TestDerivedObject>());
 }
 
@@ -249,7 +257,7 @@ TEST(ObjectTest, InstanceOf_MatchingType_ReturnsTrue) {
  */
 TEST(ObjectTest, InstanceOf_BaseType_ReturnsTrue) {
     TestDerivedObject obj{42};
-    
+
     EXPECT_TRUE(obj.instanceOf<Object>());
 }
 
@@ -259,12 +267,14 @@ TEST(ObjectTest, InstanceOf_BaseType_ReturnsTrue) {
  */
 TEST(ObjectTest, InstanceOf_UnrelatedType_ReturnsFalse) {
     TestDerivedObject obj{42};
-    
+
     class UnrelatedType : public Object {
     public:
-        [[nodiscard]] auto equals(const Object &) const -> bool override { return false; }
+        [[nodiscard]] auto equals(const Object&) const -> bool override {
+            return false;
+        }
     };
-    
+
     EXPECT_FALSE(obj.instanceOf<UnrelatedType>());
 }
 
@@ -274,7 +284,7 @@ TEST(ObjectTest, InstanceOf_UnrelatedType_ReturnsFalse) {
  */
 TEST(ObjectTest, IsInstance_MatchingType_ReturnsTrue) {
     TestDerivedObject obj{42};
-    
+
     EXPECT_TRUE(obj.isInstance(typeid(TestDerivedObject)));
 }
 
@@ -284,7 +294,7 @@ TEST(ObjectTest, IsInstance_MatchingType_ReturnsTrue) {
  */
 TEST(ObjectTest, IsInstance_NonMatchingType_ReturnsFalse) {
     TestDerivedObject obj{42};
-    
+
     EXPECT_FALSE(obj.isInstance(typeid(int)));
 }
 
@@ -294,9 +304,9 @@ TEST(ObjectTest, IsInstance_NonMatchingType_ReturnsFalse) {
  */
 TEST(ObjectTest, GetClassName_ReturnsClassName) {
     TestDerivedObject obj{42};
-    
+
     const auto class_name = obj.getClassName();
-    
+
     EXPECT_NE(class_name.find("TestDerivedObject"), std::string::npos);
 }
 
@@ -306,7 +316,7 @@ TEST(ObjectTest, GetClassName_ReturnsClassName) {
  */
 TEST(ObjectTest, Is_SameReference_ReturnsTrue) {
     TestDerivedObject obj{42};
-    
+
     EXPECT_TRUE(obj.is(obj));
 }
 
@@ -317,7 +327,7 @@ TEST(ObjectTest, Is_SameReference_ReturnsTrue) {
 TEST(ObjectTest, Is_DifferentObjects_ReturnsFalse) {
     TestDerivedObject obj1{42};
     TestDerivedObject obj2{42};
-    
+
     EXPECT_FALSE(obj1.is(obj2));
 }
 
@@ -327,9 +337,9 @@ TEST(ObjectTest, Is_DifferentObjects_ReturnsFalse) {
  */
 TEST(ObjectTest, Is_DifferentReferencesSameObject_ReturnsTrue) {
     TestDerivedObject obj{42};
-    const Object &ref1 = obj;
-    const Object &ref2 = obj;
-    
+    const Object& ref1 = obj;
+    const Object& ref2 = obj;
+
     EXPECT_TRUE(ref1.is(ref2));
 }
 
@@ -339,8 +349,8 @@ TEST(ObjectTest, Is_DifferentReferencesSameObject_ReturnsTrue) {
  */
 TEST(ObjectTest, PolymorphicBehavior_ThroughBasePointer) {
     auto obj = std::make_unique<TestDerivedObject>(55);
-    Object *base_ptr = obj.get();
-    
+    Object* base_ptr = obj.get();
+
     EXPECT_EQ(base_ptr->getClass(), typeid(TestDerivedObject));
     EXPECT_EQ(base_ptr->hashCode(), std::hash<int>{}(55));
     EXPECT_NE(base_ptr->toString().find("55"), std::string::npos);
@@ -352,10 +362,10 @@ TEST(ObjectTest, PolymorphicBehavior_ThroughBasePointer) {
  */
 TEST(ObjectTest, MultipleClones_AreIndependent) {
     TestDerivedObject original{100};
-    
+
     auto clone1 = original.clone();
     auto clone2 = original.clone();
-    
+
     EXPECT_TRUE(clone1->equals(*clone2));
     EXPECT_FALSE(clone1->is(*clone2));
 }

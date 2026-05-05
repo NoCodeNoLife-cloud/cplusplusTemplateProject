@@ -11,116 +11,116 @@
 #include "RpcMetadata.hpp"
 
 namespace common::rpc {
-    /// @brief Manages gRPC channel connectivity state and provides monitoring capabilities
-    class GrpcConnectivityManager {
-    public:
-        /// @brief Callback type for state change notifications
-        using StateChangeCallback = std::function<void(common::rpc::GrpcConnectivityState)>;
+/// @brief Manages gRPC channel connectivity state and provides monitoring capabilities
+class GrpcConnectivityManager {
+public:
+    /// @brief Callback type for state change notifications
+    using StateChangeCallback = std::function<void(common::rpc::GrpcConnectivityState)>;
 
-        /// @brief Constructor
-        /// @param channel The gRPC channel to monitor
-        explicit GrpcConnectivityManager(const std::shared_ptr<grpc::Channel> &channel) noexcept : channel_(channel), is_monitoring_(false) {
+    /// @brief Constructor
+    /// @param channel The gRPC channel to monitor
+    explicit GrpcConnectivityManager(const std::shared_ptr<grpc::Channel>& channel) noexcept : channel_(channel), is_monitoring_(false) {
+    }
+
+    /// @brief Destructor - stops monitoring if running
+    ~GrpcConnectivityManager() {
+        stopMonitoring();
+    }
+
+    /// @brief Get the current connectivity state of the channel
+    /// @return Current GrpcConnectivityState
+    [[nodiscard]] auto getCurrentState() const noexcept -> common::rpc::GrpcConnectivityState {
+        if (!channel_) {
+            return common::rpc::GrpcConnectivityState::SHUTDOWN;
         }
 
-        /// @brief Destructor - stops monitoring if running
-        ~GrpcConnectivityManager() {
-            stopMonitoring();
+        const grpc_connectivity_state raw_state = channel_->GetState(false);
+        return common::rpc::RpcMetadata::grpcStateToEnum(raw_state);
+    }
+
+    /// @brief Get the current connectivity state as string
+    /// @return String representation of current state
+    [[nodiscard]] auto getCurrentStateString() const noexcept -> std::string {
+        const auto state = getCurrentState();
+        return common::rpc::RpcMetadata::grpcStateToString(state);
+    }
+
+    /// @brief Start monitoring the channel's connectivity state
+    /// @param callback Called when state changes
+    /// @param poll_interval_ms Interval in milliseconds to check for state changes
+    auto startMonitoring(StateChangeCallback callback, int poll_interval_ms = 1000) -> void {
+        if (is_monitoring_.exchange(true)) {
+            return; // Already monitoring
         }
 
-        /// @brief Get the current connectivity state of the channel
-        /// @return Current GrpcConnectivityState
-        [[nodiscard]] auto getCurrentState() const noexcept -> common::rpc::GrpcConnectivityState {
-            if (!channel_) {
-                return common::rpc::GrpcConnectivityState::SHUTDOWN;
-            }
+        callback_ = std::move(callback);
+        last_known_state_ = getCurrentState();
 
-            const grpc_connectivity_state raw_state = channel_->GetState(false);
-            return common::rpc::RpcMetadata::grpcStateToEnum(raw_state);
-        }
+        monitor_thread_ = std::thread([this, poll_interval_ms]() {
+            while (is_monitoring_.load()) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(poll_interval_ms));
 
-        /// @brief Get the current connectivity state as string
-        /// @return String representation of current state
-        [[nodiscard]] auto getCurrentStateString() const noexcept -> std::string {
-            const auto state = getCurrentState();
-            return common::rpc::RpcMetadata::grpcStateToString(state);
-        }
+                const auto current_state = getCurrentState();
+                if (current_state != last_known_state_) {
+                    last_known_state_ = current_state;
 
-        /// @brief Start monitoring the channel's connectivity state
-        /// @param callback Called when state changes
-        /// @param poll_interval_ms Interval in milliseconds to check for state changes
-        auto startMonitoring(StateChangeCallback callback, int poll_interval_ms = 1000) -> void {
-            if (is_monitoring_.exchange(true)) {
-                return; // Already monitoring
-            }
-
-            callback_ = std::move(callback);
-            last_known_state_ = getCurrentState();
-
-            monitor_thread_ = std::thread([this, poll_interval_ms]() {
-                while (is_monitoring_.load()) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(poll_interval_ms));
-
-                    const auto current_state = getCurrentState();
-                    if (current_state != last_known_state_) {
-                        last_known_state_ = current_state;
-
-                        if (callback_) {
-                            callback_(current_state);
-                        }
+                    if (callback_) {
+                        callback_(current_state);
                     }
                 }
-            });
+            }
+        });
+    }
+
+    /// @brief Stop monitoring the channel's connectivity state
+    auto stopMonitoring() -> void {
+        if (!is_monitoring_.exchange(false)) {
+            return; // Not monitoring
         }
 
-        /// @brief Stop monitoring the channel's connectivity state
-        auto stopMonitoring() -> void {
-            if (!is_monitoring_.exchange(false)) {
-                return; // Not monitoring
+        if (monitor_thread_.joinable()) {
+            monitor_thread_.join();
+        }
+    }
+
+    /// @brief Wait for a specific connectivity state with timeout
+    /// @param target_state The state to wait for
+    /// @param timeout_seconds Maximum time to wait in seconds
+    /// @return True if state was reached within timeout, false otherwise
+    [[nodiscard]] auto waitForState(common::rpc::GrpcConnectivityState target_state, int timeout_seconds = 10) const -> bool {
+        const auto deadline = std::chrono::system_clock::now() + std::chrono::seconds(timeout_seconds);
+
+        while (std::chrono::system_clock::now() < deadline) {
+            if (getCurrentState() == target_state) {
+                return true;
             }
 
-            if (monitor_thread_.joinable()) {
-                monitor_thread_.join();
-            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
 
-        /// @brief Wait for a specific connectivity state with timeout
-        /// @param target_state The state to wait for
-        /// @param timeout_seconds Maximum time to wait in seconds
-        /// @return True if state was reached within timeout, false otherwise
-        [[nodiscard]] auto waitForState(common::rpc::GrpcConnectivityState target_state, int timeout_seconds = 10) const -> bool {
-            const auto deadline = std::chrono::system_clock::now() + std::chrono::seconds(timeout_seconds);
+        return false;
+    }
 
-            while (std::chrono::system_clock::now() < deadline) {
-                if (getCurrentState() == target_state) {
-                    return true;
-                }
+    /// @brief Check if the channel is ready for RPC calls
+    /// @return True if channel is in READY state
+    [[nodiscard]] auto isReady() const noexcept -> bool {
+        return getCurrentState() == common::rpc::GrpcConnectivityState::READY;
+    }
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            }
+private:
+    /// @brief The gRPC channel being monitored
+    std::shared_ptr<grpc::Channel> channel_;
 
-            return false;
-        }
+    /// @brief Thread for monitoring state changes
+    std::thread monitor_thread_;
 
-        /// @brief Check if the channel is ready for RPC calls
-        /// @return True if channel is in READY state
-        [[nodiscard]] auto isReady() const noexcept -> bool {
-            return getCurrentState() == common::rpc::GrpcConnectivityState::READY;
-        }
+    /// @brief Flag indicating if monitoring is active
+    std::atomic<bool> is_monitoring_;
 
-    private:
-        /// @brief The gRPC channel being monitored
-        std::shared_ptr<grpc::Channel> channel_;
+    /// @brief Last known connectivity state
+    mutable common::rpc::GrpcConnectivityState last_known_state_;
 
-        /// @brief Thread for monitoring state changes
-        std::thread monitor_thread_;
-
-        /// @brief Flag indicating if monitoring is active
-        std::atomic<bool> is_monitoring_;
-
-        /// @brief Last known connectivity state
-        mutable common::rpc::GrpcConnectivityState last_known_state_;
-
-        /// @brief Callback for state change notifications
-        StateChangeCallback callback_;
-    };
+    /// @brief Callback for state change notifications
+    StateChangeCallback callback_;
+};
 }

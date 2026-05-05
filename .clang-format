@@ -3,7 +3,6 @@
 # Based on Google C++ Style Guide with customizations
 
 Language: Cpp
-Standard: c++26
 
 # 基础格式
 BasedOnStyle: Google
@@ -18,7 +17,7 @@ AllowShortCaseLabelsOnASingleLine: false
 AllowShortBlocksOnASingleLine: Never
 
 # 列宽限制
-ColumnLimit: 120
+ColumnLimit: 600
 
 # 指针和引用对齐
 PointerAlignment: Left
@@ -53,7 +52,6 @@ MacroBlockEnd: ''
 
 # 空格规则
 SpaceAfterCStyleCast: false
-SpaceBeforeAssignmentOperators: true
 SpaceBeforeCpp11BracedList: false
 SpaceBeforeCtorInitializerColon: true
 SpaceBeforeInheritanceColon: true

@@ -135,8 +135,8 @@ TEST(CryptoToolKitTest, HashPassword_EmptyPassword) {
     EXPECT_NO_THROW({
         const auto hash = CryptoToolKit::hash_password(password, salt);
         EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
-    
-    });
+
+        });
 }
 
 /**
@@ -150,8 +150,8 @@ TEST(CryptoToolKitTest, HashPassword_LongPassword) {
     EXPECT_NO_THROW({
         const auto hash = CryptoToolKit::hash_password(password, salt);
         EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
-    
-    });
+
+        });
 }
 
 /**
@@ -165,8 +165,8 @@ TEST(CryptoToolKitTest, HashPassword_SpecialCharacters) {
     EXPECT_NO_THROW({
         const auto hash = CryptoToolKit::hash_password(password, salt);
         EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
-    
-    });
+
+        });
 }
 
 /**
@@ -180,8 +180,8 @@ TEST(CryptoToolKitTest, HashPassword_UnicodePassword) {
     EXPECT_NO_THROW({
         const auto hash = CryptoToolKit::hash_password(password, salt);
         EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
-    
-    });
+
+        });
 }
 
 /**
@@ -332,7 +332,7 @@ TEST(CryptoToolKitTest, SaltRandomness_Quality) {
     // Generate many salts and collect unique byte values
     for (int i = 0; i < 100; ++i) {
         const auto salt = CryptoToolKit::generate_salt();
-        for (unsigned char c: salt) {
+        for (unsigned char c : salt) {
             uniqueBytes.insert(c);
         }
     }

@@ -41,14 +41,14 @@ TEST(LRUCacheTest, Constructor_NegativeCapacity) {
  */
 TEST(LRUCacheTest, PutAndGet_Basic) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
-    
+
     auto result2 = cache.get(2);
     ASSERT_TRUE(result2.has_value());
     EXPECT_EQ(result2.value(), "two");
@@ -60,10 +60,10 @@ TEST(LRUCacheTest, PutAndGet_Basic) {
  */
 TEST(LRUCacheTest, Get_NonExistentKey) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     auto result = cache.get(999);
-    
+
     EXPECT_FALSE(result.has_value());
 }
 
@@ -73,10 +73,10 @@ TEST(LRUCacheTest, Get_NonExistentKey) {
  */
 TEST(LRUCacheTest, Put_UpdateExistingKey) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(1, "ONE"));
-    
+
     auto result = cache.get(1);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "ONE");
@@ -88,26 +88,26 @@ TEST(LRUCacheTest, Put_UpdateExistingKey) {
  */
 TEST(LRUCacheTest, Eviction_LRU_Policy) {
     LRUCache<int, std::string> cache(2);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     // Access key 1 to make it recently used
     auto val1 = cache.get(1);
     ASSERT_TRUE(val1.has_value());
-    
+
     // Cache is full, adding new item should evict key 2 (least recently used)
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     // Key 2 should be evicted
     auto result2 = cache.get(2);
     EXPECT_FALSE(result2.has_value());
-    
+
     // Key 1 and 3 should still exist
     auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
-    
+
     auto result3 = cache.get(3);
     ASSERT_TRUE(result3.has_value());
     EXPECT_EQ(result3.value(), "three");
@@ -119,20 +119,20 @@ TEST(LRUCacheTest, Eviction_LRU_Policy) {
  */
 TEST(LRUCacheTest, Eviction_AccessPattern) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     // Access key 1 and 2 to update their recent usage
     auto val1 = cache.get(1);
     ASSERT_TRUE(val1.has_value());
     auto val2 = cache.get(2);
     ASSERT_TRUE(val2.has_value());
-    
+
     // Add new item, should evict key 3 (least recently used)
     EXPECT_TRUE(cache.put(4, "four"));
-    
+
     EXPECT_FALSE(cache.contains(3));
     EXPECT_TRUE(cache.contains(1));
     EXPECT_TRUE(cache.contains(2));
@@ -145,10 +145,10 @@ TEST(LRUCacheTest, Eviction_AccessPattern) {
  */
 TEST(LRUCacheTest, Put_RValueReference) {
     LRUCache<int, std::string> cache(3);
-    
+
     std::string value = "test";
     EXPECT_TRUE(cache.put(1, std::move(value)));
-    
+
     auto result = cache.get(1);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "test");
@@ -160,16 +160,16 @@ TEST(LRUCacheTest, Put_RValueReference) {
  */
 TEST(LRUCacheTest, Remove_ExistingKey) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     bool removed = cache.remove(1);
     EXPECT_TRUE(removed);
-    
+
     auto result = cache.get(1);
     EXPECT_FALSE(result.has_value());
-    
+
     // Key 2 should still exist
     auto result2 = cache.get(2);
     ASSERT_TRUE(result2.has_value());
@@ -182,9 +182,9 @@ TEST(LRUCacheTest, Remove_ExistingKey) {
  */
 TEST(LRUCacheTest, Remove_NonExistentKey) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
-    
+
     bool removed = cache.remove(999);
     EXPECT_FALSE(removed);
 }
@@ -195,16 +195,16 @@ TEST(LRUCacheTest, Remove_NonExistentKey) {
  */
 TEST(LRUCacheTest, Clear_AllEntries) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     cache.clear();
-    
+
     EXPECT_EQ(cache.size(), 0);
     EXPECT_TRUE(cache.empty());
-    
+
     // All keys should be gone
     EXPECT_FALSE(cache.get(1).has_value());
     EXPECT_FALSE(cache.get(2).has_value());
@@ -217,17 +217,17 @@ TEST(LRUCacheTest, Clear_AllEntries) {
  */
 TEST(LRUCacheTest, Size_CorrectCount) {
     LRUCache<int, std::string> cache(5);
-    
+
     EXPECT_EQ(cache.size(), 0);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_EQ(cache.size(), 1);
-    
+
     EXPECT_TRUE(cache.put(2, "two"));
     EXPECT_EQ(cache.size(), 2);
-    
+
     EXPECT_TRUE(cache.put(1, "ONE")); // Update existing
-    EXPECT_EQ(cache.size(), 2); // Size should not change on update
+    EXPECT_EQ(cache.size(), 2);       // Size should not change on update
 }
 
 /**
@@ -236,7 +236,7 @@ TEST(LRUCacheTest, Size_CorrectCount) {
  */
 TEST(LRUCacheTest, Capacity_CorrectValue) {
     LRUCache<int, std::string> cache(10);
-    
+
     EXPECT_EQ(cache.capacity(), 10);
 }
 
@@ -246,12 +246,12 @@ TEST(LRUCacheTest, Capacity_CorrectValue) {
  */
 TEST(LRUCacheTest, Empty_CorrectState) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.empty());
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_FALSE(cache.empty());
-    
+
     cache.clear();
     EXPECT_TRUE(cache.empty());
 }
@@ -262,12 +262,12 @@ TEST(LRUCacheTest, Empty_CorrectState) {
  */
 TEST(LRUCacheTest, Contains_ExistingKey) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_FALSE(cache.contains(1));
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.contains(1));
-    
+
     EXPECT_TRUE(cache.remove(1));
     EXPECT_FALSE(cache.contains(1));
 }
@@ -278,18 +278,18 @@ TEST(LRUCacheTest, Contains_ExistingKey) {
  */
 TEST(LRUCacheTest, LRUOrderUpdate_OnGet) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     // Access key 1 to make it most recently used
     auto val = cache.get(1);
     ASSERT_TRUE(val.has_value());
-    
+
     // Add new item, should evict key 2 (now least recently used)
     EXPECT_TRUE(cache.put(4, "four"));
-    
+
     EXPECT_FALSE(cache.contains(2));
     EXPECT_TRUE(cache.contains(1));
     EXPECT_TRUE(cache.contains(3));
@@ -302,17 +302,17 @@ TEST(LRUCacheTest, LRUOrderUpdate_OnGet) {
  */
 TEST(LRUCacheTest, LRUOrderUpdate_OnPutUpdate) {
     LRUCache<int, std::string> cache(3);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
     EXPECT_TRUE(cache.put(3, "three"));
-    
+
     // Update key 1 (moves it to front)
     EXPECT_TRUE(cache.put(1, "ONE"));
-    
+
     // Add new item, should evict key 2 (least recently used)
     EXPECT_TRUE(cache.put(4, "four"));
-    
+
     EXPECT_FALSE(cache.contains(2));
     EXPECT_TRUE(cache.contains(1));
     EXPECT_TRUE(cache.contains(3));
@@ -325,15 +325,15 @@ TEST(LRUCacheTest, LRUOrderUpdate_OnPutUpdate) {
  */
 TEST(LRUCacheTest, EdgeCase_CapacityOne) {
     LRUCache<int, std::string> cache(1);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
-    
+
     // Adding second item should evict first
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     EXPECT_FALSE(cache.contains(1));
     EXPECT_TRUE(cache.contains(2));
 }
@@ -345,10 +345,10 @@ TEST(LRUCacheTest, EdgeCase_CapacityOne) {
 TEST(LRUCacheTest, Get_ConstVersion) {
     LRUCache<int, std::string> cache(3);
     EXPECT_TRUE(cache.put(1, "one"));
-    
-    const LRUCache<int, std::string> &constCache = cache;
+
+    const LRUCache<int, std::string>& constCache = cache;
     auto result = constCache.get(1);
-    
+
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "one");
 }
@@ -359,18 +359,18 @@ TEST(LRUCacheTest, Get_ConstVersion) {
  */
 TEST(LRUCacheTest, MultipleEvictions_Sequence) {
     LRUCache<int, std::string> cache(2);
-    
+
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
-    
+
     // Evict key 1
     EXPECT_TRUE(cache.put(3, "three"));
     EXPECT_FALSE(cache.contains(1));
-    
+
     // Evict key 2
     EXPECT_TRUE(cache.put(4, "four"));
     EXPECT_FALSE(cache.contains(2));
-    
+
     // Only key 3 and 4 should remain
     EXPECT_TRUE(cache.contains(3));
     EXPECT_TRUE(cache.contains(4));

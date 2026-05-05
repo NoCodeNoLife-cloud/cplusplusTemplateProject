@@ -26,7 +26,7 @@ TEST(TopKTest, Constructor_Default_Unbounded) {
  * @details Verifies that non-negative max_capacity values are accepted
  */
 TEST(TopKTest, Constructor_ValidMaxCapacity) {
-    EXPECT_NO_THROW(TopK topK(0));   // Unbounded
+    EXPECT_NO_THROW(TopK topK(0)); // Unbounded
     EXPECT_NO_THROW(TopK topK(1));
     EXPECT_NO_THROW(TopK topK(10));
     EXPECT_NO_THROW(TopK topK(100));
@@ -111,7 +111,7 @@ TEST(TopKTest, Add_DuplicateNumbers) {
     // All duplicates should be kept if they're in top K
     EXPECT_EQ(result.size(), 3);
 
-    for (const auto num: result) {
+    for (const auto num : result) {
         EXPECT_EQ(num, 5);
     }
 }
@@ -469,7 +469,7 @@ TEST(TopKTest, GetTopK_DescendingOrder_ReturnsLargestFirst) {
     topK.add(20);
     topK.add(40);
 
-    const auto result = topK.getTopK(0, false);  // All elements, descending order
+    const auto result = topK.getTopK(0, false); // All elements, descending order
 
     // Should return in descending order (largest to smallest)
     EXPECT_EQ(result.size(), 5);
@@ -493,7 +493,7 @@ TEST(TopKTest, GetTopK_AscendingOrderExplicit_ReturnsSmallestFirst) {
     topK.add(20);
     topK.add(40);
 
-    const auto result = topK.getTopK(0, true);  // All elements, ascending order (explicit)
+    const auto result = topK.getTopK(0, true); // All elements, ascending order (explicit)
 
     // Should return in ascending order (smallest to largest)
     EXPECT_EQ(result.size(), 5);
@@ -517,8 +517,8 @@ TEST(TopKTest, GetTopK_DefaultParameter_IsAscending) {
     topK.add(20);
     topK.add(40);
 
-    const auto result_default = topK.getTopK();       // Default parameter
-    const auto result_explicit = topK.getTopK(0, true);   // Explicit ascending
+    const auto result_default = topK.getTopK();         // Default parameter
+    const auto result_explicit = topK.getTopK(0, true); // Explicit ascending
 
     // Both should be identical (ascending order)
     EXPECT_EQ(result_default, result_explicit);
@@ -559,7 +559,7 @@ TEST(TopKTest, GetTopK_DescendingOrder_PreservesHeapState) {
  * @details Verifies that getTopK can return fewer elements than heap size
  */
 TEST(TopKTest, GetTopK_DynamicCount_ReturnsSpecifiedNumberOfElements) {
-    TopK topK(10);  // Maintain top 10
+    TopK topK(10); // Maintain top 10
 
     // Add 10 numbers
     for (int i = 1; i <= 10; ++i) {
@@ -571,15 +571,15 @@ TEST(TopKTest, GetTopK_DynamicCount_ReturnsSpecifiedNumberOfElements) {
     // Get top 3 (largest 3, ascending order)
     const auto top3 = topK.getTopK(3);
     EXPECT_EQ(top3.size(), 3);
-    EXPECT_EQ(top3[0], 8);   // Smallest of the top 3
+    EXPECT_EQ(top3[0], 8); // Smallest of the top 3
     EXPECT_EQ(top3[1], 9);
-    EXPECT_EQ(top3[2], 10);  // Largest of the top 3
+    EXPECT_EQ(top3[2], 10); // Largest of the top 3
 
     // Get top 5 (largest 5, ascending order)
     const auto top5 = topK.getTopK(5);
     EXPECT_EQ(top5.size(), 5);
-    EXPECT_EQ(top5[0], 6);   // Smallest of the top 5
-    EXPECT_EQ(top5[4], 10);  // Largest of the top 5
+    EXPECT_EQ(top5[0], 6);  // Smallest of the top 5
+    EXPECT_EQ(top5[4], 10); // Largest of the top 5
 
     // Get all (count > heap size)
     const auto topAll = topK.getTopK(100);
@@ -600,9 +600,9 @@ TEST(TopKTest, GetTopK_DynamicCountWithDescending_ReturnsLargestFirst) {
     // Get top 3 in descending order (largest 3)
     const auto top3_desc = topK.getTopK(3, false);
     EXPECT_EQ(top3_desc.size(), 3);
-    EXPECT_EQ(top3_desc[0], 10);  // Largest
+    EXPECT_EQ(top3_desc[0], 10); // Largest
     EXPECT_EQ(top3_desc[1], 9);
-    EXPECT_EQ(top3_desc[2], 8);   // 3rd largest
+    EXPECT_EQ(top3_desc[2], 8); // 3rd largest
 
     // Get top 5 in descending order
     const auto top5_desc = topK.getTopK(5, false);
@@ -640,7 +640,7 @@ TEST(TopKTest, GetTopK_ZeroCount_ReturnsAllElements) {
  * @details Verifies that TopK without capacity limit can grow indefinitely
  */
 TEST(TopKTest, Unbounded_TopK_GrowsIndefinitely) {
-    TopK topK;  // No capacity limit
+    TopK topK; // No capacity limit
 
     // Add 100 numbers
     for (int i = 1; i <= 100; ++i) {
@@ -651,9 +651,9 @@ TEST(TopKTest, Unbounded_TopK_GrowsIndefinitely) {
     EXPECT_EQ(topK.size(), 100);
 
     // Get top 10
-    const auto top10 = topK.getTopK(10, false);  // Descending
+    const auto top10 = topK.getTopK(10, false); // Descending
     EXPECT_EQ(top10.size(), 10);
-    EXPECT_EQ(top10[0], 100);  // Largest
+    EXPECT_EQ(top10[0], 100); // Largest
     EXPECT_EQ(top10[9], 91);
 }
 
@@ -662,7 +662,7 @@ TEST(TopKTest, Unbounded_TopK_GrowsIndefinitely) {
  * @details Verifies that unbounded TopK works correctly with dynamic count parameter
  */
 TEST(TopKTest, Unbounded_TopK_DynamicCountWorks) {
-    TopK topK;  // Unbounded
+    TopK topK; // Unbounded
 
     for (int i = 1; i <= 50; ++i) {
         topK.add(i);

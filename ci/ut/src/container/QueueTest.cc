@@ -265,7 +265,7 @@ TEST(QueueTest, Front_ConstAccessor) {
     queue.push(10);
     queue.push(20);
 
-    const Queue<int> &constQueue = queue;
+    const Queue<int>& constQueue = queue;
     EXPECT_EQ(constQueue.front(), 10);
 }
 
@@ -304,7 +304,7 @@ TEST(QueueTest, Back_ConstAccessor) {
     queue.push(10);
     queue.push(20);
 
-    const Queue<int> &constQueue = queue;
+    const Queue<int>& constQueue = queue;
     EXPECT_EQ(constQueue.back(), 20);
 }
 
@@ -564,11 +564,11 @@ TEST(QueueTest, PreservesInsertionOrder) {
 
     std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
 
-    for (int val: input) {
+    for (int val : input) {
         queue.push(val);
     }
 
-    for (int val: input) {
+    for (int val : input) {
         EXPECT_EQ(queue.front(), val);
         queue.pop();
     }

@@ -19,7 +19,7 @@ using namespace common::base_type;
  */
 TEST(BigDecimalTest, Constructor_FromPositiveString) {
     const BigDecimal big_decimal{"123.456"};
-    
+
     EXPECT_EQ(big_decimal, BigDecimal{"123.456"});
 }
 
@@ -29,7 +29,7 @@ TEST(BigDecimalTest, Constructor_FromPositiveString) {
  */
 TEST(BigDecimalTest, Constructor_FromNegativeString) {
     const BigDecimal big_decimal{"-789.012"};
-    
+
     EXPECT_EQ(big_decimal, BigDecimal{"-789.012"});
 }
 
@@ -39,7 +39,7 @@ TEST(BigDecimalTest, Constructor_FromNegativeString) {
  */
 TEST(BigDecimalTest, Constructor_FromZeroString) {
     const BigDecimal big_decimal{"0.0"};
-    
+
     EXPECT_EQ(big_decimal, BigDecimal{"0.0"});
 }
 
@@ -49,7 +49,7 @@ TEST(BigDecimalTest, Constructor_FromZeroString) {
  */
 TEST(BigDecimalTest, Constructor_FromIntegerString) {
     const BigDecimal big_decimal{"100"};
-    
+
     EXPECT_EQ(big_decimal, BigDecimal{"100"});
 }
 
@@ -59,7 +59,7 @@ TEST(BigDecimalTest, Constructor_FromIntegerString) {
  */
 TEST(BigDecimalTest, Constructor_FromVerySmallDecimal) {
     const BigDecimal big_decimal{"0.000000001"};
-    
+
     EXPECT_EQ(big_decimal, BigDecimal{"0.000000001"});
 }
 
@@ -69,7 +69,7 @@ TEST(BigDecimalTest, Constructor_FromVerySmallDecimal) {
  */
 TEST(BigDecimalTest, Constructor_FromVeryLargeNumber) {
     const BigDecimal big_decimal{"999999999999.999999999"};
-    
+
     EXPECT_EQ(big_decimal, BigDecimal{"999999999999.999999999"});
 }
 
@@ -79,7 +79,7 @@ TEST(BigDecimalTest, Constructor_FromVeryLargeNumber) {
  */
 TEST(BigDecimalTest, Constructor_FromPositiveDouble) {
     const BigDecimal big_decimal{3.14159};
-    
+
     // Verify the value is approximately correct by checking it's close to expected
     const auto diff = big_decimal - BigDecimal{"3.14159"};
     const auto abs_diff = diff < BigDecimal{"0.0"} ? BigDecimal{"0.0"} - diff : diff;
@@ -92,7 +92,7 @@ TEST(BigDecimalTest, Constructor_FromPositiveDouble) {
  */
 TEST(BigDecimalTest, Constructor_FromNegativeDouble) {
     const BigDecimal big_decimal{-2.71828};
-    
+
     EXPECT_TRUE(big_decimal < BigDecimal{"0.0"});
 }
 
@@ -102,7 +102,7 @@ TEST(BigDecimalTest, Constructor_FromNegativeDouble) {
  */
 TEST(BigDecimalTest, Constructor_FromZeroDouble) {
     const BigDecimal big_decimal{0.0};
-    
+
     EXPECT_EQ(big_decimal, BigDecimal{"0.0"});
 }
 
@@ -113,9 +113,9 @@ TEST(BigDecimalTest, Constructor_FromZeroDouble) {
 TEST(BigDecimalTest, Addition_PositiveNumbers) {
     const BigDecimal a{"10.5"};
     const BigDecimal b{"20.3"};
-    
+
     const auto result = a + b;
-    
+
     EXPECT_EQ(result, BigDecimal{"30.8"});
 }
 
@@ -126,9 +126,9 @@ TEST(BigDecimalTest, Addition_PositiveNumbers) {
 TEST(BigDecimalTest, Addition_NegativeNumbers) {
     const BigDecimal a{"-15.5"};
     const BigDecimal b{"-10.2"};
-    
+
     const auto result = a + b;
-    
+
     EXPECT_EQ(result, BigDecimal{"-25.7"});
 }
 
@@ -139,9 +139,9 @@ TEST(BigDecimalTest, Addition_NegativeNumbers) {
 TEST(BigDecimalTest, Addition_MixedSigns) {
     const BigDecimal a{"50.0"};
     const BigDecimal b{"-20.5"};
-    
+
     const auto result = a + b;
-    
+
     EXPECT_EQ(result, BigDecimal{"29.5"});
 }
 
@@ -152,9 +152,9 @@ TEST(BigDecimalTest, Addition_MixedSigns) {
 TEST(BigDecimalTest, Addition_WithZero) {
     const BigDecimal a{"123.456"};
     const BigDecimal b{"0.0"};
-    
+
     const auto result = a + b;
-    
+
     EXPECT_EQ(result, a);
 }
 
@@ -165,9 +165,9 @@ TEST(BigDecimalTest, Addition_WithZero) {
 TEST(BigDecimalTest, Subtraction_PositiveResult) {
     const BigDecimal a{"100.5"};
     const BigDecimal b{"30.2"};
-    
+
     const auto result = a - b;
-    
+
     EXPECT_EQ(result, BigDecimal{"70.3"});
 }
 
@@ -178,9 +178,9 @@ TEST(BigDecimalTest, Subtraction_PositiveResult) {
 TEST(BigDecimalTest, Subtraction_NegativeResult) {
     const BigDecimal a{"30.2"};
     const BigDecimal b{"100.5"};
-    
+
     const auto result = a - b;
-    
+
     EXPECT_EQ(result, BigDecimal{"-70.3"});
 }
 
@@ -191,9 +191,9 @@ TEST(BigDecimalTest, Subtraction_NegativeResult) {
 TEST(BigDecimalTest, Subtraction_ByZero) {
     const BigDecimal a{"456.789"};
     const BigDecimal b{"0.0"};
-    
+
     const auto result = a - b;
-    
+
     EXPECT_EQ(result, a);
 }
 
@@ -204,9 +204,9 @@ TEST(BigDecimalTest, Subtraction_ByZero) {
 TEST(BigDecimalTest, Subtraction_EqualValues) {
     const BigDecimal a{"99.99"};
     const BigDecimal b{"99.99"};
-    
+
     const auto result = a - b;
-    
+
     EXPECT_EQ(result, BigDecimal{"0.0"});
 }
 
@@ -217,9 +217,9 @@ TEST(BigDecimalTest, Subtraction_EqualValues) {
 TEST(BigDecimalTest, Multiplication_PositiveNumbers) {
     const BigDecimal a{"2.5"};
     const BigDecimal b{"4.0"};
-    
+
     const auto result = a * b;
-    
+
     EXPECT_EQ(result, BigDecimal{"10.0"});
 }
 
@@ -230,9 +230,9 @@ TEST(BigDecimalTest, Multiplication_PositiveNumbers) {
 TEST(BigDecimalTest, Multiplication_NegativeNumbers) {
     const BigDecimal a{"-3.0"};
     const BigDecimal b{"5.0"};
-    
+
     const auto result = a * b;
-    
+
     EXPECT_EQ(result, BigDecimal{"-15.0"});
 }
 
@@ -243,9 +243,9 @@ TEST(BigDecimalTest, Multiplication_NegativeNumbers) {
 TEST(BigDecimalTest, Multiplication_ByZero) {
     const BigDecimal a{"123.456"};
     const BigDecimal b{"0.0"};
-    
+
     const auto result = a * b;
-    
+
     EXPECT_EQ(result, BigDecimal{"0.0"});
 }
 
@@ -256,9 +256,9 @@ TEST(BigDecimalTest, Multiplication_ByZero) {
 TEST(BigDecimalTest, Multiplication_DecimalPrecision) {
     const BigDecimal a{"0.1"};
     const BigDecimal b{"0.2"};
-    
+
     const auto result = a * b;
-    
+
     EXPECT_EQ(result, BigDecimal{"0.02"});
 }
 
@@ -269,9 +269,9 @@ TEST(BigDecimalTest, Multiplication_DecimalPrecision) {
 TEST(BigDecimalTest, Division_ExactDivision) {
     const BigDecimal a{"10.0"};
     const BigDecimal b{"2.0"};
-    
+
     const auto result = a / b;
-    
+
     EXPECT_EQ(result, BigDecimal{"5.0"});
 }
 
@@ -282,13 +282,13 @@ TEST(BigDecimalTest, Division_ExactDivision) {
 TEST(BigDecimalTest, Division_DecimalResult) {
     const BigDecimal a{"10.0"};
     const BigDecimal b{"3.0"};
-    
+
     const auto result = a / b;
-    
+
     // Check if result is approximately 3.333...
     const auto expected = BigDecimal{"3.33333333333333333333"};
     const auto diff = result - expected;
-    
+
     EXPECT_TRUE(diff < BigDecimal{"0.0000000001"} && diff > BigDecimal{"-0.0000000001"});
 }
 
@@ -299,7 +299,7 @@ TEST(BigDecimalTest, Division_DecimalResult) {
 TEST(BigDecimalTest, Division_ByZero_ThrowsException) {
     const BigDecimal a{"100.0"};
     const BigDecimal b{"0.0"};
-    
+
     EXPECT_THROW(static_cast<void>(a / b), std::invalid_argument);
 }
 
@@ -310,9 +310,9 @@ TEST(BigDecimalTest, Division_ByZero_ThrowsException) {
 TEST(BigDecimalTest, Division_NegativeNumbers) {
     const BigDecimal a{"-20.0"};
     const BigDecimal b{"4.0"};
-    
+
     const auto result = a / b;
-    
+
     EXPECT_EQ(result, BigDecimal{"-5.0"});
 }
 
@@ -323,7 +323,7 @@ TEST(BigDecimalTest, Division_NegativeNumbers) {
 TEST(BigDecimalTest, Equality_EqualValues) {
     const BigDecimal a{"123.456"};
     const BigDecimal b{"123.456"};
-    
+
     EXPECT_TRUE(a == b);
 }
 
@@ -334,7 +334,7 @@ TEST(BigDecimalTest, Equality_EqualValues) {
 TEST(BigDecimalTest, Equality_DifferentValues) {
     const BigDecimal a{"123.456"};
     const BigDecimal b{"123.457"};
-    
+
     EXPECT_FALSE(a == b);
 }
 
@@ -345,7 +345,7 @@ TEST(BigDecimalTest, Equality_DifferentValues) {
 TEST(BigDecimalTest, Comparison_LessThan) {
     const BigDecimal a{"10.5"};
     const BigDecimal b{"20.3"};
-    
+
     EXPECT_TRUE(a < b);
     EXPECT_FALSE(b < a);
 }
@@ -357,7 +357,7 @@ TEST(BigDecimalTest, Comparison_LessThan) {
 TEST(BigDecimalTest, Comparison_GreaterThan) {
     const BigDecimal a{"30.7"};
     const BigDecimal b{"20.3"};
-    
+
     EXPECT_TRUE(a > b);
     EXPECT_FALSE(b > a);
 }
@@ -369,7 +369,7 @@ TEST(BigDecimalTest, Comparison_GreaterThan) {
 TEST(BigDecimalTest, Comparison_Equal) {
     const BigDecimal a{"25.5"};
     const BigDecimal b{"25.5"};
-    
+
     EXPECT_FALSE(a < b);
     EXPECT_FALSE(a > b);
     EXPECT_TRUE(a == b);
@@ -382,7 +382,7 @@ TEST(BigDecimalTest, Comparison_Equal) {
 TEST(BigDecimalTest, Comparison_NegativeNumbers) {
     const BigDecimal a{"-10.5"};
     const BigDecimal b{"10.5"};
-    
+
     EXPECT_TRUE(a < b);
     EXPECT_FALSE(a > b);
 }
@@ -394,7 +394,7 @@ TEST(BigDecimalTest, Comparison_NegativeNumbers) {
 TEST(BigDecimalTest, Comparison_SmallDifferences) {
     const BigDecimal a{"1.000000001"};
     const BigDecimal b{"1.000000002"};
-    
+
     EXPECT_TRUE(a < b);
 }
 
@@ -406,9 +406,9 @@ TEST(BigDecimalTest, ChainedOperations) {
     const BigDecimal a{"10.0"};
     const BigDecimal b{"5.0"};
     const BigDecimal c{"2.0"};
-    
+
     const auto result = (a + b) * c;
-    
+
     EXPECT_EQ(result, BigDecimal{"30.0"});
 }
 
@@ -419,12 +419,12 @@ TEST(BigDecimalTest, ChainedOperations) {
 TEST(BigDecimalTest, Operations_PreserveImmutability) {
     const BigDecimal a{"100.0"};
     const BigDecimal b{"50.0"};
-    
+
     const auto sum = a + b;
     const auto diff = a - b;
     const auto product = a * b;
     const auto quotient = a / b;
-    
+
     EXPECT_EQ(a, BigDecimal{"100.0"});
     EXPECT_EQ(b, BigDecimal{"50.0"});
     EXPECT_EQ(sum, BigDecimal{"150.0"});
@@ -440,9 +440,9 @@ TEST(BigDecimalTest, Operations_PreserveImmutability) {
 TEST(BigDecimalTest, HighPrecision_Arithmetic) {
     const BigDecimal a{"0.1"};
     const BigDecimal b{"0.2"};
-    
+
     const auto result = a + b;
-    
+
     // Should be exactly 0.3, not affected by floating point errors
     EXPECT_EQ(result, BigDecimal{"0.3"});
 }
@@ -455,14 +455,14 @@ TEST(BigDecimalTest, ComplexExpression) {
     const BigDecimal price{"19.99"};
     const BigDecimal quantity{"3"};
     const BigDecimal tax_rate{"0.08"};
-    
+
     const auto subtotal = price * quantity;
     const auto tax = subtotal * tax_rate;
     const auto total = subtotal + tax;
-    
+
     // Verify intermediate results
     EXPECT_EQ(subtotal, BigDecimal{"59.97"});
-    
+
     // Tax should be approximately 4.7976
     const auto expected_tax = BigDecimal{"4.7976"};
     const auto tax_diff = tax - expected_tax;
@@ -476,9 +476,9 @@ TEST(BigDecimalTest, ComplexExpression) {
 TEST(BigDecimalTest, Comparison_ConsistencyWithArithmetic) {
     const BigDecimal a{"10.0"};
     const BigDecimal b{"5.0"};
-    
+
     const auto diff = a - b;
-    
+
     EXPECT_TRUE(diff > BigDecimal{"0.0"});
     EXPECT_TRUE(a > b);
 }

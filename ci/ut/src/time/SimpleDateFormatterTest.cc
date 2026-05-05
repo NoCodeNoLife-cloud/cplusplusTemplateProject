@@ -74,7 +74,7 @@ TEST(SimpleDateFormatterTest, Format_Tm_DateOnly) {
 
     std::tm date = {};
     date.tm_year = 2024 - 1900; // Years since 1900
-    date.tm_mon = 6 - 1; // Months since January (0-11)
+    date.tm_mon = 6 - 1;        // Months since January (0-11)
     date.tm_mday = 15;
 
     const auto result = formatter.format(date);

@@ -163,7 +163,7 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_ExecutionTimeMatchesInterval) {
     EXPECT_NEAR(duration, expectedDuration, tolerance);
 
     // Suppress unused variable warning
-    (void) cpuUsage;
+    (void)cpuUsage;
 }
 
 /**

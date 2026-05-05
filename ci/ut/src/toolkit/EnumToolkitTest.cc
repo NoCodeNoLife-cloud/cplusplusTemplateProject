@@ -180,7 +180,7 @@ TEST(EnumToolkitTest, ConstructorDeleted) {
  */
 TEST(EnumToolkitTest, GetAllEnumValues_BasicEnum) {
     const auto values = EnumToolkit::getAllEnumValues<Color>();
-    
+
     EXPECT_EQ(values.size(), 4);
     EXPECT_EQ(values[0], Color::Red);
     EXPECT_EQ(values[1], Color::Green);
@@ -194,7 +194,7 @@ TEST(EnumToolkitTest, GetAllEnumValues_BasicEnum) {
  */
 TEST(EnumToolkitTest, GetAllEnumValues_CustomValueEnum) {
     const auto values = EnumToolkit::getAllEnumValues<Status>();
-    
+
     EXPECT_EQ(values.size(), 3);
     // Values may not be in declaration order, so we check if all are present
     bool has_success = false, has_failed = false, has_pending = false;
@@ -214,7 +214,7 @@ TEST(EnumToolkitTest, GetAllEnumValues_CustomValueEnum) {
  */
 TEST(EnumToolkitTest, GetAllEnumNames_BasicEnum) {
     const auto names = EnumToolkit::getAllEnumNames<Color>();
-    
+
     EXPECT_EQ(names.size(), 4);
     EXPECT_EQ(names[0], "Red");
     EXPECT_EQ(names[1], "Green");
@@ -228,7 +228,7 @@ TEST(EnumToolkitTest, GetAllEnumNames_BasicEnum) {
  */
 TEST(EnumToolkitTest, GetAllEnumNames_CustomValueEnum) {
     const auto names = EnumToolkit::getAllEnumNames<Status>();
-    
+
     EXPECT_EQ(names.size(), 3);
     bool has_success = false, has_failed = false, has_pending = false;
     for (const auto& name : names) {
@@ -307,13 +307,13 @@ TEST(EnumToolkitTest, IntegerToEnum_ValidIntegers) {
     const auto red = EnumToolkit::integerToEnum<Color>(0);
     const auto green = EnumToolkit::integerToEnum<Color>(1);
     const auto blue = EnumToolkit::integerToEnum<Color>(2);
-    
+
     ASSERT_TRUE(red.has_value());
     EXPECT_EQ(red.value(), Color::Red);
-    
+
     ASSERT_TRUE(green.has_value());
     EXPECT_EQ(green.value(), Color::Green);
-    
+
     ASSERT_TRUE(blue.has_value());
     EXPECT_EQ(blue.value(), Color::Blue);
 }
@@ -335,13 +335,13 @@ TEST(EnumToolkitTest, IntegerToEnum_CustomValueEnum) {
     const auto success = EnumToolkit::integerToEnum<Status>(0);
     const auto failed = EnumToolkit::integerToEnum<Status>(-1);
     const auto pending = EnumToolkit::integerToEnum<Status>(1);
-    
+
     ASSERT_TRUE(success.has_value());
     EXPECT_EQ(success.value(), Status::Success);
-    
+
     ASSERT_TRUE(failed.has_value());
     EXPECT_EQ(failed.value(), Status::Failed);
-    
+
     ASSERT_TRUE(pending.has_value());
     EXPECT_EQ(pending.value(), Status::Pending);
 }
@@ -354,7 +354,7 @@ TEST(EnumToolkitTest, IntegerToEnum_RoundTrip) {
     constexpr auto original = Color::Yellow;
     const auto int_value = EnumToolkit::enumToInteger(original);
     const auto converted = EnumToolkit::integerToEnum<Color>(int_value);
-    
+
     ASSERT_TRUE(converted.has_value());
     EXPECT_EQ(converted.value(), original);
 }
@@ -365,7 +365,7 @@ TEST(EnumToolkitTest, IntegerToEnum_RoundTrip) {
  */
 TEST(EnumToolkitTest, FormatEnumInfo_BasicEnum) {
     const auto info = EnumToolkit::formatEnumInfo<Color>();
-    
+
     EXPECT_NE(info.find("Enum Type:"), std::string::npos);
     EXPECT_NE(info.find("Color"), std::string::npos);
     EXPECT_NE(info.find("Count:"), std::string::npos);
@@ -382,7 +382,7 @@ TEST(EnumToolkitTest, FormatEnumInfo_BasicEnum) {
  */
 TEST(EnumToolkitTest, FormatEnumInfo_CustomValueEnum) {
     const auto info = EnumToolkit::formatEnumInfo<Status>();
-    
+
     EXPECT_NE(info.find("Enum Type:"), std::string::npos);
     EXPECT_NE(info.find("Status"), std::string::npos);
     EXPECT_NE(info.find("Count:"), std::string::npos);

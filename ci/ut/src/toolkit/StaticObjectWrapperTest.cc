@@ -21,7 +21,7 @@ struct TestConfig {
     TestConfig() : name("default"), value(0) {
     }
 
-    TestConfig(const std::string &n, int v) : name(n), value(v) {
+    TestConfig(const std::string& n, int v) : name(n), value(v) {
     }
 };
 
@@ -30,7 +30,7 @@ struct NoDefaultConfig {
     std::string name;
     int value;
 
-    NoDefaultConfig(const std::string &n, int v) : name(n), value(v) {
+    NoDefaultConfig(const std::string& n, int v) : name(n), value(v) {
     }
 };
 
@@ -87,7 +87,7 @@ TEST(StaticObjectWrapperTest, InitWithParamsAndGet) {
     EXPECT_TRUE(Wrapper1::isInitialized());
 
     // Get and verify
-    const auto &config = Wrapper1::get();
+    const auto& config = Wrapper1::get();
     EXPECT_EQ(config.name, "test_config");
     EXPECT_EQ(config.value, 42);
 
@@ -105,7 +105,7 @@ TEST(StaticObjectWrapperTest, InitDefaultConstructible) {
     EXPECT_TRUE(Wrapper2::isInitialized());
 
     // Get and verify default values
-    const auto &config = Wrapper2::get();
+    const auto& config = Wrapper2::get();
     EXPECT_EQ(config.first.name, "default");
     EXPECT_EQ(config.first.value, 0);
 
@@ -120,7 +120,7 @@ TEST(StaticObjectWrapperTest, GetWithoutInitDefaultConstructible) {
     EXPECT_FALSE(Wrapper3::isInitialized());
 
     // Get should auto-initialize for default constructible types
-    const auto &[fst, snd] = Wrapper3::get();
+    const auto& [fst, snd] = Wrapper3::get();
     EXPECT_TRUE(Wrapper3::isInitialized());
     EXPECT_EQ(fst.name, "default");
     EXPECT_EQ(fst.value, 0);
@@ -151,7 +151,7 @@ TEST(StaticObjectWrapperTest, InitNonDefaultConstructible) {
     EXPECT_TRUE(Wrapper5::isInitialized());
 
     // Get and verify
-    const auto &config = Wrapper5::get();
+    const auto& config = Wrapper5::get();
     EXPECT_EQ(config.first.name, "custom_config");
     EXPECT_EQ(config.first.value, 100);
 
@@ -204,7 +204,7 @@ TEST(StaticObjectWrapperTest, MultipleInitCalls) {
     Wrapper8::init(second_config);
 
     // Should still have first values
-    const auto &config = Wrapper8::get();
+    const auto& config = Wrapper8::get();
     EXPECT_EQ(config.first.name, "first");
     EXPECT_EQ(config.first.value, 1);
 

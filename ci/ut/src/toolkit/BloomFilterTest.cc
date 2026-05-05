@@ -83,7 +83,7 @@ TEST(BloomFilterTest, InsertAndContains_CharPointer) {
 
     BloomFilter filter(params);
 
-    const char *key = "test_key";
+    const char* key = "test_key";
     filter.insert(key, std::strlen(key));
 
     EXPECT_TRUE(filter.contains(key, std::strlen(key)));
@@ -146,7 +146,7 @@ TEST(BloomFilterTest, NoFalseNegatives) {
     }
 
     // All inserted keys must be found (no false negatives)
-    for (const auto &key: keys) {
+    for (const auto& key : keys) {
         EXPECT_TRUE(filter.contains(key)) << "Key not found: " << key;
     }
 }
@@ -563,7 +563,7 @@ TEST(BloomFilterTest, Table_ReturnsValidPointer) {
 
     const BloomFilter filter(params);
 
-    const auto *table_ptr = filter.table();
+    const auto* table_ptr = filter.table();
     EXPECT_NE(table_ptr, nullptr);
 }
 
@@ -585,7 +585,7 @@ TEST(BloomFilterTest, Insert_IteratorRange) {
 
     EXPECT_EQ(filter.element_count(), 5);
 
-    for (const auto &key: keys) {
+    for (const auto& key : keys) {
         EXPECT_TRUE(filter.contains(key));
     }
 }
@@ -603,7 +603,7 @@ TEST(BloomFilterTest, ContainsAll_AllPresent) {
     BloomFilter filter(params);
 
     std::vector<std::string> keys = {"a", "b", "c"};
-    for (const auto &key: keys) {
+    for (const auto& key : keys) {
         filter.insert(key);
     }
 

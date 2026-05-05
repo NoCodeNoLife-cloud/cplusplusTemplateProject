@@ -231,7 +231,7 @@ TEST(HeapTest, Top_ConstAccessor) {
     heap.push(10);
     heap.push(20);
 
-    const Heap<int> &constHeap = heap;
+    const Heap<int>& constHeap = heap;
     EXPECT_EQ(constHeap.top(), 20);
 }
 

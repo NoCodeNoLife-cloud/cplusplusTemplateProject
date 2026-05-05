@@ -36,7 +36,7 @@ TEST(FunctionProfilerAspectTest, Constructor_EmptyFunctionName) {
  */
 TEST(FunctionProfilerAspectTest, OnEntry_NoException) {
     FunctionProfilerAspect aspect{"testFunction"};
-    
+
     EXPECT_NO_THROW(aspect.onEntry());
 }
 
@@ -46,12 +46,12 @@ TEST(FunctionProfilerAspectTest, OnEntry_NoException) {
  */
 TEST(FunctionProfilerAspectTest, OnExit_AfterEntry) {
     FunctionProfilerAspect aspect{"testFunction"};
-    
+
     aspect.onEntry();
-    
+
     // Simulate some work
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    
+
     EXPECT_NO_THROW(aspect.onExit());
 }
 
@@ -61,7 +61,7 @@ TEST(FunctionProfilerAspectTest, OnExit_AfterEntry) {
  */
 TEST(FunctionProfilerAspectTest, OnExit_WithoutEntry) {
     FunctionProfilerAspect aspect{"testFunction"};
-    
+
     // Should not throw even if onEntry was not called
     EXPECT_NO_THROW(aspect.onExit());
 }
@@ -72,12 +72,12 @@ TEST(FunctionProfilerAspectTest, OnExit_WithoutEntry) {
  */
 TEST(FunctionProfilerAspectTest, OnException_WithExceptionPointer) {
     FunctionProfilerAspect aspect{"testFunction"};
-    
+
     aspect.onEntry();
-    
+
     // Create an exception pointer
     std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Test error"));
-    
+
     EXPECT_NO_THROW(aspect.onException(eptr));
 }
 
@@ -87,9 +87,9 @@ TEST(FunctionProfilerAspectTest, OnException_WithExceptionPointer) {
  */
 TEST(FunctionProfilerAspectTest, OnException_WithoutEntry) {
     FunctionProfilerAspect aspect{"testFunction"};
-    
+
     std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Test error"));
-    
+
     EXPECT_NO_THROW(aspect.onException(eptr));
 }
 
@@ -99,12 +99,12 @@ TEST(FunctionProfilerAspectTest, OnException_WithoutEntry) {
  */
 TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenExit) {
     FunctionProfilerAspect aspect{"lifecycleTest"};
-    
+
     EXPECT_NO_THROW({
         aspect.onEntry();
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         aspect.onExit();
-    });
+        });
 }
 
 /**
@@ -113,13 +113,13 @@ TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenExit) {
  */
 TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenException) {
     FunctionProfilerAspect aspect{"exceptionTest"};
-    
+
     EXPECT_NO_THROW({
         aspect.onEntry();
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Error"));
         aspect.onException(eptr);
-    });
+        });
 }
 
 /**
@@ -128,16 +128,16 @@ TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenException) {
  */
 TEST(FunctionProfilerAspectTest, Exec_VoidFunction) {
     FunctionProfilerAspect aspect{"voidFunctionTest"};
-    
+
     bool executed = false;
-    
+
     EXPECT_NO_THROW({
         aspect.exec([&executed]() {
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
             executed = true;
+            });
         });
-    });
-    
+
     EXPECT_TRUE(executed);
 }
 
@@ -147,12 +147,12 @@ TEST(FunctionProfilerAspectTest, Exec_VoidFunction) {
  */
 TEST(FunctionProfilerAspectTest, Exec_FunctionReturningValue) {
     FunctionProfilerAspect aspect{"valueFunctionTest"};
-    
+
     auto result = aspect.exec([]() -> int {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         return 42;
     });
-    
+
     EXPECT_EQ(result, 42);
 }
 
@@ -162,12 +162,12 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionReturningValue) {
  */
 TEST(FunctionProfilerAspectTest, Exec_FunctionWithArguments) {
     FunctionProfilerAspect aspect{"argsFunctionTest"};
-    
+
     auto result = aspect.exec([](int a, int b) -> int {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         return a + b;
     }, 10, 20);
-    
+
     EXPECT_EQ(result, 30);
 }
 
@@ -177,13 +177,13 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionWithArguments) {
  */
 TEST(FunctionProfilerAspectTest, Exec_FunctionThrowsException) {
     FunctionProfilerAspect aspect{"throwingFunctionTest"};
-    
+
     EXPECT_THROW({
-        aspect.exec([]() {
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
-            throw std::runtime_error("Test exception");
-        });
-    }, std::runtime_error);
+                 aspect.exec([]() {
+                     std::this_thread::sleep_for(std::chrono::milliseconds(5));
+                     throw std::runtime_error("Test exception");
+                     });
+                 }, std::runtime_error);
 }
 
 /**
@@ -192,13 +192,13 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionThrowsException) {
  */
 TEST(FunctionProfilerAspectTest, Exec_PreservesExceptionType) {
     FunctionProfilerAspect aspect{"exceptionTypeTest"};
-    
+
     try {
         aspect.exec([]() {
             throw std::invalid_argument("Invalid argument");
         });
         FAIL() << "Expected std::invalid_argument exception";
-    } catch (const std::invalid_argument &e) {
+    } catch (const std::invalid_argument& e) {
         EXPECT_STREQ(e.what(), "Invalid argument");
     } catch (...) {
         FAIL() << "Unexpected exception type";
@@ -211,15 +211,15 @@ TEST(FunctionProfilerAspectTest, Exec_PreservesExceptionType) {
  */
 TEST(FunctionProfilerAspectTest, MultipleExecutions_Sequential) {
     FunctionProfilerAspect aspect{"multipleExecTest"};
-    
+
     auto result1 = aspect.exec([]() -> int {
         return 100;
     });
-    
+
     auto result2 = aspect.exec([]() -> int {
         return 200;
     });
-    
+
     EXPECT_EQ(result1, 100);
     EXPECT_EQ(result2, 200);
 }
@@ -230,14 +230,18 @@ TEST(FunctionProfilerAspectTest, MultipleExecutions_Sequential) {
  */
 TEST(FunctionProfilerAspectTest, Exec_DifferentCallableTypes) {
     FunctionProfilerAspect aspect{"callableTest"};
-    
+
     // Lambda
-    auto result1 = aspect.exec([]() { return 1; });
+    auto result1 = aspect.exec([]() {
+        return 1;
+    });
     EXPECT_EQ(result1, 1);
-    
+
     // Function object
     struct Functor {
-        auto operator()() const -> int { return 2; }
+        auto operator()() const -> int {
+            return 2;
+        }
     };
     auto result2 = aspect.exec(Functor{});
     EXPECT_EQ(result2, 2);
@@ -249,16 +253,16 @@ TEST(FunctionProfilerAspectTest, Exec_DifferentCallableTypes) {
  */
 TEST(FunctionProfilerAspectTest, Timing_Accuracy) {
     FunctionProfilerAspect aspect{"timingTest"};
-    
+
     const auto start = std::chrono::high_resolution_clock::now();
-    
+
     aspect.exec([]() {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     });
-    
+
     const auto end = std::chrono::high_resolution_clock::now();
     const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    
+
     // Allow some tolerance for timing variations
     EXPECT_GE(elapsed, 45);
     EXPECT_LE(elapsed, 100);
@@ -271,13 +275,13 @@ TEST(FunctionProfilerAspectTest, Timing_Accuracy) {
 TEST(FunctionProfilerAspectTest, NestedExecutions) {
     FunctionProfilerAspect outerAspect{"outerFunction"};
     FunctionProfilerAspect innerAspect{"innerFunction"};
-    
+
     auto result = outerAspect.exec([&innerAspect]() -> int {
         return innerAspect.exec([]() -> int {
             return 42;
         });
     });
-    
+
     EXPECT_EQ(result, 42);
 }
 
@@ -287,12 +291,12 @@ TEST(FunctionProfilerAspectTest, NestedExecutions) {
  */
 TEST(FunctionProfilerAspectTest, LongRunningFunction) {
     FunctionProfilerAspect aspect{"longRunningTest"};
-    
+
     EXPECT_NO_THROW({
         aspect.exec([]() {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            });
         });
-    });
 }
 
 /**
@@ -301,10 +305,10 @@ TEST(FunctionProfilerAspectTest, LongRunningFunction) {
  */
 TEST(FunctionProfilerAspectTest, ImmediateFunction) {
     FunctionProfilerAspect aspect{"immediateTest"};
-    
+
     auto result = aspect.exec([]() -> int {
         return 999;
     });
-    
+
     EXPECT_EQ(result, 999);
 }

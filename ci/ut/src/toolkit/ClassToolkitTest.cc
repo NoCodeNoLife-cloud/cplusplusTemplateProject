@@ -24,14 +24,14 @@ struct TestPerson {
  * @brief ReflectTraits specialization for TestPerson
  * @details Defines metadata for reflection including field count and member pointers
  */
-template<>
+template <>
 struct ReflectTraits<TestPerson> {
     static constexpr std::size_t field_count = 3;
     static constexpr auto fields = std::make_tuple(
         std::make_pair("name", &TestPerson::name),
         std::make_pair("age", &TestPerson::age),
         std::make_pair("score", &TestPerson::score)
-    );
+        );
 };
 
 /**
@@ -256,9 +256,11 @@ TEST(ClassToolkitTest, IsSameType_DifferentTypes) {
  * @details Verifies true is returned when Base is actually a base of Derived
  */
 TEST(ClassToolkitTest, IsBaseOf_ValidInheritance) {
-    struct Base {};
-    struct Derived : Base {};
-    
+    struct Base {
+    };
+    struct Derived : Base {
+    };
+
     EXPECT_TRUE((ClassToolkit::isBaseOf<Base, Derived>()));
 }
 
@@ -267,9 +269,11 @@ TEST(ClassToolkitTest, IsBaseOf_ValidInheritance) {
  * @details Verifies false is returned when there's no inheritance relationship
  */
 TEST(ClassToolkitTest, IsBaseOf_NoInheritance) {
-    struct ClassA {};
-    struct ClassB {};
-    
+    struct ClassA {
+    };
+    struct ClassB {
+    };
+
     EXPECT_FALSE((ClassToolkit::isBaseOf<ClassA, ClassB>()));
 }
 
@@ -281,7 +285,7 @@ TEST(ClassToolkitTest, IsPolymorphic_PolymorphicClass) {
     struct Polymorphic {
         virtual ~Polymorphic() = default;
     };
-    
+
     EXPECT_TRUE((ClassToolkit::isPolymorphic<Polymorphic>()));
 }
 
@@ -293,7 +297,7 @@ TEST(ClassToolkitTest, IsPolymorphic_NonPolymorphicClass) {
     struct NonPolymorphic {
         int x;
     };
-    
+
     EXPECT_FALSE((ClassToolkit::isPolymorphic<NonPolymorphic>()));
 }
 
@@ -304,9 +308,10 @@ TEST(ClassToolkitTest, IsPolymorphic_NonPolymorphicClass) {
 TEST(ClassToolkitTest, IsAbstract_AbstractClass) {
     struct Abstract {
         virtual void foo() = 0;
+
         virtual ~Abstract() = default;
     };
-    
+
     EXPECT_TRUE((ClassToolkit::isAbstract<Abstract>()));
 }
 
@@ -316,9 +321,10 @@ TEST(ClassToolkitTest, IsAbstract_AbstractClass) {
  */
 TEST(ClassToolkitTest, IsAbstract_ConcreteClass) {
     struct Concrete {
-        void foo() {}
+        void foo() {
+        }
     };
-    
+
     EXPECT_FALSE((ClassToolkit::isAbstract<Concrete>()));
 }
 
@@ -422,7 +428,7 @@ TEST(ClassToolkitTest, GetTypeHash_DifferentTypes) {
  */
 TEST(ClassToolkitTest, GetFieldNames_ReturnsAllFields) {
     auto names = ClassToolkit::getFieldNames<TestPerson>();
-    
+
     ASSERT_EQ(names.size(), 3);
     EXPECT_EQ(names[0], "name");
     EXPECT_EQ(names[1], "age");
@@ -443,7 +449,7 @@ TEST(ClassToolkitTest, GetFieldCount_ReturnsCorrectCount) {
  */
 TEST(ClassToolkitTest, GetFieldByName_RetrievesCorrectValue) {
     const TestPerson person{"Alice", 25, 95.5};
-    
+
     EXPECT_EQ(ClassToolkit::getFieldByName(person, "name"), "Alice");
     EXPECT_EQ(ClassToolkit::getFieldByName(person, "age"), "25");
     EXPECT_EQ(ClassToolkit::getFieldByName(person, "score"), "95.5");
@@ -455,7 +461,7 @@ TEST(ClassToolkitTest, GetFieldByName_RetrievesCorrectValue) {
  */
 TEST(ClassToolkitTest, GetFieldByName_InvalidFieldName_ThrowsException) {
     const TestPerson person{"Bob", 30, 88.5};
-    
+
     EXPECT_THROW(ClassToolkit::getFieldByName(person, "invalid_field"), std::invalid_argument);
 }
 
@@ -466,7 +472,7 @@ TEST(ClassToolkitTest, GetFieldByName_InvalidFieldName_ThrowsException) {
 TEST(ClassToolkitTest, CompareObjects_IdenticalObjects) {
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Alice", 25, 95.5};
-    
+
     EXPECT_TRUE(ClassToolkit::compareObjects(person1, person2));
 }
 
@@ -477,7 +483,7 @@ TEST(ClassToolkitTest, CompareObjects_IdenticalObjects) {
 TEST(ClassToolkitTest, CompareObjects_DifferentObjects) {
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Bob", 25, 95.5};
-    
+
     EXPECT_FALSE(ClassToolkit::compareObjects(person1, person2));
 }
 
@@ -488,7 +494,7 @@ TEST(ClassToolkitTest, CompareObjects_DifferentObjects) {
 TEST(ClassToolkitTest, GetObjectDiff_IdenticalObjects) {
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Alice", 25, 95.5};
-    
+
     auto diff = ClassToolkit::getObjectDiff(person1, person2);
     EXPECT_TRUE(diff.empty());
 }
@@ -500,9 +506,9 @@ TEST(ClassToolkitTest, GetObjectDiff_IdenticalObjects) {
 TEST(ClassToolkitTest, GetObjectDiff_DifferentObjects) {
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Bob", 30, 88.5};
-    
+
     auto diff = ClassToolkit::getObjectDiff(person1, person2);
-    
+
     EXPECT_EQ(diff.size(), 3); // All fields are different
     EXPECT_EQ(diff["name"].first, "Alice");
     EXPECT_EQ(diff["name"].second, "Bob");
@@ -515,9 +521,9 @@ TEST(ClassToolkitTest, GetObjectDiff_DifferentObjects) {
 TEST(ClassToolkitTest, GetObjectDiff_PartiallyDifferent) {
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Alice", 30, 95.5};
-    
+
     auto diff = ClassToolkit::getObjectDiff(person1, person2);
-    
+
     EXPECT_EQ(diff.size(), 1); // Only age is different
     EXPECT_EQ(diff["age"].first, "25");
     EXPECT_EQ(diff["age"].second, "30");
@@ -529,7 +535,7 @@ TEST(ClassToolkitTest, GetObjectDiff_PartiallyDifferent) {
  */
 TEST(ClassToolkitTest, GetTypeInfo_ComprehensiveInformation) {
     auto info = ClassToolkit::getTypeInfo<int>();
-    
+
     EXPECT_NE(info.find("Type:"), std::string::npos);
     EXPECT_NE(info.find("Size:"), std::string::npos);
     EXPECT_NE(info.find("Alignment:"), std::string::npos);
@@ -542,6 +548,6 @@ TEST(ClassToolkitTest, GetTypeInfo_ComprehensiveInformation) {
  */
 TEST(ClassToolkitTest, GetTypeInfo_CustomClass) {
     auto info = ClassToolkit::getTypeInfo<TestPerson>();
-    
+
     EXPECT_NE(info.find("TestPerson"), std::string::npos);
 }

@@ -41,7 +41,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectFormat) {
 TEST(UuidGeneratorTest, GenerateRandomUuid_LowercaseHex) {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
 
-    for (const char c: uuid) {
+    for (const char c : uuid) {
         if (c != '-') {
             EXPECT_TRUE(std::isxdigit(static_cast<unsigned char>(c)));
             EXPECT_TRUE(std::islower(static_cast<unsigned char>(c)) || std::isdigit(static_cast<unsigned char>(c)));
@@ -108,7 +108,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_VariantIndicator) {
     // RFC 4122 variant has bits 10xx at position 19
     const char variantChar = uuid[19];
     EXPECT_TRUE(variantChar == '8' || variantChar == '9' ||
-                variantChar == 'a' || variantChar == 'b');
+        variantChar == 'a' || variantChar == 'b');
 }
 
 /**
@@ -147,7 +147,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_ThreadSafety) {
         });
     }
 
-    for (auto &thread: threads) {
+    for (auto& thread : threads) {
         thread.join();
     }
 
@@ -180,7 +180,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_GoodDistribution) {
     // Generate many UUIDs and collect unique characters
     for (int i = 0; i < 100; ++i) {
         const auto uuid = UuidGenerator::GenerateRandomUuid();
-        for (const char c: uuid) {
+        for (const char c : uuid) {
             if (c != '-') {
                 uniqueChars.insert(c);
             }

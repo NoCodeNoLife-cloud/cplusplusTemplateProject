@@ -21,13 +21,13 @@ using namespace common::crypto::hash;
  */
 TEST(SHAToolkitTest, SHA256_BasicHashing) {
     auto toolkit = SHAToolkit::createSHA256();
-    
+
     EXPECT_EQ(toolkit.getDigestSize(), 32);
     EXPECT_EQ(toolkit.getHexDigestSize(), 64);
-    
+
     EXPECT_TRUE(toolkit.update("hello"));
     const auto hash = toolkit.finalize();
-    
+
     ASSERT_TRUE(hash.has_value());
     EXPECT_EQ(hash->size(), 32);
 }
@@ -38,13 +38,13 @@ TEST(SHAToolkitTest, SHA256_BasicHashing) {
  */
 TEST(SHAToolkitTest, SHA1_BasicHashing) {
     auto toolkit = SHAToolkit::createSHA1();
-    
+
     EXPECT_EQ(toolkit.getDigestSize(), 20);
     EXPECT_EQ(toolkit.getHexDigestSize(), 40);
-    
+
     EXPECT_TRUE(toolkit.update("hello"));
     const auto hash = toolkit.finalize();
-    
+
     ASSERT_TRUE(hash.has_value());
     EXPECT_EQ(hash->size(), 20);
 }
@@ -56,7 +56,7 @@ TEST(SHAToolkitTest, SHA1_BasicHashing) {
 TEST(SHAToolkitTest, SHA256_StaticMethods) {
     const auto hash = SHAToolkit::hashStringSHA256("hello");
     ASSERT_TRUE(hash.has_value());
-    
+
     const auto hex = SHAToolkit::hashStringToHexSHA256("hello");
     ASSERT_TRUE(hex.has_value());
     EXPECT_EQ(hex->length(), 64);
@@ -71,7 +71,7 @@ TEST(SHAToolkitTest, SHA1_StaticMethods) {
     const auto hash = SHAToolkit::hashStringSHA1("hello");
     ASSERT_TRUE(hash.has_value());
     EXPECT_EQ(hash->size(), 20);
-    
+
     const auto hex = SHAToolkit::hashStringToHexSHA1("hello");
     ASSERT_TRUE(hex.has_value());
     EXPECT_EQ(hex->length(), 40);
@@ -85,14 +85,14 @@ TEST(SHAToolkitTest, SHA1_StaticMethods) {
  */
 TEST(SHAToolkitTest, IncrementalHash_SHA256) {
     auto toolkit = SHAToolkit::createSHA256();
-    
+
     EXPECT_TRUE(toolkit.update("hello"));
     EXPECT_TRUE(toolkit.update(" "));
     EXPECT_TRUE(toolkit.update("world"));
-    
+
     const auto hash = toolkit.finalize();
     ASSERT_TRUE(hash.has_value());
-    
+
     const auto expected = SHAToolkit::hashStringSHA256("hello world");
     ASSERT_TRUE(expected.has_value());
     EXPECT_EQ(*hash, *expected);
@@ -104,16 +104,16 @@ TEST(SHAToolkitTest, IncrementalHash_SHA256) {
  */
 TEST(SHAToolkitTest, Reset_Functionality) {
     auto toolkit = SHAToolkit::createSHA256();
-    
+
     EXPECT_TRUE(toolkit.update("first"));
     const auto hash1 = toolkit.finalize();
     ASSERT_TRUE(hash1.has_value());
-    
+
     EXPECT_TRUE(toolkit.reset());
     EXPECT_TRUE(toolkit.update("second"));
     const auto hash2 = toolkit.finalize();
     ASSERT_TRUE(hash2.has_value());
-    
+
     EXPECT_NE(*hash1, *hash2);
 }
 
@@ -124,20 +124,20 @@ TEST(SHAToolkitTest, Reset_Functionality) {
 TEST(SHAToolkitTest, FileHash_SHA256) {
     const std::string temp_file = "test_sha_toolkit_temp.txt";
     const std::string content = "Test content for file hashing";
-    
+
     std::ofstream ofs(temp_file, std::ios::binary);
     ASSERT_TRUE(ofs.is_open());
     ofs.write(content.c_str(), content.size());
     ofs.close();
-    
+
     const auto hex = SHAToolkit::hashFileToHexSHA256(temp_file);
     ASSERT_TRUE(hex.has_value());
     EXPECT_EQ(hex->length(), 64);
-    
+
     const auto expected_hex = SHAToolkit::hashStringToHexSHA256(content);
     ASSERT_TRUE(expected_hex.has_value());
     EXPECT_EQ(*hex, *expected_hex);
-    
+
     std::filesystem::remove(temp_file);
 }
 
@@ -147,13 +147,13 @@ TEST(SHAToolkitTest, FileHash_SHA256) {
  */
 TEST(SHAToolkitTest, Finalize_PreventsUpdates) {
     auto toolkit = SHAToolkit::createSHA256();
-    
+
     EXPECT_TRUE(toolkit.update("data"));
     const auto hash1 = toolkit.finalize();
     ASSERT_TRUE(hash1.has_value());
-    
+
     EXPECT_FALSE(toolkit.update("more data"));
-    
+
     const auto hash2 = toolkit.finalize();
     EXPECT_FALSE(hash2.has_value());
 }
@@ -165,11 +165,11 @@ TEST(SHAToolkitTest, Finalize_PreventsUpdates) {
 TEST(SHAToolkitTest, MoveSemantics) {
     auto toolkit1 = SHAToolkit::createSHA256();
     EXPECT_TRUE(toolkit1.update("test data"));
-    
+
     auto toolkit2(std::move(toolkit1));
     const auto hash = toolkit2.finalize();
     ASSERT_TRUE(hash.has_value());
-    
+
     const auto expected = SHAToolkit::hashStringSHA256("test data");
     ASSERT_TRUE(expected.has_value());
     EXPECT_EQ(*hash, *expected);
