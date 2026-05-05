@@ -116,6 +116,6 @@ private:
     PasswordPolicy password_policy_;
     std::unordered_map<std::string, std::unique_ptr<UserCredentials> > users_;
     mutable std::mutex users_mutex_;
-    server_app::sql::PasswordSQL password_sql_;
+    common::sql::PasswordSQL password_sql_;
 };
 } // common

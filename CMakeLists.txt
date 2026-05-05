@@ -36,7 +36,7 @@ include_directories(server)
 include_directories(ci)
 
 # Vcpkg dependencies
-find_package(boost CONFIG REQUIRED)
+find_package(Boost REQUIRED)
 find_package(glog CONFIG REQUIRED)
 find_package(gtest CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
