@@ -255,7 +255,7 @@ TEST(SystemInfoTest, RegistryKey_BoolConversion) {
  */
 TEST(SystemInfoTest, RegistryKey_MoveConstructor) {
     RegistryKey key1(nullptr);
-    RegistryKey key2(std::move(key1));
+    const RegistryKey key2(std::move(key1));
 
     EXPECT_FALSE(key2); // Moved-to key should still be nullptr
     EXPECT_FALSE(key1); // Moved-from key should be nullptr

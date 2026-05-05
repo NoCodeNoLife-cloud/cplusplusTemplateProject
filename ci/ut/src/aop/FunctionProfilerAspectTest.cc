@@ -76,7 +76,7 @@ TEST(FunctionProfilerAspectTest, OnException_WithExceptionPointer) {
     aspect.onEntry();
 
     // Create an exception pointer
-    std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Test error"));
+    const std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Test error"));
 
     EXPECT_NO_THROW(aspect.onException(eptr));
 }
@@ -88,7 +88,7 @@ TEST(FunctionProfilerAspectTest, OnException_WithExceptionPointer) {
 TEST(FunctionProfilerAspectTest, OnException_WithoutEntry) {
     FunctionProfilerAspect aspect{"testFunction"};
 
-    std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Test error"));
+    const std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Test error"));
 
     EXPECT_NO_THROW(aspect.onException(eptr));
 }
@@ -117,7 +117,7 @@ TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenException) {
     EXPECT_NO_THROW({
         aspect.onEntry();
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
-        std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Error"));
+        const std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Error"));
         aspect.onException(eptr);
         });
 }
@@ -148,7 +148,7 @@ TEST(FunctionProfilerAspectTest, Exec_VoidFunction) {
 TEST(FunctionProfilerAspectTest, Exec_FunctionReturningValue) {
     FunctionProfilerAspect aspect{"valueFunctionTest"};
 
-    auto result = aspect.exec([]() -> int {
+    const auto result = aspect.exec([]() -> int {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         return 42;
     });
@@ -163,7 +163,7 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionReturningValue) {
 TEST(FunctionProfilerAspectTest, Exec_FunctionWithArguments) {
     FunctionProfilerAspect aspect{"argsFunctionTest"};
 
-    auto result = aspect.exec([](int a, int b) -> int {
+    const auto result = aspect.exec([](int a, int b) -> int {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         return a + b;
     }, 10, 20);
@@ -212,11 +212,11 @@ TEST(FunctionProfilerAspectTest, Exec_PreservesExceptionType) {
 TEST(FunctionProfilerAspectTest, MultipleExecutions_Sequential) {
     FunctionProfilerAspect aspect{"multipleExecTest"};
 
-    auto result1 = aspect.exec([]() -> int {
+    const auto result1 = aspect.exec([]() -> int {
         return 100;
     });
 
-    auto result2 = aspect.exec([]() -> int {
+    const auto result2 = aspect.exec([]() -> int {
         return 200;
     });
 
@@ -232,7 +232,7 @@ TEST(FunctionProfilerAspectTest, Exec_DifferentCallableTypes) {
     FunctionProfilerAspect aspect{"callableTest"};
 
     // Lambda
-    auto result1 = aspect.exec([]() {
+    const auto result1 = aspect.exec([]() {
         return 1;
     });
     EXPECT_EQ(result1, 1);
@@ -243,7 +243,7 @@ TEST(FunctionProfilerAspectTest, Exec_DifferentCallableTypes) {
             return 2;
         }
     };
-    auto result2 = aspect.exec(Functor{});
+    const auto result2 = aspect.exec(Functor{});
     EXPECT_EQ(result2, 2);
 }
 
@@ -276,7 +276,7 @@ TEST(FunctionProfilerAspectTest, NestedExecutions) {
     FunctionProfilerAspect outerAspect{"outerFunction"};
     FunctionProfilerAspect innerAspect{"innerFunction"};
 
-    auto result = outerAspect.exec([&innerAspect]() -> int {
+    const auto result = outerAspect.exec([&innerAspect]() -> int {
         return innerAspect.exec([]() -> int {
             return 42;
         });
@@ -306,7 +306,7 @@ TEST(FunctionProfilerAspectTest, LongRunningFunction) {
 TEST(FunctionProfilerAspectTest, ImmediateFunction) {
     FunctionProfilerAspect aspect{"immediateTest"};
 
-    auto result = aspect.exec([]() -> int {
+    const auto result = aspect.exec([]() -> int {
         return 999;
     });
 

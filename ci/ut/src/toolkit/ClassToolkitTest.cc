@@ -407,8 +407,8 @@ TEST(ClassToolkitTest, IsTriviallyDestructible_TrivialTypes) {
  * @details Verifies hash is consistent for same type
  */
 TEST(ClassToolkitTest, GetTypeHash_ConsistentValues) {
-    auto hash1 = ClassToolkit::getTypeHash<int>();
-    auto hash2 = ClassToolkit::getTypeHash<int>();
+    const auto hash1 = ClassToolkit::getTypeHash<int>();
+    const auto hash2 = ClassToolkit::getTypeHash<int>();
     EXPECT_EQ(hash1, hash2);
 }
 
@@ -417,8 +417,8 @@ TEST(ClassToolkitTest, GetTypeHash_ConsistentValues) {
  * @details Verifies hash differs for different types
  */
 TEST(ClassToolkitTest, GetTypeHash_DifferentTypes) {
-    auto hash_int = ClassToolkit::getTypeHash<int>();
-    auto hash_double = ClassToolkit::getTypeHash<double>();
+    const auto hash_int = ClassToolkit::getTypeHash<int>();
+    const auto hash_double = ClassToolkit::getTypeHash<double>();
     EXPECT_NE(hash_int, hash_double);
 }
 
@@ -427,7 +427,7 @@ TEST(ClassToolkitTest, GetTypeHash_DifferentTypes) {
  * @details Verifies all fields are listed correctly
  */
 TEST(ClassToolkitTest, GetFieldNames_ReturnsAllFields) {
-    auto names = ClassToolkit::getFieldNames<TestPerson>();
+    const auto names = ClassToolkit::getFieldNames<TestPerson>();
 
     ASSERT_EQ(names.size(), 3);
     EXPECT_EQ(names[0], "name");
@@ -495,7 +495,7 @@ TEST(ClassToolkitTest, GetObjectDiff_IdenticalObjects) {
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Alice", 25, 95.5};
 
-    auto diff = ClassToolkit::getObjectDiff(person1, person2);
+    const auto diff = ClassToolkit::getObjectDiff(person1, person2);
     EXPECT_TRUE(diff.empty());
 }
 

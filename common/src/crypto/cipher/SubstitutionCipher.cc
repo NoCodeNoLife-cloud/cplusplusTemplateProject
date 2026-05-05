@@ -35,7 +35,7 @@ SubstitutionCipher::SubstitutionCipher(const int shift) {
 }
 
 SubstitutionCipher::SubstitutionCipher(const unsigned int seed) {
-    std::string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const std::string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     std::string shuffled = upper;
 
     std::mt19937 gen(seed);

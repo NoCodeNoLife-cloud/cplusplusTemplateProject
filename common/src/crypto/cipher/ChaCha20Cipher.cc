@@ -106,7 +106,7 @@ auto ChaCha20Cipher::generateKeystream(size_t length) -> std::vector<uint8_t> {
     }
 
     // Generate keystream by encrypting zeros
-    std::vector<uint8_t> zeros(length, 0);
+    const std::vector<uint8_t> zeros(length, 0);
     return process(zeros);
 }
 

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <ranges>
 
 namespace common::crypto::cipher {
 CaesarCipher::CaesarCipher(const int shift) : shift_(NormalizeShift(shift)) {
@@ -42,18 +43,11 @@ auto CaesarCipher::Transform(const std::string_view text, const int effective_sh
         throw std::invalid_argument("Input contains non-ASCII characters");
     }
 
-    std::string result;
-    result.reserve(text.length());
+    auto transformed = text | std::ranges::views::transform([effective_shift](const unsigned char c) {
+        return std::isalpha(c) ? ShiftChar(static_cast<char>(c), effective_shift) : static_cast<char>(c);
+    });
 
-    for (const unsigned char c : text) {
-        if (std::isalpha(c)) {
-            result.push_back(ShiftChar(static_cast<char>(c), effective_shift));
-        } else {
-            result.push_back(static_cast<char>(c));
-        }
-    }
-
-    return result;
+    return {transformed.begin(), transformed.end()};
 }
 
 auto CaesarCipher::ShiftChar(const char c, const int shift) noexcept -> char {

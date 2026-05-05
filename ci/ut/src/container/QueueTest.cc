@@ -17,7 +17,7 @@ using namespace common::container;
  * @details Verifies that a newly constructed queue is empty with zero size
  */
 TEST(QueueTest, DefaultConstructor_EmptyQueue) {
-    Queue<int> queue;
+    const Queue<int> queue;
     EXPECT_TRUE(queue.empty());
     EXPECT_EQ(queue.size(), 0);
 }
@@ -49,8 +49,8 @@ TEST(QueueTest, CopyConstructor_DeepCopy) {
  * @details Verifies copying an empty queue works correctly
  */
 TEST(QueueTest, CopyConstructor_EmptyQueue) {
-    Queue<int> queue1;
-    Queue<int> queue2(queue1);
+    const Queue<int> queue1;
+    const Queue<int> queue2(queue1);
 
     EXPECT_TRUE(queue2.empty());
     EXPECT_EQ(queue2.size(), 0);
@@ -562,7 +562,7 @@ TEST(QueueTest, SingleElementCycle_Correctness) {
 TEST(QueueTest, PreservesInsertionOrder) {
     Queue<int> queue;
 
-    std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
+    const std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
 
     for (int val : input) {
         queue.push(val);

@@ -309,7 +309,7 @@ TEST(TopKTest, Empty_CorrectState) {
  * @details Verifies that newly constructed TopK is empty
  */
 TEST(TopKTest, Empty_AfterConstruction) {
-    TopK topK(10);
+    const TopK topK(10);
     EXPECT_TRUE(topK.empty());
     EXPECT_EQ(topK.size(), 0);
 }

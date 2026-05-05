@@ -119,19 +119,19 @@ TEST(ObjectFactoryTest, CreateObject_ValidTypes) {
     factory.execute();
 
     // Create Circle
-    auto circle = ObjectFactory<IShape>::createObject("Circle");
+    const auto circle = ObjectFactory<IShape>::createObject("Circle");
     ASSERT_NE(circle, nullptr);
     EXPECT_EQ(circle->getName(), "Circle");
     EXPECT_NEAR(circle->getArea(), 3.14159 * 5.0 * 5.0, 0.0001);
 
     // Create Rectangle
-    auto rect = ObjectFactory<IShape>::createObject("Rectangle");
+    const auto rect = ObjectFactory<IShape>::createObject("Rectangle");
     ASSERT_NE(rect, nullptr);
     EXPECT_EQ(rect->getName(), "Rectangle");
     EXPECT_NEAR(rect->getArea(), 24.0, 0.0001);
 
     // Create Triangle
-    auto triangle = ObjectFactory<IShape>::createObject("Triangle");
+    const auto triangle = ObjectFactory<IShape>::createObject("Triangle");
     ASSERT_NE(triangle, nullptr);
     EXPECT_EQ(triangle->getName(), "Triangle");
     EXPECT_NEAR(triangle->getArea(), 6.0, 0.0001);
@@ -147,8 +147,8 @@ TEST(ObjectFactoryTest, CreateObject_MultipleInstances) {
     factory.execute();
 
     // Create multiple instances of the same type
-    auto circle1 = ObjectFactory<IShape>::createObject("Circle");
-    auto circle2 = ObjectFactory<IShape>::createObject("Circle");
+    const auto circle1 = ObjectFactory<IShape>::createObject("Circle");
+    const auto circle2 = ObjectFactory<IShape>::createObject("Circle");
 
     ASSERT_NE(circle1, nullptr);
     ASSERT_NE(circle2, nullptr);
@@ -229,7 +229,7 @@ TEST(ObjectFactoryTest, Execute_SuccessfulRegistration) {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
 
-    auto result = factory.execute();
+    const auto result = factory.execute();
     EXPECT_TRUE(result);
 
     // Verify registration was successful
@@ -287,7 +287,7 @@ TEST(ObjectFactoryTest, ClearRegistry_AndReregister) {
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Circle"));
 
     // Should be able to create objects again
-    auto circle = ObjectFactory<IShape>::createObject("Circle");
+    const auto circle = ObjectFactory<IShape>::createObject("Circle");
     ASSERT_NE(circle, nullptr);
     EXPECT_EQ(circle->getName(), "Circle");
 }
@@ -309,9 +309,9 @@ TEST(ObjectFactoryTest, RegisterWithDifferentArguments) {
     CustomFactory factory;
     factory.execute();
 
-    auto small = ObjectFactory<IShape>::createObject("SmallCircle");
-    auto large = ObjectFactory<IShape>::createObject("LargeCircle");
-    auto square = ObjectFactory<IShape>::createObject("Square");
+    const auto small = ObjectFactory<IShape>::createObject("SmallCircle");
+    const auto large = ObjectFactory<IShape>::createObject("LargeCircle");
+    const auto square = ObjectFactory<IShape>::createObject("Square");
 
     ASSERT_NE(small, nullptr);
     ASSERT_NE(large, nullptr);
@@ -331,7 +331,7 @@ TEST(ObjectFactoryTest, PolymorphicBehavior) {
     ShapeFactory factory;
     factory.execute();
 
-    std::vector<std::string> shape_names = {"Circle", "Rectangle", "Triangle"};
+    const std::vector<std::string> shape_names = {"Circle", "Rectangle", "Triangle"};
     std::vector<std::unique_ptr<IShape> > shapes;
 
     for (const auto& name : shape_names) {

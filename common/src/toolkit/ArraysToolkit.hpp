@@ -10,6 +10,8 @@
 #include <set>
 #include <random>
 #include <optional>
+#include <ranges>
+#include <span>
 
 namespace common::toolkit {
 /// @brief Utility class for array operations.
@@ -369,7 +371,7 @@ auto ArraysToolkit::copyOf(const T* original, const size_t originalSize, size_t 
     std::vector<T> result(newLength);
     const size_t copyLength = std::min(originalSize, newLength);
     if (copyLength > 0 && original) {
-        std::copy(original, original + copyLength, result.begin());
+        std::ranges::copy(std::span<const T>(original, copyLength), result.begin());
     }
     return result;
 }
@@ -404,7 +406,7 @@ auto ArraysToolkit::fill(T* array, size_t size, const T& value) -> void {
         throw std::invalid_argument("ArraysToolkit::fill: Array cannot be null when size > 0");
     }
     if (size > 0 && array) {
-        std::fill(array, array + size, value);
+        std::ranges::fill(std::span<T>(array, size), value);
     }
 }
 
@@ -434,12 +436,24 @@ auto ArraysToolkit::toString(const T* array, const size_t size) -> std::string {
     if (!array && size > 0) {
         throw std::invalid_argument("ArraysToolkit::toString: Array cannot be null when size > 0");
     }
+    
+    if (size == 0) {
+        return "[]";
+    }
+    
     std::ostringstream oss;
     oss << "[";
-    for (size_t i = 0; i < size; ++i) {
-        if (i > 0) oss << ", ";
-        if (array) oss << array[i];
+    
+    auto span_view = std::span<const T>(array, size);
+    bool first = true;
+    for (const auto& item : span_view) {
+        if (!first) {
+            oss << ", ";
+        }
+        oss << item;
+        first = false;
     }
+    
     oss << "]";
     return oss.str();
 }
@@ -454,7 +468,7 @@ auto ArraysToolkit::contains(const T* array, size_t size, const T& value) -> boo
     if (!array && size > 0) {
         throw std::invalid_argument("ArraysToolkit::contains: Array cannot be null when size > 0");
     }
-    return std::find(array, array + size, value) != array + size;
+    return std::ranges::find(std::span<const T>(array, size), value) != std::span<const T>(array, size).end();
 }
 
 template <typename T>
@@ -499,7 +513,7 @@ auto ArraysToolkit::count(const T* array, size_t size, const T& value) -> size_t
     if (!array && size > 0) {
         throw std::invalid_argument("ArraysToolkit::count: Array cannot be null when size > 0");
     }
-    return std::count(array, array + size, value);
+    return std::ranges::count(std::span<const T>(array, size), value);
 }
 
 template <typename T>
@@ -537,12 +551,9 @@ auto ArraysToolkit::map(const T* array, size_t size, Func func) -> std::vector<U
     if (!array && size > 0) {
         throw std::invalid_argument("ArraysToolkit::map: Array cannot be null when size > 0");
     }
-    std::vector<U> result;
-    result.reserve(size);
-    for (size_t i = 0; i < size; ++i) {
-        result.push_back(func(array[i]));
-    }
-    return result;
+    
+    auto view = std::span<const T>(array, size) | std::ranges::views::transform(func);
+    return std::vector<U>(view.begin(), view.end());
 }
 
 template <typename T, typename Predicate>
@@ -550,13 +561,9 @@ auto ArraysToolkit::filter(const T* array, size_t size, Predicate predicate) -> 
     if (!array && size > 0) {
         throw std::invalid_argument("ArraysToolkit::filter: Array cannot be null when size > 0");
     }
-    std::vector<T> result;
-    for (size_t i = 0; i < size; ++i) {
-        if (predicate(array[i])) {
-            result.push_back(array[i]);
-        }
-    }
-    return result;
+    
+    auto view = std::span<const T>(array, size) | std::ranges::views::filter(predicate);
+    return std::vector<T>(view.begin(), view.end());
 }
 
 template <typename T>

@@ -16,7 +16,7 @@ using namespace common::container;
  * @details Verifies that a newly constructed UnionSet is ready to use
  */
 TEST(UnionSetTest, DefaultConstructor_EmptyUnionSet) {
-    UnionSet<int> unionSet;
+    const UnionSet<int> unionSet;
     // UnionSet should be usable after construction
     EXPECT_TRUE(unionSet.connected(1, 1));
 }
@@ -28,7 +28,7 @@ TEST(UnionSetTest, DefaultConstructor_EmptyUnionSet) {
 TEST(UnionSetTest, Find_SingleElement_ReturnsSelf) {
     UnionSet<int> unionSet;
 
-    int root = unionSet.find(5);
+    const int root = unionSet.find(5);
 
     EXPECT_EQ(root, 5);
 }
@@ -46,7 +46,7 @@ TEST(UnionSetTest, Find_PathCompression) {
     unionSet.unionSets(3, 4);
 
     // Find should compress the path
-    int root = unionSet.find(1);
+    const int root = unionSet.find(1);
 
     EXPECT_EQ(root, unionSet.find(4));
     // After path compression, subsequent finds should be faster
@@ -60,7 +60,7 @@ TEST(UnionSetTest, Find_PathCompression) {
 TEST(UnionSetTest, UnionSets_MergesTwoSets) {
     UnionSet<int> unionSet;
 
-    bool result = unionSet.unionSets(1, 2);
+    const bool result = unionSet.unionSets(1, 2);
 
     EXPECT_TRUE(result);
     EXPECT_TRUE(unionSet.connected(1, 2));
@@ -74,7 +74,7 @@ TEST(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse) {
     UnionSet<int> unionSet;
 
     unionSet.unionSets(1, 2);
-    bool result = unionSet.unionSets(1, 2);
+    const bool result = unionSet.unionSets(1, 2);
 
     EXPECT_FALSE(result);
 }
@@ -116,7 +116,7 @@ TEST(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected) {
  * @details Verifies reflexivity property
  */
 TEST(UnionSetTest, Connected_SameElement_ReturnsTrue) {
-    UnionSet<int> unionSet;
+    const UnionSet<int> unionSet;
 
     EXPECT_TRUE(unionSet.connected(5, 5));
 }
@@ -126,7 +126,7 @@ TEST(UnionSetTest, Connected_SameElement_ReturnsTrue) {
  * @details Verifies that elements without union are not connected
  */
 TEST(UnionSetTest, Connected_UnconnectedElements_ReturnsFalse) {
-    UnionSet<int> unionSet;
+    const UnionSet<int> unionSet;
 
     EXPECT_FALSE(unionSet.connected(1, 2));
 }

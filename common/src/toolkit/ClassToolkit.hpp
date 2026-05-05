@@ -207,7 +207,7 @@ public:
 
         // Search for the field by name
         auto result = [&obj, &fieldName, fields]<std::size_t... Is>(std::index_sequence<Is...>) -> std::string {
-            std::string not_found = "Field '" + fieldName + "' not found";
+            const std::string not_found = "Field '" + fieldName + "' not found";
             std::string result_str = not_found;
 
             (([&]() {

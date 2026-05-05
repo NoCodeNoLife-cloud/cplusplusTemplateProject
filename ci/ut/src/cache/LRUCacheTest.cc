@@ -45,11 +45,11 @@ TEST(LRUCacheTest, PutAndGet_Basic) {
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
 
-    auto result1 = cache.get(1);
+    const auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
 
-    auto result2 = cache.get(2);
+    const auto result2 = cache.get(2);
     ASSERT_TRUE(result2.has_value());
     EXPECT_EQ(result2.value(), "two");
 }
@@ -62,7 +62,7 @@ TEST(LRUCacheTest, Get_NonExistentKey) {
     LRUCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.put(1, "one"));
-    auto result = cache.get(999);
+    const auto result = cache.get(999);
 
     EXPECT_FALSE(result.has_value());
 }
@@ -77,7 +77,7 @@ TEST(LRUCacheTest, Put_UpdateExistingKey) {
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(1, "ONE"));
 
-    auto result = cache.get(1);
+    const auto result = cache.get(1);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "ONE");
 }
@@ -149,7 +149,7 @@ TEST(LRUCacheTest, Put_RValueReference) {
     std::string value = "test";
     EXPECT_TRUE(cache.put(1, std::move(value)));
 
-    auto result = cache.get(1);
+    const auto result = cache.get(1);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "test");
 }
@@ -164,14 +164,14 @@ TEST(LRUCacheTest, Remove_ExistingKey) {
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
 
-    bool removed = cache.remove(1);
+    const bool removed = cache.remove(1);
     EXPECT_TRUE(removed);
 
-    auto result = cache.get(1);
+    const auto result = cache.get(1);
     EXPECT_FALSE(result.has_value());
 
     // Key 2 should still exist
-    auto result2 = cache.get(2);
+    const auto result2 = cache.get(2);
     ASSERT_TRUE(result2.has_value());
     EXPECT_EQ(result2.value(), "two");
 }
@@ -185,7 +185,7 @@ TEST(LRUCacheTest, Remove_NonExistentKey) {
 
     EXPECT_TRUE(cache.put(1, "one"));
 
-    bool removed = cache.remove(999);
+    const bool removed = cache.remove(999);
     EXPECT_FALSE(removed);
 }
 
@@ -235,7 +235,7 @@ TEST(LRUCacheTest, Size_CorrectCount) {
  * @details Verifies that capacity returns the configured maximum capacity
  */
 TEST(LRUCacheTest, Capacity_CorrectValue) {
-    LRUCache<int, std::string> cache(10);
+    const LRUCache<int, std::string> cache(10);
 
     EXPECT_EQ(cache.capacity(), 10);
 }
@@ -284,7 +284,7 @@ TEST(LRUCacheTest, LRUOrderUpdate_OnGet) {
     EXPECT_TRUE(cache.put(3, "three"));
 
     // Access key 1 to make it most recently used
-    auto val = cache.get(1);
+    const auto val = cache.get(1);
     ASSERT_TRUE(val.has_value());
 
     // Add new item, should evict key 2 (now least recently used)
@@ -327,7 +327,7 @@ TEST(LRUCacheTest, EdgeCase_CapacityOne) {
     LRUCache<int, std::string> cache(1);
 
     EXPECT_TRUE(cache.put(1, "one"));
-    auto result1 = cache.get(1);
+    const auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
 
@@ -347,7 +347,7 @@ TEST(LRUCacheTest, Get_ConstVersion) {
     EXPECT_TRUE(cache.put(1, "one"));
 
     const LRUCache<int, std::string>& constCache = cache;
-    auto result = constCache.get(1);
+    const auto result = constCache.get(1);
 
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "one");

@@ -9,6 +9,7 @@
 #include "crypto/cipher/ChaCha20Cipher.hpp"
 
 #include <algorithm>
+#include <ranges>
 
 using namespace common::crypto::cipher;
 
@@ -18,8 +19,8 @@ using namespace common::crypto::cipher;
 TEST(ChaCha20CipherTest, Initialize_ValidParameters) {
     ChaCha20Cipher cipher;
 
-    std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
-    std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x00);
+    const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x00);
 
     EXPECT_NO_THROW(cipher.initialize(key, nonce));
     EXPECT_TRUE(cipher.isInitialized());
@@ -32,8 +33,8 @@ TEST(ChaCha20CipherTest, Initialize_ValidParameters) {
 TEST(ChaCha20CipherTest, Initialize_InvalidKeySize) {
     ChaCha20Cipher cipher;
 
-    std::vector<uint8_t> short_key(16, 0x00); // Too short
-    std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x00);
+    const std::vector<uint8_t> short_key(16, 0x00); // Too short
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x00);
 
     EXPECT_THROW(cipher.initialize(short_key, nonce), std::invalid_argument);
     EXPECT_FALSE(cipher.isInitialized());
@@ -45,8 +46,8 @@ TEST(ChaCha20CipherTest, Initialize_InvalidKeySize) {
 TEST(ChaCha20CipherTest, Initialize_InvalidNonceSize) {
     ChaCha20Cipher cipher;
 
-    std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
-    std::vector<uint8_t> short_nonce(8, 0x00); // Too short
+    const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
+    const std::vector<uint8_t> short_nonce(8, 0x00); // Too short
 
     EXPECT_THROW(cipher.initialize(key, short_nonce), std::invalid_argument);
     EXPECT_FALSE(cipher.isInitialized());
@@ -57,7 +58,7 @@ TEST(ChaCha20CipherTest, Initialize_InvalidNonceSize) {
  */
 TEST(ChaCha20CipherTest, Encrypt_BeforeInitialization) {
     ChaCha20Cipher cipher;
-    std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03};
+    const std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03};
 
     EXPECT_THROW([[maybe_unused]] auto result = cipher.encrypt(plaintext), std::runtime_error);
 }
@@ -67,7 +68,7 @@ TEST(ChaCha20CipherTest, Encrypt_BeforeInitialization) {
  */
 TEST(ChaCha20CipherTest, Decrypt_BeforeInitialization) {
     ChaCha20Cipher cipher;
-    std::vector<uint8_t> ciphertext = {0x01, 0x02, 0x03};
+    const std::vector<uint8_t> ciphertext = {0x01, 0x02, 0x03};
 
     EXPECT_THROW([[maybe_unused]] auto result = cipher.decrypt(ciphertext), std::runtime_error);
 }
@@ -76,8 +77,8 @@ TEST(ChaCha20CipherTest, Decrypt_BeforeInitialization) {
  * @brief Test encryption/decryption roundtrip
  */
 TEST(ChaCha20CipherTest, EncryptDecrypt_RoundTrip) {
-    std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
-    std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
+    const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
 
     const std::vector<uint8_t> plaintext = {
         0x4c, 0x61, 0x64, 0x69, 0x65, 0x73, 0x20, 0x61,
@@ -90,7 +91,7 @@ TEST(ChaCha20CipherTest, EncryptDecrypt_RoundTrip) {
     // Encrypt with first cipher instance
     ChaCha20Cipher encrypt_cipher;
     encrypt_cipher.initialize(key, nonce);
-    auto ciphertext = encrypt_cipher.encrypt(plaintext);
+    const auto ciphertext = encrypt_cipher.encrypt(plaintext);
 
     // Ciphertext should be same size as plaintext for stream cipher
     EXPECT_EQ(ciphertext.size(), plaintext.size());
@@ -99,7 +100,7 @@ TEST(ChaCha20CipherTest, EncryptDecrypt_RoundTrip) {
     // Decrypt with fresh cipher instance (same key/nonce)
     ChaCha20Cipher decrypt_cipher;
     decrypt_cipher.initialize(key, nonce);
-    auto decrypted = decrypt_cipher.decrypt(ciphertext);
+    const auto decrypted = decrypt_cipher.decrypt(ciphertext);
 
     EXPECT_EQ(decrypted, plaintext);
 }
@@ -110,13 +111,13 @@ TEST(ChaCha20CipherTest, EncryptDecrypt_RoundTrip) {
 TEST(ChaCha20CipherTest, Encrypt_EmptyPlaintext) {
     ChaCha20Cipher cipher;
 
-    std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
-    std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x00);
+    const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x00);
 
     cipher.initialize(key, nonce);
 
-    std::vector<uint8_t> plaintext;
-    auto ciphertext = cipher.encrypt(plaintext);
+    const std::vector<uint8_t> plaintext;
+    const auto ciphertext = cipher.encrypt(plaintext);
 
     EXPECT_TRUE(ciphertext.empty());
 }
@@ -128,7 +129,7 @@ TEST(ChaCha20CipherTest, GenerateKeystream) {
     ChaCha20Cipher cipher;
 
     std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
-    std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x00);
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x00);
 
     cipher.initialize(key, nonce);
 
@@ -136,22 +137,14 @@ TEST(ChaCha20CipherTest, GenerateKeystream) {
 
     EXPECT_EQ(keystream.size(), 64);
 
-    // Keystream should not be all zeros (unless key/nonce are all zeros)
-    // For zero key/nonce, we can at least verify it generates something
-    bool all_zeros = std::all_of(keystream.begin(), keystream.end(),
-                                 [](uint8_t b) {
-                                     return b == 0;
-                                 });
-
     // With non-zero key, keystream should not be all zeros
-    std::fill(key.begin(), key.end(), 0x42);
+    std::ranges::fill(key, 0x42);
     cipher.initialize(key, nonce);
     keystream = cipher.generateKeystream(64);
-    all_zeros = std::all_of(keystream.begin(), keystream.end(),
-                            [](uint8_t b) {
-                                return b == 0;
-                            });
-    EXPECT_FALSE(all_zeros);
+    const bool all_zeros_after = std::ranges::all_of(keystream, [](const uint8_t b) {
+        return b == 0;
+    });
+    EXPECT_FALSE(all_zeros_after);
 }
 
 /**
@@ -160,19 +153,19 @@ TEST(ChaCha20CipherTest, GenerateKeystream) {
 TEST(ChaCha20CipherTest, Reset) {
     ChaCha20Cipher cipher;
 
-    std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
-    std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
+    const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
 
     cipher.initialize(key, nonce);
 
-    std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03, 0x04, 0x05};
-    auto ciphertext1 = cipher.encrypt(plaintext);
+    const std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03, 0x04, 0x05};
+    const auto ciphertext1 = cipher.encrypt(plaintext);
 
     // Create a new cipher instance with same key/nonce for comparison
     // This is the correct way to get deterministic encryption
     ChaCha20Cipher cipher2;
     cipher2.initialize(key, nonce);
-    auto ciphertext2 = cipher2.encrypt(plaintext);
+    const auto ciphertext2 = cipher2.encrypt(plaintext);
 
     EXPECT_EQ(ciphertext1, ciphertext2);
 }
@@ -192,12 +185,12 @@ TEST(ChaCha20CipherTest, Constants) {
 TEST(ChaCha20CipherTest, MoveConstructor) {
     ChaCha20Cipher cipher1;
 
-    std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
-    std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
+    const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
 
     cipher1.initialize(key, nonce);
 
-    ChaCha20Cipher cipher2(std::move(cipher1));
+    const ChaCha20Cipher cipher2(std::move(cipher1));
 
     EXPECT_TRUE(cipher2.isInitialized());
     EXPECT_EQ(cipher2.getAlgorithmName(), "ChaCha20");
@@ -209,13 +202,12 @@ TEST(ChaCha20CipherTest, MoveConstructor) {
 TEST(ChaCha20CipherTest, MoveAssignment) {
     ChaCha20Cipher cipher1;
 
-    std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
-    std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
+    const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
 
     cipher1.initialize(key, nonce);
 
-    ChaCha20Cipher cipher2;
-    cipher2 = std::move(cipher1);
+    const ChaCha20Cipher cipher2 = std::move(cipher1);
 
     EXPECT_TRUE(cipher2.isInitialized());
     EXPECT_EQ(cipher2.getAlgorithmName(), "ChaCha20");

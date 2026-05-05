@@ -18,7 +18,7 @@ using namespace common::container;
  * @details Verifies that a newly constructed heap is empty
  */
 TEST(HeapTest, DefaultConstructor_EmptyHeap) {
-    Heap<int> heap;
+    const Heap<int> heap;
     EXPECT_TRUE(heap.empty());
     EXPECT_EQ(heap.size(), 0);
 }

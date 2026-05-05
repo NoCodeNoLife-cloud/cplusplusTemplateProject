@@ -78,7 +78,7 @@ TEST(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys) {
  */
 TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException) {
     // Create a minimal valid ciphertext structure (salt + IV + some data)
-    std::vector<unsigned char> ciphertext(48, 0x42); // 16 salt + 16 IV + 16 data
+    const std::vector<unsigned char> ciphertext(48, 0x42); // 16 salt + 16 IV + 16 data
     const std::string wrongPassword = "wrong_password";
 
     // This should throw because padding will be invalid
@@ -91,7 +91,7 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException) {
  */
 TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException) {
     // Create ciphertext that's too short (less than salt + IV)
-    std::vector<unsigned char> truncated(10, 0x42);
+    const std::vector<unsigned char> truncated(10, 0x42);
     const std::string password = "password";
 
     EXPECT_THROW(OpenSSLToolkit::decryptAES256CBC(truncated, password), std::runtime_error);

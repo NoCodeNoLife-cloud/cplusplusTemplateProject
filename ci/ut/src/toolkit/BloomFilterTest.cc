@@ -119,7 +119,7 @@ TEST(BloomFilterTest, Insert_GenericType_Integer) {
 
     BloomFilter filter(params);
 
-    int32_t value = 42;
+    const int32_t value = 42;
     filter.insert(value);
 
     EXPECT_TRUE(filter.contains(value));
@@ -247,7 +247,7 @@ TEST(BloomFilterTest, Clear_ResetsFilter) {
  * @details Verifies that empty filter returns true for operator!
  */
 TEST(BloomFilterTest, Operator_NotEmptyCheck) {
-    BloomFilter default_filter;
+    const BloomFilter default_filter;
     EXPECT_TRUE(!default_filter); // Uninitialized filter
 
     BloomParameters params;
@@ -255,7 +255,7 @@ TEST(BloomFilterTest, Operator_NotEmptyCheck) {
     params.false_positive_probability = 0.01;
     params.compute_optimal_parameters();
 
-    BloomFilter initialized_filter(params);
+    const BloomFilter initialized_filter(params);
     EXPECT_FALSE(!initialized_filter); // Initialized filter
 }
 
@@ -295,7 +295,7 @@ TEST(BloomFilterTest, Operator_Inequality) {
     params.compute_optimal_parameters();
 
     BloomFilter filter1(params);
-    BloomFilter filter2(params);
+    const BloomFilter filter2(params);
 
     filter1.insert("test");
     // filter2 remains empty
@@ -317,7 +317,7 @@ TEST(BloomFilterTest, CopyConstructor_PreservesState) {
     original.insert("key1");
     original.insert("key2");
 
-    BloomFilter copied(original);
+    const BloomFilter copied(original);
 
     EXPECT_EQ(original, copied);
     EXPECT_TRUE(copied.contains("key1"));
@@ -760,7 +760,7 @@ TEST(BloomFilterTest, IncompatibleFilters_NoModification) {
     params2.compute_optimal_parameters();
 
     BloomFilter filter1(params1);
-    BloomFilter filter2(params2);
+    const BloomFilter filter2(params2);
 
     filter1.insert("test");
 

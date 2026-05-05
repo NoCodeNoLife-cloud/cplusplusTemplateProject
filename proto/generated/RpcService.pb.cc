@@ -443,7 +443,7 @@ RegisterUserRequest::RegisterUserRequest(
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-    RegisterUserRequest* const _this = this;
+    const RegisterUserRequest* const _this = this;
     (void)_this;
     _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
         from._internal_metadata_);
@@ -566,7 +566,7 @@ const ::_pbi::TcParseTable<1, 2, 0, 48, 2> RegisterUserRequest::_table_ = {
 PROTOBUF_NOINLINE void RegisterUserRequest::Clear() {
     // @@protoc_insertion_point(message_clear_start:rpc.RegisterUserRequest)
     ::google::protobuf::internal::TSanWrite(&_impl_);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -587,7 +587,7 @@ PROTOBUF_NOINLINE void RegisterUserRequest::Clear() {
     const RegisterUserRequest& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
     // @@protoc_insertion_point(serialize_to_array_start:rpc.RegisterUserRequest)
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     // string username = 1;
@@ -625,7 +625,7 @@ PROTOBUF_NOINLINE void RegisterUserRequest::Clear() {
     // @@protoc_insertion_point(message_byte_size_start:rpc.RegisterUserRequest)
     ::size_t total_size = 0;
 
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -651,7 +651,7 @@ void RegisterUserRequest::MergeImpl(::google::protobuf::MessageLite& to_msg, con
     auto& from = static_cast<const RegisterUserRequest&>(from_msg);
     // @@protoc_insertion_point(class_specific_merge_from_start:rpc.RegisterUserRequest)
     ABSL_DCHECK_NE(&from, _this);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     if (!from._internal_username().empty()) {
@@ -716,7 +716,7 @@ AuthenticateUserRequest::AuthenticateUserRequest(
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-    AuthenticateUserRequest* const _this = this;
+    const AuthenticateUserRequest* const _this = this;
     (void)_this;
     _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
         from._internal_metadata_);
@@ -839,7 +839,7 @@ const ::_pbi::TcParseTable<1, 2, 0, 52, 2> AuthenticateUserRequest::_table_ = {
 PROTOBUF_NOINLINE void AuthenticateUserRequest::Clear() {
     // @@protoc_insertion_point(message_clear_start:rpc.AuthenticateUserRequest)
     ::google::protobuf::internal::TSanWrite(&_impl_);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -860,7 +860,7 @@ PROTOBUF_NOINLINE void AuthenticateUserRequest::Clear() {
     const AuthenticateUserRequest& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
     // @@protoc_insertion_point(serialize_to_array_start:rpc.AuthenticateUserRequest)
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     // string username = 1;
@@ -898,7 +898,7 @@ PROTOBUF_NOINLINE void AuthenticateUserRequest::Clear() {
     // @@protoc_insertion_point(message_byte_size_start:rpc.AuthenticateUserRequest)
     ::size_t total_size = 0;
 
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -924,7 +924,7 @@ void AuthenticateUserRequest::MergeImpl(::google::protobuf::MessageLite& to_msg,
     auto& from = static_cast<const AuthenticateUserRequest&>(from_msg);
     // @@protoc_insertion_point(class_specific_merge_from_start:rpc.AuthenticateUserRequest)
     ABSL_DCHECK_NE(&from, _this);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     if (!from._internal_username().empty()) {
@@ -990,7 +990,7 @@ ChangePasswordRequest::ChangePasswordRequest(
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-    ChangePasswordRequest* const _this = this;
+    const ChangePasswordRequest* const _this = this;
     (void)_this;
     _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
         from._internal_metadata_);
@@ -1123,7 +1123,7 @@ const ::_pbi::TcParseTable<2, 3, 0, 70, 2> ChangePasswordRequest::_table_ = {
 PROTOBUF_NOINLINE void ChangePasswordRequest::Clear() {
     // @@protoc_insertion_point(message_clear_start:rpc.ChangePasswordRequest)
     ::google::protobuf::internal::TSanWrite(&_impl_);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -1145,7 +1145,7 @@ PROTOBUF_NOINLINE void ChangePasswordRequest::Clear() {
     const ChangePasswordRequest& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
     // @@protoc_insertion_point(serialize_to_array_start:rpc.ChangePasswordRequest)
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     // string username = 1;
@@ -1191,7 +1191,7 @@ PROTOBUF_NOINLINE void ChangePasswordRequest::Clear() {
     // @@protoc_insertion_point(message_byte_size_start:rpc.ChangePasswordRequest)
     ::size_t total_size = 0;
 
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -1222,7 +1222,7 @@ void ChangePasswordRequest::MergeImpl(::google::protobuf::MessageLite& to_msg, c
     auto& from = static_cast<const ChangePasswordRequest&>(from_msg);
     // @@protoc_insertion_point(class_specific_merge_from_start:rpc.ChangePasswordRequest)
     ABSL_DCHECK_NE(&from, _this);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     if (!from._internal_username().empty()) {
@@ -1291,7 +1291,7 @@ ResetPasswordRequest::ResetPasswordRequest(
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-    ResetPasswordRequest* const _this = this;
+    const ResetPasswordRequest* const _this = this;
     (void)_this;
     _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
         from._internal_metadata_);
@@ -1414,7 +1414,7 @@ const ::_pbi::TcParseTable<1, 2, 0, 53, 2> ResetPasswordRequest::_table_ = {
 PROTOBUF_NOINLINE void ResetPasswordRequest::Clear() {
     // @@protoc_insertion_point(message_clear_start:rpc.ResetPasswordRequest)
     ::google::protobuf::internal::TSanWrite(&_impl_);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -1435,7 +1435,7 @@ PROTOBUF_NOINLINE void ResetPasswordRequest::Clear() {
     const ResetPasswordRequest& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
     // @@protoc_insertion_point(serialize_to_array_start:rpc.ResetPasswordRequest)
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     // string username = 1;
@@ -1473,7 +1473,7 @@ PROTOBUF_NOINLINE void ResetPasswordRequest::Clear() {
     // @@protoc_insertion_point(message_byte_size_start:rpc.ResetPasswordRequest)
     ::size_t total_size = 0;
 
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -1499,7 +1499,7 @@ void ResetPasswordRequest::MergeImpl(::google::protobuf::MessageLite& to_msg, co
     auto& from = static_cast<const ResetPasswordRequest&>(from_msg);
     // @@protoc_insertion_point(class_specific_merge_from_start:rpc.ResetPasswordRequest)
     ABSL_DCHECK_NE(&from, _this);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     if (!from._internal_username().empty()) {
@@ -1563,7 +1563,7 @@ DeleteUserRequest::DeleteUserRequest(
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-    DeleteUserRequest* const _this = this;
+    const DeleteUserRequest* const _this = this;
     (void)_this;
     _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
         from._internal_metadata_);
@@ -1677,7 +1677,7 @@ const ::_pbi::TcParseTable<0, 1, 0, 38, 2> DeleteUserRequest::_table_ = {
 PROTOBUF_NOINLINE void DeleteUserRequest::Clear() {
     // @@protoc_insertion_point(message_clear_start:rpc.DeleteUserRequest)
     ::google::protobuf::internal::TSanWrite(&_impl_);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -1697,7 +1697,7 @@ PROTOBUF_NOINLINE void DeleteUserRequest::Clear() {
     const DeleteUserRequest& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
     // @@protoc_insertion_point(serialize_to_array_start:rpc.DeleteUserRequest)
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     // string username = 1;
@@ -1727,7 +1727,7 @@ PROTOBUF_NOINLINE void DeleteUserRequest::Clear() {
     // @@protoc_insertion_point(message_byte_size_start:rpc.DeleteUserRequest)
     ::size_t total_size = 0;
 
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -1747,7 +1747,7 @@ void DeleteUserRequest::MergeImpl(::google::protobuf::MessageLite& to_msg, const
     auto& from = static_cast<const DeleteUserRequest&>(from_msg);
     // @@protoc_insertion_point(class_specific_merge_from_start:rpc.DeleteUserRequest)
     ABSL_DCHECK_NE(&from, _this);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     if (!from._internal_username().empty()) {
@@ -1807,7 +1807,7 @@ UserExistsRequest::UserExistsRequest(
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-    UserExistsRequest* const _this = this;
+    const UserExistsRequest* const _this = this;
     (void)_this;
     _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
         from._internal_metadata_);
@@ -1921,7 +1921,7 @@ const ::_pbi::TcParseTable<0, 1, 0, 38, 2> UserExistsRequest::_table_ = {
 PROTOBUF_NOINLINE void UserExistsRequest::Clear() {
     // @@protoc_insertion_point(message_clear_start:rpc.UserExistsRequest)
     ::google::protobuf::internal::TSanWrite(&_impl_);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -1941,7 +1941,7 @@ PROTOBUF_NOINLINE void UserExistsRequest::Clear() {
     const UserExistsRequest& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
     // @@protoc_insertion_point(serialize_to_array_start:rpc.UserExistsRequest)
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     // string username = 1;
@@ -1971,7 +1971,7 @@ PROTOBUF_NOINLINE void UserExistsRequest::Clear() {
     // @@protoc_insertion_point(message_byte_size_start:rpc.UserExistsRequest)
     ::size_t total_size = 0;
 
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -1991,7 +1991,7 @@ void UserExistsRequest::MergeImpl(::google::protobuf::MessageLite& to_msg, const
     auto& from = static_cast<const UserExistsRequest&>(from_msg);
     // @@protoc_insertion_point(class_specific_merge_from_start:rpc.UserExistsRequest)
     ABSL_DCHECK_NE(&from, _this);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     if (!from._internal_username().empty()) {
@@ -2051,7 +2051,7 @@ AuthResponse::AuthResponse(
 #else   // PROTOBUF_CUSTOM_VTABLE
     : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-    AuthResponse* const _this = this;
+    const AuthResponse* const _this = this;
     (void)_this;
     _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
         from._internal_metadata_);
@@ -2191,7 +2191,7 @@ const ::_pbi::TcParseTable<2, 3, 0, 32, 2> AuthResponse::_table_ = {
 PROTOBUF_NOINLINE void AuthResponse::Clear() {
     // @@protoc_insertion_point(message_clear_start:rpc.AuthResponse)
     ::google::protobuf::internal::TSanWrite(&_impl_);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -2214,7 +2214,7 @@ PROTOBUF_NOINLINE void AuthResponse::Clear() {
     const AuthResponse& this_ = *this;
 #endif  // PROTOBUF_CUSTOM_VTABLE
     // @@protoc_insertion_point(serialize_to_array_start:rpc.AuthResponse)
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     // bool success = 1;
@@ -2258,7 +2258,7 @@ PROTOBUF_NOINLINE void AuthResponse::Clear() {
     // @@protoc_insertion_point(message_byte_size_start:rpc.AuthResponse)
     ::size_t total_size = 0;
 
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     // Prevent compiler warnings about cached_has_bits being unused
     (void)cached_has_bits;
 
@@ -2288,7 +2288,7 @@ void AuthResponse::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::go
     auto& from = static_cast<const AuthResponse&>(from_msg);
     // @@protoc_insertion_point(class_specific_merge_from_start:rpc.AuthResponse)
     ABSL_DCHECK_NE(&from, _this);
-    ::uint32_t cached_has_bits = 0;
+    const ::uint32_t cached_has_bits = 0;
     (void)cached_has_bits;
 
     if (!from._internal_message().empty()) {

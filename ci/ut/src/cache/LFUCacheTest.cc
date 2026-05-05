@@ -62,7 +62,7 @@ TEST(LFUCacheTest, Get_NonExistentKey) {
     LFUCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.put(1, "one"));
-    auto result = cache.get(999);
+    const auto result = cache.get(999);
 
     EXPECT_FALSE(result.has_value());
 }
@@ -77,7 +77,7 @@ TEST(LFUCacheTest, Put_UpdateExistingKey) {
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(1, "ONE"));
 
-    auto result = cache.get(1);
+    const auto result = cache.get(1);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "ONE");
 }
@@ -151,7 +151,7 @@ TEST(LFUCacheTest, Put_RValueReference) {
     std::string value = "test";
     EXPECT_TRUE(cache.put(1, std::move(value)));
 
-    auto result = cache.get(1);
+    const auto result = cache.get(1);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "test");
 }
@@ -187,7 +187,7 @@ TEST(LFUCacheTest, Remove_NonExistentKey) {
 
     EXPECT_TRUE(cache.put(1, "one"));
 
-    bool removed = cache.remove(999);
+    const bool removed = cache.remove(999);
     EXPECT_FALSE(removed);
 }
 
@@ -237,7 +237,7 @@ TEST(LFUCacheTest, Size_CorrectCount) {
  * @details Verifies that capacity returns the configured maximum capacity
  */
 TEST(LFUCacheTest, Capacity_CorrectValue) {
-    LFUCache<int, std::string> cache(10);
+    const LFUCache<int, std::string> cache(10);
 
     EXPECT_EQ(cache.capacity(), 10);
 }
@@ -329,7 +329,7 @@ TEST(LFUCacheTest, EdgeCase_CapacityOne) {
     LFUCache<int, std::string> cache(1);
 
     EXPECT_TRUE(cache.put(1, "one"));
-    auto result1 = cache.get(1);
+    const auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
 
@@ -349,7 +349,7 @@ TEST(LFUCacheTest, Get_ConstVersion) {
     EXPECT_TRUE(cache.put(1, "one"));
 
     const LFUCache<int, std::string>& constCache = cache;
-    auto result = constCache.get(1);
+    const auto result = constCache.get(1);
 
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "one");

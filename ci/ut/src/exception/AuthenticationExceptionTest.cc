@@ -223,7 +223,7 @@ TEST(AuthenticationExceptionTest, MultipleExceptions) {
  * @details Verifies that exception works correctly in polymorphic scenarios
  */
 TEST(AuthenticationExceptionTest, PolymorphicContext) {
-    std::exception* ex_ptr = new AuthenticationException(std::string("Polymorphic error"));
+    const std::exception* ex_ptr = new AuthenticationException(std::string("Polymorphic error"));
     
     EXPECT_STREQ(ex_ptr->what(), "Polymorphic error");
     

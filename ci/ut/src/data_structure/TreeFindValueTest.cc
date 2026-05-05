@@ -21,7 +21,7 @@ TEST(AVLTreeTest, FindValue_ExistingValue_ReturnsValue) {
     tree.insert(50);
     tree.insert(25);
 
-    auto result = tree.findValue(20);
+    const auto result = tree.findValue(20);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 20);
 }
@@ -36,7 +36,7 @@ TEST(AVLTreeTest, FindValue_NonExistingValue_ReturnsNullopt) {
     tree.insert(20);
     tree.insert(30);
 
-    auto result = tree.findValue(999);
+    const auto result = tree.findValue(999);
     EXPECT_FALSE(result.has_value());
 }
 
@@ -45,9 +45,9 @@ TEST(AVLTreeTest, FindValue_NonExistingValue_ReturnsNullopt) {
  * @details Verifies that findValue returns std::nullopt for empty tree
  */
 TEST(AVLTreeTest, FindValue_EmptyTree_ReturnsNullopt) {
-    AVLTree<int> tree;
+    const AVLTree<int> tree;
 
-    auto result = tree.findValue(10);
+    const auto result = tree.findValue(10);
     EXPECT_FALSE(result.has_value());
 }
 
@@ -61,7 +61,7 @@ TEST(AVLTreeTest, FindValue_RootNode_ReturnsValue) {
     tree.insert(30);
     tree.insert(70);
 
-    auto result = tree.findValue(50);
+    const auto result = tree.findValue(50);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 50);
 }
@@ -78,7 +78,7 @@ TEST(AVLTreeTest, FindValue_LeafNode_ReturnsValue) {
     tree.insert(20);
     tree.insert(40);
 
-    auto result = tree.findValue(20);
+    const auto result = tree.findValue(20);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 20);
 }
@@ -93,7 +93,7 @@ TEST(AVLTreeTest, FindValue_StringType_ReturnsValue) {
     tree.insert("banana");
     tree.insert("cherry");
 
-    auto result = tree.findValue("banana");
+    const auto result = tree.findValue("banana");
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "banana");
 }
@@ -131,7 +131,7 @@ TEST(BinarySearchTreeTest, FindValue_ExistingValue_ReturnsValue) {
     tree.insert(60);
     tree.insert(80);
 
-    auto result = tree.findValue(40);
+    const auto result = tree.findValue(40);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 40);
 }
@@ -146,7 +146,7 @@ TEST(BinarySearchTreeTest, FindValue_NonExistingValue_ReturnsNullopt) {
     tree.insert(30);
     tree.insert(70);
 
-    auto result = tree.findValue(999);
+    const auto result = tree.findValue(999);
     EXPECT_FALSE(result.has_value());
 }
 
@@ -155,9 +155,9 @@ TEST(BinarySearchTreeTest, FindValue_NonExistingValue_ReturnsNullopt) {
  * @details Verifies that findValue returns std::nullopt for empty tree
  */
 TEST(BinarySearchTreeTest, FindValue_EmptyTree_ReturnsNullopt) {
-    BinarySearchTree<int> tree;
+    const BinarySearchTree<int> tree;
 
-    auto result = tree.findValue(10);
+    const auto result = tree.findValue(10);
     EXPECT_FALSE(result.has_value());
 }
 
@@ -171,7 +171,7 @@ TEST(BinarySearchTreeTest, FindValue_RootNode_ReturnsValue) {
     tree.insert(50);
     tree.insert(150);
 
-    auto result = tree.findValue(100);
+    const auto result = tree.findValue(100);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 100);
 }
@@ -187,7 +187,7 @@ TEST(BinarySearchTreeTest, FindValue_LeftSubtree_ReturnsValue) {
     tree.insert(25);
     tree.insert(75);
 
-    auto result = tree.findValue(25);
+    const auto result = tree.findValue(25);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 25);
 }
@@ -203,7 +203,7 @@ TEST(BinarySearchTreeTest, FindValue_RightSubtree_ReturnsValue) {
     tree.insert(125);
     tree.insert(175);
 
-    auto result = tree.findValue(175);
+    const auto result = tree.findValue(175);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 175);
 }
@@ -218,7 +218,7 @@ TEST(BinarySearchTreeTest, FindValue_DoubleType_ReturnsValue) {
     tree.insert(2.71);
     tree.insert(1.41);
 
-    auto result = tree.findValue(2.71);
+    const auto result = tree.findValue(2.71);
     ASSERT_TRUE(result.has_value());
     EXPECT_DOUBLE_EQ(result.value(), 2.71);
 }
@@ -251,7 +251,7 @@ TEST(BinarySearchTreeTest, FindValue_AfterRemoval_ReturnsNullopt) {
     tree.insert(70);
 
     // Verify value exists
-    auto result1 = tree.findValue(30);
+    const auto result1 = tree.findValue(30);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), 30);
 
@@ -259,7 +259,7 @@ TEST(BinarySearchTreeTest, FindValue_AfterRemoval_ReturnsNullopt) {
     tree.remove(30);
 
     // Verify value no longer exists
-    auto result2 = tree.findValue(30);
+    const auto result2 = tree.findValue(30);
     EXPECT_FALSE(result2.has_value());
 }
 
@@ -276,19 +276,19 @@ TEST(BinarySearchTreeTest, FindValue_LargeDataset_ReturnsCorrectValue) {
     }
 
     // Test finding various values
-    auto result1 = tree.findValue(0);
+    const auto result1 = tree.findValue(0);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), 0);
 
-    auto result2 = tree.findValue(500);
+    const auto result2 = tree.findValue(500);
     ASSERT_TRUE(result2.has_value());
     EXPECT_EQ(result2.value(), 500);
 
-    auto result3 = tree.findValue(999);
+    const auto result3 = tree.findValue(999);
     ASSERT_TRUE(result3.has_value());
     EXPECT_EQ(result3.value(), 999);
 
     // Test non-existing value
-    auto result4 = tree.findValue(1000);
+    const auto result4 = tree.findValue(1000);
     EXPECT_FALSE(result4.has_value());
 }

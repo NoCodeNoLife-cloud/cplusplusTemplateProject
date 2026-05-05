@@ -16,7 +16,7 @@ using namespace common::toolkit;
  * @details Verifies toolkit initializes with base-10 and standard charset
  */
 TEST(RadixToolkitTest, Constructor_DefaultConfiguration) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_EQ(toolkit.get_default_base(), 10);
     EXPECT_EQ(toolkit.get_charset(), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 }
@@ -26,7 +26,7 @@ TEST(RadixToolkitTest, Constructor_DefaultConfiguration) {
  * @details Verifies custom configuration is properly stored
  */
 TEST(RadixToolkitTest, Constructor_CustomConfiguration) {
-    RadixToolkit toolkit(16, "0123456789ABCDEF");
+    const RadixToolkit toolkit(16, "0123456789ABCDEF");
     EXPECT_EQ(toolkit.get_default_base(), 16);
     EXPECT_EQ(toolkit.get_charset(), "0123456789ABCDEF");
 }
@@ -52,7 +52,7 @@ TEST(RadixToolkitTest, Constructor_BaseExceedsCharset_ThrowsException) {
  * @details Verifies integer to decimal string conversion
  */
 TEST(RadixToolkitTest, ToString_DecimalDefaultBase) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_EQ(toolkit.to_string(42), "42");
     EXPECT_EQ(toolkit.to_string(0), "0");
     EXPECT_EQ(toolkit.to_string(-123), "-123");
@@ -63,7 +63,7 @@ TEST(RadixToolkitTest, ToString_DecimalDefaultBase) {
  * @details Verifies override_base parameter works correctly
  */
 TEST(RadixToolkitTest, ToString_BinaryOverrideBase) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_EQ(toolkit.to_string(5, 2), "101");
     EXPECT_EQ(toolkit.to_string(0, 2), "0");
 }
@@ -73,7 +73,7 @@ TEST(RadixToolkitTest, ToString_BinaryOverrideBase) {
  * @details Verifies uppercase hexadecimal representation
  */
 TEST(RadixToolkitTest, ToString_Hexadecimal) {
-    RadixToolkit toolkit(16, "0123456789ABCDEF");
+    const RadixToolkit toolkit(16, "0123456789ABCDEF");
     EXPECT_EQ(toolkit.to_string(255), "FF");
     EXPECT_EQ(toolkit.to_string(10), "A");
     EXPECT_EQ(toolkit.to_string(0), "0");
@@ -84,7 +84,7 @@ TEST(RadixToolkitTest, ToString_Hexadecimal) {
  * @details Verifies correct handling of unsigned integers
  */
 TEST(RadixToolkitTest, ToString_UnsignedTypes) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_EQ(toolkit.to_string(static_cast<unsigned int>(42)), "42");
     EXPECT_EQ(toolkit.to_string(static_cast<unsigned long>(100)), "100");
 }
@@ -94,7 +94,7 @@ TEST(RadixToolkitTest, ToString_UnsignedTypes) {
  * @details Verifies string to integer conversion in base-10
  */
 TEST(RadixToolkitTest, FromString_DecimalDefaultBase) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_EQ(toolkit.from_string<int>("42"), 42);
     EXPECT_EQ(toolkit.from_string<int>("0"), 0);
     EXPECT_EQ(toolkit.from_string<int>("-123"), -123);
@@ -105,7 +105,7 @@ TEST(RadixToolkitTest, FromString_DecimalDefaultBase) {
  * @details Verifies handling of explicit positive sign
  */
 TEST(RadixToolkitTest, FromString_PositiveSignPrefix) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_EQ(toolkit.from_string<int>("+42"), 42);
 }
 
@@ -114,7 +114,7 @@ TEST(RadixToolkitTest, FromString_PositiveSignPrefix) {
  * @details Verifies parsing binary strings correctly
  */
 TEST(RadixToolkitTest, FromString_BinaryOverrideBase) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_EQ(toolkit.from_string<int>("101", 2), 5);
     EXPECT_EQ(toolkit.from_string<int>("0", 2), 0);
 }
@@ -124,7 +124,7 @@ TEST(RadixToolkitTest, FromString_BinaryOverrideBase) {
  * @details Verifies parsing uppercase hexadecimal strings
  */
 TEST(RadixToolkitTest, FromString_Hexadecimal) {
-    RadixToolkit toolkit(16, "0123456789ABCDEF");
+    const RadixToolkit toolkit(16, "0123456789ABCDEF");
     EXPECT_EQ(toolkit.from_string<int>("FF"), 255);
     EXPECT_EQ(toolkit.from_string<int>("A"), 10);
 }
@@ -134,7 +134,7 @@ TEST(RadixToolkitTest, FromString_Hexadecimal) {
  * @details Verifies case-insensitive parsing of alphabetic digits
  */
 TEST(RadixToolkitTest, FromString_LowercaseLetters) {
-    RadixToolkit toolkit(16, "0123456789ABCDEF");
+    const RadixToolkit toolkit(16, "0123456789ABCDEF");
     EXPECT_EQ(toolkit.from_string<int>("ff"), 255);
     EXPECT_EQ(toolkit.from_string<int>("a"), 10);
 }
@@ -144,7 +144,7 @@ TEST(RadixToolkitTest, FromString_LowercaseLetters) {
  * @details Validates error handling for empty input
  */
 TEST(RadixToolkitTest, FromString_EmptyString_ThrowsException) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>(""), std::invalid_argument);
 }
 
@@ -153,7 +153,7 @@ TEST(RadixToolkitTest, FromString_EmptyString_ThrowsException) {
  * @details Validates error handling for characters outside valid range
  */
 TEST(RadixToolkitTest, FromString_InvalidCharacter_ThrowsException) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>("12X", 10), std::invalid_argument);
 }
 
@@ -162,7 +162,7 @@ TEST(RadixToolkitTest, FromString_InvalidCharacter_ThrowsException) {
  * @details Validates error handling when value exceeds type limits
  */
 TEST(RadixToolkitTest, FromString_Overflow_ThrowsException) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>("99999999999999999999999"), std::out_of_range);
 }
 
@@ -171,7 +171,7 @@ TEST(RadixToolkitTest, FromString_Overflow_ThrowsException) {
  * @details Verifies stateless binary conversion
  */
 TEST(RadixToolkitTest, ConvertToString_StaticBinary) {
-    auto result = RadixToolkit::convert_to_string<int>(10, 2, std::string_view("01"));
+    const auto result = RadixToolkit::convert_to_string<int>(10, 2, std::string_view("01"));
     EXPECT_EQ(result, "1010");
 }
 
@@ -180,7 +180,7 @@ TEST(RadixToolkitTest, ConvertToString_StaticBinary) {
  * @details Verifies stateless octal conversion
  */
 TEST(RadixToolkitTest, ConvertToString_StaticOctal) {
-    auto result = RadixToolkit::convert_to_string<int>(64, 8, std::string_view("01234567"));
+    const auto result = RadixToolkit::convert_to_string<int>(64, 8, std::string_view("01234567"));
     EXPECT_EQ(result, "100");
 }
 
@@ -189,7 +189,7 @@ TEST(RadixToolkitTest, ConvertToString_StaticOctal) {
  * @details Verifies stateless hexadecimal conversion
  */
 TEST(RadixToolkitTest, ConvertToString_StaticHexadecimal) {
-    auto result = RadixToolkit::convert_to_string<int>(255, 16, std::string_view("0123456789ABCDEF"));
+    const auto result = RadixToolkit::convert_to_string<int>(255, 16, std::string_view("0123456789ABCDEF"));
     EXPECT_EQ(result, "FF");
 }
 
@@ -198,7 +198,7 @@ TEST(RadixToolkitTest, ConvertToString_StaticHexadecimal) {
  * @details Verifies proper handling of signed integers
  */
 TEST(RadixToolkitTest, ConvertToString_NegativeValues) {
-    auto result = RadixToolkit::convert_to_string<int>(-42, 10, std::string_view("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+    const auto result = RadixToolkit::convert_to_string<int>(-42, 10, std::string_view("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
     EXPECT_EQ(result, "-42");
 }
 
@@ -207,7 +207,7 @@ TEST(RadixToolkitTest, ConvertToString_NegativeValues) {
  * @details Verifies zero is correctly converted
  */
 TEST(RadixToolkitTest, ConvertToString_ZeroValue) {
-    auto result = RadixToolkit::convert_to_string<int>(0, 10, std::string_view("0123456789"));
+    const auto result = RadixToolkit::convert_to_string<int>(0, 10, std::string_view("0123456789"));
     EXPECT_EQ(result, "0");
 }
 
@@ -232,7 +232,7 @@ TEST(RadixToolkitTest, ConvertToString_BaseExceedsCharset_ThrowsException) {
  * @details Verifies stateless decimal parsing
  */
 TEST(RadixToolkitTest, ConvertFromString_StaticDecimal) {
-    auto result = RadixToolkit::convert_from_string<int>("42", 10);
+    const auto result = RadixToolkit::convert_from_string<int>("42", 10);
     EXPECT_EQ(result, 42);
 }
 
@@ -241,7 +241,7 @@ TEST(RadixToolkitTest, ConvertFromString_StaticDecimal) {
  * @details Verifies stateless binary parsing
  */
 TEST(RadixToolkitTest, ConvertFromString_StaticBinary) {
-    auto result = RadixToolkit::convert_from_string<int>("1010", 2);
+    const auto result = RadixToolkit::convert_from_string<int>("1010", 2);
     EXPECT_EQ(result, 10);
 }
 
@@ -250,7 +250,7 @@ TEST(RadixToolkitTest, ConvertFromString_StaticBinary) {
  * @details Verifies stateless hexadecimal parsing
  */
 TEST(RadixToolkitTest, ConvertFromString_StaticHexadecimal) {
-    auto result = RadixToolkit::convert_from_string<int>("FF", 16);
+    const auto result = RadixToolkit::convert_from_string<int>("FF", 16);
     EXPECT_EQ(result, 255);
 }
 
@@ -259,7 +259,7 @@ TEST(RadixToolkitTest, ConvertFromString_StaticHexadecimal) {
  * @details Verifies parsing of negative numbers
  */
 TEST(RadixToolkitTest, ConvertFromString_NegativeValues) {
-    auto result = RadixToolkit::convert_from_string<int>("-42", 10);
+    const auto result = RadixToolkit::convert_from_string<int>("-42", 10);
     EXPECT_EQ(result, -42);
 }
 
@@ -330,7 +330,7 @@ TEST(RadixToolkitTest, ToHexLower_LowercaseShorthand) {
  */
 TEST(RadixToolkitTest, FromStringNothrow_ValidInput) {
     std::errc ec;
-    auto result = RadixToolkit::from_string_nothrow<int>("42", 10, ec);
+    const auto result = RadixToolkit::from_string_nothrow<int>("42", 10, ec);
     EXPECT_EQ(result, 42);
     EXPECT_EQ(ec, std::errc{});
 }
@@ -341,7 +341,7 @@ TEST(RadixToolkitTest, FromStringNothrow_ValidInput) {
  */
 TEST(RadixToolkitTest, FromStringNothrow_InvalidInput) {
     std::errc ec;
-    auto result = RadixToolkit::from_string_nothrow<int>("XYZ", 10, ec);
+    const auto result = RadixToolkit::from_string_nothrow<int>("XYZ", 10, ec);
     EXPECT_EQ(result, 0);
     EXPECT_EQ(ec, std::errc::invalid_argument);
 }
@@ -352,7 +352,7 @@ TEST(RadixToolkitTest, FromStringNothrow_InvalidInput) {
  */
 TEST(RadixToolkitTest, FromStringNothrow_PartialParse) {
     std::errc ec;
-    auto result = RadixToolkit::from_string_nothrow<int>("42abc", 10, ec);
+    const auto result = RadixToolkit::from_string_nothrow<int>("42abc", 10, ec);
     EXPECT_EQ(result, 0);
     EXPECT_EQ(ec, std::errc::invalid_argument);
 }
@@ -362,10 +362,10 @@ TEST(RadixToolkitTest, FromStringNothrow_PartialParse) {
  * @details Verifies correct handling of maximum integer value
  */
 TEST(RadixToolkitTest, Boundary_INT_MAX) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     constexpr auto max_val = std::numeric_limits<int>::max();
-    auto str = toolkit.to_string(max_val);
-    auto parsed = toolkit.from_string<int>(str);
+    const auto str = toolkit.to_string(max_val);
+    const auto parsed = toolkit.from_string<int>(str);
     EXPECT_EQ(parsed, max_val);
 }
 
@@ -374,10 +374,10 @@ TEST(RadixToolkitTest, Boundary_INT_MAX) {
  * @details Verifies correct handling of minimum integer value
  */
 TEST(RadixToolkitTest, Boundary_INT_MIN) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     constexpr auto min_val = std::numeric_limits<int>::min();
-    auto str = toolkit.to_string(min_val);
-    auto parsed = toolkit.from_string<int>(str);
+    const auto str = toolkit.to_string(min_val);
+    const auto parsed = toolkit.from_string<int>(str);
     EXPECT_EQ(parsed, min_val);
 }
 
@@ -386,7 +386,7 @@ TEST(RadixToolkitTest, Boundary_INT_MIN) {
  * @details Verifies overflow is detected when parsing exceeds INT_MAX
  */
 TEST(RadixToolkitTest, Boundary_OverflowPositive_ThrowsException) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>("2147483648"), std::out_of_range);
 }
 
@@ -395,7 +395,7 @@ TEST(RadixToolkitTest, Boundary_OverflowPositive_ThrowsException) {
  * @details Verifies underflow is detected when parsing below INT_MIN
  */
 TEST(RadixToolkitTest, Boundary_UnderflowNegative_ThrowsException) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>("-2147483649"), std::out_of_range);
 }
 
@@ -404,7 +404,7 @@ TEST(RadixToolkitTest, Boundary_UnderflowNegative_ThrowsException) {
  * @details Verifies template works with various integral types
  */
 TEST(RadixToolkitTest, TypeVariants_DifferentIntegralTypes) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
 
     // short
     EXPECT_EQ(toolkit.to_string(static_cast<short>(100)), "100");
@@ -424,10 +424,10 @@ TEST(RadixToolkitTest, TypeVariants_DifferentIntegralTypes) {
  * @details Verifies correct handling of unsigned integer limits
  */
 TEST(RadixToolkitTest, TypeVariants_UnsignedBoundary) {
-    RadixToolkit toolkit;
+    const RadixToolkit toolkit;
     constexpr auto max_uint = std::numeric_limits<unsigned int>::max();
-    auto str = toolkit.to_string(max_uint);
-    auto parsed = toolkit.from_string<unsigned int>(str);
+    const auto str = toolkit.to_string(max_uint);
+    const auto parsed = toolkit.from_string<unsigned int>(str);
     EXPECT_EQ(parsed, max_uint);
 }
 
@@ -436,8 +436,8 @@ TEST(RadixToolkitTest, TypeVariants_UnsignedBoundary) {
  * @details Verifies to_string and from_string are inverse operations
  */
 TEST(RadixToolkitTest, RoundTrip_ConversionConsistency) {
-    RadixToolkit toolkit;
-    std::vector<int> test_values = {0, 1, -1, 42, -42, 100, -100, 255, 1024, -1024};
+    const RadixToolkit toolkit;
+    const std::vector<int> test_values = {0, 1, -1, 42, -42, 100, -100, 255, 1024, -1024};
 
     for (int val : test_values) {
         auto str = toolkit.to_string(val);
@@ -451,8 +451,8 @@ TEST(RadixToolkitTest, RoundTrip_ConversionConsistency) {
  * @details Verifies consistency across multiple numeric bases
  */
 TEST(RadixToolkitTest, RoundTrip_DifferentBases) {
-    std::vector<int> bases = {2, 8, 10, 16, 32};
-    std::vector<int> values = {0, 1, 42, 255, 1024};
+    const std::vector<int> bases = {2, 8, 10, 16, 32};
+    const std::vector<int> values = {0, 1, 42, 255, 1024};
 
     for (int base : bases) {
         for (int val : values) {

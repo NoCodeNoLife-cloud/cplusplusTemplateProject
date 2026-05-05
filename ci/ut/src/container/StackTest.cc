@@ -17,7 +17,7 @@ using namespace common::container;
  * @details Verifies that a newly constructed stack is empty with zero size
  */
 TEST(StackTest, DefaultConstructor_EmptyStack) {
-    Stack<int> stack;
+    const Stack<int> stack;
     EXPECT_TRUE(stack.empty());
     EXPECT_EQ(stack.size(), 0);
 }
@@ -40,7 +40,7 @@ TEST(StackTest, IteratorConstructor_InitializesCorrectly) {
  */
 TEST(StackTest, IteratorConstructor_EmptyRange) {
     std::vector<int> data;
-    Stack<int> stack(data.begin(), data.end());
+    const Stack<int> stack(data.begin(), data.end());
 
     EXPECT_TRUE(stack.empty());
     EXPECT_EQ(stack.size(), 0);
@@ -52,7 +52,7 @@ TEST(StackTest, IteratorConstructor_EmptyRange) {
  */
 TEST(StackTest, Push_LvalueReference) {
     Stack<int> stack;
-    int value = 42;
+    const int value = 42;
 
     stack.push(value);
 

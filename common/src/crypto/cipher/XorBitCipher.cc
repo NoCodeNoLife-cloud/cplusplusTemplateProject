@@ -3,6 +3,8 @@
 #include <fmt/format.h>
 #include <stdexcept>
 #include <string>
+#include <ranges>
+#include <algorithm>
 
 namespace common::crypto::cipher {
 void XorBitCipher::initialize(const std::vector<uint8_t>& key,
@@ -26,7 +28,7 @@ auto XorBitCipher::decrypt(const std::vector<uint8_t>& ciphertext) -> std::vecto
     return process(ciphertext);
 }
 
-auto XorBitCipher::generateKeystream(size_t length) -> std::vector<uint8_t> {
+auto XorBitCipher::generateKeystream(const size_t length) -> std::vector<uint8_t> {
     validateInitialized();
     return generateKeyStream(length);
 }
@@ -73,7 +75,7 @@ auto XorBitCipher::nextKeyBit() const -> bool {
         throw std::invalid_argument("Key stream is empty. Set key before processing.");
     }
     const uint8_t current_byte = key_stream_[key_pos_];
-    const bool bit = (current_byte >> (MSB_POSITION - bit_pos_)) & 0x01;
+    const bool bit = current_byte >> (MSB_POSITION - bit_pos_) & 0x01;
     bit_pos_++;
     if (bit_pos_ >= BITS_PER_BYTE) {
         bit_pos_ = 0;
@@ -86,9 +88,11 @@ auto XorBitCipher::process(const std::vector<uint8_t>& data) const -> std::vecto
     std::vector<uint8_t> result;
     result.reserve(data.size());
 
-    for (const uint8_t byte : data) {
-        result.push_back(byte ^ nextKeyByte());
-    }
+    std::ranges::transform(data, std::back_inserter(result),
+                           [this](const uint8_t byte) {
+                               return byte ^ nextKeyByte();
+                           });
+
     return result;
 }
 
@@ -102,9 +106,11 @@ auto XorBitCipher::processBits(const std::vector<bool>& bits) const -> std::vect
     std::vector<bool> result;
     result.reserve(bits.size());
 
-    for (const bool bit : bits) {
-        result.push_back(bit ^ nextKeyBit());
-    }
+    std::ranges::transform(bits, std::back_inserter(result),
+                           [this](const bool bit) {
+                               return bit ^ nextKeyBit();
+                           });
+
     return result;
 }
 
@@ -130,7 +136,7 @@ auto XorBitCipher::createWithRandomKey(const size_t key_length) -> XorBitCipher 
     for (size_t i = 0; i < key_length; ++i) {
         // Linear congruential generator with length-dependent seed
         state = state * 1103515245 + 12345;
-        random_key.push_back(static_cast<uint8_t>((state >> 16) & 0xFF));
+        random_key.push_back(static_cast<uint8_t>(state >> 16 & 0xFF));
     }
 
     return XorBitCipher(std::move(random_key));
