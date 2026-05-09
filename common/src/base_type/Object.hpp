@@ -42,6 +42,7 @@ public:
     /// @details This is a virtual copy constructor. Derived classes should override this method
     /// to provide proper copying behavior. The default implementation throws an exception
     /// to indicate that derived classes should implement this.
+    /// @throws std::logic_error If called on base Object class (must be overridden by derived classes)
     [[nodiscard]] virtual auto clone() const -> std::unique_ptr<Object>;
 
     /// @brief Checks if this object is an instance of the specified type.

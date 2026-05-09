@@ -35,12 +35,14 @@ public:
     /// @param key The key to insert or update
     /// @param value The value to store
     /// @return true if the operation was successful, false otherwise
+    /// @throws std::invalid_argument If key is invalid for the container type
     [[nodiscard]] auto put(const Key& key, const Value& value) -> bool override;
 
     /// @brief Inserts or updates a key-value pair in the cache (rvalue reference)
     /// @param key The key to insert or update
     /// @param value The value to store (will be moved)
     /// @return true if the operation was successful, false otherwise
+    /// @throws std::invalid_argument If key is invalid for the container type
     [[nodiscard]] auto put(const Key& key, Value&& value) -> bool override;
 
     /// @brief Removes an entry from the cache

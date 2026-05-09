@@ -90,12 +90,16 @@ auto StringToolkit::lastIndexOf(const std::string& str, const std::string& subst
 
 auto StringToolkit::substring(const std::string& str, const size_t start, const size_t length) -> std::string {
     if (start > str.length()) {
-        throw std::invalid_argument("Start position exceeds string length");
+        throw std::invalid_argument("StringToolkit::substring: Start position exceeds string length");
     }
 
-    const size_t availableLength = str.length() - start;
-    const size_t actualLength = std::min(length, availableLength);
-    return str.substr(start, actualLength);
+    // Check for potential overflow in start + length calculation
+    if (length > str.length() - start) {
+        // Length exceeds available characters, use available length instead of throwing
+        return str.substr(start);
+    }
+    
+    return str.substr(start, length);
 }
 
 auto StringToolkit::left(const std::string& str, const size_t count) -> std::string {
@@ -141,12 +145,19 @@ auto StringToolkit::repeat(const std::string& str, const size_t count) -> std::s
         return "";
     }
 
-    std::string result;
-    result.reserve(str.length() * count);
-    for (size_t i = 0; i < count; ++i) {
-        result += str;
+    try {
+        std::string result;
+        result.reserve(str.length() * count);
+        for (size_t i = 0; i < count; ++i) {
+            result += str;
+        }
+        return result;
+    } catch (const std::bad_alloc&) {
+        throw std::runtime_error(
+            "StringToolkit::repeat: Failed to allocate memory for repeated string (count=" + 
+            std::to_string(count) + ", str.length=" + std::to_string(str.length()) + ")"
+        );
     }
-    return result;
 }
 
 auto StringToolkit::reverse(const std::string& str) -> std::string {

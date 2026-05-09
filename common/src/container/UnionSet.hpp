@@ -2,6 +2,7 @@
 #include <fmt/format.h>
 #include <unordered_map>
 #include <cstdint>
+#include <stdexcept>
 
 namespace common::container {
 /// @brief A Union-Find (Disjoint Set Union) data structure implementation.
@@ -22,18 +23,21 @@ public:
     /// @brief Finds the root of the set containing element x with path compression.
     /// @param x The element to find the root for.
     /// @return The root of the set containing element x.
+    /// @throws std::invalid_argument If the element is in an invalid state
     auto find(const T& x) -> T;
 
     /// @brief Unites the sets that contain elements x and y.
     /// @param x First element
     /// @param y Second element
     /// @return True if the sets were successfully united, false if they were already in the same set.
+    /// @throws std::invalid_argument If either element is in an invalid state
     [[nodiscard]] auto unionSets(const T& x, const T& y) -> bool;
 
     /// @brief Checks if elements x and y are in the same set.
     /// @param x First element
     /// @param y Second element
     /// @return True if x and y are connected (in the same set), false otherwise.
+    /// @throws std::invalid_argument If either element is in an invalid state
     [[nodiscard]] auto connected(const T& x, const T& y) const -> bool;
 
 private:

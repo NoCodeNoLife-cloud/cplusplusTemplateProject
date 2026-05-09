@@ -97,6 +97,7 @@ public:
     /// @param substr The substring to search for.
     /// @param start The position to start searching from (default is 0).
     /// @return The position of the first occurrence, or std::nullopt if not found.
+    /// @throws std::invalid_argument If start position exceeds string length
     [[nodiscard]] static auto indexOf(const std::string& str, const std::string& substr, size_t start = 0) -> std::optional<size_t>;
 
     /// @brief Finds the last occurrence of a substring in a string.
@@ -109,7 +110,8 @@ public:
     /// @param str The source string.
     /// @param start The starting position of the substring.
     /// @param length The length of the substring to extract.
-    /// @return The extracted substring.
+    /// @return The extracted substring. If length exceeds available characters, returns from start to end.
+    /// @throws std::invalid_argument If start position exceeds string length
     [[nodiscard]] static auto substring(const std::string& str, size_t start, size_t length) -> std::string;
 
     /// @brief Extracts the leftmost n characters from a string.
@@ -142,6 +144,7 @@ public:
     /// @param str The string to repeat.
     /// @param count The number of times to repeat the string.
     /// @return A new string consisting of the original string repeated count times.
+    /// @throws std::runtime_error If memory allocation fails for large repetitions
     [[nodiscard]] static auto repeat(const std::string& str, size_t count) -> std::string;
 
     /// @brief Reverses the characters in a string.
@@ -178,18 +181,21 @@ public:
     /// @param target The string to split.
     /// @param delimiter The delimiter to split on.
     /// @return A pair containing the part before and after the first delimiter. If delimiter is not found, returns {target, ""}.
+    /// @throws std::invalid_argument If delimiter is empty
     [[nodiscard]] static auto splitOnce(const std::string& target, const std::string& delimiter) -> std::pair<std::string, std::string>;
 
     /// @brief Removes all occurrences of a substring from a string.
     /// @param str The string to remove from.
     /// @param toRemove The substring to remove.
     /// @return A new string with all occurrences of the substring removed.
+    /// @throws std::invalid_argument If toRemove is empty
     [[nodiscard]] static auto remove(const std::string& str, const std::string& toRemove) -> std::string;
 
     /// @brief Removes all occurrences of specified characters from a string.
     /// @param str The string to remove from.
     /// @param charsToRemove A string containing all characters to be removed.
     /// @return A new string with all specified characters removed.
+    /// @throws std::invalid_argument If charsToRemove is empty
     [[nodiscard]] static auto removeChars(const std::string& str, const std::string& charsToRemove) -> std::string;
 
     /// @brief Truncates a string to a maximum length with an optional suffix.
@@ -197,6 +203,7 @@ public:
     /// @param maxLength The maximum length of the resulting string (including suffix).
     /// @param suffix The suffix to append if truncation occurs (default is "...").
     /// @return The truncated string with suffix if needed, or the original string if it's within the limit.
+    /// @throws std::invalid_argument If suffix length is greater than or equal to maxLength
     [[nodiscard]] static auto truncate(const std::string& str, size_t maxLength, const std::string& suffix = "...") -> std::string;
 
     /// @brief Joins a vector of strings with a specified delimiter.

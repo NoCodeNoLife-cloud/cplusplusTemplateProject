@@ -613,7 +613,7 @@ TEST(TopKTest, GetTopK_DynamicCountWithDescending_ReturnsLargestFirst) {
 
 /**
  * @brief Test getTopK with count=0 returns all elements
- * @details Verifies that count=0 or negative returns all elements
+ * @details Verifies that count=0 returns all elements
  */
 TEST(TopKTest, GetTopK_ZeroCount_ReturnsAllElements) {
     TopK topK(10);
@@ -626,13 +626,27 @@ TEST(TopKTest, GetTopK_ZeroCount_ReturnsAllElements) {
     const auto result_zero = topK.getTopK(0);
     EXPECT_EQ(result_zero.size(), 7);
 
-    // Negative count should also return all
-    const auto result_negative = topK.getTopK(-1);
-    EXPECT_EQ(result_negative.size(), 7);
-
     // Default parameter (count=0) should return all
     const auto result_default = topK.getTopK();
     EXPECT_EQ(result_default.size(), 7);
+}
+
+/**
+ * @brief Test getTopK with negative count throws exception
+ * @details Verifies proper error handling for negative count values
+ */
+TEST(TopKTest, GetTopK_NegativeCount_ThrowsException) {
+    TopK topK(10);
+
+    for (int i = 1; i <= 7; ++i) {
+        topK.add(i);
+    }
+
+    // Negative count should throw std::invalid_argument
+    EXPECT_THROW(topK.getTopK(-1), std::invalid_argument);
+    EXPECT_THROW(topK.getTopK(-100), std::invalid_argument);
+    EXPECT_THROW(topK.getTopK(-1, true), std::invalid_argument);
+    EXPECT_THROW(topK.getTopK(-1, false), std::invalid_argument);
 }
 
 /**

@@ -1,6 +1,8 @@
 #pragma once
 #include <queue>
 #include <vector>
+#include <cstdint>
+#include <stdexcept>
 
 namespace common::data_structure {
 /// @brief A class to maintain the top K the largest numbers from a stream of integers.
@@ -28,6 +30,7 @@ public:
     /// @param ascending If true, returns in ascending order (smallest to largest).
     ///                  If false, returns in descending order (largest to smallest).
     /// @return The top k numbers in the specified order.
+    /// @throws std::invalid_argument If count is negative
     /// @note This method does not modify the internal heap state.
     [[nodiscard]] auto getTopK(int32_t count = 0, bool ascending = true) const -> std::vector<int32_t>;
 

@@ -25,10 +25,12 @@ public:
 
     /// @brief Pushes a copy of the given value onto the stack.
     /// @param value The value to push.
+    /// @throws std::bad_alloc If memory allocation fails
     auto push(const T& value) -> void;
 
     /// @brief Pushes the given value onto the stack using move semantics.
     /// @param value The value to push.
+    /// @throws std::bad_alloc If memory allocation fails
     auto push(T&& value) -> void;
 
     /// @brief Constructs an element in-place on top of the stack.
@@ -77,12 +79,20 @@ Stack<T, Container>::Stack(Iterator begin, Iterator end) : data_(begin, end) {
 
 template <std::movable T, typename Container>
 auto Stack<T, Container>::push(const T& value) -> void {
-    data_.push_back(value);
+    try {
+        data_.push_back(value);
+    } catch (const std::bad_alloc&) {
+        throw std::runtime_error("Stack::push: Failed to allocate memory for new element");
+    }
 }
 
 template <std::movable T, typename Container>
 auto Stack<T, Container>::push(T&& value) -> void {
-    data_.push_back(std::move(value));
+    try {
+        data_.push_back(std::move(value));
+    } catch (const std::bad_alloc&) {
+        throw std::runtime_error("Stack::push: Failed to allocate memory for new element");
+    }
 }
 
 template <std::movable T, typename Container>

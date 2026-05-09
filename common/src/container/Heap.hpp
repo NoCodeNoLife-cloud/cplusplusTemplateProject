@@ -43,10 +43,12 @@ public:
 
     /// @brief Pushes a value to the heap.
     /// @param value The value to push.
+    /// @throws std::bad_alloc If memory allocation fails
     auto push(const T& value) -> void;
 
     /// @brief Pushes a value to the heap.
     /// @param value The value to push.
+    /// @throws std::bad_alloc If memory allocation fails
     auto push(T&& value) -> void;
 
     /// @brief Constructs an element in-place and pushes it to the heap.
@@ -133,14 +135,22 @@ Heap<T, Compare>::~Heap() = default;
 
 template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::push(const T& value) -> void {
-    data_.push_back(value);
-    heapify_up(data_.size() - 1);
+    try {
+        data_.push_back(value);
+        heapify_up(data_.size() - 1);
+    } catch (const std::bad_alloc&) {
+        throw std::runtime_error("Heap::push: Failed to allocate memory for new element");
+    }
 }
 
 template <std::copyable T, typename Compare>
 auto Heap<T, Compare>::push(T&& value) -> void {
-    data_.push_back(std::move(value));
-    heapify_up(data_.size() - 1);
+    try {
+        data_.push_back(std::move(value));
+        heapify_up(data_.size() - 1);
+    } catch (const std::bad_alloc&) {
+        throw std::runtime_error("Heap::push: Failed to allocate memory for new element");
+    }
 }
 
 template <std::copyable T, typename Compare>

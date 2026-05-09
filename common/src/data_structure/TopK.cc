@@ -28,6 +28,12 @@ auto TopK::add(const int32_t num) -> void {
 }
 
 auto TopK::getTopK(int32_t count, bool ascending) const -> std::vector<int32_t> {
+    if (count < 0) {
+        throw std::invalid_argument(
+            "TopK::getTopK: count must be non-negative, got " + std::to_string(count)
+        );
+    }
+
     // Create a copy of the heap to avoid modifying the original
     auto temp_heap = minHeap_;
 

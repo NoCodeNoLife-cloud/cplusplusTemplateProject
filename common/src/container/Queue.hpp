@@ -34,6 +34,7 @@ public:
 
     /// @brief Add an element to the back of the queue
     /// @param value The value to add
+    /// @throws std::invalid_argument If the operation fails due to invalid state
     auto push(const T& value) -> void;
 
     /// @brief Remove the element from the front of the queue
@@ -137,6 +138,9 @@ auto Queue<T>::operator=(Queue&& other) noexcept -> Queue& {
 template <std::movable T>
 auto Queue<T>::push(const T& value) -> void {
     auto new_node = std::make_unique<Node>(value);
+    if (!new_node) {
+        throw std::runtime_error("Queue::push: Failed to allocate memory for new node");
+    }
     if (tail_) {
         tail_->next_ = std::move(new_node);
         tail_ = tail_->next_.get();
