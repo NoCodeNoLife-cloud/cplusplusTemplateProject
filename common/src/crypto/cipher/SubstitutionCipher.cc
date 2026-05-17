@@ -7,6 +7,7 @@
 #include "SubstitutionCipher.hpp"
 #include <fmt/format.h>
 #include <cctype>
+#include <glog/logging.h>
 
 namespace common::crypto::cipher {
 void SubstitutionCipher::ValidateAndBuildReverseMap() {
@@ -14,13 +15,15 @@ void SubstitutionCipher::ValidateAndBuildReverseMap() {
     std::unordered_map<char, char> reverse_check;
     for (const auto& [from, to] : encode_map_) {
         if (!std::isalpha(from) || !std::isalpha(to)) {
+            DLOG(WARNING) << "Substitution cipher mapping contains non-alphabetic characters";
             throw std::invalid_argument("Mapping must contain only alphabetic characters");
         }
         if (reverse_check.contains(to)) {
+            DLOG(WARNING) << "Substitution cipher mapping is not bijective (not one-to-one)";
             throw std::invalid_argument("Mapping must be bijective (one-to-one)");
         }
-        reverse_check[to] = from;
-        decode_map_[to] = from; ///< Build reverse lookup table
+        reverse_check[to] = from; ///< Build reverse lookup table
+        decode_map_[to] = from;
     }
 }
 

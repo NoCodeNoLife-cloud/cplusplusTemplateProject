@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
+#include <glog/logging.h>
 
 namespace common::crypto::cipher {
 auto StreamCipherFactory::create(Algorithm algo) -> std::unique_ptr<StreamCipher> {
@@ -19,6 +20,7 @@ auto StreamCipherFactory::create(Algorithm algo) -> std::unique_ptr<StreamCipher
             return std::make_unique<ChaCha20Cipher>();
 
         default:
+            DLOG(WARNING) << fmt::format("Unsupported stream cipher algorithm requested: {}", algorithmToString(algo));
             throw std::invalid_argument(
                 "Unsupported stream cipher algorithm: " +
                 algorithmToString(algo)

@@ -11,10 +11,12 @@
 #include <utility>
 #include <stdexcept>
 #include <cctype>
+#include <glog/logging.h>
 
 namespace common::toolkit {
 auto IntegerToolkit::intToRoman(const int32_t num) -> std::string {
     if (num < ROMAN_MIN_VALUE || num > ROMAN_MAX_VALUE) {
+        DLOG(WARNING) << fmt::format("IntegerToolkit intToRoman: Number {} out of range [{}, {}]", num, ROMAN_MIN_VALUE, ROMAN_MAX_VALUE);
         throw std::out_of_range("IntegerToolkit::intToRoman: Number must be between " +
                                 std::to_string(ROMAN_MIN_VALUE) + " and " +
                                 std::to_string(ROMAN_MAX_VALUE));
@@ -48,6 +50,7 @@ auto IntegerToolkit::tryIntToRoman(const int32_t num) noexcept -> std::optional<
 
 auto IntegerToolkit::romanToInt(const std::string& roman) -> int32_t {
     if (roman.empty()) {
+        DLOG(WARNING) << "IntegerToolkit romanToInt: Empty Roman numeral string";
         throw std::invalid_argument("IntegerToolkit::romanToInt: Empty Roman numeral string");
     }
     // Convert the Roman numeral string to uppercase for consistency

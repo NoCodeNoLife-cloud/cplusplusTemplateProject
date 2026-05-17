@@ -13,6 +13,7 @@
 #include <string>
 #include <stdexcept>
 #include <ctime>
+#include <glog/logging.h>
 
 namespace common::time {
 SimpleDateFormatter::SimpleDateFormatter(const std::string& pattern) {
@@ -86,6 +87,7 @@ auto SimpleDateFormatter::hashCode() const noexcept -> size_t {
 
 auto SimpleDateFormatter::validatePattern(const std::string& pat) -> void {
     if (pat.empty()) {
+        DLOG(WARNING) << "SimpleDateFormatter validatePattern: Pattern is empty";
         throw std::invalid_argument("SimpleDateFormatter::validatePattern: Pattern cannot be empty");
     }
 }

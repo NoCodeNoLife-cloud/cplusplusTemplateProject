@@ -18,6 +18,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include <sstream>
+#include <glog/logging.h>
 
 namespace common::thread {
 namespace {
@@ -31,14 +32,17 @@ auto getThreadIdString() -> std::string {
 
 ThreadPool::ThreadPool(const size_t core_threads, const size_t max_threads, const size_t queue_size, const std::chrono::milliseconds idle_time) : core_thread_count_(core_threads), max_thread_count_(max_threads), max_queue_size_(queue_size), thread_idle_time_(idle_time) {
     if (core_threads == 0) {
+        DLOG(WARNING) << "ThreadPool constructor: core_threads must be greater than 0";
         throw std::invalid_argument("ThreadPool::ThreadPool: core_threads must be greater than 0");
     }
 
     if (max_threads < core_threads) {
+        DLOG(WARNING) << fmt::format("ThreadPool constructor: max_threads ({}) < core_threads ({})", max_threads, core_threads);
         throw std::invalid_argument("ThreadPool::ThreadPool: max_threads cannot be less than core_threads");
     }
 
     if (queue_size == 0) {
+        DLOG(WARNING) << "ThreadPool constructor: queue_size must be greater than 0";
         throw std::invalid_argument("ThreadPool::ThreadPool: queue_size must be greater than 0");
     }
 

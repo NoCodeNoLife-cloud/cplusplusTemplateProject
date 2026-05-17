@@ -11,17 +11,21 @@
 #include <cstddef>
 #include <stdexcept>
 #include <string>
+#include <glog/logging.h>
 
 namespace common::filesystem {
 FileInputStream::FileInputStream(const std::string& name) {
     if (!std::filesystem::exists(name)) {
+        DLOG(WARNING) << fmt::format("FileInputStream: File does not exist - {}", name);
         throw std::invalid_argument("FileInputStream::FileInputStream: File does not exist - " + name);
     }
     if (std::filesystem::is_directory(name)) {
+        DLOG(WARNING) << fmt::format("FileInputStream: Path is a directory - {}", name);
         throw std::invalid_argument("FileInputStream::FileInputStream: Path is a directory - " + name);
     }
     file_stream_.open(name, std::ios::binary);
     if (!file_stream_.is_open()) {
+        DLOG(WARNING) << fmt::format("FileInputStream: Unable to open file - {}", name);
         throw std::ios_base::failure("FileInputStream::FileInputStream: Unable to open file - " + name);
     }
     file_name_ = name;

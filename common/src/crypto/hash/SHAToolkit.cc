@@ -9,6 +9,7 @@
 #include "SHA1Strategy.hpp"
 
 #include <fmt/format.h>
+#include <glog/logging.h>
 
 namespace common::crypto::hash {
 SHAToolkit::SHAToolkit(std::unique_ptr<HashStrategy> strategy) : strategy_(std::move(strategy)) {
@@ -42,6 +43,7 @@ auto SHAToolkit::getHexDigestSize() const noexcept -> size_t {
 
 auto SHAToolkit::update(const void* data, const size_t length) noexcept -> bool {
     if (!strategy_) {
+        DLOG(WARNING) << "SHAToolkit update called without valid strategy";
         return false;
     }
     return strategy_->update(data, length);
@@ -56,6 +58,7 @@ auto SHAToolkit::update(const std::string_view data) noexcept -> bool {
 
 auto SHAToolkit::finalize() noexcept -> std::optional<std::vector<uint8_t> > {
     if (!strategy_) {
+        DLOG(WARNING) << "SHAToolkit finalize called without valid strategy";
         return std::nullopt;
     }
     return strategy_->finalize();

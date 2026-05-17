@@ -14,6 +14,7 @@
 #include <optional>
 #include <cstdint>
 #include <chrono>
+#include <glog/logging.h>
 
 namespace common::filesystem {
 Directory::Directory(std::filesystem::path filePath) noexcept : dir_path_(std::move(filePath)) {

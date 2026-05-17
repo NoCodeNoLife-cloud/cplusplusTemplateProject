@@ -33,7 +33,30 @@ auto ClientTask::init() const noexcept -> void {
     DLOG(INFO) << "Initialization completed successfully";
 }
 
-auto ClientTask::logIn(const client_app::auth::AuthRpcClient& auth_rpc_client) -> std::string {
+auto ClientTask::run() -> void {
+    init();
+    const auto client = createRpcClient();
+
+    // Log initial connection state
+    DLOG(INFO) << "Initial connection state: " << common::rpc::RpcMetadata::grpcStateToString(client.getConnectivityState());
+
+    const std::string username = logIn(client);
+
+    task(client);
+    DLOG(INFO) << "Client task execution completed";
+
+    logOut(client, username);
+    exit();
+}
+
+auto ClientTask::exit() const noexcept -> void {
+    timer_.recordEnd();
+    const auto time_info = timer_.getRunTime();
+    LOG(INFO) << time_info;
+    DLOG(INFO) << "Application finished successfully.";
+}
+
+auto ClientTask::logIn(const auth::AuthRpcClient& auth_rpc_client) -> std::string {
     DLOG(INFO) << "Starting authentication process";
 
     // Check if the RPC client is ready before proceeding
@@ -80,7 +103,7 @@ auto ClientTask::shouldCreateNewAccount() -> bool {
     return createNewAccount == "y" || createNewAccount == "Y";
 }
 
-auto ClientTask::registerNewUser(const client_app::auth::AuthRpcClient& auth_rpc_client, const std::string& username, const std::string& password) -> void {
+auto ClientTask::registerNewUser(const auth::AuthRpcClient& auth_rpc_client, const std::string& username, const std::string& password) -> void {
     DLOG(INFO) << "Registering user...";
     const auto registerUserResponse = auth_rpc_client.RegisterUser(username, password);
     if (!registerUserResponse.success()) {
@@ -92,7 +115,7 @@ auto ClientTask::registerNewUser(const client_app::auth::AuthRpcClient& auth_rpc
     DLOG(INFO) << fmt::format("Registered user successfully, return value: {}", registerUserResponse.message());
 }
 
-auto ClientTask::logOut(const client_app::auth::AuthRpcClient& auth_rpc_client, const std::string& username) noexcept -> void {
+auto ClientTask::logOut(const auth::AuthRpcClient& auth_rpc_client, const std::string& username) noexcept -> void {
     if (const auto deleteUserResponse = auth_rpc_client.DeleteUser(username); !deleteUserResponse.success()) {
         LOG(ERROR) << fmt::format("Failed to delete user: {}, Error code: {}", deleteUserResponse.message(), deleteUserResponse.error_code());
     } else {
@@ -101,54 +124,9 @@ auto ClientTask::logOut(const client_app::auth::AuthRpcClient& auth_rpc_client, 
 }
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
-auto ClientTask::task(const client_app::auth::AuthRpcClient& auth_rpc_client) noexcept -> void {
+auto ClientTask::task(const auth::AuthRpcClient& auth_rpc_client) noexcept -> void {
     // Implement actual task logic here
     DLOG(INFO) << "Current connection state: " << common::rpc::RpcMetadata::grpcStateToString(auth_rpc_client.getConnectivityState());
-}
-
-auto ClientTask::run() -> void {
-    init();
-    const auto client = createRpcClient();
-
-    // Log initial connection state
-    DLOG(INFO) << "Initial connection state: " << common::rpc::RpcMetadata::grpcStateToString(client.getConnectivityState());
-
-    const std::string username = logIn(client);
-
-    task(client);
-    DLOG(INFO) << "Client task execution completed";
-
-    logOut(client, username);
-    exit();
-}
-
-auto ClientTask::createRpcClient() const -> client_app::auth::AuthRpcClient {
-    DLOG(INFO) << "Creating gRPC channel";
-    // Create channel using the existing createChannel method with custom arguments
-    const auto channel = createChannel();
-
-    // Get state using the new GrpcConnectivityState enum
-    const auto state_enum = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(true));
-    const std::string state_str = common::rpc::RpcMetadata::grpcStateToString(state_enum);
-
-    DLOG(INFO) << fmt::format("gRPC channel created with state: {}", state_str);
-    DLOG(INFO) << "Creating RPC client";
-    // Create client using the channel with custom arguments
-    client_app::auth::AuthRpcClient client{channel};
-    DLOG(INFO) << "RPC client created successfully";
-
-    return client;
-}
-
-auto ClientTask::exit() const noexcept -> void {
-    timer_.recordEnd();
-    const auto time_info = timer_.getRunTime();
-    LOG(INFO) << time_info;
-    DLOG(INFO) << "Application finished successfully.";
-}
-
-auto ClientTask::logClientInfo() noexcept -> void {
-    DLOG(INFO) << fmt::format("OS Version: {}, CPU Model: {}, Memory Details: {}, Graphics Card Info: {}", common::system::SystemInfo::GetOSVersion(), common::system::SystemInfo::GetCpuModelFromRegistry(), common::system::SystemInfo::GetMemoryDetails(), common::system::SystemInfo::GetGraphicsCardInfo());
 }
 
 auto ClientTask::createChannel() const -> std::shared_ptr<grpc::Channel> {
@@ -194,5 +172,27 @@ auto ClientTask::createChannel() const -> std::shared_ptr<grpc::Channel> {
     DLOG(INFO) << fmt::format("Final connection state: {}", final_state_str);
 
     return channel;
+}
+
+auto ClientTask::createRpcClient() const -> auth::AuthRpcClient {
+    DLOG(INFO) << "Creating gRPC channel";
+    // Create channel using the existing createChannel method with custom arguments
+    const auto channel = createChannel();
+
+    // Get state using the new GrpcConnectivityState enum
+    const auto state_enum = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(true));
+    const std::string state_str = common::rpc::RpcMetadata::grpcStateToString(state_enum);
+
+    DLOG(INFO) << fmt::format("gRPC channel created with state: {}", state_str);
+    DLOG(INFO) << "Creating RPC client";
+    // Create client using the channel with custom arguments
+    auth::AuthRpcClient client{channel};
+    DLOG(INFO) << "RPC client created successfully";
+
+    return client;
+}
+
+auto ClientTask::logClientInfo() noexcept -> void {
+    DLOG(INFO) << fmt::format("OS Version: {}, CPU Model: {}, Memory Details: {}, Graphics Card Info: {}", common::system::SystemInfo::GetOSVersion(), common::system::SystemInfo::GetCpuModelFromRegistry(), common::system::SystemInfo::GetMemoryDetails(), common::system::SystemInfo::GetGraphicsCardInfo());
 }
 }

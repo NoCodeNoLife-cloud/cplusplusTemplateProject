@@ -8,13 +8,16 @@
 
 #include <fmt/format.h>
 #include <stdexcept>
+#include <glog/logging.h>
 
 namespace common::crypto::hash {
 SHA1Strategy::SHA1Strategy() {
     if (!ctx_) {
+        DLOG(WARNING) << "Failed to allocate EVP_MD_CTX for SHA-1";
         throw std::runtime_error("Failed to allocate EVP_MD_CTX");
     }
     if (EVP_DigestInit_ex(ctx_.get(), EVP_sha1(), nullptr) != 1) {
+        DLOG(WARNING) << "Failed to initialize SHA-1 context";
         throw std::runtime_error("Failed to initialize SHA-1 context");
     }
 }

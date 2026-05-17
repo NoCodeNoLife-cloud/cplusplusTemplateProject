@@ -11,6 +11,7 @@
 #include <string>
 #include <compare>
 #include <stdexcept>
+#include <glog/logging.h>
 
 namespace common::base_type {
 BigInteger::BigInteger() noexcept : value_(0) {
@@ -18,6 +19,7 @@ BigInteger::BigInteger() noexcept : value_(0) {
 
 BigInteger::BigInteger(const std::string& str) : value_(0) {
     if (str.empty()) {
+        DLOG(WARNING) << "Cannot construct BigInteger from empty string";
         throw std::invalid_argument("Cannot construct BigInteger from empty string");
     }
     value_ = boost::multiprecision::cpp_int(str);
@@ -40,6 +42,7 @@ auto BigInteger::operator*(const BigInteger& other) const noexcept -> BigInteger
 
 auto BigInteger::operator/(const BigInteger& other) const -> BigInteger {
     if (other.value_ == 0) {
+        DLOG(WARNING) << "Division by zero attempted in BigInteger";
         throw std::invalid_argument("Division by zero");
     }
     return BigInteger(value_ / other.value_);
@@ -47,6 +50,7 @@ auto BigInteger::operator/(const BigInteger& other) const -> BigInteger {
 
 auto BigInteger::operator%(const BigInteger& other) const -> BigInteger {
     if (other.value_ == 0) {
+        DLOG(WARNING) << "Modulo by zero attempted in BigInteger";
         throw std::invalid_argument("Modulo by zero");
     }
     return BigInteger(value_ % other.value_);

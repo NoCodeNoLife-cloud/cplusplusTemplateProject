@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <fmt/format.h>
+#include <glog/logging.h>
 
 namespace common::data_structure {
 TopK::TopK() noexcept : max_capacity_(0) {
@@ -15,6 +16,7 @@ TopK::TopK() noexcept : max_capacity_(0) {
 
 TopK::TopK(const int32_t max_capacity) : max_capacity_(max_capacity) {
     if (max_capacity < 0) {
+        DLOG(WARNING) << fmt::format("TopK constructed with invalid max_capacity: {}", max_capacity);
         throw std::invalid_argument("max_capacity must be non-negative");
     }
 }
@@ -35,6 +37,7 @@ auto TopK::add(const int32_t num) -> void {
 
 auto TopK::getTopK(int32_t count, bool ascending) const -> std::vector<int32_t> {
     if (count < 0) {
+        DLOG(WARNING) << fmt::format("TopK::getTopK called with negative count: {}", count);
         throw std::invalid_argument(
             "TopK::getTopK: count must be non-negative, got " + std::to_string(count)
         );

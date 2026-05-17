@@ -11,6 +11,7 @@
 #include <typeinfo>
 #include <memory>
 #include <string>
+#include <glog/logging.h>
 
 namespace common::base_type {
 auto Object::getClass() const noexcept -> const std::type_info& {
@@ -32,6 +33,7 @@ auto Object::toString() const -> std::string {
 auto Object::clone() const -> std::unique_ptr<Object> {
     // Since Object is likely to be used as a base for polymorphic types, 
     // we throw an exception to indicate that derived classes should implement this.
+    DLOG(WARNING) << "clone() called on base Object class - must be implemented by derived classes";
     throw std::logic_error("clone() must be implemented by derived classes");
 }
 

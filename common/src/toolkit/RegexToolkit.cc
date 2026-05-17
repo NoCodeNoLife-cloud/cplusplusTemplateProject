@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <glog/logging.h>
 
 namespace common::toolkit {
 auto RegexToolkit::is_match(const std::string& text, const std::string& pattern, const std::regex_constants::syntax_option_type flags) -> bool {
@@ -18,6 +19,7 @@ auto RegexToolkit::is_match(const std::string& text, const std::string& pattern,
         const std::regex re(pattern, flags);
         return std::regex_match(text, re);
     } catch (const std::regex_error& e) {
+        DLOG(WARNING) << fmt::format("RegexToolkit is_match: Invalid pattern - {}", e.what());
         throw std::invalid_argument("RegexToolkit::is_match: Invalid regex pattern: " + std::string(e.what()));
     }
 }
@@ -27,6 +29,7 @@ auto RegexToolkit::is_search(const std::string& text, const std::string& pattern
         const std::regex re(pattern, flags);
         return std::regex_search(text, re);
     } catch (const std::regex_error& e) {
+        DLOG(WARNING) << fmt::format("RegexToolkit is_search: Invalid pattern - {}", e.what());
         throw std::invalid_argument("RegexToolkit::is_search: Invalid regex pattern: " + std::string(e.what()));
     }
 }

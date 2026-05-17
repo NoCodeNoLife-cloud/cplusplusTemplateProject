@@ -8,11 +8,13 @@
 
 #include <fmt/format.h>
 #include <openssl/rand.h>
+#include <glog/logging.h>
 
 namespace common::crypto {
 auto CryptoToolKit::generate_salt() -> std::string {
     unsigned char salt[SALT_SIZE];
     if (RAND_bytes(salt, SALT_SIZE) != 1) {
+        DLOG(WARNING) << "Failed to generate secure random salt";
         throw exception::AuthenticationException(std::string("Failed to generate secure random salt"));
     }
     return {reinterpret_cast<const char*>(salt), SALT_SIZE};
@@ -21,6 +23,7 @@ auto CryptoToolKit::generate_salt() -> std::string {
 auto CryptoToolKit::hash_password(const std::string& password, const std::string& salt, const size_t iterations) -> std::string {
     unsigned char hash[HASH_SIZE];
     if (PKCS5_PBKDF2_HMAC(password.c_str(), static_cast<int>(password.length()), reinterpret_cast<const unsigned char*>(salt.c_str()), static_cast<int>(salt.length()), static_cast<int>(iterations), EVP_sha256(), HASH_SIZE, hash) != 1) {
+        DLOG(WARNING) << "Password hashing failed";
         throw exception::AuthenticationException(std::string("Password hashing failed"));
     }
     return {reinterpret_cast<const char*>(hash), HASH_SIZE};

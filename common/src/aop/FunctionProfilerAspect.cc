@@ -7,22 +7,33 @@
 #include "src/aop/FunctionProfilerAspect.hpp"
 #include <utility>
 
+#include <glog/logging.h>
+
 namespace common::aop {
 FunctionProfilerAspect::FunctionProfilerAspect(std::string function_name) : profiler_(function_name, true), function_name_(std::move(function_name)) {
+    DLOG(INFO) << "FunctionProfilerAspect created for: " << function_name_;
 }
 
 auto FunctionProfilerAspect::onEntry() -> void {
+    // Removed frequent entry logging to avoid spam
+    // DLOG(INFO) << "Entering function: " << function_name_;
 }
 
 auto FunctionProfilerAspect::onExit() -> void {
     profiler_.recordEnd();
     const auto time_info = profiler_.getRunTime();
+    // Only log if execution time is significant (> 100ms) to reduce noise
+    const double elapsed_ms = profiler_.getRunTimeMs();
+    if (elapsed_ms > 100.0) {
+        DLOG(INFO) << "Exiting function: " << function_name_ << ", " << time_info;
+    }
     onProfileComplete(time_info);
 }
 
 auto FunctionProfilerAspect::onException(std::exception_ptr e) -> void {
     profiler_.recordEnd();
     const auto time_info = profiler_.getRunTime();
+    DLOG(WARNING) << "Exception in function: " << function_name_ << ", " << time_info;
     onProfileComplete(time_info);
 }
 

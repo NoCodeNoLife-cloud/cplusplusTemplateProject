@@ -23,5 +23,6 @@ target_link_libraries(${COMMON_FRAMEWORK} PUBLIC
         Microsoft::DirectXMath
         unofficial::sqlite3::sqlite3
         fmt::fmt
+        glog_service
         unofficial::mysql-connector-cpp::connector
 )

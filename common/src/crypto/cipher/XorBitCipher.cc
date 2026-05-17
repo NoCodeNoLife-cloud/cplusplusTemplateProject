@@ -11,11 +11,13 @@
 #include <string>
 #include <ranges>
 #include <algorithm>
+#include <glog/logging.h>
 
 namespace common::crypto::cipher {
 void XorBitCipher::initialize(const std::vector<uint8_t>& key,
                               const std::vector<uint8_t>& /* nonce */) {
     if (key.empty()) {
+        DLOG(WARNING) << "XorBitCipher initialized with empty key";
         throw std::invalid_argument("XorBitCipher requires a non-empty key.");
     }
     key_stream_ = key;
@@ -54,6 +56,7 @@ auto XorBitCipher::isInitialized() const noexcept -> bool {
 
 void XorBitCipher::validateInitialized() const {
     if (!hasKey()) {
+        DLOG(WARNING) << "XorBitCipher operation called without initialization";
         throw std::runtime_error("XorBitCipher not initialized. Call initialize() first.");
     }
 }

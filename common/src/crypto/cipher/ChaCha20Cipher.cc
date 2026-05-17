@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <openssl/err.h>
+#include <glog/logging.h>
 
 namespace common::crypto::cipher {
 ChaCha20Cipher::ChaCha20Cipher() noexcept : ctx_(nullptr), key_{}, nonce_{}, initialized_(false) {
@@ -47,6 +48,7 @@ void ChaCha20Cipher::initialize(const std::vector<uint8_t>& key,
                                 const std::vector<uint8_t>& nonce) {
     // Validate key size
     if (key.size() != KEY_SIZE) {
+        DLOG(WARNING) << fmt::format("ChaCha20 invalid key size: expected {} bytes, got {}", KEY_SIZE, key.size());
         throw std::invalid_argument(
             "ChaCha20 requires a 32-byte (256-bit) key. Got: " +
             std::to_string(key.size()) + " bytes."
@@ -55,6 +57,7 @@ void ChaCha20Cipher::initialize(const std::vector<uint8_t>& key,
 
     // Validate nonce size
     if (nonce.size() != NONCE_SIZE) {
+        DLOG(WARNING) << fmt::format("ChaCha20 invalid nonce size: expected {} bytes, got {}", NONCE_SIZE, nonce.size());
         throw std::invalid_argument(
             "ChaCha20-IETF requires a 12-byte (96-bit) nonce. Got: " +
             std::to_string(nonce.size()) + " bytes."
@@ -67,6 +70,7 @@ void ChaCha20Cipher::initialize(const std::vector<uint8_t>& key,
     // Create new cipher context
     ctx_ = EVP_CIPHER_CTX_new();
     if (!ctx_) {
+        DLOG(WARNING) << "Failed to create OpenSSL cipher context for ChaCha20";
         throw std::runtime_error(
             "Failed to create OpenSSL cipher context: " +
             std::string(ERR_error_string(ERR_get_error(), nullptr))
@@ -93,6 +97,7 @@ void ChaCha20Cipher::initialize(const std::vector<uint8_t>& key,
 
 auto ChaCha20Cipher::encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t> {
     if (!initialized_) {
+        DLOG(WARNING) << "ChaCha20 encrypt called without initialization";
         throw std::runtime_error("ChaCha20 cipher not initialized. Call initialize() first.");
     }
     return process(plaintext);
@@ -100,6 +105,7 @@ auto ChaCha20Cipher::encrypt(const std::vector<uint8_t>& plaintext) -> std::vect
 
 auto ChaCha20Cipher::decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t> {
     if (!initialized_) {
+        DLOG(WARNING) << "ChaCha20 decrypt called without initialization";
         throw std::runtime_error("ChaCha20 cipher not initialized. Call initialize() first.");
     }
     // For stream ciphers, decryption is identical to encryption

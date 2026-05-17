@@ -12,6 +12,8 @@
 
 #include "crypto/CryptoToolKit.hpp"
 
+#include <glog/logging.h>
+
 namespace common::auth {
 UserAuthenticator::UserAuthenticator(const std::string& db_path, const PasswordPolicy& policy) : password_policy_(policy), password_sql_(db_path) {
 }
@@ -27,20 +29,24 @@ auto UserAuthenticator::format_credentials_data(const std::string& salt, const s
 }
 
 bool UserAuthenticator::register_user(const std::string& username, const std::string& password) {
+    DLOG(INFO) << "Registering new user: " << username;
     std::lock_guard lock(users_mutex_);
 
     // Validate username format
     if (!validate_username(username)) {
+        DLOG(WARNING) << "Registration failed: invalid username format for: " << username;
         throw exception::AuthenticationException(std::string("Invalid username format. Use alphanumeric characters, underscores, or hyphens (3-20 characters)."));
     }
 
     // Check if username already exists
     if (users_.contains(username) || password_sql_.UserExists(username)) {
+        DLOG(WARNING) << "Registration failed: username already exists: " << username;
         throw exception::AuthenticationException(std::string("Username already exists"));
     }
 
     // Validate password against policy
     if (!password_policy_.validate(password)) {
+        DLOG(WARNING) << "Registration failed: password does not meet security requirements for user: " << username;
         throw exception::AuthenticationException(std::string("Password does not meet security requirements"));
     }
 
@@ -56,15 +62,18 @@ bool UserAuthenticator::register_user(const std::string& username, const std::st
 
     // Store user credentials in memory cache
     users_[username] = std::make_unique<UserCredentials>(username, hashed_password, salt);
+    DLOG(INFO) << "User registered successfully: " << username;
     return true;
 }
 
 auto UserAuthenticator::authenticate(const std::string& username, const std::string& password) -> AuthResult {
+    DLOG(INFO) << "Authenticating user: " << username;
     std::lock_guard lock(users_mutex_);
 
     // Try to get user from memory cache first
     auto it = users_.find(username);
     if (it == users_.end()) {
+        DLOG(INFO) << "User not in cache, loading from database: " << username;
         // If not in cache, try to load from database
         auto user_opt = load_user_from_db(username);
         if (user_opt.has_value()) {
@@ -75,6 +84,7 @@ auto UserAuthenticator::authenticate(const std::string& username, const std::str
     }
 
     if (it == users_.end()) {
+        DLOG(INFO) << "Authentication failed: user not found: " << username;
         return AuthResult::failure_result("User not found");
     }
 
@@ -82,6 +92,7 @@ auto UserAuthenticator::authenticate(const std::string& username, const std::str
 
     // Check if account is locked
     if (user->is_locked()) {
+        DLOG(WARNING) << "Authentication failed: account is locked: " << username;
         return AuthResult::failure_result("Account is locked due to too many failed attempts. Please try again later.");
     }
 
@@ -89,17 +100,22 @@ auto UserAuthenticator::authenticate(const std::string& username, const std::str
     const auto hashed_input = crypto::CryptoToolKit::hash_password(password, user->get_salt());
     if (crypto::CryptoToolKit::secure_compare(hashed_input, user->get_hashed_password())) {
         user->reset_failed_attempts();
+        DLOG(INFO) << "Authentication successful for user: " << username;
         return AuthResult::success_result(user.get());
     }
 
     user->increment_failed_attempts();
+    DLOG(INFO) << "Authentication failed: invalid password for user: " << username 
+               << " (failed attempts: " << user->get_failed_attempts() << ")";
     return AuthResult::failure_result("Invalid password");
 }
 
 bool UserAuthenticator::change_password(const std::string& username, const std::string& current_password, const std::string& new_password) {
+    DLOG(INFO) << "Changing password for user: " << username;
     // First verify current password
     const auto auth_result = authenticate(username, current_password);
     if (!auth_result.is_success()) {
+        DLOG(WARNING) << "Password change failed: current password incorrect for user: " << username;
         throw exception::AuthenticationException("Current password is incorrect: " + auth_result.error_message);
     }
 
@@ -127,14 +143,17 @@ bool UserAuthenticator::change_password(const std::string& username, const std::
     // Update credentials in memory cache
     auto new_credentials = std::make_unique<UserCredentials>(username, hashed_password, salt);
     it->second = std::move(new_credentials);
+    DLOG(INFO) << "Password changed successfully for user: " << username;
     return true;
 }
 
 bool UserAuthenticator::reset_password(const std::string& username, const std::string& new_password) {
+    DLOG(INFO) << "Resetting password for user: " << username;
     std::lock_guard lock(users_mutex_);
 
     // Validate new password
     if (!password_policy_.validate(new_password)) {
+        DLOG(WARNING) << "Password reset failed: new password does not meet requirements for user: " << username;
         throw exception::AuthenticationException(std::string("New password does not meet security requirements"));
     }
 
@@ -151,19 +170,23 @@ bool UserAuthenticator::reset_password(const std::string& username, const std::s
     // Update credentials in memory cache or add if not exists
     auto new_credentials = std::make_unique<UserCredentials>(username, hashed_password, salt);
     users_[username] = std::move(new_credentials);
+    DLOG(INFO) << "Password reset successfully for user: " << username;
     return true;
 }
 
 bool UserAuthenticator::delete_user(const std::string& username) {
+    DLOG(INFO) << "Deleting user: " << username;
     std::lock_guard lock(users_mutex_);
 
     // Delete from database
     if (!password_sql_.DeleteUser(username)) {
+        DLOG(WARNING) << "Failed to delete user from database: " << username;
         return false;
     }
 
     // Delete from memory cache
     users_.erase(username);
+    DLOG(INFO) << "User deleted successfully: " << username;
     return true;
 }
 

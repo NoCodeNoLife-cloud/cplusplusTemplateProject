@@ -7,6 +7,7 @@
 #include "MySqlExecutor.hpp"
 
 #include <fmt/format.h>
+#include <glog/logging.h>
 
 namespace common::sql::mysql {
 MySqlExecutor::MySqlExecutor() : session_(nullptr),
@@ -98,6 +99,7 @@ void MySqlExecutor::connect(const std::string& host,
         connected_ = true;
     } catch (const mysqlx::Error& e) {
         last_error_ = fmt::format("MySqlExecutor::connect: Connection failed - {}", e.what());
+        DLOG(WARNING) << last_error_;
         disconnect();
         throw std::runtime_error(last_error_);
     }
@@ -119,11 +121,13 @@ void MySqlExecutor::disconnect() {
 auto MySqlExecutor::execute(const std::string& sql) const -> int {
     if (!session_) {
         last_error_ = "MySqlExecutor::execute: Database not connected";
+        DLOG(WARNING) << last_error_;
         throw std::runtime_error(last_error_);
     }
 
     if (sql.empty()) {
         last_error_ = "MySqlExecutor::execute: SQL statement cannot be empty";
+        DLOG(WARNING) << last_error_;
         throw std::invalid_argument(last_error_);
     }
 

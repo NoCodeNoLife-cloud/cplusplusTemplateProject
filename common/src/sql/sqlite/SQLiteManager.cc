@@ -7,6 +7,7 @@
 #include "SQLiteManager.hpp"
 
 #include <fmt/format.h>
+#include <glog/logging.h>
 
 namespace common::sql::sqlite {
 SQLiteManager::SQLiteManager() : db_(nullptr, &sqlite3_close) {
@@ -22,6 +23,7 @@ SQLiteManager::~SQLiteManager() {
 
 void SQLiteManager::createDatabase(const std::string& db_path) {
     if (db_path.empty()) {
+        DLOG(WARNING) << "SQLiteManager createDatabase: Database path is empty";
         throw std::invalid_argument("SQLiteManager::createDatabase: Database path cannot be empty");
     }
 
@@ -32,6 +34,7 @@ void SQLiteManager::createDatabase(const std::string& db_path) {
     sqlite3* raw_db;
     if (sqlite3_open(db_path.c_str(), &raw_db) != SQLITE_OK) {
         const std::string error_msg = "SQLiteManager::createDatabase: Database open failed for path '" + db_path + "': " + std::string(sqlite3_errmsg(raw_db));
+        DLOG(WARNING) << error_msg;
         sqlite3_close(raw_db); // Clean up the failed connection
         throw std::runtime_error(error_msg);
     }

@@ -13,6 +13,7 @@
 #include <stdexcept>
 #include <iomanip>
 #include <sstream>
+#include <glog/logging.h>
 
 namespace common::time {
 FunctionProfiler::FunctionProfiler(std::string function_name, const bool autoStart) : function_name_(std::move(function_name)) {
@@ -34,6 +35,7 @@ auto FunctionProfiler::recordEnd() -> void {
 
 auto FunctionProfiler::getRunTime() const -> std::string {
     if (!started_ || !ended_) {
+        DLOG(WARNING) << fmt::format("FunctionProfiler getRunTime: {} timing incomplete. Started={}, Ended={}", function_name_, started_, ended_);
         throw std::runtime_error("FunctionProfiler::getRunTime: " + function_name_ + " timing data is incomplete. Started: " + (started_ ? "true" : "false") + ", Ended: " + (ended_ ? "true" : "false"));
     }
 
@@ -47,6 +49,7 @@ auto FunctionProfiler::getRunTime() const -> std::string {
 
 auto FunctionProfiler::getRunTimeMs() const -> double {
     if (!started_ || !ended_) {
+        DLOG(WARNING) << fmt::format("FunctionProfiler getRunTimeMs: {} timing incomplete. Started={}, Ended={}", function_name_, started_, ended_);
         throw std::runtime_error("FunctionProfiler::getRunTimeMs: " + function_name_ + " timing data is incomplete. Started: " + (started_ ? "true" : "false") + ", Ended: " + (ended_ ? "true" : "false"));
     }
 
@@ -56,6 +59,7 @@ auto FunctionProfiler::getRunTimeMs() const -> double {
 
 auto FunctionProfiler::getRunTimeSec() const -> double {
     if (!started_ || !ended_) {
+        DLOG(WARNING) << fmt::format("FunctionProfiler getRunTimeSec: {} timing incomplete. Started={}, Ended={}", function_name_, started_, ended_);
         throw std::runtime_error("FunctionProfiler::getRunTimeSec: " + function_name_ + " timing data is incomplete. Started: " + (started_ ? "true" : "false") + ", Ended: " + (ended_ ? "true" : "false"));
     }
 

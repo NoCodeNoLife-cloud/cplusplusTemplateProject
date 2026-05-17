@@ -16,6 +16,7 @@
 #include <memory>
 #include <algorithm>
 #include <array>
+#include <glog/logging.h>
 
 namespace common::crypto {
 auto OpenSSLToolkit::deriveKey(const std::string& password, std::array<unsigned char, 32>& key, const std::array<unsigned char, 16>& salt) noexcept -> void {
@@ -28,6 +29,7 @@ auto OpenSSLToolkit::encryptAES256CBC(const std::string& plaintext, const std::s
 
     // Generate random salt
     if (RAND_bytes(salt.data(), 16) != 1) {
+        DLOG(WARNING) << "Failed to generate random salt for key derivation";
         throw std::runtime_error("Failed to generate random salt for key derivation");
     }
 
@@ -35,11 +37,13 @@ auto OpenSSLToolkit::encryptAES256CBC(const std::string& plaintext, const std::s
 
     std::array<unsigned char, AES_BLOCK_SIZE> iv{};
     if (RAND_bytes(iv.data(), AES_BLOCK_SIZE) != 1) {
+        DLOG(WARNING) << "Failed to generate random initialization vector (IV)";
         throw std::runtime_error("Failed to generate random initialization vector (IV)");
     }
 
     const auto ctx = EVP_CIPHER_CTX_new();
     if (!ctx) {
+        DLOG(WARNING) << "Failed to create cipher context for encryption";
         throw std::runtime_error("Failed to create cipher context");
     }
 
@@ -51,6 +55,7 @@ auto OpenSSLToolkit::encryptAES256CBC(const std::string& plaintext, const std::s
     std::vector<unsigned char> ciphertext(plaintext.size() + AES_BLOCK_SIZE);
 
     if (EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, key.data(), iv.data()) != 1) {
+        DLOG(WARNING) << "Failed to initialize AES-256-CBC encryption";
         throw std::runtime_error("Failed to initialize AES-256-CBC encryption with provided key and IV");
     }
 
@@ -90,6 +95,7 @@ auto OpenSSLToolkit::decryptAES256CBC(const std::vector<unsigned char>& cipherte
 
     const auto ctx = EVP_CIPHER_CTX_new();
     if (!ctx) {
+        DLOG(WARNING) << "Failed to create cipher context for decryption";
         throw std::runtime_error("Failed to create cipher context");
     }
 
@@ -101,6 +107,7 @@ auto OpenSSLToolkit::decryptAES256CBC(const std::vector<unsigned char>& cipherte
     std::vector<unsigned char> plaintext(ciphertext.size());
 
     if (EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, key.data(), iv.data()) != 1) {
+        DLOG(WARNING) << "Failed to initialize AES-256-CBC decryption";
         throw std::runtime_error("Failed to initialize AES-256-CBC decryption with provided key and IV");
     }
 

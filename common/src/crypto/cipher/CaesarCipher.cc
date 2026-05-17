@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <limits>
 #include <ranges>
+#include <glog/logging.h>
 
 namespace common::crypto::cipher {
 CaesarCipher::CaesarCipher(const int shift) : shift_(NormalizeShift(shift)) {
@@ -46,6 +47,7 @@ auto CaesarCipher::SetShift(const int new_shift) -> void {
 
 auto CaesarCipher::Transform(const std::string_view text, const int effective_shift) -> std::string {
     if (!IsValidInput(text)) {
+        DLOG(WARNING) << "Caesar cipher input contains non-ASCII characters";
         throw std::invalid_argument("Input contains non-ASCII characters");
     }
 

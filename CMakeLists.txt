@@ -20,7 +20,13 @@ endif ()
 if (CMAKE_TOOLCHAIN_FILE)
     message(STATUS "Using toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 else ()
-    message(WARNING "No toolchain file specified. Default toolchain will be used.")
+    # Try to find vcpkg toolchain file automatically
+    if (DEFINED ENV{VCPKG_ROOT})
+        set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+        message(STATUS "Automatically detected vcpkg toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
+    else ()
+        message(WARNING "No toolchain file specified and VCPKG_ROOT environment variable not set. Default toolchain will be used.")
+    endif ()
 endif ()
 
 # Project setup
@@ -36,7 +42,7 @@ include_directories(server)
 include_directories(ci)
 
 # Vcpkg dependencies
-find_package(Boost REQUIRED)
+find_package(Boost CONFIG REQUIRED)
 find_package(glog CONFIG REQUIRED)
 find_package(gtest CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
@@ -48,7 +54,6 @@ find_package(gRPC CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
-find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(unofficial-mysql-connector-cpp CONFIG REQUIRED)
 
 # Subdirectories

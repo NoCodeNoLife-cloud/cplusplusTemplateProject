@@ -212,47 +212,18 @@ public:
     }
 
     /**
-     * @brief Prints the internal tower structure for debugging.
+     * @brief Returns all elements in sorted order as a vector.
      *
-     * Each level is printed as a linked list showing node keys.
-     *
-     * @param[in,out] os Output stream to write to (default @c std::cout).
+     * @return Vector containing all elements in ascending order.
      */
-    void display(std::ostream& os = std::cout) const {
-        os << "Skip List (current max level: " << currentLevel_
-            << ", size: " << size_ << ")\n";
-        for (int i = currentLevel_ - 1; i >= 0; --i) {
-            Node* current = header_->forward[i];
-            os << "Level " << i << ": ";
-            while (current != nullptr) {
-                os << current->key;
-                if (current->forward[i] != nullptr) {
-                    os << " -> ";
-                }
-                current = current->forward[i];
-            }
-            os << "\n";
-        }
-    }
-
-    /**
-     * @brief Prints all elements in sorted order (bottom-level traversal).
-     *
-     * @param[in,out] os Output stream to write to (default @c std::cout).
-     */
-    void traverse(std::ostream& os = std::cout) const {
-        os << "Elements: [";
+    [[nodiscard]] std::vector<T> toVector() const {
+        std::vector<T> result;
         Node* current = header_->forward[0];
-        bool first = true;
         while (current != nullptr) {
-            if (!first) {
-                os << ", ";
-            }
-            os << current->key;
-            first = false;
+            result.push_back(current->key);
             current = current->forward[0];
         }
-        os << "]\n";
+        return result;
     }
 
 private:

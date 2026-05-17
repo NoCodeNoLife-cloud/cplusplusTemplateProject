@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <glog/logging.h>
 
 namespace common::crypto::hash {
 auto HashStrategy::toHexString(const std::vector<uint8_t>& digest, const size_t expected_size) -> std::optional<std::string> {
@@ -35,6 +36,7 @@ auto HashStrategy::hashString(std::unique_ptr<HashStrategy> strategy, const std:
 auto HashStrategy::hashFile(std::unique_ptr<HashStrategy> strategy, const std::string& filePath, const size_t chunkSize) -> std::optional<std::vector<uint8_t> > {
     std::ifstream file(filePath, std::ios::binary);
     if (!file.is_open()) {
+        DLOG(WARNING) << fmt::format("Failed to open file for hashing: {}", filePath);
         return std::nullopt;
     }
 

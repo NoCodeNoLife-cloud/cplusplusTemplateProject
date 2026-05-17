@@ -11,16 +11,19 @@
 #include <chrono>
 #include <memory>
 #include <stdexcept>
+#include <glog/logging.h>
 
 #include "src/interface/ITimerTask.hpp"
 
 namespace common::thread {
 PeriodicActuator::PeriodicActuator(std::shared_ptr<interfaces::ITimerTask> task, const std::chrono::milliseconds interval) : task_(std::move(task)), timer_(ioContext_), interval_(interval) {
     if (!task_) {
+        DLOG(WARNING) << "PeriodicActuator constructor: task is null";
         throw std::invalid_argument("PeriodicActuator::PeriodicActuator: task cannot be null");
     }
 
     if (interval_.count() <= 0) {
+        DLOG(WARNING) << fmt::format("PeriodicActuator constructor: interval {} must be positive", interval_.count());
         throw std::invalid_argument("PeriodicActuator::PeriodicActuator: interval must be positive");
     }
 }
@@ -33,6 +36,7 @@ PeriodicActuator::~PeriodicActuator() {
 
 auto PeriodicActuator::start() -> void {
     if (isRunning()) {
+        DLOG(WARNING) << "PeriodicActuator start: Actuator is already running";
         throw std::runtime_error("PeriodicActuator::start: Actuator is already running");
     }
     isRunning_ = true;

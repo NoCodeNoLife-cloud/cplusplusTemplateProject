@@ -7,6 +7,7 @@
 #include "src/filesystem/nio/ByteBuffer.hpp"
 
 #include <fmt/format.h>
+#include <glog/logging.h>
 
 namespace common::filesystem {
 ByteBuffer::ByteBuffer(const size_t capacity) : buffer_(capacity) {
@@ -24,6 +25,7 @@ auto ByteBuffer::position() const noexcept -> size_t {
 
 auto ByteBuffer::position(const size_t newPosition) -> void {
     if (newPosition > limit_) {
+        DLOG(WARNING) << fmt::format("ByteBuffer position {} exceeds limit {}", newPosition, limit_);
         throw std::out_of_range("ByteBuffer::position: Position exceeds the current limit.");
     }
     position_ = newPosition;
@@ -35,6 +37,7 @@ auto ByteBuffer::limit() const noexcept -> size_t {
 
 auto ByteBuffer::limit(const size_t newLimit) -> void {
     if (newLimit > capacity_) {
+        DLOG(WARNING) << fmt::format("ByteBuffer limit {} exceeds capacity {}", newLimit, capacity_);
         throw std::out_of_range("ByteBuffer::limit: New limit exceeds capacity.");
     }
     limit_ = newLimit;
@@ -67,6 +70,7 @@ auto ByteBuffer::hasRemaining() const noexcept -> bool {
 
 auto ByteBuffer::put(const std::byte value) -> void {
     if (!hasRemaining()) {
+        DLOG(WARNING) << "ByteBuffer put: Buffer overflow";
         throw std::overflow_error("ByteBuffer::put: Buffer overflow");
     }
     buffer_[position_++] = value;
@@ -87,6 +91,7 @@ auto ByteBuffer::put(const std::vector<std::byte>& src) -> void {
 
 auto ByteBuffer::get() -> std::byte {
     if (!hasRemaining()) {
+        DLOG(WARNING) << "ByteBuffer get: Buffer underflow";
         throw std::underflow_error("ByteBuffer::get: Buffer underflow");
     }
     return buffer_[position_++];

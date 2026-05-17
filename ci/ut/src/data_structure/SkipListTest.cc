@@ -225,7 +225,7 @@ TEST(SkipListTest, Erase_EmptyList_ReturnsFalse) {
     SkipList<int> list;
     
     EXPECT_FALSE(list.erase(42));
-    EXPECT_TRUE(list.empty());
+    EXPECT_EQ(list.size(), 0);
 }
 
 /**
@@ -570,25 +570,10 @@ TEST(SkipListTest, SingleElement_RepeatedOperations_Success) {
 }
 
 /**
- * @brief Test display method doesn't crash
- * @details Verifies that debug display function works
+ * @brief Test toVector method returns sorted elements
+ * @details Verifies that toVector returns elements in sorted order
  */
-TEST(SkipListTest, Display_NoCrash) {
-    SkipList<int> list;
-    
-    list.insert(10);
-    list.insert(20);
-    list.insert(30);
-    
-    // Should not throw
-    EXPECT_NO_THROW(list.display());
-}
-
-/**
- * @brief Test traverse method outputs sorted order
- * @details Verifies that traverse shows elements in sorted order
- */
-TEST(SkipListTest, Traverse_OutputSortedOrder) {
+TEST(SkipListTest, ToVector_ReturnsSortedElements) {
     SkipList<int> list;
     
     list.insert(30);
@@ -596,8 +581,12 @@ TEST(SkipListTest, Traverse_OutputSortedOrder) {
     list.insert(20);
     list.insert(40);
     
-    // Should not throw
-    EXPECT_NO_THROW(list.traverse());
+    const auto elements = list.toVector();
+    EXPECT_EQ(elements.size(), 4);
+    EXPECT_EQ(elements[0], 10);
+    EXPECT_EQ(elements[1], 20);
+    EXPECT_EQ(elements[2], 30);
+    EXPECT_EQ(elements[3], 40);
 }
 
 /**

@@ -10,6 +10,7 @@
 #include <cctype>
 #include <string>
 #include <vector>
+#include <glog/logging.h>
 
 namespace common::toolkit {
 auto StringToolkit::toUpperCase(const std::string& str) -> std::string {
@@ -83,6 +84,7 @@ auto StringToolkit::contains(const std::string& str, const std::string& substr) 
 
 auto StringToolkit::indexOf(const std::string& str, const std::string& substr, const size_t start) -> std::optional<size_t> {
     if (start > str.length()) {
+        DLOG(WARNING) << fmt::format("StringToolkit indexOf: Start position {} exceeds string length {}", start, str.length());
         throw std::invalid_argument("Start position exceeds string length");
     }
     const auto pos = str.find(substr, start);
@@ -96,6 +98,7 @@ auto StringToolkit::lastIndexOf(const std::string& str, const std::string& subst
 
 auto StringToolkit::substring(const std::string& str, const size_t start, const size_t length) -> std::string {
     if (start > str.length()) {
+        DLOG(WARNING) << fmt::format("StringToolkit substring: Start position {} exceeds string length {}", start, str.length());
         throw std::invalid_argument("StringToolkit::substring: Start position exceeds string length");
     }
 
@@ -233,6 +236,7 @@ auto StringToolkit::isAlphanumeric(const std::string& str) -> bool {
 
 auto StringToolkit::splitOnce(const std::string& target, const std::string& delimiter) -> std::pair<std::string, std::string> {
     if (delimiter.empty()) {
+        DLOG(WARNING) << "StringToolkit splitOnce: Delimiter is empty";
         throw std::invalid_argument("Delimiter cannot be empty");
     }
 
@@ -249,6 +253,7 @@ auto StringToolkit::splitOnce(const std::string& target, const std::string& deli
 
 auto StringToolkit::remove(const std::string& str, const std::string& toRemove) -> std::string {
     if (toRemove.empty()) {
+        DLOG(WARNING) << "StringToolkit remove: String to remove is empty";
         throw std::invalid_argument("String to remove cannot be empty");
     }
 
@@ -262,6 +267,7 @@ auto StringToolkit::remove(const std::string& str, const std::string& toRemove) 
 
 auto StringToolkit::removeChars(const std::string& str, const std::string& charsToRemove) -> std::string {
     if (charsToRemove.empty()) {
+        DLOG(WARNING) << "StringToolkit removeChars: Characters to remove is empty";
         throw std::invalid_argument("Characters to remove cannot be empty");
     }
 
@@ -286,6 +292,7 @@ auto StringToolkit::truncate(const std::string& str, const size_t maxLength, con
     }
 
     if (suffix.length() >= maxLength) {
+        DLOG(WARNING) << fmt::format("StringToolkit truncate: Suffix length ({}) >= max length ({})", suffix.length(), maxLength);
         throw std::invalid_argument("Suffix length must be less than max length");
     }
 

@@ -18,6 +18,7 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <glog/logging.h>
 
 namespace common::filesystem {
 File::File(const std::string& path) : file_path_(path) {
@@ -248,6 +249,7 @@ auto File::toURI() const noexcept -> std::string {
 
 auto File::printFilesWithDepth(const std::filesystem::path& file_path) -> void {
     if (!std::filesystem::exists(file_path) || !std::filesystem::is_directory(file_path)) {
+        DLOG(WARNING) << fmt::format("Invalid directory path: {}", file_path.string());
         throw std::runtime_error("Invalid directory path: " + file_path.string());
     }
 
@@ -268,15 +270,18 @@ auto File::printFilesWithDepth(const std::filesystem::path& file_path) -> void {
 auto File::getFileMD5(const std::filesystem::path& filePath) -> std::string {
     std::ifstream file(filePath, std::ios::binary);
     if (!file) {
+        DLOG(WARNING) << fmt::format("Failed to open file for MD5: {}", filePath.string());
         throw std::runtime_error("Failed to open file: " + filePath.string());
     }
 
     const auto mdContext = std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)>(EVP_MD_CTX_new(), EVP_MD_CTX_free);
     if (!mdContext) {
+        DLOG(WARNING) << "Failed to create MD5 context";
         throw std::runtime_error("Failed to create MD5 context");
     }
 
     if (EVP_DigestInit_ex(mdContext.get(), EVP_md5(), nullptr) != 1) {
+        DLOG(WARNING) << "Failed to initialize MD5 context";
         throw std::runtime_error("Failed to initialize MD5 context");
     }
 

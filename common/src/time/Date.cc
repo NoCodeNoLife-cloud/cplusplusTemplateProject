@@ -15,6 +15,7 @@
 #include <cstdint>
 #include <functional>
 #include <ctime>
+#include <glog/logging.h>
 
 namespace common::time {
 namespace {
@@ -64,6 +65,7 @@ Date::Date() noexcept : time_point_(std::chrono::system_clock::now()) {
 
 Date::Date(const int32_t year, const int32_t month, const int32_t day) {
     if (!isValidDate(year, month, day)) {
+        DLOG(WARNING) << fmt::format("Date constructor: Invalid date - year={}, month={}, day={}", year, month, day);
         throw std::invalid_argument("Date::Date: Invalid date components.");
     }
 
@@ -77,6 +79,7 @@ Date::Date(const int32_t year, const int32_t month, const int32_t day) {
     tm.tm_isdst = -1; // Let mktime determine if DST is in effect
     const auto timeT = std::mktime(&tm);
     if (timeT == -1) {
+        DLOG(WARNING) << fmt::format("Date constructor: mktime failed for date - year={}, month={}, day={}", year, month, day);
         throw std::invalid_argument("Date::Date: Invalid date components.");
     }
     time_point_ = std::chrono::system_clock::from_time_t(timeT);
@@ -84,6 +87,7 @@ Date::Date(const int32_t year, const int32_t month, const int32_t day) {
 
 Date::Date(const int32_t year, const int32_t month, const int32_t day, const int32_t hours, const int32_t minutes, const int32_t seconds) {
     if (!isValidDate(year, month, day, hours, minutes, seconds)) {
+        DLOG(WARNING) << fmt::format("Date constructor: Invalid datetime - year={}, month={}, day={}, hour={}, min={}, sec={}", year, month, day, hours, minutes, seconds);
         throw std::invalid_argument("Date::Date: Invalid date-time components.");
     }
 

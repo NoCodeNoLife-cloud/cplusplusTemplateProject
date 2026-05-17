@@ -11,6 +11,7 @@
 #include <string>
 #include <stdexcept>
 #include <mutex>
+#include <glog/logging.h>
 
 namespace common::gen {
 RandomGenerator::RandomGenerator() noexcept : engine_(std::random_device{}()) {
@@ -21,6 +22,7 @@ RandomGenerator::RandomGenerator(const unsigned int seed) noexcept : engine_(see
 
 auto RandomGenerator::nextInt(const int min, const int max) -> int {
     if (min > max) {
+        DLOG(WARNING) << fmt::format("RandomGenerator nextInt: min ({}) > max ({})", min, max);
         throw std::invalid_argument("common::RandomGenerator::nextInt: min cannot be greater than max");
     }
     std::lock_guard lock(mutex_);
@@ -35,6 +37,7 @@ auto RandomGenerator::nextBool() -> bool {
 
 auto RandomGenerator::nextBool(const double trueProbability) -> bool {
     if (trueProbability < 0.0 || trueProbability > 1.0) {
+        DLOG(WARNING) << fmt::format("RandomGenerator nextBool: probability {} out of range [0, 1]", trueProbability);
         throw std::invalid_argument("common::RandomGenerator::nextBool: probability must be in [0, 1]");
     }
     std::lock_guard lock(mutex_);
@@ -45,6 +48,7 @@ auto RandomGenerator::nextBool(const double trueProbability) -> bool {
 
 auto RandomGenerator::nextDouble(const double min, const double max) -> double {
     if (min >= max) {
+        DLOG(WARNING) << fmt::format("RandomGenerator nextDouble: min ({}) >= max ({})", min, max);
         throw std::invalid_argument("common::RandomGenerator::nextDouble: min must be less than max");
     }
     std::lock_guard lock(mutex_);
@@ -55,6 +59,7 @@ auto RandomGenerator::nextDouble(const double min, const double max) -> double {
 
 auto RandomGenerator::nextString(const size_t length, const std::string& charset) -> std::string {
     if (charset.empty()) {
+        DLOG(WARNING) << "RandomGenerator nextString: charset is empty";
         throw std::invalid_argument("common::RandomGenerator::nextString: charset cannot be empty");
     }
     if (length == 0) {
@@ -77,6 +82,7 @@ auto RandomGenerator::nextString(const size_t length, const std::string& charset
 
 auto RandomGenerator::nextGaussian(const double mean, const double stddev) -> double {
     if (stddev <= 0.0) {
+        DLOG(WARNING) << fmt::format("RandomGenerator nextGaussian: stddev ({}) must be positive", stddev);
         throw std::invalid_argument("common::RandomGenerator::nextGaussian: stddev must be positive");
     }
     std::lock_guard lock(mutex_);

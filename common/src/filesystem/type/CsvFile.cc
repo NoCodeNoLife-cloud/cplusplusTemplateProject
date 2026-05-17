@@ -7,6 +7,7 @@
 #include "src/filesystem/type/CsvFile.hpp"
 
 #include <fmt/format.h>
+#include <glog/logging.h>
 
 namespace common::filesystem {
 CsvFile::CsvFile(const std::string& file_path) noexcept : file_path_(file_path) {
@@ -14,6 +15,7 @@ CsvFile::CsvFile(const std::string& file_path) noexcept : file_path_(file_path) 
         csv_doc_ = rapidcsv::Document(file_path);
         is_valid_ = true;
     } catch (const std::exception& e) {
+        DLOG(WARNING) << fmt::format("Failed to load CSV file: {} - {}", file_path, e.what());
         // Error silently handled as the function is marked noexcept
         // Client code should check validity through other methods
         is_valid_ = false;
