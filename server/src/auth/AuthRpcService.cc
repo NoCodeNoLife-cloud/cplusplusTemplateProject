@@ -1,3 +1,11 @@
+/**
+ * @file AuthRpcService.cc
+ * @brief Implementation of authentication RPC service
+ * @details This file contains the implementation of AuthRpcService class methods,
+ *          including user registration, authentication, password management,
+ *          account deletion, and exception handling for gRPC requests.
+ */
+
 #include "AuthRpcService.hpp"
 
 #include <string_view>

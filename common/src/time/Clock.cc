@@ -1,3 +1,9 @@
+/**
+ * @file Clock.cc
+ * @brief Clock class implementation
+ * @details This file contains the implementation of the Clock class methods for Time and date utilities including profilers and formatters.
+ */
+
 #include "src/time/Clock.hpp"
 
 #include <fmt/format.h>

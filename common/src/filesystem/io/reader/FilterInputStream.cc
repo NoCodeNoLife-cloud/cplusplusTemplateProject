@@ -1,3 +1,9 @@
+/**
+ * @file FilterInputStream.cc
+ * @brief FilterInputStream class implementation
+ * @details This file contains the implementation of the FilterInputStream class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/FilterInputStream.hpp"
 
 #include <fmt/format.h>

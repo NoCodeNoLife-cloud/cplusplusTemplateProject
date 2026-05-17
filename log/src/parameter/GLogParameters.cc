@@ -1,3 +1,10 @@
+/**
+ * @file GLogParameters.cc
+ * @brief Implementation of glog configuration parameters
+ * @details This file contains the implementation of GLogParameters class methods,
+ *          including parameter accessors, YAML deserialization, and equality comparison.
+ */
+
 #include "GLogParameters.hpp"
 
 #include <yaml-cpp/yaml.h>

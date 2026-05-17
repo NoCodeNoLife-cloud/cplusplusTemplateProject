@@ -1,3 +1,9 @@
+/**
+ * @file AVLTree.hpp
+ * @brief AVLTree class declaration
+ * @details This header defines the AVLTree class that provides functionality for Advanced data structures including trees and skip lists.
+ */
+
 #pragma once
 #include <fmt/format.h>
 #include <algorithm>

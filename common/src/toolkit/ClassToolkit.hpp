@@ -1,3 +1,9 @@
+/**
+ * @file ClassToolkit.hpp
+ * @brief ClassToolkit class declaration
+ * @details This header defines the ClassToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #pragma once
 #include <string>
 #include <unordered_map>

@@ -1,3 +1,9 @@
+/**
+ * @file Point3D.hpp
+ * @brief Point3D class declaration
+ * @details This header defines the Point3D class that provides functionality for Graphics and geometry utilities.
+ */
+
 #pragma once
 #include <iostream>
 

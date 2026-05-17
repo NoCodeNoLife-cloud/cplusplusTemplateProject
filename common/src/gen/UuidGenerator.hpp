@@ -1,3 +1,9 @@
+/**
+ * @file UuidGenerator.hpp
+ * @brief UuidGenerator class declaration
+ * @details This header defines the UuidGenerator class that provides functionality for Random number and ID generation utilities.
+ */
+
 #pragma once
 #include <boost/uuid/uuid.hpp>
 #include <string>

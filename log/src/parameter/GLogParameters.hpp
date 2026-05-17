@@ -1,3 +1,11 @@
+/**
+ * @file GLogParameters.hpp
+ * @brief Configuration parameters for Google Logging (glog)
+ * @details This header defines the GLogParameters class that encapsulates all configuration
+ *          options for the glog logging system, including log level, log name, output settings,
+ *          custom format options, and YAML-based configuration loading support.
+ */
+
 #pragma once
 #include <yaml-cpp/node/node.h>
 #include <filesystem>

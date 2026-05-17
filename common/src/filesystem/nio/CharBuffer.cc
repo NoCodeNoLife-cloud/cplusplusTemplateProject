@@ -1,3 +1,9 @@
+/**
+ * @file CharBuffer.cc
+ * @brief CharBuffer class implementation
+ * @details This file contains the implementation of the CharBuffer class methods for Common library utilities.
+ */
+
 #include "src/filesystem/nio/CharBuffer.hpp"
 
 #include <fmt/format.h>

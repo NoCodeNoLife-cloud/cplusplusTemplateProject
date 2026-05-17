@@ -1,3 +1,9 @@
+/**
+ * @file ArraysToolkit.hpp
+ * @brief ArraysToolkit class declaration
+ * @details This header defines the ArraysToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #pragma once
 #include <algorithm>
 #include <sstream>

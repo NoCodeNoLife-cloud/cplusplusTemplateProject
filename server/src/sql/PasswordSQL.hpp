@@ -1,3 +1,11 @@
+/**
+ * @file PasswordSQL.hpp
+ * @brief Password management SQL operations
+ * @details This header defines the PasswordSQL class that manages user authentication
+ *          and password operations using SQLite database, including registration,
+ *          authentication, password changes, and user account management.
+ */
+
 #pragma once
 #include <string>
 #include <vector>

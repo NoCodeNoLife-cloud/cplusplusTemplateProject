@@ -1,3 +1,9 @@
+/**
+ * @file CsvFile.hpp
+ * @brief CsvFile class declaration
+ * @details This header defines the CsvFile class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <rapidcsv.h>
 

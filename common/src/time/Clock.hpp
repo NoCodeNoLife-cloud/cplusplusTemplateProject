@@ -1,3 +1,9 @@
+/**
+ * @file Clock.hpp
+ * @brief Clock class declaration
+ * @details This header defines the Clock class that provides functionality for Time and date utilities including profilers and formatters.
+ */
+
 #pragma once
 #include <chrono>
 #include <string>

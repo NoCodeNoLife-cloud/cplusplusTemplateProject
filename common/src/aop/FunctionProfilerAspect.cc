@@ -1,3 +1,9 @@
+/**
+ * @file FunctionProfilerAspect.cc
+ * @brief FunctionProfilerAspect class implementation
+ * @details This file contains the implementation of the FunctionProfilerAspect class methods for Aspect-Oriented Programming support.
+ */
+
 #include "src/aop/FunctionProfilerAspect.hpp"
 #include <utility>
 

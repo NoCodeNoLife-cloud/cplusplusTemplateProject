@@ -1,3 +1,9 @@
+/**
+ * @file SimpleDateFormatter.hpp
+ * @brief SimpleDateFormatter class declaration
+ * @details This header defines the SimpleDateFormatter class that provides functionality for Time and date utilities including profilers and formatters.
+ */
+
 #pragma once
 #include <string>
 #include <chrono>

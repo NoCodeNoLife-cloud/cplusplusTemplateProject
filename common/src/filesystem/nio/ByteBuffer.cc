@@ -1,3 +1,9 @@
+/**
+ * @file ByteBuffer.cc
+ * @brief ByteBuffer class implementation
+ * @details This file contains the implementation of the ByteBuffer class methods for Common library utilities.
+ */
+
 #include "src/filesystem/nio/ByteBuffer.hpp"
 
 #include <fmt/format.h>

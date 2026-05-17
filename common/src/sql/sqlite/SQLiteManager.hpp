@@ -1,3 +1,9 @@
+/**
+ * @file SQLiteManager.hpp
+ * @brief SQLiteManager class declaration
+ * @details This header defines the SQLiteManager class that provides functionality for SQL database utilities.
+ */
+
 #pragma once
 #include <sqlite3.h>
 #include <vector>

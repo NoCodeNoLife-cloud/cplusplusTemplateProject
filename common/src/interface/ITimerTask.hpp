@@ -1,3 +1,9 @@
+/**
+ * @file ITimerTask.hpp
+ * @brief ITimerTask class declaration
+ * @details This header defines the ITimerTask class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 
 namespace common::interfaces {

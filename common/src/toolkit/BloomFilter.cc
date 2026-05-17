@@ -1,3 +1,9 @@
+/**
+ * @file BloomFilter.cc
+ * @brief BloomFilter class implementation
+ * @details This file contains the implementation of the BloomFilter class methods for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #include "BloomFilter.hpp"
 
 #include <fmt/format.h>

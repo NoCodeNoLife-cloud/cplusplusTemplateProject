@@ -1,3 +1,9 @@
+/**
+ * @file ThreadPool.hpp
+ * @brief ThreadPool class declaration
+ * @details This header defines the ThreadPool class that provides functionality for Threading utilities and thread pool implementation.
+ */
+
 #pragma once
 #include <atomic>
 #include <chrono>

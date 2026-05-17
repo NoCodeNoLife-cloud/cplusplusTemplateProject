@@ -1,3 +1,9 @@
+/**
+ * @file Graph.cc
+ * @brief Graph class implementation
+ * @details This file contains the implementation of the Graph class methods for Graphics and geometry utilities.
+ */
+
 #include "src/graphics/Graph.hpp"
 
 #include <fmt/format.h>

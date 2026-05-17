@@ -1,3 +1,11 @@
+/**
+ * @file ServerTask.cc
+ * @brief Implementation of server task functionality
+ * @details This file contains the implementation of ServerTask class methods,
+ *          including gRPC server initialization, configuration loading,
+ *          channel setup, and application lifecycle management.
+ */
+
 #include "src/task/ServerTask.hpp"
 
 #include <fmt/format.h>

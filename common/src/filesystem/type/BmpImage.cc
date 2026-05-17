@@ -1,3 +1,9 @@
+/**
+ * @file BmpImage.cc
+ * @brief BmpImage class implementation
+ * @details This file contains the implementation of the BmpImage class methods for Common library utilities.
+ */
+
 #include "src/filesystem/type/BmpImage.hpp"
 
 #include <fmt/format.h>

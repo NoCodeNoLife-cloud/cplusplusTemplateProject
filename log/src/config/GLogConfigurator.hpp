@@ -1,3 +1,11 @@
+/**
+ * @file GLogConfigurator.hpp
+ * @brief Google Logging (glog) configuration manager
+ * @details This header defines the GLogConfigurator class that handles initialization
+ *          and configuration of the glog library based on YAML configuration files,
+ *          including log level settings, output destinations, and custom formatting.
+ */
+
 #pragma once
 #include <string>
 

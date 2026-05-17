@@ -1,3 +1,9 @@
+/**
+ * @file SHA256Strategy.hpp
+ * @brief SHA256Strategy class declaration
+ * @details This header defines the SHA256Strategy class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 
 #include "HashStrategy.hpp"

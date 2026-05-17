@@ -1,3 +1,9 @@
+/**
+ * @file File.hpp
+ * @brief File class declaration
+ * @details This header defines the File class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <windows.h>
 

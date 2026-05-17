@@ -1,3 +1,9 @@
+/**
+ * @file ByteArrayOutputStream.hpp
+ * @brief ByteArrayOutputStream class declaration
+ * @details This header defines the ByteArrayOutputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <algorithm>
 #include <cstddef>

@@ -1,3 +1,9 @@
+/**
+ * @file ICloseable.hpp
+ * @brief ICloseable class declaration
+ * @details This header defines the ICloseable class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 
 namespace common::interfaces {

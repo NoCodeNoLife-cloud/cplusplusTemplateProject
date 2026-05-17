@@ -1,3 +1,9 @@
+/**
+ * @file IRunnable.hpp
+ * @brief IRunnable class declaration
+ * @details This header defines the IRunnable class that provides functionality for Threading utilities and thread pool implementation.
+ */
+
 #pragma once
 
 namespace common::interfaces {

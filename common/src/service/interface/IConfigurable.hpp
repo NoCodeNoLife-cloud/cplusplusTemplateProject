@@ -1,3 +1,9 @@
+/**
+ * @file IConfigurable.hpp
+ * @brief IConfigurable class declaration
+ * @details This header defines the IConfigurable class that provides functionality for Service interface definitions.
+ */
+
 #pragma once
 
 namespace common::service::interfaces {

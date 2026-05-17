@@ -1,3 +1,9 @@
+/**
+ * @file Object.cc
+ * @brief Object class implementation
+ * @details This file contains the implementation of the Object class methods for Base type classes providing fundamental object functionality.
+ */
+
 #include "src/base_type/Object.hpp"
 
 #include <fmt/format.h>

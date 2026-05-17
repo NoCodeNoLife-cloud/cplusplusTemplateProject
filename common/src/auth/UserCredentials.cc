@@ -1,3 +1,9 @@
+/**
+ * @file UserCredentials.cc
+ * @brief UserCredentials class implementation
+ * @details This file contains the implementation of the UserCredentials class methods for Authentication and authorization utilities.
+ */
+
 #include "UserCredentials.hpp"
 
 #include <fmt/format.h>

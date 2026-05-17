@@ -1,3 +1,9 @@
+/**
+ * @file Point2D.cc
+ * @brief Point2D class implementation
+ * @details This file contains the implementation of the Point2D class methods for Graphics and geometry utilities.
+ */
+
 #include "src/graphics/Point2D.hpp"
 
 #include <iostream>

@@ -1,3 +1,9 @@
+/**
+ * @file CaesarCipher.cc
+ * @brief CaesarCipher class implementation
+ * @details This file contains the implementation of the CaesarCipher class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "CaesarCipher.hpp"
 
 #include <algorithm>

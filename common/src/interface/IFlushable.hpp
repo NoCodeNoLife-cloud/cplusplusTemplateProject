@@ -1,3 +1,9 @@
+/**
+ * @file IFlushable.hpp
+ * @brief IFlushable class declaration
+ * @details This header defines the IFlushable class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 
 namespace common::interfaces {

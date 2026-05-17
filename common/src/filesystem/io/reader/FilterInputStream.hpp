@@ -1,3 +1,9 @@
+/**
+ * @file FilterInputStream.hpp
+ * @brief FilterInputStream class declaration
+ * @details This header defines the FilterInputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <memory>
 

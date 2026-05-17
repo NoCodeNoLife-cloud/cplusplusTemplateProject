@@ -1,3 +1,9 @@
+/**
+ * @file FloatBuffer.hpp
+ * @brief FloatBuffer class declaration
+ * @details This header defines the FloatBuffer class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <vector>
 

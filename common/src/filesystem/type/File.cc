@@ -1,3 +1,9 @@
+/**
+ * @file File.cc
+ * @brief File class implementation
+ * @details This file contains the implementation of the File class methods for Common library utilities.
+ */
+
 #include "src/filesystem/type/File.hpp"
 #include <windows.h>
 #include <openssl/evp.h>

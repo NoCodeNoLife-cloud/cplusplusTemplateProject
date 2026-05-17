@@ -1,3 +1,9 @@
+/**
+ * @file Graph.hpp
+ * @brief Graph class declaration
+ * @details This header defines the Graph class that provides functionality for Graphics and geometry utilities.
+ */
+
 #pragma once
 #include <cstdint>
 #include <vector>

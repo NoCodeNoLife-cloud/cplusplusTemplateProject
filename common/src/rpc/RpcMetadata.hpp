@@ -1,3 +1,9 @@
+/**
+ * @file RpcMetadata.hpp
+ * @brief RpcMetadata class declaration
+ * @details This header defines the RpcMetadata class that provides functionality for RPC metadata and connectivity management.
+ */
+
 #pragma once
 #include <string>
 #include <grpc/impl/connectivity_state.h>

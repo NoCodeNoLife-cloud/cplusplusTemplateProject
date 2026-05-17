@@ -1,3 +1,9 @@
+/**
+ * @file PeriodicActuator.cc
+ * @brief PeriodicActuator class implementation
+ * @details This file contains the implementation of the PeriodicActuator class methods for Threading utilities and thread pool implementation.
+ */
+
 #include "src/thread/PeriodicActuator.hpp"
 
 #include <fmt/format.h>

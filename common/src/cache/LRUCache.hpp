@@ -1,3 +1,9 @@
+/**
+ * @file LRUCache.hpp
+ * @brief LRUCache class declaration
+ * @details This header defines the LRUCache class that provides functionality for Cache implementations including LRU and LFU strategies.
+ */
+
 #pragma once
 #include <fmt/format.h>
 #include <list>

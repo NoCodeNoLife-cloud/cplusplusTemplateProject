@@ -1,3 +1,9 @@
+/**
+ * @file Scanner.hpp
+ * @brief Scanner class declaration
+ * @details This header defines the Scanner class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <boost/algorithm/string.hpp>
 #include <string>

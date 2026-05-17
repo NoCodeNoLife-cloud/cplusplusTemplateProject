@@ -1,3 +1,9 @@
+/**
+ * @file IBoostSerializable.hpp
+ * @brief IBoostSerializable class declaration
+ * @details This header defines the IBoostSerializable class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 #include <cstdint>
 #include <boost/archive/text_oarchive.hpp>

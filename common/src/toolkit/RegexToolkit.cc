@@ -1,3 +1,9 @@
+/**
+ * @file RegexToolkit.cc
+ * @brief RegexToolkit class implementation
+ * @details This file contains the implementation of the RegexToolkit class methods for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #include "src/toolkit/RegexToolkit.hpp"
 
 #include <fmt/format.h>

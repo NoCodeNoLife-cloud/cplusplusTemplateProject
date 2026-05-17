@@ -1,3 +1,9 @@
+/**
+ * @file IAppendable.hpp
+ * @brief IAppendable class declaration
+ * @details This header defines the IAppendable class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 #include <string>
 #include <string_view>

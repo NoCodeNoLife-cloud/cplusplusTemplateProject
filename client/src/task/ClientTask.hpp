@@ -1,3 +1,11 @@
+/**
+ * @file ClientTask.hpp
+ * @brief Client task implementation for the application
+ * @details This header defines the ClientTask class that manages the client application
+ *          lifecycle including initialization, authentication, task execution,
+ *          and cleanup with performance profiling support.
+ */
+
 #pragma once
 #include <memory>
 #include <string>

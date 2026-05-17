@@ -1,3 +1,9 @@
+/**
+ * @file ICache.hpp
+ * @brief ICache class declaration
+ * @details This header defines the ICache class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 #include <optional>
 

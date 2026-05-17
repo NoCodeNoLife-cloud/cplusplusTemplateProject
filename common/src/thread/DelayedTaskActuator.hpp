@@ -1,3 +1,9 @@
+/**
+ * @file DelayedTaskActuator.hpp
+ * @brief DelayedTaskActuator class declaration
+ * @details This header defines the DelayedTaskActuator class that provides functionality for Threading utilities and thread pool implementation.
+ */
+
 #pragma once
 #include <fmt/format.h>
 #include <condition_variable>

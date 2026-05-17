@@ -1,3 +1,9 @@
+/**
+ * @file IAopAspect.hpp
+ * @brief IAopAspect class declaration
+ * @details This header defines the IAopAspect class that provides functionality for Aspect-Oriented Programming support.
+ */
+
 #pragma once
 #include <functional>
 #include <type_traits>

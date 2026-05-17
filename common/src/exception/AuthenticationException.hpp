@@ -1,3 +1,9 @@
+/**
+ * @file AuthenticationException.hpp
+ * @brief AuthenticationException class declaration
+ * @details This header defines the AuthenticationException class that provides functionality for Custom exception classes for authentication and other operations.
+ */
+
 #pragma once
 #include <stdexcept>
 #include <string>

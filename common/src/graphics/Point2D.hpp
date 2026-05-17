@@ -1,3 +1,9 @@
+/**
+ * @file Point2D.hpp
+ * @brief Point2D class declaration
+ * @details This header defines the Point2D class that provides functionality for Graphics and geometry utilities.
+ */
+
 #pragma once
 #include <iostream>
 

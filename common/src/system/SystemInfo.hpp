@@ -1,3 +1,9 @@
+/**
+ * @file SystemInfo.hpp
+ * @brief SystemInfo class declaration
+ * @details This header defines the SystemInfo class that provides functionality for System information and performance monitoring.
+ */
+
 #pragma once
 #include <string>
 #include <vector>

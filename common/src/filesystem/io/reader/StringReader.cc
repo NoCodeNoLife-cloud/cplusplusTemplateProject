@@ -1,3 +1,9 @@
+/**
+ * @file StringReader.cc
+ * @brief StringReader class implementation
+ * @details This file contains the implementation of the StringReader class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/StringReader.hpp"
 
 #include <fmt/format.h>

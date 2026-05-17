@@ -1,3 +1,9 @@
+/**
+ * @file PasswordPolicy.hpp
+ * @brief PasswordPolicy class declaration
+ * @details This header defines the PasswordPolicy class that provides functionality for Authentication and authorization utilities.
+ */
+
 #pragma once
 #include <string>
 

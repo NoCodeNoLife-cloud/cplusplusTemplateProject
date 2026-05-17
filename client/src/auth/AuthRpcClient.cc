@@ -1,3 +1,10 @@
+/**
+ * @file AuthRpcClient.cc
+ * @brief Implementation of the authentication RPC client
+ * @details This file contains the implementation of AuthRpcClient class methods,
+ *          including RPC call execution, error handling, and connectivity state management.
+ */
+
 #include "src/auth/AuthRpcClient.hpp"
 
 #include <glog/logging.h>

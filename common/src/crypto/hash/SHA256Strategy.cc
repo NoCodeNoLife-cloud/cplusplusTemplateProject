@@ -1,3 +1,9 @@
+/**
+ * @file SHA256Strategy.cc
+ * @brief SHA256Strategy class implementation
+ * @details This file contains the implementation of the SHA256Strategy class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "SHA256Strategy.hpp"
 
 #include <fmt/format.h>

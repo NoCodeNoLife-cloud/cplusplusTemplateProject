@@ -1,3 +1,9 @@
+/**
+ * @file SHA1Strategy.hpp
+ * @brief SHA1Strategy class declaration
+ * @details This header defines the SHA1Strategy class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 
 #include "HashStrategy.hpp"

@@ -1,3 +1,9 @@
+/**
+ * @file LongBuffer.hpp
+ * @brief LongBuffer class declaration
+ * @details This header defines the LongBuffer class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <stdexcept>
 #include <vector>

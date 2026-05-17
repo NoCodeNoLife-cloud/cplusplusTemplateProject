@@ -1,3 +1,9 @@
+/**
+ * @file Point3D.cc
+ * @brief Point3D class implementation
+ * @details This file contains the implementation of the Point3D class methods for Graphics and geometry utilities.
+ */
+
 #include "src/graphics/Point3D.hpp"
 
 #include <iostream>

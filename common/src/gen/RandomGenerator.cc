@@ -1,3 +1,9 @@
+/**
+ * @file RandomGenerator.cc
+ * @brief RandomGenerator class implementation
+ * @details This file contains the implementation of the RandomGenerator class methods for Random number and ID generation utilities.
+ */
+
 #include "src/gen/RandomGenerator.hpp"
 
 #include <fmt/format.h>

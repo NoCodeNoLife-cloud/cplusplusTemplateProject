@@ -1,3 +1,9 @@
+/**
+ * @file HashStrategy.cc
+ * @brief HashStrategy class implementation
+ * @details This file contains the implementation of the HashStrategy class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "HashStrategy.hpp"
 
 #include <fmt/format.h>

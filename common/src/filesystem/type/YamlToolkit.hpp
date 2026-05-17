@@ -1,3 +1,9 @@
+/**
+ * @file YamlToolkit.hpp
+ * @brief YamlToolkit class declaration
+ * @details This header defines the YamlToolkit class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 
 #include <yaml-cpp/yaml.h>

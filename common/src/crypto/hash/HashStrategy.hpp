@@ -1,3 +1,9 @@
+/**
+ * @file HashStrategy.hpp
+ * @brief HashStrategy class declaration
+ * @details This header defines the HashStrategy class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 
 #include <vector>

@@ -1,3 +1,9 @@
+/**
+ * @file BigDecimal.hpp
+ * @brief BigDecimal class declaration
+ * @details This header defines the BigDecimal class that provides functionality for Base type classes providing fundamental object functionality.
+ */
+
 #pragma once
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <string>

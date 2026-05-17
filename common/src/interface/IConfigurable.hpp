@@ -1,3 +1,9 @@
+/**
+ * @file IConfigurable.hpp
+ * @brief IConfigurable class declaration
+ * @details This header defines the IConfigurable class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 
 namespace common::interfaces {

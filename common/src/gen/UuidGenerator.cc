@@ -1,3 +1,9 @@
+/**
+ * @file UuidGenerator.cc
+ * @brief UuidGenerator class implementation
+ * @details This file contains the implementation of the UuidGenerator class methods for Random number and ID generation utilities.
+ */
+
 #include "src/gen/UuidGenerator.hpp"
 
 #include <fmt/format.h>

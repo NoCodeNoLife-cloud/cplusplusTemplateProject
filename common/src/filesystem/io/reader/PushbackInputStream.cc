@@ -1,3 +1,9 @@
+/**
+ * @file PushbackInputStream.cc
+ * @brief PushbackInputStream class implementation
+ * @details This file contains the implementation of the PushbackInputStream class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/PushbackInputStream.hpp"
 
 #include <fmt/format.h>

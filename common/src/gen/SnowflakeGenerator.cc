@@ -1,3 +1,9 @@
+/**
+ * @file SnowflakeGenerator.cc
+ * @brief SnowflakeGenerator class implementation
+ * @details This file contains the implementation of the SnowflakeGenerator class methods for Random number and ID generation utilities.
+ */
+
 #include "src/gen/SnowflakeGenerator.hpp"
 
 #include <fmt/format.h>

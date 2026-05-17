@@ -1,3 +1,9 @@
+/**
+ * @file Edge.hpp
+ * @brief Edge class declaration
+ * @details This header defines the Edge class that provides functionality for Graphics and geometry utilities.
+ */
+
 #pragma once
 #include <cstdint>
 

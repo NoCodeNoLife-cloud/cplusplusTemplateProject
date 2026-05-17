@@ -1,3 +1,9 @@
+/**
+ * @file RpcMetadata.cc
+ * @brief RpcMetadata class implementation
+ * @details This file contains the implementation of the RpcMetadata class methods for RPC metadata and connectivity management.
+ */
+
 #include "RpcMetadata.hpp"
 
 #include <fmt/format.h>

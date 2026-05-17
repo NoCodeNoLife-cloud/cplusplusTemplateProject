@@ -1,3 +1,9 @@
+/**
+ * @file ShortBuffer.hpp
+ * @brief ShortBuffer class declaration
+ * @details This header defines the ShortBuffer class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <cstring>
 #include <vector>

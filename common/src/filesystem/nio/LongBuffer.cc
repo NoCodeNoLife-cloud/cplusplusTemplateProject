@@ -1,3 +1,9 @@
+/**
+ * @file LongBuffer.cc
+ * @brief LongBuffer class implementation
+ * @details This file contains the implementation of the LongBuffer class methods for Common library utilities.
+ */
+
 #include "src/filesystem/nio/LongBuffer.hpp"
 
 #include <fmt/format.h>

@@ -1,3 +1,9 @@
+/**
+ * @file BufferedReader.hpp
+ * @brief BufferedReader class declaration
+ * @details This header defines the BufferedReader class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <fstream>
 #include <string>

@@ -1,3 +1,9 @@
+/**
+ * @file Date.cc
+ * @brief Date class implementation
+ * @details This file contains the implementation of the Date class methods for Time and date utilities including profilers and formatters.
+ */
+
 #include "src/time/Date.hpp"
 
 #include <fmt/format.h>

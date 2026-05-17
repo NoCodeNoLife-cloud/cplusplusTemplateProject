@@ -1,3 +1,9 @@
+/**
+ * @file Directory.cc
+ * @brief Directory class implementation
+ * @details This file contains the implementation of the Directory class methods for Common library utilities.
+ */
+
 #include "src/filesystem/type/Directory.hpp"
 
 #include <fmt/format.h>

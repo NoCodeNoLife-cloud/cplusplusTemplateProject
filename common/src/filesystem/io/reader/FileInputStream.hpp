@@ -1,3 +1,9 @@
+/**
+ * @file FileInputStream.hpp
+ * @brief FileInputStream class declaration
+ * @details This header defines the FileInputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <filesystem>
 #include <fstream>

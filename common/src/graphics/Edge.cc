@@ -1,3 +1,9 @@
+/**
+ * @file Edge.cc
+ * @brief Edge class implementation
+ * @details This file contains the implementation of the Edge class methods for Graphics and geometry utilities.
+ */
+
 #include "src/graphics/Edge.hpp"
 
 #include <cstdint>

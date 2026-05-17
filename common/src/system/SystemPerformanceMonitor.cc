@@ -1,3 +1,9 @@
+/**
+ * @file SystemPerformanceMonitor.cc
+ * @brief SystemPerformanceMonitor class implementation
+ * @details This file contains the implementation of the SystemPerformanceMonitor class methods for System information and performance monitoring.
+ */
+
 #include "src/system/SystemPerformanceMonitor.hpp"
 
 #include <fmt/format.h>

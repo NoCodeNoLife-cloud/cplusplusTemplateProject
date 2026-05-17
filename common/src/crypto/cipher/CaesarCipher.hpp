@@ -1,3 +1,9 @@
+/**
+ * @file CaesarCipher.hpp
+ * @brief CaesarCipher class declaration
+ * @details This header defines the CaesarCipher class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 #include <string>
 #include <string_view>

@@ -1,3 +1,9 @@
+/**
+ * @file Console.hpp
+ * @brief Console class declaration
+ * @details This header defines the Console class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <format>
 #include <iostream>

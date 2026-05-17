@@ -1,3 +1,9 @@
+/**
+ * @file Scanner.cc
+ * @brief Scanner class implementation
+ * @details This file contains the implementation of the Scanner class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/Scanner.hpp"
 
 #include <fmt/format.h>

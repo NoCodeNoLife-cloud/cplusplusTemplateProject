@@ -1,3 +1,11 @@
+/**
+ * @file TreeFindValueTest.cc
+ * @brief Unit tests for the findValue method in AVLTree and BinarySearchTree classes
+ * @details Tests cover value search functionality including finding existing values,
+ *          handling non-existing values, empty trees, different node types (root, leaf),
+ *          and type consistency with various data types.
+ */
+
 #include <gtest/gtest.h>
 #include <optional>
 

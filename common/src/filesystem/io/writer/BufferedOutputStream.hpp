@@ -1,3 +1,9 @@
+/**
+ * @file BufferedOutputStream.hpp
+ * @brief BufferedOutputStream class declaration
+ * @details This header defines the BufferedOutputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <cstring>
 #include <memory>

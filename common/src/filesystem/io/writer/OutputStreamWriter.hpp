@@ -1,3 +1,9 @@
+/**
+ * @file OutputStreamWriter.hpp
+ * @brief OutputStreamWriter class declaration
+ * @details This header defines the OutputStreamWriter class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 #include <codecvt>

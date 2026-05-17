@@ -1,3 +1,9 @@
+/**
+ * @file BufferedInputStream.hpp
+ * @brief BufferedInputStream class declaration
+ * @details This header defines the BufferedInputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <memory>
 #include <cstddef>

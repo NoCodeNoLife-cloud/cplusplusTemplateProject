@@ -1,3 +1,9 @@
+/**
+ * @file PushbackReader.hpp
+ * @brief PushbackReader class declaration
+ * @details This header defines the PushbackReader class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <algorithm>
 #include <vector>

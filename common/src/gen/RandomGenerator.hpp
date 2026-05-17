@@ -1,3 +1,9 @@
+/**
+ * @file RandomGenerator.hpp
+ * @brief RandomGenerator class declaration
+ * @details This header defines the RandomGenerator class that provides functionality for Random number and ID generation utilities.
+ */
+
 #pragma once
 
 #include <random>

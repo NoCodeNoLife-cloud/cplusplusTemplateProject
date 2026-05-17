@@ -1,3 +1,9 @@
+/**
+ * @file AutoJoinThread.hpp
+ * @brief AutoJoinThread class declaration
+ * @details This header defines the AutoJoinThread class that provides functionality for Threading utilities and thread pool implementation.
+ */
+
 #pragma once
 
 #include <thread>

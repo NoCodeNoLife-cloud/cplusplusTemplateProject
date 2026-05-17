@@ -1,3 +1,9 @@
+/**
+ * @file SHA1Strategy.cc
+ * @brief SHA1Strategy class implementation
+ * @details This file contains the implementation of the SHA1Strategy class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "SHA1Strategy.hpp"
 
 #include <fmt/format.h>

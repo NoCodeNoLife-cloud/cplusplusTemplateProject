@@ -1,3 +1,9 @@
+/**
+ * @file CryptoToolKit.hpp
+ * @brief CryptoToolKit class declaration
+ * @details This header defines the CryptoToolKit class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 #include <string>
 

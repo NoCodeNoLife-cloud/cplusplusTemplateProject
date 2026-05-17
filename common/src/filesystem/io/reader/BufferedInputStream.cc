@@ -1,3 +1,9 @@
+/**
+ * @file BufferedInputStream.cc
+ * @brief BufferedInputStream class implementation
+ * @details This file contains the implementation of the BufferedInputStream class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/BufferedInputStream.hpp"
 
 #include <fmt/format.h>

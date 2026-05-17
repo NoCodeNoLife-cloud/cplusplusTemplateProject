@@ -1,3 +1,9 @@
+/**
+ * @file PasswordSQL.hpp
+ * @brief PasswordSQL class declaration
+ * @details This header defines the PasswordSQL class that provides functionality for SQL database utilities.
+ */
+
 #pragma once
 #include <string>
 #include <vector>

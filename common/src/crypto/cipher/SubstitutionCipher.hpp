@@ -1,3 +1,9 @@
+/**
+ * @file SubstitutionCipher.hpp
+ * @brief SubstitutionCipher class declaration
+ * @details This header defines the SubstitutionCipher class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 #include <string>
 #include <unordered_map>

@@ -1,3 +1,9 @@
+/**
+ * @file TopK.cc
+ * @brief TopK class implementation
+ * @details This file contains the implementation of the TopK class methods for Advanced data structures including trees and skip lists.
+ */
+
 #include "TopK.hpp"
 
 #include <algorithm>

@@ -1,3 +1,9 @@
+/**
+ * @file AbstractFilterWriter.hpp
+ * @brief AbstractFilterWriter class declaration
+ * @details This header defines the AbstractFilterWriter class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <memory>
 #include <string>

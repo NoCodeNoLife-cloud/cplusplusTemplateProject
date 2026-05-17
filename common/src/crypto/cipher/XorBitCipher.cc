@@ -1,3 +1,9 @@
+/**
+ * @file XorBitCipher.cc
+ * @brief XorBitCipher class implementation
+ * @details This file contains the implementation of the XorBitCipher class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "XorBitCipher.hpp"
 
 #include <fmt/format.h>

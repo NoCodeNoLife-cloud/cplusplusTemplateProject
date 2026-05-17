@@ -1,3 +1,9 @@
+/**
+ * @file ITimerTask.hpp
+ * @brief ITimerTask class declaration
+ * @details This header defines the ITimerTask class that provides functionality for Threading utilities and thread pool implementation.
+ */
+
 #pragma once
 
 namespace common::interfaces {

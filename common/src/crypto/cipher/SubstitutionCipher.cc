@@ -1,3 +1,9 @@
+/**
+ * @file SubstitutionCipher.cc
+ * @brief SubstitutionCipher class implementation
+ * @details This file contains the implementation of the SubstitutionCipher class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "SubstitutionCipher.hpp"
 #include <fmt/format.h>
 #include <cctype>

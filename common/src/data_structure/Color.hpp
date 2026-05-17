@@ -1,3 +1,9 @@
+/**
+ * @file Color.hpp
+ * @brief Color class declaration
+ * @details This header defines the Color class that provides functionality for Advanced data structures including trees and skip lists.
+ */
+
 #pragma once
 namespace common::data_structure {
 /// @brief Enumeration representing various colors.

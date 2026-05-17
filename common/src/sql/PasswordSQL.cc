@@ -1,3 +1,9 @@
+/**
+ * @file PasswordSQL.cc
+ * @brief PasswordSQL class implementation
+ * @details This file contains the implementation of the PasswordSQL class methods for SQL database utilities.
+ */
+
 #include "PasswordSQL.hpp"
 #include <stdexcept>
 #include <string_view>

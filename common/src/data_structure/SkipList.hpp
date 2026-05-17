@@ -1,3 +1,9 @@
+/**
+ * @file SkipList.hpp
+ * @brief SkipList class declaration
+ * @details This header defines the SkipList class that provides functionality for Advanced data structures including trees and skip lists.
+ */
+
 #pragma once
 #include <algorithm>
 #include <iostream>

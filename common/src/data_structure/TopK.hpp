@@ -1,3 +1,9 @@
+/**
+ * @file TopK.hpp
+ * @brief TopK class declaration
+ * @details This header defines the TopK class that provides functionality for Advanced data structures including trees and skip lists.
+ */
+
 #pragma once
 #include <queue>
 #include <vector>

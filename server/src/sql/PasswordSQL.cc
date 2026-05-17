@@ -1,3 +1,11 @@
+/**
+ * @file PasswordSQL.cc
+ * @brief Implementation of password management SQL operations
+ * @details This file contains the implementation of PasswordSQL class methods,
+ *          including user registration, authentication, password changes,
+ *          account deletion, and database initialization using SQLite.
+ */
+
 #include "PasswordSQL.hpp"
 #include <stdexcept>
 #include <string_view>

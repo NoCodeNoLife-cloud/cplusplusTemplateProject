@@ -1,3 +1,9 @@
+/**
+ * @file StreamCipherFactory.cc
+ * @brief StreamCipherFactory class implementation
+ * @details This file contains the implementation of the StreamCipherFactory class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "StreamCipherFactory.hpp"
 #include "ChaCha20Cipher.hpp"
 

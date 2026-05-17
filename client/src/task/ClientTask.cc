@@ -1,3 +1,11 @@
+/**
+ * @file ClientTask.cc
+ * @brief Implementation of the client task functionality
+ * @details This file contains the implementation of ClientTask class methods,
+ *          including user authentication flow, gRPC channel management,
+ *          system information logging, and application lifecycle control.
+ */
+
 #include "src/task/ClientTask.hpp"
 
 #include <fmt/format.h>

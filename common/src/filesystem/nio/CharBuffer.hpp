@@ -1,3 +1,9 @@
+/**
+ * @file CharBuffer.hpp
+ * @brief CharBuffer class declaration
+ * @details This header defines the CharBuffer class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <algorithm>
 #include <string>

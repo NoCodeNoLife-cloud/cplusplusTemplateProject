@@ -1,3 +1,10 @@
+/**
+ * @file ClientMain.cc
+ * @brief Client application entry point
+ * @details Main function that initializes and runs the client task,
+ *          serving as the starting point for the client application.
+ */
+
 #include <glog/logging.h>
 
 #include "src/task/ClientTask.hpp"

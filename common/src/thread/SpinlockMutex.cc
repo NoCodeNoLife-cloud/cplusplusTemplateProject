@@ -1,3 +1,9 @@
+/**
+ * @file SpinlockMutex.cc
+ * @brief SpinlockMutex class implementation
+ * @details This file contains the implementation of the SpinlockMutex class methods for Threading utilities and thread pool implementation.
+ */
+
 #include "src/thread/SpinlockMutex.hpp"
 
 #include <fmt/format.h>

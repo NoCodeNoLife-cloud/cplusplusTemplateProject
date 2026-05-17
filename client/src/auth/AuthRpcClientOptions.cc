@@ -1,3 +1,10 @@
+/**
+ * @file AuthRpcClientOptions.cc
+ * @brief Implementation of authentication RPC client configuration options
+ * @details This file contains the implementation of AuthRpcClientOptions class methods,
+ *          including builder pattern, YAML deserialization, and parameter validation.
+ */
+
 #include "AuthRpcClientOptions.hpp"
 
 #include <glog/logging.h>

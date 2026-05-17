@@ -1,3 +1,9 @@
+/**
+ * @file XorBitCipher.hpp
+ * @brief XorBitCipher class declaration
+ * @details This header defines the XorBitCipher class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 #include "StreamCipher.hpp"
 

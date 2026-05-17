@@ -1,3 +1,9 @@
+/**
+ * @file ISerializer.hpp
+ * @brief ISerializer class declaration
+ * @details This header defines the ISerializer class that provides functionality for Serialization utilities for JSON and YAML.
+ */
+
 #pragma once
 
 #include <string>

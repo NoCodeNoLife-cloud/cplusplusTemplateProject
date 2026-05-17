@@ -1,3 +1,9 @@
+/**
+ * @file MySqlExecutor.cc
+ * @brief MySqlExecutor class implementation
+ * @details This file contains the implementation of the MySqlExecutor class methods for SQL database utilities.
+ */
+
 #include "MySqlExecutor.hpp"
 
 #include <fmt/format.h>

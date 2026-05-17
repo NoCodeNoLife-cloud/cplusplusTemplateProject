@@ -1,3 +1,9 @@
+/**
+ * @file FileOutputStream.hpp
+ * @brief FileOutputStream class declaration
+ * @details This header defines the FileOutputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <filesystem>
 #include <fstream>

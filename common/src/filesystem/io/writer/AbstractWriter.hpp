@@ -1,3 +1,9 @@
+/**
+ * @file AbstractWriter.hpp
+ * @brief AbstractWriter class declaration
+ * @details This header defines the AbstractWriter class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <string>
 #include <vector>

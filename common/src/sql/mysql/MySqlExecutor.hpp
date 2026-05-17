@@ -1,3 +1,9 @@
+/**
+ * @file MySqlExecutor.hpp
+ * @brief MySqlExecutor class declaration
+ * @details This header defines the MySqlExecutor class that provides functionality for SQL database utilities.
+ */
+
 #pragma once
 #include <string>
 #include <vector>

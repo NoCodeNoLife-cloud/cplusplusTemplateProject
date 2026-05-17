@@ -1,3 +1,9 @@
+/**
+ * @file SimpleDateFormatter.cc
+ * @brief SimpleDateFormatter class implementation
+ * @details This file contains the implementation of the SimpleDateFormatter class methods for Time and date utilities including profilers and formatters.
+ */
+
 #include "src/time/SimpleDateFormatter.hpp"
 
 #include <fmt/format.h>

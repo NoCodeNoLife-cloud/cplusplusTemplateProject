@@ -1,3 +1,9 @@
+/**
+ * @file YamlObjectSerializer.hpp
+ * @brief YamlObjectSerializer class declaration
+ * @details This header defines the YamlObjectSerializer class that provides functionality for Serialization utilities for JSON and YAML.
+ */
+
 #pragma once
 
 #include <yaml-cpp/yaml.h>

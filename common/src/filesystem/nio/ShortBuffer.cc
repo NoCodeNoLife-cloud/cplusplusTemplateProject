@@ -1,3 +1,9 @@
+/**
+ * @file ShortBuffer.cc
+ * @brief ShortBuffer class implementation
+ * @details This file contains the implementation of the ShortBuffer class methods for Common library utilities.
+ */
+
 #include "src/filesystem/nio/ShortBuffer.hpp"
 
 #include <fmt/format.h>

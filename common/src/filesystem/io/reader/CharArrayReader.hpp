@@ -1,3 +1,9 @@
+/**
+ * @file CharArrayReader.hpp
+ * @brief CharArrayReader class declaration
+ * @details This header defines the CharArrayReader class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <vector>
 #include "AbstractReader.hpp"

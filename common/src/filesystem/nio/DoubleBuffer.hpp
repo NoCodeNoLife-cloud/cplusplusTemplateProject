@@ -1,3 +1,9 @@
+/**
+ * @file DoubleBuffer.hpp
+ * @brief DoubleBuffer class declaration
+ * @details This header defines the DoubleBuffer class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <stdexcept>
 #include <vector>

@@ -1,3 +1,9 @@
+/**
+ * @file UserCredentials.hpp
+ * @brief UserCredentials class declaration
+ * @details This header defines the UserCredentials class that provides functionality for Authentication and authorization utilities.
+ */
+
 #pragma once
 #include <chrono>
 #include <string>

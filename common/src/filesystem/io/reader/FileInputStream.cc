@@ -1,3 +1,9 @@
+/**
+ * @file FileInputStream.cc
+ * @brief FileInputStream class implementation
+ * @details This file contains the implementation of the FileInputStream class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/FileInputStream.hpp"
 
 #include <fmt/format.h>

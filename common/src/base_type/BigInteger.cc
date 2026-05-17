@@ -1,3 +1,9 @@
+/**
+ * @file BigInteger.cc
+ * @brief BigInteger class implementation
+ * @details This file contains the implementation of the BigInteger class methods for Base type classes providing fundamental object functionality.
+ */
+
 #include "src/base_type/BigInteger.hpp"
 
 #include <fmt/format.h>

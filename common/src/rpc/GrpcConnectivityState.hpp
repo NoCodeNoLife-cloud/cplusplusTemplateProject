@@ -1,3 +1,9 @@
+/**
+ * @file GrpcConnectivityState.hpp
+ * @brief GrpcConnectivityState class declaration
+ * @details This header defines the GrpcConnectivityState class that provides functionality for RPC metadata and connectivity management.
+ */
+
 #pragma once
 
 namespace common::rpc {

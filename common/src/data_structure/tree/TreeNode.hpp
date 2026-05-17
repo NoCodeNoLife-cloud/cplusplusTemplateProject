@@ -1,3 +1,9 @@
+/**
+ * @file TreeNode.hpp
+ * @brief TreeNode class declaration
+ * @details This header defines the TreeNode class that provides functionality for Advanced data structures including trees and skip lists.
+ */
+
 #pragma once
 #include <memory>
 #include <cstdint>

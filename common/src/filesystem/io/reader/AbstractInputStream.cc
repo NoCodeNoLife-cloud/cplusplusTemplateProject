@@ -1,3 +1,9 @@
+/**
+ * @file AbstractInputStream.cc
+ * @brief AbstractInputStream class implementation
+ * @details This file contains the implementation of the AbstractInputStream class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/AbstractInputStream.hpp"
 
 #include <fmt/format.h>

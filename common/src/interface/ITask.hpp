@@ -1,3 +1,9 @@
+/**
+ * @file ITask.hpp
+ * @brief ITask class declaration
+ * @details This header defines the ITask class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 
 namespace common::interfaces {

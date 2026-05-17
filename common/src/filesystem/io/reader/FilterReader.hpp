@@ -1,3 +1,9 @@
+/**
+ * @file FilterReader.hpp
+ * @brief FilterReader class declaration
+ * @details This header defines the FilterReader class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <memory>
 #include <vector>

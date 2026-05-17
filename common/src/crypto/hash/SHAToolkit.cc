@@ -1,3 +1,9 @@
+/**
+ * @file SHAToolkit.cc
+ * @brief SHAToolkit class implementation
+ * @details This file contains the implementation of the SHAToolkit class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "SHAToolkit.hpp"
 #include "SHA256Strategy.hpp"
 #include "SHA1Strategy.hpp"

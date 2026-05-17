@@ -1,3 +1,9 @@
+/**
+ * @file RadixToolkit.hpp
+ * @brief RadixToolkit class declaration
+ * @details This header defines the RadixToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #pragma once
 
 #include <algorithm>

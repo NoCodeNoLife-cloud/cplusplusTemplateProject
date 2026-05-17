@@ -1,3 +1,9 @@
+/**
+ * @file BigDecimal.cc
+ * @brief BigDecimal class implementation
+ * @details This file contains the implementation of the BigDecimal class methods for Base type classes providing fundamental object functionality.
+ */
+
 #include "src/base_type/BigDecimal.hpp"
 
 #include <fmt/format.h>

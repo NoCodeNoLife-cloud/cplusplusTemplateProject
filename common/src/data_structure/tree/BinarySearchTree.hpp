@@ -1,3 +1,9 @@
+/**
+ * @file BinarySearchTree.hpp
+ * @brief BinarySearchTree class declaration
+ * @details This header defines the BinarySearchTree class that provides functionality for Advanced data structures including trees and skip lists.
+ */
+
 #pragma once
 #include <fmt/format.h>
 #include <iostream>

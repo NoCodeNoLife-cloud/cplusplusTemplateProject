@@ -1,3 +1,9 @@
+/**
+ * @file IJsonSerializable.hpp
+ * @brief IJsonSerializable class declaration
+ * @details This header defines the IJsonSerializable class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 
 #include <rapidjson/document.h>

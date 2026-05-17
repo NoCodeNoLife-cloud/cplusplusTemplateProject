@@ -1,3 +1,9 @@
+/**
+ * @file OpenSSLToolkit.hpp
+ * @brief OpenSSLToolkit class declaration
+ * @details This header defines the OpenSSLToolkit class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 
 #include <array>

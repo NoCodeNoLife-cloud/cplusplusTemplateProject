@@ -1,3 +1,9 @@
+/**
+ * @file ICache.hpp
+ * @brief ICache class declaration
+ * @details This header defines the ICache class that provides functionality for Cache implementations including LRU and LFU strategies.
+ */
+
 #pragma once
 #include <optional>
 

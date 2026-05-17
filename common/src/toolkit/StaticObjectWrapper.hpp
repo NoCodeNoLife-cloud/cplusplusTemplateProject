@@ -1,3 +1,9 @@
+/**
+ * @file StaticObjectWrapper.hpp
+ * @brief StaticObjectWrapper class declaration
+ * @details This header defines the StaticObjectWrapper class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #pragma once
 #include <type_traits>
 #include <mutex>

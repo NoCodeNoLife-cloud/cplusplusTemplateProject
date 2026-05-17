@@ -1,3 +1,11 @@
+/**
+ * @file AuthRpcServiceOptions.hpp
+ * @brief gRPC service configuration options
+ * @details This header defines the AuthRpcServiceOptions class that encapsulates
+ *          gRPC server configuration parameters including keepalive settings,
+ *          connection management, and YAML-based configuration loading with builder pattern.
+ */
+
 #pragma once
 #include <filesystem>
 #include <string>

@@ -1,3 +1,9 @@
+/**
+ * @file BufferedWriter.cc
+ * @brief BufferedWriter class implementation
+ * @details This file contains the implementation of the BufferedWriter class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/writer/BufferedWriter.hpp"
 
 #include <fmt/format.h>

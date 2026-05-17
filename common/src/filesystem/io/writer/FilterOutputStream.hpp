@@ -1,3 +1,9 @@
+/**
+ * @file FilterOutputStream.hpp
+ * @brief FilterOutputStream class declaration
+ * @details This header defines the FilterOutputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include "AbstractOutputStream.hpp"
 #include <memory>

@@ -1,3 +1,9 @@
+/**
+ * @file IYamlConfigurable.hpp
+ * @brief IYamlConfigurable class declaration
+ * @details This header defines the IYamlConfigurable class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 #include <filesystem>
 

@@ -1,3 +1,9 @@
+/**
+ * @file IntBuffer.cc
+ * @brief IntBuffer class implementation
+ * @details This file contains the implementation of the IntBuffer class methods for Common library utilities.
+ */
+
 #include "src/filesystem/nio/IntBuffer.hpp"
 
 #include <fmt/format.h>

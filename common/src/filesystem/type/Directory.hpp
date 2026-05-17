@@ -1,3 +1,9 @@
+/**
+ * @file Directory.hpp
+ * @brief Directory class declaration
+ * @details This header defines the Directory class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <filesystem>
 #include <vector>

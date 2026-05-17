@@ -1,3 +1,9 @@
+/**
+ * @file AbstractReader.hpp
+ * @brief AbstractReader class declaration
+ * @details This header defines the AbstractReader class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 
 #include <algorithm>

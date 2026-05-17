@@ -1,3 +1,9 @@
+/**
+ * @file UnionSet.hpp
+ * @brief UnionSet class declaration
+ * @details This header defines the UnionSet class that provides functionality for Container data structures including Queue, Stack, Heap, and UnionSet.
+ */
+
 #pragma once
 #include <fmt/format.h>
 #include <unordered_map>

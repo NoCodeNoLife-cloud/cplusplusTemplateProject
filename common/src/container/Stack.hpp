@@ -1,3 +1,9 @@
+/**
+ * @file Stack.hpp
+ * @brief Stack class declaration
+ * @details This header defines the Stack class that provides functionality for Container data structures including Queue, Stack, Heap, and UnionSet.
+ */
+
 #pragma once
 #include <concepts>
 #include <fmt/format.h>

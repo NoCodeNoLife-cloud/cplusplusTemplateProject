@@ -1,3 +1,9 @@
+/**
+ * @file SystemInfo.cc
+ * @brief SystemInfo class implementation
+ * @details This file contains the implementation of the SystemInfo class methods for System information and performance monitoring.
+ */
+
 #include "src/system/SystemInfo.hpp"
 
 #include <fmt/format.h>

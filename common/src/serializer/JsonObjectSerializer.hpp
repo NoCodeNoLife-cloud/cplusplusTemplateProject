@@ -1,3 +1,9 @@
+/**
+ * @file JsonObjectSerializer.hpp
+ * @brief JsonObjectSerializer class declaration
+ * @details This header defines the JsonObjectSerializer class that provides functionality for Serialization utilities for JSON and YAML.
+ */
+
 #pragma once
 #include <string>
 

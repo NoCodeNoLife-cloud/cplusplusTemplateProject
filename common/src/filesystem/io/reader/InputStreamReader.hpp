@@ -1,3 +1,9 @@
+/**
+ * @file InputStreamReader.hpp
+ * @brief InputStreamReader class declaration
+ * @details This header defines the InputStreamReader class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING // NOLINT(*-reserved-identifier)
 #include <algorithm>

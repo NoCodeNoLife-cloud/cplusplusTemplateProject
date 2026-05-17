@@ -1,3 +1,9 @@
+/**
+ * @file StreamCipherFactory.hpp
+ * @brief StreamCipherFactory class declaration
+ * @details This header defines the StreamCipherFactory class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 #include "StreamCipher.hpp"
 

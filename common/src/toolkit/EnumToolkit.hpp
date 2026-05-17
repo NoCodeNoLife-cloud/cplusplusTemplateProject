@@ -1,3 +1,9 @@
+/**
+ * @file EnumToolkit.hpp
+ * @brief EnumToolkit class declaration
+ * @details This header defines the EnumToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #pragma once
 #include <string>
 #include <vector>

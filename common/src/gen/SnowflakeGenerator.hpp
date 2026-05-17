@@ -1,3 +1,9 @@
+/**
+ * @file SnowflakeGenerator.hpp
+ * @brief SnowflakeGenerator class declaration
+ * @details This header defines the SnowflakeGenerator class that provides functionality for Random number and ID generation utilities.
+ */
+
 #pragma once
 #include <mutex>
 #include <cstdint>

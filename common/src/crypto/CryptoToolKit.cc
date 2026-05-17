@@ -1,3 +1,9 @@
+/**
+ * @file CryptoToolKit.cc
+ * @brief CryptoToolKit class implementation
+ * @details This file contains the implementation of the CryptoToolKit class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "CryptoToolKit.hpp"
 
 #include <fmt/format.h>

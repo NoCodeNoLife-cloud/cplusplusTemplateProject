@@ -1,3 +1,9 @@
+/**
+ * @file StreamCipher.hpp
+ * @brief StreamCipher class declaration
+ * @details This header defines the StreamCipher class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 #include <vector>
 #include <cstdint>

@@ -1,3 +1,9 @@
+/**
+ * @file SpinlockMutex.hpp
+ * @brief SpinlockMutex class declaration
+ * @details This header defines the SpinlockMutex class that provides functionality for Threading utilities and thread pool implementation.
+ */
+
 #pragma once
 #include <atomic>
 #include <chrono>

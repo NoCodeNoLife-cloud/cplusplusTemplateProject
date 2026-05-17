@@ -1,3 +1,9 @@
+/**
+ * @file CharArrayWriter.hpp
+ * @brief CharArrayWriter class declaration
+ * @details This header defines the CharArrayWriter class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <algorithm>
 #include <vector>

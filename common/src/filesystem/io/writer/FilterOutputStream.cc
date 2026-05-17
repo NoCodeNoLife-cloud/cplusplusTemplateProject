@@ -1,3 +1,9 @@
+/**
+ * @file FilterOutputStream.cc
+ * @brief FilterOutputStream class implementation
+ * @details This file contains the implementation of the FilterOutputStream class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/writer/FilterOutputStream.hpp"
 
 #include <fmt/format.h>

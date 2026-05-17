@@ -1,3 +1,9 @@
+/**
+ * @file OpenSSLToolkit.cc
+ * @brief OpenSSLToolkit class implementation
+ * @details This file contains the implementation of the OpenSSLToolkit class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "src/crypto/OpenSSLToolkit.hpp"
 #include <openssl/aes.h>
 #include <openssl/evp.h>

@@ -1,3 +1,9 @@
+/**
+ * @file PushbackReader.cc
+ * @brief PushbackReader class implementation
+ * @details This file contains the implementation of the PushbackReader class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/PushbackReader.hpp"
 
 #include <fmt/format.h>

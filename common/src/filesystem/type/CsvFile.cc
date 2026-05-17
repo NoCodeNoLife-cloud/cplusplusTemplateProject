@@ -1,3 +1,9 @@
+/**
+ * @file CsvFile.cc
+ * @brief CsvFile class implementation
+ * @details This file contains the implementation of the CsvFile class methods for Common library utilities.
+ */
+
 #include "src/filesystem/type/CsvFile.hpp"
 
 #include <fmt/format.h>

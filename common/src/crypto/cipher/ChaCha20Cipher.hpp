@@ -1,3 +1,9 @@
+/**
+ * @file ChaCha20Cipher.hpp
+ * @brief ChaCha20Cipher class declaration
+ * @details This header defines the ChaCha20Cipher class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 #include "StreamCipher.hpp"
 

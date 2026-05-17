@@ -1,3 +1,11 @@
+/**
+ * @file ServerTask.hpp
+ * @brief Server task implementation for the application
+ * @details This header defines the ServerTask class that manages the server application
+ *          lifecycle including initialization, gRPC server setup, configuration loading,
+ *          and cleanup with performance profiling support.
+ */
+
 #pragma once
 #include <memory>
 #include <string>

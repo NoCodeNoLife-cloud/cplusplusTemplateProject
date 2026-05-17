@@ -1,3 +1,11 @@
+/**
+ * @file AuthRpcServiceOptions.cc
+ * @brief Implementation of gRPC service configuration options
+ * @details This file contains the implementation of AuthRpcServiceOptions class methods,
+ *          including builder pattern, YAML deserialization, and parameter validation
+ *          for gRPC server configuration.
+ */
+
 #include "AuthRpcServiceOptions.hpp"
 
 #include <functional>

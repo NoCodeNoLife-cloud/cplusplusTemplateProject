@@ -1,3 +1,11 @@
+/**
+ * @file CustomGlogPrefixFormatter.hpp
+ * @brief Custom log prefix formatter for glog
+ * @details This header defines the CustomGlogPrefixFormatter class that provides
+ *          a customizable prefix format for glog logging messages, including
+ *          severity level, timestamp, thread ID, and source location information.
+ */
+
 #pragma once
 #include <iosfwd>
 #include <glog/logging.h>

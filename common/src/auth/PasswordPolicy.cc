@@ -1,3 +1,9 @@
+/**
+ * @file PasswordPolicy.cc
+ * @brief PasswordPolicy class implementation
+ * @details This file contains the implementation of the PasswordPolicy class methods for Authentication and authorization utilities.
+ */
+
 #include "PasswordPolicy.hpp"
 #include <cctype>
 #include <fmt/format.h>

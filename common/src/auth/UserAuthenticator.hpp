@@ -1,3 +1,9 @@
+/**
+ * @file UserAuthenticator.hpp
+ * @brief UserAuthenticator class declaration
+ * @details This header defines the UserAuthenticator class that provides functionality for Authentication and authorization utilities.
+ */
+
 #pragma once
 #include <mutex>
 #include <regex>

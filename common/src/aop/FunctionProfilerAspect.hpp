@@ -1,3 +1,9 @@
+/**
+ * @file FunctionProfilerAspect.hpp
+ * @brief FunctionProfilerAspect class declaration
+ * @details This header defines the FunctionProfilerAspect class that provides functionality for Aspect-Oriented Programming support.
+ */
+
 #pragma once
 #include <string>
 #include <exception>

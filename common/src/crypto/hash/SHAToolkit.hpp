@@ -1,3 +1,9 @@
+/**
+ * @file SHAToolkit.hpp
+ * @brief SHAToolkit class declaration
+ * @details This header defines the SHAToolkit class that provides functionality for Cryptographic utilities and toolkit.
+ */
+
 #pragma once
 
 #include "HashStrategy.hpp"

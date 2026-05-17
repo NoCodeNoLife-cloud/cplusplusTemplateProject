@@ -1,3 +1,9 @@
+/**
+ * @file ChaCha20Cipher.cc
+ * @brief ChaCha20Cipher class implementation
+ * @details This file contains the implementation of the ChaCha20Cipher class methods for Cryptographic utilities and toolkit.
+ */
+
 #include "ChaCha20Cipher.hpp"
 
 #include <fmt/format.h>

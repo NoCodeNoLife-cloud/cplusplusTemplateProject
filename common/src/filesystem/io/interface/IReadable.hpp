@@ -1,3 +1,9 @@
+/**
+ * @file IReadable.hpp
+ * @brief IReadable class declaration
+ * @details This header defines the IReadable class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 
 namespace common::interfaces {

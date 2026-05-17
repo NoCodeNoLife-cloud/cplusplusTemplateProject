@@ -1,3 +1,12 @@
+/**
+ * @file AuthRpcClient.hpp
+ * @brief RPC client for authentication service communication
+ * @details This header defines the AuthRpcClient class that provides methods
+ *          to interact with the server's authentication service via gRPC,
+ *          including user registration, authentication, password management,
+ *          and user deletion operations.
+ */
+
 #pragma once
 #include <memory>
 #include <string>

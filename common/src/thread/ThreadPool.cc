@@ -1,3 +1,9 @@
+/**
+ * @file ThreadPool.cc
+ * @brief ThreadPool class implementation
+ * @details This file contains the implementation of the ThreadPool class methods for Threading utilities and thread pool implementation.
+ */
+
 #include "src/thread/ThreadPool.hpp"
 
 #include <fmt/format.h>

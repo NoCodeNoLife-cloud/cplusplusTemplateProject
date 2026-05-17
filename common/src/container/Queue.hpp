@@ -1,3 +1,9 @@
+/**
+ * @file Queue.hpp
+ * @brief Queue class declaration
+ * @details This header defines the Queue class that provides functionality for Container data structures including Queue, Stack, Heap, and UnionSet.
+ */
+
 #pragma once
 #include <concepts>
 #include <fmt/format.h>

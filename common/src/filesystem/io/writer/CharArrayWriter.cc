@@ -1,3 +1,9 @@
+/**
+ * @file CharArrayWriter.cc
+ * @brief CharArrayWriter class implementation
+ * @details This file contains the implementation of the CharArrayWriter class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/writer/CharArrayWriter.hpp"
 
 #include <fmt/format.h>

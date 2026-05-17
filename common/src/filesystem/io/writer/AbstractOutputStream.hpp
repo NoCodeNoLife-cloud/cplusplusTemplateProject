@@ -1,3 +1,9 @@
+/**
+ * @file AbstractOutputStream.hpp
+ * @brief AbstractOutputStream class declaration
+ * @details This header defines the AbstractOutputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <format>
 #include <vector>

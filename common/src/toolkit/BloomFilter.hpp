@@ -1,3 +1,9 @@
+/**
+ * @file BloomFilter.hpp
+ * @brief BloomFilter class declaration
+ * @details This header defines the BloomFilter class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #pragma once
 #include <cmath>
 #include <cstdint>

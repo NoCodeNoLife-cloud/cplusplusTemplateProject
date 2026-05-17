@@ -1,3 +1,9 @@
+/**
+ * @file IAopAspect.hpp
+ * @brief IAopAspect class declaration
+ * @details This header defines the IAopAspect class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 #include <functional>
 #include <type_traits>

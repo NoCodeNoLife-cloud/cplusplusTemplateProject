@@ -1,3 +1,9 @@
+/**
+ * @file AutoJoinThread.cc
+ * @brief AutoJoinThread class implementation
+ * @details This file contains the implementation of the AutoJoinThread class methods for Threading utilities and thread pool implementation.
+ */
+
 #include "src/thread/AutoJoinThread.hpp"
 
 #include <fmt/format.h>

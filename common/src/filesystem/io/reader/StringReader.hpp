@@ -1,3 +1,9 @@
+/**
+ * @file StringReader.hpp
+ * @brief StringReader class declaration
+ * @details This header defines the StringReader class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <algorithm>
 #include <string>

@@ -1,3 +1,9 @@
+/**
+ * @file Object.hpp
+ * @brief Base object class declaration
+ * @details This header defines the Object class that provides functionality for Base type classes providing fundamental object functionality.
+ */
+
 #pragma once
 #include <format>
 #include <typeinfo>

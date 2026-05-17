@@ -1,3 +1,9 @@
+/**
+ * @file IApplicationExecutor.hpp
+ * @brief IApplicationExecutor class declaration
+ * @details This header defines the IApplicationExecutor class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 #include <cstdint>
 #include <vector>

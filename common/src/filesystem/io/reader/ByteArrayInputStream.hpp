@@ -1,3 +1,9 @@
+/**
+ * @file ByteArrayInputStream.hpp
+ * @brief ByteArrayInputStream class declaration
+ * @details This header defines the ByteArrayInputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <algorithm>
 #include <cstddef>

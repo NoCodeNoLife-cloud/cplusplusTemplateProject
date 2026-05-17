@@ -1,3 +1,9 @@
+/**
+ * @file ByteArrayInputStream.cc
+ * @brief ByteArrayInputStream class implementation
+ * @details This file contains the implementation of the ByteArrayInputStream class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/ByteArrayInputStream.hpp"
 
 #include <fmt/format.h>

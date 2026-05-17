@@ -1,3 +1,11 @@
+/**
+ * @file GLogConfigurator.cc
+ * @brief Implementation of glog configuration manager
+ * @details This file contains the implementation of GLogConfigurator class methods,
+ *          including YAML-based configuration loading, glog initialization,
+ *          custom log format installation, and resource cleanup.
+ */
+
 #include "GLogConfigurator.hpp"
 
 #include <glog/logging.h>

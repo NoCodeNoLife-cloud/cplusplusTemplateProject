@@ -1,3 +1,9 @@
+/**
+ * @file Heap.hpp
+ * @brief Heap class declaration
+ * @details This header defines the Heap class that provides functionality for Container data structures including Queue, Stack, Heap, and UnionSet.
+ */
+
 #pragma once
 #include <fmt/format.h>
 #include <concepts>

@@ -1,3 +1,9 @@
+/**
+ * @file IStartupTask.hpp
+ * @brief IStartupTask class declaration
+ * @details This header defines the IStartupTask class that provides functionality for Service interface definitions.
+ */
+
 #pragma once
 
 namespace common::service::interfaces {

@@ -1,3 +1,9 @@
+/**
+ * @file ByteBuffer.hpp
+ * @brief ByteBuffer class declaration
+ * @details This header defines the ByteBuffer class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <span>
 #include <vector>

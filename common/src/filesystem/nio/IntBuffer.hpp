@@ -1,3 +1,9 @@
+/**
+ * @file IntBuffer.hpp
+ * @brief IntBuffer class declaration
+ * @details This header defines the IntBuffer class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <stdexcept>
 #include <vector>

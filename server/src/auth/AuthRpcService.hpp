@@ -1,3 +1,11 @@
+/**
+ * @file AuthRpcService.hpp
+ * @brief Authentication RPC service implementation
+ * @details This header defines the AuthRpcService class that implements the gRPC
+ *          authentication service, providing user registration, authentication,
+ *          password management, and account operations via remote procedure calls.
+ */
+
 #pragma once
 #include <src/auth/UserAuthenticator.hpp>
 #include <src/exception/AuthenticationException.hpp>

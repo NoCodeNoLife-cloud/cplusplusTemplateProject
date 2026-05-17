@@ -1,3 +1,9 @@
+/**
+ * @file PeriodicActuator.hpp
+ * @brief PeriodicActuator class declaration
+ * @details This header defines the PeriodicActuator class that provides functionality for Threading utilities and thread pool implementation.
+ */
+
 #pragma once
 #include <atomic>
 #include <chrono>

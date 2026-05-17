@@ -1,3 +1,9 @@
+/**
+ * @file BmpImage.hpp
+ * @brief BmpImage class declaration
+ * @details This header defines the BmpImage class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <cstdint>
 #include <vector>

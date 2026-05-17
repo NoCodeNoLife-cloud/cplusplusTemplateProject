@@ -1,3 +1,9 @@
+/**
+ * @file StringToolkit.hpp
+ * @brief StringToolkit class declaration
+ * @details This header defines the StringToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #pragma once
 #include <string>
 #include <vector>

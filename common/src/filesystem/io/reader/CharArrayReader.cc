@@ -1,3 +1,9 @@
+/**
+ * @file CharArrayReader.cc
+ * @brief CharArrayReader class implementation
+ * @details This file contains the implementation of the CharArrayReader class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/reader/CharArrayReader.hpp"
 
 #include <fmt/format.h>

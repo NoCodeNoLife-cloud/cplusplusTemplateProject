@@ -1,3 +1,9 @@
+/**
+ * @file PushbackInputStream.hpp
+ * @brief PushbackInputStream class declaration
+ * @details This header defines the PushbackInputStream class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 #include <cstddef>
 #include "FilterInputStream.hpp"

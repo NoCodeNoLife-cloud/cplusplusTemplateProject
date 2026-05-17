@@ -1,3 +1,9 @@
+/**
+ * @file IBuffer.hpp
+ * @brief IBuffer class declaration
+ * @details This header defines the IBuffer class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 #include <stdexcept>
 

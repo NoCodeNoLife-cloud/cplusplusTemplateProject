@@ -1,3 +1,9 @@
+/**
+ * @file FloatBuffer.cc
+ * @brief FloatBuffer class implementation
+ * @details This file contains the implementation of the FloatBuffer class methods for Common library utilities.
+ */
+
 #include "src/filesystem/nio/FloatBuffer.hpp"
 
 #include <fmt/format.h>

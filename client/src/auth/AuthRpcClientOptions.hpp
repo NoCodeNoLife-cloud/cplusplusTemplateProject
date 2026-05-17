@@ -1,3 +1,11 @@
+/**
+ * @file AuthRpcClientOptions.hpp
+ * @brief Configuration options for the authentication RPC client
+ * @details This header defines the AuthRpcClientOptions class that encapsulates
+ *          gRPC configuration parameters including keepalive settings, server address,
+ *          and YAML-based configuration loading with builder pattern support.
+ */
+
 #pragma once
 #include <yaml-cpp/node/node.h>
 #include <filesystem>

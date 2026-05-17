@@ -1,3 +1,9 @@
+/**
+ * @file GrpcConnectivityManager.hpp
+ * @brief GrpcConnectivityManager class declaration
+ * @details This header defines the GrpcConnectivityManager class that provides functionality for RPC metadata and connectivity management.
+ */
+
 #pragma once
 
 #include <grpcpp/grpcpp.h>

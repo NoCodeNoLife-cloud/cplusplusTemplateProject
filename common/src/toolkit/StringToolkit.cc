@@ -1,3 +1,9 @@
+/**
+ * @file StringToolkit.cc
+ * @brief StringToolkit class implementation
+ * @details This file contains the implementation of the StringToolkit class methods for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #include "src/toolkit/StringToolkit.hpp"
 
 #include <fmt/format.h>

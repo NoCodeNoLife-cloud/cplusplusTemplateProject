@@ -1,3 +1,9 @@
+/**
+ * @file RegexToolkit.hpp
+ * @brief RegexToolkit class declaration
+ * @details This header defines the RegexToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ */
+
 #pragma once
 
 #include <regex>

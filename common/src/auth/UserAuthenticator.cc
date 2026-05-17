@@ -1,3 +1,9 @@
+/**
+ * @file UserAuthenticator.cc
+ * @brief UserAuthenticator class implementation
+ * @details This file contains the implementation of the UserAuthenticator class methods for Authentication and authorization utilities.
+ */
+
 #include "UserAuthenticator.hpp"
 
 #include <fmt/format.h>

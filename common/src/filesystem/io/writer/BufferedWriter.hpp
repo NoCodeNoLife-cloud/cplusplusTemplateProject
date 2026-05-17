@@ -1,3 +1,9 @@
+/**
+ * @file BufferedWriter.hpp
+ * @brief BufferedWriter class declaration
+ * @details This header defines the BufferedWriter class that provides functionality for Common library utilities.
+ */
+
 #pragma once
 
 #include <fstream>

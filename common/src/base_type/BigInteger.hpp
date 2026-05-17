@@ -1,3 +1,9 @@
+/**
+ * @file BigInteger.hpp
+ * @brief BigInteger class declaration
+ * @details This header defines the BigInteger class that provides functionality for Base type classes providing fundamental object functionality.
+ */
+
 #pragma once
 #include <boost/multiprecision/cpp_int.hpp>
 #include <string>

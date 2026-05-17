@@ -1,3 +1,9 @@
+/**
+ * @file IYamlSerializable.hpp
+ * @brief IYamlSerializable class declaration
+ * @details This header defines the IYamlSerializable class that provides functionality for Common interface definitions for the framework.
+ */
+
 #pragma once
 
 #include <yaml-cpp/node/convert.h>

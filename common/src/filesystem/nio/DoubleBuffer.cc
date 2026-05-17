@@ -1,3 +1,9 @@
+/**
+ * @file DoubleBuffer.cc
+ * @brief DoubleBuffer class implementation
+ * @details This file contains the implementation of the DoubleBuffer class methods for Common library utilities.
+ */
+
 #include "src/filesystem/nio/DoubleBuffer.hpp"
 
 #include <fmt/format.h>

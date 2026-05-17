@@ -1,3 +1,9 @@
+/**
+ * @file FileOutputStream.cc
+ * @brief FileOutputStream class implementation
+ * @details This file contains the implementation of the FileOutputStream class methods for Common library utilities.
+ */
+
 #include "src/filesystem/io/writer/FileOutputStream.hpp"
 
 #include <fmt/format.h>

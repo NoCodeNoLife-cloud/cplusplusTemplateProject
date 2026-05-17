@@ -1,3 +1,9 @@
+/**
+ * @file SystemPerformanceMonitor.hpp
+ * @brief SystemPerformanceMonitor class declaration
+ * @details This header defines the SystemPerformanceMonitor class that provides functionality for System information and performance monitoring.
+ */
+
 #pragma once
 #include <windows.h>
 
