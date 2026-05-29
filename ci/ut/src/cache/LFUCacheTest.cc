@@ -15,7 +15,8 @@ using namespace common::cache;
  * @brief Test LFUCache constructor with valid capacity
  * @details Verifies cache is created successfully with positive capacity
  */
-TEST(LFUCacheTest, Constructor_ValidCapacity) {
+TEST(LFUCacheTest, Constructor_ValidCapacity)
+{
     EXPECT_NO_THROW((LFUCache<int, std::string>(10)));
 }
 
@@ -23,7 +24,8 @@ TEST(LFUCacheTest, Constructor_ValidCapacity) {
  * @brief Test LFUCache constructor with zero capacity
  * @details Verifies exception is thrown when capacity is zero
  */
-TEST(LFUCacheTest, Constructor_ZeroCapacity) {
+TEST(LFUCacheTest, Constructor_ZeroCapacity)
+{
     EXPECT_THROW((LFUCache<int, std::string>(0)), std::invalid_argument);
 }
 
@@ -31,7 +33,8 @@ TEST(LFUCacheTest, Constructor_ZeroCapacity) {
  * @brief Test LFUCache constructor with negative capacity
  * @details Verifies exception is thrown when capacity is negative
  */
-TEST(LFUCacheTest, Constructor_NegativeCapacity) {
+TEST(LFUCacheTest, Constructor_NegativeCapacity)
+{
     EXPECT_THROW((LFUCache<int, std::string>(-5)), std::invalid_argument);
 }
 
@@ -39,7 +42,8 @@ TEST(LFUCacheTest, Constructor_NegativeCapacity) {
  * @brief Test basic put and get operations
  * @details Verifies that values can be stored and retrieved correctly
  */
-TEST(LFUCacheTest, PutAndGet_Basic) {
+TEST(LFUCacheTest, PutAndGet_Basic)
+{
     LFUCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -58,7 +62,8 @@ TEST(LFUCacheTest, PutAndGet_Basic) {
  * @brief Test get operation for non-existent key
  * @details Verifies that get returns std::nullopt for missing keys
  */
-TEST(LFUCacheTest, Get_NonExistentKey) {
+TEST(LFUCacheTest, Get_NonExistentKey)
+{
     LFUCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -71,7 +76,8 @@ TEST(LFUCacheTest, Get_NonExistentKey) {
  * @brief Test put operation updates existing key
  * @details Verifies that putting an existing key updates its value
  */
-TEST(LFUCacheTest, Put_UpdateExistingKey) {
+TEST(LFUCacheTest, Put_UpdateExistingKey)
+{
     LFUCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -86,7 +92,8 @@ TEST(LFUCacheTest, Put_UpdateExistingKey) {
  * @brief Test LFU eviction policy - least frequently used item is evicted
  * @details When cache is full, the item with lowest access frequency should be removed
  */
-TEST(LFUCacheTest, Eviction_LFU_Policy) {
+TEST(LFUCacheTest, Eviction_LFU_Policy)
+{
     LFUCache<int, std::string> cache(2);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -119,7 +126,8 @@ TEST(LFUCacheTest, Eviction_LFU_Policy) {
  * @brief Test eviction with same frequency - LRU within same frequency
  * @details When multiple items have the same frequency, the least recently used should be evicted
  */
-TEST(LFUCacheTest, Eviction_SameFrequency_LRUTiebreaker) {
+TEST(LFUCacheTest, Eviction_SameFrequency_LRUTiebreaker)
+{
     LFUCache<int, std::string> cache(2);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -145,7 +153,8 @@ TEST(LFUCacheTest, Eviction_SameFrequency_LRUTiebreaker) {
  * @brief Test put with rvalue reference
  * @details Verifies move semantics work correctly for put operation
  */
-TEST(LFUCacheTest, Put_RValueReference) {
+TEST(LFUCacheTest, Put_RValueReference)
+{
     LFUCache<int, std::string> cache(3);
 
     std::string value = "test";
@@ -160,7 +169,8 @@ TEST(LFUCacheTest, Put_RValueReference) {
  * @brief Test remove operation
  * @details Verifies that entries can be removed from cache
  */
-TEST(LFUCacheTest, Remove_ExistingKey) {
+TEST(LFUCacheTest, Remove_ExistingKey)
+{
     LFUCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -182,7 +192,8 @@ TEST(LFUCacheTest, Remove_ExistingKey) {
  * @brief Test remove operation for non-existent key
  * @details Verifies that removing a non-existent key returns false
  */
-TEST(LFUCacheTest, Remove_NonExistentKey) {
+TEST(LFUCacheTest, Remove_NonExistentKey)
+{
     LFUCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -195,7 +206,8 @@ TEST(LFUCacheTest, Remove_NonExistentKey) {
  * @brief Test clear operation
  * @details Verifies that all entries are removed from cache
  */
-TEST(LFUCacheTest, Clear_AllEntries) {
+TEST(LFUCacheTest, Clear_AllEntries)
+{
     LFUCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -217,7 +229,8 @@ TEST(LFUCacheTest, Clear_AllEntries) {
  * @brief Test size operation
  * @details Verifies that size returns correct number of entries
  */
-TEST(LFUCacheTest, Size_CorrectCount) {
+TEST(LFUCacheTest, Size_CorrectCount)
+{
     LFUCache<int, std::string> cache(5);
 
     EXPECT_EQ(cache.size(), 0);
@@ -229,14 +242,15 @@ TEST(LFUCacheTest, Size_CorrectCount) {
     EXPECT_EQ(cache.size(), 2);
 
     EXPECT_TRUE(cache.put(1, "ONE")); // Update existing
-    EXPECT_EQ(cache.size(), 2);       // Size should not change on update
+    EXPECT_EQ(cache.size(), 2); // Size should not change on update
 }
 
 /**
  * @brief Test capacity operation
  * @details Verifies that capacity returns the configured maximum capacity
  */
-TEST(LFUCacheTest, Capacity_CorrectValue) {
+TEST(LFUCacheTest, Capacity_CorrectValue)
+{
     const LFUCache<int, std::string> cache(10);
 
     EXPECT_EQ(cache.capacity(), 10);
@@ -246,7 +260,8 @@ TEST(LFUCacheTest, Capacity_CorrectValue) {
  * @brief Test empty operation
  * @details Verifies that empty returns correct state
  */
-TEST(LFUCacheTest, Empty_CorrectState) {
+TEST(LFUCacheTest, Empty_CorrectState)
+{
     LFUCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.empty());
@@ -262,7 +277,8 @@ TEST(LFUCacheTest, Empty_CorrectState) {
  * @brief Test contains operation
  * @details Verifies that contains correctly identifies existing keys
  */
-TEST(LFUCacheTest, Contains_ExistingKey) {
+TEST(LFUCacheTest, Contains_ExistingKey)
+{
     LFUCache<int, std::string> cache(3);
 
     EXPECT_FALSE(cache.contains(1));
@@ -278,7 +294,8 @@ TEST(LFUCacheTest, Contains_ExistingKey) {
  * @brief Test frequency update on get operation
  * @details Verifies that accessing an item increases its frequency
  */
-TEST(LFUCacheTest, FrequencyUpdate_OnGet) {
+TEST(LFUCacheTest, FrequencyUpdate_OnGet)
+{
     LFUCache<int, std::string> cache(2);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -304,7 +321,8 @@ TEST(LFUCacheTest, FrequencyUpdate_OnGet) {
  * @brief Test frequency update on put operation for existing key
  * @details Verifies that updating an existing key increases its frequency
  */
-TEST(LFUCacheTest, FrequencyUpdate_OnPutUpdate) {
+TEST(LFUCacheTest, FrequencyUpdate_OnPutUpdate)
+{
     LFUCache<int, std::string> cache(2);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -325,7 +343,8 @@ TEST(LFUCacheTest, FrequencyUpdate_OnPutUpdate) {
  * @brief Test cache with capacity 1
  * @details Verifies edge case of single-element cache
  */
-TEST(LFUCacheTest, EdgeCase_CapacityOne) {
+TEST(LFUCacheTest, EdgeCase_CapacityOne)
+{
     LFUCache<int, std::string> cache(1);
 
     EXPECT_TRUE(cache.put(1, "one"));
@@ -344,7 +363,8 @@ TEST(LFUCacheTest, EdgeCase_CapacityOne) {
  * @brief Test const get operation
  * @details Verifies that const version of get works correctly
  */
-TEST(LFUCacheTest, Get_ConstVersion) {
+TEST(LFUCacheTest, Get_ConstVersion)
+{
     LFUCache<int, std::string> cache(3);
     EXPECT_TRUE(cache.put(1, "one"));
 

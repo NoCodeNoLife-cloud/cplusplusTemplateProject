@@ -17,7 +17,8 @@ using namespace common::container;
  * @brief Test default constructor creates empty heap
  * @details Verifies that a newly constructed heap is empty
  */
-TEST(HeapTest, DefaultConstructor_EmptyHeap) {
+TEST(HeapTest, DefaultConstructor_EmptyHeap)
+{
     const Heap<int> heap;
     EXPECT_TRUE(heap.empty());
     EXPECT_EQ(heap.size(), 0);
@@ -27,7 +28,8 @@ TEST(HeapTest, DefaultConstructor_EmptyHeap) {
  * @brief Test constructor from iterator range builds valid heap
  * @details Verifies that heap is correctly built from iterator range
  */
-TEST(HeapTest, IteratorConstructor_BuildsValidHeap) {
+TEST(HeapTest, IteratorConstructor_BuildsValidHeap)
+{
     std::vector<int> data = {5, 3, 8, 1, 9, 2};
     Heap<int> heap(data.begin(), data.end());
 
@@ -40,7 +42,8 @@ TEST(HeapTest, IteratorConstructor_BuildsValidHeap) {
  * @brief Test copy constructor creates independent copy
  * @details Verifies deep copy semantics
  */
-TEST(HeapTest, CopyConstructor_IndependentCopy) {
+TEST(HeapTest, CopyConstructor_IndependentCopy)
+{
     Heap<int> heap1;
     heap1.push(10);
     heap1.push(20);
@@ -62,7 +65,8 @@ TEST(HeapTest, CopyConstructor_IndependentCopy) {
  * @brief Test move constructor transfers ownership
  * @details Verifies move semantics work correctly
  */
-TEST(HeapTest, MoveConstructor_TransfersOwnership) {
+TEST(HeapTest, MoveConstructor_TransfersOwnership)
+{
     Heap<int> heap1;
     heap1.push(10);
     heap1.push(20);
@@ -80,7 +84,8 @@ TEST(HeapTest, MoveConstructor_TransfersOwnership) {
  * @brief Test copy assignment operator
  * @details Verifies copy assignment works correctly
  */
-TEST(HeapTest, CopyAssignment_CorrectBehavior) {
+TEST(HeapTest, CopyAssignment_CorrectBehavior)
+{
     Heap<int> heap1;
     heap1.push(10);
     heap1.push(20);
@@ -99,7 +104,8 @@ TEST(HeapTest, CopyAssignment_CorrectBehavior) {
  * @brief Test move assignment operator
  * @details Verifies move assignment transfers ownership
  */
-TEST(HeapTest, MoveAssignment_TransfersOwnership) {
+TEST(HeapTest, MoveAssignment_TransfersOwnership)
+{
     Heap<int> heap1;
     heap1.push(10);
     heap1.push(20);
@@ -117,7 +123,8 @@ TEST(HeapTest, MoveAssignment_TransfersOwnership) {
  * @brief Test push maintains max-heap property
  * @details Verifies that push operation maintains correct heap ordering
  */
-TEST(HeapTest, Push_MaintainsMaxHeapProperty) {
+TEST(HeapTest, Push_MaintainsMaxHeapProperty)
+{
     Heap<int> heap;
 
     heap.push(5);
@@ -135,7 +142,8 @@ TEST(HeapTest, Push_MaintainsMaxHeapProperty) {
  * @brief Test push with rvalue reference
  * @details Verifies move semantics in push operation
  */
-TEST(HeapTest, Push_RvalueReference) {
+TEST(HeapTest, Push_RvalueReference)
+{
     Heap<std::string> heap;
 
     std::string str = "hello";
@@ -150,7 +158,8 @@ TEST(HeapTest, Push_RvalueReference) {
  * @brief Test emplace constructs element in-place
  * @details Verifies that emplace forwards arguments correctly
  */
-TEST(HeapTest, Emplace_ConstructsInPlace) {
+TEST(HeapTest, Emplace_ConstructsInPlace)
+{
     Heap<std::string> heap;
 
     heap.emplace("hello");
@@ -166,7 +175,8 @@ TEST(HeapTest, Emplace_ConstructsInPlace) {
  * @brief Test pop removes top element and maintains heap property
  * @details Verifies correct removal of maximum element
  */
-TEST(HeapTest, Pop_RemovesTopElement) {
+TEST(HeapTest, Pop_RemovesTopElement)
+{
     Heap<int> heap;
     heap.push(10);
     heap.push(20);
@@ -190,7 +200,8 @@ TEST(HeapTest, Pop_RemovesTopElement) {
  * @brief Test pop on empty heap throws exception
  * @details Verifies proper error handling for empty heap
  */
-TEST(HeapTest, Pop_EmptyHeap_ThrowsException) {
+TEST(HeapTest, Pop_EmptyHeap_ThrowsException)
+{
     Heap<int> heap;
     EXPECT_THROW(heap.pop(), std::out_of_range);
 }
@@ -199,7 +210,8 @@ TEST(HeapTest, Pop_EmptyHeap_ThrowsException) {
  * @brief Test top returns reference to maximum element
  * @details Verifies const and non-const top accessors
  */
-TEST(HeapTest, Top_ReturnsMaximumElement) {
+TEST(HeapTest, Top_ReturnsMaximumElement)
+{
     Heap<int> heap;
     heap.push(15);
     heap.push(25);
@@ -217,7 +229,8 @@ TEST(HeapTest, Top_ReturnsMaximumElement) {
  * @brief Test top on empty heap throws exception
  * @details Verifies proper error handling for empty heap
  */
-TEST(HeapTest, Top_EmptyHeap_ThrowsException) {
+TEST(HeapTest, Top_EmptyHeap_ThrowsException)
+{
     Heap<int> heap;
     EXPECT_THROW(heap.top(), std::out_of_range);
 }
@@ -226,7 +239,8 @@ TEST(HeapTest, Top_EmptyHeap_ThrowsException) {
  * @brief Test const top accessor
  * @details Verifies const-correctness of top method
  */
-TEST(HeapTest, Top_ConstAccessor) {
+TEST(HeapTest, Top_ConstAccessor)
+{
     Heap<int> heap;
     heap.push(10);
     heap.push(20);
@@ -239,7 +253,8 @@ TEST(HeapTest, Top_ConstAccessor) {
  * @brief Test size returns correct count
  * @details Verifies accurate element counting
  */
-TEST(HeapTest, Size_CorrectCount) {
+TEST(HeapTest, Size_CorrectCount)
+{
     Heap<int> heap;
     EXPECT_EQ(heap.size(), 0);
 
@@ -258,7 +273,8 @@ TEST(HeapTest, Size_CorrectCount) {
  * @brief Test empty returns correct state
  * @details Verifies accurate empty state detection
  */
-TEST(HeapTest, Empty_CorrectState) {
+TEST(HeapTest, Empty_CorrectState)
+{
     Heap<int> heap;
     EXPECT_TRUE(heap.empty());
 
@@ -273,7 +289,8 @@ TEST(HeapTest, Empty_CorrectState) {
  * @brief Test clear removes all elements
  * @details Verifies complete heap clearing
  */
-TEST(HeapTest, Clear_RemovesAllElements) {
+TEST(HeapTest, Clear_RemovesAllElements)
+{
     Heap<int> heap;
     heap.push(10);
     heap.push(20);
@@ -290,7 +307,8 @@ TEST(HeapTest, Clear_RemovesAllElements) {
  * @brief Test is_valid returns true for valid heap
  * @details Verifies heap property validation
  */
-TEST(HeapTest, IsValid_ValidHeap) {
+TEST(HeapTest, IsValid_ValidHeap)
+{
     Heap<int> heap;
     heap.push(5);
     heap.push(3);
@@ -304,7 +322,8 @@ TEST(HeapTest, IsValid_ValidHeap) {
  * @brief Test is_valid returns false for invalid heap
  * @details This test verifies the validation logic works by checking internal state
  */
-TEST(HeapTest, IsValid_AfterOperations) {
+TEST(HeapTest, IsValid_AfterOperations)
+{
     Heap<int> heap;
 
     // Perform various operations
@@ -322,8 +341,9 @@ TEST(HeapTest, IsValid_AfterOperations) {
  * @brief Test min-heap with custom comparator
  * @details Verifies heap works with different comparison functions
  */
-TEST(HeapTest, MinHeap_CustomComparator) {
-    Heap<int, std::greater<int> > heap;
+TEST(HeapTest, MinHeap_CustomComparator)
+{
+    Heap<int, std::greater<int>> heap;
 
     heap.push(5);
     heap.push(3);
@@ -343,7 +363,8 @@ TEST(HeapTest, MinHeap_CustomComparator) {
  * @brief Test heap with string elements
  * @details Verifies heap works with non-numeric types
  */
-TEST(HeapTest, StringElements_LexicographicOrder) {
+TEST(HeapTest, StringElements_LexicographicOrder)
+{
     Heap<std::string> heap;
 
     heap.emplace("banana");
@@ -362,7 +383,8 @@ TEST(HeapTest, StringElements_LexicographicOrder) {
  * @brief Test heap with duplicate values
  * @details Verifies correct handling of duplicate elements
  */
-TEST(HeapTest, DuplicateValues_CorrectHandling) {
+TEST(HeapTest, DuplicateValues_CorrectHandling)
+{
     Heap<int> heap;
 
     heap.push(5);
@@ -383,7 +405,8 @@ TEST(HeapTest, DuplicateValues_CorrectHandling) {
  * @brief Test heap with single element
  * @details Verifies edge case with one element
  */
-TEST(HeapTest, SingleElement_CorrectBehavior) {
+TEST(HeapTest, SingleElement_CorrectBehavior)
+{
     Heap<int> heap;
     heap.push(42);
 
@@ -399,11 +422,13 @@ TEST(HeapTest, SingleElement_CorrectBehavior) {
  * @brief Test heap with large number of elements
  * @details Verifies scalability and correctness with many elements
  */
-TEST(HeapTest, LargeNumberOfElements_Correctness) {
+TEST(HeapTest, LargeNumberOfElements_Correctness)
+{
     Heap<int> heap;
 
     // Add 1000 elements
-    for (int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < 1000; ++i)
+    {
         heap.push(i);
     }
 
@@ -412,7 +437,8 @@ TEST(HeapTest, LargeNumberOfElements_Correctness) {
     EXPECT_EQ(heap.top(), 999);
 
     // Remove half
-    for (int i = 0; i < 500; ++i) {
+    for (int i = 0; i < 500; ++i)
+    {
         heap.pop();
     }
 
@@ -425,19 +451,23 @@ TEST(HeapTest, LargeNumberOfElements_Correctness) {
  * @brief Test heap property after multiple push-pop cycles
  * @details Verifies heap remains valid through repeated operations
  */
-TEST(HeapTest, MultiplePushPopCycles_MaintainsValidity) {
+TEST(HeapTest, MultiplePushPopCycles_MaintainsValidity)
+{
     Heap<int> heap;
 
-    for (int cycle = 0; cycle < 10; ++cycle) {
+    for (int cycle = 0; cycle < 10; ++cycle)
+    {
         // Push phase
-        for (int i = 0; i < 20; ++i) {
+        for (int i = 0; i < 20; ++i)
+        {
             heap.push(i);
         }
 
         EXPECT_TRUE(heap.is_valid());
 
         // Pop phase
-        for (int i = 0; i < 15; ++i) {
+        for (int i = 0; i < 15; ++i)
+        {
             heap.pop();
         }
 
@@ -449,7 +479,8 @@ TEST(HeapTest, MultiplePushPopCycles_MaintainsValidity) {
  * @brief Test heap construction from sorted data
  * @details Verifies heapify works correctly with pre-sorted input
  */
-TEST(HeapTest, IteratorConstructor_SortedInput) {
+TEST(HeapTest, IteratorConstructor_SortedInput)
+{
     std::vector<int> sorted = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     Heap<int> heap(sorted.begin(), sorted.end());
 
@@ -462,7 +493,8 @@ TEST(HeapTest, IteratorConstructor_SortedInput) {
  * @brief Test heap construction from reverse sorted data
  * @details Verifies heapify works correctly with reverse-sorted input
  */
-TEST(HeapTest, IteratorConstructor_ReverseSortedInput) {
+TEST(HeapTest, IteratorConstructor_ReverseSortedInput)
+{
     std::vector<int> reverseSorted = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     Heap<int> heap(reverseSorted.begin(), reverseSorted.end());
 
@@ -475,7 +507,8 @@ TEST(HeapTest, IteratorConstructor_ReverseSortedInput) {
  * @brief Test heap with negative numbers
  * @details Verifies correct handling of negative values
  */
-TEST(HeapTest, NegativeNumbers_CorrectHandling) {
+TEST(HeapTest, NegativeNumbers_CorrectHandling)
+{
     Heap<int> heap;
 
     heap.push(-10);
@@ -495,7 +528,8 @@ TEST(HeapTest, NegativeNumbers_CorrectHandling) {
  * @brief Test heap with mixed positive and negative numbers
  * @details Verifies correct handling of mixed sign values
  */
-TEST(HeapTest, MixedSignNumbers_CorrectHandling) {
+TEST(HeapTest, MixedSignNumbers_CorrectHandling)
+{
     Heap<int> heap;
 
     heap.push(-100);
@@ -515,10 +549,12 @@ TEST(HeapTest, MixedSignNumbers_CorrectHandling) {
  * @brief Test heap with all equal elements
  * @details Verifies correct handling when all elements are the same
  */
-TEST(HeapTest, AllEqualElements_CorrectHandling) {
+TEST(HeapTest, AllEqualElements_CorrectHandling)
+{
     Heap<int> heap;
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i)
+    {
         heap.push(42);
     }
 
@@ -527,7 +563,8 @@ TEST(HeapTest, AllEqualElements_CorrectHandling) {
     EXPECT_EQ(heap.top(), 42);
 
     // Pop all elements
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i)
+    {
         EXPECT_EQ(heap.top(), 42);
         heap.pop();
     }
@@ -539,7 +576,8 @@ TEST(HeapTest, AllEqualElements_CorrectHandling) {
  * @brief Test heap swap operation
  * @details Verifies that swap exchanges contents correctly
  */
-TEST(HeapTest, Swap_ExchangesContents) {
+TEST(HeapTest, Swap_ExchangesContents)
+{
     Heap<int> heap1;
     heap1.push(10);
     heap1.push(20);
@@ -564,7 +602,8 @@ TEST(HeapTest, Swap_ExchangesContents) {
  * @brief Test heap with zero values
  * @details Verifies correct handling of zero elements
  */
-TEST(HeapTest, ZeroValues_CorrectHandling) {
+TEST(HeapTest, ZeroValues_CorrectHandling)
+{
     Heap<int> heap;
 
     heap.push(0);
@@ -580,16 +619,19 @@ TEST(HeapTest, ZeroValues_CorrectHandling) {
  * @brief Test heap extraction in sorted order
  * @details Verifies that popping all elements yields sorted sequence
  */
-TEST(HeapTest, Extraction_SortedOrder) {
+TEST(HeapTest, Extraction_SortedOrder)
+{
     Heap<int> heap;
     std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
 
-    for (int val : input) {
+    for (int val : input)
+    {
         heap.push(val);
     }
 
     std::vector<int> extracted;
-    while (!heap.empty()) {
+    while (!heap.empty())
+    {
         extracted.push_back(heap.top());
         heap.pop();
     }
@@ -603,8 +645,9 @@ TEST(HeapTest, Extraction_SortedOrder) {
  * @brief Test heap with custom comparator for min-heap behavior
  * @details Verifies that custom comparators work correctly
  */
-TEST(HeapTest, MinHeap_ExtractionOrder) {
-    Heap<int, std::greater<int> > heap;
+TEST(HeapTest, MinHeap_ExtractionOrder)
+{
+    Heap<int, std::greater<int>> heap;
 
     heap.push(5);
     heap.push(3);
@@ -613,7 +656,8 @@ TEST(HeapTest, MinHeap_ExtractionOrder) {
     heap.push(9);
 
     std::vector<int> extracted;
-    while (!heap.empty()) {
+    while (!heap.empty())
+    {
         extracted.push_back(heap.top());
         heap.pop();
     }

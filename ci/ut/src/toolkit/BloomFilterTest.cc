@@ -18,7 +18,8 @@ using namespace common::toolkit;
  * @brief Test BloomParameters computes optimal values
  * @details Verifies that parameters are correctly calculated based on expected elements and FPP
  */
-TEST(BloomFilterTest, Parameters_ComputeOptimal) {
+TEST(BloomFilterTest, Parameters_ComputeOptimal)
+{
     BloomParameters params;
     params.projected_element_count = 1000;
     params.false_positive_probability = 0.01;
@@ -32,7 +33,8 @@ TEST(BloomFilterTest, Parameters_ComputeOptimal) {
  * @brief Test BloomFilter construction with valid parameters
  * @details Verifies that filter is properly initialized
  */
-TEST(BloomFilterTest, Constructor_ValidParameters) {
+TEST(BloomFilterTest, Constructor_ValidParameters)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.05;
@@ -49,7 +51,8 @@ TEST(BloomFilterTest, Constructor_ValidParameters) {
  * @brief Test insert and contains with string keys
  * @details Verifies basic insertion and membership testing
  */
-TEST(BloomFilterTest, InsertAndContains_StringKeys) {
+TEST(BloomFilterTest, InsertAndContains_StringKeys)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -75,7 +78,8 @@ TEST(BloomFilterTest, InsertAndContains_StringKeys) {
  * @brief Test insert and contains with char pointer
  * @details Verifies C-string style insertion and lookup
  */
-TEST(BloomFilterTest, InsertAndContains_CharPointer) {
+TEST(BloomFilterTest, InsertAndContains_CharPointer)
+{
     BloomParameters params;
     params.projected_element_count = 50;
     params.false_positive_probability = 0.01;
@@ -93,7 +97,8 @@ TEST(BloomFilterTest, InsertAndContains_CharPointer) {
  * @brief Test insert and contains with unsigned char pointer
  * @details Verifies raw byte array insertion and lookup
  */
-TEST(BloomFilterTest, InsertAndContains_UnsignedCharPointer) {
+TEST(BloomFilterTest, InsertAndContains_UnsignedCharPointer)
+{
     BloomParameters params;
     params.projected_element_count = 50;
     params.false_positive_probability = 0.01;
@@ -111,7 +116,8 @@ TEST(BloomFilterTest, InsertAndContains_UnsignedCharPointer) {
  * @brief Test insert with generic type (integer)
  * @details Verifies template-based insertion for primitive types
  */
-TEST(BloomFilterTest, Insert_GenericType_Integer) {
+TEST(BloomFilterTest, Insert_GenericType_Integer)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -130,7 +136,8 @@ TEST(BloomFilterTest, Insert_GenericType_Integer) {
  * @brief Test no false negatives (Bloom filter property)
  * @details Verifies that inserted elements are always found
  */
-TEST(BloomFilterTest, NoFalseNegatives) {
+TEST(BloomFilterTest, NoFalseNegatives)
+{
     BloomParameters params;
     params.projected_element_count = 1000;
     params.false_positive_probability = 0.01;
@@ -140,13 +147,15 @@ TEST(BloomFilterTest, NoFalseNegatives) {
 
     // Insert many elements
     std::vector<std::string> keys;
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 100; ++i)
+    {
         keys.push_back("key_" + std::to_string(i));
         filter.insert(keys.back());
     }
 
     // All inserted keys must be found (no false negatives)
-    for (const auto& key : keys) {
+    for (const auto& key : keys)
+    {
         EXPECT_TRUE(filter.contains(key)) << "Key not found: " << key;
     }
 }
@@ -155,7 +164,8 @@ TEST(BloomFilterTest, NoFalseNegatives) {
  * @brief Test false positive rate is within acceptable range
  * @details Verifies that false positive probability matches expectations
  */
-TEST(BloomFilterTest, FalsePositiveRate_Acceptable) {
+TEST(BloomFilterTest, FalsePositiveRate_Acceptable)
+{
     BloomParameters params;
     params.projected_element_count = 1000;
     params.false_positive_probability = 0.01;
@@ -165,7 +175,8 @@ TEST(BloomFilterTest, FalsePositiveRate_Acceptable) {
 
     // Insert expected number of elements
     std::set<std::string> inserted_keys;
-    for (int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < 1000; ++i)
+    {
         const std::string key = "inserted_" + std::to_string(i);
         inserted_keys.insert(key);
         filter.insert(key);
@@ -175,10 +186,12 @@ TEST(BloomFilterTest, FalsePositiveRate_Acceptable) {
     int false_positives = 0;
     const int test_count = 10000;
 
-    for (int i = 0; i < test_count; ++i) {
+    for (int i = 0; i < test_count; ++i)
+    {
         const std::string test_key = "not_inserted_" + std::to_string(i);
 
-        if (filter.contains(test_key)) {
+        if (filter.contains(test_key))
+        {
             ++false_positives;
         }
     }
@@ -193,7 +206,8 @@ TEST(BloomFilterTest, FalsePositiveRate_Acceptable) {
  * @brief Test effective_fpp calculation
  * @details Verifies that effective false positive probability is computed correctly
  */
-TEST(BloomFilterTest, EffectiveFpp_Calculation) {
+TEST(BloomFilterTest, EffectiveFpp_Calculation)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -207,7 +221,8 @@ TEST(BloomFilterTest, EffectiveFpp_Calculation) {
     EXPECT_LT(initial_fpp, 0.001);
 
     // Insert some elements
-    for (int i = 0; i < 50; ++i) {
+    for (int i = 0; i < 50; ++i)
+    {
         filter.insert("key_" + std::to_string(i));
     }
 
@@ -221,7 +236,8 @@ TEST(BloomFilterTest, EffectiveFpp_Calculation) {
  * @brief Test clear resets the filter
  * @details Verifies that clear removes all elements
  */
-TEST(BloomFilterTest, Clear_ResetsFilter) {
+TEST(BloomFilterTest, Clear_ResetsFilter)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -246,7 +262,8 @@ TEST(BloomFilterTest, Clear_ResetsFilter) {
  * @brief Test operator! checks if filter is uninitialized
  * @details Verifies that empty filter returns true for operator!
  */
-TEST(BloomFilterTest, Operator_NotEmptyCheck) {
+TEST(BloomFilterTest, Operator_NotEmptyCheck)
+{
     const BloomFilter default_filter;
     EXPECT_TRUE(!default_filter); // Uninitialized filter
 
@@ -263,7 +280,8 @@ TEST(BloomFilterTest, Operator_NotEmptyCheck) {
  * @brief Test equality operator
  * @details Verifies that identical filters are equal
  */
-TEST(BloomFilterTest, Operator_Equality) {
+TEST(BloomFilterTest, Operator_Equality)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -287,7 +305,8 @@ TEST(BloomFilterTest, Operator_Equality) {
  * @brief Test inequality operator
  * @details Verifies that different filters are not equal
  */
-TEST(BloomFilterTest, Operator_Inequality) {
+TEST(BloomFilterTest, Operator_Inequality)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -307,7 +326,8 @@ TEST(BloomFilterTest, Operator_Inequality) {
  * @brief Test copy constructor
  * @details Verifies that copying preserves filter state
  */
-TEST(BloomFilterTest, CopyConstructor_PreservesState) {
+TEST(BloomFilterTest, CopyConstructor_PreservesState)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -329,7 +349,8 @@ TEST(BloomFilterTest, CopyConstructor_PreservesState) {
  * @brief Test copy assignment operator
  * @details Verifies that assignment preserves filter state
  */
-TEST(BloomFilterTest, CopyAssignment_PreservesState) {
+TEST(BloomFilterTest, CopyAssignment_PreservesState)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -349,7 +370,8 @@ TEST(BloomFilterTest, CopyAssignment_PreservesState) {
  * @brief Test bitwise AND operation (intersection)
  * @details Verifies that AND creates intersection of two filters
  */
-TEST(BloomFilterTest, Operator_And_Intersection) {
+TEST(BloomFilterTest, Operator_And_Intersection)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -377,7 +399,8 @@ TEST(BloomFilterTest, Operator_And_Intersection) {
  * @brief Test bitwise OR operation (union)
  * @details Verifies that OR creates union of two filters
  */
-TEST(BloomFilterTest, Operator_Or_Union) {
+TEST(BloomFilterTest, Operator_Or_Union)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -401,7 +424,8 @@ TEST(BloomFilterTest, Operator_Or_Union) {
  * @brief Test bitwise XOR operation (difference)
  * @details Verifies that XOR creates symmetric difference
  */
-TEST(BloomFilterTest, Operator_Xor_Difference) {
+TEST(BloomFilterTest, Operator_Xor_Difference)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -428,7 +452,8 @@ TEST(BloomFilterTest, Operator_Xor_Difference) {
  * @brief Test standalone AND operator
  * @details Verifies non-mutating AND operation
  */
-TEST(BloomFilterTest, StandaloneOperator_And) {
+TEST(BloomFilterTest, StandaloneOperator_And)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -453,7 +478,8 @@ TEST(BloomFilterTest, StandaloneOperator_And) {
  * @brief Test standalone OR operator
  * @details Verifies non-mutating OR operation
  */
-TEST(BloomFilterTest, StandaloneOperator_Or) {
+TEST(BloomFilterTest, StandaloneOperator_Or)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -476,7 +502,8 @@ TEST(BloomFilterTest, StandaloneOperator_Or) {
  * @brief Test standalone XOR operator
  * @details Verifies non-mutating XOR operation
  */
-TEST(BloomFilterTest, StandaloneOperator_Xor) {
+TEST(BloomFilterTest, StandaloneOperator_Xor)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -499,7 +526,8 @@ TEST(BloomFilterTest, StandaloneOperator_Xor) {
  * @brief Test size returns correct table size
  * @details Verifies that size() returns the bit array size
  */
-TEST(BloomFilterTest, Size_ReturnsTableSize) {
+TEST(BloomFilterTest, Size_ReturnsTableSize)
+{
     BloomParameters params;
     params.projected_element_count = 1000;
     params.false_positive_probability = 0.01;
@@ -515,7 +543,8 @@ TEST(BloomFilterTest, Size_ReturnsTableSize) {
  * @brief Test element_count tracks insertions
  * @details Verifies that element count increments correctly
  */
-TEST(BloomFilterTest, ElementCount_TracksInsertions) {
+TEST(BloomFilterTest, ElementCount_TracksInsertions)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -539,7 +568,8 @@ TEST(BloomFilterTest, ElementCount_TracksInsertions) {
  * @brief Test hash_count returns number of hash functions
  * @details Verifies that hash count matches configuration
  */
-TEST(BloomFilterTest, HashCount_MatchesConfiguration) {
+TEST(BloomFilterTest, HashCount_MatchesConfiguration)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -555,7 +585,8 @@ TEST(BloomFilterTest, HashCount_MatchesConfiguration) {
  * @brief Test table accessor returns valid pointer
  * @details Verifies that table() returns non-null pointer
  */
-TEST(BloomFilterTest, Table_ReturnsValidPointer) {
+TEST(BloomFilterTest, Table_ReturnsValidPointer)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -571,7 +602,8 @@ TEST(BloomFilterTest, Table_ReturnsValidPointer) {
  * @brief Test insert with iterator range
  * @details Verifies bulk insertion using iterators
  */
-TEST(BloomFilterTest, Insert_IteratorRange) {
+TEST(BloomFilterTest, Insert_IteratorRange)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -585,7 +617,8 @@ TEST(BloomFilterTest, Insert_IteratorRange) {
 
     EXPECT_EQ(filter.element_count(), 5);
 
-    for (const auto& key : keys) {
+    for (const auto& key : keys)
+    {
         EXPECT_TRUE(filter.contains(key));
     }
 }
@@ -594,7 +627,8 @@ TEST(BloomFilterTest, Insert_IteratorRange) {
  * @brief Test contains_all with all present keys
  * @details Verifies that contains_all returns end iterator when all keys exist
  */
-TEST(BloomFilterTest, ContainsAll_AllPresent) {
+TEST(BloomFilterTest, ContainsAll_AllPresent)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -603,7 +637,8 @@ TEST(BloomFilterTest, ContainsAll_AllPresent) {
     BloomFilter filter(params);
 
     std::vector<std::string> keys = {"a", "b", "c"};
-    for (const auto& key : keys) {
+    for (const auto& key : keys)
+    {
         filter.insert(key);
     }
 
@@ -615,7 +650,8 @@ TEST(BloomFilterTest, ContainsAll_AllPresent) {
  * @brief Test contains_all with missing key
  * @details Verifies that contains_all returns iterator to first missing key
  */
-TEST(BloomFilterTest, ContainsAll_MissingKey) {
+TEST(BloomFilterTest, ContainsAll_MissingKey)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -636,7 +672,8 @@ TEST(BloomFilterTest, ContainsAll_MissingKey) {
  * @brief Test contains_none with no matching keys
  * @details Verifies that contains_none returns end iterator when no keys exist
  */
-TEST(BloomFilterTest, ContainsNone_NoMatches) {
+TEST(BloomFilterTest, ContainsNone_NoMatches)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -656,7 +693,8 @@ TEST(BloomFilterTest, ContainsNone_NoMatches) {
  * @brief Test contains_none with matching key
  * @details Verifies that contains_none returns iterator to first found key
  */
-TEST(BloomFilterTest, ContainsNone_FoundMatch) {
+TEST(BloomFilterTest, ContainsNone_FoundMatch)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -677,7 +715,8 @@ TEST(BloomFilterTest, ContainsNone_FoundMatch) {
  * @brief Test multiple insertions of same key
  * @details Verifies that duplicate insertions don't cause issues
  */
-TEST(BloomFilterTest, MultipleInsertions_SameKey) {
+TEST(BloomFilterTest, MultipleInsertions_SameKey)
+{
     BloomParameters params;
     params.projected_element_count = 100;
     params.false_positive_probability = 0.01;
@@ -688,7 +727,8 @@ TEST(BloomFilterTest, MultipleInsertions_SameKey) {
     const std::string key = "duplicate";
 
     // Insert same key multiple times
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i)
+    {
         filter.insert(key);
     }
 
@@ -703,7 +743,8 @@ TEST(BloomFilterTest, MultipleInsertions_SameKey) {
  * @brief Test with binary data containing null bytes
  * @details Verifies that binary data with null bytes is handled correctly
  */
-TEST(BloomFilterTest, BinaryData_WithNullBytes) {
+TEST(BloomFilterTest, BinaryData_WithNullBytes)
+{
     BloomParameters params;
     params.projected_element_count = 50;
     params.false_positive_probability = 0.01;
@@ -721,7 +762,8 @@ TEST(BloomFilterTest, BinaryData_WithNullBytes) {
  * @brief Test large number of insertions
  * @details Verifies filter handles many insertions without errors
  */
-TEST(BloomFilterTest, LargeScale_Insertions) {
+TEST(BloomFilterTest, LargeScale_Insertions)
+{
     BloomParameters params;
     params.projected_element_count = 10000;
     params.false_positive_probability = 0.001;
@@ -730,7 +772,8 @@ TEST(BloomFilterTest, LargeScale_Insertions) {
     BloomFilter filter(params);
 
     // Insert 5000 elements
-    for (int i = 0; i < 5000; ++i) {
+    for (int i = 0; i < 5000; ++i)
+    {
         filter.insert("element_" + std::to_string(i));
     }
 
@@ -746,7 +789,8 @@ TEST(BloomFilterTest, LargeScale_Insertions) {
  * @brief Test incompatible filters don't affect each other in operations
  * @details Verifies that operations check compatibility
  */
-TEST(BloomFilterTest, IncompatibleFilters_NoModification) {
+TEST(BloomFilterTest, IncompatibleFilters_NoModification)
+{
     BloomParameters params1;
     params1.projected_element_count = 100;
     params1.false_positive_probability = 0.01;

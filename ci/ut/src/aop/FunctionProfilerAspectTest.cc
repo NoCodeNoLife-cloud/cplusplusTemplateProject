@@ -18,7 +18,8 @@ using namespace common::aop;
  * @brief Test FunctionProfilerAspect constructor
  * @details Verifies that the aspect can be constructed with a function name
  */
-TEST(FunctionProfilerAspectTest, Constructor_ValidFunctionName) {
+TEST(FunctionProfilerAspectTest, Constructor_ValidFunctionName)
+{
     EXPECT_NO_THROW(FunctionProfilerAspect aspect{"testFunction"});
 }
 
@@ -26,7 +27,8 @@ TEST(FunctionProfilerAspectTest, Constructor_ValidFunctionName) {
  * @brief Test FunctionProfilerAspect construction with empty name
  * @details Verifies that the aspect can be constructed with an empty string
  */
-TEST(FunctionProfilerAspectTest, Constructor_EmptyFunctionName) {
+TEST(FunctionProfilerAspectTest, Constructor_EmptyFunctionName)
+{
     EXPECT_NO_THROW(FunctionProfilerAspect aspect{""});
 }
 
@@ -34,7 +36,8 @@ TEST(FunctionProfilerAspectTest, Constructor_EmptyFunctionName) {
  * @brief Test onEntry method does not throw
  * @details Verifies that onEntry can be called without exceptions
  */
-TEST(FunctionProfilerAspectTest, OnEntry_NoException) {
+TEST(FunctionProfilerAspectTest, OnEntry_NoException)
+{
     FunctionProfilerAspect aspect{"testFunction"};
 
     EXPECT_NO_THROW(aspect.onEntry());
@@ -44,7 +47,8 @@ TEST(FunctionProfilerAspectTest, OnEntry_NoException) {
  * @brief Test onExit method records end time
  * @details Verifies that onExit completes successfully after onEntry
  */
-TEST(FunctionProfilerAspectTest, OnExit_AfterEntry) {
+TEST(FunctionProfilerAspectTest, OnExit_AfterEntry)
+{
     FunctionProfilerAspect aspect{"testFunction"};
 
     aspect.onEntry();
@@ -59,7 +63,8 @@ TEST(FunctionProfilerAspectTest, OnExit_AfterEntry) {
  * @brief Test onExit method without prior onEntry
  * @details Verifies that onExit handles being called without onEntry
  */
-TEST(FunctionProfilerAspectTest, OnExit_WithoutEntry) {
+TEST(FunctionProfilerAspectTest, OnExit_WithoutEntry)
+{
     FunctionProfilerAspect aspect{"testFunction"};
 
     // Should not throw even if onEntry was not called
@@ -70,7 +75,8 @@ TEST(FunctionProfilerAspectTest, OnExit_WithoutEntry) {
  * @brief Test onException method with valid exception pointer
  * @details Verifies that onException handles exception pointers correctly
  */
-TEST(FunctionProfilerAspectTest, OnException_WithExceptionPointer) {
+TEST(FunctionProfilerAspectTest, OnException_WithExceptionPointer)
+{
     FunctionProfilerAspect aspect{"testFunction"};
 
     aspect.onEntry();
@@ -85,7 +91,8 @@ TEST(FunctionProfilerAspectTest, OnException_WithExceptionPointer) {
  * @brief Test onException method without prior onEntry
  * @details Verifies that onException handles being called without onEntry
  */
-TEST(FunctionProfilerAspectTest, OnException_WithoutEntry) {
+TEST(FunctionProfilerAspectTest, OnException_WithoutEntry)
+{
     FunctionProfilerAspect aspect{"testFunction"};
 
     const std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Test error"));
@@ -97,7 +104,8 @@ TEST(FunctionProfilerAspectTest, OnException_WithoutEntry) {
  * @brief Test complete profiling lifecycle: entry -> exit
  * @details Verifies the normal execution flow of the aspect
  */
-TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenExit) {
+TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenExit)
+{
     FunctionProfilerAspect aspect{"lifecycleTest"};
 
     EXPECT_NO_THROW({
@@ -111,7 +119,8 @@ TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenExit) {
  * @brief Test complete profiling lifecycle: entry -> exception
  * @details Verifies the exception execution flow of the aspect
  */
-TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenException) {
+TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenException)
+{
     FunctionProfilerAspect aspect{"exceptionTest"};
 
     EXPECT_NO_THROW({
@@ -126,7 +135,8 @@ TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenException) {
  * @brief Test aspect with AOP exec for void function
  * @details Verifies that the aspect works correctly with void-returning functions
  */
-TEST(FunctionProfilerAspectTest, Exec_VoidFunction) {
+TEST(FunctionProfilerAspectTest, Exec_VoidFunction)
+{
     FunctionProfilerAspect aspect{"voidFunctionTest"};
 
     bool executed = false;
@@ -145,10 +155,12 @@ TEST(FunctionProfilerAspectTest, Exec_VoidFunction) {
  * @brief Test aspect with AOP exec for function returning value
  * @details Verifies that the aspect works correctly with value-returning functions
  */
-TEST(FunctionProfilerAspectTest, Exec_FunctionReturningValue) {
+TEST(FunctionProfilerAspectTest, Exec_FunctionReturningValue)
+{
     FunctionProfilerAspect aspect{"valueFunctionTest"};
 
-    const auto result = aspect.exec([]() -> int {
+    const auto result = aspect.exec([]() -> int
+    {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         return 42;
     });
@@ -160,10 +172,12 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionReturningValue) {
  * @brief Test aspect with AOP exec for function with arguments
  * @details Verifies that the aspect correctly forwards arguments to the function
  */
-TEST(FunctionProfilerAspectTest, Exec_FunctionWithArguments) {
+TEST(FunctionProfilerAspectTest, Exec_FunctionWithArguments)
+{
     FunctionProfilerAspect aspect{"argsFunctionTest"};
 
-    const auto result = aspect.exec([](int a, int b) -> int {
+    const auto result = aspect.exec([](int a, int b) -> int
+    {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         return a + b;
     }, 10, 20);
@@ -175,7 +189,8 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionWithArguments) {
  * @brief Test aspect with AOP exec when function throws exception
  * @details Verifies that the aspect handles exceptions correctly and re-throws them
  */
-TEST(FunctionProfilerAspectTest, Exec_FunctionThrowsException) {
+TEST(FunctionProfilerAspectTest, Exec_FunctionThrowsException)
+{
     FunctionProfilerAspect aspect{"throwingFunctionTest"};
 
     EXPECT_THROW({
@@ -190,17 +205,24 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionThrowsException) {
  * @brief Test aspect with AOP exec preserves exception type
  * @details Verifies that the original exception type is preserved through the aspect
  */
-TEST(FunctionProfilerAspectTest, Exec_PreservesExceptionType) {
+TEST(FunctionProfilerAspectTest, Exec_PreservesExceptionType)
+{
     FunctionProfilerAspect aspect{"exceptionTypeTest"};
 
-    try {
-        aspect.exec([]() {
+    try
+    {
+        aspect.exec([]()
+        {
             throw std::invalid_argument("Invalid argument");
         });
         FAIL() << "Expected std::invalid_argument exception";
-    } catch (const std::invalid_argument& e) {
+    }
+    catch (const std::invalid_argument& e)
+    {
         EXPECT_STREQ(e.what(), "Invalid argument");
-    } catch (...) {
+    }
+    catch (...)
+    {
         FAIL() << "Unexpected exception type";
     }
 }
@@ -209,14 +231,17 @@ TEST(FunctionProfilerAspectTest, Exec_PreservesExceptionType) {
  * @brief Test multiple sequential executions with same aspect
  * @details Verifies that the aspect can be reused for multiple function calls
  */
-TEST(FunctionProfilerAspectTest, MultipleExecutions_Sequential) {
+TEST(FunctionProfilerAspectTest, MultipleExecutions_Sequential)
+{
     FunctionProfilerAspect aspect{"multipleExecTest"};
 
-    const auto result1 = aspect.exec([]() -> int {
+    const auto result1 = aspect.exec([]() -> int
+    {
         return 100;
     });
 
-    const auto result2 = aspect.exec([]() -> int {
+    const auto result2 = aspect.exec([]() -> int
+    {
         return 200;
     });
 
@@ -228,18 +253,22 @@ TEST(FunctionProfilerAspectTest, MultipleExecutions_Sequential) {
  * @brief Test aspect with different function types
  * @details Verifies that the aspect works with various callable types
  */
-TEST(FunctionProfilerAspectTest, Exec_DifferentCallableTypes) {
+TEST(FunctionProfilerAspectTest, Exec_DifferentCallableTypes)
+{
     FunctionProfilerAspect aspect{"callableTest"};
 
     // Lambda
-    const auto result1 = aspect.exec([]() {
+    const auto result1 = aspect.exec([]()
+    {
         return 1;
     });
     EXPECT_EQ(result1, 1);
 
     // Function object
-    struct Functor {
-        auto operator()() const -> int {
+    struct Functor
+    {
+        auto operator()() const -> int
+        {
             return 2;
         }
     };
@@ -251,12 +280,14 @@ TEST(FunctionProfilerAspectTest, Exec_DifferentCallableTypes) {
  * @brief Test aspect timing accuracy
  * @details Verifies that the aspect correctly measures execution time
  */
-TEST(FunctionProfilerAspectTest, Timing_Accuracy) {
+TEST(FunctionProfilerAspectTest, Timing_Accuracy)
+{
     FunctionProfilerAspect aspect{"timingTest"};
 
     const auto start = std::chrono::high_resolution_clock::now();
 
-    aspect.exec([]() {
+    aspect.exec([]()
+    {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     });
 
@@ -272,12 +303,15 @@ TEST(FunctionProfilerAspectTest, Timing_Accuracy) {
  * @brief Test aspect with nested function calls
  * @details Verifies that the aspect handles nested executions correctly
  */
-TEST(FunctionProfilerAspectTest, NestedExecutions) {
+TEST(FunctionProfilerAspectTest, NestedExecutions)
+{
     FunctionProfilerAspect outerAspect{"outerFunction"};
     FunctionProfilerAspect innerAspect{"innerFunction"};
 
-    const auto result = outerAspect.exec([&innerAspect]() -> int {
-        return innerAspect.exec([]() -> int {
+    const auto result = outerAspect.exec([&innerAspect]() -> int
+    {
+        return innerAspect.exec([]() -> int
+        {
             return 42;
         });
     });
@@ -289,7 +323,8 @@ TEST(FunctionProfilerAspectTest, NestedExecutions) {
  * @brief Test aspect with long-running function
  * @details Verifies that the aspect handles long execution times correctly
  */
-TEST(FunctionProfilerAspectTest, LongRunningFunction) {
+TEST(FunctionProfilerAspectTest, LongRunningFunction)
+{
     FunctionProfilerAspect aspect{"longRunningTest"};
 
     EXPECT_NO_THROW({
@@ -303,10 +338,12 @@ TEST(FunctionProfilerAspectTest, LongRunningFunction) {
  * @brief Test aspect with immediate function
  * @details Verifies that the aspect handles very fast execution correctly
  */
-TEST(FunctionProfilerAspectTest, ImmediateFunction) {
+TEST(FunctionProfilerAspectTest, ImmediateFunction)
+{
     FunctionProfilerAspect aspect{"immediateTest"};
 
-    const auto result = aspect.exec([]() -> int {
+    const auto result = aspect.exec([]() -> int
+    {
         return 999;
     });
 

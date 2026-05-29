@@ -25,31 +25,38 @@ static constexpr auto TEST_DB_NAME = "test_mysql_executor";
  * @brief Helper function to create a MySQL session with error handling
  * @return Unique pointer to MySQL session
  */
-static auto createMySQLSession() -> std::unique_ptr<mysqlx::Session> {
+static auto createMySQLSession() -> std::unique_ptr<mysqlx::Session>
+{
     std::string last_error;
 
     // Method 1: Try SessionOption format (X Protocol default port 33060)
-    try {
+    try
+    {
         auto session = std::make_unique<mysqlx::Session>(
             mysqlx::SessionOption::HOST, TEST_DB_HOST,
             mysqlx::SessionOption::PORT, static_cast<unsigned int>(TEST_DB_PORT),
             mysqlx::SessionOption::USER, TEST_DB_USER,
             mysqlx::SessionOption::PWD, TEST_DB_PASSWORD
-            );
+        );
         return session;
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e)
+    {
         last_error = std::string("SessionOption: ") + e.what();
     }
 
     // Method 2: Try URI format with mysqlx:// scheme
-    try {
+    try
+    {
         const std::string uri = "mysqlx://" + std::string(TEST_DB_USER) + ":" +
-                                std::string(TEST_DB_PASSWORD) + "@" +
-                                std::string(TEST_DB_HOST) + ":" +
-                                std::to_string(TEST_DB_PORT);
+            std::string(TEST_DB_PASSWORD) + "@" +
+            std::string(TEST_DB_HOST) + ":" +
+            std::to_string(TEST_DB_PORT);
         auto session = std::make_unique<mysqlx::Session>(uri);
         return session;
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e)
+    {
         last_error += "\nURI format: " + std::string(e.what());
     }
 
@@ -61,16 +68,22 @@ static auto createMySQLSession() -> std::unique_ptr<mysqlx::Session> {
  * @brief Global test fixture to manage database lifecycle
  * @details Creates test database before all tests and drops it after all tests
  */
-class MySqlExecutorGlobalTest : public ::testing::Environment {
+class MySqlExecutorGlobalTest : public ::testing::Environment
+{
 public:
-    void SetUp() override {
-        try {
+    void SetUp() override
+    {
+        try
+        {
             const auto session = createMySQLSession();
 
             // Drop database if exists (for clean state)
-            try {
+            try
+            {
                 session->sql("DROP DATABASE IF EXISTS " + std::string(TEST_DB_NAME)).execute();
-            } catch (...) {
+            }
+            catch (...)
+            {
                 // Ignore errors if database doesn't exist
             }
 
@@ -99,18 +112,24 @@ public:
                 ('David', NULL, 28, 88.9),
                 ('Eve', 'eve@example.com', NULL, 91.2)
             )").execute();
-        } catch (const std::exception& e) {
+        }
+        catch (const std::exception& e)
+        {
             FAIL() << "Failed to setup test database: " << e.what();
         }
     }
 
-    void TearDown() override {
-        try {
+    void TearDown() override
+    {
+        try
+        {
             const auto session = createMySQLSession();
 
             // Drop test database
             session->sql("DROP DATABASE IF EXISTS " + std::string(TEST_DB_NAME)).execute();
-        } catch (const std::exception& e) {
+        }
+        catch (const std::exception& e)
+        {
             // Log error but don't fail - cleanup is best effort
             std::cerr << "Warning: Failed to cleanup test database: " << e.what() << std::endl;
         }
@@ -124,19 +143,25 @@ public:
  * @brief Test fixture for MySqlExecutor tests
  * @details Provides a connected executor for each test
  */
-class MySqlExecutorTest : public ::testing::Test {
+class MySqlExecutorTest : public ::testing::Test
+{
 protected:
-    void SetUp() override {
-        try {
+    void SetUp() override
+    {
+        try
+        {
             // Use default constructor and then connect
             executor_ = std::make_unique<MySqlExecutor>();
             executor_->connect(TEST_DB_HOST, TEST_DB_PORT, TEST_DB_USER, TEST_DB_PASSWORD, TEST_DB_NAME);
-        } catch (const std::exception& e) {
+        }
+        catch (const std::exception& e)
+        {
             FAIL() << "Failed to connect to test database: " << e.what();
         }
     }
 
-    void TearDown() override {
+    void TearDown() override
+    {
         executor_.reset();
     }
 
@@ -148,7 +173,8 @@ protected:
 /**
  * @brief Test default constructor creates disconnected executor
  */
-TEST_F(MySqlExecutorTest, DefaultConstructor_CreatesDisconnectedExecutor) {
+TEST_F(MySqlExecutorTest, DefaultConstructor_CreatesDisconnectedExecutor)
+{
     const MySqlExecutor exec;
     EXPECT_FALSE(exec.isConnected());
 }
@@ -156,14 +182,16 @@ TEST_F(MySqlExecutorTest, DefaultConstructor_CreatesDisconnectedExecutor) {
 /**
  * @brief Test parameterized constructor connects successfully
  */
-TEST_F(MySqlExecutorTest, ParameterizedConstructor_ConnectsSuccessfully) {
+TEST_F(MySqlExecutorTest, ParameterizedConstructor_ConnectsSuccessfully)
+{
     EXPECT_TRUE(executor_->isConnected());
 }
 
 /**
  * @brief Test connect method establishes connection
  */
-TEST_F(MySqlExecutorTest, Connect_EstablishesConnection) {
+TEST_F(MySqlExecutorTest, Connect_EstablishesConnection)
+{
     MySqlExecutor exec;
     ASSERT_FALSE(exec.isConnected());
 
@@ -174,7 +202,8 @@ TEST_F(MySqlExecutorTest, Connect_EstablishesConnection) {
 /**
  * @brief Test disconnect method closes connection
  */
-TEST_F(MySqlExecutorTest, Disconnect_ClosesConnection) {
+TEST_F(MySqlExecutorTest, Disconnect_ClosesConnection)
+{
     ASSERT_TRUE(executor_->isConnected());
 
     executor_->disconnect();
@@ -184,20 +213,22 @@ TEST_F(MySqlExecutorTest, Disconnect_ClosesConnection) {
 /**
  * @brief Test connect fails with invalid credentials
  */
-TEST_F(MySqlExecutorTest, Connect_InvalidCredentials_ThrowsException) {
+TEST_F(MySqlExecutorTest, Connect_InvalidCredentials_ThrowsException)
+{
     MySqlExecutor exec;
 
     EXPECT_THROW(
         exec.connect(TEST_DB_HOST, TEST_DB_PORT, "invalid_user", "wrong_password", TEST_DB_NAME),
         std::runtime_error
-        );
+    );
     EXPECT_FALSE(exec.isConnected());
 }
 
 /**
  * @brief Test move constructor transfers connection
  */
-TEST_F(MySqlExecutorTest, MoveConstructor_TransfersConnection) {
+TEST_F(MySqlExecutorTest, MoveConstructor_TransfersConnection)
+{
     MySqlExecutor exec1;
     exec1.connect(TEST_DB_HOST, TEST_DB_PORT, TEST_DB_USER, TEST_DB_PASSWORD, TEST_DB_NAME);
     ASSERT_TRUE(exec1.isConnected());
@@ -210,7 +241,8 @@ TEST_F(MySqlExecutorTest, MoveConstructor_TransfersConnection) {
 /**
  * @brief Test move assignment operator transfers connection
  */
-TEST_F(MySqlExecutorTest, MoveAssignment_TransfersConnection) {
+TEST_F(MySqlExecutorTest, MoveAssignment_TransfersConnection)
+{
     MySqlExecutor exec1;
     exec1.connect(TEST_DB_HOST, TEST_DB_PORT, TEST_DB_USER, TEST_DB_PASSWORD, TEST_DB_NAME);
     MySqlExecutor exec2;
@@ -228,10 +260,11 @@ TEST_F(MySqlExecutorTest, MoveAssignment_TransfersConnection) {
 /**
  * @brief Test execute INSERT statement
  */
-TEST_F(MySqlExecutorTest, Execute_InsertStatement_ReturnsAffectedRows) {
+TEST_F(MySqlExecutorTest, Execute_InsertStatement_ReturnsAffectedRows)
+{
     const auto affected = executor_->execute(
         "INSERT INTO users (name, email, age, score) VALUES ('TestUser', 'test@example.com', 22, 85.0)"
-        );
+    );
 
     EXPECT_EQ(affected, 1);
 }
@@ -239,11 +272,12 @@ TEST_F(MySqlExecutorTest, Execute_InsertStatement_ReturnsAffectedRows) {
 /**
  * @brief Test execute UPDATE statement
  */
-TEST_F(MySqlExecutorTest, Execute_UpdateStatement_ReturnsAffectedRows) {
+TEST_F(MySqlExecutorTest, Execute_UpdateStatement_ReturnsAffectedRows)
+{
     // Use a specific condition that won't affect other tests
     const auto affected = executor_->execute(
         "UPDATE users SET score = 87.3 WHERE name = 'Bob'"
-        );
+    );
 
     EXPECT_GE(affected, 1);
 }
@@ -251,15 +285,16 @@ TEST_F(MySqlExecutorTest, Execute_UpdateStatement_ReturnsAffectedRows) {
 /**
  * @brief Test execute DELETE statement
  */
-TEST_F(MySqlExecutorTest, Execute_DeleteStatement_ReturnsAffectedRows) {
+TEST_F(MySqlExecutorTest, Execute_DeleteStatement_ReturnsAffectedRows)
+{
     // First insert a row to delete
     [[maybe_unused]] const auto insert_affected = executor_->execute(
         "INSERT INTO users (name, email, age, score) VALUES ('ToDelete', 'delete@example.com', 20, 70.0)"
-        );
+    );
 
     const auto affected = executor_->execute(
         "DELETE FROM users WHERE name = 'ToDelete'"
-        );
+    );
 
     EXPECT_EQ(affected, 1);
 }
@@ -267,21 +302,24 @@ TEST_F(MySqlExecutorTest, Execute_DeleteStatement_ReturnsAffectedRows) {
 /**
  * @brief Test execute with empty SQL throws exception
  */
-TEST_F(MySqlExecutorTest, Execute_EmptySQL_ThrowsException) {
+TEST_F(MySqlExecutorTest, Execute_EmptySQL_ThrowsException)
+{
     EXPECT_THROW((void)executor_->execute(""), std::invalid_argument);
 }
 
 /**
  * @brief Test execute with invalid SQL throws exception
  */
-TEST_F(MySqlExecutorTest, Execute_InvalidSQL_ThrowsException) {
+TEST_F(MySqlExecutorTest, Execute_InvalidSQL_ThrowsException)
+{
     EXPECT_THROW((void)executor_->execute("INVALID SQL STATEMENT"), std::runtime_error);
 }
 
 /**
  * @brief Test execute on disconnected executor throws exception
  */
-TEST_F(MySqlExecutorTest, Execute_Disconnected_ThrowsException) {
+TEST_F(MySqlExecutorTest, Execute_Disconnected_ThrowsException)
+{
     const MySqlExecutor exec;
     EXPECT_THROW((void)exec.execute("SELECT 1"), std::runtime_error);
 }
@@ -291,7 +329,8 @@ TEST_F(MySqlExecutorTest, Execute_Disconnected_ThrowsException) {
 /**
  * @brief Test simple SELECT query returns results
  */
-TEST_F(MySqlExecutorTest, Query_SimpleSelect_ReturnsResults) {
+TEST_F(MySqlExecutorTest, Query_SimpleSelect_ReturnsResults)
+{
     const auto results = executor_->query("SELECT name, age FROM users WHERE id = 1");
 
     EXPECT_FALSE(results.empty());
@@ -304,7 +343,8 @@ TEST_F(MySqlExecutorTest, Query_SimpleSelect_ReturnsResults) {
 /**
  * @brief Test query returns multiple rows
  */
-TEST_F(MySqlExecutorTest, Query_MultipleRows_ReturnsAllRows) {
+TEST_F(MySqlExecutorTest, Query_MultipleRows_ReturnsAllRows)
+{
     const auto results = executor_->query("SELECT name FROM users ORDER BY id");
 
     EXPECT_GE(results.size(), 5);
@@ -315,7 +355,8 @@ TEST_F(MySqlExecutorTest, Query_MultipleRows_ReturnsAllRows) {
 /**
  * @brief Test query handles NULL values
  */
-TEST_F(MySqlExecutorTest, Query_NULLValues_ReturnsNULLString) {
+TEST_F(MySqlExecutorTest, Query_NULLValues_ReturnsNULLString)
+{
     const auto results = executor_->query("SELECT email FROM users WHERE name = 'David'");
 
     ASSERT_FALSE(results.empty());
@@ -325,14 +366,16 @@ TEST_F(MySqlExecutorTest, Query_NULLValues_ReturnsNULLString) {
 /**
  * @brief Test query with empty SQL throws exception
  */
-TEST_F(MySqlExecutorTest, Query_EmptySQL_ThrowsException) {
+TEST_F(MySqlExecutorTest, Query_EmptySQL_ThrowsException)
+{
     EXPECT_THROW((void)executor_->query(""), std::invalid_argument);
 }
 
 /**
  * @brief Test query with invalid SQL throws exception
  */
-TEST_F(MySqlExecutorTest, Query_InvalidSQL_ThrowsException) {
+TEST_F(MySqlExecutorTest, Query_InvalidSQL_ThrowsException)
+{
     EXPECT_THROW((void)executor_->query("INVALID SQL"), std::runtime_error);
 }
 
@@ -341,11 +384,12 @@ TEST_F(MySqlExecutorTest, Query_InvalidSQL_ThrowsException) {
 /**
  * @brief Test parameterized query with single parameter
  */
-TEST_F(MySqlExecutorTest, QueryWithParams_SingleParameter_ReturnsCorrectResult) {
+TEST_F(MySqlExecutorTest, QueryWithParams_SingleParameter_ReturnsCorrectResult)
+{
     const auto results = executor_->queryWithParams(
         "SELECT name, age FROM users WHERE name = ?",
         {"Alice"}
-        );
+    );
 
     EXPECT_FALSE(results.empty());
     EXPECT_EQ(results[0][0], "Alice");
@@ -355,11 +399,12 @@ TEST_F(MySqlExecutorTest, QueryWithParams_SingleParameter_ReturnsCorrectResult) 
 /**
  * @brief Test parameterized query with multiple parameters
  */
-TEST_F(MySqlExecutorTest, QueryWithParams_MultipleParameters_ReturnsCorrectResult) {
+TEST_F(MySqlExecutorTest, QueryWithParams_MultipleParameters_ReturnsCorrectResult)
+{
     const auto results = executor_->queryWithParams(
         "SELECT name FROM users WHERE age > ? AND age < ?",
         {"24", "31"}
-        );
+    );
 
     EXPECT_GE(results.size(), 2);
 }
@@ -367,11 +412,12 @@ TEST_F(MySqlExecutorTest, QueryWithParams_MultipleParameters_ReturnsCorrectResul
 /**
  * @brief Test parameterized query with no matching results
  */
-TEST_F(MySqlExecutorTest, QueryWithParams_NoMatches_ReturnsEmptyResult) {
+TEST_F(MySqlExecutorTest, QueryWithParams_NoMatches_ReturnsEmptyResult)
+{
     const auto results = executor_->queryWithParams(
         "SELECT name FROM users WHERE age > ?",
         {"100"}
-        );
+    );
 
     EXPECT_TRUE(results.empty());
 }
@@ -379,11 +425,12 @@ TEST_F(MySqlExecutorTest, QueryWithParams_NoMatches_ReturnsEmptyResult) {
 /**
  * @brief Test parameterized query with empty SQL throws exception
  */
-TEST_F(MySqlExecutorTest, QueryWithParams_EmptySQL_ThrowsException) {
+TEST_F(MySqlExecutorTest, QueryWithParams_EmptySQL_ThrowsException)
+{
     EXPECT_THROW(
         (void)executor_->queryWithParams("", {"param"}),
         std::invalid_argument
-        );
+    );
 }
 
 // ==================== SQL Injection Prevention Tests ====================
@@ -394,12 +441,13 @@ TEST_F(MySqlExecutorTest, QueryWithParams_EmptySQL_ThrowsException) {
  *          Note: MySQL X DevAPI doesn't support true parameterized queries for raw SQL, so we use
  *          comprehensive character escaping to prevent SQL injection.
  */
-TEST_F(MySqlExecutorTest, QueryWithParams_SQLInjectionAttempt_SafelyHandled) {
+TEST_F(MySqlExecutorTest, QueryWithParams_SQLInjectionAttempt_SafelyHandled)
+{
     // Attempt 1: Try to inject OR condition to bypass WHERE clause
     const auto results1 = executor_->queryWithParams(
         "SELECT name FROM users WHERE name = ?",
         {"' OR '1'='1"} // SQL injection attempt
-        );
+    );
 
     // Should return empty result (no user with this exact name), not all users
     EXPECT_TRUE(results1.empty()) << "SQL injection via OR condition was not prevented!";
@@ -408,7 +456,7 @@ TEST_F(MySqlExecutorTest, QueryWithParams_SQLInjectionAttempt_SafelyHandled) {
     const auto results2 = executor_->queryWithParams(
         "SELECT name FROM users WHERE name = ?",
         {"' UNION SELECT password FROM users --"} // SQL injection attempt
-        );
+    );
 
     // Should return empty result, not passwords
     EXPECT_TRUE(results2.empty()) << "SQL injection via UNION was not prevented!";
@@ -417,7 +465,7 @@ TEST_F(MySqlExecutorTest, QueryWithParams_SQLInjectionAttempt_SafelyHandled) {
     const auto results3 = executor_->queryWithParams(
         "SELECT name FROM users WHERE name = ?",
         {"'; DROP TABLE users; --"} // SQL injection attempt
-        );
+    );
 
     // Should return empty result and table should still exist
     EXPECT_TRUE(results3.empty()) << "SQL injection via DROP TABLE was not prevented!";
@@ -431,18 +479,19 @@ TEST_F(MySqlExecutorTest, QueryWithParams_SQLInjectionAttempt_SafelyHandled) {
  * @brief Test that special characters in parameters are properly escaped
  * @details Verifies that quotes, backslashes, and other special chars don't break queries
  */
-TEST_F(MySqlExecutorTest, QueryWithParams_SpecialCharacters_ProperlyEscaped) {
+TEST_F(MySqlExecutorTest, QueryWithParams_SpecialCharacters_ProperlyEscaped)
+{
     // Insert a user with special characters in name (single quote only, simpler test)
     const auto insert_result = executor_->execute(
         "INSERT INTO users (name, email, age, score) VALUES ('O''Brien', 'special@test.com', 29, 88.5)"
-        );
+    );
     EXPECT_EQ(insert_result, 1);
 
     // Query for this user using parameterized query
     const auto results = executor_->queryWithParams(
         "SELECT name, email FROM users WHERE name = ?",
         {"O'Brien"} // Contains single quote
-        );
+    );
 
     EXPECT_FALSE(results.empty());
     EXPECT_EQ(results[0][0], "O'Brien");
@@ -451,13 +500,14 @@ TEST_F(MySqlExecutorTest, QueryWithParams_SpecialCharacters_ProperlyEscaped) {
     // Cleanup
     [[maybe_unused]] const auto delete_result = executor_->execute(
         "DELETE FROM users WHERE email = 'special@test.com'"
-        );
+    );
 }
 
 /**
  * @brief Test that NULL bytes in parameters are handled safely
  */
-TEST_F(MySqlExecutorTest, QueryWithParams_NullByteInParameter_HandledSafely) {
+TEST_F(MySqlExecutorTest, QueryWithParams_NullByteInParameter_HandledSafely)
+{
     // String with embedded null byte (should be treated as regular character or rejected)
     const std::string param_with_null = "test\x00value";
 
@@ -475,19 +525,20 @@ TEST_F(MySqlExecutorTest, QueryWithParams_NullByteInParameter_HandledSafely) {
 /**
  * @brief Test structured query with params also prevents SQL injection
  */
-TEST_F(MySqlExecutorTest, QueryWithParamsStructured_SQLInjectionAttempt_SafelyHandled) {
+TEST_F(MySqlExecutorTest, QueryWithParamsStructured_SQLInjectionAttempt_SafelyHandled)
+{
     // Same injection attempts but using structured API
     const auto result1 = executor_->queryWithParamsStructured(
         "SELECT name FROM users WHERE name = ?",
         {"' OR '1'='1"}
-        );
+    );
 
     EXPECT_TRUE(result1.isEmpty()) << "SQL injection via OR condition was not prevented in structured query!";
 
     const auto result2 = executor_->queryWithParamsStructured(
         "SELECT name FROM users WHERE name = ?",
         {"'; DROP TABLE users; --"}
-        );
+    );
 
     EXPECT_TRUE(result2.isEmpty()) << "SQL injection via DROP TABLE was not prevented in structured query!";
 
@@ -501,7 +552,8 @@ TEST_F(MySqlExecutorTest, QueryWithParamsStructured_SQLInjectionAttempt_SafelyHa
 /**
  * @brief Test queryStructured returns proper column names
  */
-TEST_F(MySqlExecutorTest, QueryStructured_ReturnsColumnNames) {
+TEST_F(MySqlExecutorTest, QueryStructured_ReturnsColumnNames)
+{
     const auto result = executor_->queryStructured("SELECT name, age, score FROM users WHERE id = 1");
 
     EXPECT_FALSE(result.isEmpty());
@@ -515,7 +567,8 @@ TEST_F(MySqlExecutorTest, QueryStructured_ReturnsColumnNames) {
 /**
  * @brief Test queryStructured returns typed values - integer
  */
-TEST_F(MySqlExecutorTest, QueryStructured_IntegerValue_IsTypedCorrectly) {
+TEST_F(MySqlExecutorTest, QueryStructured_IntegerValue_IsTypedCorrectly)
+{
     const auto result = executor_->queryStructured("SELECT age FROM users WHERE name = 'Alice'");
 
     ASSERT_FALSE(result.isEmpty());
@@ -530,7 +583,8 @@ TEST_F(MySqlExecutorTest, QueryStructured_IntegerValue_IsTypedCorrectly) {
 /**
  * @brief Test queryStructured returns typed values - double
  */
-TEST_F(MySqlExecutorTest, QueryStructured_DoubleValue_IsTypedCorrectly) {
+TEST_F(MySqlExecutorTest, QueryStructured_DoubleValue_IsTypedCorrectly)
+{
     const auto result = executor_->queryStructured("SELECT score FROM users WHERE name = 'Alice'");
 
     ASSERT_FALSE(result.isEmpty());
@@ -545,7 +599,8 @@ TEST_F(MySqlExecutorTest, QueryStructured_DoubleValue_IsTypedCorrectly) {
 /**
  * @brief Test queryStructured returns typed values - string
  */
-TEST_F(MySqlExecutorTest, QueryStructured_StringValue_IsTypedCorrectly) {
+TEST_F(MySqlExecutorTest, QueryStructured_StringValue_IsTypedCorrectly)
+{
     const auto result = executor_->queryStructured("SELECT name FROM users WHERE id = 1");
 
     ASSERT_FALSE(result.isEmpty());
@@ -560,7 +615,8 @@ TEST_F(MySqlExecutorTest, QueryStructured_StringValue_IsTypedCorrectly) {
 /**
  * @brief Test queryStructured handles NULL values
  */
-TEST_F(MySqlExecutorTest, QueryStructured_NULLValue_IsMonostate) {
+TEST_F(MySqlExecutorTest, QueryStructured_NULLValue_IsMonostate)
+{
     const auto result = executor_->queryStructured("SELECT email FROM users WHERE name = 'David'");
 
     ASSERT_FALSE(result.isEmpty());
@@ -574,14 +630,16 @@ TEST_F(MySqlExecutorTest, QueryStructured_NULLValue_IsMonostate) {
 /**
  * @brief Test QueryRow getString converts values correctly
  */
-TEST_F(MySqlExecutorTest, QueryRow_GetString_ConvertsValues) {
+TEST_F(MySqlExecutorTest, QueryRow_GetString_ConvertsValues)
+{
     // Use a fresh query to avoid data modification from other tests
     const auto result = executor_->queryStructured(
         "SELECT name, age, score FROM users WHERE name = 'Alice' AND age = 25"
-        );
+    );
 
     // If Alice's age was modified by another test, skip or use default values
-    if (result.isEmpty()) {
+    if (result.isEmpty())
+    {
         GTEST_SKIP() << "Test data was modified by previous tests";
     }
 
@@ -596,7 +654,8 @@ TEST_F(MySqlExecutorTest, QueryRow_GetString_ConvertsValues) {
 /**
  * @brief Test QueryRow hasColumn detects existing columns
  */
-TEST_F(MySqlExecutorTest, QueryRow_HasColumn_DetectsExistingColumns) {
+TEST_F(MySqlExecutorTest, QueryRow_HasColumn_DetectsExistingColumns)
+{
     const auto result = executor_->queryStructured("SELECT name, email FROM users WHERE id = 1");
 
     ASSERT_FALSE(result.isEmpty());
@@ -609,7 +668,8 @@ TEST_F(MySqlExecutorTest, QueryRow_HasColumn_DetectsExistingColumns) {
 /**
  * @brief Test QueryRow hasColumn returns false for non-existent columns
  */
-TEST_F(MySqlExecutorTest, QueryRow_HasColumn_ReturnsFalseForNonExistent) {
+TEST_F(MySqlExecutorTest, QueryRow_HasColumn_ReturnsFalseForNonExistent)
+{
     const auto result = executor_->queryStructured("SELECT name FROM users WHERE id = 1");
 
     ASSERT_FALSE(result.isEmpty());
@@ -621,7 +681,8 @@ TEST_F(MySqlExecutorTest, QueryRow_HasColumn_ReturnsFalseForNonExistent) {
 /**
  * @brief Test QueryRow hasColumn returns false for NULL values
  */
-TEST_F(MySqlExecutorTest, QueryRow_HasColumn_ReturnsFalseForNULL) {
+TEST_F(MySqlExecutorTest, QueryRow_HasColumn_ReturnsFalseForNULL)
+{
     const auto result = executor_->queryStructured("SELECT email FROM users WHERE name = 'David'");
 
     ASSERT_FALSE(result.isEmpty());
@@ -633,7 +694,8 @@ TEST_F(MySqlExecutorTest, QueryRow_HasColumn_ReturnsFalseForNULL) {
 /**
  * @brief Test queryStructured returns multiple rows
  */
-TEST_F(MySqlExecutorTest, QueryStructured_MultipleRows_ReturnsAllRows) {
+TEST_F(MySqlExecutorTest, QueryStructured_MultipleRows_ReturnsAllRows)
+{
     const auto result = executor_->queryStructured("SELECT name FROM users ORDER BY id");
 
     EXPECT_GE(result.rowCount(), 5);
@@ -643,7 +705,8 @@ TEST_F(MySqlExecutorTest, QueryStructured_MultipleRows_ReturnsAllRows) {
 /**
  * @brief Test queryStructured with empty SQL throws exception
  */
-TEST_F(MySqlExecutorTest, QueryStructured_EmptySQL_ThrowsException) {
+TEST_F(MySqlExecutorTest, QueryStructured_EmptySQL_ThrowsException)
+{
     EXPECT_THROW((void)executor_->queryStructured(""), std::invalid_argument);
 }
 
@@ -652,11 +715,12 @@ TEST_F(MySqlExecutorTest, QueryStructured_EmptySQL_ThrowsException) {
 /**
  * @brief Test queryWithParamsStructured with parameters
  */
-TEST_F(MySqlExecutorTest, QueryWithParamsStructured_WithParameters_ReturnsCorrectResult) {
+TEST_F(MySqlExecutorTest, QueryWithParamsStructured_WithParameters_ReturnsCorrectResult)
+{
     const auto result = executor_->queryWithParamsStructured(
         "SELECT name, age FROM users WHERE name = ?",
         {"Alice"}
-        );
+    );
 
     EXPECT_FALSE(result.isEmpty());
     EXPECT_EQ(result.rowCount(), 1);
@@ -665,11 +729,12 @@ TEST_F(MySqlExecutorTest, QueryWithParamsStructured_WithParameters_ReturnsCorrec
 /**
  * @brief Test queryWithParamsStructured with multiple parameters
  */
-TEST_F(MySqlExecutorTest, QueryWithParamsStructured_MultipleParameters_ReturnsCorrectResult) {
+TEST_F(MySqlExecutorTest, QueryWithParamsStructured_MultipleParameters_ReturnsCorrectResult)
+{
     const auto result = executor_->queryWithParamsStructured(
         "SELECT name FROM users WHERE age > ? AND score > ?",
         {"20", "90.0"}
-        );
+    );
 
     EXPECT_GE(result.rowCount(), 1);
 }
@@ -677,11 +742,12 @@ TEST_F(MySqlExecutorTest, QueryWithParamsStructured_MultipleParameters_ReturnsCo
 /**
  * @brief Test queryWithParamsStructured with empty SQL throws exception
  */
-TEST_F(MySqlExecutorTest, QueryWithParamsStructured_EmptySQL_ThrowsException) {
+TEST_F(MySqlExecutorTest, QueryWithParamsStructured_EmptySQL_ThrowsException)
+{
     EXPECT_THROW(
         (void)executor_->queryWithParamsStructured("", {"param"}),
         std::invalid_argument
-        );
+    );
 }
 
 // ==================== Error Handling Tests ====================
@@ -689,11 +755,15 @@ TEST_F(MySqlExecutorTest, QueryWithParamsStructured_EmptySQL_ThrowsException) {
 /**
  * @brief Test getLastError returns error message after failed operation
  */
-TEST_F(MySqlExecutorTest, GetLastError_ReturnsErrorMessage) {
-    try {
+TEST_F(MySqlExecutorTest, GetLastError_ReturnsErrorMessage)
+{
+    try
+    {
         (void)executor_->execute("INVALID SQL STATEMENT");
         FAIL() << "Expected exception was not thrown";
-    } catch (const std::runtime_error&) {
+    }
+    catch (const std::runtime_error&)
+    {
         const auto error = executor_->getLastError();
         EXPECT_FALSE(error.empty());
         EXPECT_NE(error.find("execution failed"), std::string::npos);
@@ -703,7 +773,8 @@ TEST_F(MySqlExecutorTest, GetLastError_ReturnsErrorMessage) {
 /**
  * @brief Test isConnected returns correct state after disconnect
  */
-TEST_F(MySqlExecutorTest, IsConnected_AfterDisconnect_ReturnsFalse) {
+TEST_F(MySqlExecutorTest, IsConnected_AfterDisconnect_ReturnsFalse)
+{
     ASSERT_TRUE(executor_->isConnected());
 
     executor_->disconnect();
@@ -713,7 +784,8 @@ TEST_F(MySqlExecutorTest, IsConnected_AfterDisconnect_ReturnsFalse) {
 /**
  * @brief Test reconnect after disconnect works
  */
-TEST_F(MySqlExecutorTest, Reconnect_AfterDisconnect_Works) {
+TEST_F(MySqlExecutorTest, Reconnect_AfterDisconnect_Works)
+{
     executor_->disconnect();
     ASSERT_FALSE(executor_->isConnected());
 
@@ -726,7 +798,8 @@ TEST_F(MySqlExecutorTest, Reconnect_AfterDisconnect_Works) {
 /**
  * @brief Test query returns empty result for no matches
  */
-TEST_F(MySqlExecutorTest, Query_NoMatches_ReturnsEmptyResult) {
+TEST_F(MySqlExecutorTest, Query_NoMatches_ReturnsEmptyResult)
+{
     const auto result = executor_->queryStructured("SELECT * FROM users WHERE age > 200");
 
     EXPECT_TRUE(result.isEmpty());
@@ -736,12 +809,13 @@ TEST_F(MySqlExecutorTest, Query_NoMatches_ReturnsEmptyResult) {
 /**
  * @brief Test execute with complex SQL statement
  */
-TEST_F(MySqlExecutorTest, Execute_ComplexSQL_Success) {
+TEST_F(MySqlExecutorTest, Execute_ComplexSQL_Success)
+{
     const auto affected = executor_->execute(
         "INSERT INTO users (name, email, age, score) "
         "SELECT 'Clone', 'clone@example.com', 40, 80.0 "
         "WHERE NOT EXISTS (SELECT 1 FROM users WHERE name = 'Clone')"
-        );
+    );
 
     EXPECT_GE(affected, 0);
 }
@@ -749,10 +823,11 @@ TEST_F(MySqlExecutorTest, Execute_ComplexSQL_Success) {
 /**
  * @brief Test query with JOIN-like operations (subquery)
  */
-TEST_F(MySqlExecutorTest, Query_Subquery_ReturnsCorrectResult) {
+TEST_F(MySqlExecutorTest, Query_Subquery_ReturnsCorrectResult)
+{
     const auto result = executor_->queryStructured(
         "SELECT name FROM users WHERE age > (SELECT AVG(age) FROM users WHERE age IS NOT NULL)"
-        );
+    );
 
     // Should return users older than average age
     EXPECT_GE(result.rowCount(), 0);
@@ -761,7 +836,8 @@ TEST_F(MySqlExecutorTest, Query_Subquery_ReturnsCorrectResult) {
 /**
  * @brief Test multiple sequential queries work correctly
  */
-TEST_F(MySqlExecutorTest, MultipleSequentialQueries_WorkCorrectly) {
+TEST_F(MySqlExecutorTest, MultipleSequentialQueries_WorkCorrectly)
+{
     const auto result1 = executor_->queryStructured("SELECT COUNT(*) as cnt FROM users");
     const auto result2 = executor_->queryStructured("SELECT name FROM users LIMIT 1");
     const auto result3 = executor_->queryStructured("SELECT MAX(age) as max_age FROM users");

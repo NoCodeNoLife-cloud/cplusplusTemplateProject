@@ -14,7 +14,8 @@ using namespace common::toolkit;
 /**
  * @brief Simple test class for reflection tests
  */
-struct TestPerson {
+struct TestPerson
+{
     std::string name;
     int age;
     double score;
@@ -25,20 +26,22 @@ struct TestPerson {
  * @details Defines metadata for reflection including field count and member pointers
  */
 template <>
-struct ReflectTraits<TestPerson> {
+struct ReflectTraits<TestPerson>
+{
     static constexpr std::size_t field_count = 3;
     static constexpr auto fields = std::make_tuple(
         std::make_pair("name", &TestPerson::name),
         std::make_pair("age", &TestPerson::age),
         std::make_pair("score", &TestPerson::score)
-        );
+    );
 };
 
 /**
  * @brief Test getTypeId with basic types
  * @details Verifies type name extraction for fundamental types
  */
-TEST(ClassToolkitTest, GetTypeId_BasicTypes) {
+TEST(ClassToolkitTest, GetTypeId_BasicTypes)
+{
     constexpr int int_val = 42;
     constexpr double double_val = 3.14;
     const std::string str_val = "test";
@@ -60,7 +63,8 @@ TEST(ClassToolkitTest, GetTypeId_BasicTypes) {
  * @brief Test getTypeId with custom class
  * @details Verifies type name extraction includes class name
  */
-TEST(ClassToolkitTest, GetTypeId_CustomClass) {
+TEST(ClassToolkitTest, GetTypeId_CustomClass)
+{
     const TestPerson person{"Alice", 25, 95.5};
     auto type_name = ClassToolkit::getTypeId(person);
 
@@ -72,7 +76,8 @@ TEST(ClassToolkitTest, GetTypeId_CustomClass) {
  * @brief Test getTypeIdWithCvr with basic types
  * @details Verifies CVR (const/volatile/reference) qualifiers are handled correctly
  */
-TEST(ClassToolkitTest, GetTypeIdWithCvr_BasicTypes) {
+TEST(ClassToolkitTest, GetTypeIdWithCvr_BasicTypes)
+{
     constexpr int const_int = 100;
     // Note: getTypeIdWithCvr deduces T from parameter type
     // For const int&, T is deduced as int (not const int)
@@ -87,7 +92,8 @@ TEST(ClassToolkitTest, GetTypeIdWithCvr_BasicTypes) {
  * @brief Test getTypeIdByClass without instance for int type
  * @details Verifies template-based type identification
  */
-TEST(ClassToolkitTest, GetTypeIdByClass_IntType) {
+TEST(ClassToolkitTest, GetTypeIdByClass_IntType)
+{
     auto type_name = ClassToolkit::getTypeIdByClass<int>();
 
     EXPECT_FALSE(type_name.empty());
@@ -98,7 +104,8 @@ TEST(ClassToolkitTest, GetTypeIdByClass_IntType) {
  * @brief Test getTypeIdByClass for double type
  * @details Verifies floating-point type identification
  */
-TEST(ClassToolkitTest, GetTypeIdByClass_DoubleType) {
+TEST(ClassToolkitTest, GetTypeIdByClass_DoubleType)
+{
     auto type_name = ClassToolkit::getTypeIdByClass<double>();
 
     EXPECT_FALSE(type_name.empty());
@@ -109,7 +116,8 @@ TEST(ClassToolkitTest, GetTypeIdByClass_DoubleType) {
  * @brief Test getTypeIdByClass for string type
  * @details Verifies standard library type identification
  */
-TEST(ClassToolkitTest, GetTypeIdByClass_StringType) {
+TEST(ClassToolkitTest, GetTypeIdByClass_StringType)
+{
     auto type_name = ClassToolkit::getTypeIdByClass<std::string>();
 
     EXPECT_FALSE(type_name.empty());
@@ -120,7 +128,8 @@ TEST(ClassToolkitTest, GetTypeIdByClass_StringType) {
  * @brief Test getTypeIdByClass for custom class
  * @details Verifies user-defined type identification
  */
-TEST(ClassToolkitTest, GetTypeIdByClass_CustomClass) {
+TEST(ClassToolkitTest, GetTypeIdByClass_CustomClass)
+{
     auto type_name = ClassToolkit::getTypeIdByClass<TestPerson>();
 
     EXPECT_FALSE(type_name.empty());
@@ -131,7 +140,8 @@ TEST(ClassToolkitTest, GetTypeIdByClass_CustomClass) {
  * @brief Test getTypeIdWithCvrByClass with const qualifier
  * @details Verifies const qualifier is preserved in type name
  */
-TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_ConstInt) {
+TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_ConstInt)
+{
     auto type_name = ClassToolkit::getTypeIdWithCvrByClass<const int>();
 
     EXPECT_FALSE(type_name.empty());
@@ -143,7 +153,8 @@ TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_ConstInt) {
  * @brief Test getTypeIdWithCvrByClass with volatile qualifier
  * @details Verifies volatile qualifier is preserved in type name
  */
-TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_VolatileDouble) {
+TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_VolatileDouble)
+{
     auto type_name = ClassToolkit::getTypeIdWithCvrByClass<volatile double>();
 
     EXPECT_FALSE(type_name.empty());
@@ -155,7 +166,8 @@ TEST(ClassToolkitTest, GetTypeIdWithCvrByClass_VolatileDouble) {
  * @brief Test consistency between by-class and by-object methods
  * @details Verifies both approaches produce identical type names
  */
-TEST(ClassToolkitTest, Consistency_ByClassVsByObject) {
+TEST(ClassToolkitTest, Consistency_ByClassVsByObject)
+{
     constexpr int value = 42;
 
     const auto by_class = ClassToolkit::getTypeIdByClass<int>();
@@ -168,7 +180,8 @@ TEST(ClassToolkitTest, Consistency_ByClassVsByObject) {
  * @brief Test consistency of CVR methods
  * @details Verifies CVR handling is consistent across different APIs
  */
-TEST(ClassToolkitTest, Consistency_CvrMethods) {
+TEST(ClassToolkitTest, Consistency_CvrMethods)
+{
     constexpr int const_value = 100;
 
     // Both should deduce as "int" (template deduction strips top-level const)
@@ -182,7 +195,8 @@ TEST(ClassToolkitTest, Consistency_CvrMethods) {
  * @brief Test getFields basic structure extraction
  * @details Verifies all fields are extracted with correct string representations
  */
-TEST(ClassToolkitTest, GetFields_BasicStructure) {
+TEST(ClassToolkitTest, GetFields_BasicStructure)
+{
     const TestPerson person{"Bob", 30, 88.5};
     auto fields = ClassToolkit::getFields(person);
 
@@ -196,7 +210,8 @@ TEST(ClassToolkitTest, GetFields_BasicStructure) {
  * @brief Test getFields with empty string and zero values
  * @details Verifies edge case handling for default/empty values
  */
-TEST(ClassToolkitTest, GetFields_EmptyString) {
+TEST(ClassToolkitTest, GetFields_EmptyString)
+{
     const TestPerson person{"", 0, 0.0};
     auto fields = ClassToolkit::getFields(person);
 
@@ -210,7 +225,8 @@ TEST(ClassToolkitTest, GetFields_EmptyString) {
  * @brief Test getFields with negative values
  * @details Verifies correct string representation of negative numbers
  */
-TEST(ClassToolkitTest, GetFields_NegativeValues) {
+TEST(ClassToolkitTest, GetFields_NegativeValues)
+{
     const TestPerson person{"Charlie", -5, -10.5};
     auto fields = ClassToolkit::getFields(person);
 
@@ -224,7 +240,8 @@ TEST(ClassToolkitTest, GetFields_NegativeValues) {
  * @brief Test that constructor is deleted (compile-time check)
  * @details Verifies ClassToolkit cannot be instantiated as it's a utility class
  */
-TEST(ClassToolkitTest, ConstructorDeleted) {
+TEST(ClassToolkitTest, ConstructorDeleted)
+{
     // This test verifies at compile time that ClassToolkit cannot be instantiated
     // If the following line compiles, the test fails
     static_assert(std::is_constructible_v<ClassToolkit> == false,
@@ -237,7 +254,8 @@ TEST(ClassToolkitTest, ConstructorDeleted) {
  * @brief Test isSameType with identical types
  * @details Verifies true is returned for same types
  */
-TEST(ClassToolkitTest, IsSameType_IdenticalTypes) {
+TEST(ClassToolkitTest, IsSameType_IdenticalTypes)
+{
     EXPECT_TRUE((ClassToolkit::isSameType<int, int>()));
     EXPECT_TRUE((ClassToolkit::isSameType<std::string, std::string>()));
 }
@@ -246,7 +264,8 @@ TEST(ClassToolkitTest, IsSameType_IdenticalTypes) {
  * @brief Test isSameType with different types
  * @details Verifies false is returned for different types
  */
-TEST(ClassToolkitTest, IsSameType_DifferentTypes) {
+TEST(ClassToolkitTest, IsSameType_DifferentTypes)
+{
     EXPECT_FALSE((ClassToolkit::isSameType<int, double>()));
     EXPECT_FALSE((ClassToolkit::isSameType<int, std::string>()));
 }
@@ -255,10 +274,13 @@ TEST(ClassToolkitTest, IsSameType_DifferentTypes) {
  * @brief Test isBaseOf with valid inheritance
  * @details Verifies true is returned when Base is actually a base of Derived
  */
-TEST(ClassToolkitTest, IsBaseOf_ValidInheritance) {
-    struct Base {
+TEST(ClassToolkitTest, IsBaseOf_ValidInheritance)
+{
+    struct Base
+    {
     };
-    struct Derived : Base {
+    struct Derived : Base
+    {
     };
 
     EXPECT_TRUE((ClassToolkit::isBaseOf<Base, Derived>()));
@@ -268,10 +290,13 @@ TEST(ClassToolkitTest, IsBaseOf_ValidInheritance) {
  * @brief Test isBaseOf with no inheritance
  * @details Verifies false is returned when there's no inheritance relationship
  */
-TEST(ClassToolkitTest, IsBaseOf_NoInheritance) {
-    struct ClassA {
+TEST(ClassToolkitTest, IsBaseOf_NoInheritance)
+{
+    struct ClassA
+    {
     };
-    struct ClassB {
+    struct ClassB
+    {
     };
 
     EXPECT_FALSE((ClassToolkit::isBaseOf<ClassA, ClassB>()));
@@ -281,8 +306,10 @@ TEST(ClassToolkitTest, IsBaseOf_NoInheritance) {
  * @brief Test isPolymorphic with polymorphic class
  * @details Verifies true is returned for classes with virtual functions
  */
-TEST(ClassToolkitTest, IsPolymorphic_PolymorphicClass) {
-    struct Polymorphic {
+TEST(ClassToolkitTest, IsPolymorphic_PolymorphicClass)
+{
+    struct Polymorphic
+    {
         virtual ~Polymorphic() = default;
     };
 
@@ -293,8 +320,10 @@ TEST(ClassToolkitTest, IsPolymorphic_PolymorphicClass) {
  * @brief Test isPolymorphic with non-polymorphic class
  * @details Verifies false is returned for classes without virtual functions
  */
-TEST(ClassToolkitTest, IsPolymorphic_NonPolymorphicClass) {
-    struct NonPolymorphic {
+TEST(ClassToolkitTest, IsPolymorphic_NonPolymorphicClass)
+{
+    struct NonPolymorphic
+    {
         int x;
     };
 
@@ -305,8 +334,10 @@ TEST(ClassToolkitTest, IsPolymorphic_NonPolymorphicClass) {
  * @brief Test isAbstract with abstract class
  * @details Verifies true is returned for abstract classes
  */
-TEST(ClassToolkitTest, IsAbstract_AbstractClass) {
-    struct Abstract {
+TEST(ClassToolkitTest, IsAbstract_AbstractClass)
+{
+    struct Abstract
+    {
         virtual void foo() = 0;
 
         virtual ~Abstract() = default;
@@ -319,9 +350,12 @@ TEST(ClassToolkitTest, IsAbstract_AbstractClass) {
  * @brief Test isAbstract with concrete class
  * @details Verifies false is returned for concrete classes
  */
-TEST(ClassToolkitTest, IsAbstract_ConcreteClass) {
-    struct Concrete {
-        void foo() {
+TEST(ClassToolkitTest, IsAbstract_ConcreteClass)
+{
+    struct Concrete
+    {
+        void foo()
+        {
         }
     };
 
@@ -332,7 +366,8 @@ TEST(ClassToolkitTest, IsAbstract_ConcreteClass) {
  * @brief Test getTypeSize for basic types
  * @details Verifies correct size is returned
  */
-TEST(ClassToolkitTest, GetTypeSize_BasicTypes) {
+TEST(ClassToolkitTest, GetTypeSize_BasicTypes)
+{
     EXPECT_EQ(ClassToolkit::getTypeSize<char>(), 1);
     EXPECT_EQ(ClassToolkit::getTypeSize<int>(), sizeof(int));
     EXPECT_EQ(ClassToolkit::getTypeSize<double>(), sizeof(double));
@@ -342,7 +377,8 @@ TEST(ClassToolkitTest, GetTypeSize_BasicTypes) {
  * @brief Test getTypeSize for custom struct
  * @details Verifies size calculation for user-defined types
  */
-TEST(ClassToolkitTest, GetTypeSize_CustomStruct) {
+TEST(ClassToolkitTest, GetTypeSize_CustomStruct)
+{
     EXPECT_GT(ClassToolkit::getTypeSize<TestPerson>(), 0);
 }
 
@@ -350,7 +386,8 @@ TEST(ClassToolkitTest, GetTypeSize_CustomStruct) {
  * @brief Test getTypeAlignment for basic types
  * @details Verifies correct alignment is returned
  */
-TEST(ClassToolkitTest, GetTypeAlignment_BasicTypes) {
+TEST(ClassToolkitTest, GetTypeAlignment_BasicTypes)
+{
     EXPECT_EQ(ClassToolkit::getTypeAlignment<char>(), alignof(char));
     EXPECT_EQ(ClassToolkit::getTypeAlignment<int>(), alignof(int));
     EXPECT_EQ(ClassToolkit::getTypeAlignment<double>(), alignof(double));
@@ -360,7 +397,8 @@ TEST(ClassToolkitTest, GetTypeAlignment_BasicTypes) {
  * @brief Test isDefaultConstructible with constructible types
  * @details Verifies true is returned for default constructible types
  */
-TEST(ClassToolkitTest, IsDefaultConstructible_ConstructibleTypes) {
+TEST(ClassToolkitTest, IsDefaultConstructible_ConstructibleTypes)
+{
     EXPECT_TRUE((ClassToolkit::isDefaultConstructible<int>()));
     EXPECT_TRUE((ClassToolkit::isDefaultConstructible<std::string>()));
     EXPECT_TRUE((ClassToolkit::isDefaultConstructible<TestPerson>()));
@@ -370,7 +408,8 @@ TEST(ClassToolkitTest, IsDefaultConstructible_ConstructibleTypes) {
  * @brief Test isCopyConstructible with copyable types
  * @details Verifies true is returned for copy constructible types
  */
-TEST(ClassToolkitTest, IsCopyConstructible_CopyableTypes) {
+TEST(ClassToolkitTest, IsCopyConstructible_CopyableTypes)
+{
     EXPECT_TRUE((ClassToolkit::isCopyConstructible<int>()));
     EXPECT_TRUE((ClassToolkit::isCopyConstructible<std::string>()));
 }
@@ -379,7 +418,8 @@ TEST(ClassToolkitTest, IsCopyConstructible_CopyableTypes) {
  * @brief Test isMoveConstructible with movable types
  * @details Verifies true is returned for move constructible types
  */
-TEST(ClassToolkitTest, IsMoveConstructible_MovableTypes) {
+TEST(ClassToolkitTest, IsMoveConstructible_MovableTypes)
+{
     EXPECT_TRUE((ClassToolkit::isMoveConstructible<int>()));
     EXPECT_TRUE((ClassToolkit::isMoveConstructible<std::string>()));
 }
@@ -388,7 +428,8 @@ TEST(ClassToolkitTest, IsMoveConstructible_MovableTypes) {
  * @brief Test isTriviallyCopyable with trivial types
  * @details Verifies true is returned for trivially copyable types
  */
-TEST(ClassToolkitTest, IsTriviallyCopyable_TrivialTypes) {
+TEST(ClassToolkitTest, IsTriviallyCopyable_TrivialTypes)
+{
     EXPECT_TRUE((ClassToolkit::isTriviallyCopyable<int>()));
     EXPECT_TRUE((ClassToolkit::isTriviallyCopyable<double>()));
 }
@@ -397,7 +438,8 @@ TEST(ClassToolkitTest, IsTriviallyCopyable_TrivialTypes) {
  * @brief Test isTriviallyDestructible with trivial types
  * @details Verifies true is returned for trivially destructible types
  */
-TEST(ClassToolkitTest, IsTriviallyDestructible_TrivialTypes) {
+TEST(ClassToolkitTest, IsTriviallyDestructible_TrivialTypes)
+{
     EXPECT_TRUE((ClassToolkit::isTriviallyDestructible<int>()));
     EXPECT_TRUE((ClassToolkit::isTriviallyDestructible<double>()));
 }
@@ -406,7 +448,8 @@ TEST(ClassToolkitTest, IsTriviallyDestructible_TrivialTypes) {
  * @brief Test getTypeHash returns consistent values
  * @details Verifies hash is consistent for same type
  */
-TEST(ClassToolkitTest, GetTypeHash_ConsistentValues) {
+TEST(ClassToolkitTest, GetTypeHash_ConsistentValues)
+{
     const auto hash1 = ClassToolkit::getTypeHash<int>();
     const auto hash2 = ClassToolkit::getTypeHash<int>();
     EXPECT_EQ(hash1, hash2);
@@ -416,7 +459,8 @@ TEST(ClassToolkitTest, GetTypeHash_ConsistentValues) {
  * @brief Test getTypeHash returns different values for different types
  * @details Verifies hash differs for different types
  */
-TEST(ClassToolkitTest, GetTypeHash_DifferentTypes) {
+TEST(ClassToolkitTest, GetTypeHash_DifferentTypes)
+{
     const auto hash_int = ClassToolkit::getTypeHash<int>();
     const auto hash_double = ClassToolkit::getTypeHash<double>();
     EXPECT_NE(hash_int, hash_double);
@@ -426,7 +470,8 @@ TEST(ClassToolkitTest, GetTypeHash_DifferentTypes) {
  * @brief Test getFieldNames returns all field names
  * @details Verifies all fields are listed correctly
  */
-TEST(ClassToolkitTest, GetFieldNames_ReturnsAllFields) {
+TEST(ClassToolkitTest, GetFieldNames_ReturnsAllFields)
+{
     const auto names = ClassToolkit::getFieldNames<TestPerson>();
 
     ASSERT_EQ(names.size(), 3);
@@ -439,7 +484,8 @@ TEST(ClassToolkitTest, GetFieldNames_ReturnsAllFields) {
  * @brief Test getFieldCount returns correct count
  * @details Verifies field count matches ReflectTraits definition
  */
-TEST(ClassToolkitTest, GetFieldCount_ReturnsCorrectCount) {
+TEST(ClassToolkitTest, GetFieldCount_ReturnsCorrectCount)
+{
     EXPECT_EQ(ClassToolkit::getFieldCount<TestPerson>(), 3);
 }
 
@@ -447,7 +493,8 @@ TEST(ClassToolkitTest, GetFieldCount_ReturnsCorrectCount) {
  * @brief Test getFieldByName retrieves correct value
  * @details Verifies field value is correctly retrieved by name
  */
-TEST(ClassToolkitTest, GetFieldByName_RetrievesCorrectValue) {
+TEST(ClassToolkitTest, GetFieldByName_RetrievesCorrectValue)
+{
     const TestPerson person{"Alice", 25, 95.5};
 
     EXPECT_EQ(ClassToolkit::getFieldByName(person, "name"), "Alice");
@@ -459,7 +506,8 @@ TEST(ClassToolkitTest, GetFieldByName_RetrievesCorrectValue) {
  * @brief Test getFieldByName with invalid field name throws exception
  * @details Validates proper error handling
  */
-TEST(ClassToolkitTest, GetFieldByName_InvalidFieldName_ThrowsException) {
+TEST(ClassToolkitTest, GetFieldByName_InvalidFieldName_ThrowsException)
+{
     const TestPerson person{"Bob", 30, 88.5};
 
     EXPECT_THROW(ClassToolkit::getFieldByName(person, "invalid_field"), std::invalid_argument);
@@ -469,7 +517,8 @@ TEST(ClassToolkitTest, GetFieldByName_InvalidFieldName_ThrowsException) {
  * @brief Test compareObjects with identical objects
  * @details Verifies true is returned when all fields match
  */
-TEST(ClassToolkitTest, CompareObjects_IdenticalObjects) {
+TEST(ClassToolkitTest, CompareObjects_IdenticalObjects)
+{
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Alice", 25, 95.5};
 
@@ -480,7 +529,8 @@ TEST(ClassToolkitTest, CompareObjects_IdenticalObjects) {
  * @brief Test compareObjects with different objects
  * @details Verifies false is returned when any field differs
  */
-TEST(ClassToolkitTest, CompareObjects_DifferentObjects) {
+TEST(ClassToolkitTest, CompareObjects_DifferentObjects)
+{
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Bob", 25, 95.5};
 
@@ -491,7 +541,8 @@ TEST(ClassToolkitTest, CompareObjects_DifferentObjects) {
  * @brief Test getObjectDiff with identical objects
  * @details Verifies empty diff is returned
  */
-TEST(ClassToolkitTest, GetObjectDiff_IdenticalObjects) {
+TEST(ClassToolkitTest, GetObjectDiff_IdenticalObjects)
+{
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Alice", 25, 95.5};
 
@@ -503,7 +554,8 @@ TEST(ClassToolkitTest, GetObjectDiff_IdenticalObjects) {
  * @brief Test getObjectDiff with different objects
  * @details Verifies only different fields are included in diff
  */
-TEST(ClassToolkitTest, GetObjectDiff_DifferentObjects) {
+TEST(ClassToolkitTest, GetObjectDiff_DifferentObjects)
+{
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Bob", 30, 88.5};
 
@@ -518,7 +570,8 @@ TEST(ClassToolkitTest, GetObjectDiff_DifferentObjects) {
  * @brief Test getObjectDiff with partially different objects
  * @details Verifies only changed fields are in diff
  */
-TEST(ClassToolkitTest, GetObjectDiff_PartiallyDifferent) {
+TEST(ClassToolkitTest, GetObjectDiff_PartiallyDifferent)
+{
     const TestPerson person1{"Alice", 25, 95.5};
     const TestPerson person2{"Alice", 30, 95.5};
 
@@ -533,7 +586,8 @@ TEST(ClassToolkitTest, GetObjectDiff_PartiallyDifferent) {
  * @brief Test getTypeInfo returns comprehensive information
  * @details Verifies type info string contains expected sections
  */
-TEST(ClassToolkitTest, GetTypeInfo_ComprehensiveInformation) {
+TEST(ClassToolkitTest, GetTypeInfo_ComprehensiveInformation)
+{
     auto info = ClassToolkit::getTypeInfo<int>();
 
     EXPECT_NE(info.find("Type:"), std::string::npos);
@@ -546,7 +600,8 @@ TEST(ClassToolkitTest, GetTypeInfo_ComprehensiveInformation) {
  * @brief Test getTypeInfo for custom class
  * @details Verifies type info includes class name
  */
-TEST(ClassToolkitTest, GetTypeInfo_CustomClass) {
+TEST(ClassToolkitTest, GetTypeInfo_CustomClass)
+{
     auto info = ClassToolkit::getTypeInfo<TestPerson>();
 
     EXPECT_NE(info.find("TestPerson"), std::string::npos);

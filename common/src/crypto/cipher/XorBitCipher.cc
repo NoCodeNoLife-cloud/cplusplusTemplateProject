@@ -13,141 +13,169 @@
 #include <algorithm>
 #include <glog/logging.h>
 
-namespace common::crypto::cipher {
-void XorBitCipher::initialize(const std::vector<uint8_t>& key,
-                              const std::vector<uint8_t>& /* nonce */) {
-    if (key.empty()) {
-        DLOG(WARNING) << "XorBitCipher initialized with empty key";
-        throw std::invalid_argument("XorBitCipher requires a non-empty key.");
-    }
-    key_stream_ = key;
-    key_pos_ = 0;
-    bit_pos_ = 0;
-}
-
-auto XorBitCipher::encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t> {
-    validateInitialized();
-    return process(plaintext);
-}
-
-auto XorBitCipher::decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t> {
-    validateInitialized();
-    // For XOR cipher, decryption is identical to encryption
-    return process(ciphertext);
-}
-
-auto XorBitCipher::generateKeystream(const size_t length) -> std::vector<uint8_t> {
-    validateInitialized();
-    return generateKeyStream(length);
-}
-
-void XorBitCipher::reset() {
-    key_pos_ = 0;
-    bit_pos_ = 0;
-}
-
-auto XorBitCipher::getAlgorithmName() const noexcept -> std::string {
-    return "XorBitCipher";
-}
-
-auto XorBitCipher::isInitialized() const noexcept -> bool {
-    return hasKey();
-}
-
-void XorBitCipher::validateInitialized() const {
-    if (!hasKey()) {
-        DLOG(WARNING) << "XorBitCipher operation called without initialization";
-        throw std::runtime_error("XorBitCipher not initialized. Call initialize() first.");
-    }
-}
-
-auto XorBitCipher::getCurrentPosition() const noexcept -> size_t {
-    return key_pos_;
-}
-
-auto XorBitCipher::hasKey() const noexcept -> bool {
-    return !key_stream_.empty();
-}
-
-auto XorBitCipher::nextKeyByte() const -> uint8_t {
-    if (key_stream_.empty()) {
-        throw std::invalid_argument("Key stream is empty. Set key before processing.");
-    }
-    const uint8_t byte = key_stream_[key_pos_];
-    key_pos_ = (key_pos_ + 1) % key_stream_.size();
-    bit_pos_ = 0;
-    return byte;
-}
-
-auto XorBitCipher::nextKeyBit() const -> bool {
-    if (key_stream_.empty()) {
-        throw std::invalid_argument("Key stream is empty. Set key before processing.");
-    }
-    const uint8_t current_byte = key_stream_[key_pos_];
-    const bool bit = current_byte >> (MSB_POSITION - bit_pos_) & 0x01;
-    bit_pos_++;
-    if (bit_pos_ >= BITS_PER_BYTE) {
+namespace common::crypto::cipher
+{
+    void XorBitCipher::initialize(const std::vector<uint8_t>& key,
+                                  const std::vector<uint8_t>& /* nonce */)
+    {
+        if (key.empty())
+        {
+            DLOG(WARNING) << "XorBitCipher initialized with empty key";
+            throw std::invalid_argument("XorBitCipher requires a non-empty key.");
+        }
+        key_stream_ = key;
+        key_pos_ = 0;
         bit_pos_ = 0;
+    }
+
+    auto XorBitCipher::encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t>
+    {
+        validateInitialized();
+        return process(plaintext);
+    }
+
+    auto XorBitCipher::decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t>
+    {
+        validateInitialized();
+        // For XOR cipher, decryption is identical to encryption
+        return process(ciphertext);
+    }
+
+    auto XorBitCipher::generateKeystream(const size_t length) -> std::vector<uint8_t>
+    {
+        validateInitialized();
+        return generateKeyStream(length);
+    }
+
+    void XorBitCipher::reset()
+    {
+        key_pos_ = 0;
+        bit_pos_ = 0;
+    }
+
+    auto XorBitCipher::getAlgorithmName() const noexcept -> std::string
+    {
+        return "XorBitCipher";
+    }
+
+    auto XorBitCipher::isInitialized() const noexcept -> bool
+    {
+        return hasKey();
+    }
+
+    void XorBitCipher::validateInitialized() const
+    {
+        if (!hasKey())
+        {
+            DLOG(WARNING) << "XorBitCipher operation called without initialization";
+            throw std::runtime_error("XorBitCipher not initialized. Call initialize() first.");
+        }
+    }
+
+    auto XorBitCipher::getCurrentPosition() const noexcept -> size_t
+    {
+        return key_pos_;
+    }
+
+    auto XorBitCipher::hasKey() const noexcept -> bool
+    {
+        return !key_stream_.empty();
+    }
+
+    auto XorBitCipher::nextKeyByte() const -> uint8_t
+    {
+        if (key_stream_.empty())
+        {
+            throw std::invalid_argument("Key stream is empty. Set key before processing.");
+        }
+        const uint8_t byte = key_stream_[key_pos_];
         key_pos_ = (key_pos_ + 1) % key_stream_.size();
-    }
-    return bit;
-}
-
-auto XorBitCipher::process(const std::vector<uint8_t>& data) const -> std::vector<uint8_t> {
-    std::vector<uint8_t> result;
-    result.reserve(data.size());
-
-    std::ranges::transform(data, std::back_inserter(result),
-                           [this](const uint8_t byte) {
-                               return byte ^ nextKeyByte();
-                           });
-
-    return result;
-}
-
-auto XorBitCipher::processInPlace(std::vector<uint8_t>& data) const -> void {
-    for (auto& byte : data) {
-        byte ^= nextKeyByte();
-    }
-}
-
-auto XorBitCipher::processBits(const std::vector<bool>& bits) const -> std::vector<bool> {
-    std::vector<bool> result;
-    result.reserve(bits.size());
-
-    std::ranges::transform(bits, std::back_inserter(result),
-                           [this](const bool bit) {
-                               return bit ^ nextKeyBit();
-                           });
-
-    return result;
-}
-
-auto XorBitCipher::generateKeyStream(const size_t length) const -> std::vector<uint8_t> {
-    std::vector<uint8_t> stream;
-    stream.reserve(length);
-
-    for (size_t i = 0; i < length; ++i) {
-        stream.push_back(nextKeyByte());
-    }
-    return stream;
-}
-
-auto XorBitCipher::createWithRandomKey(const size_t key_length) -> XorBitCipher {
-    std::vector<uint8_t> random_key;
-    random_key.reserve(key_length);
-
-    // Simple deterministic generation for demonstration only
-    // In production, use crypto-secure RNG (e.g., std::random_device with proper seeding)
-    // Use different seeds based on key_length to ensure different keys for different lengths
-    const auto seed = static_cast<uint32_t>(key_length * 2654435761u);
-    uint32_t state = seed;
-    for (size_t i = 0; i < key_length; ++i) {
-        // Linear congruential generator with length-dependent seed
-        state = state * 1103515245 + 12345;
-        random_key.push_back(static_cast<uint8_t>(state >> 16 & 0xFF));
+        bit_pos_ = 0;
+        return byte;
     }
 
-    return XorBitCipher(std::move(random_key));
-}
+    auto XorBitCipher::nextKeyBit() const -> bool
+    {
+        if (key_stream_.empty())
+        {
+            throw std::invalid_argument("Key stream is empty. Set key before processing.");
+        }
+        const uint8_t current_byte = key_stream_[key_pos_];
+        const bool bit = current_byte >> (MSB_POSITION - bit_pos_) & 0x01;
+        bit_pos_++;
+        if (bit_pos_ >= BITS_PER_BYTE)
+        {
+            bit_pos_ = 0;
+            key_pos_ = (key_pos_ + 1) % key_stream_.size();
+        }
+        return bit;
+    }
+
+    auto XorBitCipher::process(const std::vector<uint8_t>& data) const -> std::vector<uint8_t>
+    {
+        std::vector<uint8_t> result;
+        result.reserve(data.size());
+
+        std::ranges::transform(data, std::back_inserter(result),
+                               [this](const uint8_t byte)
+                               {
+                                   return byte ^ nextKeyByte();
+                               });
+
+        return result;
+    }
+
+    auto XorBitCipher::processInPlace(std::vector<uint8_t>& data) const -> void
+    {
+        for (auto& byte : data)
+        {
+            byte ^= nextKeyByte();
+        }
+    }
+
+    auto XorBitCipher::processBits(const std::vector<bool>& bits) const -> std::vector<bool>
+    {
+        std::vector<bool> result;
+        result.reserve(bits.size());
+
+        std::ranges::transform(bits, std::back_inserter(result),
+                               [this](const bool bit)
+                               {
+                                   return bit ^ nextKeyBit();
+                               });
+
+        return result;
+    }
+
+    auto XorBitCipher::generateKeyStream(const size_t length) const -> std::vector<uint8_t>
+    {
+        std::vector<uint8_t> stream;
+        stream.reserve(length);
+
+        for (size_t i = 0; i < length; ++i)
+        {
+            stream.push_back(nextKeyByte());
+        }
+        return stream;
+    }
+
+    auto XorBitCipher::createWithRandomKey(const size_t key_length) -> XorBitCipher
+    {
+        std::vector<uint8_t> random_key;
+        random_key.reserve(key_length);
+
+        // Simple deterministic generation for demonstration only
+        // In production, use crypto-secure RNG (e.g., std::random_device with proper seeding)
+        // Use different seeds based on key_length to ensure different keys for different lengths
+        const auto seed = static_cast<uint32_t>(key_length * 2654435761u);
+        uint32_t state = seed;
+        for (size_t i = 0; i < key_length; ++i)
+        {
+            // Linear congruential generator with length-dependent seed
+            state = state * 1103515245 + 12345;
+            random_key.push_back(static_cast<uint8_t>(state >> 16 & 0xFF));
+        }
+
+        return XorBitCipher(std::move(random_key));
+    }
 }

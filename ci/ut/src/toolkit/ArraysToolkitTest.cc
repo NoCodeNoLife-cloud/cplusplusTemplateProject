@@ -16,7 +16,8 @@ using namespace common::toolkit;
  * @brief Test asList functionality with basic array conversion
  * @details Verifies that C-style arrays are correctly converted to std::vector
  */
-TEST(ArraysToolkitTest, AsList_BasicConversion) {
+TEST(ArraysToolkitTest, AsList_BasicConversion)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     const auto result = ArraysToolkit::asList(arr, 5);
 
@@ -29,7 +30,8 @@ TEST(ArraysToolkitTest, AsList_BasicConversion) {
  * @brief Test asList with empty array
  * @details Verifies handling of zero-length arrays
  */
-TEST(ArraysToolkitTest, AsList_EmptyArray) {
+TEST(ArraysToolkitTest, AsList_EmptyArray)
+{
     const auto result = ArraysToolkit::asList<int>(nullptr, 0);
     EXPECT_TRUE(result.empty());
 }
@@ -38,7 +40,8 @@ TEST(ArraysToolkitTest, AsList_EmptyArray) {
  * @brief Test asList with null pointer and non-zero size throws exception
  * @details Validates proper error handling for invalid input parameters
  */
-TEST(ArraysToolkitTest, AsList_NullPointerWithSize_ThrowsException) {
+TEST(ArraysToolkitTest, AsList_NullPointerWithSize_ThrowsException)
+{
     EXPECT_THROW(ArraysToolkit::asList<int>(nullptr, 5), std::invalid_argument);
 }
 
@@ -46,7 +49,8 @@ TEST(ArraysToolkitTest, AsList_NullPointerWithSize_ThrowsException) {
  * @brief Test binarySearch when key is found
  * @details Verifies correct index is returned for existing elements
  */
-TEST(ArraysToolkitTest, BinarySearch_KeyFound) {
+TEST(ArraysToolkitTest, BinarySearch_KeyFound)
+{
     const int arr[] = {1, 3, 5, 7, 9};
     const auto index = ArraysToolkit::binarySearch(arr, 5, 5);
     ASSERT_TRUE(index.has_value());
@@ -57,7 +61,8 @@ TEST(ArraysToolkitTest, BinarySearch_KeyFound) {
  * @brief Test binarySearch when key is not found
  * @details Verifies std::nullopt is returned for non-existent elements
  */
-TEST(ArraysToolkitTest, BinarySearch_KeyNotFound) {
+TEST(ArraysToolkitTest, BinarySearch_KeyNotFound)
+{
     const int arr[] = {1, 3, 5, 7, 9};
     const auto index = ArraysToolkit::binarySearch(arr, 5, 6);
     EXPECT_FALSE(index.has_value());
@@ -67,7 +72,8 @@ TEST(ArraysToolkitTest, BinarySearch_KeyNotFound) {
  * @brief Test binarySearch for first element
  * @details Verifies correct handling of boundary condition at array start
  */
-TEST(ArraysToolkitTest, BinarySearch_FirstElement) {
+TEST(ArraysToolkitTest, BinarySearch_FirstElement)
+{
     const int arr[] = {1, 3, 5, 7, 9};
     const auto index = ArraysToolkit::binarySearch(arr, 5, 1);
     ASSERT_TRUE(index.has_value());
@@ -78,7 +84,8 @@ TEST(ArraysToolkitTest, BinarySearch_FirstElement) {
  * @brief Test binarySearch for last element
  * @details Verifies correct handling of boundary condition at array end
  */
-TEST(ArraysToolkitTest, BinarySearch_LastElement) {
+TEST(ArraysToolkitTest, BinarySearch_LastElement)
+{
     const int arr[] = {1, 3, 5, 7, 9};
     const auto index = ArraysToolkit::binarySearch(arr, 5, 9);
     ASSERT_TRUE(index.has_value());
@@ -89,7 +96,8 @@ TEST(ArraysToolkitTest, BinarySearch_LastElement) {
  * @brief Test binarySearch with custom range when key is found
  * @details Verifies search works correctly within specified sub-range
  */
-TEST(ArraysToolkitTest, BinarySearch_WithRange_KeyFound) {
+TEST(ArraysToolkitTest, BinarySearch_WithRange_KeyFound)
+{
     const int arr[] = {1, 3, 5, 7, 9, 11, 13};
     const auto index = ArraysToolkit::binarySearch(arr, 2, 5, 7);
     ASSERT_TRUE(index.has_value());
@@ -100,7 +108,8 @@ TEST(ArraysToolkitTest, BinarySearch_WithRange_KeyFound) {
  * @brief Test binarySearch with invalid range throws exception
  * @details Validates proper error handling for out-of-bounds range parameters
  */
-TEST(ArraysToolkitTest, BinarySearch_WithRange_InvalidRange_ThrowsException) {
+TEST(ArraysToolkitTest, BinarySearch_WithRange_InvalidRange_ThrowsException)
+{
     const int arr[] = {1, 3, 5, 7, 9};
     EXPECT_THROW(ArraysToolkit::binarySearch(arr, 3, 2, 5), std::out_of_range);
 }
@@ -109,12 +118,14 @@ TEST(ArraysToolkitTest, BinarySearch_WithRange_InvalidRange_ThrowsException) {
  * @brief Test copyOf with same length as original
  * @details Verifies exact duplication of array content
  */
-TEST(ArraysToolkitTest, CopyOf_SameLength) {
+TEST(ArraysToolkitTest, CopyOf_SameLength)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     const auto result = ArraysToolkit::copyOf(arr, 5, 5);
 
     EXPECT_EQ(result.size(), 5);
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5; ++i)
+    {
         EXPECT_EQ(result[i], arr[i]);
     }
 }
@@ -123,7 +134,8 @@ TEST(ArraysToolkitTest, CopyOf_SameLength) {
  * @brief Test copyOf with longer length than original
  * @details Verifies array is padded with default-initialized values
  */
-TEST(ArraysToolkitTest, CopyOf_LongerLength) {
+TEST(ArraysToolkitTest, CopyOf_LongerLength)
+{
     const int arr[] = {1, 2, 3};
     const auto result = ArraysToolkit::copyOf(arr, 3, 5);
 
@@ -138,7 +150,8 @@ TEST(ArraysToolkitTest, CopyOf_LongerLength) {
  * @brief Test copyOf with shorter length than original
  * @details Verifies array is truncated to specified length
  */
-TEST(ArraysToolkitTest, CopyOf_ShorterLength) {
+TEST(ArraysToolkitTest, CopyOf_ShorterLength)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     const auto result = ArraysToolkit::copyOf(arr, 5, 3);
 
@@ -151,7 +164,8 @@ TEST(ArraysToolkitTest, CopyOf_ShorterLength) {
  * @brief Test copyOfRange with basic range extraction
  * @details Verifies correct sub-array extraction from specified indices
  */
-TEST(ArraysToolkitTest, CopyOfRange_BasicRange) {
+TEST(ArraysToolkitTest, CopyOfRange_BasicRange)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     const auto result = ArraysToolkit::copyOfRange(arr, 1, 4);
 
@@ -164,7 +178,8 @@ TEST(ArraysToolkitTest, CopyOfRange_BasicRange) {
  * @brief Test copyOfRange with full array range
  * @details Verifies complete array duplication using range method
  */
-TEST(ArraysToolkitTest, CopyOfRange_FullRange) {
+TEST(ArraysToolkitTest, CopyOfRange_FullRange)
+{
     const int arr[] = {1, 2, 3};
     const auto result = ArraysToolkit::copyOfRange(arr, 0, 3);
 
@@ -177,7 +192,8 @@ TEST(ArraysToolkitTest, CopyOfRange_FullRange) {
  * @brief Test copyOfRange with invalid range throws exception
  * @details Validates proper error handling when from > to
  */
-TEST(ArraysToolkitTest, CopyOfRange_InvalidRange_ThrowsException) {
+TEST(ArraysToolkitTest, CopyOfRange_InvalidRange_ThrowsException)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     EXPECT_THROW(ArraysToolkit::copyOfRange(arr, 3, 2), std::out_of_range);
 }
@@ -186,7 +202,8 @@ TEST(ArraysToolkitTest, CopyOfRange_InvalidRange_ThrowsException) {
  * @brief Test equals with identical arrays
  * @details Verifies content comparison returns true for matching arrays
  */
-TEST(ArraysToolkitTest, Equals_IdenticalArrays) {
+TEST(ArraysToolkitTest, Equals_IdenticalArrays)
+{
     const int a[] = {1, 2, 3};
     const int b[] = {1, 2, 3};
     EXPECT_TRUE(ArraysToolkit::equals(a, 3, b, 3));
@@ -196,7 +213,8 @@ TEST(ArraysToolkitTest, Equals_IdenticalArrays) {
  * @brief Test equals with different content
  * @details Verifies content comparison returns false for mismatched values
  */
-TEST(ArraysToolkitTest, Equals_DifferentContent) {
+TEST(ArraysToolkitTest, Equals_DifferentContent)
+{
     const int a[] = {1, 2, 3};
     const int b[] = {1, 2, 4};
     EXPECT_FALSE(ArraysToolkit::equals(a, 3, b, 3));
@@ -206,7 +224,8 @@ TEST(ArraysToolkitTest, Equals_DifferentContent) {
  * @brief Test equals with different sizes
  * @details Verifies size mismatch results in inequality
  */
-TEST(ArraysToolkitTest, Equals_DifferentSize) {
+TEST(ArraysToolkitTest, Equals_DifferentSize)
+{
     const int a[] = {1, 2, 3};
     const int b[] = {1, 2};
     EXPECT_FALSE(ArraysToolkit::equals(a, 3, b, 2));
@@ -216,7 +235,8 @@ TEST(ArraysToolkitTest, Equals_DifferentSize) {
  * @brief Test equals with empty arrays
  * @details Verifies two null/empty arrays are considered equal
  */
-TEST(ArraysToolkitTest, Equals_EmptyArrays) {
+TEST(ArraysToolkitTest, Equals_EmptyArrays)
+{
     EXPECT_TRUE(ArraysToolkit::equals<int>(nullptr, 0, nullptr, 0));
 }
 
@@ -224,11 +244,13 @@ TEST(ArraysToolkitTest, Equals_EmptyArrays) {
  * @brief Test fill with basic value assignment
  * @details Verifies all elements are set to specified value
  */
-TEST(ArraysToolkitTest, Fill_BasicFill) {
+TEST(ArraysToolkitTest, Fill_BasicFill)
+{
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::fill(arr, 5, 0);
 
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5; ++i)
+    {
         EXPECT_EQ(arr[i], 0);
     }
 }
@@ -237,7 +259,8 @@ TEST(ArraysToolkitTest, Fill_BasicFill) {
  * @brief Test fill with empty array
  * @details Verifies no crash or exception on zero-length array
  */
-TEST(ArraysToolkitTest, Fill_EmptyArray) {
+TEST(ArraysToolkitTest, Fill_EmptyArray)
+{
     // Should not throw or crash
     EXPECT_NO_THROW(ArraysToolkit::fill<int>(nullptr, 0, 5));
 }
@@ -246,7 +269,8 @@ TEST(ArraysToolkitTest, Fill_EmptyArray) {
  * @brief Test sort with unsorted array
  * @details Verifies ascending order sorting works correctly
  */
-TEST(ArraysToolkitTest, Sort_UnsortedArray) {
+TEST(ArraysToolkitTest, Sort_UnsortedArray)
+{
     int arr[] = {5, 2, 8, 1, 9};
     ArraysToolkit::sort(arr, 5);
 
@@ -261,7 +285,8 @@ TEST(ArraysToolkitTest, Sort_UnsortedArray) {
  * @brief Test sort with already sorted array
  * @details Verifies idempotency of sort operation
  */
-TEST(ArraysToolkitTest, Sort_AlreadySorted) {
+TEST(ArraysToolkitTest, Sort_AlreadySorted)
+{
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::sort(arr, 5);
 
@@ -273,7 +298,8 @@ TEST(ArraysToolkitTest, Sort_AlreadySorted) {
  * @brief Test sort with custom range
  * @details Verifies partial sorting within specified indices
  */
-TEST(ArraysToolkitTest, Sort_WithRange) {
+TEST(ArraysToolkitTest, Sort_WithRange)
+{
     int arr[] = {5, 3, 1, 4, 2};
     ArraysToolkit::sort(arr, 1, 4);
 
@@ -288,7 +314,8 @@ TEST(ArraysToolkitTest, Sort_WithRange) {
  * @brief Test sort with invalid range throws exception
  * @details Validates proper error handling when from > to
  */
-TEST(ArraysToolkitTest, Sort_InvalidRange_ThrowsException) {
+TEST(ArraysToolkitTest, Sort_InvalidRange_ThrowsException)
+{
     int arr[] = {1, 2, 3, 4, 5};
     EXPECT_THROW(ArraysToolkit::sort(arr, 3, 2), std::out_of_range);
 }
@@ -297,7 +324,8 @@ TEST(ArraysToolkitTest, Sort_InvalidRange_ThrowsException) {
  * @brief Test toString with basic array
  * @details Verifies correct string representation format "[elem1, elem2, ...]"
  */
-TEST(ArraysToolkitTest, ToString_BasicArray) {
+TEST(ArraysToolkitTest, ToString_BasicArray)
+{
     const int arr[] = {1, 2, 3};
     const auto str = ArraysToolkit::toString(arr, 3);
     EXPECT_EQ(str, "[1, 2, 3]");
@@ -307,7 +335,8 @@ TEST(ArraysToolkitTest, ToString_BasicArray) {
  * @brief Test toString with empty array
  * @details Verifies empty array produces "[]" string
  */
-TEST(ArraysToolkitTest, ToString_EmptyArray) {
+TEST(ArraysToolkitTest, ToString_EmptyArray)
+{
     const auto str = ArraysToolkit::toString<int>(nullptr, 0);
     EXPECT_EQ(str, "[]");
 }
@@ -316,7 +345,8 @@ TEST(ArraysToolkitTest, ToString_EmptyArray) {
  * @brief Test toString with single element
  * @details Verifies single-element array formatting
  */
-TEST(ArraysToolkitTest, ToString_SingleElement) {
+TEST(ArraysToolkitTest, ToString_SingleElement)
+{
     const int arr[] = {42};
     const auto str = ArraysToolkit::toString(arr, 1);
     EXPECT_EQ(str, "[42]");
@@ -326,7 +356,8 @@ TEST(ArraysToolkitTest, ToString_SingleElement) {
  * @brief Test toString with string array
  * @details Verifies non-numeric types are correctly formatted
  */
-TEST(ArraysToolkitTest, ToString_StringArray) {
+TEST(ArraysToolkitTest, ToString_StringArray)
+{
     const std::string arr[] = {"hello", "world"};
     const auto str = ArraysToolkit::toString(arr, 2);
     EXPECT_EQ(str, "[hello, world]");
@@ -338,7 +369,8 @@ TEST(ArraysToolkitTest, ToString_StringArray) {
  * @brief Test isEmpty with null array
  * @details Verifies null array is considered empty
  */
-TEST(ArraysToolkitTest, IsEmpty_NullArray) {
+TEST(ArraysToolkitTest, IsEmpty_NullArray)
+{
     EXPECT_TRUE(ArraysToolkit::isEmpty<int>(nullptr, 0));
 }
 
@@ -346,7 +378,8 @@ TEST(ArraysToolkitTest, IsEmpty_NullArray) {
  * @brief Test isEmpty with zero size
  * @details Verifies zero-size array is considered empty
  */
-TEST(ArraysToolkitTest, IsEmpty_ZeroSize) {
+TEST(ArraysToolkitTest, IsEmpty_ZeroSize)
+{
     const int arr[] = {1, 2, 3};
     EXPECT_TRUE(ArraysToolkit::isEmpty(arr, 0));
 }
@@ -355,7 +388,8 @@ TEST(ArraysToolkitTest, IsEmpty_ZeroSize) {
  * @brief Test isEmpty with non-empty array
  * @details Verifies non-empty array returns false
  */
-TEST(ArraysToolkitTest, IsEmpty_NonEmpty) {
+TEST(ArraysToolkitTest, IsEmpty_NonEmpty)
+{
     const int arr[] = {1, 2, 3};
     EXPECT_FALSE(ArraysToolkit::isEmpty(arr, 3));
 }
@@ -364,7 +398,8 @@ TEST(ArraysToolkitTest, IsEmpty_NonEmpty) {
  * @brief Test contains when element exists
  * @details Verifies contains returns true for existing element
  */
-TEST(ArraysToolkitTest, Contains_ElementExists) {
+TEST(ArraysToolkitTest, Contains_ElementExists)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     EXPECT_TRUE(ArraysToolkit::contains(arr, 5, 3));
 }
@@ -373,7 +408,8 @@ TEST(ArraysToolkitTest, Contains_ElementExists) {
  * @brief Test contains when element doesn't exist
  * @details Verifies contains returns false for non-existing element
  */
-TEST(ArraysToolkitTest, Contains_ElementNotExists) {
+TEST(ArraysToolkitTest, Contains_ElementNotExists)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     EXPECT_FALSE(ArraysToolkit::contains(arr, 5, 6));
 }
@@ -382,7 +418,8 @@ TEST(ArraysToolkitTest, Contains_ElementNotExists) {
  * @brief Test contains with empty array
  * @details Verifies contains returns false for empty array
  */
-TEST(ArraysToolkitTest, Contains_EmptyArray) {
+TEST(ArraysToolkitTest, Contains_EmptyArray)
+{
     EXPECT_FALSE(ArraysToolkit::contains<int>(nullptr, 0, 1));
 }
 
@@ -390,7 +427,8 @@ TEST(ArraysToolkitTest, Contains_EmptyArray) {
  * @brief Test linearSearch when key is found
  * @details Verifies correct index is returned
  */
-TEST(ArraysToolkitTest, LinearSearch_KeyFound) {
+TEST(ArraysToolkitTest, LinearSearch_KeyFound)
+{
     const int arr[] = {5, 3, 8, 1, 9};
     const auto index = ArraysToolkit::linearSearch(arr, 5, 8);
     ASSERT_TRUE(index.has_value());
@@ -401,7 +439,8 @@ TEST(ArraysToolkitTest, LinearSearch_KeyFound) {
  * @brief Test linearSearch when key is not found
  * @details Verifies std::nullopt is returned for non-existent element
  */
-TEST(ArraysToolkitTest, LinearSearch_KeyNotFound) {
+TEST(ArraysToolkitTest, LinearSearch_KeyNotFound)
+{
     const int arr[] = {5, 3, 8, 1, 9};
     const auto index = ArraysToolkit::linearSearch(arr, 5, 7);
     EXPECT_FALSE(index.has_value());
@@ -411,7 +450,8 @@ TEST(ArraysToolkitTest, LinearSearch_KeyNotFound) {
  * @brief Test linearSearch for first occurrence
  * @details Verifies first occurrence is returned for duplicates
  */
-TEST(ArraysToolkitTest, LinearSearch_FirstOccurrence) {
+TEST(ArraysToolkitTest, LinearSearch_FirstOccurrence)
+{
     const int arr[] = {1, 2, 3, 2, 4};
     const auto index = ArraysToolkit::linearSearch(arr, 5, 2);
     ASSERT_TRUE(index.has_value());
@@ -422,7 +462,8 @@ TEST(ArraysToolkitTest, LinearSearch_FirstOccurrence) {
  * @brief Test maxElement finds maximum value index
  * @details Verifies correct index of maximum element
  */
-TEST(ArraysToolkitTest, MaxElement_FindsMaximum) {
+TEST(ArraysToolkitTest, MaxElement_FindsMaximum)
+{
     const int arr[] = {5, 2, 8, 1, 9};
     const auto index = ArraysToolkit::maxElement(arr, 5);
     ASSERT_TRUE(index.has_value());
@@ -434,7 +475,8 @@ TEST(ArraysToolkitTest, MaxElement_FindsMaximum) {
  * @brief Test maxElement with empty array
  * @details Verifies std::nullopt is returned for empty array
  */
-TEST(ArraysToolkitTest, MaxElement_EmptyArray) {
+TEST(ArraysToolkitTest, MaxElement_EmptyArray)
+{
     const auto index = ArraysToolkit::maxElement<int>(nullptr, 0);
     EXPECT_FALSE(index.has_value());
 }
@@ -443,7 +485,8 @@ TEST(ArraysToolkitTest, MaxElement_EmptyArray) {
  * @brief Test minElement finds minimum value index
  * @details Verifies correct index of minimum element
  */
-TEST(ArraysToolkitTest, MinElement_FindsMinimum) {
+TEST(ArraysToolkitTest, MinElement_FindsMinimum)
+{
     const int arr[] = {5, 2, 8, 1, 9};
     const auto index = ArraysToolkit::minElement(arr, 5);
     ASSERT_TRUE(index.has_value());
@@ -455,7 +498,8 @@ TEST(ArraysToolkitTest, MinElement_FindsMinimum) {
  * @brief Test minElement with empty array
  * @details Verifies std::nullopt is returned for empty array
  */
-TEST(ArraysToolkitTest, MinElement_EmptyArray) {
+TEST(ArraysToolkitTest, MinElement_EmptyArray)
+{
     const auto index = ArraysToolkit::minElement<int>(nullptr, 0);
     EXPECT_FALSE(index.has_value());
 }
@@ -464,7 +508,8 @@ TEST(ArraysToolkitTest, MinElement_EmptyArray) {
  * @brief Test count occurrences of a value
  * @details Verifies correct count of element occurrences
  */
-TEST(ArraysToolkitTest, Count_MultipleOccurrences) {
+TEST(ArraysToolkitTest, Count_MultipleOccurrences)
+{
     const int arr[] = {1, 2, 3, 2, 4, 2, 5};
     const auto cnt = ArraysToolkit::count(arr, 7, 2);
     EXPECT_EQ(cnt, 3);
@@ -474,7 +519,8 @@ TEST(ArraysToolkitTest, Count_MultipleOccurrences) {
  * @brief Test count when value doesn't exist
  * @details Verifies 0 is returned for non-existent value
  */
-TEST(ArraysToolkitTest, Count_NoOccurrences) {
+TEST(ArraysToolkitTest, Count_NoOccurrences)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     const auto cnt = ArraysToolkit::count(arr, 5, 6);
     EXPECT_EQ(cnt, 0);
@@ -484,7 +530,8 @@ TEST(ArraysToolkitTest, Count_NoOccurrences) {
  * @brief Test reverse entire array
  * @details Verifies array is reversed in place
  */
-TEST(ArraysToolkitTest, Reverse_EntireArray) {
+TEST(ArraysToolkitTest, Reverse_EntireArray)
+{
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::reverse(arr, 5);
     EXPECT_EQ(arr[0], 5);
@@ -495,7 +542,8 @@ TEST(ArraysToolkitTest, Reverse_EntireArray) {
  * @brief Test reverse with range
  * @details Verifies partial array reversal
  */
-TEST(ArraysToolkitTest, Reverse_WithRange) {
+TEST(ArraysToolkitTest, Reverse_WithRange)
+{
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::reverse(arr, 1, 4);
     EXPECT_EQ(arr[0], 1); // Unchanged
@@ -509,7 +557,8 @@ TEST(ArraysToolkitTest, Reverse_WithRange) {
  * @brief Test reverse with invalid range throws exception
  * @details Validates proper error handling
  */
-TEST(ArraysToolkitTest, Reverse_InvalidRange_ThrowsException) {
+TEST(ArraysToolkitTest, Reverse_InvalidRange_ThrowsException)
+{
     int arr[] = {1, 2, 3, 4, 5};
     EXPECT_THROW(ArraysToolkit::reverse(arr, 3, 2), std::out_of_range);
 }
@@ -518,7 +567,8 @@ TEST(ArraysToolkitTest, Reverse_InvalidRange_ThrowsException) {
  * @brief Test distinct removes duplicates
  * @details Verifies duplicate elements are removed and result is sorted
  */
-TEST(ArraysToolkitTest, Distinct_RemovesDuplicates) {
+TEST(ArraysToolkitTest, Distinct_RemovesDuplicates)
+{
     const int arr[] = {3, 1, 2, 1, 3, 2, 4};
     const auto result = ArraysToolkit::distinct(arr, 7);
     ASSERT_EQ(result.size(), 4);
@@ -532,9 +582,11 @@ TEST(ArraysToolkitTest, Distinct_RemovesDuplicates) {
  * @brief Test map transforms elements
  * @details Verifies transformation function is applied to all elements
  */
-TEST(ArraysToolkitTest, Map_TransformElements) {
+TEST(ArraysToolkitTest, Map_TransformElements)
+{
     const int arr[] = {1, 2, 3, 4, 5};
-    const auto result = ArraysToolkit::map<int, int>(arr, 5, [](int x) {
+    const auto result = ArraysToolkit::map<int, int>(arr, 5, [](int x)
+    {
         return x * 2;
     });
     ASSERT_EQ(result.size(), 5);
@@ -546,9 +598,11 @@ TEST(ArraysToolkitTest, Map_TransformElements) {
  * @brief Test map with type conversion
  * @details Verifies map can convert between different types
  */
-TEST(ArraysToolkitTest, Map_TypeConversion) {
+TEST(ArraysToolkitTest, Map_TypeConversion)
+{
     const int arr[] = {1, 2, 3};
-    const auto result = ArraysToolkit::map<int, double>(arr, 3, [](int x) {
+    const auto result = ArraysToolkit::map<int, double>(arr, 3, [](int x)
+    {
         return static_cast<double>(x) * 1.5;
     });
     ASSERT_EQ(result.size(), 3);
@@ -560,9 +614,11 @@ TEST(ArraysToolkitTest, Map_TypeConversion) {
  * @brief Test filter keeps matching elements
  * @details Verifies only elements satisfying predicate are kept
  */
-TEST(ArraysToolkitTest, Filter_KeepsMatchingElements) {
+TEST(ArraysToolkitTest, Filter_KeepsMatchingElements)
+{
     const int arr[] = {1, 2, 3, 4, 5, 6};
-    const auto result = ArraysToolkit::filter(arr, 6, [](int x) {
+    const auto result = ArraysToolkit::filter(arr, 6, [](int x)
+    {
         return x % 2 == 0;
     });
     ASSERT_EQ(result.size(), 3);
@@ -575,9 +631,11 @@ TEST(ArraysToolkitTest, Filter_KeepsMatchingElements) {
  * @brief Test filter with no matches
  * @details Verifies empty vector is returned when no elements match
  */
-TEST(ArraysToolkitTest, Filter_NoMatches) {
+TEST(ArraysToolkitTest, Filter_NoMatches)
+{
     const int arr[] = {1, 3, 5, 7};
-    const auto result = ArraysToolkit::filter(arr, 4, [](int x) {
+    const auto result = ArraysToolkit::filter(arr, 4, [](int x)
+    {
         return x % 2 == 0;
     });
     EXPECT_TRUE(result.empty());
@@ -587,7 +645,8 @@ TEST(ArraysToolkitTest, Filter_NoMatches) {
  * @brief Test sum calculates total
  * @details Verifies sum of all elements is correct
  */
-TEST(ArraysToolkitTest, Sum_CalculatesTotal) {
+TEST(ArraysToolkitTest, Sum_CalculatesTotal)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     const auto total = ArraysToolkit::sum(arr, 5);
     EXPECT_EQ(total, 15);
@@ -597,7 +656,8 @@ TEST(ArraysToolkitTest, Sum_CalculatesTotal) {
  * @brief Test sum with empty array
  * @details Verifies sum of empty array is zero
  */
-TEST(ArraysToolkitTest, Sum_EmptyArray) {
+TEST(ArraysToolkitTest, Sum_EmptyArray)
+{
     const auto total = ArraysToolkit::sum<int>(nullptr, 0);
     EXPECT_EQ(total, 0);
 }
@@ -606,7 +666,8 @@ TEST(ArraysToolkitTest, Sum_EmptyArray) {
  * @brief Test average calculates mean
  * @details Verifies average calculation is correct
  */
-TEST(ArraysToolkitTest, Average_CalculatesMean) {
+TEST(ArraysToolkitTest, Average_CalculatesMean)
+{
     const int arr[] = {2, 4, 6, 8};
     const auto avg = ArraysToolkit::average(arr, 4);
     EXPECT_DOUBLE_EQ(avg, 5.0);
@@ -616,7 +677,8 @@ TEST(ArraysToolkitTest, Average_CalculatesMean) {
  * @brief Test average with empty array throws exception
  * @details Validates proper error handling
  */
-TEST(ArraysToolkitTest, Average_EmptyArray_ThrowsException) {
+TEST(ArraysToolkitTest, Average_EmptyArray_ThrowsException)
+{
     EXPECT_THROW(ArraysToolkit::average<int>(nullptr, 0), std::invalid_argument);
 }
 
@@ -624,7 +686,8 @@ TEST(ArraysToolkitTest, Average_EmptyArray_ThrowsException) {
  * @brief Test allMatch when all elements satisfy predicate
  * @details Verifies true is returned when condition holds for all
  */
-TEST(ArraysToolkitTest, AllMatch_AllSatisfy) {
+TEST(ArraysToolkitTest, AllMatch_AllSatisfy)
+{
     const int arr[] = {2, 4, 6, 8};
     EXPECT_TRUE(ArraysToolkit::allMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
@@ -633,7 +696,8 @@ TEST(ArraysToolkitTest, AllMatch_AllSatisfy) {
  * @brief Test allMatch when some elements don't satisfy
  * @details Verifies false is returned when condition fails for any
  */
-TEST(ArraysToolkitTest, AllMatch_NotAllSatisfy) {
+TEST(ArraysToolkitTest, AllMatch_NotAllSatisfy)
+{
     const int arr[] = {2, 3, 6, 8};
     EXPECT_FALSE(ArraysToolkit::allMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
@@ -642,7 +706,8 @@ TEST(ArraysToolkitTest, AllMatch_NotAllSatisfy) {
  * @brief Test anyMatch when at least one element satisfies
  * @details Verifies true is returned when condition holds for any
  */
-TEST(ArraysToolkitTest, AnyMatch_AnySatisfies) {
+TEST(ArraysToolkitTest, AnyMatch_AnySatisfies)
+{
     const int arr[] = {1, 3, 5, 6};
     EXPECT_TRUE(ArraysToolkit::anyMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
@@ -651,7 +716,8 @@ TEST(ArraysToolkitTest, AnyMatch_AnySatisfies) {
  * @brief Test anyMatch when no elements satisfy
  * @details Verifies false is returned when condition fails for all
  */
-TEST(ArraysToolkitTest, AnyMatch_NoneSatisfies) {
+TEST(ArraysToolkitTest, AnyMatch_NoneSatisfies)
+{
     const int arr[] = {1, 3, 5, 7};
     EXPECT_FALSE(ArraysToolkit::anyMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
@@ -660,7 +726,8 @@ TEST(ArraysToolkitTest, AnyMatch_NoneSatisfies) {
  * @brief Test noneMatch when no elements satisfy predicate
  * @details Verifies true is returned when condition fails for all
  */
-TEST(ArraysToolkitTest, NoneMatch_NoneSatisfy) {
+TEST(ArraysToolkitTest, NoneMatch_NoneSatisfy)
+{
     const int arr[] = {1, 3, 5, 7};
     EXPECT_TRUE(ArraysToolkit::noneMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
@@ -669,7 +736,8 @@ TEST(ArraysToolkitTest, NoneMatch_NoneSatisfy) {
  * @brief Test noneMatch when some elements satisfy
  * @details Verifies false is returned when condition holds for any
  */
-TEST(ArraysToolkitTest, NoneMatch_SomeSatisfy) {
+TEST(ArraysToolkitTest, NoneMatch_SomeSatisfy)
+{
     const int arr[] = {1, 2, 3, 5};
     EXPECT_FALSE(ArraysToolkit::noneMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
@@ -678,7 +746,8 @@ TEST(ArraysToolkitTest, NoneMatch_SomeSatisfy) {
  * @brief Test concat merges two arrays
  * @details Verifies both arrays are concatenated in order
  */
-TEST(ArraysToolkitTest, Concat_MergesArrays) {
+TEST(ArraysToolkitTest, Concat_MergesArrays)
+{
     const int a[] = {1, 2, 3};
     const int b[] = {4, 5, 6};
     const auto result = ArraysToolkit::concat(a, 3, b, 3);
@@ -691,7 +760,8 @@ TEST(ArraysToolkitTest, Concat_MergesArrays) {
  * @brief Test concat with empty first array
  * @details Verifies concatenation works with empty first array
  */
-TEST(ArraysToolkitTest, Concat_EmptyFirstArray) {
+TEST(ArraysToolkitTest, Concat_EmptyFirstArray)
+{
     const int b[] = {4, 5, 6};
     const auto result = ArraysToolkit::concat<int>(nullptr, 0, b, 3);
     ASSERT_EQ(result.size(), 3);
@@ -702,7 +772,8 @@ TEST(ArraysToolkitTest, Concat_EmptyFirstArray) {
  * @brief Test intersection finds common elements
  * @details Verifies intersection returns sorted unique common elements
  */
-TEST(ArraysToolkitTest, Intersection_FindsCommonElements) {
+TEST(ArraysToolkitTest, Intersection_FindsCommonElements)
+{
     const int a[] = {1, 2, 3, 4, 5};
     const int b[] = {3, 4, 5, 6, 7};
     const auto result = ArraysToolkit::intersection(a, 5, b, 5);
@@ -716,7 +787,8 @@ TEST(ArraysToolkitTest, Intersection_FindsCommonElements) {
  * @brief Test intersection with no common elements
  * @details Verifies empty vector is returned
  */
-TEST(ArraysToolkitTest, Intersection_NoCommonElements) {
+TEST(ArraysToolkitTest, Intersection_NoCommonElements)
+{
     const int a[] = {1, 2, 3};
     const int b[] = {4, 5, 6};
     const auto result = ArraysToolkit::intersection(a, 3, b, 3);
@@ -727,7 +799,8 @@ TEST(ArraysToolkitTest, Intersection_NoCommonElements) {
  * @brief Test unionSet combines all unique elements
  * @details Verifies union returns sorted unique elements from both arrays
  */
-TEST(ArraysToolkitTest, UnionSet_CombinesUniqueElements) {
+TEST(ArraysToolkitTest, UnionSet_CombinesUniqueElements)
+{
     const int a[] = {1, 2, 3};
     const int b[] = {3, 4, 5};
     const auto result = ArraysToolkit::unionSet(a, 3, b, 3);
@@ -740,7 +813,8 @@ TEST(ArraysToolkitTest, UnionSet_CombinesUniqueElements) {
  * @brief Test difference finds elements in first but not second
  * @details Verifies difference returns sorted unique elements
  */
-TEST(ArraysToolkitTest, Difference_FindsUniqueElements) {
+TEST(ArraysToolkitTest, Difference_FindsUniqueElements)
+{
     const int a[] = {1, 2, 3, 4, 5};
     const int b[] = {3, 4, 5, 6, 7};
     const auto result = ArraysToolkit::difference(a, 5, b, 5);
@@ -753,7 +827,8 @@ TEST(ArraysToolkitTest, Difference_FindsUniqueElements) {
  * @brief Test isSorted with sorted array
  * @details Verifies true is returned for sorted array
  */
-TEST(ArraysToolkitTest, IsSorted_SortedArray) {
+TEST(ArraysToolkitTest, IsSorted_SortedArray)
+{
     const int arr[] = {1, 2, 3, 4, 5};
     EXPECT_TRUE(ArraysToolkit::isSorted(arr, 5));
 }
@@ -762,7 +837,8 @@ TEST(ArraysToolkitTest, IsSorted_SortedArray) {
  * @brief Test isSorted with unsorted array
  * @details Verifies false is returned for unsorted array
  */
-TEST(ArraysToolkitTest, IsSorted_UnsortedArray) {
+TEST(ArraysToolkitTest, IsSorted_UnsortedArray)
+{
     const int arr[] = {1, 3, 2, 4, 5};
     EXPECT_FALSE(ArraysToolkit::isSorted(arr, 5));
 }
@@ -771,7 +847,8 @@ TEST(ArraysToolkitTest, IsSorted_UnsortedArray) {
  * @brief Test isSorted with single element
  * @details Verifies single element array is considered sorted
  */
-TEST(ArraysToolkitTest, IsSorted_SingleElement) {
+TEST(ArraysToolkitTest, IsSorted_SingleElement)
+{
     const int arr[] = {42};
     EXPECT_TRUE(ArraysToolkit::isSorted(arr, 1));
 }
@@ -780,7 +857,8 @@ TEST(ArraysToolkitTest, IsSorted_SingleElement) {
  * @brief Test isSorted with empty array
  * @details Verifies empty array is considered sorted
  */
-TEST(ArraysToolkitTest, IsSorted_EmptyArray) {
+TEST(ArraysToolkitTest, IsSorted_EmptyArray)
+{
     EXPECT_TRUE(ArraysToolkit::isSorted<int>(nullptr, 0));
 }
 
@@ -788,7 +866,8 @@ TEST(ArraysToolkitTest, IsSorted_EmptyArray) {
  * @brief Test shuffle randomizes array order
  * @details Verifies shuffled array has same elements but potentially different order
  */
-TEST(ArraysToolkitTest, Shuffle_RandomizesOrder) {
+TEST(ArraysToolkitTest, Shuffle_RandomizesOrder)
+{
     int arr[] = {1, 2, 3, 4, 5};
     const auto original = ArraysToolkit::asList(arr, 5);
     ArraysToolkit::shuffle(arr, 5);
@@ -803,7 +882,8 @@ TEST(ArraysToolkitTest, Shuffle_RandomizesOrder) {
  * @brief Test rotate shifts elements right
  * @details Verifies elements are rotated by specified positions
  */
-TEST(ArraysToolkitTest, Rotate_RightRotation) {
+TEST(ArraysToolkitTest, Rotate_RightRotation)
+{
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::rotate(arr, 5, 2);
     EXPECT_EQ(arr[0], 4);
@@ -817,7 +897,8 @@ TEST(ArraysToolkitTest, Rotate_RightRotation) {
  * @brief Test rotate shifts elements left (negative positions)
  * @details Verifies left rotation works correctly
  */
-TEST(ArraysToolkitTest, Rotate_LeftRotation) {
+TEST(ArraysToolkitTest, Rotate_LeftRotation)
+{
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::rotate(arr, 5, -2);
     EXPECT_EQ(arr[0], 3);
@@ -831,7 +912,8 @@ TEST(ArraysToolkitTest, Rotate_LeftRotation) {
  * @brief Test rotate with zero positions
  * @details Verifies array remains unchanged
  */
-TEST(ArraysToolkitTest, Rotate_ZeroPositions) {
+TEST(ArraysToolkitTest, Rotate_ZeroPositions)
+{
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::rotate(arr, 5, 0);
     EXPECT_EQ(arr[0], 1);
@@ -842,7 +924,8 @@ TEST(ArraysToolkitTest, Rotate_ZeroPositions) {
  * @brief Test topK gets largest K elements
  * @details Verifies top K elements are returned in descending order
  */
-TEST(ArraysToolkitTest, TopK_GetsLargestElements) {
+TEST(ArraysToolkitTest, TopK_GetsLargestElements)
+{
     const int arr[] = {5, 3, 8, 1, 9, 2, 7};
     const auto result = ArraysToolkit::topK(arr, 7, 3);
     ASSERT_EQ(result.size(), 3);
@@ -855,7 +938,8 @@ TEST(ArraysToolkitTest, TopK_GetsLargestElements) {
  * @brief Test topK with invalid k throws exception
  * @details Validates proper error handling
  */
-TEST(ArraysToolkitTest, TopK_InvalidK_ThrowsException) {
+TEST(ArraysToolkitTest, TopK_InvalidK_ThrowsException)
+{
     int arr[] = {1, 2, 3, 4, 5};
     EXPECT_THROW(ArraysToolkit::topK(arr, 5, 0), std::invalid_argument);
     EXPECT_THROW(ArraysToolkit::topK(arr, 5, 6), std::invalid_argument);

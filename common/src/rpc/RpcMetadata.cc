@@ -10,23 +10,28 @@
 #include <unordered_map>
 #include <utility>
 
-namespace common::rpc {
-auto RpcMetadata::grpcStateToString(const grpc_connectivity_state state) -> std::string {
-    // Using table-driven approach for better maintainability
-    static const std::unordered_map<grpc_connectivity_state, std::string> stateToStringMap = {{GRPC_CHANNEL_IDLE, "IDLE"}, {GRPC_CHANNEL_CONNECTING, "CONNECTING"}, {GRPC_CHANNEL_READY, "READY"}, {GRPC_CHANNEL_TRANSIENT_FAILURE, "TRANSIENT_FAILURE"}, {GRPC_CHANNEL_SHUTDOWN, "SHUTDOWN"}};
+namespace common::rpc
+{
+    auto RpcMetadata::grpcStateToString(const grpc_connectivity_state state) -> std::string
+    {
+        // Using table-driven approach for better maintainability
+        static const std::unordered_map<grpc_connectivity_state, std::string> stateToStringMap = {{GRPC_CHANNEL_IDLE, "IDLE"}, {GRPC_CHANNEL_CONNECTING, "CONNECTING"}, {GRPC_CHANNEL_READY, "READY"}, {GRPC_CHANNEL_TRANSIENT_FAILURE, "TRANSIENT_FAILURE"}, {GRPC_CHANNEL_SHUTDOWN, "SHUTDOWN"}};
 
-    // Look up the state in our map
-    const auto it = stateToStringMap.find(state);
-    if (it != stateToStringMap.end()) {
-        return it->second;
+        // Look up the state in our map
+        const auto it = stateToStringMap.find(state);
+        if (it != stateToStringMap.end())
+        {
+            return it->second;
+        }
+        return "UNKNOWN";
     }
-    return "UNKNOWN";
-}
 
-auto RpcMetadata::grpcStateToEnum(const grpc_connectivity_state state) -> GrpcConnectivityState {
-    // Map grpc_connectivity_state to our internal GrpcConnectivityState enum
-    GrpcConnectivityState result;
-    switch (state) {
+    auto RpcMetadata::grpcStateToEnum(const grpc_connectivity_state state) -> GrpcConnectivityState
+    {
+        // Map grpc_connectivity_state to our internal GrpcConnectivityState enum
+        GrpcConnectivityState result;
+        switch (state)
+        {
         case GRPC_CHANNEL_IDLE:
             result = GrpcConnectivityState::IDLE;
             break;
@@ -44,14 +49,16 @@ auto RpcMetadata::grpcStateToEnum(const grpc_connectivity_state state) -> GrpcCo
             break;
         default:
             result = GrpcConnectivityState::IDLE;
+        }
+        return result;
     }
-    return result;
-}
 
-auto RpcMetadata::grpcStateToString(const GrpcConnectivityState state) -> std::string {
-    std::string result;
-    // Convert our internal GrpcConnectivityState enum to string
-    switch (state) {
+    auto RpcMetadata::grpcStateToString(const GrpcConnectivityState state) -> std::string
+    {
+        std::string result;
+        // Convert our internal GrpcConnectivityState enum to string
+        switch (state)
+        {
         case GrpcConnectivityState::IDLE:
             result = "IDLE";
             break;
@@ -69,7 +76,7 @@ auto RpcMetadata::grpcStateToString(const GrpcConnectivityState state) -> std::s
             break;
         default:
             result = "UNKNOWN";
+        }
+        return result;
     }
-    return result;
-}
 } // common

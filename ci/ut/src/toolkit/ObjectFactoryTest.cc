@@ -15,7 +15,8 @@ using namespace common::toolkit;
 /**
  * @brief Test interface for factory pattern
  */
-class IShape {
+class IShape
+{
 public:
     virtual ~IShape() = default;
 
@@ -27,16 +28,20 @@ public:
 /**
  * @brief Concrete implementations for testing
  */
-class Circle : public IShape {
+class Circle : public IShape
+{
 public:
-    explicit Circle(double radius = 1.0) : radius_(radius) {
+    explicit Circle(double radius = 1.0) : radius_(radius)
+    {
     }
 
-    [[nodiscard]] auto getName() const -> std::string override {
+    [[nodiscard]] auto getName() const -> std::string override
+    {
         return "Circle";
     }
 
-    [[nodiscard]] auto getArea() const -> double override {
+    [[nodiscard]] auto getArea() const -> double override
+    {
         return 3.14159 * radius_ * radius_;
     }
 
@@ -44,16 +49,20 @@ private:
     double radius_;
 };
 
-class Rectangle : public IShape {
+class Rectangle : public IShape
+{
 public:
-    Rectangle(double width = 1.0, double height = 1.0) : width_(width), height_(height) {
+    Rectangle(double width = 1.0, double height = 1.0) : width_(width), height_(height)
+    {
     }
 
-    [[nodiscard]] auto getName() const -> std::string override {
+    [[nodiscard]] auto getName() const -> std::string override
+    {
         return "Rectangle";
     }
 
-    [[nodiscard]] auto getArea() const -> double override {
+    [[nodiscard]] auto getArea() const -> double override
+    {
         return width_ * height_;
     }
 
@@ -62,16 +71,20 @@ private:
     double height_;
 };
 
-class Triangle : public IShape {
+class Triangle : public IShape
+{
 public:
-    Triangle(double base = 1.0, double height = 1.0) : base_(base), height_(height) {
+    Triangle(double base = 1.0, double height = 1.0) : base_(base), height_(height)
+    {
     }
 
-    [[nodiscard]] auto getName() const -> std::string override {
+    [[nodiscard]] auto getName() const -> std::string override
+    {
         return "Triangle";
     }
 
-    [[nodiscard]] auto getArea() const -> double override {
+    [[nodiscard]] auto getArea() const -> double override
+    {
         return 0.5 * base_ * height_;
     }
 
@@ -83,9 +96,11 @@ private:
 /**
  * @brief Concrete factory implementation for testing
  */
-class ShapeFactory : public ObjectFactory<IShape> {
+class ShapeFactory : public ObjectFactory<IShape>
+{
 protected:
-    auto registerAll() -> void override {
+    auto registerAll() -> void override
+    {
         registerType<Circle>("Circle", 5.0);
         registerType<Rectangle>("Rectangle", 4.0, 6.0);
         registerType<Triangle>("Triangle", 3.0, 4.0);
@@ -96,7 +111,8 @@ protected:
  * @brief Test registration and creation of basic types
  * @details Verifies types can be registered and queried
  */
-TEST(ObjectFactoryTest, RegisterAndCreate_BasicTypes) {
+TEST(ObjectFactoryTest, RegisterAndCreate_BasicTypes)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
 
@@ -113,7 +129,8 @@ TEST(ObjectFactoryTest, RegisterAndCreate_BasicTypes) {
  * @brief Test object creation for valid registered types
  * @details Verifies created objects have correct properties
  */
-TEST(ObjectFactoryTest, CreateObject_ValidTypes) {
+TEST(ObjectFactoryTest, CreateObject_ValidTypes)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
     factory.execute();
@@ -141,7 +158,8 @@ TEST(ObjectFactoryTest, CreateObject_ValidTypes) {
  * @brief Test creation of multiple instances of same type
  * @details Verifies each call creates a new independent instance
  */
-TEST(ObjectFactoryTest, CreateObject_MultipleInstances) {
+TEST(ObjectFactoryTest, CreateObject_MultipleInstances)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
     factory.execute();
@@ -160,7 +178,8 @@ TEST(ObjectFactoryTest, CreateObject_MultipleInstances) {
  * @brief Test error handling for unregistered type
  * @details Verifies std::runtime_error is thrown for unknown types
  */
-TEST(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException) {
+TEST(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
     factory.execute();
@@ -168,34 +187,37 @@ TEST(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException) {
     EXPECT_THROW(
         ObjectFactory<IShape>::createObject("UnknownShape"),
         std::runtime_error
-        );
+    );
 }
 
 /**
  * @brief Test error handling for empty type name
  * @details Verifies std::invalid_argument is thrown for empty string
  */
-TEST(ObjectFactoryTest, CreateObject_EmptyTypeName_ThrowsException) {
+TEST(ObjectFactoryTest, CreateObject_EmptyTypeName_ThrowsException)
+{
     EXPECT_THROW(
         ObjectFactory<IShape>::createObject(""),
         std::invalid_argument
-        );
+    );
 }
 
-TEST(ObjectFactoryTest, RegisterType_EmptyTypeName_ThrowsException) {
+TEST(ObjectFactoryTest, RegisterType_EmptyTypeName_ThrowsException)
+{
     ShapeFactory factory;
 
     EXPECT_THROW(
         ObjectFactory<IShape>::registerType<Circle>("", 1.0),
         std::invalid_argument
-        );
+    );
 }
 
 /**
  * @brief Test isRegistered functionality after execution
  * @details Verifies registration state changes correctly before and after execute
  */
-TEST(ObjectFactoryTest, IsRegistered_AfterExecution) {
+TEST(ObjectFactoryTest, IsRegistered_AfterExecution)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
 
@@ -208,11 +230,13 @@ TEST(ObjectFactoryTest, IsRegistered_AfterExecution) {
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Rectangle"));
 }
 
-TEST(ObjectFactoryTest, IsRegistered_EmptyTypeName) {
+TEST(ObjectFactoryTest, IsRegistered_EmptyTypeName)
+{
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered(""));
 }
 
-TEST(ObjectFactoryTest, IsRegistered_NonExistentType) {
+TEST(ObjectFactoryTest, IsRegistered_NonExistentType)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
     factory.execute();
@@ -225,7 +249,8 @@ TEST(ObjectFactoryTest, IsRegistered_NonExistentType) {
  * @brief Test execute functionality for successful registration
  * @details Verifies execute returns true and types are registered
  */
-TEST(ObjectFactoryTest, Execute_SuccessfulRegistration) {
+TEST(ObjectFactoryTest, Execute_SuccessfulRegistration)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
 
@@ -236,7 +261,8 @@ TEST(ObjectFactoryTest, Execute_SuccessfulRegistration) {
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Circle"));
 }
 
-TEST(ObjectFactoryTest, Execute_MultipleCalls) {
+TEST(ObjectFactoryTest, Execute_MultipleCalls)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
 
@@ -254,7 +280,8 @@ TEST(ObjectFactoryTest, Execute_MultipleCalls) {
  * @brief Test clearRegistry functionality after registration
  * @details Verifies registry can be cleared and types become unregistered
  */
-TEST(ObjectFactoryTest, ClearRegistry_AfterRegistration) {
+TEST(ObjectFactoryTest, ClearRegistry_AfterRegistration)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
     factory.execute();
@@ -270,7 +297,8 @@ TEST(ObjectFactoryTest, ClearRegistry_AfterRegistration) {
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered("Rectangle"));
 }
 
-TEST(ObjectFactoryTest, ClearRegistry_AndReregister) {
+TEST(ObjectFactoryTest, ClearRegistry_AndReregister)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
 
@@ -293,13 +321,16 @@ TEST(ObjectFactoryTest, ClearRegistry_AndReregister) {
 }
 
 // Test with different constructor arguments
-TEST(ObjectFactoryTest, RegisterWithDifferentArguments) {
+TEST(ObjectFactoryTest, RegisterWithDifferentArguments)
+{
     // Clear any existing registrations
     ObjectFactory<IShape>::clearRegistry();
 
-    class CustomFactory : public ObjectFactory<IShape> {
+    class CustomFactory : public ObjectFactory<IShape>
+    {
     protected:
-        auto registerAll() -> void override {
+        auto registerAll() -> void override
+        {
             registerType<Circle>("SmallCircle", 1.0);
             registerType<Circle>("LargeCircle", 10.0);
             registerType<Rectangle>("Square", 5.0, 5.0);
@@ -326,15 +357,17 @@ TEST(ObjectFactoryTest, RegisterWithDifferentArguments) {
  * @brief Test polymorphic behavior of created objects
  * @details Verifies virtual methods work correctly on factory-created objects
  */
-TEST(ObjectFactoryTest, PolymorphicBehavior) {
+TEST(ObjectFactoryTest, PolymorphicBehavior)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
     factory.execute();
 
     const std::vector<std::string> shape_names = {"Circle", "Rectangle", "Triangle"};
-    std::vector<std::unique_ptr<IShape> > shapes;
+    std::vector<std::unique_ptr<IShape>> shapes;
 
-    for (const auto& name : shape_names) {
+    for (const auto& name : shape_names)
+    {
         shapes.push_back(ObjectFactory<IShape>::createObject(name));
     }
 
@@ -350,13 +383,15 @@ TEST(ObjectFactoryTest, PolymorphicBehavior) {
 }
 
 // Test thread safety (basic test)
-TEST(ObjectFactoryTest, ThreadSafety_BasicOperations) {
+TEST(ObjectFactoryTest, ThreadSafety_BasicOperations)
+{
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
     factory.execute();
 
     // Multiple creations should work correctly
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i)
+    {
         auto circle = ObjectFactory<IShape>::createObject("Circle");
         ASSERT_NE(circle, nullptr);
         EXPECT_EQ(circle->getName(), "Circle");
@@ -367,12 +402,13 @@ TEST(ObjectFactoryTest, ThreadSafety_BasicOperations) {
  * @brief Test that ObjectFactory inherits from IStartupTask
  * @details Verifies inheritance relationship and interface compatibility
  */
-TEST(ObjectFactoryTest, Inheritance_FromIStartupTask) {
+TEST(ObjectFactoryTest, Inheritance_FromIStartupTask)
+{
     ObjectFactory<IShape>::clearRegistry();
     static_assert(
-        std::is_base_of_v<common::interfaces::IStartupTask, ObjectFactory<IShape> >,
+        std::is_base_of_v<common::interfaces::IStartupTask, ObjectFactory<IShape>>,
         "ObjectFactory should inherit from IStartupTask"
-        );
+    );
 
     ShapeFactory factory;
     common::interfaces::IStartupTask* task = &factory;

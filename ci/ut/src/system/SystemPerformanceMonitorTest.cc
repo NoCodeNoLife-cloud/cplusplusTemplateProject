@@ -15,7 +15,8 @@ using namespace common::system;
  * @brief Test GetMemoryUsage returns valid structure
  * @details Verifies that memory usage retrieval returns a properly populated structure
  */
-TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ReturnsValidStructure) {
+TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ReturnsValidStructure)
+{
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
 
     // All fields should be accessible
@@ -29,7 +30,8 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ReturnsValidStructure) {
  * @brief Test GetMemoryUsage total memory is reasonable
  * @details Ensures total physical memory is within expected bounds (at least 1GB)
  */
-TEST(SystemPerformanceMonitorTest, GetMemoryUsage_TotalMemoryReasonable) {
+TEST(SystemPerformanceMonitorTest, GetMemoryUsage_TotalMemoryReasonable)
+{
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
 
     // Total memory should be at least 1GB (1073741824 bytes) on modern systems
@@ -41,7 +43,8 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_TotalMemoryReasonable) {
  * @brief Test GetMemoryUsage available memory does not exceed total
  * @details Verifies that available memory is less than or equal to total memory
  */
-TEST(SystemPerformanceMonitorTest, GetMemoryUsage_AvailableNotExceedTotal) {
+TEST(SystemPerformanceMonitorTest, GetMemoryUsage_AvailableNotExceedTotal)
+{
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
 
     EXPECT_LE(memUsage.available_memory, memUsage.total_memory);
@@ -51,7 +54,8 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_AvailableNotExceedTotal) {
  * @brief Test GetMemoryUsage used memory calculation is correct
  * @details Verifies that used memory equals total minus available
  */
-TEST(SystemPerformanceMonitorTest, GetMemoryUsage_UsedMemoryCalculation) {
+TEST(SystemPerformanceMonitorTest, GetMemoryUsage_UsedMemoryCalculation)
+{
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
 
     const ULONGLONG calculatedUsed = memUsage.total_memory - memUsage.available_memory;
@@ -62,7 +66,8 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_UsedMemoryCalculation) {
  * @brief Test GetMemoryUsage usage percentage is in valid range
  * @details Ensures memory usage percentage is between 0.0 and 100.0
  */
-TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageInRange) {
+TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageInRange)
+{
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
 
     EXPECT_GE(memUsage.memory_usage_percent, 0.0);
@@ -73,12 +78,14 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageInRange) {
  * @brief Test GetMemoryUsage usage percentage calculation accuracy
  * @details Verifies that percentage matches the ratio of used to total memory
  */
-TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageAccuracy) {
+TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageAccuracy)
+{
     const MemoryUsage memUsage = SystemPerformanceMonitor::GetMemoryUsage();
 
-    if (memUsage.total_memory > 0) {
+    if (memUsage.total_memory > 0)
+    {
         const double expectedPercent = static_cast<double>(memUsage.used_memory) /
-                                       static_cast<double>(memUsage.total_memory) * 100.0;
+            static_cast<double>(memUsage.total_memory) * 100.0;
         EXPECT_NEAR(memUsage.memory_usage_percent, expectedPercent, 0.01);
     }
 }
@@ -87,7 +94,8 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_PercentageAccuracy) {
  * @brief Test GetMemoryUsage consistency across multiple calls
  * @details Verifies that consecutive calls return similar results (within reasonable variance)
  */
-TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ConsistentResults) {
+TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ConsistentResults)
+{
     const MemoryUsage memUsage1 = SystemPerformanceMonitor::GetMemoryUsage();
     const MemoryUsage memUsage2 = SystemPerformanceMonitor::GetMemoryUsage();
 
@@ -104,7 +112,8 @@ TEST(SystemPerformanceMonitorTest, GetMemoryUsage_ConsistentResults) {
  * @brief Test GetCpuUsage with default interval returns valid structure
  * @details Verifies that CPU usage retrieval with default 1-second interval works correctly
  */
-TEST(SystemPerformanceMonitorTest, GetCpuUsage_DefaultInterval_ValidResult) {
+TEST(SystemPerformanceMonitorTest, GetCpuUsage_DefaultInterval_ValidResult)
+{
     const CpuUsage cpuUsage = SystemPerformanceMonitor::GetCpuUsage();
 
     EXPECT_GE(cpuUsage.cpu_usage_percent, 0.0);
@@ -115,7 +124,8 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_DefaultInterval_ValidResult) {
  * @brief Test GetCpuUsage with custom interval returns valid structure
  * @details Verifies that CPU usage retrieval with custom interval works correctly
  */
-TEST(SystemPerformanceMonitorTest, GetCpuUsage_CustomInterval_ValidResult) {
+TEST(SystemPerformanceMonitorTest, GetCpuUsage_CustomInterval_ValidResult)
+{
     const CpuUsage cpuUsage = SystemPerformanceMonitor::GetCpuUsage(2);
 
     EXPECT_GE(cpuUsage.cpu_usage_percent, 0.0);
@@ -126,7 +136,8 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_CustomInterval_ValidResult) {
  * @brief Test GetCpuUsage with minimum interval
  * @details Verifies that CPU usage retrieval with 1-second interval works correctly
  */
-TEST(SystemPerformanceMonitorTest, GetCpuUsage_MinimumInterval) {
+TEST(SystemPerformanceMonitorTest, GetCpuUsage_MinimumInterval)
+{
     const CpuUsage cpuUsage = SystemPerformanceMonitor::GetCpuUsage(1);
 
     EXPECT_GE(cpuUsage.cpu_usage_percent, 0.0);
@@ -137,7 +148,8 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_MinimumInterval) {
  * @brief Test GetCpuUsage percentage is in valid range
  * @details Ensures CPU usage percentage is always between 0.0 and 100.0
  */
-TEST(SystemPerformanceMonitorTest, GetCpuUsage_PercentageInRange) {
+TEST(SystemPerformanceMonitorTest, GetCpuUsage_PercentageInRange)
+{
     const CpuUsage cpuUsage = SystemPerformanceMonitor::GetCpuUsage(1);
 
     EXPECT_GE(cpuUsage.cpu_usage_percent, 0.0);
@@ -148,7 +160,8 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_PercentageInRange) {
  * @brief Test GetCpuUsage execution time matches interval
  * @details Verifies that the method takes approximately the specified interval time
  */
-TEST(SystemPerformanceMonitorTest, GetCpuUsage_ExecutionTimeMatchesInterval) {
+TEST(SystemPerformanceMonitorTest, GetCpuUsage_ExecutionTimeMatchesInterval)
+{
     const int32_t interval = 1;
 
     const auto start = std::chrono::steady_clock::now();
@@ -170,7 +183,8 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_ExecutionTimeMatchesInterval) {
  * @brief Test GetCpuUsage with different intervals produces valid results
  * @details Verifies that various interval values work correctly
  */
-TEST(SystemPerformanceMonitorTest, GetCpuUsage_DifferentIntervals) {
+TEST(SystemPerformanceMonitorTest, GetCpuUsage_DifferentIntervals)
+{
     const CpuUsage cpuUsage1 = SystemPerformanceMonitor::GetCpuUsage(1);
     const CpuUsage cpuUsage2 = SystemPerformanceMonitor::GetCpuUsage(2);
 
@@ -185,7 +199,8 @@ TEST(SystemPerformanceMonitorTest, GetCpuUsage_DifferentIntervals) {
  * @brief Test all performance monitor methods execute without crashing
  * @details Verifies that all public methods run without exceptions
  */
-TEST(SystemPerformanceMonitorTest, AllMethods_ExecuteWithoutCrash) {
+TEST(SystemPerformanceMonitorTest, AllMethods_ExecuteWithoutCrash)
+{
     EXPECT_NO_THROW(SystemPerformanceMonitor::GetMemoryUsage());
     EXPECT_NO_THROW(SystemPerformanceMonitor::GetCpuUsage(1));
 }
@@ -194,7 +209,8 @@ TEST(SystemPerformanceMonitorTest, AllMethods_ExecuteWithoutCrash) {
  * @brief Test MemoryUsage struct field accessibility
  * @details Verifies that all MemoryUsage fields can be accessed and modified
  */
-TEST(SystemPerformanceMonitorTest, MemoryUsage_StructFieldsAccessible) {
+TEST(SystemPerformanceMonitorTest, MemoryUsage_StructFieldsAccessible)
+{
     MemoryUsage memUsage{};
 
     memUsage.total_memory = 16000000000ULL;
@@ -212,7 +228,8 @@ TEST(SystemPerformanceMonitorTest, MemoryUsage_StructFieldsAccessible) {
  * @brief Test CpuUsage struct field accessibility
  * @details Verifies that CpuUsage fields can be accessed and modified
  */
-TEST(SystemPerformanceMonitorTest, CpuUsage_StructFieldsAccessible) {
+TEST(SystemPerformanceMonitorTest, CpuUsage_StructFieldsAccessible)
+{
     CpuUsage cpuUsage{};
 
     cpuUsage.cpu_usage_percent = 75.5;
@@ -224,7 +241,8 @@ TEST(SystemPerformanceMonitorTest, CpuUsage_StructFieldsAccessible) {
  * @brief Test MemoryUsage default initialization
  * @details Verifies that MemoryUsage struct initializes to zero values
  */
-TEST(SystemPerformanceMonitorTest, MemoryUsage_DefaultInitialization) {
+TEST(SystemPerformanceMonitorTest, MemoryUsage_DefaultInitialization)
+{
     const MemoryUsage memUsage{};
 
     EXPECT_EQ(memUsage.total_memory, 0ULL);
@@ -237,7 +255,8 @@ TEST(SystemPerformanceMonitorTest, MemoryUsage_DefaultInitialization) {
  * @brief Test CpuUsage default initialization
  * @details Verifies that CpuUsage struct initializes to zero values
  */
-TEST(SystemPerformanceMonitorTest, CpuUsage_DefaultInitialization) {
+TEST(SystemPerformanceMonitorTest, CpuUsage_DefaultInitialization)
+{
     const CpuUsage cpuUsage{};
 
     EXPECT_DOUBLE_EQ(cpuUsage.cpu_usage_percent, 0.0);

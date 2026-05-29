@@ -16,10 +16,11 @@ using namespace common::exception;
  * @brief Test exception construction with string message
  * @details Verifies that exception can be created with std::string message
  */
-TEST(AuthenticationExceptionTest, ConstructionWithString) {
+TEST(AuthenticationExceptionTest, ConstructionWithString)
+{
     const std::string message = "Authentication failed: invalid credentials";
     const AuthenticationException ex(message);
-    
+
     EXPECT_STREQ(ex.what(), message.c_str());
 }
 
@@ -27,10 +28,11 @@ TEST(AuthenticationExceptionTest, ConstructionWithString) {
  * @brief Test exception construction with string_view message
  * @details Verifies that exception can be created with std::string_view
  */
-TEST(AuthenticationExceptionTest, ConstructionWithStringView) {
+TEST(AuthenticationExceptionTest, ConstructionWithStringView)
+{
     const std::string_view message = "Invalid username or password";
     const AuthenticationException ex(message);
-    
+
     EXPECT_STREQ(ex.what(), std::string(message).c_str());
 }
 
@@ -38,9 +40,10 @@ TEST(AuthenticationExceptionTest, ConstructionWithStringView) {
  * @brief Test exception construction with C-string
  * @details Verifies that exception can be created with const char*
  */
-TEST(AuthenticationExceptionTest, ConstructionWithCString) {
+TEST(AuthenticationExceptionTest, ConstructionWithCString)
+{
     const AuthenticationException ex(std::string("Access denied"));
-    
+
     EXPECT_STREQ(ex.what(), "Access denied");
 }
 
@@ -48,9 +51,10 @@ TEST(AuthenticationExceptionTest, ConstructionWithCString) {
  * @brief Test exception with empty message
  * @details Verifies that exception handles empty messages correctly
  */
-TEST(AuthenticationExceptionTest, EmptyMessage) {
+TEST(AuthenticationExceptionTest, EmptyMessage)
+{
     const AuthenticationException ex(std::string(""));
-    
+
     EXPECT_STREQ(ex.what(), "");
 }
 
@@ -58,10 +62,11 @@ TEST(AuthenticationExceptionTest, EmptyMessage) {
  * @brief Test exception with long message
  * @details Verifies that exception handles long messages correctly
  */
-TEST(AuthenticationExceptionTest, LongMessage) {
+TEST(AuthenticationExceptionTest, LongMessage)
+{
     const std::string message(10000, 'x'); // 10KB message
     const AuthenticationException ex(message);
-    
+
     EXPECT_STREQ(ex.what(), message.c_str());
     EXPECT_EQ(std::string(ex.what()).length(), 10000);
 }
@@ -70,10 +75,11 @@ TEST(AuthenticationExceptionTest, LongMessage) {
  * @brief Test exception with special characters in message
  * @details Verifies that exception handles special characters correctly
  */
-TEST(AuthenticationExceptionTest, SpecialCharactersInMessage) {
+TEST(AuthenticationExceptionTest, SpecialCharactersInMessage)
+{
     const std::string message = "Error: user@test.com - invalid @#$%^&*()";
     const AuthenticationException ex(message);
-    
+
     EXPECT_STREQ(ex.what(), message.c_str());
 }
 
@@ -81,10 +87,11 @@ TEST(AuthenticationExceptionTest, SpecialCharactersInMessage) {
  * @brief Test exception with Unicode message
  * @details Verifies that exception handles Unicode characters correctly
  */
-TEST(AuthenticationExceptionTest, UnicodeMessage) {
+TEST(AuthenticationExceptionTest, UnicodeMessage)
+{
     const std::string message = "认证失败：用户名或密码错误 🔐";
     const AuthenticationException ex(message);
-    
+
     EXPECT_STREQ(ex.what(), message.c_str());
 }
 
@@ -92,10 +99,11 @@ TEST(AuthenticationExceptionTest, UnicodeMessage) {
  * @brief Test exception copy constructor
  * @details Verifies that exception can be copied correctly
  */
-TEST(AuthenticationExceptionTest, CopyConstructor) {
+TEST(AuthenticationExceptionTest, CopyConstructor)
+{
     const AuthenticationException ex1(std::string("Original error message"));
     const AuthenticationException ex2(ex1);
-    
+
     EXPECT_STREQ(ex1.what(), ex2.what());
     EXPECT_STREQ(ex2.what(), "Original error message");
 }
@@ -104,10 +112,11 @@ TEST(AuthenticationExceptionTest, CopyConstructor) {
  * @brief Test exception move constructor
  * @details Verifies that exception can be moved efficiently
  */
-TEST(AuthenticationExceptionTest, MoveConstructor) {
+TEST(AuthenticationExceptionTest, MoveConstructor)
+{
     AuthenticationException ex1(std::string("Moveable error"));
     const AuthenticationException ex2(std::move(ex1));
-    
+
     EXPECT_STREQ(ex2.what(), "Moveable error");
 }
 
@@ -115,12 +124,13 @@ TEST(AuthenticationExceptionTest, MoveConstructor) {
  * @brief Test exception assignment operator
  * @details Verifies that exception assignment works correctly
  */
-TEST(AuthenticationExceptionTest, AssignmentOperator) {
+TEST(AuthenticationExceptionTest, AssignmentOperator)
+{
     AuthenticationException ex1(std::string("First error"));
     const AuthenticationException ex2(std::string("Second error"));
-    
+
     ex1 = ex2;
-    
+
     EXPECT_STREQ(ex1.what(), "Second error");
 }
 
@@ -128,12 +138,13 @@ TEST(AuthenticationExceptionTest, AssignmentOperator) {
  * @brief Test exception move assignment operator
  * @details Verifies that move assignment works correctly
  */
-TEST(AuthenticationExceptionTest, MoveAssignmentOperator) {
+TEST(AuthenticationExceptionTest, MoveAssignmentOperator)
+{
     AuthenticationException ex1(std::string("First error"));
     AuthenticationException ex2(std::string("Second error"));
-    
+
     ex1 = std::move(ex2);
-    
+
     EXPECT_STREQ(ex1.what(), "Second error");
 }
 
@@ -141,13 +152,17 @@ TEST(AuthenticationExceptionTest, MoveAssignmentOperator) {
  * @brief Test exception inherits from std::runtime_error
  * @details Verifies proper inheritance hierarchy
  */
-TEST(AuthenticationExceptionTest, InheritanceFromRuntimeError) {
+TEST(AuthenticationExceptionTest, InheritanceFromRuntimeError)
+{
     const AuthenticationException ex(std::string("Test error"));
-    
+
     // Should be catchable as std::runtime_error
-    try {
+    try
+    {
         throw ex;
-    } catch (const std::runtime_error& e) {
+    }
+    catch (const std::runtime_error& e)
+    {
         EXPECT_STREQ(e.what(), "Test error");
     }
 }
@@ -156,13 +171,17 @@ TEST(AuthenticationExceptionTest, InheritanceFromRuntimeError) {
  * @brief Test exception inherits from std::exception
  * @details Verifies base exception compatibility
  */
-TEST(AuthenticationExceptionTest, InheritanceFromException) {
+TEST(AuthenticationExceptionTest, InheritanceFromException)
+{
     const AuthenticationException ex(std::string("Base test"));
-    
+
     // Should be catchable as std::exception
-    try {
+    try
+    {
         throw ex;
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e)
+    {
         EXPECT_STREQ(e.what(), "Base test");
     }
 }
@@ -171,10 +190,14 @@ TEST(AuthenticationExceptionTest, InheritanceFromException) {
  * @brief Test exception can be thrown and caught
  * @details Verifies basic exception throwing mechanism
  */
-TEST(AuthenticationExceptionTest, ThrowAndCatch) {
-    try {
+TEST(AuthenticationExceptionTest, ThrowAndCatch)
+{
+    try
+    {
         throw AuthenticationException(std::string("Thrown error"));
-    } catch (const AuthenticationException& e) {
+    }
+    catch (const AuthenticationException& e)
+    {
         EXPECT_STREQ(e.what(), "Thrown error");
     }
 }
@@ -183,10 +206,11 @@ TEST(AuthenticationExceptionTest, ThrowAndCatch) {
  * @brief Test exception with multiline message
  * @details Verifies that exception handles multiline messages
  */
-TEST(AuthenticationExceptionTest, MultilineMessage) {
+TEST(AuthenticationExceptionTest, MultilineMessage)
+{
     const std::string message = "Line 1\nLine 2\nLine 3";
     const AuthenticationException ex(message);
-    
+
     EXPECT_STREQ(ex.what(), message.c_str());
 }
 
@@ -194,11 +218,12 @@ TEST(AuthenticationExceptionTest, MultilineMessage) {
  * @brief Test exception message persistence
  * @details Verifies that exception message persists throughout lifetime
  */
-TEST(AuthenticationExceptionTest, MessagePersistence) {
+TEST(AuthenticationExceptionTest, MessagePersistence)
+{
     const auto ex = std::make_unique<AuthenticationException>(std::string("Persistent message"));
-    
+
     EXPECT_STREQ(ex->what(), "Persistent message");
-    
+
     // Message should still be valid after some operations
     const std::string msg = ex->what();
     EXPECT_EQ(msg, "Persistent message");
@@ -208,11 +233,12 @@ TEST(AuthenticationExceptionTest, MessagePersistence) {
  * @brief Test multiple exceptions with different messages
  * @details Verifies that multiple exceptions maintain separate messages
  */
-TEST(AuthenticationExceptionTest, MultipleExceptions) {
+TEST(AuthenticationExceptionTest, MultipleExceptions)
+{
     const AuthenticationException ex1(std::string("Error 1"));
     const AuthenticationException ex2(std::string("Error 2"));
     const AuthenticationException ex3(std::string("Error 3"));
-    
+
     EXPECT_STREQ(ex1.what(), "Error 1");
     EXPECT_STREQ(ex2.what(), "Error 2");
     EXPECT_STREQ(ex3.what(), "Error 3");
@@ -222,11 +248,12 @@ TEST(AuthenticationExceptionTest, MultipleExceptions) {
  * @brief Test exception in polymorphic context
  * @details Verifies that exception works correctly in polymorphic scenarios
  */
-TEST(AuthenticationExceptionTest, PolymorphicContext) {
+TEST(AuthenticationExceptionTest, PolymorphicContext)
+{
     const std::exception* ex_ptr = new AuthenticationException(std::string("Polymorphic error"));
-    
+
     EXPECT_STREQ(ex_ptr->what(), "Polymorphic error");
-    
+
     delete ex_ptr;
 }
 
@@ -234,7 +261,8 @@ TEST(AuthenticationExceptionTest, PolymorphicContext) {
  * @brief Test exception with various authentication error messages
  * @details Verifies common authentication error scenarios
  */
-TEST(AuthenticationExceptionTest, CommonAuthErrorMessages) {
+TEST(AuthenticationExceptionTest, CommonAuthErrorMessages)
+{
     const std::vector<std::string> messages = {
         "Invalid username",
         "Invalid password",
@@ -247,8 +275,9 @@ TEST(AuthenticationExceptionTest, CommonAuthErrorMessages) {
         "Session expired",
         "Access denied"
     };
-    
-    for (const auto& msg : messages) {
+
+    for (const auto& msg : messages)
+    {
         const AuthenticationException ex(msg);
         EXPECT_STREQ(ex.what(), msg.c_str());
     }

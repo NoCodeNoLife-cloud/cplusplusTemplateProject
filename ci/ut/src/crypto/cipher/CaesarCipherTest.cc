@@ -12,7 +12,8 @@ using namespace common::crypto::cipher;
 /**
  * @brief Test basic encryption with default shift (3)
  */
-TEST(CaesarCipherTest, Encrypt_DefaultShift) {
+TEST(CaesarCipherTest, Encrypt_DefaultShift)
+{
     const CaesarCipher cipher;
     EXPECT_EQ(cipher.Encrypt("abc"), "def");
     EXPECT_EQ(cipher.Encrypt("xyz"), "abc");
@@ -22,7 +23,8 @@ TEST(CaesarCipherTest, Encrypt_DefaultShift) {
 /**
  * @brief Test basic decryption with default shift (3)
  */
-TEST(CaesarCipherTest, Decrypt_DefaultShift) {
+TEST(CaesarCipherTest, Decrypt_DefaultShift)
+{
     const CaesarCipher cipher;
     EXPECT_EQ(cipher.Decrypt("def"), "abc");
     EXPECT_EQ(cipher.Decrypt("abc"), "xyz");
@@ -32,7 +34,8 @@ TEST(CaesarCipherTest, Decrypt_DefaultShift) {
 /**
  * @brief Test encryption/decryption roundtrip
  */
-TEST(CaesarCipherTest, RoundTrip) {
+TEST(CaesarCipherTest, RoundTrip)
+{
     const std::string plaintext = "The Quick Brown Fox Jumps Over The Lazy Dog!";
     const CaesarCipher cipher(7);
 
@@ -45,7 +48,8 @@ TEST(CaesarCipherTest, RoundTrip) {
 /**
  * @brief Test custom shift values
  */
-TEST(CaesarCipherTest, CustomShift) {
+TEST(CaesarCipherTest, CustomShift)
+{
     const CaesarCipher cipher(13);
     EXPECT_EQ(cipher.Encrypt("hello"), "uryyb");
     EXPECT_EQ(cipher.Decrypt("uryyb"), "hello");
@@ -54,7 +58,8 @@ TEST(CaesarCipherTest, CustomShift) {
 /**
  * @brief Test negative shift values
  */
-TEST(CaesarCipherTest, NegativeShift) {
+TEST(CaesarCipherTest, NegativeShift)
+{
     const CaesarCipher cipher(-3);
     EXPECT_EQ(cipher.Encrypt("def"), "abc");
     EXPECT_EQ(cipher.Decrypt("abc"), "def");
@@ -63,7 +68,8 @@ TEST(CaesarCipherTest, NegativeShift) {
 /**
  * @brief Test static Encrypt method
  */
-TEST(CaesarCipherTest, StaticEncrypt) {
+TEST(CaesarCipherTest, StaticEncrypt)
+{
     EXPECT_EQ(CaesarCipher::Encrypt("abc", 3), "def");
     EXPECT_EQ(CaesarCipher::Encrypt("xyz", 3), "abc");
 }
@@ -71,7 +77,8 @@ TEST(CaesarCipherTest, StaticEncrypt) {
 /**
  * @brief Test static Decrypt method
  */
-TEST(CaesarCipherTest, StaticDecrypt) {
+TEST(CaesarCipherTest, StaticDecrypt)
+{
     EXPECT_EQ(CaesarCipher::Decrypt("def", 3), "abc");
     EXPECT_EQ(CaesarCipher::Decrypt("abc", 3), "xyz");
 }
@@ -79,7 +86,8 @@ TEST(CaesarCipherTest, StaticDecrypt) {
 /**
  * @brief Test ROT13 factory method
  */
-TEST(CaesarCipherTest, ROT13) {
+TEST(CaesarCipherTest, ROT13)
+{
     const auto rot13 = CaesarCipher::CreateRot13();
     EXPECT_EQ(rot13.GetShift(), 13);
 
@@ -95,7 +103,8 @@ TEST(CaesarCipherTest, ROT13) {
 /**
  * @brief Test input validation
  */
-TEST(CaesarCipherTest, IsValidInput) {
+TEST(CaesarCipherTest, IsValidInput)
+{
     EXPECT_TRUE(CaesarCipher::IsValidInput("Hello"));
     EXPECT_TRUE(CaesarCipher::IsValidInput("ASCII only"));
     EXPECT_FALSE(CaesarCipher::IsValidInput(std::string("\x80\x81", 2))); // Non-ASCII
@@ -104,7 +113,8 @@ TEST(CaesarCipherTest, IsValidInput) {
 /**
  * @brief Test non-alphabetic characters pass through unchanged
  */
-TEST(CaesarCipherTest, NonAlphabeticCharacters) {
+TEST(CaesarCipherTest, NonAlphabeticCharacters)
+{
     const CaesarCipher cipher(3);
     const std::string input = "Hello, World! 123 @#$";
     const auto encrypted = cipher.Encrypt(input);
@@ -113,8 +123,8 @@ TEST(CaesarCipherTest, NonAlphabeticCharacters) {
     EXPECT_EQ(encrypted, "Khoor, Zruog! 123 @#$");
 
     // Check specific non-alphabetic characters remain unchanged
-    EXPECT_EQ(encrypted[5], ',');              // Comma at position 5 unchanged
-    EXPECT_EQ(encrypted[12], '!');             // Exclamation at position 12 unchanged
+    EXPECT_EQ(encrypted[5], ','); // Comma at position 5 unchanged
+    EXPECT_EQ(encrypted[12], '!'); // Exclamation at position 12 unchanged
     EXPECT_EQ(encrypted.substr(14, 3), "123"); // Digits unchanged
     EXPECT_EQ(encrypted.substr(18, 3), "@#$"); // Special chars unchanged
 }
@@ -122,7 +132,8 @@ TEST(CaesarCipherTest, NonAlphabeticCharacters) {
 /**
  * @brief Test case preservation
  */
-TEST(CaesarCipherTest, CasePreservation) {
+TEST(CaesarCipherTest, CasePreservation)
+{
     const CaesarCipher cipher(3);
     const auto encrypted = cipher.Encrypt("aBcDeF");
 
@@ -134,7 +145,8 @@ TEST(CaesarCipherTest, CasePreservation) {
 /**
  * @brief Test empty string
  */
-TEST(CaesarCipherTest, EmptyString) {
+TEST(CaesarCipherTest, EmptyString)
+{
     const CaesarCipher cipher(5);
     EXPECT_EQ(cipher.Encrypt(""), "");
     EXPECT_EQ(cipher.Decrypt(""), "");
@@ -143,7 +155,8 @@ TEST(CaesarCipherTest, EmptyString) {
 /**
  * @brief Test GetShift accessor
  */
-TEST(CaesarCipherTest, GetShift) {
+TEST(CaesarCipherTest, GetShift)
+{
     const CaesarCipher cipher1;
     EXPECT_EQ(cipher1.GetShift(), 3);
 
@@ -154,7 +167,8 @@ TEST(CaesarCipherTest, GetShift) {
 /**
  * @brief Test SetShift mutator
  */
-TEST(CaesarCipherTest, SetShift) {
+TEST(CaesarCipherTest, SetShift)
+{
     CaesarCipher cipher;
     EXPECT_EQ(cipher.GetShift(), 3);
 
@@ -166,7 +180,8 @@ TEST(CaesarCipherTest, SetShift) {
 /**
  * @brief Test large shift values (normalization)
  */
-TEST(CaesarCipherTest, LargeShiftNormalization) {
+TEST(CaesarCipherTest, LargeShiftNormalization)
+{
     const CaesarCipher cipher1(29); // 29 % 26 = 3
     const CaesarCipher cipher2(3);
 
@@ -177,7 +192,8 @@ TEST(CaesarCipherTest, LargeShiftNormalization) {
 /**
  * @brief Test constants
  */
-TEST(CaesarCipherTest, Constants) {
+TEST(CaesarCipherTest, Constants)
+{
     EXPECT_EQ(CaesarCipher::kDefaultShift, 3);
     EXPECT_EQ(CaesarCipher::kAlphabetSize, 26);
 }

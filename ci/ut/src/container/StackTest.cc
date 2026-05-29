@@ -16,7 +16,8 @@ using namespace common::container;
  * @brief Test default constructor creates empty stack
  * @details Verifies that a newly constructed stack is empty with zero size
  */
-TEST(StackTest, DefaultConstructor_EmptyStack) {
+TEST(StackTest, DefaultConstructor_EmptyStack)
+{
     const Stack<int> stack;
     EXPECT_TRUE(stack.empty());
     EXPECT_EQ(stack.size(), 0);
@@ -26,7 +27,8 @@ TEST(StackTest, DefaultConstructor_EmptyStack) {
  * @brief Test constructor from iterator range builds stack correctly
  * @details Verifies that stack is correctly initialized from iterator range
  */
-TEST(StackTest, IteratorConstructor_InitializesCorrectly) {
+TEST(StackTest, IteratorConstructor_InitializesCorrectly)
+{
     std::vector<int> data = {1, 2, 3, 4, 5};
     Stack<int> stack(data.begin(), data.end());
 
@@ -38,7 +40,8 @@ TEST(StackTest, IteratorConstructor_InitializesCorrectly) {
  * @brief Test constructor from empty iterator range
  * @details Verifies behavior when constructing from empty range
  */
-TEST(StackTest, IteratorConstructor_EmptyRange) {
+TEST(StackTest, IteratorConstructor_EmptyRange)
+{
     std::vector<int> data;
     const Stack<int> stack(data.begin(), data.end());
 
@@ -50,7 +53,8 @@ TEST(StackTest, IteratorConstructor_EmptyRange) {
  * @brief Test push with lvalue reference
  * @details Verifies that push correctly adds copy of value to stack
  */
-TEST(StackTest, Push_LvalueReference) {
+TEST(StackTest, Push_LvalueReference)
+{
     Stack<int> stack;
     const int value = 42;
 
@@ -64,7 +68,8 @@ TEST(StackTest, Push_LvalueReference) {
  * @brief Test push with rvalue reference
  * @details Verifies that push correctly moves value to stack
  */
-TEST(StackTest, Push_RvalueReference) {
+TEST(StackTest, Push_RvalueReference)
+{
     Stack<std::string> stack;
 
     stack.push(std::string("hello"));
@@ -78,7 +83,8 @@ TEST(StackTest, Push_RvalueReference) {
  * @brief Test multiple push operations maintain LIFO order
  * @details Verifies that last-in-first-out ordering is maintained
  */
-TEST(StackTest, Push_MaintainsLIFOOrder) {
+TEST(StackTest, Push_MaintainsLIFOOrder)
+{
     Stack<int> stack;
 
     stack.push(10);
@@ -93,7 +99,8 @@ TEST(StackTest, Push_MaintainsLIFOOrder) {
  * @brief Test emplace constructs element in-place
  * @details Verifies that emplace forwards arguments correctly to constructor
  */
-TEST(StackTest, Emplace_ConstructsInPlace) {
+TEST(StackTest, Emplace_ConstructsInPlace)
+{
     Stack<std::string> stack;
 
     stack.emplace("hello");
@@ -108,7 +115,8 @@ TEST(StackTest, Emplace_ConstructsInPlace) {
  * @brief Test emplace with complex object construction
  * @details Verifies emplace works with multi-argument constructors
  */
-TEST(StackTest, Emplace_ComplexConstruction) {
+TEST(StackTest, Emplace_ComplexConstruction)
+{
     Stack<std::string> stack;
 
     stack.emplace(5, 'a'); // Constructs string "aaaaa"
@@ -121,7 +129,8 @@ TEST(StackTest, Emplace_ComplexConstruction) {
  * @brief Test pop removes top element
  * @details Verifies that pop correctly removes the top element and updates stack
  */
-TEST(StackTest, Pop_RemovesTopElement) {
+TEST(StackTest, Pop_RemovesTopElement)
+{
     Stack<int> stack;
     stack.push(10);
     stack.push(20);
@@ -141,7 +150,8 @@ TEST(StackTest, Pop_RemovesTopElement) {
  * @brief Test pop on empty stack throws exception
  * @details Verifies proper error handling when popping from empty stack
  */
-TEST(StackTest, Pop_EmptyStack_ThrowsException) {
+TEST(StackTest, Pop_EmptyStack_ThrowsException)
+{
     Stack<int> stack;
     EXPECT_THROW(stack.pop(), std::out_of_range);
 }
@@ -150,7 +160,8 @@ TEST(StackTest, Pop_EmptyStack_ThrowsException) {
  * @brief Test pop until stack becomes empty
  * @details Verifies that stack correctly transitions to empty state
  */
-TEST(StackTest, Pop_UntilEmpty) {
+TEST(StackTest, Pop_UntilEmpty)
+{
     Stack<int> stack;
     stack.push(10);
     stack.push(20);
@@ -166,7 +177,8 @@ TEST(StackTest, Pop_UntilEmpty) {
  * @brief Test top returns reference to top element
  * @details Verifies const and non-const top accessors work correctly
  */
-TEST(StackTest, Top_ReturnsTopElement) {
+TEST(StackTest, Top_ReturnsTopElement)
+{
     Stack<int> stack;
     stack.push(10);
     stack.push(20);
@@ -183,7 +195,8 @@ TEST(StackTest, Top_ReturnsTopElement) {
  * @brief Test top on empty stack throws exception
  * @details Verifies proper error handling for empty stack
  */
-TEST(StackTest, Top_EmptyStack_ThrowsException) {
+TEST(StackTest, Top_EmptyStack_ThrowsException)
+{
     Stack<int> stack;
     EXPECT_THROW(stack.top(), std::out_of_range);
 }
@@ -192,7 +205,8 @@ TEST(StackTest, Top_EmptyStack_ThrowsException) {
  * @brief Test const top accessor
  * @details Verifies const-correctness of top method
  */
-TEST(StackTest, Top_ConstAccessor) {
+TEST(StackTest, Top_ConstAccessor)
+{
     Stack<int> stack;
     stack.push(10);
     stack.push(20);
@@ -205,7 +219,8 @@ TEST(StackTest, Top_ConstAccessor) {
  * @brief Test empty returns correct state
  * @details Verifies accurate empty state detection throughout stack lifecycle
  */
-TEST(StackTest, Empty_CorrectState) {
+TEST(StackTest, Empty_CorrectState)
+{
     Stack<int> stack;
     EXPECT_TRUE(stack.empty());
 
@@ -220,7 +235,8 @@ TEST(StackTest, Empty_CorrectState) {
  * @brief Test size returns correct count
  * @details Verifies accurate element counting after various operations
  */
-TEST(StackTest, Size_CorrectCount) {
+TEST(StackTest, Size_CorrectCount)
+{
     Stack<int> stack;
     EXPECT_EQ(stack.size(), 0);
 
@@ -243,7 +259,8 @@ TEST(StackTest, Size_CorrectCount) {
  * @brief Test stack with string elements
  * @details Verifies stack works correctly with non-numeric types
  */
-TEST(StackTest, StringElements_CorrectBehavior) {
+TEST(StackTest, StringElements_CorrectBehavior)
+{
     Stack<std::string> stack;
 
     stack.emplace("hello");
@@ -261,7 +278,8 @@ TEST(StackTest, StringElements_CorrectBehavior) {
  * @brief Test stack with duplicate values
  * @details Verifies correct handling of duplicate elements
  */
-TEST(StackTest, DuplicateValues_CorrectHandling) {
+TEST(StackTest, DuplicateValues_CorrectHandling)
+{
     Stack<int> stack;
 
     stack.push(5);
@@ -281,7 +299,8 @@ TEST(StackTest, DuplicateValues_CorrectHandling) {
  * @brief Test stack with negative numbers
  * @details Verifies correct handling of negative values
  */
-TEST(StackTest, NegativeNumbers_CorrectHandling) {
+TEST(StackTest, NegativeNumbers_CorrectHandling)
+{
     Stack<int> stack;
 
     stack.push(-10);
@@ -300,7 +319,8 @@ TEST(StackTest, NegativeNumbers_CorrectHandling) {
  * @brief Test stack with mixed positive and negative numbers
  * @details Verifies correct handling of mixed sign values
  */
-TEST(StackTest, MixedSignNumbers_CorrectHandling) {
+TEST(StackTest, MixedSignNumbers_CorrectHandling)
+{
     Stack<int> stack;
 
     stack.push(-100);
@@ -317,11 +337,13 @@ TEST(StackTest, MixedSignNumbers_CorrectHandling) {
  * @brief Test large number of elements
  * @details Verifies scalability and correctness with many elements
  */
-TEST(StackTest, LargeNumberOfElements_Correctness) {
+TEST(StackTest, LargeNumberOfElements_Correctness)
+{
     Stack<int> stack;
 
     // Add 1000 elements
-    for (int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < 1000; ++i)
+    {
         stack.push(i);
     }
 
@@ -329,7 +351,8 @@ TEST(StackTest, LargeNumberOfElements_Correctness) {
     EXPECT_EQ(stack.top(), 999);
 
     // Remove half
-    for (int i = 0; i < 500; ++i) {
+    for (int i = 0; i < 500; ++i)
+    {
         stack.pop();
     }
 
@@ -341,7 +364,8 @@ TEST(StackTest, LargeNumberOfElements_Correctness) {
  * @brief Test alternating push and pop operations
  * @details Verifies stack maintains correctness through mixed operations
  */
-TEST(StackTest, AlternatingPushPop_Correctness) {
+TEST(StackTest, AlternatingPushPop_Correctness)
+{
     Stack<int> stack;
 
     stack.push(1);
@@ -360,10 +384,12 @@ TEST(StackTest, AlternatingPushPop_Correctness) {
  * @brief Test single element push and pop cycle
  * @details Verifies edge case with one element being added and removed repeatedly
  */
-TEST(StackTest, SingleElementCycle_Correctness) {
+TEST(StackTest, SingleElementCycle_Correctness)
+{
     Stack<int> stack;
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i)
+    {
         stack.push(i);
         EXPECT_EQ(stack.size(), 1);
         EXPECT_EQ(stack.top(), i);
@@ -376,17 +402,20 @@ TEST(StackTest, SingleElementCycle_Correctness) {
  * @brief Test stack preserves LIFO property
  * @details Verifies last-in-first-out property is strictly maintained
  */
-TEST(StackTest, PreservesLIFOProperty) {
+TEST(StackTest, PreservesLIFOProperty)
+{
     Stack<int> stack;
 
     std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
 
-    for (int val : input) {
+    for (int val : input)
+    {
         stack.push(val);
     }
 
     // Should come out in reverse order
-    for (auto it = input.rbegin(); it != input.rend(); ++it) {
+    for (auto it = input.rbegin(); it != input.rend(); ++it)
+    {
         EXPECT_EQ(stack.top(), *it);
         stack.pop();
     }
@@ -398,8 +427,9 @@ TEST(StackTest, PreservesLIFOProperty) {
  * @brief Test stack with custom container type
  * @details Verifies stack works with different underlying container types
  */
-TEST(StackTest, CustomContainer_CorrectBehavior) {
-    Stack<int, std::vector<int> > stack;
+TEST(StackTest, CustomContainer_CorrectBehavior)
+{
+    Stack<int, std::vector<int>> stack;
 
     stack.push(10);
     stack.push(20);
@@ -413,7 +443,8 @@ TEST(StackTest, CustomContainer_CorrectBehavior) {
  * @brief Test swap exchanges contents of two stacks
  * @details Verifies that swap efficiently exchanges all elements
  */
-TEST(StackTest, Swap_ExchangesContents) {
+TEST(StackTest, Swap_ExchangesContents)
+{
     Stack<int> stack1;
     stack1.push(10);
     stack1.push(20);
@@ -436,7 +467,8 @@ TEST(StackTest, Swap_ExchangesContents) {
  * @brief Test swap with empty stack
  * @details Verifies swapping with an empty stack works correctly
  */
-TEST(StackTest, Swap_WithEmptyStack) {
+TEST(StackTest, Swap_WithEmptyStack)
+{
     Stack<int> stack1;
     stack1.push(10);
     stack1.push(20);
@@ -454,9 +486,11 @@ TEST(StackTest, Swap_WithEmptyStack) {
  * @brief Test stack memory efficiency with move semantics
  * @details Verifies that move operations are efficient
  */
-TEST(StackTest, MoveSemantics_Efficiency) {
+TEST(StackTest, MoveSemantics_Efficiency)
+{
     Stack<std::string> stack1;
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 100; ++i)
+    {
         stack1.push("test_string_" + std::to_string(i));
     }
 
@@ -471,7 +505,8 @@ TEST(StackTest, MoveSemantics_Efficiency) {
  * @brief Test stack with zero values
  * @details Verifies correct handling of zero elements
  */
-TEST(StackTest, ZeroValues_CorrectHandling) {
+TEST(StackTest, ZeroValues_CorrectHandling)
+{
     Stack<int> stack;
 
     stack.push(0);

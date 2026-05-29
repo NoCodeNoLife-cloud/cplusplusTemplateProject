@@ -9,7 +9,8 @@
 
 #include "src/task/ClientTask.hpp"
 
-auto main(const int32_t, char*[]) -> int32_t {
+int32_t main(const int32_t, char*[])
+{
     client_app::task::ClientTask main_task("client");
     main_task.run();
 }

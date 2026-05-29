@@ -14,70 +14,84 @@ using namespace common::toolkit;
 /**
  * @brief Simple test class for wrapper tests
  */
-struct TestConfig {
+struct TestConfig
+{
     std::string name;
     int value;
 
-    TestConfig() : name("default"), value(0) {
+    TestConfig() : name("default"), value(0)
+    {
     }
 
-    TestConfig(const std::string& n, int v) : name(n), value(v) {
+    TestConfig(const std::string& n, int v) : name(n), value(v)
+    {
     }
 };
 
 // Non-default constructible class
-struct NoDefaultConfig {
+struct NoDefaultConfig
+{
     std::string name;
     int value;
 
-    NoDefaultConfig(const std::string& n, int v) : name(n), value(v) {
+    NoDefaultConfig(const std::string& n, int v) : name(n), value(v)
+    {
     }
 };
 
 /**
  * @brief Wrapper classes to create distinct types for test isolation
  */
-class TestConfigWrapper1 {
+class TestConfigWrapper1
+{
 };
 
-class TestConfigWrapper2 {
+class TestConfigWrapper2
+{
 };
 
-class TestConfigWrapper3 {
+class TestConfigWrapper3
+{
 };
 
-class TestConfigWrapper6 {
+class TestConfigWrapper6
+{
 };
 
-class TestConfigWrapper7 {
+class TestConfigWrapper7
+{
 };
 
-class TestConfigWrapper8 {
+class TestConfigWrapper8
+{
 };
 
-class NoDefaultConfigWrapper4 {
+class NoDefaultConfigWrapper4
+{
 };
 
-class NoDefaultConfigWrapper5 {
+class NoDefaultConfigWrapper5
+{
 };
 
 /**
  * @brief Type aliases with unique wrapper types to isolate static state between tests
  */
 using Wrapper1 = StaticObjectWrapper<TestConfig>;
-using Wrapper2 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper2> >;
-using Wrapper3 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper3> >;
+using Wrapper2 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper2>>;
+using Wrapper3 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper3>>;
 using Wrapper4 = StaticObjectWrapper<NoDefaultConfig>;
-using Wrapper5 = StaticObjectWrapper<std::pair<NoDefaultConfig, NoDefaultConfigWrapper5> >;
-using Wrapper6 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper6> >;
-using Wrapper7 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper7> >;
-using Wrapper8 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper8> >;
+using Wrapper5 = StaticObjectWrapper<std::pair<NoDefaultConfig, NoDefaultConfigWrapper5>>;
+using Wrapper6 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper6>>;
+using Wrapper7 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper7>>;
+using Wrapper8 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper8>>;
 
 /**
  * @brief Test init with parameters and get
  * @details Verifies parameterized initialization and retrieval
  */
-TEST(StaticObjectWrapperTest, InitWithParamsAndGet) {
+TEST(StaticObjectWrapperTest, InitWithParamsAndGet)
+{
     // Clean state
     Wrapper1::destroy();
     EXPECT_FALSE(Wrapper1::isInitialized());
@@ -96,7 +110,8 @@ TEST(StaticObjectWrapperTest, InitWithParamsAndGet) {
 }
 
 // Test init without parameters (default constructible)
-TEST(StaticObjectWrapperTest, InitDefaultConstructible) {
+TEST(StaticObjectWrapperTest, InitDefaultConstructible)
+{
     // Clean state
     Wrapper2::destroy();
 
@@ -114,7 +129,8 @@ TEST(StaticObjectWrapperTest, InitDefaultConstructible) {
 }
 
 // Test get without initialization for default constructible type
-TEST(StaticObjectWrapperTest, GetWithoutInitDefaultConstructible) {
+TEST(StaticObjectWrapperTest, GetWithoutInitDefaultConstructible)
+{
     // Clean state
     Wrapper3::destroy();
     EXPECT_FALSE(Wrapper3::isInitialized());
@@ -130,7 +146,8 @@ TEST(StaticObjectWrapperTest, GetWithoutInitDefaultConstructible) {
 }
 
 // Test get without initialization for non-default constructible type
-TEST(StaticObjectWrapperTest, GetWithoutInitNonDefaultConstructible) {
+TEST(StaticObjectWrapperTest, GetWithoutInitNonDefaultConstructible)
+{
     // Clean state
     Wrapper4::destroy();
     EXPECT_FALSE(Wrapper4::isInitialized());
@@ -141,7 +158,8 @@ TEST(StaticObjectWrapperTest, GetWithoutInitNonDefaultConstructible) {
 }
 
 // Test init with non-default constructible type
-TEST(StaticObjectWrapperTest, InitNonDefaultConstructible) {
+TEST(StaticObjectWrapperTest, InitNonDefaultConstructible)
+{
     // Clean state
     Wrapper5::destroy();
 
@@ -163,7 +181,8 @@ TEST(StaticObjectWrapperTest, InitNonDefaultConstructible) {
  * @brief Test destroy functionality
  * @details Verifies object can be destroyed and state is reset
  */
-TEST(StaticObjectWrapperTest, Destroy) {
+TEST(StaticObjectWrapperTest, Destroy)
+{
     // Initialize with explicit pair construction
     const auto config_pair = std::make_pair(TestConfig{"test", 123}, TestConfigWrapper6{});
     Wrapper6::init(config_pair);
@@ -175,7 +194,8 @@ TEST(StaticObjectWrapperTest, Destroy) {
 }
 
 // Test isInitialized state tracking
-TEST(StaticObjectWrapperTest, IsInitializedStateTracking) {
+TEST(StaticObjectWrapperTest, IsInitializedStateTracking)
+{
     // Initial state
     Wrapper7::destroy();
     EXPECT_FALSE(Wrapper7::isInitialized());
@@ -191,7 +211,8 @@ TEST(StaticObjectWrapperTest, IsInitializedStateTracking) {
 }
 
 // Test multiple calls to init (only first should take effect)
-TEST(StaticObjectWrapperTest, MultipleInitCalls) {
+TEST(StaticObjectWrapperTest, MultipleInitCalls)
+{
     // Clean state
     Wrapper8::destroy();
 
@@ -216,20 +237,23 @@ TEST(StaticObjectWrapperTest, MultipleInitCalls) {
  * @brief Test that constructor is deleted (compile-time check)
  * @details Verifies StaticObjectWrapper cannot be instantiated
  */
-TEST(StaticObjectWrapperTest, ConstructorDeleted) {
+TEST(StaticObjectWrapperTest, ConstructorDeleted)
+{
     // This test verifies at compile time that StaticObjectWrapper cannot be instantiated
-    static_assert(std::is_constructible_v<StaticObjectWrapper<TestConfig> > == false,
+    static_assert(std::is_constructible_v<StaticObjectWrapper<TestConfig>> == false,
                   "StaticObjectWrapper should not be constructible");
 }
 
 // Test copy constructor is deleted (compile-time check)
-TEST(StaticObjectWrapperTest, CopyConstructorDeleted) {
-    static_assert(std::is_copy_constructible_v<StaticObjectWrapper<TestConfig> > == false,
+TEST(StaticObjectWrapperTest, CopyConstructorDeleted)
+{
+    static_assert(std::is_copy_constructible_v<StaticObjectWrapper<TestConfig>> == false,
                   "StaticObjectWrapper should not be copy constructible");
 }
 
 // Test copy assignment is deleted (compile-time check)
-TEST(StaticObjectWrapperTest, CopyAssignmentDeleted) {
-    static_assert(std::is_copy_assignable_v<StaticObjectWrapper<TestConfig> > == false,
+TEST(StaticObjectWrapperTest, CopyAssignmentDeleted)
+{
+    static_assert(std::is_copy_assignable_v<StaticObjectWrapper<TestConfig>> == false,
                   "StaticObjectWrapper should not be copy assignable");
 }

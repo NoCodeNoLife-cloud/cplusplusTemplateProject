@@ -10,102 +10,128 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace common::filesystem {
-CharBuffer::CharBuffer(const size_t cap) : buffer_(cap, '\0') {
-    position_ = 0;
-    limit_ = cap;
-    capacity_ = cap;
-}
+namespace common::filesystem
+{
+    CharBuffer::CharBuffer(const size_t cap) : buffer_(cap, '\0')
+    {
+        position_ = 0;
+        limit_ = cap;
+        capacity_ = cap;
+    }
 
-auto CharBuffer::clear() noexcept -> void {
-    position_ = 0;
-    limit_ = capacity_;
-}
+    auto CharBuffer::clear() noexcept -> void
+    {
+        position_ = 0;
+        limit_ = capacity_;
+    }
 
-auto CharBuffer::flip() noexcept -> void {
-    limit_ = position_;
-    position_ = 0;
-}
-
-auto CharBuffer::rewind() noexcept -> void {
-    position_ = 0;
-}
-
-auto CharBuffer::compact() -> void {
-    if (position_ > 0) {
-        std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_), buffer_.begin());
-        limit_ -= position_;
+    auto CharBuffer::flip() noexcept -> void
+    {
+        limit_ = position_;
         position_ = 0;
     }
-}
 
-auto CharBuffer::put(const char c) -> void {
-    if (!hasRemaining()) {
-        throw std::overflow_error("CharBuffer::put: Buffer overflow.");
-    }
-    buffer_[position_++] = c;
-}
-
-auto CharBuffer::put(const std::string& src) -> void {
-    if (src.empty()) {
-        return;
+    auto CharBuffer::rewind() noexcept -> void
+    {
+        position_ = 0;
     }
 
-    if (position_ + src.size() > limit_) {
-        throw std::overflow_error("CharBuffer::put: Buffer overflow.");
+    auto CharBuffer::compact() -> void
+    {
+        if (position_ > 0)
+        {
+            std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_), buffer_.begin());
+            limit_ -= position_;
+            position_ = 0;
+        }
     }
-    std::ranges::copy(src, buffer_.begin() + static_cast<std::ptrdiff_t>(position_));
-    position_ += src.size();
-}
 
-auto CharBuffer::get() -> char {
-    if (!hasRemaining()) {
-        throw std::underflow_error("CharBuffer::get: Buffer underflow.");
+    auto CharBuffer::put(const char c) -> void
+    {
+        if (!hasRemaining())
+        {
+            throw std::overflow_error("CharBuffer::put: Buffer overflow.");
+        }
+        buffer_[position_++] = c;
     }
-    return buffer_[position_++];
-}
 
-auto CharBuffer::getRemaining() const -> std::string {
-    if (position_ >= limit_) {
-        return {};
+    auto CharBuffer::put(const std::string& src) -> void
+    {
+        if (src.empty())
+        {
+            return;
+        }
+
+        if (position_ + src.size() > limit_)
+        {
+            throw std::overflow_error("CharBuffer::put: Buffer overflow.");
+        }
+        std::ranges::copy(src, buffer_.begin() + static_cast<std::ptrdiff_t>(position_));
+        position_ += src.size();
     }
-    return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
-}
 
-auto CharBuffer::position() const noexcept -> size_t {
-    return position_;
-}
-
-auto CharBuffer::position(const size_t newPosition) -> void {
-    if (newPosition > limit_) {
-        throw std::out_of_range("CharBuffer::position: Position exceeds limit.");
+    auto CharBuffer::get() -> char
+    {
+        if (!hasRemaining())
+        {
+            throw std::underflow_error("CharBuffer::get: Buffer underflow.");
+        }
+        return buffer_[position_++];
     }
-    position_ = newPosition;
-}
 
-auto CharBuffer::limit() const noexcept -> size_t {
-    return limit_;
-}
-
-auto CharBuffer::limit(const size_t newLimit) -> void {
-    if (newLimit > capacity_) {
-        throw std::out_of_range("CharBuffer::limit: Limit exceeds capacity.");
+    auto CharBuffer::getRemaining() const -> std::string
+    {
+        if (position_ >= limit_)
+        {
+            return {};
+        }
+        return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
     }
-    if (position_ > newLimit) {
-        position_ = newLimit;
+
+    auto CharBuffer::position() const noexcept -> size_t
+    {
+        return position_;
     }
-    limit_ = newLimit;
-}
 
-auto CharBuffer::capacity() const noexcept -> size_t {
-    return capacity_;
-}
+    auto CharBuffer::position(const size_t newPosition) -> void
+    {
+        if (newPosition > limit_)
+        {
+            throw std::out_of_range("CharBuffer::position: Position exceeds limit.");
+        }
+        position_ = newPosition;
+    }
 
-auto CharBuffer::hasRemaining() const noexcept -> bool {
-    return position_ < limit_;
-}
+    auto CharBuffer::limit() const noexcept -> size_t
+    {
+        return limit_;
+    }
 
-auto CharBuffer::remaining() const noexcept -> size_t {
-    return limit_ - position_;
-}
+    auto CharBuffer::limit(const size_t newLimit) -> void
+    {
+        if (newLimit > capacity_)
+        {
+            throw std::out_of_range("CharBuffer::limit: Limit exceeds capacity.");
+        }
+        if (position_ > newLimit)
+        {
+            position_ = newLimit;
+        }
+        limit_ = newLimit;
+    }
+
+    auto CharBuffer::capacity() const noexcept -> size_t
+    {
+        return capacity_;
+    }
+
+    auto CharBuffer::hasRemaining() const noexcept -> bool
+    {
+        return position_ < limit_;
+    }
+
+    auto CharBuffer::remaining() const noexcept -> size_t
+    {
+        return limit_ - position_;
+    }
 }

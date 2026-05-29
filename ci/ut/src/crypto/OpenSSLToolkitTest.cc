@@ -19,7 +19,8 @@ using namespace common::crypto;
  * @brief Test deriveKey produces consistent output
  * @details Verifies that same password and salt produce same key
  */
-TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput) {
+TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput)
+{
     const std::string password = "test_password";
     std::array<unsigned char, 16> salt{};
     salt.fill(0x42); // Fixed salt for reproducibility
@@ -37,7 +38,8 @@ TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput) {
  * @brief Test deriveKey with different passwords produces different keys
  * @details Verifies that different passwords result in different derived keys
  */
-TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys) {
+TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys)
+{
     std::array<unsigned char, 16> salt{};
     salt.fill(0x42);
 
@@ -54,7 +56,8 @@ TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys) {
  * @brief Test deriveKey with different salts produces different keys
  * @details Verifies that same password with different salts produces different keys
  */
-TEST(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys) {
+TEST(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys)
+{
     const std::string password = "same_password";
 
     std::array<unsigned char, 16> salt1{};
@@ -76,7 +79,8 @@ TEST(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys) {
  * @brief Test decryptAES256CBC with wrong password fails
  * @details Verifies that incorrect password causes decryption failure
  */
-TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException) {
+TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException)
+{
     // Create a minimal valid ciphertext structure (salt + IV + some data)
     const std::vector<unsigned char> ciphertext(48, 0x42); // 16 salt + 16 IV + 16 data
     const std::string wrongPassword = "wrong_password";
@@ -89,7 +93,8 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException) {
  * @brief Test decryptAES256CBC with truncated ciphertext fails
  * @details Verifies that incomplete ciphertext is rejected
  */
-TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException) {
+TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException)
+{
     // Create ciphertext that's too short (less than salt + IV)
     const std::vector<unsigned char> truncated(10, 0x42);
     const std::string password = "password";
@@ -101,7 +106,8 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException) {
  * @brief Test decryptAES256CBC with empty ciphertext fails
  * @details Verifies that empty input is properly rejected
  */
-TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException) {
+TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException)
+{
     const std::vector<unsigned char> emptyCiphertext;
     const std::string password = "password";
 
@@ -113,17 +119,21 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException) {
  * @details Verifies error handling in encryption path
  * @note This test validates the API structure; actual encryption may fail due to implementation issues
  */
-TEST(OpenSSLToolkitTest, EncryptAES256CBC_APIValidation) {
+TEST(OpenSSLToolkitTest, EncryptAES256CBC_APIValidation)
+{
     const std::string plaintext = "Test";
     const std::string password = "password";
 
     // Just verify the function can be called without crashing
     // Actual success depends on OpenSSL implementation
-    try {
+    try
+    {
         const auto ciphertext = OpenSSLToolkit::encryptAES256CBC(plaintext, password);
         // If it succeeds, ciphertext should have minimum size
         EXPECT_GE(ciphertext.size(), 32); // salt + IV minimum
-    } catch (const std::runtime_error&) {
+    }
+    catch (const std::runtime_error&)
+    {
         // Expected if there are implementation issues
         SUCCEED() << "Encryption failed as expected due to implementation limitations";
     }

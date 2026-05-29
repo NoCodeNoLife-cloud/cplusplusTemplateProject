@@ -16,7 +16,8 @@ using namespace common::crypto::cipher;
 /**
  * @brief Test basic initialization with valid key and nonce
  */
-TEST(ChaCha20CipherTest, Initialize_ValidParameters) {
+TEST(ChaCha20CipherTest, Initialize_ValidParameters)
+{
     ChaCha20Cipher cipher;
 
     const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
@@ -30,7 +31,8 @@ TEST(ChaCha20CipherTest, Initialize_ValidParameters) {
 /**
  * @brief Test initialization with invalid key size
  */
-TEST(ChaCha20CipherTest, Initialize_InvalidKeySize) {
+TEST(ChaCha20CipherTest, Initialize_InvalidKeySize)
+{
     ChaCha20Cipher cipher;
 
     const std::vector<uint8_t> short_key(16, 0x00); // Too short
@@ -43,7 +45,8 @@ TEST(ChaCha20CipherTest, Initialize_InvalidKeySize) {
 /**
  * @brief Test initialization with invalid nonce size
  */
-TEST(ChaCha20CipherTest, Initialize_InvalidNonceSize) {
+TEST(ChaCha20CipherTest, Initialize_InvalidNonceSize)
+{
     ChaCha20Cipher cipher;
 
     const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
@@ -56,7 +59,8 @@ TEST(ChaCha20CipherTest, Initialize_InvalidNonceSize) {
 /**
  * @brief Test encryption before initialization throws exception
  */
-TEST(ChaCha20CipherTest, Encrypt_BeforeInitialization) {
+TEST(ChaCha20CipherTest, Encrypt_BeforeInitialization)
+{
     ChaCha20Cipher cipher;
     const std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03};
 
@@ -66,7 +70,8 @@ TEST(ChaCha20CipherTest, Encrypt_BeforeInitialization) {
 /**
  * @brief Test decryption before initialization throws exception
  */
-TEST(ChaCha20CipherTest, Decrypt_BeforeInitialization) {
+TEST(ChaCha20CipherTest, Decrypt_BeforeInitialization)
+{
     ChaCha20Cipher cipher;
     const std::vector<uint8_t> ciphertext = {0x01, 0x02, 0x03};
 
@@ -76,7 +81,8 @@ TEST(ChaCha20CipherTest, Decrypt_BeforeInitialization) {
 /**
  * @brief Test encryption/decryption roundtrip
  */
-TEST(ChaCha20CipherTest, EncryptDecrypt_RoundTrip) {
+TEST(ChaCha20CipherTest, EncryptDecrypt_RoundTrip)
+{
     const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
     const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
 
@@ -108,7 +114,8 @@ TEST(ChaCha20CipherTest, EncryptDecrypt_RoundTrip) {
 /**
  * @brief Test empty plaintext encryption
  */
-TEST(ChaCha20CipherTest, Encrypt_EmptyPlaintext) {
+TEST(ChaCha20CipherTest, Encrypt_EmptyPlaintext)
+{
     ChaCha20Cipher cipher;
 
     const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
@@ -125,7 +132,8 @@ TEST(ChaCha20CipherTest, Encrypt_EmptyPlaintext) {
 /**
  * @brief Test keystream generation
  */
-TEST(ChaCha20CipherTest, GenerateKeystream) {
+TEST(ChaCha20CipherTest, GenerateKeystream)
+{
     ChaCha20Cipher cipher;
 
     std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x00);
@@ -141,7 +149,8 @@ TEST(ChaCha20CipherTest, GenerateKeystream) {
     std::ranges::fill(key, 0x42);
     cipher.initialize(key, nonce);
     keystream = cipher.generateKeystream(64);
-    const bool all_zeros_after = std::ranges::all_of(keystream, [](const uint8_t b) {
+    const bool all_zeros_after = std::ranges::all_of(keystream, [](const uint8_t b)
+    {
         return b == 0;
     });
     EXPECT_FALSE(all_zeros_after);
@@ -150,7 +159,8 @@ TEST(ChaCha20CipherTest, GenerateKeystream) {
 /**
  * @brief Test reset functionality
  */
-TEST(ChaCha20CipherTest, Reset) {
+TEST(ChaCha20CipherTest, Reset)
+{
     ChaCha20Cipher cipher;
 
     const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
@@ -173,8 +183,9 @@ TEST(ChaCha20CipherTest, Reset) {
 /**
  * @brief Test constants
  */
-TEST(ChaCha20CipherTest, Constants) {
-    EXPECT_EQ(ChaCha20Cipher::KEY_SIZE, 32);   // 256 bits
+TEST(ChaCha20CipherTest, Constants)
+{
+    EXPECT_EQ(ChaCha20Cipher::KEY_SIZE, 32); // 256 bits
     EXPECT_EQ(ChaCha20Cipher::NONCE_SIZE, 12); // 96 bits (IETF)
     EXPECT_EQ(ChaCha20Cipher::INITIAL_COUNTER, 1);
 }
@@ -182,7 +193,8 @@ TEST(ChaCha20CipherTest, Constants) {
 /**
  * @brief Test move constructor
  */
-TEST(ChaCha20CipherTest, MoveConstructor) {
+TEST(ChaCha20CipherTest, MoveConstructor)
+{
     ChaCha20Cipher cipher1;
 
     const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
@@ -199,7 +211,8 @@ TEST(ChaCha20CipherTest, MoveConstructor) {
 /**
  * @brief Test move assignment operator
  */
-TEST(ChaCha20CipherTest, MoveAssignment) {
+TEST(ChaCha20CipherTest, MoveAssignment)
+{
     ChaCha20Cipher cipher1;
 
     const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);

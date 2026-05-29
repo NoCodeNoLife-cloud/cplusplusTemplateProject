@@ -15,7 +15,8 @@ using namespace common::container;
  * @brief Test default constructor creates empty UnionSet
  * @details Verifies that a newly constructed UnionSet is ready to use
  */
-TEST(UnionSetTest, DefaultConstructor_EmptyUnionSet) {
+TEST(UnionSetTest, DefaultConstructor_EmptyUnionSet)
+{
     const UnionSet<int> unionSet;
     // UnionSet should be usable after construction
     EXPECT_TRUE(unionSet.connected(1, 1));
@@ -25,7 +26,8 @@ TEST(UnionSetTest, DefaultConstructor_EmptyUnionSet) {
  * @brief Test find returns the element itself for single element
  * @details Verifies that an unconnected element is its own root
  */
-TEST(UnionSetTest, Find_SingleElement_ReturnsSelf) {
+TEST(UnionSetTest, Find_SingleElement_ReturnsSelf)
+{
     UnionSet<int> unionSet;
 
     const int root = unionSet.find(5);
@@ -37,7 +39,8 @@ TEST(UnionSetTest, Find_SingleElement_ReturnsSelf) {
  * @brief Test find with path compression
  * @details Verifies that path compression optimizes future lookups
  */
-TEST(UnionSetTest, Find_PathCompression) {
+TEST(UnionSetTest, Find_PathCompression)
+{
     UnionSet<int> unionSet;
 
     // Create a chain: 1 -> 2 -> 3 -> 4
@@ -57,7 +60,8 @@ TEST(UnionSetTest, Find_PathCompression) {
  * @brief Test unionSets merges two separate sets
  * @details Verifies that union operation correctly combines two disjoint sets
  */
-TEST(UnionSetTest, UnionSets_MergesTwoSets) {
+TEST(UnionSetTest, UnionSets_MergesTwoSets)
+{
     UnionSet<int> unionSet;
 
     const bool result = unionSet.unionSets(1, 2);
@@ -70,7 +74,8 @@ TEST(UnionSetTest, UnionSets_MergesTwoSets) {
  * @brief Test unionSets returns false for already connected elements
  * @details Verifies that union operation detects redundant unions
  */
-TEST(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse) {
+TEST(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse)
+{
     UnionSet<int> unionSet;
 
     unionSet.unionSets(1, 2);
@@ -83,7 +88,8 @@ TEST(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse) {
  * @brief Test unionSets with multiple elements maintains connectivity
  * @details Verifies transitive property of union operations
  */
-TEST(UnionSetTest, UnionSets_MultipleElements_TransitiveConnectivity) {
+TEST(UnionSetTest, UnionSets_MultipleElements_TransitiveConnectivity)
+{
     UnionSet<int> unionSet;
 
     unionSet.unionSets(1, 2);
@@ -99,7 +105,8 @@ TEST(UnionSetTest, UnionSets_MultipleElements_TransitiveConnectivity) {
  * @brief Test unionSets maintains separate sets when not united
  * @details Verifies that unrelated elements remain in different sets
  */
-TEST(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected) {
+TEST(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected)
+{
     UnionSet<int> unionSet;
 
     unionSet.unionSets(1, 2);
@@ -115,7 +122,8 @@ TEST(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected) {
  * @brief Test connected returns true for same element
  * @details Verifies reflexivity property
  */
-TEST(UnionSetTest, Connected_SameElement_ReturnsTrue) {
+TEST(UnionSetTest, Connected_SameElement_ReturnsTrue)
+{
     const UnionSet<int> unionSet;
 
     EXPECT_TRUE(unionSet.connected(5, 5));
@@ -125,7 +133,8 @@ TEST(UnionSetTest, Connected_SameElement_ReturnsTrue) {
  * @brief Test connected returns false for unconnected elements
  * @details Verifies that elements without union are not connected
  */
-TEST(UnionSetTest, Connected_UnconnectedElements_ReturnsFalse) {
+TEST(UnionSetTest, Connected_UnconnectedElements_ReturnsFalse)
+{
     const UnionSet<int> unionSet;
 
     EXPECT_FALSE(unionSet.connected(1, 2));
@@ -135,7 +144,8 @@ TEST(UnionSetTest, Connected_UnconnectedElements_ReturnsFalse) {
  * @brief Test connected after union operation
  * @details Verifies that connected correctly identifies united elements
  */
-TEST(UnionSetTest, Connected_AfterUnion_ReturnsTrue) {
+TEST(UnionSetTest, Connected_AfterUnion_ReturnsTrue)
+{
     UnionSet<int> unionSet;
 
     unionSet.unionSets(10, 20);
@@ -150,7 +160,8 @@ TEST(UnionSetTest, Connected_AfterUnion_ReturnsTrue) {
  * @brief Test connected with const reference
  * @details Verifies const-correctness of connected method
  */
-TEST(UnionSetTest, Connected_ConstReference_CorrectBehavior) {
+TEST(UnionSetTest, Connected_ConstReference_CorrectBehavior)
+{
     UnionSet<int> unionSet;
 
     unionSet.unionSets(1, 2);
@@ -166,15 +177,18 @@ TEST(UnionSetTest, Connected_ConstReference_CorrectBehavior) {
  * @brief Test union by rank optimization
  * @details Verifies that union by rank creates balanced trees
  */
-TEST(UnionSetTest, UnionByRank_BalancedStructure) {
+TEST(UnionSetTest, UnionByRank_BalancedStructure)
+{
     UnionSet<int> unionSet;
 
     // Create two chains
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i)
+    {
         unionSet.unionSets(i, i + 1);
     }
 
-    for (int i = 10; i < 20; ++i) {
+    for (int i = 10; i < 20; ++i)
+    {
         unionSet.unionSets(i, i + 1);
     }
 
@@ -190,7 +204,8 @@ TEST(UnionSetTest, UnionByRank_BalancedStructure) {
  * @brief Test UnionSet with string elements
  * @details Verifies UnionSet works correctly with non-numeric types
  */
-TEST(UnionSetTest, StringElements_CorrectBehavior) {
+TEST(UnionSetTest, StringElements_CorrectBehavior)
+{
     UnionSet<std::string> unionSet;
 
     unionSet.unionSets("apple", "banana");
@@ -205,11 +220,13 @@ TEST(UnionSetTest, StringElements_CorrectBehavior) {
  * @brief Test UnionSet with large number of elements
  * @details Verifies scalability and correctness with many elements
  */
-TEST(UnionSetTest, LargeNumberOfElements_Correctness) {
+TEST(UnionSetTest, LargeNumberOfElements_Correctness)
+{
     UnionSet<int> unionSet;
 
     // Create 100 separate sets
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 100; ++i)
+    {
         unionSet.unionSets(i, i + 1);
     }
 
@@ -225,7 +242,8 @@ TEST(UnionSetTest, LargeNumberOfElements_Correctness) {
  * @brief Test multiple independent components
  * @details Verifies correct handling of multiple disjoint sets
  */
-TEST(UnionSetTest, MultipleIndependentComponents_CorrectHandling) {
+TEST(UnionSetTest, MultipleIndependentComponents_CorrectHandling)
+{
     UnionSet<int> unionSet;
 
     // Component 1: 1-2-3
@@ -254,7 +272,8 @@ TEST(UnionSetTest, MultipleIndependentComponents_CorrectHandling) {
  * @brief Test UnionSet with negative numbers
  * @details Verifies correct handling of negative values
  */
-TEST(UnionSetTest, NegativeNumbers_CorrectHandling) {
+TEST(UnionSetTest, NegativeNumbers_CorrectHandling)
+{
     UnionSet<int> unionSet;
 
     unionSet.unionSets(-10, -5);
@@ -268,7 +287,8 @@ TEST(UnionSetTest, NegativeNumbers_CorrectHandling) {
  * @brief Test UnionSet with mixed positive and negative numbers
  * @details Verifies correct handling of mixed sign values
  */
-TEST(UnionSetTest, MixedSignNumbers_CorrectHandling) {
+TEST(UnionSetTest, MixedSignNumbers_CorrectHandling)
+{
     UnionSet<int> unionSet;
 
     unionSet.unionSets(-100, 50);
@@ -283,7 +303,8 @@ TEST(UnionSetTest, MixedSignNumbers_CorrectHandling) {
  * @brief Test repeated union operations on same elements
  * @details Verifies idempotency of union operations
  */
-TEST(UnionSetTest, RepeatedUnions_Idempotent) {
+TEST(UnionSetTest, RepeatedUnions_Idempotent)
+{
     UnionSet<int> unionSet;
 
     unionSet.unionSets(1, 2);
@@ -297,7 +318,8 @@ TEST(UnionSetTest, RepeatedUnions_Idempotent) {
  * @brief Test UnionSet forms correct equivalence classes
  * @details Verifies reflexive, symmetric, and transitive properties
  */
-TEST(UnionSetTest, EquivalenceClasses_CorrectProperties) {
+TEST(UnionSetTest, EquivalenceClasses_CorrectProperties)
+{
     UnionSet<int> unionSet;
 
     unionSet.unionSets(1, 2);
