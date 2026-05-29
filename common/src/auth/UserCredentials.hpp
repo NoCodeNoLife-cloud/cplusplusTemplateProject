@@ -22,34 +22,34 @@ namespace common::auth
 
         /// @brief Get username
         /// @return Username string
-        [[nodiscard]] auto get_username() const noexcept -> const std::string&;
+        [[nodiscard]] const std::string& get_username() const noexcept;
 
         /// @brief Get hashed password
         /// @return Hashed password string
-        [[nodiscard]] auto get_hashed_password() const noexcept -> const std::string&;
+        [[nodiscard]] const std::string& get_hashed_password() const noexcept;
 
         /// @brief Get salt value
         /// @return Salt string used for hashing
-        [[nodiscard]] auto get_salt() const noexcept -> const std::string&;
+        [[nodiscard]] const std::string& get_salt() const noexcept;
 
         /// @brief Get number of failed login attempts
         /// @return Count of failed attempts
-        [[nodiscard]] auto get_failed_attempts() const noexcept -> size_t;
+        [[nodiscard]] size_t get_failed_attempts() const noexcept;
 
         /// @brief Increment failed login attempt counter
-        auto increment_failed_attempts() noexcept -> void;
+        void increment_failed_attempts() noexcept;
 
         /// @brief Reset failed attempt counter
-        auto reset_failed_attempts() noexcept -> void;
+        void reset_failed_attempts() noexcept;
 
         /// @brief Check if account is locked due to excessive failed attempts
         /// @return true if account is locked, false otherwise
-        [[nodiscard]] auto is_locked() const noexcept -> bool;
+        [[nodiscard]] bool is_locked() const noexcept;
 
         /// @brief Check if account lock will expire after a specific duration
         /// @param lockout_duration Duration in minutes after which lockout expires
         /// @return true if account is locked, false otherwise
-        [[nodiscard]] auto is_locked(std::chrono::minutes lockout_duration, size_t max_attempts) const noexcept -> bool;
+        [[nodiscard]] bool is_locked(std::chrono::minutes lockout_duration, size_t max_attempts) const noexcept;
 
     private:
         std::string username_;
@@ -61,4 +61,4 @@ namespace common::auth
         static constexpr size_t DEFAULT_MAX_ATTEMPTS = 5;
         static constexpr std::chrono::minutes DEFAULT_LOCKOUT_DURATION{5};
     };
-} // common
+}

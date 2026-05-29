@@ -26,7 +26,7 @@ namespace common::interfaces
         /// @param args Arguments to be passed to the function
         /// @return The result of the function
         template <typename Func, typename... Args>
-        [[nodiscard]] auto exec(Func&& func, Args&&... args) -> decltype(auto);
+        [[nodiscard]] decltype(auto) exec(Func&& func, Args&&... args);
 
         virtual ~IAopAspect() = default;
 
@@ -55,7 +55,7 @@ namespace common::interfaces
         /// Derived classes can override this to implement result processing logic.
         /// @note Default implementation simply forwards the result
         template <typename T>
-        auto handleResult(T&& result) -> decltype(auto)
+        decltype(auto) handleResult(T&& result)
         {
             // Default implementation: simply forward the result without modification
             return std::forward<T>(result);
@@ -64,7 +64,7 @@ namespace common::interfaces
 
     template <typename Derived>
     template <typename Func, typename... Args>
-    auto IAopAspect<Derived>::exec(Func&& func, Args&&... args) -> decltype(auto)
+    decltype(auto) IAopAspect<Derived>::exec(Func&& func, Args&&... args)
     {
         // Execute the pre-execution logic
         static_cast<Derived*>(this)->onEntry();
@@ -85,7 +85,7 @@ namespace common::interfaces
                 return static_cast<Derived*>(this)->handleResult(std::move(result));
             }
         }
-        catch (const std::exception& e)
+        catch ([[maybe_unused]] const std::exception& e)
         {
             // Handle standard exceptions with context
             static_cast<Derived*>(this)->onException(std::current_exception());

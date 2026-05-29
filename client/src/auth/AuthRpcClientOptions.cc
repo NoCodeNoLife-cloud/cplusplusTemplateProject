@@ -17,25 +17,25 @@ namespace client_app::auth
         validate(); // Validate parameters after construction
     }
 
-    Builder& AuthRpcClientOptions::Builder::keepaliveTimeMs(const int32_t value) noexcept
+    AuthRpcClientOptions::Builder& AuthRpcClientOptions::Builder::keepaliveTimeMs(const int32_t value) noexcept
     {
         keepalive_time_ms_ = value;
         return *this;
     }
 
-    Builder& AuthRpcClientOptions::Builder::keepaliveTimeoutMs(const int32_t value) noexcept
+    AuthRpcClientOptions::Builder& AuthRpcClientOptions::Builder::keepaliveTimeoutMs(const int32_t value) noexcept
     {
         keepalive_timeout_ms_ = value;
         return *this;
     }
 
-    Builder& AuthRpcClientOptions::Builder::keepalivePermitWithoutCalls(const int32_t value) noexcept
+    AuthRpcClientOptions::Builder& AuthRpcClientOptions::Builder::keepalivePermitWithoutCalls(const int32_t value) noexcept
     {
         keepalive_permit_without_calls_ = value;
         return *this;
     }
 
-    Builder& AuthRpcClientOptions::Builder::serverAddress(const std::string& value) noexcept
+    AuthRpcClientOptions::Builder& AuthRpcClientOptions::Builder::serverAddress(const std::string& value) noexcept
     {
         server_address_ = value;
         return *this;

@@ -33,53 +33,53 @@ namespace common::container
         /// @brief Copy assignment operator
         /// @param other The queue to copy from
         /// @return Reference to this queue
-        auto operator=(const Queue& other) -> Queue&;
+        Queue& operator=(const Queue& other);
 
         /// @brief Move assignment operator
         /// @param other The queue to move from
         /// @return Reference to this queue
-        auto operator=(Queue&& other) noexcept -> Queue&;
+        Queue& operator=(Queue&& other) noexcept;
 
         /// @brief Add an element to the back of the queue
         /// @param value The value to add
         /// @throws std::invalid_argument If the operation fails due to invalid state
-        auto push(const T& value) -> void;
+        void push(const T& value);
 
         /// @brief Remove the element from the front of the queue
         /// @throws std::out_of_range If the queue is empty
-        auto pop() -> void;
+        void pop();
 
         /// @brief Get a reference to the front element
         /// @return Reference to the front element
         /// @throws std::out_of_range If the queue is empty
-        auto front() -> T&;
+        T& front();
 
         /// @brief Get a const reference to the front element
         /// @return Const reference to the front element
         /// @throws std::out_of_range If the queue is empty
-        auto front() const -> const T&;
+        const T& front() const;
 
         /// @brief Get a reference to the back element
         /// @return Reference to the back element
         /// @throws std::out_of_range If the queue is empty
-        auto back() -> T&;
+        T& back();
 
         /// @brief Get a const reference to the back element
         /// @return Const reference to the back element
         /// @throws std::out_of_range If the queue is empty
-        auto back() const -> const T&;
+        const T& back() const;
 
         /// @brief Check if the queue is empty
         /// @return True if the queue is empty, false otherwise
-        [[nodiscard]] auto empty() const noexcept -> bool;
+        [[nodiscard]] bool empty() const noexcept;
 
         /// @brief Get the number of elements in the queue
         /// @return The number of elements in the queue
-        [[nodiscard]] auto size() const noexcept -> size_t;
+        [[nodiscard]] size_t size() const noexcept;
 
         /// @brief Swap the contents of this queue with another
         /// @param other The queue to swap with
-        auto swap(Queue& other) noexcept -> void;
+        void swap(Queue& other) noexcept;
 
     private:
         /// @brief Internal node structure for the queue
@@ -128,7 +128,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    auto Queue<T>::operator=(const Queue& other) -> Queue&
+    Queue<T>& Queue<T>::operator=(const Queue& other)
     {
         if (this != &other)
         {
@@ -139,7 +139,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    auto Queue<T>::operator=(Queue&& other) noexcept -> Queue&
+    Queue<T>& Queue<T>::operator=(Queue&& other) noexcept
     {
         if (this != &other)
         {
@@ -153,7 +153,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    auto Queue<T>::push(const T& value) -> void
+    void Queue<T>::push(const T& value)
     {
         auto new_node = std::make_unique<Node>(value);
         if (!new_node)
@@ -174,7 +174,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    auto Queue<T>::pop() -> void
+    void Queue<T>::pop()
     {
         if (empty())
         {
@@ -189,7 +189,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    auto Queue<T>::front() -> T&
+    T& Queue<T>::front()
     {
         if (empty())
         {
@@ -199,7 +199,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    auto Queue<T>::front() const -> const T&
+    const T& Queue<T>::front() const
     {
         if (empty())
         {
@@ -209,7 +209,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    auto Queue<T>::back() -> T&
+    T& Queue<T>::back()
     {
         if (empty())
         {
@@ -219,7 +219,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    auto Queue<T>::back() const -> const T&
+    const T& Queue<T>::back() const
     {
         if (empty())
         {
@@ -229,19 +229,19 @@ namespace common::container
     }
 
     template <std::movable T>
-    auto Queue<T>::empty() const noexcept -> bool
+    bool Queue<T>::empty() const noexcept
     {
         return queue_size_ == 0;
     }
 
     template <std::movable T>
-    auto Queue<T>::size() const noexcept -> size_t
+    size_t Queue<T>::size() const noexcept
     {
         return queue_size_;
     }
 
     template <std::movable T>
-    auto Queue<T>::swap(Queue& other) noexcept -> void
+    void Queue<T>::swap(Queue& other) noexcept
     {
         using std::swap;
         head_.swap(other.head_);

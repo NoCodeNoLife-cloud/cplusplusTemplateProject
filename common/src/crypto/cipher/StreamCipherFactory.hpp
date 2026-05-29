@@ -24,7 +24,7 @@ namespace common::crypto::cipher
      * @code
      * // Create ChaCha20 cipher
      * auto cipher = StreamCipherFactory::create(StreamCipherFactory::Algorithm::CHACHA20);
-     * 
+     *
      * // Or use convenience method
      * auto cipher2 = StreamCipherFactory::createChaCha20();
      * @endcode
@@ -52,27 +52,27 @@ namespace common::crypto::cipher
          * @throws std::invalid_argument if algorithm is not supported.
          * @throws std::runtime_error if cipher initialization fails.
          */
-        [[nodiscard]] static auto create(Algorithm algo) -> std::unique_ptr<StreamCipher>;
+        [[nodiscard]] static std::unique_ptr<StreamCipher> create(Algorithm algo);
 
         /**
          * @brief Create a ChaCha20 cipher instance (convenience method).
          * @return Unique pointer to ChaCha20Cipher.
          * @throws std::runtime_error if cipher creation fails.
          */
-        [[nodiscard]] static auto createChaCha20() -> std::unique_ptr<StreamCipher>;
+        [[nodiscard]] static std::unique_ptr<StreamCipher> createChaCha20();
 
         /**
          * @brief Get list of supported algorithm names.
          * @return Vector of algorithm name strings.
          */
-        [[nodiscard]] static auto getSupportedAlgorithms() -> std::vector<std::string>;
+        [[nodiscard]] static std::vector<std::string> getSupportedAlgorithms();
 
         /**
          * @brief Check if an algorithm is supported.
          * @param algo The algorithm to check.
          * @return true if supported, false otherwise.
          */
-        [[nodiscard]] static auto isSupported(Algorithm algo) noexcept -> bool;
+        [[nodiscard]] static bool isSupported(Algorithm algo) noexcept;
 
     private:
         /**
@@ -80,6 +80,6 @@ namespace common::crypto::cipher
          * @param algo The algorithm enum value.
          * @return String representation.
          */
-        [[nodiscard]] static auto algorithmToString(Algorithm algo) -> std::string;
+        [[nodiscard]] static std::string algorithmToString(Algorithm algo);
     };
-} // namespace common::crypto::cipher
+}

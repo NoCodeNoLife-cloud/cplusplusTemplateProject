@@ -6,7 +6,6 @@
 
 #pragma once
 #include <mutex>
-#include <regex>
 #include <unordered_map>
 #include <optional>
 #include <memory>
@@ -25,19 +24,19 @@ namespace common::auth
         UserCredentials* user = nullptr; ///< Pointer to user credentials (only valid if success is true)
 
         /// @brief Create a successful auth result
-        static auto success_result(UserCredentials* user) -> AuthResult
+        static AuthResult success_result(UserCredentials* user)
         {
             return AuthResult{true, "", user};
         }
 
         /// @brief Create a failed auth result
-        static auto failure_result(const std::string& error) -> AuthResult
+        static AuthResult failure_result(const std::string& error)
         {
             return AuthResult{false, error, nullptr};
         }
 
         /// @brief Check if authentication was successful
-        [[nodiscard]] auto is_success() const -> bool
+        [[nodiscard]] bool is_success() const
         {
             return success;
         }
@@ -64,7 +63,7 @@ namespace common::auth
         /// @param password Plaintext password to verify
         /// @return AuthResult containing success status, error message (if any), and user pointer (if successful)
         /// @note This method does NOT throw exceptions for authentication failures. Use the returned AuthResult to check status.
-        [[nodiscard]] auto authenticate(const std::string& username, const std::string& password) -> AuthResult;
+        [[nodiscard]] AuthResult authenticate(const std::string& username, const std::string& password);
 
         /// @brief Change user password after verifying current password
         /// @param username User identifier
@@ -97,37 +96,37 @@ namespace common::auth
 
         /// @brief Get reference to the users map for administrative operations
         /// @return Reference to the users map
-        auto get_users() -> std::unordered_map<std::string, std::unique_ptr<UserCredentials>>&;
+        std::unordered_map<std::string, std::unique_ptr<UserCredentials>>& get_users();
 
         /// @brief Get reference to the mutex protecting the users map
         /// @return Reference to the users mutex
-        auto get_users_mutex() const -> std::mutex&;
+        std::mutex& get_users_mutex() const;
 
     private:
         /// @brief Validate username format against security requirements
         /// @param username Username string to validate
         /// @return true if username format is valid, false otherwise
-        static auto validate_username(const std::string& username) noexcept -> bool;
+        static bool validate_username(const std::string& username) noexcept;
 
         /// @brief Load user credentials from database
         /// @param username User identifier to load
         /// @return User credentials if found, nullopt otherwise
-        auto load_user_from_db(const std::string& username) const -> std::optional<UserCredentials>;
+        std::optional<UserCredentials> load_user_from_db(const std::string& username) const;
 
         /// @brief Parse credentials data (salt:hashed_password format)
         /// @param credentials_data Raw credentials data from database
         /// @return Parsed salt and hashed password pair, nullopt if invalid format
-        static auto parse_credentials_data(const std::string& credentials_data) -> std::optional<std::pair<std::string, std::string>>;
+        static std::optional<std::pair<std::string, std::string>> parse_credentials_data(const std::string& credentials_data);
 
         /// @brief Format credentials data (salt:hashed_password format)
         /// @param salt Salt string
         /// @param hashed_password Hashed password string
         /// @return Formatted credentials string
-        static auto format_credentials_data(const std::string& salt, const std::string& hashed_password) -> std::string;
+        static std::string format_credentials_data(const std::string& salt, const std::string& hashed_password);
 
         PasswordPolicy password_policy_;
         std::unordered_map<std::string, std::unique_ptr<UserCredentials>> users_;
         mutable std::mutex users_mutex_;
         common::sql::PasswordSQL password_sql_;
     };
-} // common
+}

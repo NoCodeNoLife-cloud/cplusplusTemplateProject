@@ -27,21 +27,21 @@ namespace common::aop
 
         /// @brief Entry point - records the start time of the function
         /// @details Called when entering the function to be profiled
-        auto onEntry() -> void override;
+        void onEntry() override;
 
         /// @brief Exit point - records the end time of the function
         /// @details Called when exiting the function to be profiled
-        auto onExit() -> void override;
+        void onExit() override;
 
         /// @brief Exception point - records the end time when exception occurs
         /// @details Called when function exits with exception
-        auto onException(std::exception_ptr e) -> void override;
+        void onException(std::exception_ptr e) override;
 
     protected:
         /// @brief Called when profiling is complete, subclasses can override to handle timing info
         /// @param time_info Formatted string with execution time information
         /// @details Default implementation does nothing. Override to log, send to metrics, etc.
-        virtual auto onProfileComplete(const std::string& time_info) -> void;
+        virtual void onProfileComplete(const std::string& time_info);
 
     private:
         time::FunctionProfiler profiler_;

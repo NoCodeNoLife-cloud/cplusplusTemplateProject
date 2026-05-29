@@ -57,12 +57,12 @@ namespace common::crypto::cipher
         // Delete copy operations to prevent resource management issues
         ChaCha20Cipher(const ChaCha20Cipher&) = delete;
 
-        auto operator=(const ChaCha20Cipher&) -> ChaCha20Cipher& = delete;
+        ChaCha20Cipher& operator=(const ChaCha20Cipher&) = delete;
 
         // Enable move operations
         ChaCha20Cipher(ChaCha20Cipher&& other) noexcept;
 
-        auto operator=(ChaCha20Cipher&& other) noexcept -> ChaCha20Cipher&;
+        ChaCha20Cipher& operator=(ChaCha20Cipher&& other) noexcept;
 
         /**
          * @brief Initialize the cipher with key and nonce.
@@ -84,7 +84,7 @@ namespace common::crypto::cipher
          *       create a NEW cipher instance with the same key/nonce instead of
          *       calling reset() on the same instance.
          */
-        [[nodiscard]] auto encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t> override;
+        [[nodiscard]] std::vector<uint8_t> encrypt(const std::vector<uint8_t>& plaintext) override;
 
         /**
          * @brief Decrypt ciphertext using ChaCha20.
@@ -95,7 +95,7 @@ namespace common::crypto::cipher
          * @note Use a FRESH cipher instance initialized with the same key/nonce
          *       that was used for encryption. Do NOT reuse the encryption instance.
          */
-        [[nodiscard]] auto decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t> override;
+        [[nodiscard]] std::vector<uint8_t> decrypt(const std::vector<uint8_t>& ciphertext) override;
 
         /**
          * @brief Generate ChaCha20 keystream.
@@ -103,7 +103,7 @@ namespace common::crypto::cipher
          * @return Generated keystream.
          * @throws std::runtime_error if cipher not initialized.
          */
-        [[nodiscard]] auto generateKeystream(size_t length) -> std::vector<uint8_t> override;
+        [[nodiscard]] std::vector<uint8_t> generateKeystream(size_t length) override;
 
         /**
          * @brief Reset cipher state to initial configuration.
@@ -118,13 +118,13 @@ namespace common::crypto::cipher
          * @brief Get algorithm name.
          * @return "ChaCha20"
          */
-        [[nodiscard]] auto getAlgorithmName() const noexcept -> std::string override;
+        [[nodiscard]] std::string getAlgorithmName() const noexcept override;
 
         /**
          * @brief Check if cipher is initialized.
          * @return true if initialize() has been called successfully.
          */
-        [[nodiscard]] auto isInitialized() const noexcept -> bool override;
+        [[nodiscard]] bool isInitialized() const noexcept override;
 
     private:
         /** @brief OpenSSL cipher context */
@@ -145,11 +145,11 @@ namespace common::crypto::cipher
          * @return Processed output data.
          * @throws std::runtime_error if operation fails.
          */
-        [[nodiscard]] auto process(const std::vector<uint8_t>& input) const -> std::vector<uint8_t>;
+        [[nodiscard]] std::vector<uint8_t> process(const std::vector<uint8_t>& input) const;
 
         /**
          * @brief Cleanup OpenSSL resources.
          */
         void cleanup() noexcept;
     };
-} // namespace common::crypto::cipher
+}

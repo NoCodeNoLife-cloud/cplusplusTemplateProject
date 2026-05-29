@@ -16,13 +16,13 @@ namespace common::aop
         DLOG(INFO) << "FunctionProfilerAspect created for: " << function_name_;
     }
 
-    auto FunctionProfilerAspect::onEntry() -> void
+    void FunctionProfilerAspect::onEntry()
     {
         // Removed frequent entry logging to avoid spam
         // DLOG(INFO) << "Entering function: " << function_name_;
     }
 
-    auto FunctionProfilerAspect::onExit() -> void
+    void FunctionProfilerAspect::onExit()
     {
         profiler_.recordEnd();
         const auto time_info = profiler_.getRunTime();
@@ -35,7 +35,7 @@ namespace common::aop
         onProfileComplete(time_info);
     }
 
-    auto FunctionProfilerAspect::onException(std::exception_ptr e) -> void
+    void FunctionProfilerAspect::onException(std::exception_ptr e)
     {
         profiler_.recordEnd();
         const auto time_info = profiler_.getRunTime();
@@ -43,7 +43,7 @@ namespace common::aop
         onProfileComplete(time_info);
     }
 
-    auto FunctionProfilerAspect::onProfileComplete(const std::string& time_info) -> void
+    void FunctionProfilerAspect::onProfileComplete(const std::string& time_info)
     {
         // Default implementation does nothing
         // Subclasses can override to log, send to metrics, etc.

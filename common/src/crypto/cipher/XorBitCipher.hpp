@@ -72,7 +72,7 @@ namespace common::crypto::cipher
          *       create a NEW cipher instance with the same key instead of
          *       calling reset() on the same instance.
          */
-        [[nodiscard]] auto encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t> override;
+        [[nodiscard]] std::vector<uint8_t> encrypt(const std::vector<uint8_t>& plaintext) override;
 
         /**
          * @brief Decrypt data using XOR with key stream.
@@ -83,7 +83,7 @@ namespace common::crypto::cipher
          * @note Use a FRESH cipher instance initialized with the same key
          *       that was used for encryption. Do NOT reuse the encryption instance.
          */
-        [[nodiscard]] auto decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t> override;
+        [[nodiscard]] std::vector<uint8_t> decrypt(const std::vector<uint8_t>& ciphertext) override;
 
         /**
          * @brief Generate keystream of specified length.
@@ -91,7 +91,7 @@ namespace common::crypto::cipher
          * @return Generated keystream.
          * @throws std::runtime_error if cipher not initialized.
          */
-        [[nodiscard]] auto generateKeystream(size_t length) -> std::vector<uint8_t> override;
+        [[nodiscard]] std::vector<uint8_t> generateKeystream(size_t length) override;
 
         /**
          * @brief Reset the key stream position to the beginning.
@@ -106,13 +106,13 @@ namespace common::crypto::cipher
          * @brief Get algorithm name.
          * @return "XorBitCipher"
          */
-        [[nodiscard]] auto getAlgorithmName() const noexcept -> std::string override;
+        [[nodiscard]] std::string getAlgorithmName() const noexcept override;
 
         /**
          * @brief Check if cipher is initialized (has key).
          * @return true if key is set, false otherwise.
          */
-        [[nodiscard]] auto isInitialized() const noexcept -> bool override;
+        [[nodiscard]] bool isInitialized() const noexcept override;
 
         /**
          * @brief Process (encrypt/decrypt) data using XOR with key stream.
@@ -122,14 +122,14 @@ namespace common::crypto::cipher
          *
          * @note This method processes full bytes. Use processBits() for arbitrary bit lengths.
          */
-        [[nodiscard]] auto process(const std::vector<uint8_t>& data) const -> std::vector<uint8_t>;
+        [[nodiscard]] std::vector<uint8_t> process(const std::vector<uint8_t>& data) const;
 
         /**
          * @brief Process data in-place for memory efficiency.
          * @param data Reference to data buffer to be processed.
          * @throw std::invalid_argument if key is empty.
          */
-        auto processInPlace(std::vector<uint8_t>& data) const -> void;
+        void processInPlace(std::vector<uint8_t>& data) const;
 
         /**
          * @brief Process arbitrary bit sequence.
@@ -139,7 +139,7 @@ namespace common::crypto::cipher
          *
          * @note Bit-level processing is slower than byte-level but supports arbitrary lengths.
          */
-        [[nodiscard]] auto processBits(const std::vector<bool>& bits) const -> std::vector<bool>;
+        [[nodiscard]] std::vector<bool> processBits(const std::vector<bool>& bits) const;
 
         /**
          * @brief Generate keystream segment using internal state.
@@ -147,19 +147,19 @@ namespace common::crypto::cipher
          * @return Generated keystream segment.
          * @throw std::invalid_argument if key is empty.
          */
-        [[nodiscard]] auto generateKeyStream(size_t length) const -> std::vector<uint8_t>;
+        [[nodiscard]] std::vector<uint8_t> generateKeyStream(size_t length) const;
 
         /**
          * @brief Get current key stream position.
          * @return Current byte position in key stream.
          */
-        [[nodiscard]] auto getCurrentPosition() const noexcept -> size_t;
+        [[nodiscard]] size_t getCurrentPosition() const noexcept;
 
         /**
          * @brief Check if key is set.
          * @return True if key stream is not empty, false otherwise.
          */
-        [[nodiscard]] auto hasKey() const noexcept -> bool;
+        [[nodiscard]] bool hasKey() const noexcept;
 
         /**
          * @brief Create a new cipher instance with auto-generated random key.
@@ -168,7 +168,7 @@ namespace common::crypto::cipher
          * @note This is a factory method for convenience testing only.
          *       Not cryptographically secure without proper entropy source.
          */
-        [[nodiscard]] static auto createWithRandomKey(size_t key_length) -> XorBitCipher;
+        [[nodiscard]] static XorBitCipher createWithRandomKey(size_t key_length);
 
     private:
         /** @brief The key stream (keystream) for XOR operations */
@@ -191,13 +191,13 @@ namespace common::crypto::cipher
          * @return Next key byte for XOR operation.
          * @throw std::invalid_argument if key is empty.
          */
-        [[nodiscard]] auto nextKeyByte() const -> uint8_t;
+        [[nodiscard]] uint8_t nextKeyByte() const;
 
         /**
          * @brief Get next key bit and advance position.
          * @return Next key bit (0 or 1) for XOR operation.
          * @throw std::invalid_argument if key is empty.
          */
-        [[nodiscard]] auto nextKeyBit() const -> bool;
+        [[nodiscard]] bool nextKeyBit() const;
     };
-} // namespace common::crypto::cipher
+}

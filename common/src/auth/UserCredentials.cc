@@ -14,31 +14,36 @@
 
 namespace common::auth
 {
-    UserCredentials::UserCredentials(std::string username, std::string hashed_password, std::string salt) noexcept : username_(std::move(username)), hashed_password_(std::move(hashed_password)), salt_(std::move(salt)), failed_attempts_(0), last_failed_attempt_(std::chrono::system_clock::time_point::min())
+    UserCredentials::UserCredentials(std::string username, std::string hashed_password, std::string salt) noexcept
+        : username_(std::move(username)),
+          hashed_password_(std::move(hashed_password)),
+          salt_(std::move(salt)),
+          failed_attempts_(0),
+          last_failed_attempt_(std::chrono::system_clock::time_point::min())
     {
     }
 
-    auto UserCredentials::get_username() const noexcept -> const std::string&
+    const std::string& UserCredentials::get_username() const noexcept
     {
         return username_;
     }
 
-    auto UserCredentials::get_hashed_password() const noexcept -> const std::string&
+    const std::string& UserCredentials::get_hashed_password() const noexcept
     {
         return hashed_password_;
     }
 
-    auto UserCredentials::get_salt() const noexcept -> const std::string&
+    const std::string& UserCredentials::get_salt() const noexcept
     {
         return salt_;
     }
 
-    auto UserCredentials::get_failed_attempts() const noexcept -> size_t
+    size_t UserCredentials::get_failed_attempts() const noexcept
     {
         return failed_attempts_;
     }
 
-    auto UserCredentials::increment_failed_attempts() noexcept -> void
+    void UserCredentials::increment_failed_attempts() noexcept
     {
         failed_attempts_++;
         last_failed_attempt_ = std::chrono::system_clock::now();
@@ -50,7 +55,7 @@ namespace common::auth
         }
     }
 
-    auto UserCredentials::reset_failed_attempts() noexcept -> void
+    void UserCredentials::reset_failed_attempts() noexcept
     {
         // Only log if there were previous failures to report
         if (failed_attempts_ > 0)
@@ -62,12 +67,12 @@ namespace common::auth
         last_failed_attempt_ = std::chrono::system_clock::time_point::min();
     }
 
-    auto UserCredentials::is_locked() const noexcept -> bool
+    bool UserCredentials::is_locked() const noexcept
     {
         return is_locked(DEFAULT_LOCKOUT_DURATION, DEFAULT_MAX_ATTEMPTS);
     }
 
-    auto UserCredentials::is_locked(const std::chrono::minutes lockout_duration, const size_t max_attempts) const noexcept -> bool
+    bool UserCredentials::is_locked(const std::chrono::minutes lockout_duration, const size_t max_attempts) const noexcept
     {
         const auto now = std::chrono::system_clock::now();
         const auto time_since_last_fail = now - last_failed_attempt_;
@@ -82,4 +87,4 @@ namespace common::auth
         }
         return locked;
     }
-} // common
+}

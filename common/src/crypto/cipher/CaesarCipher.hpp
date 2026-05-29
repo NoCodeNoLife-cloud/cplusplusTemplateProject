@@ -67,13 +67,13 @@ namespace common::crypto::cipher
         constexpr CaesarCipher(const CaesarCipher& other) noexcept = default;
 
         /** @brief Copy assignment */
-        constexpr auto operator=(const CaesarCipher& other) noexcept -> CaesarCipher& = default;
+        constexpr CaesarCipher& operator=(const CaesarCipher& other) noexcept = default;
 
         /** @brief Move constructor */
         constexpr CaesarCipher(CaesarCipher&& other) noexcept = default;
 
         /** @brief Move assignment */
-        constexpr auto operator=(CaesarCipher&& other) noexcept -> CaesarCipher& = default;
+        constexpr CaesarCipher& operator=(CaesarCipher&& other) noexcept = default;
 
         /**
          * @brief Encrypts plaintext using configured shift
@@ -82,7 +82,7 @@ namespace common::crypto::cipher
          * @throws std::invalid_argument If non-ASCII characters detected
          * @par Complexity: Time O(n), Space O(n)
          */
-        [[nodiscard]] auto Encrypt(std::string_view plaintext) const -> std::string;
+        [[nodiscard]] std::string Encrypt(std::string_view plaintext) const;
 
         /**
          * @brief Decrypts ciphertext using configured shift
@@ -91,7 +91,7 @@ namespace common::crypto::cipher
          * @throws std::invalid_argument If non-ASCII characters detected
          * @par Complexity: Time O(n), Space O(n)
          */
-        [[nodiscard]] auto Decrypt(std::string_view ciphertext) const -> std::string;
+        [[nodiscard]] std::string Decrypt(std::string_view ciphertext) const;
 
         /**
          * @brief Stateless encryption utility
@@ -100,7 +100,7 @@ namespace common::crypto::cipher
          * @return Encrypted string
          * @throws std::invalid_argument If invalid input or shift
          */
-        [[nodiscard]] static auto Encrypt(std::string_view text, int shift) -> std::string;
+        [[nodiscard]] static std::string Encrypt(std::string_view text, int shift);
 
         /**
          * @brief Stateless decryption utility
@@ -109,27 +109,27 @@ namespace common::crypto::cipher
          * @return Decrypted string
          * @throws std::invalid_argument If invalid input or shift
          */
-        [[nodiscard]] static auto Decrypt(std::string_view text, int shift) -> std::string;
+        [[nodiscard]] static std::string Decrypt(std::string_view text, int shift);
 
         /**
          * @brief Input validation helper
          * @param[in] text String to validate
          * @return true if all chars are ASCII (0-127)
          */
-        [[nodiscard]] static auto IsValidInput(std::string_view text) noexcept -> bool;
+        [[nodiscard]] static bool IsValidInput(std::string_view text) noexcept;
 
         /**
          * @brief Factory method for ROT13 variant
          * @return Configured instance with shift=13
          * @note ROT13 is self-inverse: Encrypt() == Decrypt()
          */
-        [[nodiscard]] static auto CreateRot13() -> CaesarCipher;
+        [[nodiscard]] static CaesarCipher CreateRot13();
 
         /**
          * @brief Current shift value accessor
          * @return Normalized shift in range [0, 25]
          */
-        [[nodiscard]] auto GetShift() const noexcept -> int
+        [[nodiscard]] int GetShift() const noexcept
         {
             return shift_;
         }
@@ -139,7 +139,7 @@ namespace common::crypto::cipher
          * @param[in] new_shift New shift value
          * @throws std::invalid_argument If normalization fails
          */
-        auto SetShift(int new_shift) -> void;
+        void SetShift(int new_shift);
 
     private:
         /**
@@ -153,7 +153,7 @@ namespace common::crypto::cipher
          * @param[in] effective_shift Applied shift (handles negative)
          * @return Transformed result
          */
-        [[nodiscard]] static auto Transform(std::string_view text, int effective_shift) -> std::string;
+        [[nodiscard]] static std::string Transform(std::string_view text, int effective_shift);
 
         /**
          * @brief Character-level shift logic
@@ -162,7 +162,7 @@ namespace common::crypto::cipher
          * @return Shifted character preserving case
          * @pre std::isalpha(c) == true
          */
-        [[nodiscard]] static auto ShiftChar(char c, int shift) noexcept -> char;
+        [[nodiscard]] static char ShiftChar(char c, int shift) noexcept;
 
         /**
          * @brief Normalizes any integer to valid shift range
@@ -170,6 +170,6 @@ namespace common::crypto::cipher
          * @return Value in [0, 25]
          * @throws std::invalid_argument On arithmetic overflow
          */
-        [[nodiscard]] static auto NormalizeShift(int shift) -> int;
+        [[nodiscard]] static int NormalizeShift(int shift);
     };
-} // namespace common::crypto::cipher
+}

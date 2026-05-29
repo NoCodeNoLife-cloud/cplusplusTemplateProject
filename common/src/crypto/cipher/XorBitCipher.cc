@@ -28,20 +28,20 @@ namespace common::crypto::cipher
         bit_pos_ = 0;
     }
 
-    auto XorBitCipher::encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t>
+    std::vector<uint8_t> XorBitCipher::encrypt(const std::vector<uint8_t>& plaintext)
     {
         validateInitialized();
         return process(plaintext);
     }
 
-    auto XorBitCipher::decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t>
+    std::vector<uint8_t> XorBitCipher::decrypt(const std::vector<uint8_t>& ciphertext)
     {
         validateInitialized();
         // For XOR cipher, decryption is identical to encryption
         return process(ciphertext);
     }
 
-    auto XorBitCipher::generateKeystream(const size_t length) -> std::vector<uint8_t>
+    std::vector<uint8_t> XorBitCipher::generateKeystream(const size_t length)
     {
         validateInitialized();
         return generateKeyStream(length);
@@ -53,12 +53,12 @@ namespace common::crypto::cipher
         bit_pos_ = 0;
     }
 
-    auto XorBitCipher::getAlgorithmName() const noexcept -> std::string
+    std::string XorBitCipher::getAlgorithmName() const noexcept
     {
         return "XorBitCipher";
     }
 
-    auto XorBitCipher::isInitialized() const noexcept -> bool
+    bool XorBitCipher::isInitialized() const noexcept
     {
         return hasKey();
     }
@@ -72,17 +72,17 @@ namespace common::crypto::cipher
         }
     }
 
-    auto XorBitCipher::getCurrentPosition() const noexcept -> size_t
+    size_t XorBitCipher::getCurrentPosition() const noexcept
     {
         return key_pos_;
     }
 
-    auto XorBitCipher::hasKey() const noexcept -> bool
+    bool XorBitCipher::hasKey() const noexcept
     {
         return !key_stream_.empty();
     }
 
-    auto XorBitCipher::nextKeyByte() const -> uint8_t
+    uint8_t XorBitCipher::nextKeyByte() const
     {
         if (key_stream_.empty())
         {
@@ -94,7 +94,7 @@ namespace common::crypto::cipher
         return byte;
     }
 
-    auto XorBitCipher::nextKeyBit() const -> bool
+    bool XorBitCipher::nextKeyBit() const
     {
         if (key_stream_.empty())
         {
@@ -111,7 +111,7 @@ namespace common::crypto::cipher
         return bit;
     }
 
-    auto XorBitCipher::process(const std::vector<uint8_t>& data) const -> std::vector<uint8_t>
+    std::vector<uint8_t> XorBitCipher::process(const std::vector<uint8_t>& data) const
     {
         std::vector<uint8_t> result;
         result.reserve(data.size());
@@ -125,7 +125,7 @@ namespace common::crypto::cipher
         return result;
     }
 
-    auto XorBitCipher::processInPlace(std::vector<uint8_t>& data) const -> void
+    void XorBitCipher::processInPlace(std::vector<uint8_t>& data) const
     {
         for (auto& byte : data)
         {
@@ -133,7 +133,7 @@ namespace common::crypto::cipher
         }
     }
 
-    auto XorBitCipher::processBits(const std::vector<bool>& bits) const -> std::vector<bool>
+    std::vector<bool> XorBitCipher::processBits(const std::vector<bool>& bits) const
     {
         std::vector<bool> result;
         result.reserve(bits.size());
@@ -147,7 +147,7 @@ namespace common::crypto::cipher
         return result;
     }
 
-    auto XorBitCipher::generateKeyStream(const size_t length) const -> std::vector<uint8_t>
+    std::vector<uint8_t> XorBitCipher::generateKeyStream(const size_t length) const
     {
         std::vector<uint8_t> stream;
         stream.reserve(length);
@@ -159,7 +159,7 @@ namespace common::crypto::cipher
         return stream;
     }
 
-    auto XorBitCipher::createWithRandomKey(const size_t key_length) -> XorBitCipher
+    XorBitCipher XorBitCipher::createWithRandomKey(const size_t key_length)
     {
         std::vector<uint8_t> random_key;
         random_key.reserve(key_length);

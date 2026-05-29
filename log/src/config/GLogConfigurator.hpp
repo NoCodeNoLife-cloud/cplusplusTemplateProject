@@ -33,32 +33,32 @@ namespace glog::config
         GLogConfigurator(const GLogConfigurator&) = delete;
 
         /// @brief Copy assignment operator is deleted to prevent copying
-        auto operator=(const GLogConfigurator&) -> GLogConfigurator& = delete;
+        GLogConfigurator& operator=(const GLogConfigurator&) = delete;
 
         /// @brief Move constructor
         GLogConfigurator(GLogConfigurator&&) noexcept = default;
 
         /// @brief Move assignment operator
-        auto operator=(GLogConfigurator&&) noexcept -> GLogConfigurator& = default;
+        GLogConfigurator& operator=(GLogConfigurator&&) noexcept = default;
 
         /// @brief Execute the configuration process
         /// @return True if configuration was successful
-        auto execute() const -> void;
+        void execute() const;
 
         /// @brief Get the current configuration parameters
         /// @return A const reference to the GLogParameters object
-        [[nodiscard]] auto getConfig() const noexcept -> const parameter::GLogParameters&;
+        [[nodiscard]] const parameter::GLogParameters& getConfig() const noexcept;
 
         /// @brief Update the configuration parameters
         /// @param config The new configuration parameters
-        auto updateConfig(const parameter::GLogParameters& config) noexcept -> void;
+        void updateConfig(const parameter::GLogParameters& config) noexcept;
 
     private:
         /// @brief Perform the actual glog configuration
-        static auto doConfig(const parameter::GLogParameters& config) noexcept -> void;
+        static void doConfig(const parameter::GLogParameters& config) noexcept;
 
         /// @brief Clean up glog resources
-        static auto clean() noexcept -> void;
+        static void clean() noexcept;
 
         std::string glog_yaml_path_;
         parameter::GLogParameters config_;

@@ -16,47 +16,47 @@ namespace glog::parameter
     {
     }
 
-    auto GLogParameters::minLogLevel() const noexcept -> int32_t
+    int32_t GLogParameters::minLogLevel() const noexcept
     {
         return min_log_level_;
     }
 
-    auto GLogParameters::minLogLevel(const int32_t min_log_level) noexcept -> void
+    void GLogParameters::minLogLevel(const int32_t min_log_level) noexcept
     {
         min_log_level_ = min_log_level;
     }
 
-    auto GLogParameters::logName() const noexcept -> std::string
+    std::string GLogParameters::logName() const noexcept
     {
         return log_name_;
     }
 
-    auto GLogParameters::logName(const std::string& log_name) -> void
+    void GLogParameters::logName(const std::string& log_name)
     {
         log_name_ = log_name;
     }
 
-    auto GLogParameters::logToStderr() const noexcept -> bool
+    bool GLogParameters::logToStderr() const noexcept
     {
         return log_to_stderr_;
     }
 
-    auto GLogParameters::logToStderr(const bool log_to_stderr) noexcept -> void
+    void GLogParameters::logToStderr(const bool log_to_stderr) noexcept
     {
         log_to_stderr_ = log_to_stderr;
     }
 
-    auto GLogParameters::customLogFormat() const noexcept -> bool
+    bool GLogParameters::customLogFormat() const noexcept
     {
         return custom_log_format_;
     }
 
-    auto GLogParameters::customLogFormat(const bool custom_log_format) noexcept -> void
+    void GLogParameters::customLogFormat(const bool custom_log_format) noexcept
     {
         custom_log_format_ = custom_log_format;
     }
 
-    auto GLogParameters::deserializedFromYamlFile(const std::filesystem::path& path) -> void
+    void GLogParameters::deserializedFromYamlFile(const std::filesystem::path& path)
     {
         if (!std::filesystem::exists(path))
         {
@@ -116,18 +116,18 @@ namespace glog::parameter
         }
     }
 
-    auto GLogParameters::operator==(const GLogParameters& other) const noexcept -> bool
+    bool GLogParameters::operator==(const GLogParameters& other) const noexcept
     {
         return min_log_level_ == other.min_log_level_ && log_name_ == other.log_name_ && log_to_stderr_ == other.log_to_stderr_ && custom_log_format_ == other.custom_log_format_;
     }
 
-    auto GLogParameters::operator!=(const GLogParameters& other) const noexcept -> bool
+    bool GLogParameters::operator!=(const GLogParameters& other) const noexcept
     {
         return !(*this == other);
     }
 }
 
-auto YAML::convert<glog::parameter::GLogParameters>::decode(const YAML::Node& node, glog::parameter::GLogParameters& rhs) -> bool
+bool YAML::convert<glog::parameter::GLogParameters>::decode(const YAML::Node& node, glog::parameter::GLogParameters& rhs)
 {
     if (!node.IsMap())
     {
@@ -153,7 +153,7 @@ auto YAML::convert<glog::parameter::GLogParameters>::decode(const YAML::Node& no
     return true;
 }
 
-auto YAML::convert<glog::parameter::GLogParameters>::encode(const glog::parameter::GLogParameters& rhs) -> YAML::Node
+YAML::Node YAML::convert<glog::parameter::GLogParameters>::encode(const glog::parameter::GLogParameters& rhs)
 {
     YAML::Node node;
     node["minLogLevel"] = rhs.minLogLevel();

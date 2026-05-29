@@ -33,7 +33,7 @@ namespace common::crypto::cipher
         other.initialized_ = false;
     }
 
-    auto ChaCha20Cipher::operator=(ChaCha20Cipher&& other) noexcept -> ChaCha20Cipher&
+    ChaCha20Cipher& ChaCha20Cipher::operator=(ChaCha20Cipher&& other) noexcept
     {
         if (this != &other)
         {
@@ -106,7 +106,7 @@ namespace common::crypto::cipher
         initialized_ = true;
     }
 
-    auto ChaCha20Cipher::encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t>
+    std::vector<uint8_t> ChaCha20Cipher::encrypt(const std::vector<uint8_t>& plaintext)
     {
         if (!initialized_)
         {
@@ -116,7 +116,7 @@ namespace common::crypto::cipher
         return process(plaintext);
     }
 
-    auto ChaCha20Cipher::decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t>
+    std::vector<uint8_t> ChaCha20Cipher::decrypt(const std::vector<uint8_t>& ciphertext)
     {
         if (!initialized_)
         {
@@ -127,7 +127,7 @@ namespace common::crypto::cipher
         return process(ciphertext);
     }
 
-    auto ChaCha20Cipher::generateKeystream(size_t length) -> std::vector<uint8_t>
+    std::vector<uint8_t> ChaCha20Cipher::generateKeystream(size_t length)
     {
         if (!initialized_)
         {
@@ -157,17 +157,17 @@ namespace common::crypto::cipher
         }
     }
 
-    auto ChaCha20Cipher::getAlgorithmName() const noexcept -> std::string
+    std::string ChaCha20Cipher::getAlgorithmName() const noexcept
     {
         return "ChaCha20";
     }
 
-    auto ChaCha20Cipher::isInitialized() const noexcept -> bool
+    bool ChaCha20Cipher::isInitialized() const noexcept
     {
         return initialized_;
     }
 
-    auto ChaCha20Cipher::process(const std::vector<uint8_t>& input) const -> std::vector<uint8_t>
+    std::vector<uint8_t> ChaCha20Cipher::process(const std::vector<uint8_t>& input) const
     {
         if (!ctx_)
         {
@@ -212,4 +212,4 @@ namespace common::crypto::cipher
         }
         initialized_ = false;
     }
-} // namespace common::crypto::cipher
+}

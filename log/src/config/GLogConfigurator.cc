@@ -25,7 +25,7 @@ namespace glog::config
         config_.deserializedFromYamlFile(glog_yaml_path_);
     }
 
-    auto GLogConfigurator::execute() const -> void
+    void GLogConfigurator::execute() const
     {
         doConfig(config_);
         if (const auto result = std::atexit(clean); result != 0)
@@ -35,17 +35,17 @@ namespace glog::config
         DLOG(INFO) << "glog configured...";
     }
 
-    auto GLogConfigurator::getConfig() const noexcept -> const parameter::GLogParameters&
+    const parameter::GLogParameters& GLogConfigurator::getConfig() const noexcept
     {
         return config_;
     }
 
-    auto GLogConfigurator::updateConfig(const parameter::GLogParameters& config) noexcept -> void
+    void GLogConfigurator::updateConfig(const parameter::GLogParameters& config) noexcept
     {
         config_ = config;
     }
 
-    auto GLogConfigurator::doConfig(const parameter::GLogParameters& config) noexcept -> void
+    void GLogConfigurator::doConfig(const parameter::GLogParameters& config) noexcept
     {
         google::InitGoogleLogging(config.logName().c_str());
         FLAGS_minloglevel = config.minLogLevel();
@@ -61,7 +61,7 @@ namespace glog::config
         }
     }
 
-    auto GLogConfigurator::clean() noexcept -> void
+    void GLogConfigurator::clean() noexcept
     {
         if (static_custom_log_sink_)
         {

@@ -32,26 +32,26 @@ namespace common::container
         /// @param x The element to find the root for.
         /// @return The root of the set containing element x.
         /// @throws std::invalid_argument If the element is in an invalid state
-        auto find(const T& x) -> T;
+        T find(const T& x);
 
         /// @brief Unites the sets that contain elements x and y.
         /// @param x First element
         /// @param y Second element
         /// @return True if the sets were successfully united, false if they were already in the same set.
         /// @throws std::invalid_argument If either element is in an invalid state
-        [[nodiscard]] auto unionSets(const T& x, const T& y) -> bool;
+        [[nodiscard]] bool unionSets(const T& x, const T& y);
 
         /// @brief Checks if elements x and y are in the same set.
         /// @param x First element
         /// @param y Second element
         /// @return True if x and y are connected (in the same set), false otherwise.
         /// @throws std::invalid_argument If either element is in an invalid state
-        [[nodiscard]] auto connected(const T& x, const T& y) const -> bool;
+        [[nodiscard]] bool connected(const T& x, const T& y) const;
 
     private:
         /// @brief Ensures that the element x is registered in the UnionSet.
         /// @param x The element to register.
-        auto ensureRegistered(const T& x) -> void;
+        void ensureRegistered(const T& x);
 
         mutable std::unordered_map<T, T> parent_{};
         mutable std::unordered_map<T, int32_t> rank_{};
@@ -61,7 +61,7 @@ namespace common::container
     UnionSet<T>::UnionSet() = default;
 
     template <typename T>
-    auto UnionSet<T>::find(const T& x) -> T
+    T UnionSet<T>::find(const T& x)
     {
         ensureRegistered(x);
         if (parent_[x] != x)
@@ -72,7 +72,7 @@ namespace common::container
     }
 
     template <typename T>
-    auto UnionSet<T>::unionSets(const T& x, const T& y) -> bool
+    bool UnionSet<T>::unionSets(const T& x, const T& y)
     {
         T rootX = find(x);
         T rootY = find(y);
@@ -99,7 +99,7 @@ namespace common::container
     }
 
     template <typename T>
-    auto UnionSet<T>::connected(const T& x, const T& y) const -> bool
+    bool UnionSet<T>::connected(const T& x, const T& y) const
     {
         // Since find() modifies the data structure for path compression,
         // we need to temporarily cast away constness for this operation
@@ -110,7 +110,7 @@ namespace common::container
     }
 
     template <typename T>
-    auto UnionSet<T>::ensureRegistered(const T& x) -> void
+    void UnionSet<T>::ensureRegistered(const T& x)
     {
         if (!parent_.contains(x))
         {

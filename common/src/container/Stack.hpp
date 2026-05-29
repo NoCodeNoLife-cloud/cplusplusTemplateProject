@@ -34,44 +34,44 @@ namespace common::container
         /// @brief Pushes a copy of the given value onto the stack.
         /// @param value The value to push.
         /// @throws std::bad_alloc If memory allocation fails
-        auto push(const T& value) -> void;
+        void push(const T& value);
 
         /// @brief Pushes the given value onto the stack using move semantics.
         /// @param value The value to push.
         /// @throws std::bad_alloc If memory allocation fails
-        auto push(T&& value) -> void;
+        void push(T&& value);
 
         /// @brief Constructs an element in-place on top of the stack.
         /// @tparam Args Types of arguments to forward to the constructor.
         /// @param args Arguments to forward to the constructor.
         template <typename... Args>
-        auto emplace(Args&&... args) -> void;
+        void emplace(Args&&... args);
 
         /// @brief Removes the top element from the stack.
         /// @throws std::out_of_range If the stack is empty.
-        auto pop() -> void;
+        void pop();
 
         /// @brief Accesses the top element of the stack.
         /// @return A reference to the top element.
         /// @throws std::out_of_range If the stack is empty.
-        auto top() -> T&;
+        T& top();
 
         /// @brief Accesses the top element of the stack.
         /// @return A const reference to the top element.
         /// @throws std::out_of_range If the stack is empty.
-        auto top() const -> const T&;
+        const T& top() const;
 
         /// @brief Checks whether the stack is empty.
         /// @return True if the stack is empty, false otherwise.
-        [[nodiscard]] auto empty() const noexcept -> bool;
+        [[nodiscard]] bool empty() const noexcept;
 
         /// @brief Returns the number of elements in the stack.
         /// @return The number of elements in the stack.
-        [[nodiscard]] auto size() const noexcept -> size_t;
+        [[nodiscard]] std::size_t size() const noexcept;
 
         /// @brief Swaps the contents of this stack with another stack.
         /// @param other The stack to swap with.
-        auto swap(Stack& other) noexcept -> void;
+        void swap(Stack& other) noexcept;
 
     private:
         Container data_{};
@@ -87,7 +87,7 @@ namespace common::container
     }
 
     template <std::movable T, typename Container>
-    auto Stack<T, Container>::push(const T& value) -> void
+    void Stack<T, Container>::push(const T& value)
     {
         try
         {
@@ -100,7 +100,7 @@ namespace common::container
     }
 
     template <std::movable T, typename Container>
-    auto Stack<T, Container>::push(T&& value) -> void
+    void Stack<T, Container>::push(T&& value)
     {
         try
         {
@@ -114,13 +114,13 @@ namespace common::container
 
     template <std::movable T, typename Container>
     template <typename... Args>
-    auto Stack<T, Container>::emplace(Args&&... args) -> void
+    void Stack<T, Container>::emplace(Args&&... args)
     {
         data_.emplace_back(std::forward<Args>(args)...);
     }
 
     template <std::movable T, typename Container>
-    auto Stack<T, Container>::pop() -> void
+    void Stack<T, Container>::pop()
     {
         if (data_.empty())
         {
@@ -130,7 +130,7 @@ namespace common::container
     }
 
     template <std::movable T, typename Container>
-    auto Stack<T, Container>::top() -> T&
+    T& Stack<T, Container>::top()
     {
         if (data_.empty())
         {
@@ -140,7 +140,7 @@ namespace common::container
     }
 
     template <std::movable T, typename Container>
-    auto Stack<T, Container>::top() const -> const T&
+    const T& Stack<T, Container>::top() const
     {
         if (data_.empty())
         {
@@ -150,19 +150,19 @@ namespace common::container
     }
 
     template <std::movable T, typename Container>
-    auto Stack<T, Container>::empty() const noexcept -> bool
+    bool Stack<T, Container>::empty() const noexcept
     {
         return data_.empty();
     }
 
     template <std::movable T, typename Container>
-    auto Stack<T, Container>::size() const noexcept -> size_t
+    std::size_t Stack<T, Container>::size() const noexcept
     {
         return data_.size();
     }
 
     template <std::movable T, typename Container>
-    auto Stack<T, Container>::swap(Stack& other) noexcept -> void
+    void Stack<T, Container>::swap(Stack& other) noexcept
     {
         using std::swap;
         swap(data_, other.data_);

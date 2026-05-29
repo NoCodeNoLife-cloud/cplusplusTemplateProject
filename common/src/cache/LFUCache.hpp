@@ -32,51 +32,51 @@ namespace common::cache
         /// @brief Retrieves a value from the cache (const version)
         /// @param key The key to look up in the cache
         /// @return Optional value if found, std::nullopt otherwise
-        [[nodiscard]] auto get(const Key& key) const -> std::optional<Value>;
+        [[nodiscard]] std::optional<Value> get(const Key& key) const;
 
         /// @brief Retrieves a value from the cache (non-const version)
         /// @param key The key to look up in the cache
         /// @return Optional value if found, std::nullopt otherwise
-        [[nodiscard]] auto get(const Key& key) -> std::optional<Value> override;
+        [[nodiscard]] std::optional<Value> get(const Key& key) override;
 
         /// @brief Inserts or updates a key-value pair in the cache (const value)
         /// @param key The key to insert or update
         /// @param value The value to store
         /// @return true if the operation was successful, false otherwise
         /// @throws std::invalid_argument If key is invalid for the container type
-        [[nodiscard]] auto put(const Key& key, const Value& value) -> bool override;
+        [[nodiscard]] bool put(const Key& key, const Value& value) override;
 
         /// @brief Inserts or updates a key-value pair in the cache (rvalue reference)
         /// @param key The key to insert or update
         /// @param value The value to store (will be moved)
         /// @return true if the operation was successful, false otherwise
         /// @throws std::invalid_argument If key is invalid for the container type
-        [[nodiscard]] auto put(const Key& key, Value&& value) -> bool override;
+        [[nodiscard]] bool put(const Key& key, Value&& value) override;
 
         /// @brief Removes an entry from the cache
         /// @param key The key to remove
         /// @return true if the key was found and removed, false otherwise
-        [[nodiscard]] auto remove(const Key& key) -> bool override;
+        [[nodiscard]] bool remove(const Key& key) override;
 
         /// @brief Clears all entries from the cache
         void clear() noexcept override;
 
         /// @brief Returns the current number of entries in the cache
         /// @return Number of entries currently in the cache
-        [[nodiscard]] auto size() const noexcept -> size_t override;
+        [[nodiscard]] size_t size() const noexcept override;
 
         /// @brief Returns the maximum capacity of the cache
         /// @return Maximum number of entries the cache can hold
-        [[nodiscard]] auto capacity() const noexcept -> size_t override;
+        [[nodiscard]] size_t capacity() const noexcept override;
 
         /// @brief Checks if the cache is empty
         /// @return true if the cache is empty, false otherwise
-        [[nodiscard]] auto empty() const noexcept -> bool override;
+        [[nodiscard]] bool empty() const noexcept override;
 
         /// @brief Checks if a key exists in the cache
         /// @param key The key to check for
         /// @return true if the key exists in the cache, false otherwise
-        [[nodiscard]] auto contains(const Key& key) const noexcept -> bool override;
+        [[nodiscard]] bool contains(const Key& key) const noexcept override;
 
     private:
         // Structure to hold frequency to list mapping
@@ -94,7 +94,7 @@ namespace common::cache
         /// @param key The key to look up
         /// @return Optional value if found, std::nullopt otherwise
         template <typename CacheType>
-        [[nodiscard]] static auto get_impl(CacheType& cache, const Key& key) -> std::optional<Value>;
+        [[nodiscard]] static std::optional<Value> get_impl(CacheType& cache, const Key& key);
 
         /// @brief Helper method to handle both const and non-const put operations
         /// @tparam ValueType Type of the value to store (const reference or rvalue reference)
@@ -102,24 +102,24 @@ namespace common::cache
         /// @param value The value to store
         /// @return true if the operation was successful, false otherwise
         template <typename ValueType>
-        [[nodiscard]] auto put_impl(const Key& key, ValueType&& value) -> bool;
+        [[nodiscard]] bool put_impl(const Key& key, ValueType&& value);
 
         /// @brief Updates the frequency of a key after access
         /// @param it Iterator to the element in the cache
-        auto update_frequency(std::list<std::pair<Key, std::pair<Value, size_t>>>::iterator it) -> void;
+        void update_frequency(typename std::list<std::pair<Key, std::pair<Value, size_t>>>::iterator it);
 
         /// @brief Evicts the least frequently used item when cache is at capacity
         /// @return true if eviction was successful, false otherwise
-        auto evict_lfu_item() -> bool;
+        bool evict_lfu_item();
 
         /// @brief Gets or creates a frequency list for the given frequency
         /// @param freq The frequency level
         /// @return Reference to the list for the given frequency
-        auto get_or_create_freq_list(size_t freq) -> std::list<std::pair<Key, std::pair<Value, size_t>>>&;
+        std::list<std::pair<Key, std::pair<Value, size_t>>>& get_or_create_freq_list(size_t freq);
 
         /// @brief Removes an empty frequency list and updates min_freq_ if necessary
         /// @param freq The frequency level to potentially remove
-        auto remove_empty_freq_list(size_t freq) -> void;
+        void remove_empty_freq_list(size_t freq);
     };
 
     template <typename Key, typename Value, typename Map>
@@ -133,7 +133,7 @@ namespace common::cache
 
     template <typename Key, typename Value, typename Map>
     template <typename CacheType>
-    auto LFUCache<Key, Value, Map>::get_impl(CacheType& cache, const Key& key) -> std::optional<Value>
+    std::optional<Value> LFUCache<Key, Value, Map>::get_impl(CacheType& cache, const Key& key)
     {
         auto it = cache.key_map_.find(key);
         if (it == cache.key_map_.end())
@@ -155,20 +155,20 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LFUCache<Key, Value, Map>::get(const Key& key) const -> std::optional<Value>
+    std::optional<Value> LFUCache<Key, Value, Map>::get(const Key& key) const
     {
         return get_impl(*this, key);
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LFUCache<Key, Value, Map>::get(const Key& key) -> std::optional<Value>
+    std::optional<Value> LFUCache<Key, Value, Map>::get(const Key& key)
     {
         return get_impl(*this, key);
     }
 
     template <typename Key, typename Value, typename Map>
     template <typename ValueType>
-    auto LFUCache<Key, Value, Map>::put_impl(const Key& key, ValueType&& value) -> bool
+    bool LFUCache<Key, Value, Map>::put_impl(const Key& key, ValueType&& value)
     {
         auto it = key_map_.find(key);
         if (it != key_map_.end())
@@ -208,19 +208,19 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LFUCache<Key, Value, Map>::put(const Key& key, const Value& value) -> bool
+    bool LFUCache<Key, Value, Map>::put(const Key& key, const Value& value)
     {
         return put_impl(key, value);
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LFUCache<Key, Value, Map>::put(const Key& key, Value&& value) -> bool
+    bool LFUCache<Key, Value, Map>::put(const Key& key, Value&& value)
     {
         return put_impl(key, std::forward<Value>(value));
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LFUCache<Key, Value, Map>::remove(const Key& key) -> bool
+    [[nodiscard]] bool LFUCache<Key, Value, Map>::remove(const Key& key)
     {
         auto it = key_map_.find(key);
         if (it == key_map_.end())
@@ -252,31 +252,31 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LFUCache<Key, Value, Map>::size() const noexcept -> size_t
+    [[nodiscard]] size_t LFUCache<Key, Value, Map>::size() const noexcept
     {
         return key_map_.size(); // Size is the number of entries in the key map
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LFUCache<Key, Value, Map>::capacity() const noexcept -> size_t
+    [[nodiscard]] size_t LFUCache<Key, Value, Map>::capacity() const noexcept
     {
         return capacity_;
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LFUCache<Key, Value, Map>::empty() const noexcept -> bool
+    [[nodiscard]] bool LFUCache<Key, Value, Map>::empty() const noexcept
     {
         return key_map_.empty();
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LFUCache<Key, Value, Map>::contains(const Key& key) const noexcept -> bool
+    [[nodiscard]] bool LFUCache<Key, Value, Map>::contains(const Key& key) const noexcept
     {
         return key_map_.find(key) != key_map_.end();
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LFUCache<Key, Value, Map>::evict_lfu_item() -> bool
+    bool LFUCache<Key, Value, Map>::evict_lfu_item()
     {
         // Find the list with minimum frequency
         auto min_freq_it = freq_list_map_.find(min_freq_);
@@ -309,7 +309,7 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LFUCache<Key, Value, Map>::get_or_create_freq_list(size_t freq) -> std::list<std::pair<Key, std::pair<Value, size_t>>>&
+    std::list<std::pair<Key, std::pair<Value, size_t>>>& LFUCache<Key, Value, Map>::get_or_create_freq_list(size_t freq)
     {
         if (!freq_list_map_.contains(freq))
         {
@@ -319,7 +319,7 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LFUCache<Key, Value, Map>::remove_empty_freq_list(size_t freq) -> void
+    void LFUCache<Key, Value, Map>::remove_empty_freq_list(size_t freq)
     {
         auto& freq_list = freq_list_map_[freq];
         if (freq_list.empty())
@@ -343,7 +343,7 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LFUCache<Key, Value, Map>::update_frequency(typename std::list<std::pair<Key, std::pair<Value, size_t>>>::iterator it) -> void
+    void LFUCache<Key, Value, Map>::update_frequency(typename std::list<std::pair<Key, std::pair<Value, size_t>>>::iterator it)
     {
         Key key = it->first;
         Value value = it->second.first;

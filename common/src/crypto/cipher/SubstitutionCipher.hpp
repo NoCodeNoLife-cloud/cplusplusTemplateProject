@@ -97,13 +97,13 @@ namespace common::crypto::cipher
         SubstitutionCipher(const SubstitutionCipher&) = delete;
 
         /** Disabled copy assignment (key material protection) */
-        auto operator=(const SubstitutionCipher&) -> SubstitutionCipher& = delete;
+        SubstitutionCipher& operator=(const SubstitutionCipher&) = delete;
 
         /** Default move constructor (noexcept guarantee) */
         SubstitutionCipher(SubstitutionCipher&&) noexcept = default;
 
         /** Default move assignment (noexcept guarantee) */
-        auto operator=(SubstitutionCipher&&) noexcept -> SubstitutionCipher& = default;
+        SubstitutionCipher& operator=(SubstitutionCipher&&) noexcept = default;
 
         /** Default destructor (no dynamic resources to release) */
         ~SubstitutionCipher() noexcept = default;
@@ -127,7 +127,7 @@ namespace common::crypto::cipher
          * @par Thread Safety
          * This is a const method and may be called concurrently from multiple threads
          */
-        [[nodiscard]] auto Encrypt(const std::string& plaintext) const -> std::string;
+        [[nodiscard]] std::string Encrypt(const std::string& plaintext) const;
 
         /**
          * @brief Decryption operation
@@ -141,7 +141,7 @@ namespace common::crypto::cipher
          *
          * @post For any plaintext P, Decrypt(Encrypt(P)) == P
          */
-        [[nodiscard]] auto Decrypt(const std::string& ciphertext) const -> std::string;
+        [[nodiscard]] std::string Decrypt(const std::string& ciphertext) const;
 
         /**@}*/
 
@@ -156,7 +156,7 @@ namespace common::crypto::cipher
          * @warning Use only for debugging or serialization scenarios; production code should not
          *          rely on this method for key retrieval
          */
-        [[nodiscard]] auto GetMapping() const noexcept -> const std::unordered_map<char, char>&
+        [[nodiscard]] const std::unordered_map<char, char>& GetMapping() const noexcept
         {
             return encode_map_;
         }
@@ -172,7 +172,7 @@ namespace common::crypto::cipher
          * 2. Checks value range for duplicates (ensuring injectivity, hence bijectivity)
          * 3. Builds reverse lookup table decode_map_
          */
-        auto ValidateAndBuildReverseMap() -> void;
+        void ValidateAndBuildReverseMap();
 
         /**
          * @brief Character-level transformation helper
@@ -182,9 +182,9 @@ namespace common::crypto::cipher
          *
          * @return char Transformed character; returns original if input is non-alphabetic
          */
-        static auto TransformChar(char c, const std::unordered_map<char, char>& map) -> char;
+        static char TransformChar(char c, const std::unordered_map<char, char>& map);
 
         std::unordered_map<char, char> encode_map_; ///< Forward encryption mapping (plaintext → ciphertext)
         std::unordered_map<char, char> decode_map_; ///< Reverse decryption mapping (ciphertext → plaintext)
     };
-} // namespace common::crypto::cipher
+}

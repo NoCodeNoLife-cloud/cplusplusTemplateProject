@@ -29,22 +29,22 @@ namespace common::base_type
     {
     }
 
-    auto BigDecimal::operator+(const BigDecimal& other) const noexcept -> BigDecimal
+    BigDecimal BigDecimal::operator+(const BigDecimal& other) const noexcept
     {
         return BigDecimal(value_ + other.value_);
     }
 
-    auto BigDecimal::operator-(const BigDecimal& other) const noexcept -> BigDecimal
+    BigDecimal BigDecimal::operator-(const BigDecimal& other) const noexcept
     {
         return BigDecimal(value_ - other.value_);
     }
 
-    auto BigDecimal::operator*(const BigDecimal& other) const noexcept -> BigDecimal
+    BigDecimal BigDecimal::operator*(const BigDecimal& other) const noexcept
     {
         return BigDecimal(value_ * other.value_);
     }
 
-    auto BigDecimal::operator/(const BigDecimal& other) const -> BigDecimal
+    BigDecimal BigDecimal::operator/(const BigDecimal& other) const
     {
         if (other.value_ == 0)
         {
@@ -54,7 +54,7 @@ namespace common::base_type
         return BigDecimal(value_ / other.value_);
     }
 
-    auto BigDecimal::operator<=>(const BigDecimal& other) const noexcept -> std::strong_ordering
+    std::strong_ordering BigDecimal::operator<=>(const BigDecimal& other) const noexcept
     {
         if (value_ < other.value_)
         {
@@ -67,7 +67,7 @@ namespace common::base_type
         return std::strong_ordering::equal;
     }
 
-    auto BigDecimal::operator==(const BigDecimal& other) const noexcept -> bool
+    bool BigDecimal::operator==(const BigDecimal& other) const noexcept
     {
         return value_ == other.value_;
     }

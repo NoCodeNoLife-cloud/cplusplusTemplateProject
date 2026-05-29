@@ -1,5 +1,5 @@
 /**
- * @file CustomGlogPrefixFormatter.hpp
+* @file CustomGlogPrefixFormatter.hpp
  * @brief Custom log prefix formatter for glog
  * @details This header defines the CustomGlogPrefixFormatter class that provides
  *          a customizable prefix format for glog logging messages, including
@@ -39,7 +39,7 @@ namespace glog::formatter
         /// @param s Output stream to write formatted prefix to
         /// @param m Log message containing metadata for the prefix
         /// @param data User data pointer (unused)
-        static auto MyPrefixFormatter(std::ostream& s, const google::LogMessage& m, void* data) noexcept -> void;
+        static void MyPrefixFormatter(std::ostream& s, const google::LogMessage& m, void* data) noexcept;
 
     private:
         /// @brief Date format helper constant for year offset

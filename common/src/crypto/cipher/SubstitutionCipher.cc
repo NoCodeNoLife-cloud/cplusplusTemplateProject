@@ -67,7 +67,7 @@ namespace common::crypto::cipher
         ValidateAndBuildReverseMap();
     }
 
-    auto SubstitutionCipher::TransformChar(const char c, const std::unordered_map<char, char>& map) -> char
+    char SubstitutionCipher::TransformChar(const char c, const std::unordered_map<char, char>& map)
     {
         if (!std::isalpha(c)) return c;
 
@@ -75,7 +75,7 @@ namespace common::crypto::cipher
         return (it != map.end()) ? it->second : c;
     }
 
-    auto SubstitutionCipher::Encrypt(const std::string& plaintext) const -> std::string
+    std::string SubstitutionCipher::Encrypt(const std::string& plaintext) const
     {
         std::string result;
         result.reserve(plaintext.size());
@@ -86,7 +86,7 @@ namespace common::crypto::cipher
         return result;
     }
 
-    auto SubstitutionCipher::Decrypt(const std::string& ciphertext) const -> std::string
+    std::string SubstitutionCipher::Decrypt(const std::string& ciphertext) const
     {
         std::string result;
         result.reserve(ciphertext.size());
@@ -96,4 +96,4 @@ namespace common::crypto::cipher
         }
         return result;
     }
-} // namespace common::crypto::cipher
+}

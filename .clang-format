@@ -1,7 +1,3 @@
----
-# C++ Project Template - ClangFormat Configuration
-# Based on Google C++ Style Guide with customizations
-
 Language: Cpp
 
 # 基础格式
@@ -119,10 +115,5 @@ RawStringFormats:
     BasedOnStyle: google
 SortUsingDeclarations: true
 SpaceAfterLogicalNot: false
-SpaceAfterOverride: true
 SpaceBeforeAssignmentOperators: true
-SplitEmptyFunction: true
-SplitEmptyRecord: true
-SplitEmptyNamespace: true
-Standard: c++26
-...
+Standard: c++20

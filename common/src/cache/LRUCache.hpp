@@ -31,51 +31,51 @@ namespace common::cache
         /// @brief Retrieves a value from the cache (const version)
         /// @param key The key to look up in the cache
         /// @return Optional value if found, std::nullopt otherwise
-        [[nodiscard]] auto get(const Key& key) const -> std::optional<Value>;
+        [[nodiscard]] std::optional<Value> get(const Key& key) const;
 
         /// @brief Retrieves a value from the cache (non-const version)
         /// @param key The key to look up in the cache
         /// @return Optional value if found, std::nullopt otherwise
-        [[nodiscard]] auto get(const Key& key) -> std::optional<Value> override;
+        [[nodiscard]] std::optional<Value> get(const Key& key) override;
 
         /// @brief Inserts or updates a key-value pair in the cache (const value)
         /// @param key The key to insert or update
         /// @param value The value to store
         /// @return true if the operation was successful, false otherwise
         /// @throws std::invalid_argument If key is invalid for the container type
-        [[nodiscard]] auto put(const Key& key, const Value& value) -> bool override;
+        [[nodiscard]] bool put(const Key& key, const Value& value) override;
 
         /// @brief Inserts or updates a key-value pair in the cache (rvalue reference)
         /// @param key The key to insert or update
         /// @param value The value to store (will be moved)
         /// @return true if the operation was successful, false otherwise
         /// @throws std::invalid_argument If key is invalid for the container type
-        [[nodiscard]] auto put(const Key& key, Value&& value) -> bool override;
+        [[nodiscard]] bool put(const Key& key, Value&& value) override;
 
         /// @brief Removes an entry from the cache
         /// @param key The key to remove
         /// @return true if the key was found and removed, false otherwise
-        [[nodiscard]] auto remove(const Key& key) -> bool override;
+        [[nodiscard]] bool remove(const Key& key) override;
 
         /// @brief Clears all entries from the cache
         void clear() noexcept override;
 
         /// @brief Returns the current number of entries in the cache
         /// @return Number of entries currently in the cache
-        [[nodiscard]] auto size() const noexcept -> size_t override;
+        [[nodiscard]] size_t size() const noexcept override;
 
         /// @brief Returns the maximum capacity of the cache
         /// @return Maximum number of entries the cache can hold
-        [[nodiscard]] auto capacity() const noexcept -> size_t override;
+        [[nodiscard]] size_t capacity() const noexcept override;
 
         /// @brief Checks if the cache is empty
         /// @return true if the cache is empty, false otherwise
-        [[nodiscard]] auto empty() const noexcept -> bool override;
+        [[nodiscard]] bool empty() const noexcept override;
 
         /// @brief Checks if a key exists in the cache
         /// @param key The key to check for
         /// @return true if the key exists in the cache, false otherwise
-        [[nodiscard]] auto contains(const Key& key) const noexcept -> bool override;
+        [[nodiscard]] bool contains(const Key& key) const noexcept override;
 
     private:
         mutable std::list<std::pair<Key, Value>> cache_list_;
@@ -84,7 +84,7 @@ namespace common::cache
 
         /// @brief Moves the specified iterator to the front of the list (most recently used)
         /// @param it Iterator to the element to move to the front
-        auto move_to_front(std::list<std::pair<Key, Value>>::const_iterator it) const -> void;
+        void move_to_front(typename std::list<std::pair<Key, Value>>::const_iterator it) const;
 
         /// @brief Helper method to handle both const and non-const get operations
         /// @tparam CacheType Type of the cache instance (const or non-const)
@@ -92,7 +92,7 @@ namespace common::cache
         /// @param key The key to look up
         /// @return Optional value if found, std::nullopt otherwise
         template <typename CacheType>
-        [[nodiscard]] static auto get_impl(CacheType& cache, const Key& key) -> std::optional<Value>;
+        [[nodiscard]] static std::optional<Value> get_impl(CacheType& cache, const Key& key);
 
         /// @brief Helper method to handle both const and non-const put operations
         /// @tparam ValueType Type of the value to store (const reference or rvalue reference)
@@ -100,7 +100,7 @@ namespace common::cache
         /// @param value The value to store
         /// @return true if the operation was successful, false otherwise
         template <typename ValueType>
-        [[nodiscard]] auto put_impl(const Key& key, ValueType&& value) -> bool;
+        [[nodiscard]] bool put_impl(const Key& key, ValueType&& value);
     };
 
     template <typename Key, typename Value, typename Map>
@@ -114,7 +114,7 @@ namespace common::cache
 
     template <typename Key, typename Value, typename Map>
     template <typename CacheType>
-    auto LRUCache<Key, Value, Map>::get_impl(CacheType& cache, const Key& key) -> std::optional<Value>
+    std::optional<Value> LRUCache<Key, Value, Map>::get_impl(CacheType& cache, const Key& key)
     {
         auto it = cache.cache_map_.find(key);
         if (it == cache.cache_map_.end())
@@ -127,20 +127,20 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LRUCache<Key, Value, Map>::get(const Key& key) const -> std::optional<Value>
+    std::optional<Value> LRUCache<Key, Value, Map>::get(const Key& key) const
     {
         return get_impl(*this, key);
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LRUCache<Key, Value, Map>::get(const Key& key) -> std::optional<Value>
+    std::optional<Value> LRUCache<Key, Value, Map>::get(const Key& key)
     {
         return get_impl(*this, key);
     }
 
     template <typename Key, typename Value, typename Map>
     template <typename ValueType>
-    auto LRUCache<Key, Value, Map>::put_impl(const Key& key, ValueType&& value) -> bool
+    bool LRUCache<Key, Value, Map>::put_impl(const Key& key, ValueType&& value)
     {
         auto it = cache_map_.find(key);
         if (it != cache_map_.end())
@@ -169,19 +169,19 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LRUCache<Key, Value, Map>::put(const Key& key, const Value& value) -> bool
+    bool LRUCache<Key, Value, Map>::put(const Key& key, const Value& value)
     {
         return put_impl(key, value);
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LRUCache<Key, Value, Map>::put(const Key& key, Value&& value) -> bool
+    bool LRUCache<Key, Value, Map>::put(const Key& key, Value&& value)
     {
         return put_impl(key, std::forward<Value>(value));
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LRUCache<Key, Value, Map>::remove(const Key& key) -> bool
+    [[nodiscard]] bool LRUCache<Key, Value, Map>::remove(const Key& key)
     {
         auto it = cache_map_.find(key);
         if (it == cache_map_.end())
@@ -203,31 +203,31 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LRUCache<Key, Value, Map>::size() const noexcept -> size_t
+    [[nodiscard]] size_t LRUCache<Key, Value, Map>::size() const noexcept
     {
         return cache_list_.size();
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LRUCache<Key, Value, Map>::capacity() const noexcept -> size_t
+    [[nodiscard]] size_t LRUCache<Key, Value, Map>::capacity() const noexcept
     {
         return capacity_;
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LRUCache<Key, Value, Map>::empty() const noexcept -> bool
+    [[nodiscard]] bool LRUCache<Key, Value, Map>::empty() const noexcept
     {
         return cache_list_.empty();
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] auto LRUCache<Key, Value, Map>::contains(const Key& key) const noexcept -> bool
+    [[nodiscard]] bool LRUCache<Key, Value, Map>::contains(const Key& key) const noexcept
     {
         return cache_map_.find(key) != cache_map_.end();
     }
 
     template <typename Key, typename Value, typename Map>
-    auto LRUCache<Key, Value, Map>::move_to_front(typename std::list<std::pair<Key, Value>>::const_iterator it) const -> void
+    void LRUCache<Key, Value, Map>::move_to_front(typename std::list<std::pair<Key, Value>>::const_iterator it) const
     {
         if (it == cache_list_.begin())
         {

@@ -17,27 +17,27 @@ namespace common::crypto::cipher
     {
     }
 
-    auto CaesarCipher::Encrypt(const std::string_view plaintext) const -> std::string
+    std::string CaesarCipher::Encrypt(const std::string_view plaintext) const
     {
         return Transform(plaintext, shift_);
     }
 
-    auto CaesarCipher::Decrypt(const std::string_view ciphertext) const -> std::string
+    std::string CaesarCipher::Decrypt(const std::string_view ciphertext) const
     {
         return Transform(ciphertext, -shift_);
     }
 
-    auto CaesarCipher::Encrypt(const std::string_view text, const int shift) -> std::string
+    std::string CaesarCipher::Encrypt(const std::string_view text, const int shift)
     {
         return CaesarCipher(shift).Encrypt(text);
     }
 
-    auto CaesarCipher::Decrypt(const std::string_view text, const int shift) -> std::string
+    std::string CaesarCipher::Decrypt(const std::string_view text, const int shift)
     {
         return CaesarCipher(shift).Decrypt(text);
     }
 
-    auto CaesarCipher::IsValidInput(const std::string_view text) noexcept -> bool
+    bool CaesarCipher::IsValidInput(const std::string_view text) noexcept
     {
         return std::ranges::all_of(text, [](const unsigned char c)
         {
@@ -45,17 +45,17 @@ namespace common::crypto::cipher
         });
     }
 
-    auto CaesarCipher::CreateRot13() -> CaesarCipher
+    CaesarCipher CaesarCipher::CreateRot13()
     {
         return CaesarCipher(13);
     }
 
-    auto CaesarCipher::SetShift(const int new_shift) -> void
+    void CaesarCipher::SetShift(const int new_shift)
     {
         shift_ = NormalizeShift(new_shift);
     }
 
-    auto CaesarCipher::Transform(const std::string_view text, const int effective_shift) -> std::string
+    std::string CaesarCipher::Transform(const std::string_view text, const int effective_shift)
     {
         if (!IsValidInput(text))
         {
@@ -71,7 +71,7 @@ namespace common::crypto::cipher
         return {transformed.begin(), transformed.end()};
     }
 
-    auto CaesarCipher::ShiftChar(const char c, const int shift) noexcept -> char
+    char CaesarCipher::ShiftChar(const char c, const int shift) noexcept
     {
         const char base = std::isupper(c) ? 'A' : 'a';
         // Modular arithmetic ensures wrap-around handling
@@ -80,7 +80,7 @@ namespace common::crypto::cipher
         return static_cast<char>(base + offset);
     }
 
-    auto CaesarCipher::NormalizeShift(int shift) -> int
+    int CaesarCipher::NormalizeShift(int shift)
     {
         // Prevent abs(INT_MIN) undefined behavior
         if (shift == std::numeric_limits<int>::min())
@@ -95,4 +95,4 @@ namespace common::crypto::cipher
         }
         return normalized;
     }
-} // namespace common::crypto::cipher
+}

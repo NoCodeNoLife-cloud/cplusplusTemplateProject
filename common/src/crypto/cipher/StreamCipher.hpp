@@ -77,7 +77,7 @@ namespace common::crypto::cipher
          *
          * @note For stream ciphers, encryption and decryption are symmetric operations.
          */
-        [[nodiscard]] virtual auto encrypt(const std::vector<uint8_t>& plaintext) -> std::vector<uint8_t> = 0;
+        [[nodiscard]] virtual std::vector<uint8_t> encrypt(const std::vector<uint8_t>& plaintext) = 0;
 
         /**
          * @brief Decrypt ciphertext data.
@@ -87,7 +87,7 @@ namespace common::crypto::cipher
          *
          * @note For stream ciphers, this is identical to encrypt() operation.
          */
-        [[nodiscard]] virtual auto decrypt(const std::vector<uint8_t>& ciphertext) -> std::vector<uint8_t> = 0;
+        [[nodiscard]] virtual std::vector<uint8_t> decrypt(const std::vector<uint8_t>& ciphertext) = 0;
 
         /**
          * @brief Generate keystream of specified length.
@@ -97,7 +97,7 @@ namespace common::crypto::cipher
          *
          * @note Useful for custom encryption schemes or testing.
          */
-        [[nodiscard]] virtual auto generateKeystream(size_t length) -> std::vector<uint8_t> = 0;
+        [[nodiscard]] virtual std::vector<uint8_t> generateKeystream(size_t length) = 0;
 
         /**
          * @brief Reset the cipher state to initial configuration.
@@ -111,12 +111,12 @@ namespace common::crypto::cipher
          * @brief Get the algorithm name.
          * @return Human-readable algorithm name (e.g., "ChaCha20").
          */
-        [[nodiscard]] virtual auto getAlgorithmName() const noexcept -> std::string = 0;
+        [[nodiscard]] virtual std::string getAlgorithmName() const noexcept = 0;
 
         /**
          * @brief Check if the cipher has been initialized.
          * @return true if initialized, false otherwise.
          */
-        [[nodiscard]] virtual auto isInitialized() const noexcept -> bool = 0;
+        [[nodiscard]] virtual bool isInitialized() const noexcept = 0;
     };
-} // namespace common::crypto::cipher
+}

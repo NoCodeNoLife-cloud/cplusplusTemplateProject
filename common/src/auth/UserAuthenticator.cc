@@ -24,7 +24,7 @@ namespace common::auth
     /// @param salt Salt string
     /// @param hashed_password Hashed password string
     /// @return Formatted credentials string
-    auto UserAuthenticator::format_credentials_data(const std::string& salt, const std::string& hashed_password) -> std::string
+    std::string UserAuthenticator::format_credentials_data(const std::string& salt, const std::string& hashed_password)
     {
         std::ostringstream credential_stream;
         credential_stream << salt << ":" << hashed_password;
@@ -74,7 +74,7 @@ namespace common::auth
         return true;
     }
 
-    auto UserAuthenticator::authenticate(const std::string& username, const std::string& password) -> AuthResult
+    AuthResult UserAuthenticator::authenticate(const std::string& username, const std::string& password)
     {
         DLOG(INFO) << "Authenticating user: " << username;
         std::lock_guard lock(users_mutex_);
@@ -231,7 +231,7 @@ namespace common::auth
         password_policy_ = policy;
     }
 
-    auto UserAuthenticator::validate_username(const std::string& username) noexcept -> bool
+    bool UserAuthenticator::validate_username(const std::string& username) noexcept
     {
         // Allow letters, numbers, underscores, hyphens; 3-20 characters
         const std::regex username_pattern("^[a-zA-Z0-9_-]{3,20}$");
@@ -241,7 +241,7 @@ namespace common::auth
     /// @brief Parse credentials data (salt:hashed_password format)
     /// @param credentials_data Raw credentials data from database
     /// @return Parsed salt and hashed password pair, nullopt if invalid format
-    auto UserAuthenticator::parse_credentials_data(const std::string& credentials_data) -> std::optional<std::pair<std::string, std::string>>
+    std::optional<std::pair<std::string, std::string>> UserAuthenticator::parse_credentials_data(const std::string& credentials_data)
     {
         const size_t delimiter_pos = credentials_data.find(':');
         if (delimiter_pos == std::string::npos)
@@ -254,7 +254,7 @@ namespace common::auth
         return std::make_pair(salt, hashed_password);
     }
 
-    auto UserAuthenticator::load_user_from_db(const std::string& username) const -> std::optional<UserCredentials>
+    std::optional<UserCredentials> UserAuthenticator::load_user_from_db(const std::string& username) const
     {
         if (!password_sql_.UserExists(username))
         {
@@ -278,13 +278,13 @@ namespace common::auth
         return UserCredentials(username, hashed_password, salt);
     }
 
-    auto UserAuthenticator::get_users() -> std::unordered_map<std::string, std::unique_ptr<UserCredentials>>&
+    std::unordered_map<std::string, std::unique_ptr<UserCredentials>>& UserAuthenticator::get_users()
     {
         return users_;
     }
 
-    auto UserAuthenticator::get_users_mutex() const -> std::mutex&
+    std::mutex& UserAuthenticator::get_users_mutex() const
     {
         return users_mutex_;
     }
-} // common
+}

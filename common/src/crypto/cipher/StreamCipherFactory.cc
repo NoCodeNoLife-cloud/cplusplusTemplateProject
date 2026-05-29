@@ -1,5 +1,5 @@
 /**
- * @file StreamCipherFactory.cc
+* @file StreamCipherFactory.cc
  * @brief StreamCipherFactory class implementation
  * @details This file contains the implementation of the StreamCipherFactory class methods for Cryptographic utilities and toolkit.
  */
@@ -15,7 +15,7 @@
 
 namespace common::crypto::cipher
 {
-    auto StreamCipherFactory::create(Algorithm algo) -> std::unique_ptr<StreamCipher>
+    std::unique_ptr<StreamCipher> StreamCipherFactory::create(Algorithm algo)
     {
         switch (algo)
         {
@@ -31,17 +31,17 @@ namespace common::crypto::cipher
         }
     }
 
-    auto StreamCipherFactory::createChaCha20() -> std::unique_ptr<StreamCipher>
+    std::unique_ptr<StreamCipher> StreamCipherFactory::createChaCha20()
     {
         return create(Algorithm::CHACHA20);
     }
 
-    auto StreamCipherFactory::getSupportedAlgorithms() -> std::vector<std::string>
+    std::vector<std::string> StreamCipherFactory::getSupportedAlgorithms()
     {
         return {"ChaCha20"};
     }
 
-    auto StreamCipherFactory::isSupported(Algorithm algo) noexcept -> bool
+    bool StreamCipherFactory::isSupported(Algorithm algo) noexcept
     {
         switch (algo)
         {
@@ -52,7 +52,7 @@ namespace common::crypto::cipher
         }
     }
 
-    auto StreamCipherFactory::algorithmToString(Algorithm algo) -> std::string
+    std::string StreamCipherFactory::algorithmToString(Algorithm algo)
     {
         switch (algo)
         {
@@ -62,4 +62,4 @@ namespace common::crypto::cipher
             return "Unknown";
         }
     }
-} // namespace common::crypto::cipher
+}

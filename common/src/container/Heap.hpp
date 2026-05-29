@@ -52,69 +52,69 @@ namespace common::container
         /// @brief Pushes a value to the heap.
         /// @param value The value to push.
         /// @throws std::bad_alloc If memory allocation fails
-        auto push(const T& value) -> void;
+        void push(const T& value);
 
         /// @brief Pushes a value to the heap.
         /// @param value The value to push.
         /// @throws std::bad_alloc If memory allocation fails
-        auto push(T&& value) -> void;
+        void push(T&& value);
 
         /// @brief Constructs an element in-place and pushes it to the heap.
         /// @param args Arguments to forward to the constructor of the element.
         template <typename... Args>
-        auto emplace(Args&&... args) -> void;
+        void emplace(Args&&... args);
 
         /// @brief Removes the top element from the heap.
         /// @throws std::out_of_range If the heap is empty.
-        auto pop() -> void;
+        void pop();
 
         /// @brief Accesses the top element of the heap.
         /// @return Const reference to the top element.
         /// @throws std::out_of_range If the heap is empty.
-        [[nodiscard]] auto top() const -> const T&;
+        [[nodiscard]] const T& top() const;
 
         /// @brief Accesses the top element of the heap.
         /// @return Reference to the top element.
         /// @throws std::out_of_range If the heap is empty.
-        [[nodiscard]] auto top() -> T&;
+        [[nodiscard]] T& top();
 
         /// @brief Returns the number of elements in the heap.
         /// @return The number of elements.
-        [[nodiscard]] auto size() const noexcept -> std::size_t;
+        [[nodiscard]] std::size_t size() const noexcept;
 
         /// @brief Checks if the heap is empty.
         /// @return True if the heap is empty, false otherwise.
-        [[nodiscard]] auto empty() const noexcept -> bool;
+        [[nodiscard]] bool empty() const noexcept;
 
         /// @brief Clears the heap contents
-        auto clear() noexcept -> void;
+        void clear() noexcept;
 
         /// @brief Checks if the heap is valid (maintains heap property)
         /// @return True if heap property is maintained
-        [[nodiscard]] auto is_valid() const -> bool;
+        [[nodiscard]] bool is_valid() const;
 
         /// @brief Swaps the contents of this heap with another heap.
         /// @param other The heap to swap with.
-        auto swap(Heap& other) noexcept -> void;
+        void swap(Heap& other) noexcept;
 
     private:
         std::vector<T> data_{};
         Compare compare_{};
 
         /// @brief Heapifies the entire heap to maintain the heap property.
-        auto heapify() -> void;
+        void heapify();
 
         /// @brief Heapifies up from the given index to maintain the heap property.
         /// @param index The index to start heapifying up from.
-        auto heapify_up(std::size_t index) -> void;
+        void heapify_up(std::size_t index);
 
         /// @brief Heapifies down from the given index to maintain the heap property.
         /// @param index The index to start heapifying down from.
-        auto heapify_down(std::size_t index) -> void;
+        void heapify_down(std::size_t index);
 
         /// @brief Validates the heap property for the entire structure
         /// @return True if heap property is maintained throughout the structure
-        [[nodiscard]] auto validate_heap_property() const -> bool;
+        [[nodiscard]] bool validate_heap_property() const;
     };
 
     template <std::copyable T, typename Compare>
@@ -143,7 +143,7 @@ namespace common::container
     Heap<T, Compare>::~Heap() = default;
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::push(const T& value) -> void
+    void Heap<T, Compare>::push(const T& value)
     {
         try
         {
@@ -157,7 +157,7 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::push(T&& value) -> void
+    void Heap<T, Compare>::push(T&& value)
     {
         try
         {
@@ -172,14 +172,14 @@ namespace common::container
 
     template <std::copyable T, typename Compare>
     template <typename... Args>
-    auto Heap<T, Compare>::emplace(Args&&... args) -> void
+    void Heap<T, Compare>::emplace(Args&&... args)
     {
         data_.emplace_back(std::forward<Args>(args)...);
         heapify_up(data_.size() - 1);
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::pop() -> void
+    void Heap<T, Compare>::pop()
     {
         if (empty())
         {
@@ -194,7 +194,7 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::top() const -> const T&
+    const T& Heap<T, Compare>::top() const
     {
         if (empty())
         {
@@ -204,7 +204,7 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::top() -> T&
+    T& Heap<T, Compare>::top()
     {
         if (empty())
         {
@@ -214,31 +214,31 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::size() const noexcept -> std::size_t
+    std::size_t Heap<T, Compare>::size() const noexcept
     {
         return data_.size();
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::empty() const noexcept -> bool
+    bool Heap<T, Compare>::empty() const noexcept
     {
         return data_.empty();
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::clear() noexcept -> void
+    void Heap<T, Compare>::clear() noexcept
     {
         data_.clear();
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::is_valid() const -> bool
+    bool Heap<T, Compare>::is_valid() const
     {
         return validate_heap_property();
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::heapify() -> void
+    void Heap<T, Compare>::heapify()
     {
         const auto size = data_.size();
         if (size <= 1) return;
@@ -251,7 +251,7 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::heapify_up(std::size_t index) -> void
+    void Heap<T, Compare>::heapify_up(std::size_t index)
     {
         while (index > 0)
         {
@@ -266,7 +266,7 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::heapify_down(std::size_t index) -> void
+    void Heap<T, Compare>::heapify_down(std::size_t index)
     {
         const auto size = data_.size();
         while (true)
@@ -300,7 +300,7 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::validate_heap_property() const -> bool
+    bool Heap<T, Compare>::validate_heap_property() const
     {
         const auto size = data_.size();
         for (std::size_t i = 0; i < size; ++i)
@@ -321,7 +321,7 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    auto Heap<T, Compare>::swap(Heap& other) noexcept -> void
+    void Heap<T, Compare>::swap(Heap& other) noexcept
     {
         using std::swap;
         swap(data_, other.data_);

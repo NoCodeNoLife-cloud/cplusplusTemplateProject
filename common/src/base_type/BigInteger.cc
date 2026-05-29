@@ -33,22 +33,22 @@ namespace common::base_type
     {
     }
 
-    auto BigInteger::operator+(const BigInteger& other) const noexcept -> BigInteger
+    BigInteger BigInteger::operator+(const BigInteger& other) const noexcept
     {
         return BigInteger(value_ + other.value_);
     }
 
-    auto BigInteger::operator-(const BigInteger& other) const noexcept -> BigInteger
+    BigInteger BigInteger::operator-(const BigInteger& other) const noexcept
     {
         return BigInteger(value_ - other.value_);
     }
 
-    auto BigInteger::operator*(const BigInteger& other) const noexcept -> BigInteger
+    BigInteger BigInteger::operator*(const BigInteger& other) const noexcept
     {
         return BigInteger(value_ * other.value_);
     }
 
-    auto BigInteger::operator/(const BigInteger& other) const -> BigInteger
+    BigInteger BigInteger::operator/(const BigInteger& other) const
     {
         if (other.value_ == 0)
         {
@@ -58,7 +58,7 @@ namespace common::base_type
         return BigInteger(value_ / other.value_);
     }
 
-    auto BigInteger::operator%(const BigInteger& other) const -> BigInteger
+    BigInteger BigInteger::operator%(const BigInteger& other) const
     {
         if (other.value_ == 0)
         {
@@ -68,7 +68,7 @@ namespace common::base_type
         return BigInteger(value_ % other.value_);
     }
 
-    auto BigInteger::operator<=>(const BigInteger& other) const noexcept -> std::strong_ordering
+    std::strong_ordering BigInteger::operator<=>(const BigInteger& other) const noexcept
     {
         if (value_ < other.value_)
         {
@@ -81,17 +81,17 @@ namespace common::base_type
         return std::strong_ordering::equal;
     }
 
-    auto BigInteger::operator==(const BigInteger& other) const noexcept -> bool
+    bool BigInteger::operator==(const BigInteger& other) const noexcept
     {
         return value_ == other.value_;
     }
 
-    auto BigInteger::fromString(const std::string& str) -> BigInteger
+    BigInteger BigInteger::fromString(const std::string& str)
     {
         return BigInteger(str);
     }
 
-    auto BigInteger::fromInt(const int64_t num) noexcept -> BigInteger
+    BigInteger BigInteger::fromInt(const int64_t num) noexcept
     {
         return BigInteger(num);
     }

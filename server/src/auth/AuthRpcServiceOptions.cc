@@ -327,7 +327,7 @@ bool YAML::convert<app_server::auth::AuthRpcServiceOptions>::decode(const Node& 
     return true;
 }
 
-Node YAML::convert<app_server::auth::AuthRpcServiceOptions>::encode(const app_server::auth::AuthRpcServiceOptions& rhs)
+YAML::Node YAML::convert<app_server::auth::AuthRpcServiceOptions>::encode(const app_server::auth::AuthRpcServiceOptions& rhs)
 {
     Node node;
     node["maxConnectionIdleMs"] = rhs.maxConnectionIdleMs();
