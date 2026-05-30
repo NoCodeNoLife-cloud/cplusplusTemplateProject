@@ -16,7 +16,7 @@ namespace glog::parameter
     {
     }
 
-    int32_t GLogParameters::minLogLevel() const noexcept
+    auto GLogParameters::minLogLevel() const noexcept -> int32_t
     {
         return min_log_level_;
     }
@@ -26,7 +26,7 @@ namespace glog::parameter
         min_log_level_ = min_log_level;
     }
 
-    std::string GLogParameters::logName() const noexcept
+    auto GLogParameters::logName() const noexcept -> std::string
     {
         return log_name_;
     }
@@ -36,7 +36,7 @@ namespace glog::parameter
         log_name_ = log_name;
     }
 
-    bool GLogParameters::logToStderr() const noexcept
+    auto GLogParameters::logToStderr() const noexcept -> bool
     {
         return log_to_stderr_;
     }
@@ -46,7 +46,7 @@ namespace glog::parameter
         log_to_stderr_ = log_to_stderr;
     }
 
-    bool GLogParameters::customLogFormat() const noexcept
+    auto GLogParameters::customLogFormat() const noexcept -> bool
     {
         return custom_log_format_;
     }
@@ -116,12 +116,12 @@ namespace glog::parameter
         }
     }
 
-    bool GLogParameters::operator==(const GLogParameters& other) const noexcept
+    auto GLogParameters::operator==(const GLogParameters& other) const noexcept -> bool
     {
         return min_log_level_ == other.min_log_level_ && log_name_ == other.log_name_ && log_to_stderr_ == other.log_to_stderr_ && custom_log_format_ == other.custom_log_format_;
     }
 
-    bool GLogParameters::operator!=(const GLogParameters& other) const noexcept
+    auto GLogParameters::operator!=(const GLogParameters& other) const noexcept -> bool
     {
         return !(*this == other);
     }

@@ -47,7 +47,7 @@ namespace glog::config
 
         /// @brief Get the current configuration parameters
         /// @return A const reference to the GLogParameters object
-        [[nodiscard]] const parameter::GLogParameters& getConfig() const noexcept;
+        [[nodiscard]] auto getConfig() const noexcept -> const parameter::GLogParameters&;
 
         /// @brief Update the configuration parameters
         /// @param config The new configuration parameters

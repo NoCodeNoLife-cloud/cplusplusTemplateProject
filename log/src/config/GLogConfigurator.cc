@@ -35,7 +35,7 @@ namespace glog::config
         DLOG(INFO) << "glog configured...";
     }
 
-    const parameter::GLogParameters& GLogConfigurator::getConfig() const noexcept
+    auto GLogConfigurator::getConfig() const noexcept -> const parameter::GLogParameters&
     {
         return config_;
     }

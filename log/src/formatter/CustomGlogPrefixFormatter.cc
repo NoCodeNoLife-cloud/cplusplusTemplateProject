@@ -15,7 +15,7 @@ namespace glog::formatter
     /// @param s Output stream to write formatted prefix to
     /// @param m Log message containing metadata for the prefix
     /// @param data User data pointer (unused)
-    void CustomGlogPrefixFormatter::MyPrefixFormatter(std::ostream& s, const google::LogMessage& m, void* data) noexcept
+    auto CustomGlogPrefixFormatter::MyPrefixFormatter(std::ostream& s, const google::LogMessage& m, void* data) noexcept -> void
     {
         // Use the original stream-based approach to avoid fmt compatibility issues
         s << '[' << google::GetLogSeverityName(m.severity()) << "] [" << std::setw(4) << (kYearOffset_ + m.time().year()) << std::setw(2) << (kMonthOffset_ + m.time().month()) << std::setw(2) << m.time().day() << ' ' << std::setw(2) << m.time().hour() << ':' << std::setw(2) << m.time().min() << ':' << std::setw(2) << m.time().sec() << "." << std::setw(6) << m.time().usec() << "] [" << std::setfill(' ') << std::setw(5) << m.thread_id() << std::setfill('0') << "] [" << m.basename() << ':' << m.line() << "] ";

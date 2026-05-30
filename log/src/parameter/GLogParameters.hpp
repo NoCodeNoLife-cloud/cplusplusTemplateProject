@@ -32,7 +32,7 @@ namespace glog::parameter
 
         /// @brief Get the minimum log level.
         /// @return The minimum log level as an integer.
-        [[nodiscard]] int32_t minLogLevel() const noexcept;
+        [[nodiscard]] auto minLogLevel() const noexcept -> int32_t;
 
         /// @brief Set the minimum log level.
         /// @param min_log_level The minimum log level to set.
@@ -40,7 +40,7 @@ namespace glog::parameter
 
         /// @brief Get the log name.
         /// @return The log name as a string.
-        [[nodiscard]] std::string logName() const noexcept;
+        [[nodiscard]] auto logName() const noexcept -> std::string;
 
         /// @brief Set the log name.
         /// @param log_name The log name to set.
@@ -48,7 +48,7 @@ namespace glog::parameter
 
         /// @brief Check if logging to stderr is enabled.
         /// @return True if logging to stderr is enabled, false otherwise.
-        [[nodiscard]] bool logToStderr() const noexcept;
+        [[nodiscard]] auto logToStderr() const noexcept -> bool;
 
         /// @brief Enable or disable logging to stderr.
         /// @param log_to_stderr True to enable logging to stderr, false to disable.
@@ -56,7 +56,7 @@ namespace glog::parameter
 
         /// @brief Check if custom log format is enabled.
         /// @return True if custom log format is enabled, false otherwise.
-        [[nodiscard]] bool customLogFormat() const noexcept;
+        [[nodiscard]] auto customLogFormat() const noexcept -> bool;
 
         /// @brief Enable or disable custom log format.
         /// @param custom_log_format True to enable custom log format, false to disable.
@@ -70,12 +70,12 @@ namespace glog::parameter
         /// @brief Equality operator.
         /// @param other The other GLogParameters to compare with.
         /// @return True if both objects are equal, false otherwise.
-        [[nodiscard]] bool operator==(const GLogParameters& other) const noexcept;
+        [[nodiscard]] auto operator==(const GLogParameters& other) const noexcept -> bool;
 
         /// @brief Inequality operator.
         /// @param other The other GLogParameters to compare with.
         /// @return True if both objects are not equal, false otherwise.
-        [[nodiscard]] bool operator!=(const GLogParameters& other) const noexcept;
+        [[nodiscard]] auto operator!=(const GLogParameters& other) const noexcept -> bool;
 
     private:
         int32_t min_log_level_{};
