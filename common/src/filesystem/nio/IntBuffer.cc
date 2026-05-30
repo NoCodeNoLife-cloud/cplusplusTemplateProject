@@ -19,24 +19,24 @@ namespace common::filesystem
         buffer_.resize(capacity);
     }
 
-    auto IntBuffer::clear() noexcept -> void
+    void IntBuffer::clear() noexcept
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    auto IntBuffer::flip() noexcept -> void
+    void IntBuffer::flip() noexcept
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    auto IntBuffer::rewind() noexcept -> void
+    void IntBuffer::rewind() noexcept
     {
         position_ = 0;
     }
 
-    auto IntBuffer::compact() -> void
+    void IntBuffer::compact()
     {
         if (position_ > 0)
         {
@@ -46,7 +46,7 @@ namespace common::filesystem
         }
     }
 
-    auto IntBuffer::get() -> int32_t
+    int32_t IntBuffer::get()
     {
         if (!hasRemaining())
         {
@@ -55,7 +55,7 @@ namespace common::filesystem
         return buffer_[position_++];
     }
 
-    auto IntBuffer::get(const size_t index) const -> int32_t
+    int32_t IntBuffer::get(const size_t index) const
     {
         if (index >= limit_)
         {
@@ -64,7 +64,7 @@ namespace common::filesystem
         return buffer_[index];
     }
 
-    auto IntBuffer::put(const int32_t value) -> void
+    void IntBuffer::put(const int32_t value)
     {
         if (!hasRemaining())
         {
@@ -73,7 +73,7 @@ namespace common::filesystem
         buffer_[position_++] = value;
     }
 
-    auto IntBuffer::put(const size_t index, const int32_t value) -> void
+    void IntBuffer::put(const size_t index, const int32_t value)
     {
         if (index >= limit_)
         {
@@ -82,7 +82,7 @@ namespace common::filesystem
         buffer_[index] = value;
     }
 
-    auto IntBuffer::getRemaining() const -> std::vector<int32_t>
+    std::vector<int32_t> IntBuffer::getRemaining() const
     {
         if (position_ >= limit_)
         {
@@ -91,12 +91,12 @@ namespace common::filesystem
         return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
     }
 
-    auto IntBuffer::position() const noexcept -> size_t
+    size_t IntBuffer::position() const noexcept
     {
         return position_;
     }
 
-    auto IntBuffer::position(const size_t newPosition) -> void
+    void IntBuffer::position(const size_t newPosition)
     {
         if (newPosition > limit_)
         {
@@ -105,12 +105,12 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    auto IntBuffer::limit() const noexcept -> size_t
+    size_t IntBuffer::limit() const noexcept
     {
         return limit_;
     }
 
-    auto IntBuffer::limit(const size_t newLimit) -> void
+    void IntBuffer::limit(const size_t newLimit)
     {
         if (newLimit > capacity_)
         {
@@ -123,17 +123,17 @@ namespace common::filesystem
         limit_ = newLimit;
     }
 
-    auto IntBuffer::capacity() const noexcept -> size_t
+    size_t IntBuffer::capacity() const noexcept
     {
         return capacity_;
     }
 
-    auto IntBuffer::hasRemaining() const noexcept -> bool
+    bool IntBuffer::hasRemaining() const noexcept
     {
         return position_ < limit_;
     }
 
-    auto IntBuffer::remaining() const noexcept -> size_t
+    size_t IntBuffer::remaining() const noexcept
     {
         return limit_ - position_;
     }

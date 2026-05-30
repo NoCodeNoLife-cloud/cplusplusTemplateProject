@@ -34,7 +34,7 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @return A vector containing the elements of the array.
         template <typename T>
-        [[nodiscard]] static auto asList(const T* array, size_t size) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> asList(const T* array, size_t size);
 
         /// @brief Searches for a key in a sorted array using binary search.
         /// @tparam T The type of elements in the array.
@@ -43,7 +43,7 @@ namespace common::toolkit
         /// @param key The value to search for.
         /// @return Index of the key if found, std::nullopt otherwise.
         template <typename T>
-        [[nodiscard]] static auto binarySearch(const T* array, size_t size, const T& key) -> std::optional<size_t>;
+        [[nodiscard]] static std::optional<size_t> binarySearch(const T* array, size_t size, const T& key);
 
         /// @brief Searches for a key in a sorted subarray using binary search.
         /// @tparam T The type of elements in the array.
@@ -54,7 +54,7 @@ namespace common::toolkit
         /// @return Index of the key if found, std::nullopt otherwise.
         /// @throws std::out_of_range If fromIndex >= toIndex
         template <typename T>
-        [[nodiscard]] static auto binarySearch(const T* array, size_t fromIndex, size_t toIndex, const T& key) -> std::optional<size_t>;
+        [[nodiscard]] static std::optional<size_t> binarySearch(const T* array, size_t fromIndex, size_t toIndex, const T& key);
 
         /// @brief Copies an array to a new vector of specified length.
         /// @tparam T The type of elements in the array.
@@ -63,7 +63,7 @@ namespace common::toolkit
         /// @param newLength Length of the new vector.
         /// @return A new vector with the copied elements.
         template <typename T>
-        [[nodiscard]] static auto copyOf(const T* original, size_t originalSize, size_t newLength) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> copyOf(const T* original, size_t originalSize, size_t newLength);
 
         /// @brief Copies a range of an array to a new vector.
         /// @tparam T The type of elements in the array.
@@ -73,7 +73,7 @@ namespace common::toolkit
         /// @return A new vector containing the specified range.
         /// @throws std::out_of_range If from > to
         template <typename T>
-        [[nodiscard]] static auto copyOfRange(const T* original, size_t from, size_t to) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> copyOfRange(const T* original, size_t from, size_t to);
 
         /// @brief Checks if two arrays are equal.
         /// @tparam T The type of elements in the arrays.
@@ -83,7 +83,7 @@ namespace common::toolkit
         /// @param sizeB Size of the second array.
         /// @return True if the arrays are equal, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto equals(const T* a, size_t sizeA, const T* b, size_t sizeB) -> bool;
+        [[nodiscard]] static bool equals(const T* a, size_t sizeA, const T* b, size_t sizeB);
 
         /// @brief Fills an array with a specific value.
         /// @tparam T The type of elements in the array.
@@ -91,14 +91,14 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @param value The value to fill the array with.
         template <typename T>
-        static auto fill(T* array, size_t size, const T& value) -> void;
+        static void fill(T* array, size_t size, const T& value);
 
         /// @brief Sorts an array in ascending order.
         /// @tparam T The type of elements in the array.
         /// @param array Pointer to the array.
         /// @param size Size of the array.
         template <typename T>
-        static auto sort(T* array, size_t size) -> void;
+        static void sort(T* array, size_t size);
 
         /// @brief Sorts a subarray in ascending order.
         /// @tparam T The type of elements in the array.
@@ -107,7 +107,7 @@ namespace common::toolkit
         /// @param toIndex Ending index of the subarray (exclusive).
         /// @throws std::out_of_range If fromIndex >= toIndex
         template <typename T>
-        static auto sort(T* array, size_t fromIndex, size_t toIndex) -> void;
+        static void sort(T* array, size_t fromIndex, size_t toIndex);
 
         /// @brief Converts an array to a string representation.
         /// @tparam T The type of elements in the array.
@@ -115,7 +115,7 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @return A string representation of the array.
         template <typename T>
-        [[nodiscard]] static auto toString(const T* array, size_t size) -> std::string;
+        [[nodiscard]] static std::string toString(const T* array, size_t size);
 
         /// @brief Checks if array is empty or null.
         /// @tparam T The type of elements in the array.
@@ -123,7 +123,7 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @return True if the array is empty or null, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto isEmpty(const T* array, size_t size) -> bool;
+        [[nodiscard]] static bool isEmpty(const T* array, size_t size);
 
         /// @brief Checks if array contains a specific value.
         /// @tparam T The type of elements in the array.
@@ -132,7 +132,7 @@ namespace common::toolkit
         /// @param value The value to search for.
         /// @return True if the value is found, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto contains(const T* array, size_t size, const T& value) -> bool;
+        [[nodiscard]] static bool contains(const T* array, size_t size, const T& value);
 
         /// @brief Performs linear search for a key in an array.
         /// @tparam T The type of elements in the array.
@@ -141,7 +141,7 @@ namespace common::toolkit
         /// @param key The value to search for.
         /// @return Index of the key if found, std::nullopt otherwise.
         template <typename T>
-        [[nodiscard]] static auto linearSearch(const T* array, size_t size, const T& key) -> std::optional<size_t>;
+        [[nodiscard]] static std::optional<size_t> linearSearch(const T* array, size_t size, const T& key);
 
         /// @brief Finds the index of the maximum element in the array.
         /// @tparam T The type of elements in the array.
@@ -149,7 +149,7 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @return Index of the maximum element, or std::nullopt if array is empty.
         template <typename T>
-        [[nodiscard]] static auto maxElement(const T* array, size_t size) -> std::optional<size_t>;
+        [[nodiscard]] static std::optional<size_t> maxElement(const T* array, size_t size);
 
         /// @brief Finds the index of the minimum element in the array.
         /// @tparam T The type of elements in the array.
@@ -157,7 +157,7 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @return Index of the minimum element, or std::nullopt if array is empty.
         template <typename T>
-        [[nodiscard]] static auto minElement(const T* array, size_t size) -> std::optional<size_t>;
+        [[nodiscard]] static std::optional<size_t> minElement(const T* array, size_t size);
 
         /// @brief Counts occurrences of a value in the array.
         /// @tparam T The type of elements in the array.
@@ -166,14 +166,14 @@ namespace common::toolkit
         /// @param value The value to count.
         /// @return Number of occurrences of the value.
         template <typename T>
-        [[nodiscard]] static auto count(const T* array, size_t size, const T& value) -> size_t;
+        [[nodiscard]] static size_t count(const T* array, size_t size, const T& value);
 
         /// @brief Reverses the array in place.
         /// @tparam T The type of elements in the array.
         /// @param array Pointer to the array.
         /// @param size Size of the array.
         template <typename T>
-        static auto reverse(T* array, size_t size) -> void;
+        static void reverse(T* array, size_t size);
 
         /// @brief Reverses a range of the array in place.
         /// @tparam T The type of elements in the array.
@@ -182,7 +182,7 @@ namespace common::toolkit
         /// @param toIndex Ending index (exclusive).
         /// @throws std::out_of_range If fromIndex >= toIndex
         template <typename T>
-        static auto reverse(T* array, size_t fromIndex, size_t toIndex) -> void;
+        static void reverse(T* array, size_t fromIndex, size_t toIndex);
 
         /// @brief Removes duplicates and returns a new sorted vector with unique elements.
         /// @tparam T The type of elements in the array.
@@ -190,7 +190,7 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @return A vector with unique elements in sorted order.
         template <typename T>
-        [[nodiscard]] static auto distinct(const T* array, size_t size) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> distinct(const T* array, size_t size);
 
         /// @brief Transforms array elements using a function.
         /// @tparam T The input element type.
@@ -201,7 +201,7 @@ namespace common::toolkit
         /// @param func Transformation function.
         /// @return A vector with transformed elements.
         template <typename T, typename U, typename Func>
-        [[nodiscard]] static auto map(const T* array, size_t size, Func func) -> std::vector<U>;
+        [[nodiscard]] static std::vector<U> map(const T* array, size_t size, Func func);
 
         /// @brief Filters array elements based on a predicate.
         /// @tparam T The type of elements in the array.
@@ -211,7 +211,7 @@ namespace common::toolkit
         /// @param predicate Filter predicate.
         /// @return A vector with elements that satisfy the predicate.
         template <typename T, typename Predicate>
-        [[nodiscard]] static auto filter(const T* array, size_t size, Predicate predicate) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> filter(const T* array, size_t size, Predicate predicate);
 
         /// @brief Calculates the sum of all elements in the array.
         /// @tparam T The type of elements in the array.
@@ -219,7 +219,7 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @return Sum of all elements.
         template <typename T>
-        [[nodiscard]] static auto sum(const T* array, size_t size) -> T;
+        [[nodiscard]] static T sum(const T* array, size_t size);
 
         /// @brief Calculates the average of all elements in the array.
         /// @tparam T The type of elements in the array.
@@ -228,7 +228,7 @@ namespace common::toolkit
         /// @return Average of all elements.
         /// @throws std::invalid_argument If array is empty
         template <typename T>
-        [[nodiscard]] static auto average(const T* array, size_t size) -> double;
+        [[nodiscard]] static double average(const T* array, size_t size);
 
         /// @brief Checks if all elements satisfy a predicate.
         /// @tparam T The type of elements in the array.
@@ -238,7 +238,7 @@ namespace common::toolkit
         /// @param predicate Condition to check.
         /// @return True if all elements satisfy the predicate, false otherwise.
         template <typename T, typename Predicate>
-        [[nodiscard]] static auto allMatch(const T* array, size_t size, Predicate predicate) -> bool;
+        [[nodiscard]] static bool allMatch(const T* array, size_t size, Predicate predicate);
 
         /// @brief Checks if any element satisfies a predicate.
         /// @tparam T The type of elements in the array.
@@ -248,7 +248,7 @@ namespace common::toolkit
         /// @param predicate Condition to check.
         /// @return True if any element satisfies the predicate, false otherwise.
         template <typename T, typename Predicate>
-        [[nodiscard]] static auto anyMatch(const T* array, size_t size, Predicate predicate) -> bool;
+        [[nodiscard]] static bool anyMatch(const T* array, size_t size, Predicate predicate);
 
         /// @brief Checks if no element satisfies a predicate.
         /// @tparam T The type of elements in the array.
@@ -258,7 +258,7 @@ namespace common::toolkit
         /// @param predicate Condition to check.
         /// @return True if no element satisfies the predicate, false otherwise.
         template <typename T, typename Predicate>
-        [[nodiscard]] static auto noneMatch(const T* array, size_t size, Predicate predicate) -> bool;
+        [[nodiscard]] static bool noneMatch(const T* array, size_t size, Predicate predicate);
 
         /// @brief Concatenates two arrays into a new vector.
         /// @tparam T The type of elements in the arrays.
@@ -268,7 +268,7 @@ namespace common::toolkit
         /// @param sizeB Size of the second array.
         /// @return A vector containing elements from both arrays.
         template <typename T>
-        [[nodiscard]] static auto concat(const T* a, size_t sizeA, const T* b, size_t sizeB) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> concat(const T* a, size_t sizeA, const T* b, size_t sizeB);
 
         /// @brief Computes the intersection of two arrays.
         /// @tparam T The type of elements in the arrays.
@@ -278,7 +278,7 @@ namespace common::toolkit
         /// @param sizeB Size of the second array.
         /// @return A vector containing common elements (sorted, unique).
         template <typename T>
-        [[nodiscard]] static auto intersection(const T* a, size_t sizeA, const T* b, size_t sizeB) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> intersection(const T* a, size_t sizeA, const T* b, size_t sizeB);
 
         /// @brief Computes the union of two arrays.
         /// @tparam T The type of elements in the arrays.
@@ -288,7 +288,7 @@ namespace common::toolkit
         /// @param sizeB Size of the second array.
         /// @return A vector containing all unique elements (sorted).
         template <typename T>
-        [[nodiscard]] static auto unionSet(const T* a, size_t sizeA, const T* b, size_t sizeB) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> unionSet(const T* a, size_t sizeA, const T* b, size_t sizeB);
 
         /// @brief Computes the difference of two arrays (elements in a but not in b).
         /// @tparam T The type of elements in the arrays.
@@ -298,7 +298,7 @@ namespace common::toolkit
         /// @param sizeB Size of the second array.
         /// @return A vector containing elements in a but not in b (sorted, unique).
         template <typename T>
-        [[nodiscard]] static auto difference(const T* a, size_t sizeA, const T* b, size_t sizeB) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> difference(const T* a, size_t sizeA, const T* b, size_t sizeB);
 
         /// @brief Checks if array is sorted in ascending order.
         /// @tparam T The type of elements in the array.
@@ -306,14 +306,14 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @return True if the array is sorted, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto isSorted(const T* array, size_t size) -> bool;
+        [[nodiscard]] static bool isSorted(const T* array, size_t size);
 
         /// @brief Shuffles the array randomly in place.
         /// @tparam T The type of elements in the array.
         /// @param array Pointer to the array.
         /// @param size Size of the array.
         template <typename T>
-        static auto shuffle(T* array, size_t size) -> void;
+        static void shuffle(T* array, size_t size);
 
         /// @brief Rotates array elements by specified positions.
         /// @tparam T The type of elements in the array.
@@ -321,7 +321,7 @@ namespace common::toolkit
         /// @param size Size of the array.
         /// @param positions Number of positions to rotate (positive = right, negative = left).
         template <typename T>
-        static auto rotate(T* array, size_t size, int32_t positions) -> void;
+        static void rotate(T* array, size_t size, int32_t positions);
 
         /// @brief Gets the top K largest elements from the array.
         /// @tparam T The type of elements in the array.
@@ -331,11 +331,11 @@ namespace common::toolkit
         /// @return A vector containing the top K elements in descending order.
         /// @throws std::invalid_argument If k is 0 or greater than size
         template <typename T>
-        [[nodiscard]] static auto topK(const T* array, size_t size, size_t k) -> std::vector<T>;
+        [[nodiscard]] static std::vector<T> topK(const T* array, size_t size, size_t k);
     };
 
     template <typename T>
-    auto ArraysToolkit::asList(const T* array, size_t size) -> std::vector<T>
+    std::vector<T> ArraysToolkit::asList(const T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -345,7 +345,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::binarySearch(const T* array, size_t size, const T& key) -> std::optional<size_t>
+    std::optional<size_t> ArraysToolkit::binarySearch(const T* array, size_t size, const T& key)
     {
         if (!array && size > 0)
         {
@@ -360,7 +360,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::binarySearch(const T* array, size_t fromIndex, size_t toIndex, const T& key) -> std::optional<size_t>
+    std::optional<size_t> ArraysToolkit::binarySearch(const T* array, size_t fromIndex, size_t toIndex, const T& key)
     {
         if (!array)
         {
@@ -381,7 +381,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::copyOf(const T* original, const size_t originalSize, size_t newLength) -> std::vector<T>
+    std::vector<T> ArraysToolkit::copyOf(const T* original, const size_t originalSize, size_t newLength)
     {
         if (!original && originalSize > 0)
         {
@@ -397,7 +397,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::copyOfRange(const T* original, size_t from, size_t to) -> std::vector<T>
+    std::vector<T> ArraysToolkit::copyOfRange(const T* original, size_t from, size_t to)
     {
         if (!original)
         {
@@ -411,7 +411,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::equals(const T* a, size_t sizeA, const T* b, const size_t sizeB) -> bool
+    bool ArraysToolkit::equals(const T* a, size_t sizeA, const T* b, const size_t sizeB)
     {
         if (!a && sizeA > 0)
         {
@@ -427,7 +427,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::fill(T* array, size_t size, const T& value) -> void
+    void ArraysToolkit::fill(T* array, size_t size, const T& value)
     {
         if (!array && size > 0)
         {
@@ -440,7 +440,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::sort(T* array, size_t size) -> void
+    void ArraysToolkit::sort(T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -453,7 +453,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::sort(T* array, size_t fromIndex, size_t toIndex) -> void
+    void ArraysToolkit::sort(T* array, size_t fromIndex, size_t toIndex)
     {
         if (!array)
         {
@@ -467,7 +467,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::toString(const T* array, const size_t size) -> std::string
+    std::string ArraysToolkit::toString(const T* array, const size_t size)
     {
         if (!array && size > 0)
         {
@@ -499,13 +499,13 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::isEmpty(const T* array, size_t size) -> bool
+    bool ArraysToolkit::isEmpty(const T* array, size_t size)
     {
         return (array == nullptr) || (size == 0);
     }
 
     template <typename T>
-    auto ArraysToolkit::contains(const T* array, size_t size, const T& value) -> bool
+    bool ArraysToolkit::contains(const T* array, size_t size, const T& value)
     {
         if (!array && size > 0)
         {
@@ -515,7 +515,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::linearSearch(const T* array, size_t size, const T& key) -> std::optional<size_t>
+    std::optional<size_t> ArraysToolkit::linearSearch(const T* array, size_t size, const T& key)
     {
         if (!array && size > 0)
         {
@@ -532,7 +532,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::maxElement(const T* array, size_t size) -> std::optional<size_t>
+    std::optional<size_t> ArraysToolkit::maxElement(const T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -547,7 +547,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::minElement(const T* array, size_t size) -> std::optional<size_t>
+    std::optional<size_t> ArraysToolkit::minElement(const T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -562,7 +562,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::count(const T* array, size_t size, const T& value) -> size_t
+    size_t ArraysToolkit::count(const T* array, size_t size, const T& value)
     {
         if (!array && size > 0)
         {
@@ -572,7 +572,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::reverse(T* array, size_t size) -> void
+    void ArraysToolkit::reverse(T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -585,7 +585,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::reverse(T* array, size_t fromIndex, size_t toIndex) -> void
+    void ArraysToolkit::reverse(T* array, size_t fromIndex, size_t toIndex)
     {
         if (!array)
         {
@@ -599,7 +599,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::distinct(const T* array, size_t size) -> std::vector<T>
+    std::vector<T> ArraysToolkit::distinct(const T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -610,7 +610,7 @@ namespace common::toolkit
     }
 
     template <typename T, typename U, typename Func>
-    auto ArraysToolkit::map(const T* array, size_t size, Func func) -> std::vector<U>
+    std::vector<U> ArraysToolkit::map(const T* array, size_t size, Func func)
     {
         if (!array && size > 0)
         {
@@ -622,7 +622,7 @@ namespace common::toolkit
     }
 
     template <typename T, typename Predicate>
-    auto ArraysToolkit::filter(const T* array, size_t size, Predicate predicate) -> std::vector<T>
+    std::vector<T> ArraysToolkit::filter(const T* array, size_t size, Predicate predicate)
     {
         if (!array && size > 0)
         {
@@ -634,7 +634,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::sum(const T* array, size_t size) -> T
+    T ArraysToolkit::sum(const T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -648,7 +648,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::average(const T* array, size_t size) -> double
+    double ArraysToolkit::average(const T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -662,7 +662,7 @@ namespace common::toolkit
     }
 
     template <typename T, typename Predicate>
-    auto ArraysToolkit::allMatch(const T* array, size_t size, Predicate predicate) -> bool
+    bool ArraysToolkit::allMatch(const T* array, size_t size, Predicate predicate)
     {
         if (!array && size > 0)
         {
@@ -672,7 +672,7 @@ namespace common::toolkit
     }
 
     template <typename T, typename Predicate>
-    auto ArraysToolkit::anyMatch(const T* array, size_t size, Predicate predicate) -> bool
+    bool ArraysToolkit::anyMatch(const T* array, size_t size, Predicate predicate)
     {
         if (!array && size > 0)
         {
@@ -682,7 +682,7 @@ namespace common::toolkit
     }
 
     template <typename T, typename Predicate>
-    auto ArraysToolkit::noneMatch(const T* array, size_t size, Predicate predicate) -> bool
+    bool ArraysToolkit::noneMatch(const T* array, size_t size, Predicate predicate)
     {
         if (!array && size > 0)
         {
@@ -692,7 +692,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::concat(const T* a, size_t sizeA, const T* b, size_t sizeB) -> std::vector<T>
+    std::vector<T> ArraysToolkit::concat(const T* a, size_t sizeA, const T* b, size_t sizeB)
     {
         if (!a && sizeA > 0)
         {
@@ -716,7 +716,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::intersection(const T* a, size_t sizeA, const T* b, size_t sizeB) -> std::vector<T>
+    std::vector<T> ArraysToolkit::intersection(const T* a, size_t sizeA, const T* b, size_t sizeB)
     {
         if (!a && sizeA > 0)
         {
@@ -734,7 +734,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::unionSet(const T* a, size_t sizeA, const T* b, size_t sizeB) -> std::vector<T>
+    std::vector<T> ArraysToolkit::unionSet(const T* a, size_t sizeA, const T* b, size_t sizeB)
     {
         if (!a && sizeA > 0)
         {
@@ -752,7 +752,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::difference(const T* a, size_t sizeA, const T* b, size_t sizeB) -> std::vector<T>
+    std::vector<T> ArraysToolkit::difference(const T* a, size_t sizeA, const T* b, size_t sizeB)
     {
         if (!a && sizeA > 0)
         {
@@ -770,7 +770,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::isSorted(const T* array, size_t size) -> bool
+    bool ArraysToolkit::isSorted(const T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -784,7 +784,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::shuffle(T* array, size_t size) -> void
+    void ArraysToolkit::shuffle(T* array, size_t size)
     {
         if (!array && size > 0)
         {
@@ -799,7 +799,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::rotate(T* array, size_t size, int32_t positions) -> void
+    void ArraysToolkit::rotate(T* array, size_t size, int32_t positions)
     {
         if (!array && size > 0)
         {
@@ -819,7 +819,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ArraysToolkit::topK(const T* array, size_t size, size_t k) -> std::vector<T>
+    std::vector<T> ArraysToolkit::topK(const T* array, size_t size, size_t k)
     {
         if (!array && size > 0)
         {

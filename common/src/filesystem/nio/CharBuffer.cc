@@ -19,24 +19,24 @@ namespace common::filesystem
         capacity_ = cap;
     }
 
-    auto CharBuffer::clear() noexcept -> void
+    void CharBuffer::clear() noexcept
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    auto CharBuffer::flip() noexcept -> void
+    void CharBuffer::flip() noexcept
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    auto CharBuffer::rewind() noexcept -> void
+    void CharBuffer::rewind() noexcept
     {
         position_ = 0;
     }
 
-    auto CharBuffer::compact() -> void
+    void CharBuffer::compact()
     {
         if (position_ > 0)
         {
@@ -46,7 +46,7 @@ namespace common::filesystem
         }
     }
 
-    auto CharBuffer::put(const char c) -> void
+    void CharBuffer::put(const char c)
     {
         if (!hasRemaining())
         {
@@ -55,7 +55,7 @@ namespace common::filesystem
         buffer_[position_++] = c;
     }
 
-    auto CharBuffer::put(const std::string& src) -> void
+    void CharBuffer::put(const std::string& src)
     {
         if (src.empty())
         {
@@ -70,7 +70,7 @@ namespace common::filesystem
         position_ += src.size();
     }
 
-    auto CharBuffer::get() -> char
+    char CharBuffer::get()
     {
         if (!hasRemaining())
         {
@@ -79,7 +79,7 @@ namespace common::filesystem
         return buffer_[position_++];
     }
 
-    auto CharBuffer::getRemaining() const -> std::string
+    std::string CharBuffer::getRemaining() const
     {
         if (position_ >= limit_)
         {
@@ -88,12 +88,12 @@ namespace common::filesystem
         return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
     }
 
-    auto CharBuffer::position() const noexcept -> size_t
+    size_t CharBuffer::position() const noexcept
     {
         return position_;
     }
 
-    auto CharBuffer::position(const size_t newPosition) -> void
+    void CharBuffer::position(const size_t newPosition)
     {
         if (newPosition > limit_)
         {
@@ -102,12 +102,12 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    auto CharBuffer::limit() const noexcept -> size_t
+    size_t CharBuffer::limit() const noexcept
     {
         return limit_;
     }
 
-    auto CharBuffer::limit(const size_t newLimit) -> void
+    void CharBuffer::limit(const size_t newLimit)
     {
         if (newLimit > capacity_)
         {
@@ -120,17 +120,17 @@ namespace common::filesystem
         limit_ = newLimit;
     }
 
-    auto CharBuffer::capacity() const noexcept -> size_t
+    size_t CharBuffer::capacity() const noexcept
     {
         return capacity_;
     }
 
-    auto CharBuffer::hasRemaining() const noexcept -> bool
+    bool CharBuffer::hasRemaining() const noexcept
     {
         return position_ < limit_;
     }
 
-    auto CharBuffer::remaining() const noexcept -> size_t
+    size_t CharBuffer::remaining() const noexcept
     {
         return limit_ - position_;
     }

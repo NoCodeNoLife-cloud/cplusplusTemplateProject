@@ -6,7 +6,6 @@
 
 #include "src/filesystem/io/reader/FilterReader.hpp"
 
-#include <fmt/format.h>
 #include <stdexcept>
 
 namespace common::filesystem

@@ -12,7 +12,6 @@
 #include <utility>
 #include <vector>
 #include <optional>
-#include <cstdint>
 #include <chrono>
 #include <glog/logging.h>
 
@@ -22,7 +21,7 @@ namespace common::filesystem
     {
     }
 
-    auto Directory::mkdir() const noexcept -> bool
+    bool Directory::mkdir() const noexcept
     {
         try
         {
@@ -34,7 +33,7 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::mkdirs(const bool exist_ok) const -> bool
+    bool Directory::mkdirs(const bool exist_ok) const
     {
         try
         {
@@ -65,17 +64,17 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::exists() const noexcept -> bool
+    bool Directory::exists() const noexcept
     {
         return std::filesystem::exists(dir_path_);
     }
 
-    auto Directory::isDirectory() const noexcept -> bool
+    bool Directory::isDirectory() const noexcept
     {
         return std::filesystem::is_directory(dir_path_);
     }
 
-    auto Directory::isEmpty() const noexcept -> bool
+    bool Directory::isEmpty() const noexcept
     {
         try
         {
@@ -87,7 +86,7 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::remove() const noexcept -> bool
+    bool Directory::remove() const noexcept
     {
         try
         {
@@ -99,7 +98,7 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::removeAll() const noexcept -> std::uintmax_t
+    std::uintmax_t Directory::removeAll() const noexcept
     {
         try
         {
@@ -111,7 +110,7 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::move(const std::filesystem::path& destination) const noexcept -> bool
+    bool Directory::move(const std::filesystem::path& destination) const noexcept
     {
         try
         {
@@ -124,7 +123,7 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::rename(const std::string& newName) const noexcept -> bool
+    bool Directory::rename(const std::string& newName) const noexcept
     {
         try
         {
@@ -139,7 +138,7 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::copy(const std::filesystem::path& destination) const -> bool
+    bool Directory::copy(const std::filesystem::path& destination) const
     {
         try
         {
@@ -188,7 +187,7 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::size() const noexcept -> std::uintmax_t
+    std::uintmax_t Directory::size() const noexcept
     {
         std::uintmax_t total = 0;
         try
@@ -207,7 +206,7 @@ namespace common::filesystem
         return total;
     }
 
-    auto Directory::lastModifiedTime() const -> std::optional<std::chrono::system_clock::time_point>
+    std::optional<std::chrono::system_clock::time_point> Directory::lastModifiedTime() const
     {
         try
         {
@@ -220,12 +219,12 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::listDir(const bool recursive) const -> std::vector<std::filesystem::directory_entry>
+    std::vector<std::filesystem::directory_entry> Directory::listDir(const bool recursive) const
     {
         return listDir(dir_path_, recursive);
     }
 
-    auto Directory::listDir(const std::filesystem::path& dir_path, const bool recursive) -> std::vector<std::filesystem::directory_entry>
+    std::vector<std::filesystem::directory_entry> Directory::listDir(const std::filesystem::path& dir_path, const bool recursive)
     {
         std::vector<std::filesystem::directory_entry> entries;
         try
@@ -251,12 +250,12 @@ namespace common::filesystem
         return entries;
     }
 
-    auto Directory::listEntries(const bool recursive) const -> std::vector<std::filesystem::directory_entry>
+    std::vector<std::filesystem::directory_entry> Directory::listEntries(const bool recursive) const
     {
         return listDir(dir_path_, recursive);
     }
 
-    auto Directory::clearAll() const -> bool
+    bool Directory::clearAll() const
     {
         try
         {
@@ -276,7 +275,7 @@ namespace common::filesystem
         }
     }
 
-    auto Directory::getCurrentWorkingDirectory() -> std::filesystem::path
+    std::filesystem::path Directory::getCurrentWorkingDirectory()
     {
         return std::filesystem::current_path();
     }

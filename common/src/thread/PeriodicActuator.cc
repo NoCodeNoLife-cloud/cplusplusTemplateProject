@@ -40,7 +40,7 @@ namespace common::thread
         }
     }
 
-    auto PeriodicActuator::start() -> void
+    void PeriodicActuator::start()
     {
         if (isRunning())
         {
@@ -65,7 +65,7 @@ namespace common::thread
         });
     }
 
-    auto PeriodicActuator::stop() -> void
+    void PeriodicActuator::stop()
     {
         if (!isRunning())
         {
@@ -83,12 +83,12 @@ namespace common::thread
         }
     }
 
-    auto PeriodicActuator::isRunning() const -> bool
+    bool PeriodicActuator::isRunning() const
     {
         return isRunning_;
     }
 
-    auto PeriodicActuator::scheduleNext() -> void
+    void PeriodicActuator::scheduleNext()
     {
         if (!isRunning())
         {

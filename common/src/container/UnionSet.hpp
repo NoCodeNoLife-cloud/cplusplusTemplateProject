@@ -8,7 +8,6 @@
 #include <fmt/format.h>
 #include <unordered_map>
 #include <cstdint>
-#include <stdexcept>
 
 namespace common::container
 {

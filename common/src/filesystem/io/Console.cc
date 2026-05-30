@@ -1,5 +1,5 @@
 /**
- * @file Console.cc
+* @file Console.cc
  * @brief Console class implementation
  * @details This file contains the implementation of the Console class methods for Common library utilities.
  */
@@ -10,24 +10,24 @@
 
 namespace common::filesystem
 {
-    auto Console::flush() -> void
+    void Console::flush()
     {
         std::cout.flush();
     }
 
-    auto Console::readLine() -> std::string
+    std::string Console::readLine()
     {
         std::string input;
         std::getline(std::cin, input);
         return input;
     }
 
-    auto Console::writer() -> std::ostream&
+    std::ostream& Console::writer()
     {
         return std::cout;
     }
 
-    auto Console::reader() -> std::istream&
+    std::istream& Console::reader()
     {
         return std::cin;
     }

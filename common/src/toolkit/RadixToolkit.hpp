@@ -45,7 +45,7 @@ namespace common::toolkit
          * @return String representation
          */
         template <std::integral T>
-        [[nodiscard]] constexpr auto to_string(T value, const int override_base = 0) const -> std::string;
+        [[nodiscard]] constexpr std::string to_string(T value, const int override_base = 0) const;
 
         /**
          * @brief Parse string using instance default base
@@ -67,11 +67,11 @@ namespace common::toolkit
          * @throws std::invalid_argument For invalid base/charset combination
          */
         template <std::integral T, typename CharSet = std::string_view>
-        [[nodiscard]] static constexpr auto convert_to_string(
+        [[nodiscard]] static constexpr std::string convert_to_string(
             T value,
             int base,
             const CharSet& charset
-        ) -> std::string;
+        );
 
         /**
          * @brief Stateless parsing from specified base
@@ -83,10 +83,10 @@ namespace common::toolkit
          * @throws std::out_of_range For overflow beyond type limits
          */
         template <std::integral T>
-        [[nodiscard]] static constexpr auto convert_from_string(
+        [[nodiscard]] static constexpr T convert_from_string(
             const std::string_view str,
             int base
-        ) -> T;
+        );
 
         /**
          * @brief Binary conversion shorthand (base-2)
@@ -95,7 +95,7 @@ namespace common::toolkit
          * @return Binary string
          */
         template <std::integral T>
-        [[nodiscard]] static constexpr auto to_binary(T value) -> std::string;
+        [[nodiscard]] static constexpr std::string to_binary(T value);
 
         /**
          * @brief Octal conversion shorthand (base-8)
@@ -104,7 +104,7 @@ namespace common::toolkit
          * @return Octal string
          */
         template <std::integral T>
-        [[nodiscard]] static constexpr auto to_octal(T value) -> std::string;
+        [[nodiscard]] static constexpr std::string to_octal(T value);
 
         /**
          * @brief Hexadecimal conversion (uppercase, base-16)
@@ -113,7 +113,7 @@ namespace common::toolkit
          * @return Hexadecimal string
          */
         template <std::integral T>
-        [[nodiscard]] static constexpr auto to_hex(T value) -> std::string;
+        [[nodiscard]] static constexpr std::string to_hex(T value);
 
         /**
          * @brief Hexadecimal conversion (lowercase, base-16)
@@ -122,7 +122,7 @@ namespace common::toolkit
          * @return Lowercase hexadecimal string
          */
         template <std::integral T>
-        [[nodiscard]] static constexpr auto to_hex_lower(T value) -> std::string;
+        [[nodiscard]] static constexpr std::string to_hex_lower(T value);
 
         /**
          * @brief Non-throwing string to value conversion using std::from_chars
@@ -133,11 +133,11 @@ namespace common::toolkit
          * @return Converted value or 0 on error
          */
         template <std::integral T>
-        [[nodiscard]] static constexpr auto from_string_nothrow(
+        [[nodiscard]] static constexpr T from_string_nothrow(
             std::string_view str,
             int base,
             std::errc& ec
-        ) noexcept -> T;
+        ) noexcept;
 
         /**
          * @brief Get current default base configuration
@@ -167,7 +167,7 @@ namespace common::toolkit
     }
 
     template <std::integral T>
-    constexpr auto RadixToolkit::to_string(T value, const int override_base) const -> std::string
+    constexpr std::string RadixToolkit::to_string(T value, const int override_base) const
     {
         const int base = (override_base == 0) ? default_base_ : override_base;
         return convert_to_string(value, base, charset_);
@@ -181,7 +181,7 @@ namespace common::toolkit
     }
 
     template <std::integral T, typename CharSet>
-    constexpr auto RadixToolkit::convert_to_string(T value, int base, const CharSet& charset) -> std::string
+    constexpr std::string RadixToolkit::convert_to_string(T value, int base, const CharSet& charset)
     {
         // Calculate charset size: handle both string_view and C-style arrays
         constexpr bool is_array = std::is_array_v<std::remove_reference_t<CharSet>>;
@@ -334,25 +334,25 @@ namespace common::toolkit
     }
 
     template <std::integral T>
-    constexpr auto RadixToolkit::to_binary(T value) -> std::string
+    constexpr std::string RadixToolkit::to_binary(T value)
     {
         return convert_to_string(value, 2, "01");
     }
 
     template <std::integral T>
-    constexpr auto RadixToolkit::to_octal(T value) -> std::string
+    constexpr std::string RadixToolkit::to_octal(T value)
     {
         return convert_to_string(value, 8, "01234567");
     }
 
     template <std::integral T>
-    constexpr auto RadixToolkit::to_hex(T value) -> std::string
+    constexpr std::string RadixToolkit::to_hex(T value)
     {
         return convert_to_string(value, 16, "0123456789ABCDEF");
     }
 
     template <std::integral T>
-    constexpr auto RadixToolkit::to_hex_lower(T value) -> std::string
+    constexpr std::string RadixToolkit::to_hex_lower(T value)
     {
         return convert_to_string(value, 16, "0123456789abcdef");
     }

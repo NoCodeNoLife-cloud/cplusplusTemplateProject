@@ -24,18 +24,18 @@ namespace common::filesystem
 
     OutputStreamWriter::~OutputStreamWriter() = default;
 
-    auto OutputStreamWriter::getEncoding() const -> std::string
+    std::string OutputStreamWriter::getEncoding() const
     {
         return closed_ ? "" : charset_;
     }
 
-    auto OutputStreamWriter::write(const char c) -> void
+    void OutputStreamWriter::write(const char c)
     {
         checkIfClosed();
         write(std::string(1, c));
     }
 
-    auto OutputStreamWriter::write(const std::vector<char>& cBuf) -> void
+    void OutputStreamWriter::write(const std::vector<char>& cBuf)
     {
         if (!cBuf.empty())
         {
@@ -43,7 +43,7 @@ namespace common::filesystem
         }
     }
 
-    auto OutputStreamWriter::write(const std::vector<char>& cBuf, const size_t off, const size_t len) -> void
+    void OutputStreamWriter::write(const std::vector<char>& cBuf, const size_t off, const size_t len)
     {
         if (len == 0)
         {
@@ -59,7 +59,7 @@ namespace common::filesystem
         checkOutputStream();
     }
 
-    auto OutputStreamWriter::write(const std::string& str) -> void
+    void OutputStreamWriter::write(const std::string& str)
     {
         if (!str.empty())
         {
@@ -67,7 +67,7 @@ namespace common::filesystem
         }
     }
 
-    auto OutputStreamWriter::write(const std::string& str, const size_t off, const size_t len) -> void
+    void OutputStreamWriter::write(const std::string& str, const size_t off, const size_t len)
     {
         if (len == 0)
         {
@@ -81,14 +81,14 @@ namespace common::filesystem
         write(std::vector(str.begin() + static_cast<std::string::difference_type>(off), str.begin() + static_cast<std::string::difference_type>(off + len)));
     }
 
-    auto OutputStreamWriter::flush() -> void
+    void OutputStreamWriter::flush()
     {
         checkIfClosed();
         output_writer_->flush();
         checkOutputStream();
     }
 
-    auto OutputStreamWriter::close() -> void
+    void OutputStreamWriter::close()
     {
         if (closed_)
         {
@@ -98,24 +98,24 @@ namespace common::filesystem
         closed_ = true;
     }
 
-    auto OutputStreamWriter::isClosed() const -> bool
+    bool OutputStreamWriter::isClosed() const
     {
         return closed_;
     }
 
-    auto OutputStreamWriter::append(const char c) -> AbstractWriter&
+    AbstractWriter& OutputStreamWriter::append(const char c)
     {
         write(c);
         return *this;
     }
 
-    auto OutputStreamWriter::append(const std::string& csq) -> AbstractWriter&
+    AbstractWriter& OutputStreamWriter::append(const std::string& csq)
     {
         write(csq);
         return *this;
     }
 
-    auto OutputStreamWriter::append(const std::string& csq, const size_t start, const size_t end) -> AbstractWriter&
+    AbstractWriter& OutputStreamWriter::append(const std::string& csq, const size_t start, const size_t end)
     {
         if (start <= end && start <= csq.length())
         {
@@ -125,13 +125,13 @@ namespace common::filesystem
         return *this;
     }
 
-    auto OutputStreamWriter::toString() const -> std::string
+    std::string OutputStreamWriter::toString() const
     {
         checkIfClosed();
         return output_writer_->toString();
     }
 
-    auto OutputStreamWriter::checkIfClosed() const -> void
+    void OutputStreamWriter::checkIfClosed() const
     {
         if (closed_)
         {
@@ -139,7 +139,7 @@ namespace common::filesystem
         }
     }
 
-    auto OutputStreamWriter::checkOutputStream() const -> void
+    void OutputStreamWriter::checkOutputStream() const
     {
         if (!output_writer_)
         {

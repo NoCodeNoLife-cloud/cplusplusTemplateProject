@@ -46,16 +46,16 @@ namespace common::thread
         [[nodiscard]] auto submit(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>;
 
         /// @brief Gracefully shutdown the thread pool, waiting for all tasks to complete
-        auto shutdown() -> void;
+        void shutdown();
 
         /// @brief Immediately shutdown the thread pool, abandoning any remaining tasks
-        auto shutdownNow() -> void;
+        void shutdownNow();
 
         /// @brief Get the current number of active threads
-        [[nodiscard]] auto getActiveThreadCount() const -> size_t;
+        [[nodiscard]] size_t getActiveThreadCount() const;
 
         /// @brief Get the current size of the task queue
-        [[nodiscard]] auto getQueueSize() -> size_t;
+        size_t getQueueSize();
 
     private:
         std::vector<std::thread> workers_{};
@@ -70,11 +70,11 @@ namespace common::thread
         std::chrono::milliseconds thread_idle_time_{};
 
         /// @brief Worker thread function that processes tasks from the queue
-        auto worker() -> void;
+        void worker();
 
         /// @brief Add a new worker thread to the pool if possible
         /// @return true if a new worker was added, false otherwise
-        auto addWorker() -> bool;
+        bool addWorker();
     };
 
     // Template method implementation must be in header

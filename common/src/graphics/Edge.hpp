@@ -1,5 +1,5 @@
 /**
- * @file Edge.hpp
+* @file Edge.hpp
  * @brief Edge class declaration
  * @details This header defines the Edge class that provides functionality for Graphics and geometry utilities.
  */
@@ -23,29 +23,29 @@ namespace common::graphics
 
         /// @brief Get target vertex
         /// @return Target vertex
-        [[nodiscard]] auto to() const noexcept -> int32_t;
+        [[nodiscard]] int32_t to() const noexcept;
 
         /// @brief Set target vertex
         /// @param to Target vertex
-        auto setTo(int32_t to) noexcept -> void;
+        void setTo(int32_t to) noexcept;
 
         /// @brief Get edge weight
         /// @return Edge weight
-        [[nodiscard]] auto weight() const noexcept -> int32_t;
+        [[nodiscard]] int32_t weight() const noexcept;
 
         /// @brief Set edge weight
         /// @param weight Edge weight
-        auto setWeight(int32_t weight) noexcept -> void;
+        void setWeight(int32_t weight) noexcept;
 
         /// @brief Equality operator
         /// @param other Edge to compare with
         /// @return True if edges are equal
-        [[nodiscard]] auto operator==(const Edge& other) const noexcept -> bool;
+        [[nodiscard]] bool operator==(const Edge& other) const noexcept;
 
         /// @brief Inequality operator
         /// @param other Edge to compare with
         /// @return True if edges are not equal
-        [[nodiscard]] auto operator!=(const Edge& other) const noexcept -> bool;
+        [[nodiscard]] bool operator!=(const Edge& other) const noexcept;
 
     private:
         int32_t to_{0};

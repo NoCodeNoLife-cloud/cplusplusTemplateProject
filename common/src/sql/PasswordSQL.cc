@@ -28,7 +28,7 @@ namespace common::sql
         }
     }
 
-    auto PasswordSQL::RegisterUser(const std::string& username, const std::string& password) const noexcept -> bool
+    bool PasswordSQL::RegisterUser(const std::string& username, const std::string& password) const noexcept
     {
         /// @brief Validate input parameters
         if (username.empty() || password.empty())
@@ -57,7 +57,7 @@ namespace common::sql
         }
     }
 
-    auto PasswordSQL::AuthenticateUser(const std::string& username, const std::string& password) const noexcept -> bool
+    bool PasswordSQL::AuthenticateUser(const std::string& username, const std::string& password) const noexcept
     {
         /// @brief Validate input parameters
         if (username.empty() || password.empty())
@@ -80,7 +80,7 @@ namespace common::sql
         }
     }
 
-    auto PasswordSQL::ChangePassword(const std::string& username, const std::string& old_password, const std::string& new_password) const noexcept -> bool
+    bool PasswordSQL::ChangePassword(const std::string& username, const std::string& old_password, const std::string& new_password) const noexcept
     {
         /// @brief Validate input parameters
         if (username.empty() || old_password.empty() || new_password.empty())
@@ -113,7 +113,7 @@ namespace common::sql
         }
     }
 
-    auto PasswordSQL::ResetPassword(const std::string& username, const std::string& new_password) const noexcept -> bool
+    bool PasswordSQL::ResetPassword(const std::string& username, const std::string& new_password) const noexcept
     {
         /// @brief Validate input parameters
         if (username.empty() || new_password.empty())
@@ -140,7 +140,7 @@ namespace common::sql
         }
     }
 
-    auto PasswordSQL::DeleteUser(const std::string& username) const noexcept -> bool
+    bool PasswordSQL::DeleteUser(const std::string& username) const noexcept
     {
         /// @brief Validate input parameters
         if (username.empty())
@@ -167,7 +167,7 @@ namespace common::sql
         }
     }
 
-    auto PasswordSQL::UserExists(const std::string& username) const noexcept -> bool
+    bool PasswordSQL::UserExists(const std::string& username) const noexcept
     {
         /// @brief Validate input parameters
         if (username.empty())
@@ -190,7 +190,7 @@ namespace common::sql
         }
     }
 
-    auto PasswordSQL::GetUser(const std::string& username) const noexcept -> std::string
+    std::string PasswordSQL::GetUser(const std::string& username) const noexcept
     {
         /// @brief Validate input parameters
         if (username.empty())
@@ -217,7 +217,7 @@ namespace common::sql
         }
     }
 
-    auto PasswordSQL::GetAllUsers() const noexcept -> std::vector<std::string>
+    std::vector<std::string> PasswordSQL::GetAllUsers() const noexcept
     {
         try
         {

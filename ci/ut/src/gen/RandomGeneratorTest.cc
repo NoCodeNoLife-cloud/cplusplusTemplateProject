@@ -10,7 +10,6 @@
 #include "gen/RandomGenerator.hpp"
 #include <stdexcept>
 #include <set>
-#include <algorithm>
 #include <cmath>
 
 using namespace common::gen;

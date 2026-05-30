@@ -37,17 +37,17 @@ namespace common::filesystem
 
         /// @brief Get the encoding of the writer.
         /// @return The encoding name as a string.
-        [[nodiscard]] auto getEncoding() const -> std::string;
+        [[nodiscard]] std::string getEncoding() const;
 
         /// @brief Write a single character.
         /// @param c The character to write.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
-        auto write(char c) -> void override;
+        void write(char c) override;
 
         /// @brief Write an entire character array.
         /// @param cBuf The character array to write.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
-        auto write(const std::vector<char>& cBuf) -> void override;
+        void write(const std::vector<char>& cBuf) override;
 
         /// @brief Write a portion of a character array.
         /// @param cBuf The character array to write from.
@@ -55,12 +55,12 @@ namespace common::filesystem
         /// @param len The number of characters to write.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
         /// @throws std::out_of_range If offset and length exceed buffer size.
-        auto write(const std::vector<char>& cBuf, size_t off, size_t len) -> void override;
+        void write(const std::vector<char>& cBuf, size_t off, size_t len) override;
 
         /// @brief Write a string.
         /// @param str The string to write.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
-        auto write(const std::string& str) -> void override;
+        void write(const std::string& str) override;
 
         /// @brief Write a portion of a string.
         /// @param str The string to write from.
@@ -68,31 +68,31 @@ namespace common::filesystem
         /// @param len The number of characters to write.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
         /// @throws std::out_of_range If offset and length exceed string size.
-        auto write(const std::string& str, size_t off, size_t len) -> void override;
+        void write(const std::string& str, size_t off, size_t len) override;
 
         /// @brief Flush the stream.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
-        auto flush() -> void override;
+        void flush() override;
 
         /// @brief Close the writer.
         /// @throws std::ios_base::failure If the output stream is not available.
-        auto close() -> void override;
+        void close() override;
 
         /// @brief Checks if the stream is closed.
         /// @return true if the stream is closed, false otherwise.
-        [[nodiscard]] auto isClosed() const -> bool override;
+        [[nodiscard]] bool isClosed() const override;
 
         /// @brief Append a character to the writer.
         /// @param c The character to append.
         /// @return A reference to this writer.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
-        auto append(char c) -> AbstractWriter& override;
+        AbstractWriter& append(char c) override;
 
         /// @brief Append a string to the writer.
         /// @param csq The string to append.
         /// @return A reference to this writer.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
-        auto append(const std::string& csq) -> AbstractWriter& override;
+        AbstractWriter& append(const std::string& csq) override;
 
         /// @brief Append a subsequence of a string to the writer.
         /// @param csq The string to append from.
@@ -100,12 +100,12 @@ namespace common::filesystem
         /// @param end The ending index of the subsequence.
         /// @return A reference to this writer.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
-        auto append(const std::string& csq, size_t start, size_t end) -> AbstractWriter& override;
+        AbstractWriter& append(const std::string& csq, size_t start, size_t end) override;
 
         /// @brief Convert the writer to a string representation.
         /// @return A string representation of the writer.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
-        [[nodiscard]] auto toString() const -> std::string override;
+        [[nodiscard]] std::string toString() const override;
 
     private:
         std::unique_ptr<AbstractWriter> output_writer_;
@@ -115,10 +115,10 @@ namespace common::filesystem
 
         /// @brief Checks if the stream is closed.
         /// @throws std::ios_base::failure if the stream is closed.
-        auto checkIfClosed() const -> void;
+        void checkIfClosed() const;
 
         /// @brief Checks if the output stream is available.
         /// @throws std::ios_base::failure if the output stream is not available.
-        auto checkOutputStream() const -> void;
+        void checkOutputStream() const;
     };
 }

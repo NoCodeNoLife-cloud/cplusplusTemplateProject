@@ -27,7 +27,7 @@ namespace common::filesystem
         load(filename);
     }
 
-    auto BmpImage::setPixel(const int32_t x, const int32_t y, const uint8_t r, const uint8_t g, const uint8_t b) noexcept -> void
+    void BmpImage::setPixel(const int32_t x, const int32_t y, const uint8_t r, const uint8_t g, const uint8_t b) noexcept
     {
         if (x < 0 || x >= width_ || y < 0 || y >= height_)
         {
@@ -40,7 +40,7 @@ namespace common::filesystem
         pixels_[index + 2] = r;
     }
 
-    auto BmpImage::getPixel(const int32_t x, const int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const noexcept -> bool
+    bool BmpImage::getPixel(const int32_t x, const int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const noexcept
     {
         if (x < 0 || x >= width_ || y < 0 || y >= height_)
         {
@@ -54,7 +54,7 @@ namespace common::filesystem
         return true;
     }
 
-    auto BmpImage::save(const std::string& filename) const -> void
+    void BmpImage::save(const std::string& filename) const
     {
         const int32_t rowSize = width_ * 3 + 3 & ~3;
         const int32_t pixelDataSize = rowSize * height_;
@@ -87,17 +87,17 @@ namespace common::filesystem
         }
     }
 
-    auto BmpImage::getWidth() const noexcept -> int32_t
+    int32_t BmpImage::getWidth() const noexcept
     {
         return width_;
     }
 
-    auto BmpImage::getHeight() const noexcept -> int32_t
+    int32_t BmpImage::getHeight() const noexcept
     {
         return height_;
     }
 
-    auto BmpImage::load(const std::string& filename) -> void
+    void BmpImage::load(const std::string& filename)
     {
         std::ifstream file(filename, std::ios::binary);
         if (!file)

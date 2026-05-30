@@ -34,14 +34,14 @@ namespace common::toolkit
         /// @brief Get a mutable reference to the static object
         /// @return Reference to the static object
         /// @throws std::runtime_error if object was not initialized and is not default constructible
-        [[nodiscard]] static auto get() -> T&;
+        [[nodiscard]] static T& get();
 
         /// @brief Destroy the static object if it exists
         static void destroy() noexcept;
 
         /// @brief Check if the static object has been initialized
         /// @return true if initialized, false otherwise
-        [[nodiscard]] static auto isInitialized() -> bool;
+        [[nodiscard]] static bool isInitialized();
 
     private:
         static inline std::unique_ptr<T> instance_ = nullptr;
@@ -62,7 +62,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto StaticObjectWrapper<T>::get() -> T&
+    T& StaticObjectWrapper<T>::get()
     {
         if constexpr (std::is_default_constructible_v<T>)
         {
@@ -86,7 +86,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto StaticObjectWrapper<T>::isInitialized() -> bool
+    bool StaticObjectWrapper<T>::isInitialized()
     {
         return instance_ != nullptr;
     }

@@ -18,23 +18,23 @@ namespace common::time
 
         /// @brief Get current date and time as a string in format "YYYY-MM-DD HH:MM:SS"
         /// @return Formatted date and time string
-        [[nodiscard]] static auto getCurrentDateTimeString() noexcept -> std::string;
+        [[nodiscard]] static std::string getCurrentDateTimeString() noexcept;
 
         /// @brief Get current date and time as a compressed string in format "YYYYMMDD_HHMMSS"
         /// @return Compressed date and time string
-        [[nodiscard]] static auto getCompressedCurrentDateTimeString() noexcept -> std::string;
+        [[nodiscard]] static std::string getCompressedCurrentDateTimeString() noexcept;
 
         /// @brief Get current timestamp as a count of milliseconds since epoch
         /// @return Milliseconds since epoch
-        [[nodiscard]] static auto getCurrentTimestampMs() noexcept -> std::chrono::milliseconds::rep;
+        [[nodiscard]] static std::chrono::milliseconds::rep getCurrentTimestampMs() noexcept;
 
         /// @brief Get current timestamp as a count of seconds since epoch
         /// @return Seconds since epoch
-        [[nodiscard]] static auto getCurrentTimestamp() noexcept -> std::chrono::seconds::rep;
+        [[nodiscard]] static std::chrono::seconds::rep getCurrentTimestamp() noexcept;
 
         /// @brief Format current time with a custom format string
         /// @param format Format string using strftime-compatible format specifiers
         /// @return Formatted date and time string
-        [[nodiscard]] static auto formatCurrentTime(const std::string& format) -> std::string;
+        [[nodiscard]] static std::string formatCurrentTime(const std::string& format);
     };
 }

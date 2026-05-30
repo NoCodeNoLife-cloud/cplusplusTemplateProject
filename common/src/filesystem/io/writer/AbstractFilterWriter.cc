@@ -6,7 +6,6 @@
 
 #include "src/filesystem/io/writer/AbstractFilterWriter.hpp"
 
-#include <fmt/format.h>
 #include <stdexcept>
 
 namespace common::filesystem

@@ -12,7 +12,7 @@
 
 namespace common::rpc
 {
-    auto RpcMetadata::grpcStateToString(const grpc_connectivity_state state) -> std::string
+    std::string RpcMetadata::grpcStateToString(const grpc_connectivity_state state)
     {
         // Using table-driven approach for better maintainability
         static const std::unordered_map<grpc_connectivity_state, std::string> stateToStringMap = {{GRPC_CHANNEL_IDLE, "IDLE"}, {GRPC_CHANNEL_CONNECTING, "CONNECTING"}, {GRPC_CHANNEL_READY, "READY"}, {GRPC_CHANNEL_TRANSIENT_FAILURE, "TRANSIENT_FAILURE"}, {GRPC_CHANNEL_SHUTDOWN, "SHUTDOWN"}};
@@ -26,7 +26,7 @@ namespace common::rpc
         return "UNKNOWN";
     }
 
-    auto RpcMetadata::grpcStateToEnum(const grpc_connectivity_state state) -> GrpcConnectivityState
+    GrpcConnectivityState RpcMetadata::grpcStateToEnum(const grpc_connectivity_state state)
     {
         // Map grpc_connectivity_state to our internal GrpcConnectivityState enum
         GrpcConnectivityState result;
@@ -53,7 +53,7 @@ namespace common::rpc
         return result;
     }
 
-    auto RpcMetadata::grpcStateToString(const GrpcConnectivityState state) -> std::string
+    std::string RpcMetadata::grpcStateToString(const GrpcConnectivityState state)
     {
         std::string result;
         // Convert our internal GrpcConnectivityState enum to string

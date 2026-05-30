@@ -8,7 +8,6 @@
 #include <gtest/gtest.h>
 #include "auth/UserCredentials.hpp"
 #include <chrono>
-#include <thread>
 
 using namespace common::auth;
 

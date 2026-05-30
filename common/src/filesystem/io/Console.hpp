@@ -24,21 +24,21 @@ namespace common::filesystem
         /// @param fmt The format string.
         /// @param args Arguments to be formatted.
         template <typename... Args>
-        auto format(const std::string& fmt, Args&&... args) const -> void;
+        void format(const std::string& fmt, Args&&... args) const;
 
         /// @brief Prints a formatted string to the console.
         /// @tparam Args Variadic template arguments.
         /// @param fmt The format string.
         /// @param args Arguments to be formatted.
         template <typename... Args>
-        auto printf(const std::string& fmt, Args&&... args) const -> void;
+        void printf(const std::string& fmt, Args&&... args) const;
 
         /// @brief Flushes the console output.
-        auto flush() -> void override;
+        void flush() override;
 
         /// @brief Reads a line from the console.
         /// @return The read line as a string.
-        static auto readLine() -> std::string;
+        static std::string readLine();
 
         /// @brief Reads a line from the console with a prompt.
         /// @tparam Args Variadic template arguments for the prompt formatting.
@@ -46,31 +46,31 @@ namespace common::filesystem
         /// @param args Arguments to be formatted in the prompt.
         /// @return The read line as a string.
         template <typename... Args>
-        static auto readLine(const std::string& fmt, Args&&... args) -> std::string;
+        static std::string readLine(const std::string& fmt, Args&&... args);
 
         /// @brief Gets the writer stream for the console.
         /// @return Reference to the output stream.
-        static auto writer() -> std::ostream&;
+        static std::ostream& writer();
 
         /// @brief Gets the reader stream for the console.
         /// @return Reference to the input stream.
-        static auto reader() -> std::istream&;
+        static std::istream& reader();
     };
 
     template <typename... Args>
-    auto Console::format(const std::string& fmt, Args&&... args) const -> void
+    void Console::format(const std::string& fmt, Args&&... args) const
     {
         std::cout << std::vformat(fmt, std::make_format_args(args...));
     }
 
     template <typename... Args>
-    auto Console::printf(const std::string& fmt, Args&&... args) const -> void
+    void Console::printf(const std::string& fmt, Args&&... args) const
     {
         format(fmt, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
-    auto Console::readLine(const std::string& fmt, Args&&... args) -> std::string
+    std::string Console::readLine(const std::string& fmt, Args&&... args)
     {
         Console{}.format(fmt, std::forward<Args>(args)...);
         return readLine();

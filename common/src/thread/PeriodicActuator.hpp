@@ -33,16 +33,16 @@ namespace common::thread
         /// @brief Start the periodic actuator to begin executing the task at specified intervals.
         /// @details This function creates a background thread to run the io_context and starts the periodic execution.
         ///          The task will then be rescheduled automatically based on the configured interval until stopped.
-        auto start() -> void;
+        void start();
 
         /// @brief Stop the periodic actuator gracefully.
         /// @details This function stops the io_context, allowing the background thread to finish.
         ///          Any pending tasks will be cancelled.
-        auto stop() -> void;
+        void stop();
 
         /// @brief Check if the actuator is currently running.
         /// @return true if the actuator is running, false otherwise.
-        [[nodiscard]] auto isRunning() const -> bool;
+        [[nodiscard]] bool isRunning() const;
 
     private:
         boost::asio::io_context ioContext_{};
@@ -53,6 +53,6 @@ namespace common::thread
         std::atomic<bool> isRunning_{false};
 
         /// @brief Schedule the next execution of the task
-        auto scheduleNext() -> void;
+        void scheduleNext();
     };
 }

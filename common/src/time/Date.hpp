@@ -48,58 +48,58 @@ namespace common::time
 
         /// @brief Creates and returns a copy of this object.
         /// @return A copy of this date
-        [[nodiscard]] auto clone() const -> Date;
+        [[nodiscard]] Date clone() const;
 
         /// @brief Compares this date to the specified date.
         /// @param other The date to compare with
         /// @return true if the dates are equal, false otherwise
-        [[nodiscard]] auto equals(const Date& other) const noexcept -> bool;
+        [[nodiscard]] bool equals(const Date& other) const noexcept;
 
         /// @brief Tests if this date is after the specified date.
         /// @param other The date to compare with
         /// @return true if this date is after the other date, false otherwise
-        [[nodiscard]] auto after(const Date& other) const noexcept -> bool;
+        [[nodiscard]] bool after(const Date& other) const noexcept;
 
         /// @brief Tests if this date is before the specified date.
         /// @param other The date to compare with
         /// @return true if this date is before the other date, false otherwise
-        [[nodiscard]] auto before(const Date& other) const noexcept -> bool;
+        [[nodiscard]] bool before(const Date& other) const noexcept;
 
         /// @brief Returns the number of milliseconds since January 1, 1970, 00:00:00 GMT.
         /// @return The timestamp in milliseconds
-        [[nodiscard]] auto getTime() const noexcept -> int64_t;
+        [[nodiscard]] int64_t getTime() const noexcept;
 
         /// @brief Returns the year represented by this date.
         /// @return The year (e.g., 2023)
-        [[nodiscard]] auto getYear() const -> int32_t;
+        [[nodiscard]] int32_t getYear() const;
 
         /// @brief Returns the month represented by this date.
         /// @return The month (1-12)
-        [[nodiscard]] auto getMonth() const -> int32_t;
+        [[nodiscard]] int32_t getMonth() const;
 
         /// @brief Returns the day of the month represented by this date.
         /// @return The day of the month (1-31)
-        [[nodiscard]] auto getDay() const -> int32_t;
+        [[nodiscard]] int32_t getDay() const;
 
         /// @brief Returns the hour represented by this date.
         /// @return The hour (0-23)
-        [[nodiscard]] auto getHours() const -> int32_t;
+        [[nodiscard]] int32_t getHours() const;
 
         /// @brief Returns the minute represented by this date.
         /// @return The minute (0-59)
-        [[nodiscard]] auto getMinutes() const -> int32_t;
+        [[nodiscard]] int32_t getMinutes() const;
 
         /// @brief Returns the second represented by this date.
         /// @return The second (0-59)
-        [[nodiscard]] auto getSeconds() const -> int32_t;
+        [[nodiscard]] int32_t getSeconds() const;
 
         /// @brief Converts this date to a string representation.
         /// @return A string representation of the date in format "YYYY-MM-DD HH:MM:SS"
-        [[nodiscard]] auto toString() const -> std::string;
+        [[nodiscard]] std::string toString() const;
 
         /// @brief Returns a hash code value for this date.
         /// @return The hash code value
-        [[nodiscard]] auto hashCode() const noexcept -> size_t;
+        [[nodiscard]] size_t hashCode() const noexcept;
 
         // Comparison operators
         [[nodiscard]] bool operator==(const Date& other) const noexcept;
@@ -119,7 +119,7 @@ namespace common::time
 
         /// @brief Converts the time point to a std::tm structure.
         /// @return The tm structure representation of the date
-        [[nodiscard]] auto toTm() const -> std::tm;
+        [[nodiscard]] std::tm toTm() const;
 
         /// @brief Validates if the given date components form a valid date
         /// @param year The year
@@ -129,6 +129,6 @@ namespace common::time
         /// @param minutes The minutes (0-59)
         /// @param seconds The seconds (0-59)
         /// @return true if the date components are valid, false otherwise
-        [[nodiscard]] static auto isValidDate(int32_t year, int32_t month, int32_t day, int32_t hours = 0, int32_t minutes = 0, int32_t seconds = 0) -> bool;
+        [[nodiscard]] static bool isValidDate(int32_t year, int32_t month, int32_t day, int32_t hours = 0, int32_t minutes = 0, int32_t seconds = 0);
     };
 }

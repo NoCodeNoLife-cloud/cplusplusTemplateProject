@@ -7,7 +7,6 @@
 #include "src/graphics/Graph.hpp"
 
 #include <fmt/format.h>
-#include <cstdint>
 #include <vector>
 #include <stdexcept>
 #include <string>
@@ -27,7 +26,7 @@ namespace common::graphics
         adj_list_.resize(static_cast<size_t>(num_nodes_));
     }
 
-    auto Graph::addEdge(const int32_t from, const int32_t to, const int32_t weight) -> void
+    void Graph::addEdge(const int32_t from, const int32_t to, const int32_t weight)
     {
         if (from < 0 || from >= num_nodes_ || to < 0 || to >= num_nodes_)
         {
@@ -38,7 +37,7 @@ namespace common::graphics
         adj_list_[static_cast<size_t>(from)].emplace_back(edge);
     }
 
-    auto Graph::getAdjList(const int32_t node) const -> const std::vector<Edge>&
+    const std::vector<Edge>& Graph::getAdjList(const int32_t node) const
     {
         if (node < 0 || node >= num_nodes_)
         {
@@ -48,12 +47,12 @@ namespace common::graphics
         return adj_list_[static_cast<size_t>(node)];
     }
 
-    auto Graph::getNodeCount() const noexcept -> int32_t
+    int32_t Graph::getNodeCount() const noexcept
     {
         return num_nodes_;
     }
 
-    auto Graph::isEmpty() const noexcept -> bool
+    bool Graph::isEmpty() const noexcept
     {
         return num_nodes_ == 0;
     }

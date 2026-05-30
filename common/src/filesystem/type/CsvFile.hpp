@@ -25,27 +25,27 @@ namespace common::filesystem
 
         /// @brief Get the number of rows in the CSV file
         /// @return The number of rows as uint64_t
-        [[nodiscard]] auto getRowCount() const noexcept -> uint64_t;
+        [[nodiscard]] uint64_t getRowCount() const noexcept;
 
         /// @brief Get the number of columns in the CSV file
         /// @return The number of columns as uint64_t
-        [[nodiscard]] auto getColumnCount() const noexcept -> uint64_t;
+        [[nodiscard]] uint64_t getColumnCount() const noexcept;
 
         /// @brief Insert a row at the specified index
         /// @param insertIndex The index where the row should be inserted
         /// @param item The vector of strings representing the row data
         /// @return True if successful, false otherwise
-        auto insertRow(uint64_t insertIndex, const std::vector<std::string>& item) noexcept -> bool;
+        bool insertRow(uint64_t insertIndex, const std::vector<std::string>& item) noexcept;
 
         /// @brief Add a row to the end of the CSV file
         /// @param item The vector of strings representing the row data
         /// @return True if successful, false otherwise
-        auto pushBack(const std::vector<std::string>& item) noexcept -> bool;
+        bool pushBack(const std::vector<std::string>& item) noexcept;
 
         /// @brief Save the CSV file to disk
         /// @param path The path where to save the file (uses original path if empty)
         /// @return True if successful, false otherwise
-        auto save(const std::string& path = {}) noexcept -> bool;
+        bool save(const std::string& path = {}) noexcept;
 
     private:
         std::string file_path_{};

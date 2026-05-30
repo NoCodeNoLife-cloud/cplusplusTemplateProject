@@ -5,7 +5,6 @@
  */
 
 #pragma once
-#include <fmt/format.h>
 #include <condition_variable>
 #include <functional>
 #include <future>
@@ -29,17 +28,17 @@ namespace common::thread
         /// @param delayMs The delay in milliseconds before the task is executed.
         /// @param task The task to be executed.
         /// @return The ID of the scheduled task.
-        [[nodiscard]] auto scheduleTask(int32_t delayMs, std::function<ResultType()> task) -> int32_t;
+        [[nodiscard]] int32_t scheduleTask(int32_t delayMs, std::function<ResultType()> task);
 
         /// @brief Retrieves the result of a scheduled task.
         /// @param taskId The ID of the task whose result is to be retrieved.
         /// @return A future object that will hold the result of the task.
-        [[nodiscard]] auto getTaskResult(int32_t taskId) -> std::future<ResultType>;
+        [[nodiscard]] std::future<ResultType> getTaskResult(int32_t taskId);
 
         /// @brief Checks if a task is currently pending execution.
         /// @param taskId The ID of the task to check.
         /// @return true if the task is pending, false otherwise.
-        auto isTaskPending(const int32_t taskId) const -> bool;
+        bool isTaskPending(const int32_t taskId) const;
 
         /// @brief Cancels a scheduled task if it hasn't started yet.
         /// @param taskId The ID of the task to cancel.
@@ -55,7 +54,7 @@ namespace common::thread
     };
 
     template <typename ResultType>
-    auto DelayedTaskActuator<ResultType>::scheduleTask(int32_t delayMs, std::function<ResultType()> task) -> int32_t
+    int32_t DelayedTaskActuator<ResultType>::scheduleTask(int32_t delayMs, std::function<ResultType()> task)
     {
         if (delayMs < 0)
         {
@@ -130,7 +129,7 @@ namespace common::thread
     }
 
     template <typename ResultType>
-    auto DelayedTaskActuator<ResultType>::getTaskResult(int32_t taskId) -> std::future<ResultType>
+    std::future<ResultType> DelayedTaskActuator<ResultType>::getTaskResult(int32_t taskId)
     {
         std::unique_lock lock(mutex_);
 
@@ -156,7 +155,7 @@ namespace common::thread
     }
 
     template <typename ResultType>
-    auto DelayedTaskActuator<ResultType>::isTaskPending(const int32_t taskId) const -> bool
+    bool DelayedTaskActuator<ResultType>::isTaskPending(const int32_t taskId) const
     {
         std::lock_guard lock(mutex_);
         const auto it = pendingTasks_.find(taskId);

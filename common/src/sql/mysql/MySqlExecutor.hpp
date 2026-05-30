@@ -30,7 +30,7 @@ namespace common::sql::mysql
         /// @brief Get column value by name
         /// @param column_name Name of the column
         /// @return Optional value (nullopt if column doesn't exist)
-        [[nodiscard]] auto getColumn(const std::string& column_name) const -> std::optional<QueryValue>
+        [[nodiscard]] std::optional<QueryValue> getColumn(const std::string& column_name) const
         {
             const auto it = columns.find(column_name);
             return (it != columns.end()) ? std::make_optional(it->second) : std::nullopt;
@@ -39,7 +39,7 @@ namespace common::sql::mysql
         /// @brief Get column value as string by name
         /// @param column_name Name of the column
         /// @return String representation (empty string if NULL or not found)
-        [[nodiscard]] auto getString(const std::string& column_name) const -> std::string
+        [[nodiscard]] std::string getString(const std::string& column_name) const
         {
             auto value = getColumn(column_name);
             if (!value.has_value())
@@ -69,7 +69,7 @@ namespace common::sql::mysql
         /// @brief Check if a column exists and is not NULL
         /// @param column_name Name of the column
         /// @return true if column exists and has a non-NULL value
-        [[nodiscard]] auto hasColumn(const std::string& column_name) const -> bool
+        [[nodiscard]] bool hasColumn(const std::string& column_name) const
         {
             const auto value = getColumn(column_name);
             if (!value.has_value())
@@ -90,19 +90,19 @@ namespace common::sql::mysql
         std::vector<std::string> column_names;
 
         /// @brief Number of rows
-        [[nodiscard]] auto rowCount() const -> size_t
+        [[nodiscard]] size_t rowCount() const
         {
             return rows.size();
         }
 
         /// @brief Number of columns
-        [[nodiscard]] auto columnCount() const -> size_t
+        [[nodiscard]] size_t columnCount() const
         {
             return column_names.size();
         }
 
         /// @brief Check if result is empty
-        [[nodiscard]] auto isEmpty() const -> bool
+        [[nodiscard]] bool isEmpty() const
         {
             return rows.empty();
         }
@@ -135,7 +135,7 @@ namespace common::sql::mysql
         MySqlExecutor(const MySqlExecutor&) = delete;
 
         /// @brief Copy assignment operator (deleted - database connections should not be copied)
-        auto operator=(const MySqlExecutor&) -> MySqlExecutor& = delete;
+        MySqlExecutor& operator=(const MySqlExecutor&) = delete;
 
         /// @brief Move constructor
         /// @param other Another MySqlExecutor instance to move from
@@ -144,7 +144,7 @@ namespace common::sql::mysql
         /// @brief Move assignment operator
         /// @param other Another MySqlExecutor instance to move from
         /// @return Reference to this instance
-        auto operator=(MySqlExecutor&& other) noexcept -> MySqlExecutor&;
+        MySqlExecutor& operator=(MySqlExecutor&& other) noexcept;
 
         /// @brief Connect to MySQL database
         /// @param host MySQL server host
@@ -166,14 +166,14 @@ namespace common::sql::mysql
         /// @param sql SQL statement to execute
         /// @return Number of affected rows
         /// @throws std::runtime_error if execution fails
-        [[nodiscard]] auto execute(const std::string& sql) const -> int;
+        [[nodiscard]] int execute(const std::string& sql) const;
 
         /// @brief Executes a query and returns results as a 2D string vector (legacy API)
         /// @param sql SQL query to execute
         /// @return Query results in format [rows][columns]
         /// @throws std::runtime_error if query fails
         /// @deprecated Use queryStructured() for better type safety and column name support
-        [[nodiscard]] auto query(const std::string& sql) const -> std::vector<std::vector<std::string>>;
+        [[nodiscard]] std::vector<std::vector<std::string>> query(const std::string& sql) const;
 
         /// @brief Executes a parameterized query and returns results as a 2D string vector (legacy API)
         /// @param sql SQL query with placeholders (?)
@@ -183,14 +183,14 @@ namespace common::sql::mysql
         /// @note MySQL X DevAPI doesn't support true parameterized queries for raw SQL.
         ///       Parameters are safely escaped using comprehensive character escaping.
         /// @deprecated Use queryWithParamsStructured() for better type safety and column name support
-        [[nodiscard]] auto queryWithParams(const std::string& sql,
-                                           const std::vector<std::string>& params) const -> std::vector<std::vector<std::string>>;
+        [[nodiscard]] std::vector<std::vector<std::string>> queryWithParams(const std::string& sql,
+                                                                           const std::vector<std::string>& params) const;
 
         /// @brief Executes a query and returns structured results with column names and typed values
         /// @param sql SQL query to execute
         /// @return Structured query result with metadata
         /// @throws std::runtime_error if query fails
-        [[nodiscard]] auto queryStructured(const std::string& sql) const -> QueryResult;
+        [[nodiscard]] QueryResult queryStructured(const std::string& sql) const;
 
         /// @brief Executes a parameterized query and returns structured results with column names and typed values
         /// @param sql SQL query with placeholders (?)
@@ -199,16 +199,16 @@ namespace common::sql::mysql
         /// @throws std::runtime_error if query fails
         /// @note MySQL X DevAPI doesn't support true parameterized queries for raw SQL.
         ///       Parameters are safely escaped using comprehensive character escaping.
-        [[nodiscard]] auto queryWithParamsStructured(const std::string& sql,
-                                                     const std::vector<std::string>& params) const -> QueryResult;
+        [[nodiscard]] QueryResult queryWithParamsStructured(const std::string& sql,
+                                                            const std::vector<std::string>& params) const;
 
         /// @brief Check if database session is valid
         /// @return true if connected, false otherwise
-        [[nodiscard]] auto isConnected() const -> bool;
+        [[nodiscard]] bool isConnected() const;
 
         /// @brief Get last error message
         /// @return Error message string
-        [[nodiscard]] auto getLastError() const -> std::string;
+        [[nodiscard]] std::string getLastError() const;
 
     private:
         /// @brief MySQL session handle
@@ -236,11 +236,11 @@ namespace common::sql::mysql
         /// @brief Process query result and convert to 2D string vector (legacy)
         /// @param result MySQL query result
         /// @return Query results in format [rows][columns]
-        [[nodiscard]] static auto processQueryResult(mysqlx::SqlResult& result) -> std::vector<std::vector<std::string>>;
+        [[nodiscard]] static std::vector<std::vector<std::string>> processQueryResult(mysqlx::SqlResult& result);
 
         /// @brief Process query result into structured format with column names and typed values
         /// @param result MySQL query result
         /// @return Structured query result
-        [[nodiscard]] static auto processQueryResultStructured(mysqlx::SqlResult& result) -> QueryResult;
+        [[nodiscard]] static QueryResult processQueryResultStructured(mysqlx::SqlResult& result);
     };
 }

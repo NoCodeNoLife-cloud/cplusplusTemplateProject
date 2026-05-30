@@ -23,7 +23,7 @@ namespace common::gen
     {
     }
 
-    auto RandomGenerator::nextInt(const int min, const int max) -> int
+    int RandomGenerator::nextInt(const int min, const int max)
     {
         if (min > max)
         {
@@ -36,12 +36,12 @@ namespace common::gen
         return result;
     }
 
-    auto RandomGenerator::nextBool() -> bool
+    bool RandomGenerator::nextBool()
     {
         return nextBool(0.5);
     }
 
-    auto RandomGenerator::nextBool(const double trueProbability) -> bool
+    bool RandomGenerator::nextBool(const double trueProbability)
     {
         if (trueProbability < 0.0 || trueProbability > 1.0)
         {
@@ -54,7 +54,7 @@ namespace common::gen
         return result;
     }
 
-    auto RandomGenerator::nextDouble(const double min, const double max) -> double
+    double RandomGenerator::nextDouble(const double min, const double max)
     {
         if (min >= max)
         {
@@ -67,7 +67,7 @@ namespace common::gen
         return result;
     }
 
-    auto RandomGenerator::nextString(const size_t length, const std::string& charset) -> std::string
+    std::string RandomGenerator::nextString(const size_t length, const std::string& charset)
     {
         if (charset.empty())
         {
@@ -94,7 +94,7 @@ namespace common::gen
         return result;
     }
 
-    auto RandomGenerator::nextGaussian(const double mean, const double stddev) -> double
+    double RandomGenerator::nextGaussian(const double mean, const double stddev)
     {
         if (stddev <= 0.0)
         {
@@ -107,7 +107,7 @@ namespace common::gen
         return result;
     }
 
-    auto RandomGenerator::setSeed(const unsigned int seed) -> void
+    void RandomGenerator::setSeed(const unsigned int seed)
     {
         std::lock_guard lock(mutex_);
         engine_.seed(seed);

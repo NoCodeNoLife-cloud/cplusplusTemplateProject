@@ -36,25 +36,25 @@ namespace common::filesystem
 
     File::~File() = default;
 
-    auto File::canExecute() const noexcept -> bool
+    bool File::canExecute() const noexcept
     {
         const DWORD attributes = GetFileAttributesW(file_path_.c_str());
         return attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
     }
 
-    auto File::canRead() const noexcept -> bool
+    bool File::canRead() const noexcept
     {
         const std::ifstream file(file_path_);
         return file.good();
     }
 
-    auto File::canWrite() const noexcept -> bool
+    bool File::canWrite() const noexcept
     {
         const std::ofstream file(file_path_, std::ios::app);
         return file.good();
     }
 
-    auto File::exists() const noexcept -> bool
+    bool File::exists() const noexcept
     {
         try
         {
@@ -66,7 +66,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::isFile() const noexcept -> bool
+    bool File::isFile() const noexcept
     {
         try
         {
@@ -78,18 +78,18 @@ namespace common::filesystem
         }
     }
 
-    auto File::isHidden() const noexcept -> bool
+    bool File::isHidden() const noexcept
     {
         const DWORD attributes = GetFileAttributesW(file_path_.c_str());
         return attributes != INVALID_FILE_ATTRIBUTES && attributes & FILE_ATTRIBUTE_HIDDEN;
     }
 
-    auto File::isAbsolute() const noexcept -> bool
+    bool File::isAbsolute() const noexcept
     {
         return file_path_.is_absolute();
     }
 
-    auto File::createNewFile() const -> bool
+    bool File::createNewFile() const
     {
         if (std::filesystem::exists(file_path_))
         {
@@ -99,7 +99,7 @@ namespace common::filesystem
         return file.good();
     }
 
-    auto File::deleteFile() const noexcept -> bool
+    bool File::deleteFile() const noexcept
     {
         try
         {
@@ -111,7 +111,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::renameTo(const File& dest) const noexcept -> bool
+    bool File::renameTo(const File& dest) const noexcept
     {
         try
         {
@@ -124,7 +124,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::copyTo(const File& dest) const -> bool
+    bool File::copyTo(const File& dest) const
     {
         try
         {
@@ -137,7 +137,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::length() const noexcept -> int64_t
+    int64_t File::length() const noexcept
     {
         try
         {
@@ -153,7 +153,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::lastModified() const noexcept -> int64_t
+    int64_t File::lastModified() const noexcept
     {
         try
         {
@@ -167,7 +167,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::setLastModified(const int64_t time) const noexcept -> bool
+    bool File::setLastModified(const int64_t time) const noexcept
     {
         try
         {
@@ -182,7 +182,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::setReadOnly() const noexcept -> bool
+    bool File::setReadOnly() const noexcept
     {
         try
         {
@@ -204,7 +204,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::getAbsolutePath() const -> std::string
+    std::string File::getAbsolutePath() const
     {
         try
         {
@@ -216,7 +216,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::getAbsoluteFile() const -> File
+    File File::getAbsoluteFile() const
     {
         try
         {
@@ -228,12 +228,12 @@ namespace common::filesystem
         }
     }
 
-    auto File::getName() const noexcept -> std::string
+    std::string File::getName() const noexcept
     {
         return file_path_.filename().string();
     }
 
-    auto File::getExtension() const noexcept -> std::string
+    std::string File::getExtension() const noexcept
     {
         try
         {
@@ -246,22 +246,22 @@ namespace common::filesystem
         }
     }
 
-    auto File::getParent() const noexcept -> std::string
+    std::string File::getParent() const noexcept
     {
         return file_path_.parent_path().string();
     }
 
-    auto File::getParentFile() const -> File
+    File File::getParentFile() const
     {
         return file_path_.has_parent_path() ? File(file_path_.parent_path()) : File(std::string(""));
     }
 
-    auto File::getPath() const noexcept -> std::string
+    std::string File::getPath() const noexcept
     {
         return file_path_.string();
     }
 
-    auto File::getTotalSpace() const noexcept -> int64_t
+    int64_t File::getTotalSpace() const noexcept
     {
         try
         {
@@ -274,7 +274,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::getUsableSpace() const noexcept -> int64_t
+    int64_t File::getUsableSpace() const noexcept
     {
         try
         {
@@ -287,7 +287,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::getSizeString() const noexcept -> std::string
+    std::string File::getSizeString() const noexcept
     {
         const auto size = length();
         if (size < 0)
@@ -322,17 +322,17 @@ namespace common::filesystem
         return oss.str();
     }
 
-    auto File::hashCode() const noexcept -> size_t
+    size_t File::hashCode() const noexcept
     {
         return std::hash<std::string>{}(file_path_.string());
     }
 
-    auto File::toURI() const noexcept -> std::string
+    std::string File::toURI() const noexcept
     {
         return "file://" + file_path_.string();
     }
 
-    auto File::printFilesWithDepth(const std::filesystem::path& file_path) -> void
+    void File::printFilesWithDepth(const std::filesystem::path& file_path)
     {
         if (!std::filesystem::exists(file_path) || !std::filesystem::is_directory(file_path))
         {
@@ -358,7 +358,7 @@ namespace common::filesystem
         }
     }
 
-    auto File::getFileMD5(const std::filesystem::path& filePath) -> std::string
+    std::string File::getFileMD5(const std::filesystem::path& filePath)
     {
         std::ifstream file(filePath, std::ios::binary);
         if (!file)

@@ -1,5 +1,5 @@
 /**
- * @file UuidGenerator.hpp
+* @file UuidGenerator.hpp
  * @brief UuidGenerator class declaration
  * @details This header defines the UuidGenerator class that provides functionality for Random number and ID generation utilities.
  */
@@ -34,6 +34,6 @@ namespace common::gen
 
         /// @brief Generates a random UUID string.
         /// @return A string representation of the generated UUID.
-        [[nodiscard]] static auto GenerateRandomUuid() noexcept -> std::string;
+        [[nodiscard]] static std::string GenerateRandomUuid() noexcept;
     };
 }

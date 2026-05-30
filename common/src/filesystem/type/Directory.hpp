@@ -24,79 +24,79 @@ namespace common::filesystem
 
         /// @brief Create a directory
         /// @return true if the directory was created successfully, false otherwise
-        [[nodiscard]] auto mkdir() const noexcept -> bool;
+        [[nodiscard]] bool mkdir() const noexcept;
 
         /// @brief Create directories recursively
         /// @param exist_ok If true, no error will be thrown if the directory already exists
         /// @return true if the directories were created successfully, false otherwise
-        [[nodiscard]] auto mkdirs(bool exist_ok = false) const -> bool;
+        [[nodiscard]] bool mkdirs(bool exist_ok = false) const;
 
         /// @brief Check if the directory exists
         /// @return true if the directory exists, false otherwise
-        [[nodiscard]] auto exists() const noexcept -> bool;
+        [[nodiscard]] bool exists() const noexcept;
 
         /// @brief Check if the path is a directory
         /// @return true if the path is a directory, false otherwise
-        [[nodiscard]] auto isDirectory() const noexcept -> bool;
+        [[nodiscard]] bool isDirectory() const noexcept;
 
         /// @brief Check if the directory is empty
         /// @return true if the directory is empty, false otherwise
-        [[nodiscard]] auto isEmpty() const noexcept -> bool;
+        [[nodiscard]] bool isEmpty() const noexcept;
 
         /// @brief Remove the directory
         /// @return true if the directory was removed successfully, false otherwise
-        [[nodiscard]] auto remove() const noexcept -> bool;
+        [[nodiscard]] bool remove() const noexcept;
 
         /// @brief Remove the directory and all its contents
         /// @return The number of files removed
-        [[nodiscard]] auto removeAll() const noexcept -> std::uintmax_t;
+        [[nodiscard]] std::uintmax_t removeAll() const noexcept;
 
         /// @brief Move the directory to a destination
         /// @param destination The destination path
         /// @return true if the directory was moved successfully, false otherwise
-        [[nodiscard]] auto move(const std::filesystem::path& destination) const noexcept -> bool;
+        [[nodiscard]] bool move(const std::filesystem::path& destination) const noexcept;
 
         /// @brief Rename the directory
         /// @param newName The new name for the directory
         /// @return true if the directory was renamed successfully, false otherwise
-        [[nodiscard]] auto rename(const std::string& newName) const noexcept -> bool;
+        [[nodiscard]] bool rename(const std::string& newName) const noexcept;
 
         /// @brief Copy the directory to a destination
         /// @param destination The destination path
         /// @return true if the directory was copied successfully, false otherwise
-        [[nodiscard]] auto copy(const std::filesystem::path& destination) const -> bool;
+        [[nodiscard]] bool copy(const std::filesystem::path& destination) const;
 
         /// @brief Get the size of the directory
         /// @return The size of the directory in bytes
-        [[nodiscard]] auto size() const noexcept -> std::uintmax_t;
+        [[nodiscard]] std::uintmax_t size() const noexcept;
 
         /// @brief Get the last modified time of the directory
         /// @return The last modified time, or std::nullopt if an error occurred
-        [[nodiscard]] auto lastModifiedTime() const -> std::optional<std::chrono::system_clock::time_point>;
+        [[nodiscard]] std::optional<std::chrono::system_clock::time_point> lastModifiedTime() const;
 
         /// @brief List directory contents
         /// @param recursive Whether to list subdirectories recursively
         /// @return A vector of directory entries
-        [[nodiscard]] auto listDir(bool recursive) const -> std::vector<std::filesystem::directory_entry>;
+        [[nodiscard]] std::vector<std::filesystem::directory_entry> listDir(bool recursive) const;
 
         /// @brief List directory contents
         /// @param dir_path The directory path to list
         /// @param recursive Whether to list subdirectories recursively
         /// @return A vector of directory entries
-        [[nodiscard]] static auto listDir(const std::filesystem::path& dir_path, bool recursive) -> std::vector<std::filesystem::directory_entry>;
+        [[nodiscard]] static std::vector<std::filesystem::directory_entry> listDir(const std::filesystem::path& dir_path, bool recursive);
 
         /// @brief List directory entries
         /// @param recursive Whether to list subdirectories recursively
         /// @return A vector of directory entries
-        [[nodiscard]] auto listEntries(bool recursive = false) const -> std::vector<std::filesystem::directory_entry>;
+        [[nodiscard]] std::vector<std::filesystem::directory_entry> listEntries(bool recursive = false) const;
 
         /// @brief Clear all contents of the directory
         /// @return true if the directory was cleared successfully, false otherwise
-        [[nodiscard]] auto clearAll() const -> bool;
+        [[nodiscard]] bool clearAll() const;
 
         /// @brief Get the current working directory
         /// @return The current working directory path
-        [[nodiscard]] static auto getCurrentWorkingDirectory() -> std::filesystem::path;
+        [[nodiscard]] static std::filesystem::path getCurrentWorkingDirectory();
 
     private:
         std::filesystem::path dir_path_{};

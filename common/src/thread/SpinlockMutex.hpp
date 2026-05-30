@@ -34,21 +34,21 @@ namespace common::thread
 
         /// @brief Locks the spinlock, blocking until the lock is acquired.
         /// Uses test_and_set in a loop with yielding to reduce CPU usage.
-        auto lock() noexcept -> void;
+        void lock() noexcept;
 
         /// @brief Attempts to lock the spinlock without blocking.
         /// @return true if the lock was acquired, false otherwise.
-        [[nodiscard]] auto try_lock() noexcept -> bool;
+        [[nodiscard]] bool try_lock() noexcept;
 
         /// @brief Attempts to lock the spinlock within the specified timeout period.
         /// @param timeout_duration Maximum time to wait for the lock
         /// @return true if the lock was acquired, false if timeout occurred
         template <typename Rep, typename Period>
-        [[nodiscard]] auto try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration) noexcept -> bool;
+        [[nodiscard]] bool try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration) noexcept;
 
         /// @brief Unlocks the spinlock, allowing other threads to acquire it.
         /// Clears the atomic flag with release memory ordering.
-        auto unlock() noexcept -> void;
+        void unlock() noexcept;
 
     private:
         std::atomic_flag flag_{};

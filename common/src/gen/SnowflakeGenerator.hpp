@@ -48,13 +48,13 @@ namespace common::gen
 
         /// @brief Generate the next unique ID.
         /// @return The next unique ID.
-        [[nodiscard]] auto NextId() -> int64_t;
+        [[nodiscard]] int64_t NextId();
 
     private:
         /// @brief Updates the sequence number and timestamp for ID generation
         /// @param timestamp Reference to current timestamp
         /// @param last_timestamp Last timestamp used
-        auto UpdateSequenceAndTimestamp(int64_t& timestamp, int64_t last_timestamp) -> void;
+        void UpdateSequenceAndTimestamp(int64_t& timestamp, int64_t last_timestamp);
 
         /// @brief Generates the unique ID from timestamp, datacenter, machine, and sequence
         /// @param timestamp The timestamp component
@@ -62,16 +62,16 @@ namespace common::gen
         /// @param machine_id The machine ID component
         /// @param sequence The sequence number component
         /// @return Generated unique ID
-        [[nodiscard]] static auto GenerateUniqueId(int64_t timestamp, int16_t datacenter_id, int16_t machine_id, int64_t sequence) -> int64_t;
+        [[nodiscard]] static int64_t GenerateUniqueId(int64_t timestamp, int16_t datacenter_id, int16_t machine_id, int64_t sequence);
 
         /// @brief Get current timestamp in milliseconds.
         /// @return Current timestamp.
-        [[nodiscard]] static auto GetCurrentTimestamp() noexcept -> int64_t;
+        [[nodiscard]] static int64_t GetCurrentTimestamp() noexcept;
 
         /// @brief Wait until next millisecond when sequence number overflows.
         /// @param last_timestamp The last timestamp.
         /// @return The next valid timestamp.
-        [[nodiscard]] static auto TilNextMillis(int64_t last_timestamp) noexcept -> int64_t;
+        [[nodiscard]] static int64_t TilNextMillis(int64_t last_timestamp) noexcept;
 
         int64_t last_timestamp_{-1};
         int64_t sequence_{0};

@@ -28,40 +28,40 @@ namespace common::toolkit
         /// @param type_name The name to register the type under.
         /// @param args The arguments to forward to the constructor of V.
         template <typename V, typename... Args>
-        static auto registerType(const std::string& type_name, Args&&... args) -> void;
+        static void registerType(const std::string& type_name, Args&&... args);
 
         /// @brief Creates an object of the specified type.
         /// @param type_name The name of the type to create.
         /// @return A unique pointer to the created object.
         /// @throws std::runtime_error If the type name is not registered.
-        [[nodiscard]] static auto createObject(const std::string& type_name) -> std::unique_ptr<T>;
+        [[nodiscard]] static std::unique_ptr<T> createObject(const std::string& type_name);
 
         /// @brief Checks if a type is registered in the factory.
         /// @param type_name The name of the type to check.
         /// @return true if the type is registered, false otherwise.
-        [[nodiscard]] static auto isRegistered(const std::string& type_name) -> bool;
+        [[nodiscard]] static bool isRegistered(const std::string& type_name);
 
         /// @brief Executes the startup task.
         /// @return True if successful, false otherwise.
-        [[nodiscard]] auto execute() noexcept -> bool override;
+        [[nodiscard]] bool execute() noexcept override;
 
         /// @brief Clears all registered types from the factory.
-        static auto clearRegistry() -> void;
+        static void clearRegistry();
 
     private:
         /// @brief Registers all types with the factory.
-        virtual auto registerAll() -> void = 0;
+        virtual void registerAll() = 0;
 
         /// @brief Get the registry map (using Meyer's singleton to ensure initialization order)
-        static auto getRegistry() -> std::unordered_map<std::string, std::function<std::unique_ptr<T>()>>&;
+        static std::unordered_map<std::string, std::function<std::unique_ptr<T>()>>& getRegistry();
 
         /// @brief Get the mutex for the registry (using Meyer's singleton)
-        static auto getRegistryMutex() -> std::mutex&;
+        static std::mutex& getRegistryMutex();
     };
 
     template <typename T>
     template <typename V, typename... Args>
-    auto ObjectFactory<T>::registerType(const std::string& type_name, Args&&... args) -> void
+    void ObjectFactory<T>::registerType(const std::string& type_name, Args&&... args)
     {
         if (type_name.empty())
         {
@@ -79,7 +79,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ObjectFactory<T>::createObject(const std::string& type_name) -> std::unique_ptr<T>
+    std::unique_ptr<T> ObjectFactory<T>::createObject(const std::string& type_name)
     {
         if (type_name.empty())
         {
@@ -96,7 +96,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ObjectFactory<T>::isRegistered(const std::string& type_name) -> bool
+    bool ObjectFactory<T>::isRegistered(const std::string& type_name)
     {
         if (type_name.empty())
         {
@@ -108,7 +108,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ObjectFactory<T>::execute() noexcept -> bool
+    bool ObjectFactory<T>::execute() noexcept
     {
         try
         {
@@ -123,21 +123,21 @@ namespace common::toolkit
     }
 
     template <typename T>
-    auto ObjectFactory<T>::clearRegistry() -> void
+    void ObjectFactory<T>::clearRegistry()
     {
         std::lock_guard<std::mutex> lock(getRegistryMutex());
         getRegistry().clear();
     }
 
     template <typename T>
-    auto ObjectFactory<T>::getRegistry() -> std::unordered_map<std::string, std::function<std::unique_ptr<T>()>>&
+    std::unordered_map<std::string, std::function<std::unique_ptr<T>()>>& ObjectFactory<T>::getRegistry()
     {
         static std::unordered_map<std::string, std::function<std::unique_ptr<T>()>> registry{};
         return registry;
     }
 
     template <typename T>
-    auto ObjectFactory<T>::getRegistryMutex() -> std::mutex&
+    std::mutex& ObjectFactory<T>::getRegistryMutex()
     {
         static std::mutex registryMutex{};
         return registryMutex;

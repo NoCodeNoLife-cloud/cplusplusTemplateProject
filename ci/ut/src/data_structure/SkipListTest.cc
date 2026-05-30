@@ -9,9 +9,8 @@
 #include "data_structure/SkipList.hpp"
 #include <string>
 #include <vector>
-#include <algorithm>
 
-using namespace common::common::data_structure::tree;
+using namespace common::data_structure;
 
 /**
  * @brief Test default constructor

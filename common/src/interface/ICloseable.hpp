@@ -24,21 +24,21 @@ namespace common::interfaces
         /// After calling this method, the resource should no longer be usable.
         /// Implementations should be idempotent - calling close multiple times should
         /// have the same effect as calling it once.
-        virtual auto close() -> void = 0;
+        virtual void close() = 0;
 
         /// @brief Check if the resource is closed.
         /// This method returns the current state of the resource.
         /// @return true if the resource is closed, false otherwise
-        [[nodiscard]] virtual auto isClosed() const -> bool = 0;
+        [[nodiscard]] virtual bool isClosed() const = 0;
 
         /// @brief Close the resource with exception handling.
         /// This method attempts to close the resource and handles any exceptions that may occur.
         /// If an exception occurs during closing, it will be caught and the method will return false.
         /// @return true if the resource was successfully closed, false otherwise
-        [[nodiscard]] virtual auto closeSafe() noexcept -> bool;
+        [[nodiscard]] virtual bool closeSafe() noexcept;
     };
 
-    inline auto ICloseable::closeSafe() noexcept -> bool
+    inline bool ICloseable::closeSafe() noexcept
     {
         try
         {

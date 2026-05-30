@@ -19,6 +19,6 @@ namespace common::interfaces
         virtual ~ITimerTask() = default;
 
         /// @brief Executes the timer task.
-        virtual auto execute() -> void = 0;
+        virtual void execute() = 0;
     };
 }

@@ -14,7 +14,7 @@ namespace common::filesystem
     {
     }
 
-    auto ShortBuffer::wrap(const int16_t* data, const size_t size) -> ShortBuffer
+    ShortBuffer ShortBuffer::wrap(const int16_t* data, const size_t size)
     {
         ShortBuffer sb(size);
         if (data != nullptr && size > 0)
@@ -24,7 +24,7 @@ namespace common::filesystem
         return sb;
     }
 
-    auto ShortBuffer::get() -> int16_t
+    int16_t ShortBuffer::get()
     {
         if (!hasRemaining())
         {
@@ -33,7 +33,7 @@ namespace common::filesystem
         return buffer_[position_++];
     }
 
-    auto ShortBuffer::get(const size_t index) const -> int16_t
+    int16_t ShortBuffer::get(const size_t index) const
     {
         if (index >= limit_)
         {
@@ -42,7 +42,7 @@ namespace common::filesystem
         return buffer_[index];
     }
 
-    auto ShortBuffer::put(const int16_t value) -> void
+    void ShortBuffer::put(const int16_t value)
     {
         if (!hasRemaining())
         {
@@ -51,7 +51,7 @@ namespace common::filesystem
         buffer_[position_++] = value;
     }
 
-    auto ShortBuffer::put(const size_t index, const int16_t value) -> void
+    void ShortBuffer::put(const size_t index, const int16_t value)
     {
         if (index >= limit_)
         {
@@ -60,22 +60,22 @@ namespace common::filesystem
         buffer_[index] = value;
     }
 
-    auto ShortBuffer::hasRemaining() const noexcept -> bool
+    bool ShortBuffer::hasRemaining() const noexcept
     {
         return position_ < limit_;
     }
 
-    auto ShortBuffer::remaining() const noexcept -> size_t
+    size_t ShortBuffer::remaining() const noexcept
     {
         return limit_ - position_;
     }
 
-    auto ShortBuffer::position() const noexcept -> size_t
+    size_t ShortBuffer::position() const noexcept
     {
         return position_;
     }
 
-    auto ShortBuffer::position(const size_t newPosition) -> void
+    void ShortBuffer::position(const size_t newPosition)
     {
         if (newPosition > limit_)
         {
@@ -84,12 +84,12 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    auto ShortBuffer::limit() const noexcept -> size_t
+    size_t ShortBuffer::limit() const noexcept
     {
         return limit_;
     }
 
-    auto ShortBuffer::limit(const size_t newLimit) -> void
+    void ShortBuffer::limit(const size_t newLimit)
     {
         if (newLimit > capacity_)
         {
@@ -102,34 +102,34 @@ namespace common::filesystem
         }
     }
 
-    auto ShortBuffer::capacity() const noexcept -> size_t
+    size_t ShortBuffer::capacity() const noexcept
     {
         return capacity_;
     }
 
-    auto ShortBuffer::clear() noexcept -> void
+    void ShortBuffer::clear() noexcept
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    auto ShortBuffer::flip() noexcept -> void
+    void ShortBuffer::flip() noexcept
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    auto ShortBuffer::rewind() noexcept -> void
+    void ShortBuffer::rewind() noexcept
     {
         position_ = 0;
     }
 
-    auto ShortBuffer::data() -> int16_t*
+    int16_t* ShortBuffer::data()
     {
         return buffer_.data();
     }
 
-    auto ShortBuffer::data() const -> const int16_t*
+    const int16_t* ShortBuffer::data() const
     {
         return buffer_.data();
     }

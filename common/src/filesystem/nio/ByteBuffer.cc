@@ -17,17 +17,17 @@ namespace common::filesystem
         limit_ = capacity;
     }
 
-    auto ByteBuffer::capacity() const noexcept -> size_t
+    size_t ByteBuffer::capacity() const noexcept
     {
         return capacity_;
     }
 
-    auto ByteBuffer::position() const noexcept -> size_t
+    size_t ByteBuffer::position() const noexcept
     {
         return position_;
     }
 
-    auto ByteBuffer::position(const size_t newPosition) -> void
+    void ByteBuffer::position(const size_t newPosition)
     {
         if (newPosition > limit_)
         {
@@ -37,12 +37,12 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    auto ByteBuffer::limit() const noexcept -> size_t
+    size_t ByteBuffer::limit() const noexcept
     {
         return limit_;
     }
 
-    auto ByteBuffer::limit(const size_t newLimit) -> void
+    void ByteBuffer::limit(const size_t newLimit)
     {
         if (newLimit > capacity_)
         {
@@ -56,34 +56,34 @@ namespace common::filesystem
         }
     }
 
-    auto ByteBuffer::clear() noexcept -> void
+    void ByteBuffer::clear() noexcept
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    auto ByteBuffer::flip() noexcept -> void
+    void ByteBuffer::flip() noexcept
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    auto ByteBuffer::rewind() noexcept -> void
+    void ByteBuffer::rewind() noexcept
     {
         position_ = 0;
     }
 
-    auto ByteBuffer::remaining() const noexcept -> size_t
+    size_t ByteBuffer::remaining() const noexcept
     {
         return limit_ - position_;
     }
 
-    auto ByteBuffer::hasRemaining() const noexcept -> bool
+    bool ByteBuffer::hasRemaining() const noexcept
     {
         return position_ < limit_;
     }
 
-    auto ByteBuffer::put(const std::byte value) -> void
+    void ByteBuffer::put(const std::byte value)
     {
         if (!hasRemaining())
         {
@@ -93,7 +93,7 @@ namespace common::filesystem
         buffer_[position_++] = value;
     }
 
-    auto ByteBuffer::put(const std::vector<std::byte>& src) -> void
+    void ByteBuffer::put(const std::vector<std::byte>& src)
     {
         if (src.empty())
         {
@@ -109,7 +109,7 @@ namespace common::filesystem
         position_ += src.size();
     }
 
-    auto ByteBuffer::get() -> std::byte
+    std::byte ByteBuffer::get()
     {
         if (!hasRemaining())
         {
@@ -119,7 +119,7 @@ namespace common::filesystem
         return buffer_[position_++];
     }
 
-    auto ByteBuffer::get(const size_t length) -> std::vector<std::byte>
+    std::vector<std::byte> ByteBuffer::get(const size_t length)
     {
         if (length == 0)
         {

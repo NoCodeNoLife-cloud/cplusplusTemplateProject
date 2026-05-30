@@ -19,6 +19,6 @@ namespace common::interfaces
 
         /// @brief Pure virtual function to run the task
         /// @details This function must be implemented by derived classes
-        virtual auto run() -> void = 0;
+        virtual void run() = 0;
     };
 }

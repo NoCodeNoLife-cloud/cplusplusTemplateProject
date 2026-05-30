@@ -23,51 +23,51 @@ namespace common::filesystem
         /// @brief Get the current value from the buffer and advance the position
         /// @return The current value
         /// @throws std::out_of_range If no remaining elements to get
-        [[nodiscard]] auto get() -> int64_t;
+        [[nodiscard]] int64_t get();
 
         /// @brief Put a value into the buffer and advance the position
         /// @param value The value to put
         /// @throws std::out_of_range If no remaining space to put
-        auto put(int64_t value) -> void;
+        void put(int64_t value);
 
         /// @brief Check if there are remaining elements in the buffer
         /// @return True if there are remaining elements, false otherwise
-        [[nodiscard]] auto hasRemaining() const noexcept -> bool override;
+        [[nodiscard]] bool hasRemaining() const noexcept override;
 
         /// @brief Get the number of remaining elements in the buffer
         /// @return Number of remaining elements
-        [[nodiscard]] auto remaining() const noexcept -> std::size_t override;
+        [[nodiscard]] std::size_t remaining() const noexcept override;
 
         /// @brief Get the current position in the buffer
         /// @return The current position
-        [[nodiscard]] auto position() const noexcept -> std::size_t override;
+        [[nodiscard]] std::size_t position() const noexcept override;
 
         /// @brief Set the position in the buffer
         /// @param newPosition The new position to set
         /// @throws std::out_of_range If the new position is out of range
-        auto position(std::size_t newPosition) -> void override;
+        void position(std::size_t newPosition) override;
 
         /// @brief Get the limit of the buffer
         /// @return The current limit
-        [[nodiscard]] auto limit() const noexcept -> std::size_t override;
+        [[nodiscard]] std::size_t limit() const noexcept override;
 
         /// @brief Set the limit of the buffer
         /// @param newLimit The new limit to set
         /// @throws std::out_of_range If the new limit is out of range
-        auto limit(std::size_t newLimit) -> void override;
+        void limit(std::size_t newLimit) override;
 
         /// @brief Get the capacity of the buffer
         /// @return The capacity
-        [[nodiscard]] auto capacity() const noexcept -> std::size_t override;
+        [[nodiscard]] std::size_t capacity() const noexcept override;
 
         /// @brief Reset the buffer position to zero and set limit to capacity
-        auto clear() noexcept -> void override;
+        void clear() noexcept override;
 
         /// @brief Flip the buffer (limit = position, position = 0)
-        auto flip() noexcept -> void override;
+        void flip() noexcept override;
 
         /// @brief Reset the buffer position to zero
-        auto rewind() noexcept -> void override;
+        void rewind() noexcept override;
 
     private:
         std::vector<int64_t> buffer_{};

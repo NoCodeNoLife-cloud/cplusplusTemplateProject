@@ -7,7 +7,6 @@
 #include <gtest/gtest.h>
 #include "time/Date.hpp"
 #include <chrono>
-#include <thread>
 #include <stdexcept>
 
 using namespace common::time;

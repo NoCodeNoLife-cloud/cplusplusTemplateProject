@@ -12,7 +12,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <cstdint>
 #include <functional>
 #include <ctime>
 #include <glog/logging.h>
@@ -22,13 +21,13 @@ namespace common::time
     namespace
     {
         // Helper function to check if a year is a leap year
-        auto isLeapYear(const int32_t year) -> bool
+        bool isLeapYear(const int32_t year)
         {
             return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
         }
 
         // Helper function to get days in a month
-        auto getDaysInMonth(const int32_t year, const int32_t month) -> int32_t
+        int32_t getDaysInMonth(const int32_t year, const int32_t month)
         {
             static const int32_t daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
             int32_t days = daysInMonth[month];
@@ -41,7 +40,7 @@ namespace common::time
         }
     }
 
-    auto Date::isValidDate(const int32_t year, const int32_t month, const int32_t day, const int32_t hours, const int32_t minutes, const int32_t seconds) -> bool
+    bool Date::isValidDate(const int32_t year, const int32_t month, const int32_t day, const int32_t hours, const int32_t minutes, const int32_t seconds)
     {
         if (month < 1 || month > 12)
         {
@@ -128,62 +127,62 @@ namespace common::time
     {
     }
 
-    auto Date::clone() const -> Date
+    Date Date::clone() const
     {
         return Date(getTime());
     }
 
-    auto Date::equals(const Date& other) const noexcept -> bool
+    bool Date::equals(const Date& other) const noexcept
     {
         return time_point_ == other.time_point_;
     }
 
-    auto Date::after(const Date& other) const noexcept -> bool
+    bool Date::after(const Date& other) const noexcept
     {
         return time_point_ > other.time_point_;
     }
 
-    auto Date::before(const Date& other) const noexcept -> bool
+    bool Date::before(const Date& other) const noexcept
     {
         return time_point_ < other.time_point_;
     }
 
-    auto Date::getTime() const noexcept -> int64_t
+    int64_t Date::getTime() const noexcept
     {
         return std::chrono::duration_cast<std::chrono::milliseconds>(time_point_.time_since_epoch()).count();
     }
 
-    auto Date::getYear() const -> int32_t
+    int32_t Date::getYear() const
     {
         return toTm().tm_year + 1900;
     }
 
-    auto Date::getMonth() const -> int32_t
+    int32_t Date::getMonth() const
     {
         return toTm().tm_mon + 1;
     }
 
-    auto Date::getDay() const -> int32_t
+    int32_t Date::getDay() const
     {
         return toTm().tm_mday;
     }
 
-    auto Date::getHours() const -> int32_t
+    int32_t Date::getHours() const
     {
         return toTm().tm_hour;
     }
 
-    auto Date::getMinutes() const -> int32_t
+    int32_t Date::getMinutes() const
     {
         return toTm().tm_min;
     }
 
-    auto Date::getSeconds() const -> int32_t
+    int32_t Date::getSeconds() const
     {
         return toTm().tm_sec;
     }
 
-    auto Date::toString() const -> std::string
+    std::string Date::toString() const
     {
         const auto tm = toTm();
         std::ostringstream oss;
@@ -192,12 +191,12 @@ namespace common::time
         return result;
     }
 
-    auto Date::hashCode() const noexcept -> size_t
+    size_t Date::hashCode() const noexcept
     {
         return std::hash<int64_t>{}(getTime());
     }
 
-    auto Date::toTm() const -> std::tm
+    std::tm Date::toTm() const
     {
         const auto timeT = std::chrono::system_clock::to_time_t(time_point_);
         std::tm tm = {};

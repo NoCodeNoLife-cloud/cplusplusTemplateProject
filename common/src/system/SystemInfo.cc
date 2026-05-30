@@ -17,7 +17,7 @@ namespace common::system
     namespace
     {
         // Helper function to convert wide string to UTF-8 string
-        auto WideToUtf8(const wchar_t* wideStr) -> std::string
+        std::string WideToUtf8(const wchar_t* wideStr)
         {
             if (!wideStr) return "";
             const int32_t len = WideCharToMultiByte(CP_UTF8, 0, wideStr, -1, nullptr, 0, nullptr, nullptr);
@@ -28,7 +28,7 @@ namespace common::system
         }
     }
 
-    auto SystemInfo::ReadRegistryStringValue(HKEY__* const hKeyRoot, const wchar_t* subKey, const wchar_t* valueName) noexcept -> std::string
+    std::string SystemInfo::ReadRegistryStringValue(HKEY__* const hKeyRoot, const wchar_t* subKey, const wchar_t* valueName) noexcept
     {
         HKEY hKey;
         if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
@@ -51,7 +51,7 @@ namespace common::system
         return {}; // Return empty string if failed
     }
 
-    auto SystemInfo::EnumerateRegistryValues(HKEY__* const hKeyRoot, const wchar_t* subKey) noexcept -> std::vector<std::string>
+    std::vector<std::string> SystemInfo::EnumerateRegistryValues(HKEY__* const hKeyRoot, const wchar_t* subKey) noexcept
     {
         std::vector<std::string> values;
         HKEY hKey;
@@ -83,20 +83,20 @@ namespace common::system
         return values;
     }
 
-    auto SystemInfo::GetCpuModelFromRegistry() noexcept -> std::string
+    std::string SystemInfo::GetCpuModelFromRegistry() noexcept
     {
         const std::string cpuModel = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", L"ProcessorNameString");
         const std::string result = cpuModel.empty() ? "Unknown CPU Model" : cpuModel;
         return result;
     }
 
-    auto SystemInfo::GetMemoryDetails() noexcept -> std::string
+    std::string SystemInfo::GetMemoryDetails() noexcept
     {
         const std::string result = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E965-E325-11CE-BFC1-08002BE10318}", L"DeviceDesc");
         return result.empty() ? "Memory details not available" : result;
     }
 
-    auto SystemInfo::GetOSVersion() noexcept -> std::string
+    std::string SystemInfo::GetOSVersion() noexcept
     {
         std::string result = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", L"ProductName");
 
@@ -115,7 +115,7 @@ namespace common::system
         return finalResult;
     }
 
-    auto SystemInfo::GetMotherboardInfo() noexcept -> MotherboardInfo
+    MotherboardInfo SystemInfo::GetMotherboardInfo() noexcept
     {
         MotherboardInfo info{};
 
@@ -134,7 +134,7 @@ namespace common::system
         return info;
     }
 
-    auto SystemInfo::GetGraphicsCardInfo() noexcept -> std::string
+    std::string SystemInfo::GetGraphicsCardInfo() noexcept
     {
         // Open the graphics drivers devices key
         HKEY hKey;
@@ -171,12 +171,12 @@ namespace common::system
         return "Graphics card information not available";
     }
 
-    auto SystemInfo::GetDiskDriveInfo() noexcept -> std::vector<std::string>
+    std::vector<std::string> SystemInfo::GetDiskDriveInfo() noexcept
     {
         return EnumerateRegistryValues(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum");
     }
 
-    auto SystemInfo::GetBIOSInfo() noexcept -> std::vector<std::string>
+    std::vector<std::string> SystemInfo::GetBIOSInfo() noexcept
     {
         std::vector<std::string> adapters;
         HKEY hKey;

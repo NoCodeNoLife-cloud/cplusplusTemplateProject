@@ -16,81 +16,81 @@ namespace common::graphics
     {
     }
 
-    auto Point2D::getX() const noexcept -> double
+    double Point2D::getX() const noexcept
     {
         return x_;
     }
 
-    auto Point2D::getY() const noexcept -> double
+    double Point2D::getY() const noexcept
     {
         return y_;
     }
 
-    auto Point2D::setX(const double x) noexcept -> void
+    void Point2D::setX(const double x) noexcept
     {
         x_ = x;
     }
 
-    auto Point2D::setY(const double y) noexcept -> void
+    void Point2D::setY(const double y) noexcept
     {
         y_ = y;
     }
 
-    auto Point2D::operator+=(const Point2D& other) noexcept -> Point2D&
+    Point2D& Point2D::operator+=(const Point2D& other) noexcept
     {
         x_ += other.x_;
         y_ += other.y_;
         return *this;
     }
 
-    auto Point2D::operator-=(const Point2D& other) noexcept -> Point2D&
+    Point2D& Point2D::operator-=(const Point2D& other) noexcept
     {
         x_ -= other.x_;
         y_ -= other.y_;
         return *this;
     }
 
-    auto Point2D::operator-() const noexcept -> Point2D
+    Point2D Point2D::operator-() const noexcept
     {
         return {-x_, -y_};
     }
 
-    auto Point2D::distanceTo(const Point2D& other) const noexcept -> double
+    double Point2D::distanceTo(const Point2D& other) const noexcept
     {
         return std::sqrt(distanceSquaredTo(other));
     }
 
-    auto Point2D::distanceSquaredTo(const Point2D& other) const noexcept -> double
+    double Point2D::distanceSquaredTo(const Point2D& other) const noexcept
     {
         const double dx = x_ - other.x_;
         const double dy = y_ - other.y_;
         return dx * dx + dy * dy;
     }
 
-    auto operator+(Point2D lhs, const Point2D& rhs) noexcept -> Point2D
+    Point2D operator+(Point2D lhs, const Point2D& rhs) noexcept
     {
         lhs += rhs;
         return lhs;
     }
 
-    auto operator-(Point2D lhs, const Point2D& rhs) noexcept -> Point2D
+    Point2D operator-(Point2D lhs, const Point2D& rhs) noexcept
     {
         lhs -= rhs;
         return lhs;
     }
 
-    auto operator==(const Point2D& lhs, const Point2D& rhs) noexcept -> bool
+    bool operator==(const Point2D& lhs, const Point2D& rhs) noexcept
     {
         constexpr double epsilon = 1e-9;
         return std::abs(lhs.getX() - rhs.getX()) < epsilon && std::abs(lhs.getY() - rhs.getY()) < epsilon;
     }
 
-    auto operator!=(const Point2D& lhs, const Point2D& rhs) noexcept -> bool
+    bool operator!=(const Point2D& lhs, const Point2D& rhs) noexcept
     {
         return !(lhs == rhs);
     }
 
-    auto operator<<(std::ostream& os, const Point2D& point) -> std::ostream&
+    std::ostream& operator<<(std::ostream& os, const Point2D& point)
     {
         os << "(" << point.getX() << ", " << point.getY() << ")";
         return os;

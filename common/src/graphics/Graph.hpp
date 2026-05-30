@@ -29,21 +29,21 @@ namespace common::graphics
         /// @param to Destination node
         /// @param weight Edge weight
         /// @throws std::out_of_range If node indices are out of valid range
-        auto addEdge(int32_t from, int32_t to, int32_t weight) -> void;
+        void addEdge(int32_t from, int32_t to, int32_t weight);
 
         /// @brief Get adjacency list of a node
         /// @param node Node index
         /// @return Reference to adjacency list
         /// @throws std::out_of_range If node index is out of valid range
-        [[nodiscard]] auto getAdjList(int32_t node) const -> const std::vector<Edge>&;
+        [[nodiscard]] const std::vector<Edge>& getAdjList(int32_t node) const;
 
         /// @brief Get number of nodes
         /// @return Number of nodes
-        [[nodiscard]] auto getNodeCount() const noexcept -> int32_t;
+        [[nodiscard]] int32_t getNodeCount() const noexcept;
 
         /// @brief Check if the graph is empty
         /// @return True if the graph has no nodes
-        [[nodiscard]] auto isEmpty() const noexcept -> bool;
+        [[nodiscard]] bool isEmpty() const noexcept;
 
     private:
         int32_t num_nodes_{0};

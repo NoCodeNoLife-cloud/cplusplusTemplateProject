@@ -27,19 +27,19 @@ namespace common::filesystem
         }
     }
 
-    auto CsvFile::getRowCount() const noexcept -> uint64_t
+    uint64_t CsvFile::getRowCount() const noexcept
     {
         if (!is_valid_) return 0;
         return csv_doc_.GetRowCount();
     }
 
-    auto CsvFile::getColumnCount() const noexcept -> uint64_t
+    uint64_t CsvFile::getColumnCount() const noexcept
     {
         if (!is_valid_) return 0;
         return csv_doc_.GetColumnCount();
     }
 
-    auto CsvFile::insertRow(const uint64_t insertIndex, const std::vector<std::string>& item) noexcept -> bool
+    bool CsvFile::insertRow(const uint64_t insertIndex, const std::vector<std::string>& item) noexcept
     {
         if (!is_valid_) return false;
         if (insertIndex > getRowCount())
@@ -61,12 +61,12 @@ namespace common::filesystem
         }
     }
 
-    auto CsvFile::pushBack(const std::vector<std::string>& item) noexcept -> bool
+    bool CsvFile::pushBack(const std::vector<std::string>& item) noexcept
     {
         return insertRow(getRowCount(), item);
     }
 
-    auto CsvFile::save(const std::string& path) noexcept -> bool
+    bool CsvFile::save(const std::string& path) noexcept
     {
         if (!is_valid_) return false;
         try

@@ -10,7 +10,6 @@
 #include <chrono>
 #include <mutex>
 #include <stdexcept>
-#include <cstdint>
 #include <glog/logging.h>
 
 namespace common::gen
@@ -31,7 +30,7 @@ namespace common::gen
         datacenter_id_ = datacenter_id;
     }
 
-    auto SnowflakeGenerator::NextId() -> int64_t
+    int64_t SnowflakeGenerator::NextId()
     {
         std::lock_guard lock(mutex_);
         int64_t timestamp = GetCurrentTimestamp();
@@ -53,7 +52,7 @@ namespace common::gen
         return uniqueId;
     }
 
-    auto SnowflakeGenerator::GetCurrentTimestamp() noexcept -> int64_t
+    int64_t SnowflakeGenerator::GetCurrentTimestamp() noexcept
     {
         const auto now = std::chrono::system_clock::now();
         const auto duration = now.time_since_epoch();
@@ -61,7 +60,7 @@ namespace common::gen
         return timestamp - SnowflakeOption::TWEPOCH;
     }
 
-    auto SnowflakeGenerator::TilNextMillis(const int64_t last_timestamp) noexcept -> int64_t
+    int64_t SnowflakeGenerator::TilNextMillis(const int64_t last_timestamp) noexcept
     {
         int64_t timestamp = GetCurrentTimestamp();
         while (timestamp <= last_timestamp)
@@ -71,7 +70,7 @@ namespace common::gen
         return timestamp;
     }
 
-    auto SnowflakeGenerator::UpdateSequenceAndTimestamp(int64_t& timestamp, const int64_t last_timestamp) -> void
+    void SnowflakeGenerator::UpdateSequenceAndTimestamp(int64_t& timestamp, const int64_t last_timestamp)
     {
         if (timestamp == last_timestamp)
         {
@@ -87,7 +86,7 @@ namespace common::gen
         }
     }
 
-    auto SnowflakeGenerator::GenerateUniqueId(const int64_t timestamp, const int16_t datacenter_id, const int16_t machine_id, const int64_t sequence) -> int64_t
+    int64_t SnowflakeGenerator::GenerateUniqueId(const int64_t timestamp, const int16_t datacenter_id, const int16_t machine_id, const int64_t sequence)
     {
         return timestamp << (static_cast<int64_t>(SnowflakeOption::machine_bits_) + static_cast<int64_t>(SnowflakeOption::sequence_bits_)) | static_cast<int64_t>(datacenter_id << 5 | machine_id) << static_cast<int64_t>(SnowflakeOption::sequence_bits_) | sequence;
     }

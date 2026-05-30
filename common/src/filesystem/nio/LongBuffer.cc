@@ -15,7 +15,7 @@ namespace common::filesystem
         buffer_.resize(capacity);
     }
 
-    auto LongBuffer::get() -> int64_t
+    int64_t LongBuffer::get()
     {
         if (!hasRemaining())
         {
@@ -24,7 +24,7 @@ namespace common::filesystem
         return buffer_[position_++];
     }
 
-    auto LongBuffer::put(const int64_t value) -> void
+    void LongBuffer::put(const int64_t value)
     {
         if (!hasRemaining())
         {
@@ -33,22 +33,22 @@ namespace common::filesystem
         buffer_[position_++] = value;
     }
 
-    auto LongBuffer::hasRemaining() const noexcept -> bool
+    bool LongBuffer::hasRemaining() const noexcept
     {
         return position_ < limit_;
     }
 
-    auto LongBuffer::remaining() const noexcept -> std::size_t
+    std::size_t LongBuffer::remaining() const noexcept
     {
         return limit_ - position_;
     }
 
-    auto LongBuffer::position() const noexcept -> std::size_t
+    std::size_t LongBuffer::position() const noexcept
     {
         return position_;
     }
 
-    auto LongBuffer::position(const std::size_t newPosition) -> void
+    void LongBuffer::position(const std::size_t newPosition)
     {
         if (newPosition > limit_)
         {
@@ -57,12 +57,12 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    auto LongBuffer::limit() const noexcept -> std::size_t
+    std::size_t LongBuffer::limit() const noexcept
     {
         return limit_;
     }
 
-    auto LongBuffer::limit(const std::size_t newLimit) -> void
+    void LongBuffer::limit(const std::size_t newLimit)
     {
         if (newLimit > capacity_)
         {
@@ -75,24 +75,24 @@ namespace common::filesystem
         }
     }
 
-    auto LongBuffer::capacity() const noexcept -> std::size_t
+    std::size_t LongBuffer::capacity() const noexcept
     {
         return capacity_;
     }
 
-    auto LongBuffer::clear() noexcept -> void
+    void LongBuffer::clear() noexcept
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    auto LongBuffer::flip() noexcept -> void
+    void LongBuffer::flip() noexcept
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    auto LongBuffer::rewind() noexcept -> void
+    void LongBuffer::rewind() noexcept
     {
         position_ = 0;
     }

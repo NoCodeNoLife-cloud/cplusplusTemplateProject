@@ -1,12 +1,11 @@
 /**
- * @file UuidGenerator.cc
+* @file UuidGenerator.cc
  * @brief UuidGenerator class implementation
  * @details This file contains the implementation of the UuidGenerator class methods for Random number and ID generation utilities.
  */
 
 #include "src/gen/UuidGenerator.hpp"
 
-#include <fmt/format.h>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -15,7 +14,7 @@
 namespace common::gen
 {
     // ReSharper disable once CppDFAConstantFunctionResult
-    auto UuidGenerator::GenerateRandomUuid() noexcept -> std::string
+    std::string UuidGenerator::GenerateRandomUuid() noexcept
     {
         static auto generator = boost::uuids::random_generator();
         const auto uuid = generator();

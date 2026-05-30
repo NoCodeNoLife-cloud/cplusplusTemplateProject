@@ -16,7 +16,7 @@
 namespace common::time
 {
     // Helper function to format time using strftime in a thread-safe way
-    static auto formatTime(std::time_t time, const std::string& format) -> std::string
+    static std::string formatTime(std::time_t time, const std::string& format)
     {
         std::tm tm_time{};
 #ifdef _WIN32
@@ -29,7 +29,7 @@ namespace common::time
         return oss.str();
     }
 
-    auto Clock::getCurrentDateTimeString() noexcept -> std::string
+    std::string Clock::getCurrentDateTimeString() noexcept
     {
         const auto now = std::chrono::system_clock::now();
         const auto time_t = std::chrono::system_clock::to_time_t(now);
@@ -37,7 +37,7 @@ namespace common::time
         return result;
     }
 
-    auto Clock::getCompressedCurrentDateTimeString() noexcept -> std::string
+    std::string Clock::getCompressedCurrentDateTimeString() noexcept
     {
         const auto now = std::chrono::system_clock::now();
         const auto time_t = std::chrono::system_clock::to_time_t(now);
@@ -45,21 +45,21 @@ namespace common::time
         return result;
     }
 
-    auto Clock::getCurrentTimestampMs() noexcept -> std::chrono::milliseconds::rep
+    std::chrono::milliseconds::rep Clock::getCurrentTimestampMs() noexcept
     {
         const auto now = std::chrono::system_clock::now();
         const auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
         return timestamp;
     }
 
-    auto Clock::getCurrentTimestamp() noexcept -> std::chrono::seconds::rep
+    std::chrono::seconds::rep Clock::getCurrentTimestamp() noexcept
     {
         const auto now = std::chrono::system_clock::now();
         const auto timestamp = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
         return timestamp;
     }
 
-    auto Clock::formatCurrentTime(const std::string& format) -> std::string
+    std::string Clock::formatCurrentTime(const std::string& format)
     {
         const auto now = std::chrono::system_clock::now();
         const auto time_t = std::chrono::system_clock::to_time_t(now);

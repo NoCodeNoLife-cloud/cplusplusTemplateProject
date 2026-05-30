@@ -19,7 +19,7 @@ namespace common::interfaces
         /// @brief Public interface for configuring the service.
         /// @return true if configuration is successful, false otherwise.
         /// @throws std::runtime_error if configuration fails with details about the failure
-        [[nodiscard]] auto config() -> bool
+        [[nodiscard]] bool config()
         {
             return doConfig();
         }
@@ -28,6 +28,6 @@ namespace common::interfaces
         /// @brief Configure the service.
         /// @return true if configuration is successful, false otherwise.
         /// @throws std::runtime_error if configuration fails with details about the failure
-        [[nodiscard]] virtual auto doConfig() -> bool = 0;
+        [[nodiscard]] virtual bool doConfig() = 0;
     };
 }

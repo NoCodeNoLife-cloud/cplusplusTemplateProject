@@ -6,7 +6,6 @@
 
 #pragma once
 #include <format>
-#include <typeinfo>
 #include <memory>
 #include <string>
 

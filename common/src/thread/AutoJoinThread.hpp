@@ -44,22 +44,22 @@ namespace common::thread
         ~AutoJoinThread();
 
         /// @brief Detaches the thread from the object
-        auto detach() -> void;
+        void detach();
 
         /// @brief Joins the thread with the calling thread
-        auto join() -> void;
+        void join();
 
         /// @brief Checks if the thread is joinable
         /// @return true if the thread is joinable, false otherwise
-        [[nodiscard]] auto joinable() const noexcept -> bool;
+        [[nodiscard]] bool joinable() const noexcept;
 
         /// @brief Swaps this thread with another AutoJoinThread object
         /// @param other The other AutoJoinThread object to swap with
-        auto swap(AutoJoinThread& other) noexcept -> void;
+        void swap(AutoJoinThread& other) noexcept;
 
         /// @brief Gets the native handle of the underlying thread
         /// @return The native handle of the thread
-        [[nodiscard]] auto native_handle() -> std::thread::native_handle_type;
+        [[nodiscard]] std::thread::native_handle_type native_handle();
 
     private:
         std::thread thread_; ///< The underlying thread object

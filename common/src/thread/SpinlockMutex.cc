@@ -17,7 +17,7 @@ namespace common::thread
     namespace
     {
         // Helper function to convert thread::id to string
-        auto getThreadIdString() -> std::string
+        std::string getThreadIdString()
         {
             std::ostringstream oss;
             oss << std::this_thread::get_id();
@@ -25,7 +25,7 @@ namespace common::thread
         }
     }
 
-    auto SpinlockMutex::lock() noexcept -> void
+    void SpinlockMutex::lock() noexcept
     {
         // Use exponential backoff to reduce contention
         int spin_count = 0;
@@ -47,14 +47,14 @@ namespace common::thread
         }
     }
 
-    auto SpinlockMutex::try_lock() noexcept -> bool
+    bool SpinlockMutex::try_lock() noexcept
     {
         // Attempt to acquire the lock without blocking
         return !flag_.test_and_set(std::memory_order_acquire);
     }
 
     template <typename Rep, typename Period>
-    auto SpinlockMutex::try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration) noexcept -> bool
+    bool SpinlockMutex::try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration) noexcept
     {
         auto start_time = std::chrono::high_resolution_clock::now();
         auto end_time = start_time + timeout_duration;
@@ -80,15 +80,15 @@ namespace common::thread
         return false;
     }
 
-    auto SpinlockMutex::unlock() noexcept -> void
+    void SpinlockMutex::unlock() noexcept
     {
         flag_.clear(std::memory_order_release);
     }
 
     // Explicitly instantiate the template method for common duration types
-    template auto SpinlockMutex::try_lock_for<>(const std::chrono::duration<int64_t, std::milli>&) noexcept -> bool;
+    template bool SpinlockMutex::try_lock_for<>(const std::chrono::duration<int64_t, std::milli>&) noexcept;
 
-    template auto SpinlockMutex::try_lock_for<>(const std::chrono::duration<int64_t, std::nano>&) noexcept -> bool;
+    template bool SpinlockMutex::try_lock_for<>(const std::chrono::duration<int64_t, std::nano>&) noexcept;
 
-    template auto SpinlockMutex::try_lock_for<>(const std::chrono::duration<double, std::milli>&) noexcept -> bool;
+    template bool SpinlockMutex::try_lock_for<>(const std::chrono::duration<double, std::milli>&) noexcept;
 }

@@ -26,28 +26,28 @@ namespace common::time
 
         /// @brief Records the start time of the function execution.
         /// @details Captures the current time as the start time for profiling.
-        auto recordStart() -> void;
+        void recordStart();
 
         /// @brief Records the end time of the function execution.
         /// @details Captures the current time as the end time for profiling.
-        auto recordEnd() -> void;
+        void recordEnd();
 
         /// @brief Gets the runtime as a formatted string.
         /// @details Calculates the duration between start and end times and returns it as a human-readable string.
         /// @return Formatted string with execution time (e.g., "functionName finished in 0.123 s (123.456 ms)").
         /// @throws std::runtime_error If timing data is incomplete.
-        [[nodiscard]] auto getRunTime() const -> std::string;
+        [[nodiscard]] std::string getRunTime() const;
 
         /// @brief Gets the runtime duration in milliseconds.
         /// @details Calculates the duration between start and end times.
         /// @return The duration in milliseconds as a double.
         /// @throws std::runtime_error If timing data is incomplete.
-        [[nodiscard]] auto getRunTimeMs() const -> double;
+        [[nodiscard]] double getRunTimeMs() const;
 
         /// @brief Gets the runtime duration in seconds.
         /// @return The duration in seconds as a double.
         /// @throws std::runtime_error If timing data is incomplete.
-        [[nodiscard]] auto getRunTimeSec() const -> double;
+        [[nodiscard]] double getRunTimeSec() const;
 
     private:
         std::chrono::time_point<std::chrono::high_resolution_clock> start_{};

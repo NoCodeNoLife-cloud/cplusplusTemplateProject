@@ -23,18 +23,18 @@ namespace common::time
         pattern_ = pattern;
     }
 
-    auto SimpleDateFormatter::applyPattern(const std::string& newPattern) -> void
+    void SimpleDateFormatter::applyPattern(const std::string& newPattern)
     {
         validatePattern(newPattern);
         pattern_ = newPattern;
     }
 
-    auto SimpleDateFormatter::toPattern() const -> std::string
+    std::string SimpleDateFormatter::toPattern() const
     {
         return pattern_;
     }
 
-    auto SimpleDateFormatter::format(const std::tm& date) const -> std::string
+    std::string SimpleDateFormatter::format(const std::tm& date) const
     {
         std::ostringstream oss;
         try
@@ -53,7 +53,7 @@ namespace common::time
         return result;
     }
 
-    auto SimpleDateFormatter::format(const std::chrono::system_clock::time_point& tp) const -> std::string
+    std::string SimpleDateFormatter::format(const std::chrono::system_clock::time_point& tp) const
     {
         std::time_t time = std::chrono::system_clock::to_time_t(tp);
         std::tm tm_struct = {};
@@ -72,7 +72,7 @@ namespace common::time
         return format(tm_struct);
     }
 
-    auto SimpleDateFormatter::parse(const std::string& dateStr) const -> std::tm
+    std::tm SimpleDateFormatter::parse(const std::string& dateStr) const
     {
         std::tm date = {};
         std::istringstream iss(dateStr);
@@ -92,17 +92,17 @@ namespace common::time
         return date;
     }
 
-    auto SimpleDateFormatter::equals(const SimpleDateFormatter& other) const noexcept -> bool
+    bool SimpleDateFormatter::equals(const SimpleDateFormatter& other) const noexcept
     {
         return pattern_ == other.pattern_;
     }
 
-    auto SimpleDateFormatter::hashCode() const noexcept -> size_t
+    size_t SimpleDateFormatter::hashCode() const noexcept
     {
         return std::hash<std::string>{}(pattern_);
     }
 
-    auto SimpleDateFormatter::validatePattern(const std::string& pat) -> void
+    void SimpleDateFormatter::validatePattern(const std::string& pat)
     {
         if (pat.empty())
         {

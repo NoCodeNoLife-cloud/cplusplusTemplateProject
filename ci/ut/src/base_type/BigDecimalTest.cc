@@ -9,7 +9,6 @@
 #include "base_type/BigDecimal.hpp"
 #include <string>
 #include <stdexcept>
-#include <cmath>
 
 using namespace common::base_type;
 

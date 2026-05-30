@@ -19,24 +19,24 @@ namespace common::filesystem
         buffer_.resize(capacity);
     }
 
-    auto DoubleBuffer::clear() noexcept -> void
+    void DoubleBuffer::clear() noexcept
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    auto DoubleBuffer::flip() noexcept -> void
+    void DoubleBuffer::flip() noexcept
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    auto DoubleBuffer::rewind() noexcept -> void
+    void DoubleBuffer::rewind() noexcept
     {
         position_ = 0;
     }
 
-    auto DoubleBuffer::compact() -> void
+    void DoubleBuffer::compact()
     {
         if (position_ > 0)
         {
@@ -46,7 +46,7 @@ namespace common::filesystem
         }
     }
 
-    auto DoubleBuffer::put(const double value) -> DoubleBuffer&
+    DoubleBuffer& DoubleBuffer::put(const double value)
     {
         if (!hasRemaining())
         {
@@ -56,7 +56,7 @@ namespace common::filesystem
         return *this;
     }
 
-    auto DoubleBuffer::put(const std::vector<double>& values) -> DoubleBuffer&
+    DoubleBuffer& DoubleBuffer::put(const std::vector<double>& values)
     {
         if (values.empty())
         {
@@ -75,7 +75,7 @@ namespace common::filesystem
         return *this;
     }
 
-    auto DoubleBuffer::get() -> double
+    double DoubleBuffer::get()
     {
         if (!hasRemaining())
         {
@@ -84,12 +84,12 @@ namespace common::filesystem
         return buffer_[position_++];
     }
 
-    auto DoubleBuffer::position() const noexcept -> size_t
+    size_t DoubleBuffer::position() const noexcept
     {
         return position_;
     }
 
-    auto DoubleBuffer::position(const size_t newPosition) -> void
+    void DoubleBuffer::position(const size_t newPosition)
     {
         if (newPosition > limit_)
         {
@@ -98,12 +98,12 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    auto DoubleBuffer::limit() const noexcept -> size_t
+    size_t DoubleBuffer::limit() const noexcept
     {
         return limit_;
     }
 
-    auto DoubleBuffer::limit(const size_t newLimit) -> void
+    void DoubleBuffer::limit(const size_t newLimit)
     {
         if (newLimit > capacity_)
         {
@@ -116,22 +116,22 @@ namespace common::filesystem
         limit_ = newLimit;
     }
 
-    auto DoubleBuffer::capacity() const noexcept -> size_t
+    size_t DoubleBuffer::capacity() const noexcept
     {
         return capacity_;
     }
 
-    auto DoubleBuffer::hasRemaining() const noexcept -> bool
+    bool DoubleBuffer::hasRemaining() const noexcept
     {
         return position_ < limit_;
     }
 
-    auto DoubleBuffer::remaining() const noexcept -> size_t
+    size_t DoubleBuffer::remaining() const noexcept
     {
         return limit_ - position_;
     }
 
-    auto DoubleBuffer::getRemaining() const -> std::vector<double>
+    std::vector<double> DoubleBuffer::getRemaining() const
     {
         if (position_ >= limit_)
         {

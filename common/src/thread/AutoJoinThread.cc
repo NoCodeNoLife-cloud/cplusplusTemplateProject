@@ -27,7 +27,7 @@ namespace common::thread
         }
     }
 
-    auto AutoJoinThread::detach() -> void
+    void AutoJoinThread::detach()
     {
         if (thread_.joinable())
         {
@@ -35,7 +35,7 @@ namespace common::thread
         }
     }
 
-    auto AutoJoinThread::join() -> void
+    void AutoJoinThread::join()
     {
         if (thread_.joinable())
         {
@@ -43,17 +43,17 @@ namespace common::thread
         }
     }
 
-    auto AutoJoinThread::joinable() const noexcept -> bool
+    bool AutoJoinThread::joinable() const noexcept
     {
         return thread_.joinable();
     }
 
-    auto AutoJoinThread::swap(AutoJoinThread& other) noexcept -> void
+    void AutoJoinThread::swap(AutoJoinThread& other) noexcept
     {
         thread_.swap(other.thread_);
     }
 
-    auto AutoJoinThread::native_handle() -> std::thread::native_handle_type
+    std::thread::native_handle_type AutoJoinThread::native_handle()
     {
         return thread_.native_handle();
     }

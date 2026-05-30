@@ -35,7 +35,7 @@ namespace common::toolkit
         /// @param t The object to get type id from.
         /// @return std::string The pretty name of the type.
         template <typename T>
-        [[nodiscard]] static auto getTypeId(const T& /*t*/) noexcept -> std::string
+        [[nodiscard]] static std::string getTypeId(const T& /*t*/) noexcept
         {
             return boost::typeindex::type_id<T>().pretty_name();
         }
@@ -46,7 +46,7 @@ namespace common::toolkit
         /// @param t The object to get type id with CVR from.
         /// @return std::string The pretty name of the type with CVR.
         template <typename T>
-        [[nodiscard]] static auto getTypeIdWithCvr(const T& /*t*/) noexcept -> std::string
+        [[nodiscard]] static std::string getTypeIdWithCvr(const T& /*t*/) noexcept
         {
             return boost::typeindex::type_id_with_cvr<T>().pretty_name();
         }
@@ -55,7 +55,7 @@ namespace common::toolkit
         /// @tparam T Type of the class.
         /// @return std::string The pretty name of the type.
         template <typename T>
-        [[nodiscard]] static auto getTypeIdByClass() noexcept -> std::string
+        [[nodiscard]] static std::string getTypeIdByClass() noexcept
         {
             return boost::typeindex::type_id<T>().pretty_name();
         }
@@ -64,7 +64,7 @@ namespace common::toolkit
         /// @tparam T Type of the class.
         /// @return std::string The pretty name of the type with CVR.
         template <typename T>
-        [[nodiscard]] static auto getTypeIdWithCvrByClass() noexcept -> std::string
+        [[nodiscard]] static std::string getTypeIdWithCvrByClass() noexcept
         {
             return boost::typeindex::type_id_with_cvr<T>().pretty_name();
         }
@@ -74,7 +74,7 @@ namespace common::toolkit
         /// @param obj The object to get fields from.
         /// @return std::unordered_map<std::string, std::string> A map of field names to their string representations.
         template <typename T>
-        [[nodiscard]] static auto getFields(const T& obj) -> std::unordered_map<std::string, std::string>
+        [[nodiscard]] static std::unordered_map<std::string, std::string> getFields(const T& obj)
         {
             std::unordered_map<std::string, std::string> field_map;
             constexpr auto fields = ReflectTraits<T>::fields;
@@ -93,7 +93,7 @@ namespace common::toolkit
         /// @tparam T2 Second type.
         /// @return True if types are identical, false otherwise.
         template <typename T1, typename T2>
-        [[nodiscard]] static auto isSameType() noexcept -> bool
+        [[nodiscard]] static bool isSameType() noexcept
         {
             return std::is_same_v<T1, T2>;
         }
@@ -103,7 +103,7 @@ namespace common::toolkit
         /// @tparam Derived Derived class type.
         /// @return True if Base is a base of Derived, false otherwise.
         template <typename Base, typename Derived>
-        [[nodiscard]] static auto isBaseOf() noexcept -> bool
+        [[nodiscard]] static bool isBaseOf() noexcept
         {
             return std::is_base_of_v<Base, Derived>;
         }
@@ -112,7 +112,7 @@ namespace common::toolkit
         /// @tparam T Type to check.
         /// @return True if the type is polymorphic, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto isPolymorphic() noexcept -> bool
+        [[nodiscard]] static bool isPolymorphic() noexcept
         {
             return std::is_polymorphic_v<T>;
         }
@@ -121,7 +121,7 @@ namespace common::toolkit
         /// @tparam T Type to check.
         /// @return True if the type is abstract, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto isAbstract() noexcept -> bool
+        [[nodiscard]] static bool isAbstract() noexcept
         {
             return std::is_abstract_v<T>;
         }
@@ -130,7 +130,7 @@ namespace common::toolkit
         /// @tparam T Type to get size for.
         /// @return Size in bytes.
         template <typename T>
-        [[nodiscard]] static auto getTypeSize() noexcept -> std::size_t
+        [[nodiscard]] static std::size_t getTypeSize() noexcept
         {
             return sizeof(T);
         }
@@ -139,7 +139,7 @@ namespace common::toolkit
         /// @tparam T Type to get alignment for.
         /// @return Alignment in bytes.
         template <typename T>
-        [[nodiscard]] static auto getTypeAlignment() noexcept -> std::size_t
+        [[nodiscard]] static std::size_t getTypeAlignment() noexcept
         {
             return alignof(T);
         }
@@ -148,7 +148,7 @@ namespace common::toolkit
         /// @tparam T Type to check.
         /// @return True if default constructible, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto isDefaultConstructible() noexcept -> bool
+        [[nodiscard]] static bool isDefaultConstructible() noexcept
         {
             return std::is_default_constructible_v<T>;
         }
@@ -157,7 +157,7 @@ namespace common::toolkit
         /// @tparam T Type to check.
         /// @return True if copy constructible, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto isCopyConstructible() noexcept -> bool
+        [[nodiscard]] static bool isCopyConstructible() noexcept
         {
             return std::is_copy_constructible_v<T>;
         }
@@ -166,7 +166,7 @@ namespace common::toolkit
         /// @tparam T Type to check.
         /// @return True if move constructible, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto isMoveConstructible() noexcept -> bool
+        [[nodiscard]] static bool isMoveConstructible() noexcept
         {
             return std::is_move_constructible_v<T>;
         }
@@ -175,7 +175,7 @@ namespace common::toolkit
         /// @tparam T Type to check.
         /// @return True if trivially copyable, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto isTriviallyCopyable() noexcept -> bool
+        [[nodiscard]] static bool isTriviallyCopyable() noexcept
         {
             return std::is_trivially_copyable_v<T>;
         }
@@ -184,7 +184,7 @@ namespace common::toolkit
         /// @tparam T Type to check.
         /// @return True if trivially destructible, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto isTriviallyDestructible() noexcept -> bool
+        [[nodiscard]] static bool isTriviallyDestructible() noexcept
         {
             return std::is_trivially_destructible_v<T>;
         }
@@ -193,7 +193,7 @@ namespace common::toolkit
         /// @tparam T Type to hash.
         /// @return Hash value.
         template <typename T>
-        [[nodiscard]] static auto getTypeHash() noexcept -> std::size_t
+        [[nodiscard]] static std::size_t getTypeHash() noexcept
         {
             return boost::typeindex::type_id<T>().hash_code();
         }
@@ -202,7 +202,7 @@ namespace common::toolkit
         /// @tparam T Type to get field names for.
         /// @return Vector of field names.
         template <typename T>
-        [[nodiscard]] static auto getFieldNames() -> std::vector<std::string>
+        [[nodiscard]] static std::vector<std::string> getFieldNames()
         {
             std::vector<std::string> field_names;
             constexpr auto fields = ReflectTraits<T>::fields;
@@ -219,7 +219,7 @@ namespace common::toolkit
         /// @tparam T Type to get field count for.
         /// @return Number of fields.
         template <typename T>
-        [[nodiscard]] static auto getFieldCount() noexcept -> std::size_t
+        [[nodiscard]] static std::size_t getFieldCount() noexcept
         {
             return ReflectTraits<T>::field_count;
         }
@@ -231,7 +231,7 @@ namespace common::toolkit
         /// @return String representation of the field value.
         /// @throws std::invalid_argument If field name not found
         template <typename T>
-        [[nodiscard]] static auto getFieldByName(const T& obj, const std::string& fieldName) -> std::string
+        [[nodiscard]] static std::string getFieldByName(const T& obj, const std::string& fieldName)
         {
             constexpr auto fields = ReflectTraits<T>::fields;
 
@@ -265,7 +265,7 @@ namespace common::toolkit
         /// @param obj2 Second object.
         /// @return True if all fields are equal, false otherwise.
         template <typename T>
-        [[nodiscard]] static auto compareObjects(const T& obj1, const T& obj2) -> bool
+        [[nodiscard]] static bool compareObjects(const T& obj1, const T& obj2)
         {
             constexpr auto fields = ReflectTraits<T>::fields;
 
@@ -289,7 +289,7 @@ namespace common::toolkit
         /// @param obj2 Second object.
         /// @return Map of field names to pair of values (different fields only).
         template <typename T>
-        [[nodiscard]] static auto getObjectDiff(const T& obj1, const T& obj2) -> std::unordered_map<std::string, std::pair<std::string, std::string>>
+        [[nodiscard]] static std::unordered_map<std::string, std::pair<std::string, std::string>> getObjectDiff(const T& obj1, const T& obj2)
         {
             std::unordered_map<std::string, std::pair<std::string, std::string>> diff_map;
             constexpr auto fields = ReflectTraits<T>::fields;
@@ -317,7 +317,7 @@ namespace common::toolkit
         /// @tparam T Type to describe.
         /// @return Detailed type description including size, alignment, traits.
         template <typename T>
-        [[nodiscard]] static auto getTypeInfo() noexcept -> std::string
+        [[nodiscard]] static std::string getTypeInfo() noexcept
         {
             return std::format(
                 "Type: {}\n"

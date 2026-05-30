@@ -27,12 +27,12 @@ namespace common::filesystem
         /// @brief Writes a single byte to the output stream.
         /// @param b The byte to write.
         /// @throws std::runtime_error If the output stream is not available.
-        auto write(std::byte b) -> void override;
+        void write(std::byte b) override;
 
         /// @brief Writes all bytes from the given buffer to the output stream.
         /// @param buffer The buffer containing bytes to write.
         /// @throws std::runtime_error If the output stream is not available.
-        auto write(const std::vector<std::byte>& buffer) -> void override;
+        void write(const std::vector<std::byte>& buffer) override;
 
         /// @brief Writes a specified number of bytes from the buffer starting at the given offset.
         /// @param buffer The buffer containing bytes to write.
@@ -40,21 +40,21 @@ namespace common::filesystem
         /// @param len The number of bytes to write.
         /// @throws std::runtime_error If the output stream is not available.
         /// @throws std::out_of_range If offset + len exceeds buffer size.
-        auto write(const std::vector<std::byte>& buffer, size_t offset, size_t len) -> void override;
+        void write(const std::vector<std::byte>& buffer, size_t offset, size_t len) override;
 
-        auto write(const std::byte* buffer, size_t length) -> void override;
+        void write(const std::byte* buffer, size_t length) override;
 
         /// @brief Flushes the output stream, ensuring all buffered data is written.
         /// @throws std::runtime_error If the output stream is not available.
-        auto flush() -> void override;
+        void flush() override;
 
         /// @brief Closes the output stream and releases any associated resources.
         /// @throws std::runtime_error If the output stream is not available.
-        auto close() -> void override;
+        void close() override;
 
         /// @brief Checks if the stream is closed.
         /// @return true if the stream is closed, false otherwise.
-        [[nodiscard]] auto isClosed() const -> bool override;
+        [[nodiscard]] bool isClosed() const override;
 
     protected:
         std::shared_ptr<AbstractOutputStream> output_stream_;

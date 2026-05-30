@@ -135,7 +135,7 @@ namespace common::sql::mysql
         connected_ = false;
     }
 
-    auto MySqlExecutor::execute(const std::string& sql) const -> int
+    int MySqlExecutor::execute(const std::string& sql) const
     {
         if (!session_)
         {
@@ -168,7 +168,7 @@ namespace common::sql::mysql
         }
     }
 
-    auto MySqlExecutor::query(const std::string& sql) const -> std::vector<std::vector<std::string>>
+    std::vector<std::vector<std::string>> MySqlExecutor::query(const std::string& sql) const
     {
         if (!session_)
         {
@@ -197,8 +197,8 @@ namespace common::sql::mysql
         }
     }
 
-    auto MySqlExecutor::queryWithParams(const std::string& sql,
-                                        const std::vector<std::string>& params) const -> std::vector<std::vector<std::string>>
+    std::vector<std::vector<std::string>> MySqlExecutor::queryWithParams(const std::string& sql,
+                                                                        const std::vector<std::string>& params) const
     {
         if (!session_)
         {
@@ -272,7 +272,7 @@ namespace common::sql::mysql
         }
     }
 
-    auto MySqlExecutor::queryStructured(const std::string& sql) const -> QueryResult
+    QueryResult MySqlExecutor::queryStructured(const std::string& sql) const
     {
         if (!session_)
         {
@@ -301,8 +301,8 @@ namespace common::sql::mysql
         }
     }
 
-    auto MySqlExecutor::queryWithParamsStructured(const std::string& sql,
-                                                  const std::vector<std::string>& params) const -> QueryResult
+    QueryResult MySqlExecutor::queryWithParamsStructured(const std::string& sql,
+                                                          const std::vector<std::string>& params) const
     {
         if (!session_)
         {
@@ -376,18 +376,18 @@ namespace common::sql::mysql
         }
     }
 
-    auto MySqlExecutor::isConnected() const -> bool
+    bool MySqlExecutor::isConnected() const
     {
         // Fast check using flag - no database query needed
         return connected_ && session_;
     }
 
-    auto MySqlExecutor::getLastError() const -> std::string
+    std::string MySqlExecutor::getLastError() const
     {
         return last_error_;
     }
 
-    auto MySqlExecutor::processQueryResult(mysqlx::SqlResult& result) -> std::vector<std::vector<std::string>>
+    std::vector<std::vector<std::string>> MySqlExecutor::processQueryResult(mysqlx::SqlResult& result)
     {
         std::vector<std::vector<std::string>> results;
 
@@ -444,7 +444,7 @@ namespace common::sql::mysql
         return results;
     }
 
-    auto MySqlExecutor::processQueryResultStructured(mysqlx::SqlResult& result) -> QueryResult
+    QueryResult MySqlExecutor::processQueryResultStructured(mysqlx::SqlResult& result)
     {
         QueryResult query_result;
 

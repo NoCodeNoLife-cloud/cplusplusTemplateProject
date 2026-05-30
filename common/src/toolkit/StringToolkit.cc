@@ -14,7 +14,7 @@
 
 namespace common::toolkit
 {
-    auto StringToolkit::toUpperCase(const std::string& str) -> std::string
+    std::string StringToolkit::toUpperCase(const std::string& str)
     {
         if (str.empty())
         {
@@ -29,7 +29,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::toLowerCase(const std::string& str) -> std::string
+    std::string StringToolkit::toLowerCase(const std::string& str)
     {
         if (str.empty())
         {
@@ -44,7 +44,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::trimLeft(const std::string& str) -> std::string
+    std::string StringToolkit::trimLeft(const std::string& str)
     {
         if (str.empty())
         {
@@ -65,7 +65,7 @@ namespace common::toolkit
         return str.substr(start);
     }
 
-    auto StringToolkit::trimRight(const std::string& str) -> std::string
+    std::string StringToolkit::trimRight(const std::string& str)
     {
         if (str.empty())
         {
@@ -87,7 +87,7 @@ namespace common::toolkit
         return str.substr(0, end + 1);
     }
 
-    auto StringToolkit::contains(const std::string& str, const std::string& substr) -> bool
+    bool StringToolkit::contains(const std::string& str, const std::string& substr)
     {
         if (substr.empty())
         {
@@ -100,7 +100,7 @@ namespace common::toolkit
         return str.find(substr) != std::string::npos;
     }
 
-    auto StringToolkit::indexOf(const std::string& str, const std::string& substr, const size_t start) -> std::optional<size_t>
+    std::optional<size_t> StringToolkit::indexOf(const std::string& str, const std::string& substr, const size_t start)
     {
         if (start > str.length())
         {
@@ -111,13 +111,13 @@ namespace common::toolkit
         return (pos != std::string::npos) ? std::optional<size_t>(pos) : std::nullopt;
     }
 
-    auto StringToolkit::lastIndexOf(const std::string& str, const std::string& substr) -> std::optional<size_t>
+    std::optional<size_t> StringToolkit::lastIndexOf(const std::string& str, const std::string& substr)
     {
         const auto pos = str.rfind(substr);
         return (pos != std::string::npos) ? std::optional<size_t>(pos) : std::nullopt;
     }
 
-    auto StringToolkit::substring(const std::string& str, const size_t start, const size_t length) -> std::string
+    std::string StringToolkit::substring(const std::string& str, const size_t start, const size_t length)
     {
         if (start > str.length())
         {
@@ -135,7 +135,7 @@ namespace common::toolkit
         return str.substr(start, length);
     }
 
-    auto StringToolkit::left(const std::string& str, const size_t count) -> std::string
+    std::string StringToolkit::left(const std::string& str, const size_t count)
     {
         if (count == 0 || str.empty())
         {
@@ -148,7 +148,7 @@ namespace common::toolkit
         return str.substr(0, count);
     }
 
-    auto StringToolkit::right(const std::string& str, const size_t count) -> std::string
+    std::string StringToolkit::right(const std::string& str, const size_t count)
     {
         if (count == 0 || str.empty())
         {
@@ -161,7 +161,7 @@ namespace common::toolkit
         return str.substr(str.length() - count);
     }
 
-    auto StringToolkit::padLeft(const std::string& str, const size_t width, const char padChar) -> std::string
+    std::string StringToolkit::padLeft(const std::string& str, const size_t width, const char padChar)
     {
         if (str.length() >= width)
         {
@@ -172,7 +172,7 @@ namespace common::toolkit
         return std::string(paddingLength, padChar) + str;
     }
 
-    auto StringToolkit::padRight(const std::string& str, const size_t width, const char padChar) -> std::string
+    std::string StringToolkit::padRight(const std::string& str, const size_t width, const char padChar)
     {
         if (str.length() >= width)
         {
@@ -183,7 +183,7 @@ namespace common::toolkit
         return str + std::string(paddingLength, padChar);
     }
 
-    auto StringToolkit::repeat(const std::string& str, const size_t count) -> std::string
+    std::string StringToolkit::repeat(const std::string& str, const size_t count)
     {
         if (count == 0 || str.empty())
         {
@@ -209,7 +209,7 @@ namespace common::toolkit
         }
     }
 
-    auto StringToolkit::reverse(const std::string& str) -> std::string
+    std::string StringToolkit::reverse(const std::string& str)
     {
         if (str.empty())
         {
@@ -220,12 +220,12 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::isEmpty(const std::string& str) -> bool
+    bool StringToolkit::isEmpty(const std::string& str)
     {
         return str.empty();
     }
 
-    auto StringToolkit::isBlank(const std::string& str) -> bool
+    bool StringToolkit::isBlank(const std::string& str)
     {
         if (str.empty())
         {
@@ -242,7 +242,7 @@ namespace common::toolkit
         return true;
     }
 
-    auto StringToolkit::isNumeric(const std::string& str) -> bool
+    bool StringToolkit::isNumeric(const std::string& str)
     {
         if (str.empty())
         {
@@ -259,7 +259,7 @@ namespace common::toolkit
         return true;
     }
 
-    auto StringToolkit::isAlpha(const std::string& str) -> bool
+    bool StringToolkit::isAlpha(const std::string& str)
     {
         if (str.empty())
         {
@@ -276,7 +276,7 @@ namespace common::toolkit
         return true;
     }
 
-    auto StringToolkit::isAlphanumeric(const std::string& str) -> bool
+    bool StringToolkit::isAlphanumeric(const std::string& str)
     {
         if (str.empty())
         {
@@ -293,7 +293,7 @@ namespace common::toolkit
         return true;
     }
 
-    auto StringToolkit::splitOnce(const std::string& target, const std::string& delimiter) -> std::pair<std::string, std::string>
+    std::pair<std::string, std::string> StringToolkit::splitOnce(const std::string& target, const std::string& delimiter)
     {
         if (delimiter.empty())
         {
@@ -313,7 +313,7 @@ namespace common::toolkit
         };
     }
 
-    auto StringToolkit::remove(const std::string& str, const std::string& toRemove) -> std::string
+    std::string StringToolkit::remove(const std::string& str, const std::string& toRemove)
     {
         if (toRemove.empty())
         {
@@ -330,7 +330,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::removeChars(const std::string& str, const std::string& charsToRemove) -> std::string
+    std::string StringToolkit::removeChars(const std::string& str, const std::string& charsToRemove)
     {
         if (charsToRemove.empty())
         {
@@ -351,7 +351,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::truncate(const std::string& str, const size_t maxLength, const std::string& suffix) -> std::string
+    std::string StringToolkit::truncate(const std::string& str, const size_t maxLength, const std::string& suffix)
     {
         if (str.length() <= maxLength)
         {
@@ -373,7 +373,7 @@ namespace common::toolkit
         return str.substr(0, contentLength) + suffix;
     }
 
-    auto StringToolkit::split(const std::string& target, const char split_char) -> std::vector<std::string>
+    std::vector<std::string> StringToolkit::split(const std::string& target, const char split_char)
     {
         std::vector<std::string> result;
         size_t start = 0;
@@ -388,7 +388,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::splitWithEmpty(const std::string& target, const char split_char) -> std::vector<std::string>
+    std::vector<std::string> StringToolkit::splitWithEmpty(const std::string& target, const char split_char)
     {
         std::vector<std::string> result;
         size_t start = 0;
@@ -407,7 +407,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::split(const std::string& target, const std::string& delimiter) -> std::vector<std::string>
+    std::vector<std::string> StringToolkit::split(const std::string& target, const std::string& delimiter)
     {
         if (delimiter.empty())
         {
@@ -429,7 +429,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::concatenate(const std::vector<std::string>& source, const char split_char) -> std::string
+    std::string StringToolkit::concatenate(const std::vector<std::string>& source, const char split_char)
     {
         if (source.empty())
         {
@@ -444,7 +444,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::concatenate(const std::vector<std::string>& source, const std::string& delimiter) -> std::string
+    std::string StringToolkit::concatenate(const std::vector<std::string>& source, const std::string& delimiter)
     {
         if (source.empty())
         {
@@ -464,7 +464,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::startsWith(const std::string& str, const std::string& prefix) -> bool
+    bool StringToolkit::startsWith(const std::string& str, const std::string& prefix)
     {
         if (prefix.length() > str.length())
         {
@@ -473,7 +473,7 @@ namespace common::toolkit
         return str.compare(0, prefix.length(), prefix) == 0;
     }
 
-    auto StringToolkit::endsWith(const std::string& str, const std::string& suffix) -> bool
+    bool StringToolkit::endsWith(const std::string& str, const std::string& suffix)
     {
         if (suffix.length() > str.length())
         {
@@ -482,7 +482,7 @@ namespace common::toolkit
         return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
     }
 
-    auto StringToolkit::trim(const std::string& str) -> std::string
+    std::string StringToolkit::trim(const std::string& str)
     {
         if (str.empty())
         {
@@ -509,7 +509,7 @@ namespace common::toolkit
         return str.substr(start, end - start + 1);
     }
 
-    auto StringToolkit::replaceAll(const std::string& str, const std::string& from, const std::string& to) -> std::string
+    std::string StringToolkit::replaceAll(const std::string& str, const std::string& from, const std::string& to)
     {
         if (from.empty())
         {
@@ -526,7 +526,7 @@ namespace common::toolkit
         return result;
     }
 
-    auto StringToolkit::join(const std::vector<std::string>& parts, const std::string& delimiter) -> std::string
+    std::string StringToolkit::join(const std::vector<std::string>& parts, const std::string& delimiter)
     {
         return concatenate(parts, delimiter);
     }

@@ -16,37 +16,37 @@ namespace common::graphics
     {
     }
 
-    auto Point3D::getX() const noexcept -> double
+    double Point3D::getX() const noexcept
     {
         return x_;
     }
 
-    auto Point3D::getY() const noexcept -> double
+    double Point3D::getY() const noexcept
     {
         return y_;
     }
 
-    auto Point3D::getZ() const noexcept -> double
+    double Point3D::getZ() const noexcept
     {
         return z_;
     }
 
-    auto Point3D::setX(const double x) noexcept -> void
+    void Point3D::setX(const double x) noexcept
     {
         x_ = x;
     }
 
-    auto Point3D::setY(const double y) noexcept -> void
+    void Point3D::setY(const double y) noexcept
     {
         y_ = y;
     }
 
-    auto Point3D::setZ(const double z) noexcept -> void
+    void Point3D::setZ(const double z) noexcept
     {
         z_ = z;
     }
 
-    auto Point3D::operator+=(const Point3D& other) noexcept -> Point3D&
+    Point3D& Point3D::operator+=(const Point3D& other) noexcept
     {
         x_ += other.x_;
         y_ += other.y_;
@@ -54,7 +54,7 @@ namespace common::graphics
         return *this;
     }
 
-    auto Point3D::operator-=(const Point3D& other) noexcept -> Point3D&
+    Point3D& Point3D::operator-=(const Point3D& other) noexcept
     {
         x_ -= other.x_;
         y_ -= other.y_;
@@ -62,17 +62,17 @@ namespace common::graphics
         return *this;
     }
 
-    auto Point3D::operator-() const noexcept -> Point3D
+    Point3D Point3D::operator-() const noexcept
     {
         return {-x_, -y_, -z_};
     }
 
-    auto Point3D::distanceTo(const Point3D& other) const noexcept -> double
+    double Point3D::distanceTo(const Point3D& other) const noexcept
     {
         return std::sqrt(distanceSquaredTo(other));
     }
 
-    auto Point3D::distanceSquaredTo(const Point3D& other) const noexcept -> double
+    double Point3D::distanceSquaredTo(const Point3D& other) const noexcept
     {
         const double dx = x_ - other.x_;
         const double dy = y_ - other.y_;
@@ -80,30 +80,30 @@ namespace common::graphics
         return dx * dx + dy * dy + dz * dz;
     }
 
-    auto operator+(Point3D lhs, const Point3D& rhs) noexcept -> Point3D
+    Point3D operator+(Point3D lhs, const Point3D& rhs) noexcept
     {
         lhs += rhs;
         return lhs;
     }
 
-    auto operator-(Point3D lhs, const Point3D& rhs) noexcept -> Point3D
+    Point3D operator-(Point3D lhs, const Point3D& rhs) noexcept
     {
         lhs -= rhs;
         return lhs;
     }
 
-    auto operator==(const Point3D& lhs, const Point3D& rhs) noexcept -> bool
+    bool operator==(const Point3D& lhs, const Point3D& rhs) noexcept
     {
         constexpr double epsilon = 1e-9;
         return std::abs(lhs.getX() - rhs.getX()) < epsilon && std::abs(lhs.getY() - rhs.getY()) < epsilon && std::abs(lhs.getZ() - rhs.getZ()) < epsilon;
     }
 
-    auto operator!=(const Point3D& lhs, const Point3D& rhs) noexcept -> bool
+    bool operator!=(const Point3D& lhs, const Point3D& rhs) noexcept
     {
         return !(lhs == rhs);
     }
 
-    auto operator<<(std::ostream& os, const Point3D& point) -> std::ostream&
+    std::ostream& operator<<(std::ostream& os, const Point3D& point)
     {
         os << "(" << point.getX() << ", " << point.getY() << ", " << point.getZ() << ")";
         return os;

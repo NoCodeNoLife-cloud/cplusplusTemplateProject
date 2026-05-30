@@ -20,7 +20,7 @@ namespace common::interfaces
         /// @brief Runs the task with given arguments and returns a value of ReturnType.
         /// @param args Arguments to pass to the task.
         /// @return ReturnType The result of the task execution.
-        [[nodiscard]] virtual auto run(Args... args) -> ReturnType = 0;
+        [[nodiscard]] virtual ReturnType run(Args... args) = 0;
     };
 
     /// @brief Specialization for void return type
@@ -32,6 +32,6 @@ namespace common::interfaces
 
         /// @brief Runs the task with given arguments (void return type specialization)
         /// @param args Arguments to pass to the task.
-        virtual auto run(Args... args) -> void = 0;
+        virtual void run(Args... args) = 0;
     };
 }

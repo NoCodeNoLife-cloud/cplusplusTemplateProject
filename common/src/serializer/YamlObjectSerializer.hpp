@@ -25,17 +25,17 @@ namespace common::serializer
         /// @param filename The path to the file where the YAML data will be saved.
         /// @throws std::invalid_argument If filename is empty.
         /// @throws std::runtime_error If file cannot be opened or written to.
-        auto serialize(const T& obj, const std::string& filename) -> void override;
+        void serialize(const T& obj, const std::string& filename) override;
 
         /// @brief Deserializes an object from a YAML file.
         /// @param filename The path to the YAML file to deserialize from.
         /// @return The deserialized object.
         /// @throws std::runtime_error If file cannot be opened or decoded.
-        [[nodiscard]] auto deserialize(const std::string& filename) -> T override;
+        [[nodiscard]] T deserialize(const std::string& filename) override;
     };
 
     template <typename T>
-    auto YamlObjectSerializer<T>::serialize(const T& obj, const std::string& filename) -> void
+    void YamlObjectSerializer<T>::serialize(const T& obj, const std::string& filename)
     {
         if (filename.empty())
         {
@@ -63,7 +63,7 @@ namespace common::serializer
     }
 
     template <typename T>
-    [[nodiscard]] auto YamlObjectSerializer<T>::deserialize(const std::string& filename) -> T
+    [[nodiscard]] T YamlObjectSerializer<T>::deserialize(const std::string& filename)
     {
         if (filename.empty())
         {

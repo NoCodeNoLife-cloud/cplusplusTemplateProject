@@ -14,7 +14,7 @@ namespace common::filesystem
     {
     }
 
-    auto FilterOutputStream::write(const std::byte b) -> void
+    void FilterOutputStream::write(const std::byte b)
     {
         if (!output_stream_)
         {
@@ -23,7 +23,7 @@ namespace common::filesystem
         output_stream_->write(b);
     }
 
-    auto FilterOutputStream::write(const std::vector<std::byte>& buffer) -> void
+    void FilterOutputStream::write(const std::vector<std::byte>& buffer)
     {
         if (!output_stream_)
         {
@@ -32,7 +32,7 @@ namespace common::filesystem
         output_stream_->write(buffer);
     }
 
-    auto FilterOutputStream::write(const std::vector<std::byte>& buffer, const size_t offset, const size_t len) -> void
+    void FilterOutputStream::write(const std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
         if (!output_stream_)
         {
@@ -45,7 +45,7 @@ namespace common::filesystem
         output_stream_->write(buffer, offset, len);
     }
 
-    auto FilterOutputStream::write(const std::byte* buffer, const size_t length) -> void
+    void FilterOutputStream::write(const std::byte* buffer, const size_t length)
     {
         if (!output_stream_)
         {
@@ -58,7 +58,7 @@ namespace common::filesystem
         output_stream_->write(buffer, length);
     }
 
-    auto FilterOutputStream::flush() -> void
+    void FilterOutputStream::flush()
     {
         if (!output_stream_)
         {
@@ -67,7 +67,7 @@ namespace common::filesystem
         output_stream_->flush();
     }
 
-    auto FilterOutputStream::close() -> void
+    void FilterOutputStream::close()
     {
         if (!output_stream_)
         {
@@ -77,7 +77,7 @@ namespace common::filesystem
         output_stream_->close();
     }
 
-    auto FilterOutputStream::isClosed() const -> bool
+    bool FilterOutputStream::isClosed() const
     {
         // A filter stream is considered closed if the underlying stream is not available
         // or if the underlying stream reports being closed

@@ -5,7 +5,6 @@
  */
 
 #pragma once
-#include <fmt/format.h>
 #include <memory>
 
 namespace common::data_structure::tree

@@ -1,5 +1,5 @@
 /**
- * @file Edge.cc
+* @file Edge.cc
  * @brief Edge class implementation
  * @details This file contains the implementation of the Edge class methods for Graphics and geometry utilities.
  */
@@ -14,32 +14,32 @@ namespace common::graphics
     {
     }
 
-    auto Edge::to() const noexcept -> int32_t
+    int32_t Edge::to() const noexcept
     {
         return to_;
     }
 
-    auto Edge::setTo(const int32_t to) noexcept -> void
+    void Edge::setTo(const int32_t to) noexcept
     {
         to_ = to;
     }
 
-    auto Edge::weight() const noexcept -> int32_t
+    int32_t Edge::weight() const noexcept
     {
         return weight_;
     }
 
-    auto Edge::setWeight(const int32_t weight) noexcept -> void
+    void Edge::setWeight(const int32_t weight) noexcept
     {
         weight_ = weight;
     }
 
-    auto Edge::operator==(const Edge& other) const noexcept -> bool
+    bool Edge::operator==(const Edge& other) const noexcept
     {
         return to_ == other.to_ && weight_ == other.weight_;
     }
 
-    auto Edge::operator!=(const Edge& other) const noexcept -> bool
+    bool Edge::operator!=(const Edge& other) const noexcept
     {
         return !(*this == other);
     }

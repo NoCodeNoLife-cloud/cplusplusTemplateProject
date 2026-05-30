@@ -25,20 +25,20 @@ namespace common::time
         }
     }
 
-    auto FunctionProfiler::recordStart() -> void
+    void FunctionProfiler::recordStart()
     {
         start_ = std::chrono::high_resolution_clock::now();
         started_ = true;
         ended_ = false; // Reset ended flag when starting again
     }
 
-    auto FunctionProfiler::recordEnd() -> void
+    void FunctionProfiler::recordEnd()
     {
         end_ = std::chrono::high_resolution_clock::now();
         ended_ = true;
     }
 
-    auto FunctionProfiler::getRunTime() const -> std::string
+    std::string FunctionProfiler::getRunTime() const
     {
         if (!started_ || !ended_)
         {
@@ -54,7 +54,7 @@ namespace common::time
         return oss.str();
     }
 
-    auto FunctionProfiler::getRunTimeMs() const -> double
+    double FunctionProfiler::getRunTimeMs() const
     {
         if (!started_ || !ended_)
         {
@@ -66,7 +66,7 @@ namespace common::time
         return duration_ms.count();
     }
 
-    auto FunctionProfiler::getRunTimeSec() const -> double
+    double FunctionProfiler::getRunTimeSec() const
     {
         if (!started_ || !ended_)
         {

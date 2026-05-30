@@ -19,29 +19,29 @@ namespace common::filesystem
         buffer_.resize(capacity);
     }
 
-    auto FloatBuffer::allocate(const size_t capacity) -> FloatBuffer
+    FloatBuffer FloatBuffer::allocate(const size_t capacity)
     {
         return FloatBuffer(capacity);
     }
 
-    auto FloatBuffer::clear() noexcept -> void
+    void FloatBuffer::clear() noexcept
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    auto FloatBuffer::flip() noexcept -> void
+    void FloatBuffer::flip() noexcept
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    auto FloatBuffer::rewind() noexcept -> void
+    void FloatBuffer::rewind() noexcept
     {
         position_ = 0;
     }
 
-    auto FloatBuffer::compact() -> void
+    void FloatBuffer::compact()
     {
         if (position_ > 0)
         {
@@ -51,7 +51,7 @@ namespace common::filesystem
         }
     }
 
-    auto FloatBuffer::put(const float value) -> void
+    void FloatBuffer::put(const float value)
     {
         if (!hasRemaining())
         {
@@ -60,7 +60,7 @@ namespace common::filesystem
         buffer_[position_++] = value;
     }
 
-    auto FloatBuffer::put(const std::vector<float>& values) -> void
+    void FloatBuffer::put(const std::vector<float>& values)
     {
         if (values.empty())
         {
@@ -75,7 +75,7 @@ namespace common::filesystem
         position_ += values.size();
     }
 
-    auto FloatBuffer::get() -> float
+    float FloatBuffer::get()
     {
         if (!hasRemaining())
         {
@@ -84,7 +84,7 @@ namespace common::filesystem
         return buffer_[position_++];
     }
 
-    auto FloatBuffer::get(const size_t length) -> std::vector<float>
+    std::vector<float> FloatBuffer::get(const size_t length)
     {
         if (length == 0)
         {
@@ -100,7 +100,7 @@ namespace common::filesystem
         return result;
     }
 
-    auto FloatBuffer::getRemaining() const -> std::vector<float>
+    std::vector<float> FloatBuffer::getRemaining() const
     {
         if (position_ >= limit_)
         {
@@ -109,12 +109,12 @@ namespace common::filesystem
         return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
     }
 
-    auto FloatBuffer::position() const noexcept -> size_t
+    size_t FloatBuffer::position() const noexcept
     {
         return position_;
     }
 
-    auto FloatBuffer::position(const size_t newPosition) -> void
+    void FloatBuffer::position(const size_t newPosition)
     {
         if (newPosition > limit_)
         {
@@ -123,12 +123,12 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    auto FloatBuffer::limit() const noexcept -> size_t
+    size_t FloatBuffer::limit() const noexcept
     {
         return limit_;
     }
 
-    auto FloatBuffer::limit(const size_t newLimit) -> void
+    void FloatBuffer::limit(const size_t newLimit)
     {
         if (newLimit > capacity_)
         {
@@ -141,17 +141,17 @@ namespace common::filesystem
         limit_ = newLimit;
     }
 
-    auto FloatBuffer::capacity() const noexcept -> size_t
+    size_t FloatBuffer::capacity() const noexcept
     {
         return capacity_;
     }
 
-    auto FloatBuffer::hasRemaining() const noexcept -> bool
+    bool FloatBuffer::hasRemaining() const noexcept
     {
         return position_ < limit_;
     }
 
-    auto FloatBuffer::remaining() const noexcept -> size_t
+    size_t FloatBuffer::remaining() const noexcept
     {
         return limit_ - position_;
     }

@@ -21,54 +21,54 @@ namespace common::graphics
 
         /// @brief Get the X coordinate
         /// @return X coordinate value
-        [[nodiscard]] auto getX() const noexcept -> double;
+        [[nodiscard]] double getX() const noexcept;
 
         /// @brief Get the Y coordinate
         /// @return Y coordinate value
-        [[nodiscard]] auto getY() const noexcept -> double;
+        [[nodiscard]] double getY() const noexcept;
 
         /// @brief Set the X coordinate
         /// @param x X coordinate value
-        auto setX(double x) noexcept -> void;
+        void setX(double x) noexcept;
 
         /// @brief Set the Y coordinate
         /// @param y Y coordinate value
-        auto setY(double y) noexcept -> void;
+        void setY(double y) noexcept;
 
         /// @brief Add another Point2D to this point
         /// @param other Point2D to add
         /// @return Reference to this point
-        auto operator+=(const Point2D& other) noexcept -> Point2D&;
+        Point2D& operator+=(const Point2D& other) noexcept;
 
         /// @brief Subtract another Point2D from this point
         /// @param other Point2D to subtract
         /// @return Reference to this point
-        auto operator-=(const Point2D& other) noexcept -> Point2D&;
+        Point2D& operator-=(const Point2D& other) noexcept;
 
         /// @brief Negate this point
         /// @return Negated point
-        [[nodiscard]] auto operator-() const noexcept -> Point2D;
+        [[nodiscard]] Point2D operator-() const noexcept;
 
         /// @brief Calculate Euclidean distance to another point
         /// @param other Point to calculate distance to
         /// @return Euclidean distance
-        [[nodiscard]] auto distanceTo(const Point2D& other) const noexcept -> double;
+        [[nodiscard]] double distanceTo(const Point2D& other) const noexcept;
 
         /// @brief Calculate squared distance to another point (avoids sqrt)
         /// @param other Point to calculate distance to
         /// @return Squared Euclidean distance
-        [[nodiscard]] auto distanceSquaredTo(const Point2D& other) const noexcept -> double;
+        [[nodiscard]] double distanceSquaredTo(const Point2D& other) const noexcept;
 
         // Friend operators
-        friend auto operator+(Point2D lhs, const Point2D& rhs) noexcept -> Point2D;
+        friend Point2D operator+(Point2D lhs, const Point2D& rhs) noexcept;
 
-        friend auto operator-(Point2D lhs, const Point2D& rhs) noexcept -> Point2D;
+        friend Point2D operator-(Point2D lhs, const Point2D& rhs) noexcept;
 
-        friend auto operator==(const Point2D& lhs, const Point2D& rhs) noexcept -> bool;
+        friend bool operator==(const Point2D& lhs, const Point2D& rhs) noexcept;
 
-        friend auto operator!=(const Point2D& lhs, const Point2D& rhs) noexcept -> bool;
+        friend bool operator!=(const Point2D& lhs, const Point2D& rhs) noexcept;
 
-        friend auto operator<<(std::ostream& os, const Point2D& point) -> std::ostream&;
+        friend std::ostream& operator<<(std::ostream& os, const Point2D& point);
 
     private:
         double x_{0.0};

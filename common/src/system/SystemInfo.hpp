@@ -84,31 +84,31 @@ namespace common::system
 
         /// @brief Get CPU model from registry
         /// @return CPU model as string
-        [[nodiscard]] static auto GetCpuModelFromRegistry() noexcept -> std::string;
+        [[nodiscard]] static std::string GetCpuModelFromRegistry() noexcept;
 
         /// @brief Get memory details
         /// @return Memory details as string
-        [[nodiscard]] static auto GetMemoryDetails() noexcept -> std::string;
+        [[nodiscard]] static std::string GetMemoryDetails() noexcept;
 
         /// @brief Get OS version
         /// @return OS version as string
-        [[nodiscard]] static auto GetOSVersion() noexcept -> std::string;
+        [[nodiscard]] static std::string GetOSVersion() noexcept;
 
         /// @brief Get motherboard information
         /// @return MotherboardInfo struct
-        [[nodiscard]] static auto GetMotherboardInfo() noexcept -> MotherboardInfo;
+        [[nodiscard]] static MotherboardInfo GetMotherboardInfo() noexcept;
 
         /// @brief Get graphics card information
         /// @return Graphics card info as string
-        [[nodiscard]] static auto GetGraphicsCardInfo() noexcept -> std::string;
+        [[nodiscard]] static std::string GetGraphicsCardInfo() noexcept;
 
         /// @brief Get disk drive information
         /// @return Vector of disk drive info strings
-        [[nodiscard]] static auto GetDiskDriveInfo() noexcept -> std::vector<std::string>;
+        [[nodiscard]] static std::vector<std::string> GetDiskDriveInfo() noexcept;
 
         /// @brief Get BIOS information
         /// @return Vector of BIOS info strings
-        [[nodiscard]] static auto GetBIOSInfo() noexcept -> std::vector<std::string>;
+        [[nodiscard]] static std::vector<std::string> GetBIOSInfo() noexcept;
 
     private:
         /// @brief Helper function to read string value from registry
@@ -116,12 +116,12 @@ namespace common::system
         /// @param subKey Subkey path
         /// @param valueName Value name to read
         /// @return String value from registry or empty string if failed
-        [[nodiscard]] static auto ReadRegistryStringValue(HKEY hKeyRoot, const wchar_t* subKey, const wchar_t* valueName) noexcept -> std::string;
+        [[nodiscard]] static std::string ReadRegistryStringValue(HKEY hKeyRoot, const wchar_t* subKey, const wchar_t* valueName) noexcept;
 
         /// @brief Helper function to enumerate registry values
         /// @param hKeyRoot Root key to open
         /// @param subKey Subkey path to enumerate
         /// @return Vector of string values from registry
-        [[nodiscard]] static auto EnumerateRegistryValues(HKEY hKeyRoot, const wchar_t* subKey) noexcept -> std::vector<std::string>;
+        [[nodiscard]] static std::vector<std::string> EnumerateRegistryValues(HKEY hKeyRoot, const wchar_t* subKey) noexcept;
     };
 }

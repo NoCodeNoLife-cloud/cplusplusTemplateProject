@@ -25,7 +25,7 @@ namespace common::thread
     namespace
     {
         // Helper function to convert thread::id to string
-        auto getThreadIdString() -> std::string
+        std::string getThreadIdString()
         {
             std::ostringstream oss;
             oss << std::this_thread::get_id();
@@ -67,7 +67,7 @@ namespace common::thread
         }
     }
 
-    auto ThreadPool::shutdown() -> void
+    void ThreadPool::shutdown()
     {
         {
             std::unique_lock lock(queue_mutex_);
@@ -81,7 +81,7 @@ namespace common::thread
         }
     }
 
-    auto ThreadPool::shutdownNow() -> void
+    void ThreadPool::shutdownNow()
     {
         {
             std::unique_lock lock(queue_mutex_);
@@ -98,18 +98,18 @@ namespace common::thread
         }
     }
 
-    auto ThreadPool::getActiveThreadCount() const -> size_t
+    size_t ThreadPool::getActiveThreadCount() const
     {
         return active_thread_count_.load();
     }
 
-    auto ThreadPool::getQueueSize() -> size_t
+    size_t ThreadPool::getQueueSize()
     {
         std::unique_lock lock(queue_mutex_);
         return task_queue_.size();
     }
 
-    auto ThreadPool::worker() -> void
+    void ThreadPool::worker()
     {
         while (true)
         {
@@ -156,7 +156,7 @@ namespace common::thread
         }
     }
 
-    auto ThreadPool::addWorker() -> bool
+    bool ThreadPool::addWorker()
     {
         if (active_thread_count_ >= max_thread_count_)
         {

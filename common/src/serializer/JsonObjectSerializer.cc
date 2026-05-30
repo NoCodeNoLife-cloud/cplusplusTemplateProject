@@ -15,7 +15,7 @@
 namespace common::serializer
 {
     template <typename T>
-    auto JsonObjectSerializer::getValueOrDefault(const rapidjson::Value& json, const std::string& key, T defaultValue) noexcept -> T
+    T JsonObjectSerializer::getValueOrDefault(const rapidjson::Value& json, const std::string& key, T defaultValue) noexcept
     {
         // Convert std::string to c_str for rapidjson compatibility
         if (json.HasMember(key.c_str()))
@@ -53,45 +53,45 @@ namespace common::serializer
         return defaultValue;
     }
 
-    auto JsonObjectSerializer::getStringOrDefault(const rapidjson::Value& json, const std::string& key, const std::string& defaultValue) noexcept -> std::string
+    std::string JsonObjectSerializer::getStringOrDefault(const rapidjson::Value& json, const std::string& key, const std::string& defaultValue) noexcept
     {
         return getValueOrDefault<std::string>(json, key, defaultValue);
     }
 
-    auto JsonObjectSerializer::getIntOrDefault(const rapidjson::Value& json, const std::string& key, const int32_t defaultValue) noexcept -> int32_t
+    int32_t JsonObjectSerializer::getIntOrDefault(const rapidjson::Value& json, const std::string& key, const int32_t defaultValue) noexcept
     {
         return getValueOrDefault<int32_t>(json, key, defaultValue);
     }
 
-    auto JsonObjectSerializer::getDoubleOrDefault(const rapidjson::Value& json, const std::string& key, const double defaultValue) noexcept -> double
+    double JsonObjectSerializer::getDoubleOrDefault(const rapidjson::Value& json, const std::string& key, const double defaultValue) noexcept
     {
         return getValueOrDefault<double>(json, key, defaultValue);
     }
 
-    auto JsonObjectSerializer::getBoolOrDefault(const rapidjson::Value& json, const std::string& key, const bool defaultValue) noexcept -> bool
+    bool JsonObjectSerializer::getBoolOrDefault(const rapidjson::Value& json, const std::string& key, const bool defaultValue) noexcept
     {
         return getValueOrDefault<bool>(json, key, defaultValue);
     }
 
-    auto JsonObjectSerializer::serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const std::string& value) noexcept -> void
+    void JsonObjectSerializer::serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const std::string& value) noexcept
     {
         writer.Key(key.c_str());
         writer.String(value.c_str());
     }
 
-    auto JsonObjectSerializer::serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const int32_t value) noexcept -> void
+    void JsonObjectSerializer::serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const int32_t value) noexcept
     {
         writer.Key(key.c_str());
         writer.Int(value);
     }
 
-    auto JsonObjectSerializer::serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const double value) noexcept -> void
+    void JsonObjectSerializer::serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const double value) noexcept
     {
         writer.Key(key.c_str());
         writer.Double(value);
     }
 
-    auto JsonObjectSerializer::serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const bool value) noexcept -> void
+    void JsonObjectSerializer::serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const bool value) noexcept
     {
         writer.Key(key.c_str());
         writer.Bool(value);

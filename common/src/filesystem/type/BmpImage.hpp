@@ -80,7 +80,7 @@ namespace common::filesystem
         /// @param r The red component of the color (0-255)
         /// @param g The green component of the color (0-255)
         /// @param b The blue component of the color (0-255)
-        auto setPixel(int32_t x, int32_t y, uint8_t r, uint8_t g, uint8_t b) noexcept -> void;
+        void setPixel(int32_t x, int32_t y, uint8_t r, uint8_t g, uint8_t b) noexcept;
 
         /// @brief Gets the color of a pixel at the specified coordinates
         /// @param x The x-coordinate of the pixel
@@ -89,20 +89,20 @@ namespace common::filesystem
         /// @param g Reference to store the green component of the color (0-255)
         /// @param b Reference to store the blue component of the color (0-255)
         /// @return true if the coordinates are valid, false otherwise
-        [[nodiscard]] auto getPixel(int32_t x, int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const noexcept -> bool;
+        [[nodiscard]] bool getPixel(int32_t x, int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const noexcept;
 
         /// @brief Saves the BMP image to a file
         /// @param filename The name of the file to save the image to
         /// @throws std::runtime_error if the file cannot be created
-        auto save(const std::string& filename) const -> void;
+        void save(const std::string& filename) const;
 
         /// @brief Gets the width of the image
         /// @return The width of the image in pixels
-        [[nodiscard]] auto getWidth() const noexcept -> int32_t;
+        [[nodiscard]] int32_t getWidth() const noexcept;
 
         /// @brief Gets the height of the image
         /// @return The height of the image in pixels
-        [[nodiscard]] auto getHeight() const noexcept -> int32_t;
+        [[nodiscard]] int32_t getHeight() const noexcept;
 
     private:
         int32_t width_{};
@@ -112,6 +112,6 @@ namespace common::filesystem
         /// @brief Loads a BMP image from a file
         /// @param filename The name of the file to load the image from
         /// @throws std::runtime_error if the file cannot be loaded or is not a valid BMP
-        auto load(const std::string& filename) -> void;
+        void load(const std::string& filename);
     };
 }

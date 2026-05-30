@@ -8,7 +8,6 @@
 #include <queue>
 #include <vector>
 #include <cstdint>
-#include <stdexcept>
 
 namespace common::data_structure
 {

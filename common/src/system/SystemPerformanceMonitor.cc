@@ -6,7 +6,6 @@
 
 #include "src/system/SystemPerformanceMonitor.hpp"
 
-#include <fmt/format.h>
 #include <windows.h>
 
 #include <chrono>
@@ -15,7 +14,7 @@
 
 namespace common::system
 {
-    auto SystemPerformanceMonitor::FileTimeToULARGEInteger(const FILETIME& ft) noexcept -> ULARGE_INTEGER
+    ULARGE_INTEGER SystemPerformanceMonitor::FileTimeToULARGEInteger(const FILETIME& ft) noexcept
     {
         ULARGE_INTEGER result;
         result.LowPart = ft.dwLowDateTime;
@@ -23,7 +22,7 @@ namespace common::system
         return result;
     }
 
-    auto SystemPerformanceMonitor::GetMemoryUsage() noexcept -> MemoryUsage
+    MemoryUsage SystemPerformanceMonitor::GetMemoryUsage() noexcept
     {
         MemoryUsage memUsage{};
         MEMORYSTATUSEX memInfo{};
@@ -39,7 +38,7 @@ namespace common::system
         return memUsage;
     }
 
-    auto SystemPerformanceMonitor::GetCpuUsage(const int32_t interval) noexcept -> CpuUsage
+    CpuUsage SystemPerformanceMonitor::GetCpuUsage(const int32_t interval) noexcept
     {
         CpuUsage cpuUsage{};
 
