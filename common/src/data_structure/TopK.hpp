@@ -30,7 +30,7 @@ namespace common::data_structure
 
         /// @brief Add a number to the TopK.
         /// @param num The number to add.
-        auto add(int32_t num) -> void;
+        void add(int32_t num);
 
         /// @brief Get the top k numbers (non-destructive, read-only operation).
         /// @param count Number of elements to return (must be <= internal heap size).
@@ -40,15 +40,15 @@ namespace common::data_structure
         /// @return The top k numbers in the specified order.
         /// @throws std::invalid_argument If count is negative
         /// @note This method does not modify the internal heap state.
-        [[nodiscard]] auto getTopK(int32_t count = 0, bool ascending = true) const -> std::vector<int32_t>;
+        [[nodiscard]] std::vector<int32_t> getTopK(int32_t count = 0, bool ascending = true) const;
 
         /// @brief Get the current size of the heap.
         /// @return The number of elements in the heap.
-        [[nodiscard]] auto size() const -> size_t;
+        [[nodiscard]] size_t size() const;
 
         /// @brief Check if the heap is empty.
         /// @return True if the heap is empty, false otherwise.
-        [[nodiscard]] auto empty() const -> bool;
+        [[nodiscard]] bool empty() const;
 
     private:
         int32_t max_capacity_; // 0 means unbounded

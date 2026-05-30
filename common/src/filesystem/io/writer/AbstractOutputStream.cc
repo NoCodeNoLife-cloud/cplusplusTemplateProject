@@ -10,7 +10,7 @@
 
 namespace common::filesystem
 {
-    auto AbstractOutputStream::write(const std::vector<std::byte>& buffer) -> void
+    void AbstractOutputStream::write(const std::vector<std::byte>& buffer)
     {
         if (!buffer.empty())
         {
@@ -18,7 +18,7 @@ namespace common::filesystem
         }
     }
 
-    auto AbstractOutputStream::write(const std::vector<std::byte>& buffer, const size_t offset, const size_t len) -> void
+    void AbstractOutputStream::write(const std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
         if (offset + len > buffer.size())
         {

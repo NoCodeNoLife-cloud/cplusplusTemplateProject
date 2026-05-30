@@ -26,12 +26,12 @@ namespace common::interfaces
         /// @brief Append a character to the object
         /// @param c The character to append
         /// @return A reference to the object for method chaining
-        [[nodiscard]] virtual auto append(char c) -> T& = 0;
+        [[nodiscard]] virtual T& append(char c) = 0;
 
         /// @brief Append a string to the object
         /// @param str The string to append
         /// @return A reference to the object for method chaining
-        [[nodiscard]] virtual auto append(const std::string& str) -> T& = 0;
+        [[nodiscard]] virtual T& append(const std::string& str) = 0;
 
         /// @brief Append a substring to the object
         /// @param str The string to append
@@ -39,36 +39,36 @@ namespace common::interfaces
         /// @param end The end index of the substring (exclusive)
         /// @pre start <= end <= str.size()
         /// @return A reference to the object for method chaining
-        [[nodiscard]] virtual auto append(const std::string& str, size_t start, size_t end) -> T& = 0;
+        [[nodiscard]] virtual T& append(const std::string& str, size_t start, size_t end) = 0;
 
         /// @brief Append a string view to the object
         /// @param str The string view to append
         /// @return A reference to the object for method chaining
-        [[nodiscard]] virtual auto append(std::string_view str) -> T& = 0;
+        [[nodiscard]] virtual T& append(std::string_view str) = 0;
 
         /// @brief Append a C-style string to the object
         /// @param str The C-style string to append
         /// @pre str != nullptr
         /// @return A reference to the object for method chaining
-        [[nodiscard]] virtual auto append(const char* str) -> T& = 0;
+        [[nodiscard]] virtual T& append(const char* str) = 0;
 
         /// @brief Append characters from an initializer list to the object
         /// @param chars The characters to append
         /// @return A reference to the object for method chaining
-        [[nodiscard]] virtual auto append(std::initializer_list<char> chars) -> T& = 0;
+        [[nodiscard]] virtual T& append(std::initializer_list<char> chars) = 0;
 
         /// @brief Append a character array to the object
         /// @param chars Pointer to the character array
         /// @param count Number of characters to append
         /// @pre chars != nullptr || count == 0
         /// @return A reference to the object for method chaining
-        [[nodiscard]] virtual auto append(const char* chars, size_t count) -> T& = 0;
+        [[nodiscard]] virtual T& append(const char* chars, size_t count) = 0;
 
         /// @brief Append a character multiple times to the object
         /// @param c The character to append
         /// @param count Number of times to append the character
         /// @return A reference to the object for method chaining
-        [[nodiscard]] virtual auto append(char c, size_t count) -> T& = 0;
+        [[nodiscard]] virtual T& append(char c, size_t count) = 0;
 
         /// @brief Append a range of characters to the object
         /// @tparam InputIt Iterator type
@@ -76,7 +76,7 @@ namespace common::interfaces
         /// @param last Iterator to one past the last character
         /// @return A reference to the object for method chaining
         template <typename InputIt>
-        [[nodiscard]] auto append(InputIt first, InputIt last) -> T&
+        [[nodiscard]] T& append(InputIt first, InputIt last)
         {
             while (first != last)
             {

@@ -23,33 +23,33 @@ namespace common::data_structure::tree
 
         /// @brief Insert a value into the red-black tree
         /// @param value The value to insert
-        auto insert(const T& value) -> void;
+        void insert(const T& value);
 
         /// @brief Get the root node for testing purposes
         /// @return A shared pointer to the root node
-        [[nodiscard]] auto getRoot() const noexcept -> std::shared_ptr<RedBlackTreeNode<T>>;
+        [[nodiscard]] std::shared_ptr<RedBlackTreeNode<T>> getRoot() const noexcept;
 
     private:
         std::shared_ptr<RedBlackTreeNode<T>> root_{};
 
         /// @brief Perform a left rotation on the given node
         /// @param node The node to rotate
-        auto leftRotate(std::shared_ptr<RedBlackTreeNode<T>> node) -> void;
+        void leftRotate(std::shared_ptr<RedBlackTreeNode<T>> node);
 
         /// @brief Perform a right rotation on the given node
         /// @param node The node to rotate
-        auto rightRotate(std::shared_ptr<RedBlackTreeNode<T>> node) -> void;
+        void rightRotate(std::shared_ptr<RedBlackTreeNode<T>> node);
 
         /// @brief Fix the red-black tree after insertion
         /// @param node The node that was inserted
-        auto fixInsert(std::shared_ptr<RedBlackTreeNode<T>> node) -> void;
+        void fixInsert(std::shared_ptr<RedBlackTreeNode<T>> node);
     };
 
     template <typename T>
     RedBlackTree<T>::RedBlackTree() = default;
 
     template <typename T>
-    auto RedBlackTree<T>::insert(const T& value) -> void
+    void RedBlackTree<T>::insert(const T& value)
     {
         auto node = std::make_shared<RedBlackTreeNode<T>>(value);
         if (!root_)
@@ -85,13 +85,13 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto RedBlackTree<T>::getRoot() const noexcept -> std::shared_ptr<RedBlackTreeNode<T>>
+    std::shared_ptr<RedBlackTreeNode<T>> RedBlackTree<T>::getRoot() const noexcept
     {
         return root_;
     }
 
     template <typename T>
-    auto RedBlackTree<T>::leftRotate(std::shared_ptr<RedBlackTreeNode<T>> node) -> void
+    void RedBlackTree<T>::leftRotate(std::shared_ptr<RedBlackTreeNode<T>> node)
     {
         auto rightChild = node->getRight();
         node->setRight(rightChild->getLeft());
@@ -117,7 +117,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto RedBlackTree<T>::rightRotate(std::shared_ptr<RedBlackTreeNode<T>> node) -> void
+    void RedBlackTree<T>::rightRotate(std::shared_ptr<RedBlackTreeNode<T>> node)
     {
         auto leftChild = node->getLeft();
         node->setLeft(leftChild->getRight());
@@ -143,7 +143,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto RedBlackTree<T>::fixInsert(std::shared_ptr<RedBlackTreeNode<T>> node) -> void
+    void RedBlackTree<T>::fixInsert(std::shared_ptr<RedBlackTreeNode<T>> node)
     {
         while (node != root_ && node->getParent() && node->getParent()->getColor() == Color::Red)
         {

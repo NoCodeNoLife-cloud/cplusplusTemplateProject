@@ -31,7 +31,7 @@ namespace common::crypto::hash
         other.finalized_ = true; // Prevent other from being used after move
     }
 
-    auto SHA256Strategy::operator=(SHA256Strategy&& other) noexcept -> SHA256Strategy&
+    SHA256Strategy& SHA256Strategy::operator=(SHA256Strategy&& other) noexcept
     {
         if (this != &other)
         {
@@ -44,17 +44,17 @@ namespace common::crypto::hash
 
     SHA256Strategy::~SHA256Strategy() = default;
 
-    auto SHA256Strategy::getDigestSize() const noexcept -> size_t
+    size_t SHA256Strategy::getDigestSize() const noexcept
     {
         return DIGEST_SIZE;
     }
 
-    auto SHA256Strategy::getHexDigestSize() const noexcept -> size_t
+    size_t SHA256Strategy::getHexDigestSize() const noexcept
     {
         return HEX_DIGEST_SIZE;
     }
 
-    auto SHA256Strategy::update(const void* data, const size_t length) noexcept -> bool
+    bool SHA256Strategy::update(const void* data, const size_t length) noexcept
     {
         if (finalized_)
         {
@@ -63,7 +63,7 @@ namespace common::crypto::hash
         return EVP_DigestUpdate(ctx_.get(), data, length) == 1;
     }
 
-    auto SHA256Strategy::finalize() noexcept -> std::optional<std::vector<uint8_t>>
+    std::optional<std::vector<uint8_t>> SHA256Strategy::finalize() noexcept
     {
         if (finalized_)
         {
@@ -87,13 +87,13 @@ namespace common::crypto::hash
         return digest;
     }
 
-    auto SHA256Strategy::reset() noexcept -> bool
+    bool SHA256Strategy::reset() noexcept
     {
         finalized_ = false;
         return EVP_DigestInit_ex(ctx_.get(), EVP_sha256(), nullptr) == 1;
     }
 
-    auto SHA256Strategy::EvpDeleter::operator()(EVP_MD_CTX* ctx) const noexcept -> void
+    void SHA256Strategy::EvpDeleter::operator()(EVP_MD_CTX* ctx) const noexcept
     {
         if (ctx != nullptr)
         {
@@ -101,7 +101,7 @@ namespace common::crypto::hash
         }
     }
 
-    auto SHA256Strategy::validateContext() const -> void
+    void SHA256Strategy::validateContext() const
     {
         if (!ctx_)
         {

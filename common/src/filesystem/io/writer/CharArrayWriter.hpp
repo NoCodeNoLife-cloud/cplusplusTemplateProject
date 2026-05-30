@@ -36,104 +36,104 @@ namespace common::filesystem
         // Writer functions
         /// @brief Writes a single character to the buffer.
         /// @param c The character to write.
-        auto write(char c) -> void override;
+        void write(char c) override;
 
         /// @brief Writes a portion of a character array to the buffer.
         /// @param cBuf The character array to write from.
         /// @param off The offset in the array to start writing from.
         /// @param len The number of characters to write.
         /// @throws std::out_of_range if offset and length are out of the bounds of the buffer.
-        auto write(const std::vector<char>& cBuf, size_t off, size_t len) -> void override;
+        void write(const std::vector<char>& cBuf, size_t off, size_t len) override;
 
         /// @brief Writes a character array to the buffer.
         /// @param cBuf The character array to write.
-        auto write(const std::vector<char>& cBuf) -> void override;
+        void write(const std::vector<char>& cBuf) override;
 
         /// @brief Writes a portion of a string to the buffer.
         /// @param str The string to write from.
         /// @param off The offset in the string to start writing from.
         /// @param len The number of characters to write.
         /// @throws std::out_of_range if offset and length are out of the bounds of the string.
-        auto write(const std::string& str, size_t off, size_t len) -> void override;
+        void write(const std::string& str, size_t off, size_t len) override;
 
         /// @brief Writes a string to the buffer.
         /// @param str The string to write.
-        auto write(const std::string& str) -> void override;
+        void write(const std::string& str) override;
 
         /// @brief Writes the contents of this writer to another writer.
         /// @param out The writer to write to.
-        auto writeTo(AbstractWriter& out) const -> void;
+        void writeTo(AbstractWriter& out) const;
 
         // Appendable functions
         /// @brief Appends a single character to the buffer.
         /// @param c The character to append.
         /// @return A reference to this CharArrayWriter instance.
-        auto append(char c) -> CharArrayWriter& override;
+        CharArrayWriter& append(char c) override;
 
         /// @brief Appends a string to the buffer.
         /// @param csq The string to append.
         /// @return A reference to this CharArrayWriter instance.
-        auto append(const std::string& csq) -> CharArrayWriter& override;
+        CharArrayWriter& append(const std::string& csq) override;
 
         /// @brief Appends a subsequence of a string to the buffer.
         /// @param csq The string to append from.
         /// @param start The starting index of the subsequence.
         /// @param end The ending index of the subsequence.
         /// @return A reference to this CharArrayWriter instance.
-        auto append(const std::string& csq, size_t start, size_t end) -> CharArrayWriter& override;
+        CharArrayWriter& append(const std::string& csq, size_t start, size_t end) override;
 
         /// @brief Appends a string view to the buffer.
         /// @param str The string view to append.
         /// @return A reference to this CharArrayWriter instance.
-        auto append(std::string_view str) -> CharArrayWriter& override;
+        CharArrayWriter& append(std::string_view str) override;
 
         /// @brief Appends a C-string to the buffer.
         /// @param str The C-string to append.
         /// @return A reference to this CharArrayWriter instance.
-        auto append(const char* str) -> CharArrayWriter& override;
+        CharArrayWriter& append(const char* str) override;
 
         /// @brief Appends an initializer list of characters to the buffer.
         /// @param chars The initializer list of characters to append.
         /// @return A reference to this CharArrayWriter instance.
-        auto append(std::initializer_list<char> chars) -> CharArrayWriter& override;
+        CharArrayWriter& append(std::initializer_list<char> chars) override;
 
         /// @brief Appends a sequence of characters to the buffer.
         /// @param chars Pointer to the character sequence.
         /// @param count Number of characters to append.
         /// @return A reference to this CharArrayWriter instance.
-        auto append(const char* chars, size_t count) -> CharArrayWriter& override;
+        CharArrayWriter& append(const char* chars, size_t count) override;
 
         /// @brief Appends a character multiple times to the buffer.
         /// @param c The character to append.
         /// @param count Number of times to append the character.
         /// @return A reference to this CharArrayWriter instance.
-        auto append(char c, size_t count) -> CharArrayWriter& override;
+        CharArrayWriter& append(char c, size_t count) override;
 
         // Utility functions
         /// @brief Resets the buffer to empty.
-        auto reset() -> void;
+        void reset();
 
         /// @brief Returns a copy of the buffer's contents as a character array.
         /// @return A vector containing the buffer's contents.
-        [[nodiscard]] auto toCharArray() const -> std::vector<char>;
+        [[nodiscard]] std::vector<char> toCharArray() const;
 
         /// @brief Returns the current size of the buffer.
         /// @return The number of characters in the buffer.
-        [[nodiscard]] auto size() const -> size_t;
+        [[nodiscard]] size_t size() const;
 
         /// @brief Returns the buffer's contents as a string.
         /// @return A string representation of the buffer's contents.
-        [[nodiscard]] auto toString() const -> std::string override;
+        [[nodiscard]] std::string toString() const override;
 
         /// @brief Flushes the stream (no-op for this implementation).
-        auto flush() -> void override;
+        void flush() override;
 
         /// @brief Closes the writer (no-op for this implementation).
-        auto close() -> void override;
+        void close() override;
 
         /// @brief Checks if the writer is closed.
         /// @return Always false for this implementation.
-        [[nodiscard]] auto isClosed() const -> bool override;
+        [[nodiscard]] bool isClosed() const override;
 
     private:
         std::vector<char> buf_{};
@@ -141,6 +141,6 @@ namespace common::filesystem
 
         /// @brief Ensures that the buffer has at least the specified capacity.
         /// @param minCapacity The minimum capacity required.
-        auto ensureCapacity(size_t minCapacity) -> void;
+        void ensureCapacity(size_t minCapacity);
     };
 }

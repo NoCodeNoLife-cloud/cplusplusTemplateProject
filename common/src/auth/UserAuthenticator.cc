@@ -6,6 +6,7 @@
 
 #include "UserAuthenticator.hpp"
 
+#include <regex>
 #include <fmt/format.h>
 #include "src/exception/AuthenticationException.hpp"
 #include <sstream>

@@ -16,7 +16,7 @@ namespace common::filesystem
     {
     }
 
-    auto FilterInputStream::validateInputStream() const -> void
+    void FilterInputStream::validateInputStream() const
     {
         if (!input_stream_)
         {
@@ -24,19 +24,19 @@ namespace common::filesystem
         }
     }
 
-    auto FilterInputStream::available() -> size_t
+    size_t FilterInputStream::available()
     {
         validateInputStream();
         return input_stream_->available();
     }
 
-    auto FilterInputStream::mark(const int32_t readLimit) -> void
+    void FilterInputStream::mark(const int32_t readLimit)
     {
         validateInputStream();
         input_stream_->mark(readLimit);
     }
 
-    auto FilterInputStream::markSupported() const noexcept -> bool
+    bool FilterInputStream::markSupported() const noexcept
     {
         if (!input_stream_)
         {
@@ -45,37 +45,37 @@ namespace common::filesystem
         return input_stream_->markSupported();
     }
 
-    auto FilterInputStream::read() -> std::byte
+    std::byte FilterInputStream::read()
     {
         validateInputStream();
         return input_stream_->read();
     }
 
-    auto FilterInputStream::read(std::vector<std::byte>& buffer) -> size_t
+    size_t FilterInputStream::read(std::vector<std::byte>& buffer)
     {
         validateInputStream();
         return input_stream_->read(buffer);
     }
 
-    auto FilterInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len) -> size_t
+    size_t FilterInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
         validateInputStream();
         return input_stream_->read(buffer, offset, len);
     }
 
-    auto FilterInputStream::reset() -> void
+    void FilterInputStream::reset()
     {
         validateInputStream();
         input_stream_->reset();
     }
 
-    auto FilterInputStream::skip(const size_t n) -> size_t
+    size_t FilterInputStream::skip(const size_t n)
     {
         validateInputStream();
         return input_stream_->skip(n);
     }
 
-    auto FilterInputStream::close() -> void
+    void FilterInputStream::close()
     {
         if (input_stream_)
         {
@@ -83,7 +83,7 @@ namespace common::filesystem
         }
     }
 
-    auto FilterInputStream::isClosed() const noexcept -> bool
+    bool FilterInputStream::isClosed() const noexcept
     {
         if (!input_stream_)
         {

@@ -1,5 +1,5 @@
 /**
- * @file AuthenticationException.hpp
+* @file AuthenticationException.hpp
  * @brief AuthenticationException class declaration
  * @details This header defines the AuthenticationException class that provides functionality for Custom exception classes for authentication and other operations.
  */
@@ -33,11 +33,11 @@ namespace common::exception
 
         /// @brief Assignment operator
         /// @param other Exception object to assign from
-        auto operator=(const AuthenticationException& other) -> AuthenticationException& = default;
+        AuthenticationException& operator=(const AuthenticationException& other) = default;
 
         /// @brief Move assignment operator
         /// @param other Exception object to move from
-        auto operator=(AuthenticationException&& other) noexcept -> AuthenticationException& = default;
+        AuthenticationException& operator=(AuthenticationException&& other) noexcept = default;
 
         /// @brief Virtual destructor for proper cleanup in inheritance hierarchy
         ~AuthenticationException() noexcept override;

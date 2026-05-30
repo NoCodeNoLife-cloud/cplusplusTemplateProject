@@ -31,36 +31,36 @@ namespace common::filesystem
         /// @brief Read a single character.
         /// @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff),
         ///         or -1 if the end of the stream has been reached
-        auto read() -> int override;
+        int read() override;
 
         /// @brief Read characters into an array.
         /// @param cBuf Destination buffer
         /// @param off Offset at which to start storing characters
         /// @param len Maximum number of characters to read
         /// @return The number of characters read, or -1 if the end of the stream has been reached
-        auto read(std::vector<char>& cBuf, size_t off, size_t len) -> int override;
+        int read(std::vector<char>& cBuf, size_t off, size_t len) override;
 
         /// @brief Tests if this input stream is ready to be read.
         /// @return true if the next read() is guaranteed not to block for input, false otherwise.
-        [[nodiscard]] auto ready() const -> bool override;
+        [[nodiscard]] bool ready() const override;
 
         /// @brief Close the stream.
-        auto close() -> void override;
+        void close() override;
 
         /// @brief Tests if this stream supports the mark and reset methods.
         /// @return true if this stream type supports the mark and reset methods; false otherwise.
-        [[nodiscard]] auto markSupported() const -> bool override;
+        [[nodiscard]] bool markSupported() const override;
 
         /// @brief Marks the current position in the stream.
         /// @param readAheadLimit the maximum limit of bytes that can be read before the mark position becomes invalid.
-        auto mark(size_t readAheadLimit) -> void override;
+        void mark(size_t readAheadLimit) override;
 
         /// @brief Resets the stream to the most recent mark.
-        auto reset() -> void override;
+        void reset() override;
 
         /// @brief Checks if this reader has been closed.
         /// @return true if this reader has been closed, false otherwise.
-        [[nodiscard]] auto isClosed() const -> bool override;
+        [[nodiscard]] bool isClosed() const override;
 
     private:
         std::shared_ptr<AbstractReader> reader_;

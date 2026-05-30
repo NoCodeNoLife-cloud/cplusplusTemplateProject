@@ -30,21 +30,21 @@ namespace common::data_structure::tree
 
         /// @brief Insert a value into the AVL tree
         /// @param value The value to insert
-        auto insert(T value) -> void;
+        void insert(T value);
 
         /// @brief Remove a value from the AVL tree
         /// @param value The value to remove
-        auto remove(T value) -> void;
+        void remove(T value);
 
         /// @brief Find a value in the AVL tree
         /// @param value The value to find
         /// @return bool True if the value is found, false otherwise
-        [[nodiscard]] auto find(T value) const -> bool;
+        [[nodiscard]] bool find(T value) const;
 
         /// @brief Find a value in the AVL tree and return it
         /// @param value The value to find
         /// @return std::optional<T> The value if found, std::nullopt otherwise
-        [[nodiscard]] auto findValue(T value) const -> std::optional<T>;
+        [[nodiscard]] std::optional<T> findValue(T value) const;
 
     private:
         std::shared_ptr<TreeNode<T>> root_{};
@@ -52,70 +52,70 @@ namespace common::data_structure::tree
         /// @brief Get the height of a node
         /// @param node The node to get the height of
         /// @return int32_t The height of the node
-        [[nodiscard]] auto getHeight(const std::shared_ptr<TreeNode<T>>& node) const noexcept -> int32_t;
+        [[nodiscard]] int32_t getHeight(const std::shared_ptr<TreeNode<T>>& node) const noexcept;
 
         /// @brief Get the balance factor of a node
         /// @param node The node to get the balance factor of
         /// @return int32_t The balance factor of the node
-        [[nodiscard]] auto getBalance(const std::shared_ptr<TreeNode<T>>& node) const noexcept -> int32_t;
+        [[nodiscard]] int32_t getBalance(const std::shared_ptr<TreeNode<T>>& node) const noexcept;
 
         /// @brief Rotate a subtree to the right
         /// @param y The root of the subtree to rotate
         /// @return std::shared_ptr<TreeNode<T>> The new root of the subtree
-        auto rotateRight(std::shared_ptr<TreeNode<T>> y) -> std::shared_ptr<TreeNode<T>>;
+        std::shared_ptr<TreeNode<T>> rotateRight(std::shared_ptr<TreeNode<T>> y);
 
         /// @brief Rotate a subtree to the left
         /// @param x The root of the subtree to rotate
         /// @return std::shared_ptr<TreeNode<T>> The new root of the subtree
-        auto rotateLeft(std::shared_ptr<TreeNode<T>> x) -> std::shared_ptr<TreeNode<T>>;
+        std::shared_ptr<TreeNode<T>> rotateLeft(std::shared_ptr<TreeNode<T>> x);
 
         /// @brief Insert a value into a subtree
         /// @param node The root of the subtree to insert into
         /// @param value The value to insert
         /// @return std::shared_ptr<TreeNode<T>> The new root of the subtree
-        auto insert(std::shared_ptr<TreeNode<T>> node, T value) -> std::shared_ptr<TreeNode<T>>;
+        std::shared_ptr<TreeNode<T>> insert(std::shared_ptr<TreeNode<T>> node, T value);
 
         /// @brief Remove a value from a subtree
         /// @param node The root of the subtree to remove from
         /// @param value The value to remove
         /// @return std::shared_ptr<TreeNode<T>> The new root of the subtree
-        auto remove(std::shared_ptr<TreeNode<T>> node, T value) -> std::shared_ptr<TreeNode<T>>;
+        std::shared_ptr<TreeNode<T>> remove(std::shared_ptr<TreeNode<T>> node, T value);
 
         /// @brief Find the node with the minimum value in a subtree
         /// @param node The root of the subtree to search
         /// @return std::shared_ptr<TreeNode<T>> The node with the minimum value
-        [[nodiscard]] auto findMin(const std::shared_ptr<TreeNode<T>>& node) const -> std::shared_ptr<TreeNode<T>>;
+        [[nodiscard]] std::shared_ptr<TreeNode<T>> findMin(const std::shared_ptr<TreeNode<T>>& node) const;
 
         /// @brief Find a value in a subtree
         /// @param node The root of the subtree to search
         /// @param value The value to find
         /// @return std::shared_ptr<TreeNode<T>> The node containing the value, or nullptr if not found
-        [[nodiscard]] auto find(const std::shared_ptr<TreeNode<T>>& node, T value) const -> std::shared_ptr<TreeNode<T>>;
+        [[nodiscard]] std::shared_ptr<TreeNode<T>> find(const std::shared_ptr<TreeNode<T>>& node, T value) const;
     };
 
     template <typename T>
     AVLTree<T>::AVLTree() = default;
 
     template <typename T>
-    auto AVLTree<T>::insert(T value) -> void
+    void AVLTree<T>::insert(T value)
     {
         root_ = insert(root_, value);
     }
 
     template <typename T>
-    auto AVLTree<T>::remove(T value) -> void
+    void AVLTree<T>::remove(T value)
     {
         root_ = remove(root_, value);
     }
 
     template <typename T>
-    auto AVLTree<T>::find(T value) const -> bool
+    bool AVLTree<T>::find(T value) const
     {
         return find(root_, value) != nullptr;
     }
 
     template <typename T>
-    auto AVLTree<T>::findValue(T value) const -> std::optional<T>
+    std::optional<T> AVLTree<T>::findValue(T value) const
     {
         const auto node = find(root_, value);
         if (node)
@@ -126,19 +126,19 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto AVLTree<T>::getHeight(const std::shared_ptr<TreeNode<T>>& node) const noexcept -> int32_t
+    int32_t AVLTree<T>::getHeight(const std::shared_ptr<TreeNode<T>>& node) const noexcept
     {
         return node ? node->height_ : 0;
     }
 
     template <typename T>
-    auto AVLTree<T>::getBalance(const std::shared_ptr<TreeNode<T>>& node) const noexcept -> int32_t
+    int32_t AVLTree<T>::getBalance(const std::shared_ptr<TreeNode<T>>& node) const noexcept
     {
         return node ? getHeight(node->left_) - getHeight(node->right_) : 0;
     }
 
     template <typename T>
-    auto AVLTree<T>::rotateRight(std::shared_ptr<TreeNode<T>> y) -> std::shared_ptr<TreeNode<T>>
+    std::shared_ptr<TreeNode<T>> AVLTree<T>::rotateRight(std::shared_ptr<TreeNode<T>> y)
     {
         auto x = y->left_;
         auto T2 = x->right_;
@@ -150,7 +150,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto AVLTree<T>::rotateLeft(std::shared_ptr<TreeNode<T>> x) -> std::shared_ptr<TreeNode<T>>
+    std::shared_ptr<TreeNode<T>> AVLTree<T>::rotateLeft(std::shared_ptr<TreeNode<T>> x)
     {
         auto y = x->right_;
         auto T2 = y->left_;
@@ -162,7 +162,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto AVLTree<T>::insert(std::shared_ptr<TreeNode<T>> node, T value) -> std::shared_ptr<TreeNode<T>>
+    std::shared_ptr<TreeNode<T>> AVLTree<T>::insert(std::shared_ptr<TreeNode<T>> node, T value)
     {
         if (!node)
         {
@@ -198,7 +198,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto AVLTree<T>::remove(std::shared_ptr<TreeNode<T>> node, T value) -> std::shared_ptr<TreeNode<T>>
+    std::shared_ptr<TreeNode<T>> AVLTree<T>::remove(std::shared_ptr<TreeNode<T>> node, T value)
     {
         if (!node)
         {
@@ -219,7 +219,7 @@ namespace common::data_structure::tree
             }
         }
         if (!node) return node;
-        node->height = 1 + std::max(getHeight(node->left_), getHeight(node->right_));
+        node->height_ = 1 + std::max(getHeight(node->left_), getHeight(node->right_));
         const int32_t balance = getBalance(node);
         if (balance > 1)
         {
@@ -243,7 +243,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto AVLTree<T>::findMin(const std::shared_ptr<TreeNode<T>>& node) const -> std::shared_ptr<TreeNode<T>>
+    std::shared_ptr<TreeNode<T>> AVLTree<T>::findMin(const std::shared_ptr<TreeNode<T>>& node) const
     {
         auto current = node;
         while (current->left_) current = current->left_;
@@ -251,7 +251,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto AVLTree<T>::find(const std::shared_ptr<TreeNode<T>>& node, T value) const -> std::shared_ptr<TreeNode<T>>
+    std::shared_ptr<TreeNode<T>> AVLTree<T>::find(const std::shared_ptr<TreeNode<T>>& node, T value) const
     {
         if (!node) return nullptr;
         if (value == node->data) return node;

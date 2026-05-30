@@ -12,7 +12,7 @@
 
 namespace common::filesystem
 {
-    auto PushbackReader::validateOpen() const -> void
+    void PushbackReader::validateOpen() const
     {
         if (closed_ || !in_)
         {
@@ -20,7 +20,7 @@ namespace common::filesystem
         }
     }
 
-    auto PushbackReader::validateNotClosed() const -> void
+    void PushbackReader::validateNotClosed() const
     {
         if (closed_)
         {
@@ -40,25 +40,25 @@ namespace common::filesystem
         }
     }
 
-    auto PushbackReader::close() noexcept -> void
+    void PushbackReader::close() noexcept
     {
         closed_ = true;
         FilterReader::close();
         buffer_.clear();
     }
 
-    auto PushbackReader::mark(const size_t readAheadLimit) -> void
+    void PushbackReader::mark(const size_t readAheadLimit)
     {
         static_cast<void>(readAheadLimit); // Unused parameter
         throw std::runtime_error("PushbackReader::mark: mark() not supported.");
     }
 
-    auto PushbackReader::markSupported() const -> bool
+    bool PushbackReader::markSupported() const
     {
         return false;
     }
 
-    auto PushbackReader::read() -> int
+    int PushbackReader::read()
     {
         validateOpen();
 
@@ -69,7 +69,7 @@ namespace common::filesystem
         return FilterReader::read();
     }
 
-    auto PushbackReader::read(std::vector<char>& cBuf, const size_t off, const size_t len) -> int
+    int PushbackReader::read(std::vector<char>& cBuf, const size_t off, const size_t len)
     {
         validateOpen();
 
@@ -96,7 +96,7 @@ namespace common::filesystem
         return static_cast<int>(bytesRead);
     }
 
-    auto PushbackReader::ready() const -> bool
+    bool PushbackReader::ready() const
     {
         if (closed_ || !in_)
         {
@@ -105,12 +105,12 @@ namespace common::filesystem
         return buffer_pos_ < buffer_.size() || FilterReader::ready();
     }
 
-    auto PushbackReader::reset() -> void
+    void PushbackReader::reset()
     {
         throw std::runtime_error("PushbackReader::reset: reset() not supported.");
     }
 
-    auto PushbackReader::skip(const size_t n) -> size_t
+    size_t PushbackReader::skip(const size_t n)
     {
         validateOpen();
 
@@ -128,12 +128,12 @@ namespace common::filesystem
         return skipped;
     }
 
-    auto PushbackReader::unread(const std::vector<char>& cbuf) noexcept -> void
+    void PushbackReader::unread(const std::vector<char>& cbuf) noexcept
     {
         unread(cbuf, 0, cbuf.size());
     }
 
-    auto PushbackReader::unread(const std::vector<char>& cBuf, const size_t off, const size_t len) -> void
+    void PushbackReader::unread(const std::vector<char>& cBuf, const size_t off, const size_t len)
     {
         validateNotClosed();
 
@@ -153,7 +153,7 @@ namespace common::filesystem
         }
     }
 
-    auto PushbackReader::unread(const int32_t c) -> void
+    void PushbackReader::unread(const int32_t c)
     {
         validateNotClosed();
 
@@ -164,7 +164,7 @@ namespace common::filesystem
         buffer_[--buffer_pos_] = static_cast<char>(c);
     }
 
-    auto PushbackReader::isClosed() const -> bool
+    bool PushbackReader::isClosed() const
     {
         return closed_ || !in_ || in_->isClosed();
     }

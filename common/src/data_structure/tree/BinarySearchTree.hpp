@@ -24,24 +24,24 @@ namespace common::data_structure::tree
 
         /// @brief Inserts a value into the binary search tree.
         /// @param value The value to be inserted.
-        auto insert(T value) -> void;
+        void insert(T value);
 
         /// @brief Finds a value in the binary search tree.
         /// @param value The value to be searched.
         /// @return True if the value is found, false otherwise.
-        [[nodiscard]] auto find(T value) const -> bool;
+        [[nodiscard]] bool find(T value) const;
 
         /// @brief Finds a value in the binary search tree and returns it.
         /// @param value The value to be searched.
         /// @return std::optional<T> The value if found, std::nullopt otherwise.
-        [[nodiscard]] auto findValue(T value) const -> std::optional<T>;
+        [[nodiscard]] std::optional<T> findValue(T value) const;
 
         /// @brief Removes a value from the binary search tree.
         /// @param value The value to be removed.
-        auto remove(T value) -> void;
+        void remove(T value);
 
         /// @brief Performs an inorder traversal of the binary search tree.
-        auto inorderTraversal() const -> void;
+        void inorderTraversal() const;
 
     private:
         std::shared_ptr<TreeNode<T>> root_{};
@@ -50,48 +50,48 @@ namespace common::data_structure::tree
         /// @param node The current node in the recursion.
         /// @param value The value to be inserted.
         /// @return The updated node after insertion.
-        auto insertRecursive(std::shared_ptr<TreeNode<T>> node, T value) -> std::shared_ptr<TreeNode<T>>;
+        std::shared_ptr<TreeNode<T>> insertRecursive(std::shared_ptr<TreeNode<T>> node, T value);
 
         /// @brief Recursively finds a value in the binary search tree.
         /// @param node The current node in the recursion.
         /// @param value The value to be searched.
         /// @return True if the value is found, false otherwise.
-        [[nodiscard]] auto findRecursive(const std::shared_ptr<TreeNode<T>>& node, T value) const -> bool;
+        [[nodiscard]] bool findRecursive(const std::shared_ptr<TreeNode<T>>& node, T value) const;
 
         /// @brief Recursively removes a value from the binary search tree.
         /// @param node The current node in the recursion.
         /// @param value The value to be removed.
         /// @return The updated node after removal.
-        auto removeRecursive(std::shared_ptr<TreeNode<T>> node, T value) -> std::shared_ptr<TreeNode<T>>;
+        std::shared_ptr<TreeNode<T>> removeRecursive(std::shared_ptr<TreeNode<T>> node, T value);
 
         /// @brief Finds the node with the minimum value in a subtree.
         /// @param node The root of the subtree.
         /// @return The node with the minimum value.
-        [[nodiscard]] auto minValueNode(std::shared_ptr<TreeNode<T>> node) -> std::shared_ptr<TreeNode<T>>;
+        [[nodiscard]] std::shared_ptr<TreeNode<T>> minValueNode(std::shared_ptr<TreeNode<T>> node);
 
         /// @brief Recursively performs an inorder traversal of the binary search tree.
         /// @param node The current node in the recursion.
-        auto inorderTraversalRecursive(const std::shared_ptr<TreeNode<T>>& node) const -> void;
+        void inorderTraversalRecursive(const std::shared_ptr<TreeNode<T>>& node) const;
     };
 
     template <typename T>
     BinarySearchTree<T>::BinarySearchTree() noexcept = default;
 
     template <typename T>
-    auto BinarySearchTree<T>::insert(T value) -> void
+    void BinarySearchTree<T>::insert(T value)
     {
         root_ = insertRecursive(root_, value);
     }
 
     template <typename T>
-    auto BinarySearchTree<T>::find(T value) const -> bool
+    bool BinarySearchTree<T>::find(T value) const
     {
         const bool found = findRecursive(root_, value);
         return found;
     }
 
     template <typename T>
-    auto BinarySearchTree<T>::findValue(T value) const -> std::optional<T>
+    std::optional<T> BinarySearchTree<T>::findValue(T value) const
     {
         auto node = root_;
         while (node)
@@ -113,20 +113,20 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto BinarySearchTree<T>::remove(T value) -> void
+    void BinarySearchTree<T>::remove(T value)
     {
         root_ = removeRecursive(root_, value);
     }
 
     template <typename T>
-    auto BinarySearchTree<T>::inorderTraversal() const -> void
+    void BinarySearchTree<T>::inorderTraversal() const
     {
         inorderTraversalRecursive(root_);
         std::cout << std::endl;
     }
 
     template <typename T>
-    auto BinarySearchTree<T>::insertRecursive(std::shared_ptr<TreeNode<T>> node, T value) -> std::shared_ptr<TreeNode<T>>
+    std::shared_ptr<TreeNode<T>> BinarySearchTree<T>::insertRecursive(std::shared_ptr<TreeNode<T>> node, T value)
     {
         if (!node)
         {
@@ -138,7 +138,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto BinarySearchTree<T>::findRecursive(const std::shared_ptr<TreeNode<T>>& node, T value) const -> bool
+    bool BinarySearchTree<T>::findRecursive(const std::shared_ptr<TreeNode<T>>& node, T value) const
     {
         if (!node) return false;
         if (value == node->data) return true;
@@ -147,7 +147,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto BinarySearchTree<T>::removeRecursive(std::shared_ptr<TreeNode<T>> node, T value) -> std::shared_ptr<TreeNode<T>>
+    std::shared_ptr<TreeNode<T>> BinarySearchTree<T>::removeRecursive(std::shared_ptr<TreeNode<T>> node, T value)
     {
         if (!node)
         {
@@ -166,7 +166,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto BinarySearchTree<T>::minValueNode(std::shared_ptr<TreeNode<T>> node) -> std::shared_ptr<TreeNode<T>>
+    std::shared_ptr<TreeNode<T>> BinarySearchTree<T>::minValueNode(std::shared_ptr<TreeNode<T>> node)
     {
         auto current = node;
         while (current && current->left_) current = current->left_;
@@ -174,7 +174,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto BinarySearchTree<T>::inorderTraversalRecursive(const std::shared_ptr<TreeNode<T>>& node) const -> void
+    void BinarySearchTree<T>::inorderTraversalRecursive(const std::shared_ptr<TreeNode<T>>& node) const
     {
         if (!node) return;
         inorderTraversalRecursive(node->left_);

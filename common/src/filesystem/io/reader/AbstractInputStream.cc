@@ -16,22 +16,22 @@
 
 namespace common::filesystem
 {
-    auto AbstractInputStream::mark(std::int32_t readLimit) -> void
+    void AbstractInputStream::mark(std::int32_t readLimit)
     {
         throw std::runtime_error("Mark operation not supported by this input stream implementation");
     }
 
-    auto AbstractInputStream::markSupported() const -> bool
+    bool AbstractInputStream::markSupported() const
     {
         return false;
     }
 
-    auto AbstractInputStream::read(std::vector<std::byte>& buffer) -> size_t
+    size_t AbstractInputStream::read(std::vector<std::byte>& buffer)
     {
         return read(buffer, 0, buffer.size());
     }
 
-    auto AbstractInputStream::read(std::vector<std::byte>& buffer, const std::size_t offset, const std::size_t len) -> size_t
+    size_t AbstractInputStream::read(std::vector<std::byte>& buffer, const std::size_t offset, const std::size_t len)
     {
         // Check for buffer overflow
         if (offset > buffer.size() || len > buffer.size() - offset)
@@ -54,12 +54,12 @@ namespace common::filesystem
         return bytesRead;
     }
 
-    auto AbstractInputStream::reset() -> void
+    void AbstractInputStream::reset()
     {
         throw std::runtime_error("Reset operation not supported by this input stream implementation");
     }
 
-    auto AbstractInputStream::skip(const std::size_t n) -> size_t
+    size_t AbstractInputStream::skip(const std::size_t n)
     {
         std::size_t skipped = 0;
         // Prevent potential overflow

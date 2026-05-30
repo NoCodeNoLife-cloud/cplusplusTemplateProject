@@ -28,53 +28,53 @@ namespace common::filesystem
 
         /// @brief Writes a single byte to the stream.
         /// @param b The byte to write.
-        auto write(std::byte b) -> void override;
+        void write(std::byte b) override;
 
         /// @brief Writes a sequence of bytes to the stream from the specified buffer.
         /// @param buffer The buffer containing bytes to write.
         /// @param offset The start offset in the buffer.
         /// @param len The number of bytes to write.
         /// @throws std::out_of_range if offset and length are out of the bounds of the buffer.
-        auto write(const std::vector<std::byte>& buffer, size_t offset, size_t len) -> void override;
+        void write(const std::vector<std::byte>& buffer, size_t offset, size_t len) override;
 
         /// @brief Writes a sequence of bytes to the stream from the specified buffer.
         /// @param buffer The buffer containing bytes to write.
         /// @param length The number of bytes to write.
         /// @throws std::invalid_argument if buffer is null.
-        auto write(const std::byte* buffer, size_t length) -> void override;
+        void write(const std::byte* buffer, size_t length) override;
 
         /// @brief Writes the complete contents of this byte array output stream to the specified output stream.
         /// @param out The output stream to which to write the data.
-        auto writeTo(AbstractOutputStream& out) const -> void;
+        void writeTo(AbstractOutputStream& out) const;
 
         /// @brief Resets the count field of this byte array output stream to zero.
-        auto reset() -> void;
+        void reset();
 
         /// @brief Creates a newly allocated byte array.
         /// @return The current contents of this output stream, as a byte array.
-        [[nodiscard]] auto toByteArray() const -> std::vector<std::byte>;
+        [[nodiscard]] std::vector<std::byte> toByteArray() const;
 
         /// @brief Returns the current size of the buffer.
         /// @return The value of the count field, which is the number of valid bytes in the buffer.
-        [[nodiscard]] auto size() const -> size_t;
+        [[nodiscard]] size_t size() const;
 
         /// @brief Converts the buffer's contents into a string by decoding the bytes using the platform's default charset.
         /// @return A string representation of the buffer's contents.
-        [[nodiscard]] auto toString() const -> std::string;
+        [[nodiscard]] std::string toString() const;
 
         /// @brief Flushes this output stream and forces any buffered output bytes to be written out.
-        auto flush() -> void override;
+        void flush() override;
 
         /// @brief Closes this output stream and releases any system resources associated with this stream.
-        auto close() -> void override;
+        void close() override;
 
         /// @brief Returns the current capacity of the buffer.
         /// @return The current capacity of the buffer.
-        [[nodiscard]] auto capacity() const -> size_t;
+        [[nodiscard]] size_t capacity() const;
 
         /// @brief Checks if the stream is closed.
         /// @return True if the stream is closed, false otherwise.
-        [[nodiscard]] auto isClosed() const -> bool override;
+        [[nodiscard]] bool isClosed() const override;
 
     protected:
         std::vector<std::byte> buf_{};
@@ -83,6 +83,6 @@ namespace common::filesystem
     private:
         /// @brief Ensures that the buffer has at least the specified capacity.
         /// @param additionalCapacity The additional capacity needed.
-        auto ensureCapacity(size_t additionalCapacity) -> void;
+        void ensureCapacity(size_t additionalCapacity);
     };
 }

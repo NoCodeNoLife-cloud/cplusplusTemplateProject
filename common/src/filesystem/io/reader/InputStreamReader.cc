@@ -30,7 +30,7 @@ namespace common::filesystem
         }
     }
 
-    auto InputStreamReader::read() -> int
+    int InputStreamReader::read()
     {
         if (closed_ || !reader_)
         {
@@ -48,7 +48,7 @@ namespace common::filesystem
         // UTF-8 byte patterns:
         // 0xxxxxxx -> 1 byte (ASCII)
         // 110xxxxx -> 2 bytes
-        // 1110xxxx -> 3 bytes  
+        // 1110xxxx -> 3 bytes
         // 11110xxx -> 4 bytes
         // Others are invalid as start bytes
         constexpr struct
@@ -115,7 +115,7 @@ namespace common::filesystem
         }
     }
 
-    auto InputStreamReader::read(std::vector<char>& cBuf, const size_t off, const size_t len) -> int
+    int InputStreamReader::read(std::vector<char>& cBuf, const size_t off, const size_t len)
     {
         if (closed_ || !reader_)
         {
@@ -149,7 +149,7 @@ namespace common::filesystem
         return static_cast<int>(totalCharsRead);
     }
 
-    auto InputStreamReader::ready() const -> bool
+    bool InputStreamReader::ready() const
     {
         if (closed_ || !reader_)
         {
@@ -158,7 +158,7 @@ namespace common::filesystem
         return reader_->ready();
     }
 
-    auto InputStreamReader::close() -> void
+    void InputStreamReader::close()
     {
         closed_ = true;
         if (reader_)
@@ -167,23 +167,23 @@ namespace common::filesystem
         }
     }
 
-    auto InputStreamReader::markSupported() const -> bool
+    bool InputStreamReader::markSupported() const
     {
         return false;
     }
 
-    auto InputStreamReader::mark(const size_t readAheadLimit) -> void
+    void InputStreamReader::mark(const size_t readAheadLimit)
     {
         static_cast<void>(readAheadLimit); // NOLINT(readability-unused-parameter) - Unused parameter in interface
         throw std::runtime_error("InputStreamReader::mark: Mark not supported");
     }
 
-    auto InputStreamReader::reset() -> void
+    void InputStreamReader::reset()
     {
         throw std::runtime_error("InputStreamReader::reset: Reset not supported");
     }
 
-    auto InputStreamReader::isClosed() const -> bool
+    bool InputStreamReader::isClosed() const
     {
         return closed_ || !reader_ || reader_->isClosed();
     }

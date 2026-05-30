@@ -34,30 +34,30 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedInputStream::available() const noexcept -> size_t
+    size_t BufferedInputStream::available() const noexcept
     {
         return count_ - pos_ + input_stream_->available();
     }
 
-    auto BufferedInputStream::close() noexcept -> void
+    void BufferedInputStream::close() noexcept
     {
         input_stream_->close();
         buf_.clear();
     }
 
-    auto BufferedInputStream::mark(const int32_t readLimit) -> void
+    void BufferedInputStream::mark(const int32_t readLimit)
     {
         mark_limit_ = readLimit;
         input_stream_->mark(readLimit);
         mark_pos_ = pos_;
     }
 
-    auto BufferedInputStream::markSupported() const noexcept -> bool
+    bool BufferedInputStream::markSupported() const noexcept
     {
         return true;
     }
 
-    auto BufferedInputStream::read() -> std::byte
+    std::byte BufferedInputStream::read()
     {
         if (pos_ >= count_)
         {
@@ -71,7 +71,7 @@ namespace common::filesystem
     }
 
     template <typename Operation>
-    auto BufferedInputStream::processWithBuffer(Operation&& op) -> size_t
+    size_t BufferedInputStream::processWithBuffer(Operation&& op)
     {
         if (const size_t bytesAvailable = count_ - pos_; bytesAvailable == 0)
         {
@@ -85,7 +85,7 @@ namespace common::filesystem
         return op(count_ - pos_); // Pass available bytes to the operation
     }
 
-    auto BufferedInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len) -> size_t
+    size_t BufferedInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
         if (offset > buffer.size() || len > buffer.size() - offset)
         {
@@ -124,13 +124,13 @@ namespace common::filesystem
         return totalBytesRead;
     }
 
-    auto BufferedInputStream::reset() -> void
+    void BufferedInputStream::reset()
     {
         pos_ = mark_pos_;
         input_stream_->reset();
     }
 
-    auto BufferedInputStream::skip(const size_t n) -> size_t
+    size_t BufferedInputStream::skip(const size_t n)
     {
         if (n == 0)
         {
@@ -161,12 +161,12 @@ namespace common::filesystem
         return skipped;
     }
 
-    auto BufferedInputStream::isClosed() const noexcept -> bool
+    bool BufferedInputStream::isClosed() const noexcept
     {
         return !input_stream_ || input_stream_->isClosed();
     }
 
-    auto BufferedInputStream::fillBuffer() -> void
+    void BufferedInputStream::fillBuffer()
     {
         count_ = input_stream_->read(buf_, 0, buf_.size());
         pos_ = 0;

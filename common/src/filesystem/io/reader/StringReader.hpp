@@ -25,21 +25,21 @@ namespace common::filesystem
         ~StringReader() override = default;
 
         /// @brief Closes the StringReader and releases any associated resources.
-        auto close() noexcept -> void override;
+        void close() noexcept override;
 
         /// @brief Marks the current position in the stream.
         /// @param readAheadLimit the maximum number of characters that can be read from the stream before the mark position
         /// becomes invalid.
-        auto mark(size_t readAheadLimit) -> void override;
+        void mark(size_t readAheadLimit) override;
 
         /// @brief Tests if this input stream supports the mark and reset methods.
         /// @return true if this stream type supports the mark and reset methods; false otherwise.
-        [[nodiscard]] auto markSupported() const noexcept -> bool override;
+        [[nodiscard]] bool markSupported() const noexcept override;
 
         /// @brief Reads a single character from the string.
         /// @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff),
         ///         or -1 if the end of the string has been reached.
-        [[nodiscard]] auto read() -> int override;
+        [[nodiscard]] int read() override;
 
         /// @brief Reads up to len characters from the string into the buffer cBuf starting at offset off.
         /// @param cBuf The buffer into which the data is read.
@@ -47,23 +47,23 @@ namespace common::filesystem
         /// @param len The maximum number of characters to read.
         /// @return The total number of characters read into the buffer, or -1 if there is no more data because the end of
         /// the string has been reached.
-        [[nodiscard]] auto read(std::vector<char>& cBuf, size_t off, size_t len) -> int override;
+        [[nodiscard]] int read(std::vector<char>& cBuf, size_t off, size_t len) override;
 
         /// @brief Tests if this input stream is ready to be read.
         /// @return true if the next read() is guaranteed not to block for input, false otherwise.
-        [[nodiscard]] auto ready() const noexcept -> bool override;
+        [[nodiscard]] bool ready() const noexcept override;
 
         /// @brief Resets the stream to the most recent mark position.
-        auto reset() -> void override;
+        void reset() override;
 
         /// @brief Skips over and discards n characters from the input stream.
         /// @param ns The number of characters to skip.
         /// @return The actual number of characters skipped.
-        [[nodiscard]] auto skip(size_t ns) noexcept -> size_t override;
+        [[nodiscard]] size_t skip(size_t ns) noexcept override;
 
         /// @brief Checks if this reader has been closed.
         /// @return true if this reader has been closed, false otherwise.
-        [[nodiscard]] auto isClosed() const noexcept -> bool override;
+        [[nodiscard]] bool isClosed() const noexcept override;
 
     private:
         std::string source_;

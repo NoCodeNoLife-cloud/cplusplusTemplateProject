@@ -49,12 +49,12 @@ namespace common::filesystem
         close();
     }
 
-    auto FileInputStream::isValid() const noexcept -> bool
+    bool FileInputStream::isValid() const noexcept
     {
         return !closed_ && file_stream_.good();
     }
 
-    auto FileInputStream::validateBufferParams(const std::vector<std::byte>& buffer, const size_t offset, const size_t len) -> void
+    void FileInputStream::validateBufferParams(const std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
         if (offset > buffer.size() || len > buffer.size() - offset)
         {
@@ -62,7 +62,7 @@ namespace common::filesystem
         }
     }
 
-    auto FileInputStream::read() -> std::byte
+    std::byte FileInputStream::read()
     {
         if (!isValid())
         {
@@ -77,12 +77,12 @@ namespace common::filesystem
         return static_cast<std::byte>(-1);
     }
 
-    auto FileInputStream::read(std::vector<std::byte>& buffer) -> size_t
+    size_t FileInputStream::read(std::vector<std::byte>& buffer)
     {
         return read(buffer, 0, buffer.size());
     }
 
-    auto FileInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len) -> size_t
+    size_t FileInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
         validateBufferParams(buffer, offset, len);
 
@@ -96,7 +96,7 @@ namespace common::filesystem
         return static_cast<size_t>(bytes_read);
     }
 
-    auto FileInputStream::skip(const size_t n) -> size_t
+    size_t FileInputStream::skip(const size_t n)
     {
         if (!isValid())
         {
@@ -127,7 +127,7 @@ namespace common::filesystem
         return static_cast<size_t>(skipped);
     }
 
-    auto FileInputStream::available() -> size_t
+    size_t FileInputStream::available()
     {
         if (!isValid())
         {
@@ -153,7 +153,7 @@ namespace common::filesystem
         return static_cast<size_t>(std::max(available_bytes, static_cast<std::streamoff>(0)));
     }
 
-    auto FileInputStream::close() -> void
+    void FileInputStream::close()
     {
         if (file_stream_.is_open())
         {
@@ -162,12 +162,12 @@ namespace common::filesystem
         closed_ = true;
     }
 
-    [[nodiscard]] auto FileInputStream::isClosed() const -> bool
+    [[nodiscard]] bool FileInputStream::isClosed() const
     {
         return closed_;
     }
 
-    [[nodiscard]] auto FileInputStream::markSupported() const -> bool
+    [[nodiscard]] bool FileInputStream::markSupported() const
     {
         return false;
     }

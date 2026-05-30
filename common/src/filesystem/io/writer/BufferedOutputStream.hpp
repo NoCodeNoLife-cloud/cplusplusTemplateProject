@@ -34,41 +34,41 @@ namespace common::filesystem
 
         /// @brief Writes a single byte to the buffer.
         /// @param b The byte to write.
-        auto write(std::byte b) -> void override;
+        void write(std::byte b) override;
 
         /// @brief Writes a sequence of bytes to the buffer.
         /// @param data The data to write.
         /// @param offset The start offset in the data.
         /// @param len The number of bytes to write.
         /// @throws std::out_of_range if offset + len exceeds data size.
-        auto write(const std::vector<std::byte>& data, size_t offset, size_t len) -> void override;
+        void write(const std::vector<std::byte>& data, size_t offset, size_t len) override;
 
         /// @brief Writes a sequence of bytes to the buffer.
         /// @param buffer The buffer containing bytes to write.
         /// @param length The number of bytes to write.
-        auto write(const std::byte* buffer, size_t length) -> void override;
+        void write(const std::byte* buffer, size_t length) override;
 
         /// @brief Flushes the buffer by writing all buffered bytes to the underlying output stream.
-        auto flush() -> void override;
+        void flush() override;
 
         /// @brief Closes the stream by flushing the buffer and closing the underlying output stream.
-        auto close() -> void override;
+        void close() override;
 
         /// @brief Returns the current size of the buffer.
         /// @return The buffer size in bytes.
-        [[nodiscard]] auto getBufferSize() const noexcept -> size_t;
+        [[nodiscard]] size_t getBufferSize() const noexcept;
 
         /// @brief Returns the number of bytes currently in the buffer.
         /// @return The number of bytes buffered.
-        [[nodiscard]] auto getBufferedDataSize() const noexcept -> size_t;
+        [[nodiscard]] size_t getBufferedDataSize() const noexcept;
 
         /// @brief Checks if the stream is closed.
         /// @return True if the stream is closed, false otherwise.
-        [[nodiscard]] auto isClosed() const noexcept -> bool override;
+        [[nodiscard]] bool isClosed() const noexcept override;
 
     protected:
         /// @brief Flushes the internal buffer to the underlying output stream.
-        auto flushBuffer() -> void;
+        void flushBuffer();
 
         static constexpr size_t DEFAULT_BUFFER_SIZE = 8192;
         size_t bufferSize_{};

@@ -6,11 +6,10 @@
 
 #pragma once
 #include <algorithm>
-#include <iostream>
 #include <random>
 #include <vector>
 
-namespace common::common::data_structure::tree
+namespace common::data_structure
 {
     /**
      * @class   SkipList

@@ -14,7 +14,7 @@
 
 namespace common::crypto::hash
 {
-    auto HashStrategy::toHexString(const std::vector<uint8_t>& digest, const size_t expected_size) -> std::optional<std::string>
+    std::optional<std::string> HashStrategy::toHexString(const std::vector<uint8_t>& digest, const size_t expected_size)
     {
         if (digest.size() != expected_size)
         {
@@ -30,7 +30,7 @@ namespace common::crypto::hash
         return oss.str();
     }
 
-    auto HashStrategy::hashString(std::unique_ptr<HashStrategy> strategy, const std::string_view input) noexcept -> std::optional<std::vector<uint8_t>>
+    std::optional<std::vector<uint8_t>> HashStrategy::hashString(std::unique_ptr<HashStrategy> strategy, const std::string_view input) noexcept
     {
         if (!strategy->update(input))
         {
@@ -39,7 +39,7 @@ namespace common::crypto::hash
         return strategy->finalize();
     }
 
-    auto HashStrategy::hashFile(std::unique_ptr<HashStrategy> strategy, const std::string& filePath, const size_t chunkSize) -> std::optional<std::vector<uint8_t>>
+    std::optional<std::vector<uint8_t>> HashStrategy::hashFile(std::unique_ptr<HashStrategy> strategy, const std::string& filePath, const size_t chunkSize)
     {
         std::ifstream file(filePath, std::ios::binary);
         if (!file.is_open())
@@ -71,7 +71,7 @@ namespace common::crypto::hash
         return strategy->finalize();
     }
 
-    auto HashStrategy::hashStringToHex(std::unique_ptr<HashStrategy> strategy, const std::string_view input) noexcept -> std::optional<std::string>
+    std::optional<std::string> HashStrategy::hashStringToHex(std::unique_ptr<HashStrategy> strategy, const std::string_view input) noexcept
     {
         const auto digest_size = strategy->getDigestSize();
         const auto digest = hashString(std::move(strategy), input);
@@ -82,7 +82,7 @@ namespace common::crypto::hash
         return toHexString(*digest, digest_size);
     }
 
-    auto HashStrategy::hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string& filePath) -> std::optional<std::string>
+    std::optional<std::string> HashStrategy::hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string& filePath)
     {
         const auto digest_size = strategy->getDigestSize();
         const auto digest = hashFile(std::move(strategy), filePath);

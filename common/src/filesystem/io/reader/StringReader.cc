@@ -16,7 +16,7 @@ namespace common::filesystem
     {
     }
 
-    auto StringReader::close() noexcept -> void
+    void StringReader::close() noexcept
     {
         closed_ = true;
         source_.clear();
@@ -25,7 +25,7 @@ namespace common::filesystem
         mark_set_ = false;
     }
 
-    auto StringReader::mark(const size_t readAheadLimit) -> void
+    void StringReader::mark(const size_t readAheadLimit)
     {
         if (closed_)
         {
@@ -36,12 +36,12 @@ namespace common::filesystem
         static_cast<void>(readAheadLimit); // Unused parameter
     }
 
-    auto StringReader::markSupported() const noexcept -> bool
+    bool StringReader::markSupported() const noexcept
     {
         return true;
     }
 
-    auto StringReader::read() -> int
+    int StringReader::read()
     {
         if (closed_ || position_ >= source_.size())
         {
@@ -50,7 +50,7 @@ namespace common::filesystem
         return static_cast<unsigned char>(source_[position_++]);
     }
 
-    auto StringReader::read(std::vector<char>& cBuf, const size_t off, const size_t len) -> int
+    int StringReader::read(std::vector<char>& cBuf, const size_t off, const size_t len)
     {
         if (closed_)
         {
@@ -84,12 +84,12 @@ namespace common::filesystem
         return static_cast<int>(actualRead > 0 ? actualRead : -1);
     }
 
-    auto StringReader::ready() const noexcept -> bool
+    bool StringReader::ready() const noexcept
     {
         return !closed_ && position_ < source_.size();
     }
 
-    auto StringReader::reset() -> void
+    void StringReader::reset()
     {
         if (closed_)
         {
@@ -105,7 +105,7 @@ namespace common::filesystem
         }
     }
 
-    auto StringReader::skip(const size_t ns) noexcept -> size_t
+    size_t StringReader::skip(const size_t ns) noexcept
     {
         if (closed_)
         {
@@ -116,7 +116,7 @@ namespace common::filesystem
         return charsToSkip;
     }
 
-    auto StringReader::isClosed() const noexcept -> bool
+    bool StringReader::isClosed() const noexcept
     {
         return closed_;
     }

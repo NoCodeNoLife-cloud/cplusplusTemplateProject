@@ -23,13 +23,13 @@ namespace common::filesystem
         }
     }
 
-    auto ByteArrayOutputStream::write(const std::byte b) -> void
+    void ByteArrayOutputStream::write(const std::byte b)
     {
         ensureCapacity(1);
         buf_[count_++] = b;
     }
 
-    auto ByteArrayOutputStream::write(const std::vector<std::byte>& buffer, const size_t offset, const size_t len) -> void
+    void ByteArrayOutputStream::write(const std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
         if (len == 0)
         {
@@ -46,7 +46,7 @@ namespace common::filesystem
         count_ += len;
     }
 
-    auto ByteArrayOutputStream::write(const std::byte* buffer, const size_t length) -> void
+    void ByteArrayOutputStream::write(const std::byte* buffer, const size_t length)
     {
         if (length == 0)
         {
@@ -63,7 +63,7 @@ namespace common::filesystem
         count_ += length;
     }
 
-    auto ByteArrayOutputStream::writeTo(AbstractOutputStream& out) const -> void
+    void ByteArrayOutputStream::writeTo(AbstractOutputStream& out) const
     {
         if (count_ > 0)
         {
@@ -71,47 +71,47 @@ namespace common::filesystem
         }
     }
 
-    auto ByteArrayOutputStream::reset() -> void
+    void ByteArrayOutputStream::reset()
     {
         count_ = 0;
     }
 
-    auto ByteArrayOutputStream::toByteArray() const -> std::vector<std::byte>
+    std::vector<std::byte> ByteArrayOutputStream::toByteArray() const
     {
         return {buf_.begin(), buf_.begin() + static_cast<std::vector<std::byte>::difference_type>(count_)};
     }
 
-    auto ByteArrayOutputStream::size() const -> size_t
+    size_t ByteArrayOutputStream::size() const
     {
         return count_;
     }
 
-    auto ByteArrayOutputStream::toString() const -> std::string
+    std::string ByteArrayOutputStream::toString() const
     {
         return {reinterpret_cast<const char*>(buf_.data()), count_};
     }
 
-    auto ByteArrayOutputStream::close() -> void
+    void ByteArrayOutputStream::close()
     {
         // No operation for ByteArrayOutputStream.
     }
 
-    auto ByteArrayOutputStream::flush() -> void
+    void ByteArrayOutputStream::flush()
     {
         // No operation for ByteArrayOutputStream.
     }
 
-    auto ByteArrayOutputStream::capacity() const -> size_t
+    size_t ByteArrayOutputStream::capacity() const
     {
         return buf_.size();
     }
 
-    auto ByteArrayOutputStream::isClosed() const -> bool
+    bool ByteArrayOutputStream::isClosed() const
     {
         return false; // ByteArrayOutputStream is never closed
     }
 
-    auto ByteArrayOutputStream::ensureCapacity(const size_t additionalCapacity) -> void
+    void ByteArrayOutputStream::ensureCapacity(const size_t additionalCapacity)
     {
         if (count_ + additionalCapacity > buf_.size())
         {

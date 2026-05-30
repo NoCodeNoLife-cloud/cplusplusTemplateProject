@@ -1,5 +1,5 @@
 /**
- * @file CryptoToolKit.cc
+* @file CryptoToolKit.cc
  * @brief CryptoToolKit class implementation
  * @details This file contains the implementation of the CryptoToolKit class methods for Cryptographic utilities and toolkit.
  */
@@ -12,7 +12,7 @@
 
 namespace common::crypto
 {
-    auto CryptoToolKit::generate_salt() -> std::string
+    std::string CryptoToolKit::generate_salt()
     {
         unsigned char salt[SALT_SIZE];
         if (RAND_bytes(salt, SALT_SIZE) != 1)
@@ -23,7 +23,7 @@ namespace common::crypto
         return {reinterpret_cast<const char*>(salt), SALT_SIZE};
     }
 
-    auto CryptoToolKit::hash_password(const std::string& password, const std::string& salt, const size_t iterations) -> std::string
+    std::string CryptoToolKit::hash_password(const std::string& password, const std::string& salt, const size_t iterations)
     {
         unsigned char hash[HASH_SIZE];
         if (PKCS5_PBKDF2_HMAC(password.c_str(), static_cast<int>(password.length()), reinterpret_cast<const unsigned char*>(salt.c_str()), static_cast<int>(salt.length()), static_cast<int>(iterations), EVP_sha256(), HASH_SIZE, hash) != 1)
@@ -34,7 +34,7 @@ namespace common::crypto
         return {reinterpret_cast<const char*>(hash), HASH_SIZE};
     }
 
-    auto CryptoToolKit::secure_compare(const std::string& a, const std::string& b) noexcept -> bool
+    bool CryptoToolKit::secure_compare(const std::string& a, const std::string& b) noexcept
     {
         if (a.length() != b.length())
         {

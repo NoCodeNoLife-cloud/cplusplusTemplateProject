@@ -1,5 +1,5 @@
 /**
- * @file CryptoToolKit.hpp
+* @file CryptoToolKit.hpp
  * @brief CryptoToolKit class declaration
  * @details This header defines the CryptoToolKit class that provides functionality for Cryptographic utilities and toolkit.
  */
@@ -21,7 +21,7 @@ namespace common::crypto
         /// @brief Generate cryptographically secure random salt
         /// @return Random salt string of SALT_SIZE bytes
         /// @throws AuthenticationException if secure random generation fails
-        [[nodiscard]] static auto generate_salt() -> std::string;
+        [[nodiscard]] static std::string generate_salt();
 
         /// @brief Hash password using PBKDF2-HMAC-SHA256 with configurable iterations
         /// @param password Plaintext password to hash
@@ -29,12 +29,12 @@ namespace common::crypto
         /// @param iterations Number of PBKDF2 iterations (default: 600000, NIST recommended)
         /// @return Hashed password string
         /// @throws AuthenticationException if hashing operation fails
-        [[nodiscard]] static auto hash_password(const std::string& password, const std::string& salt, size_t iterations = 600000) -> std::string;
+        [[nodiscard]] static std::string hash_password(const std::string& password, const std::string& salt, size_t iterations = 600000);
 
         /// @brief Constant-time string comparison to prevent timing attacks
         /// @param a First string to compare
         /// @param b Second string to compare
         /// @return true if strings are equal, false otherwise
-        [[nodiscard]] static auto secure_compare(const std::string& a, const std::string& b) noexcept -> bool;
+        [[nodiscard]] static bool secure_compare(const std::string& a, const std::string& b) noexcept;
     };
 }

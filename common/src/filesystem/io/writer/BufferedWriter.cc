@@ -36,7 +36,7 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedWriter::write(const std::string& str) -> void
+    void BufferedWriter::write(const std::string& str)
     {
         if (str.size() > buffer_size_)
         {
@@ -53,7 +53,7 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedWriter::write(const std::vector<char>& cBuf, const size_t off, const size_t len) -> void
+    void BufferedWriter::write(const std::vector<char>& cBuf, const size_t off, const size_t len)
     {
         if (len == 0)
         {
@@ -80,7 +80,7 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedWriter::flush() -> void
+    void BufferedWriter::flush()
     {
         if (!buffer_.empty())
         {
@@ -90,7 +90,7 @@ namespace common::filesystem
         output_stream_->flush();
     }
 
-    auto BufferedWriter::close() -> void
+    void BufferedWriter::close()
     {
         if (output_stream_ && output_stream_->is_open())
         {
@@ -99,14 +99,14 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedWriter::append(const char c) -> BufferedWriter&
+    BufferedWriter& BufferedWriter::append(const char c)
     {
         buffer_.push_back(c);
         checkAndFlush();
         return *this;
     }
 
-    auto BufferedWriter::append(const std::string& str) -> BufferedWriter&
+    BufferedWriter& BufferedWriter::append(const std::string& str)
     {
         for (const char c : str)
         {
@@ -116,7 +116,7 @@ namespace common::filesystem
         return *this;
     }
 
-    auto BufferedWriter::append(const std::string& str, const size_t start, const size_t end) -> BufferedWriter&
+    BufferedWriter& BufferedWriter::append(const std::string& str, const size_t start, const size_t end)
     {
         if (start < str.length() && end <= str.length() && start < end)
         {
@@ -129,7 +129,7 @@ namespace common::filesystem
         return *this;
     }
 
-    auto BufferedWriter::append(const std::string_view str) -> BufferedWriter&
+    BufferedWriter& BufferedWriter::append(const std::string_view str)
     {
         for (const char c : str)
         {
@@ -139,7 +139,7 @@ namespace common::filesystem
         return *this;
     }
 
-    auto BufferedWriter::append(const char* str) -> BufferedWriter&
+    BufferedWriter& BufferedWriter::append(const char* str)
     {
         if (str)
         {
@@ -152,7 +152,7 @@ namespace common::filesystem
         return *this;
     }
 
-    auto BufferedWriter::append(const std::initializer_list<char> chars) -> BufferedWriter&
+    BufferedWriter& BufferedWriter::append(const std::initializer_list<char> chars)
     {
         for (const char c : chars)
         {
@@ -162,7 +162,7 @@ namespace common::filesystem
         return *this;
     }
 
-    auto BufferedWriter::append(const char* chars, const size_t count) -> BufferedWriter&
+    BufferedWriter& BufferedWriter::append(const char* chars, const size_t count)
     {
         if (chars)
         {
@@ -175,7 +175,7 @@ namespace common::filesystem
         return *this;
     }
 
-    auto BufferedWriter::append(const char c, const size_t count) -> BufferedWriter&
+    BufferedWriter& BufferedWriter::append(const char c, const size_t count)
     {
         for (size_t i = 0; i < count; ++i)
         {
@@ -185,22 +185,22 @@ namespace common::filesystem
         return *this;
     }
 
-    auto BufferedWriter::newLine() -> BufferedWriter&
+    BufferedWriter& BufferedWriter::newLine()
     {
         return append('\n');
     }
 
-    auto BufferedWriter::toString() const -> std::string
+    std::string BufferedWriter::toString() const
     {
         return {buffer_.begin(), buffer_.end()};
     }
 
-    auto BufferedWriter::isClosed() const noexcept -> bool
+    bool BufferedWriter::isClosed() const noexcept
     {
         return output_stream_ == nullptr || !output_stream_->is_open();
     }
 
-    auto BufferedWriter::checkAndFlush() -> void
+    void BufferedWriter::checkAndFlush()
     {
         if (buffer_.size() >= buffer_size_)
         {

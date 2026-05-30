@@ -29,13 +29,13 @@ namespace fox::interfaces
         /// This method serializes the object to the provided output stream using Boost text archive.
         /// @param stream Output stream to serialize to
         /// @return true if serialization was successful, false otherwise
-        [[nodiscard]] auto serializeTo(std::ostream& stream) const -> bool;
+        [[nodiscard]] bool serializeTo(std::ostream& stream) const;
 
         /// @brief Deserialize object from input stream
         /// This method deserializes the object from the provided input stream using Boost text archive.
         /// @param stream Input stream to deserialize from
         /// @return true if deserialization was successful, false otherwise
-        [[nodiscard]] auto deserializeFrom(std::istream& stream) -> bool;
+        [[nodiscard]] bool deserializeFrom(std::istream& stream);
 
     private:
         /// @brief Friend declaration to allow Boost serialization access
@@ -48,11 +48,11 @@ namespace fox::interfaces
         /// @param archive Archive object used for serialization
         /// @param version Version number for serialization
         template <class Archive>
-        auto serialize(Archive& archive, uint32_t version) -> void;
+        void serialize(Archive& archive, uint32_t version);
     };
 
     template <typename T>
-    auto IBoostSerializable<T>::serializeTo(std::ostream& stream) const -> bool
+    bool IBoostSerializable<T>::serializeTo(std::ostream& stream) const
     {
         boost::archive::text_oarchive oa(stream);
         oa << static_cast<const T&>(*this);
@@ -60,7 +60,7 @@ namespace fox::interfaces
     }
 
     template <typename T>
-    auto IBoostSerializable<T>::deserializeFrom(std::istream& stream) -> bool
+    bool IBoostSerializable<T>::deserializeFrom(std::istream& stream)
     {
         boost::archive::text_iarchive ia(stream);
         ia >> static_cast<T&>(*this);
@@ -69,7 +69,7 @@ namespace fox::interfaces
 
     template <typename T>
     template <class Archive>
-    auto IBoostSerializable<T>::serialize(Archive& archive, const uint32_t version) -> void
+    void IBoostSerializable<T>::serialize(Archive& archive, const uint32_t version)
     {
         static_cast<T*>(this)->serializeImpl(archive, version);
     }

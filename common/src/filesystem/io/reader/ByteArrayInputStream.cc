@@ -18,7 +18,7 @@ namespace common::filesystem
     {
     }
 
-    auto ByteArrayInputStream::read() -> std::byte
+    std::byte ByteArrayInputStream::read()
     {
         if (closed_ || pos_ >= buffer_.size())
         {
@@ -27,7 +27,7 @@ namespace common::filesystem
         return buffer_[pos_++];
     }
 
-    auto ByteArrayInputStream::read(std::vector<std::byte>& cBuf, const size_t off, const size_t len) -> size_t
+    size_t ByteArrayInputStream::read(std::vector<std::byte>& cBuf, const size_t off, const size_t len)
     {
         if (off > cBuf.size() || len > cBuf.size() - off)
         {
@@ -47,7 +47,7 @@ namespace common::filesystem
         return bytesToRead;
     }
 
-    auto ByteArrayInputStream::skip(const size_t n) -> size_t
+    size_t ByteArrayInputStream::skip(const size_t n)
     {
         if (closed_)
         {
@@ -60,7 +60,7 @@ namespace common::filesystem
         return bytesToSkip;
     }
 
-    auto ByteArrayInputStream::available() -> size_t
+    size_t ByteArrayInputStream::available()
     {
         if (closed_)
         {
@@ -69,7 +69,7 @@ namespace common::filesystem
         return buffer_.size() - pos_;
     }
 
-    auto ByteArrayInputStream::reset() -> void
+    void ByteArrayInputStream::reset()
     {
         if (closed_)
         {
@@ -78,7 +78,7 @@ namespace common::filesystem
         pos_ = mark_position_;
     }
 
-    auto ByteArrayInputStream::mark(const int32_t readLimit) -> void
+    void ByteArrayInputStream::mark(const int32_t readLimit)
     {
         if (closed_)
         {
@@ -87,17 +87,17 @@ namespace common::filesystem
         mark_position_ = pos_;
     }
 
-    auto ByteArrayInputStream::markSupported() const noexcept -> bool
+    bool ByteArrayInputStream::markSupported() const noexcept
     {
         return true;
     }
 
-    auto ByteArrayInputStream::close() noexcept -> void
+    void ByteArrayInputStream::close() noexcept
     {
         closed_ = true;
     }
 
-    auto ByteArrayInputStream::isClosed() const noexcept -> bool
+    bool ByteArrayInputStream::isClosed() const noexcept
     {
         return closed_;
     }

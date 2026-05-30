@@ -20,43 +20,43 @@ namespace common::data_structure::tree
 
         /// @brief Get the data stored in the node
         /// @return The data stored in the node
-        [[nodiscard]] auto getData() const noexcept -> T;
+        [[nodiscard]] T getData() const noexcept;
 
         /// @brief Set the data stored in the node
         /// @param value The new value to store in the node
-        auto setData(const T& value) noexcept -> void;
+        void setData(const T& value) noexcept;
 
         /// @brief Get the left child node
         /// @return A shared pointer to the left child node
-        [[nodiscard]] auto getLeft() const noexcept -> std::shared_ptr<RedBlackTreeNode>;
+        [[nodiscard]] std::shared_ptr<RedBlackTreeNode> getLeft() const noexcept;
 
         /// @brief Set the left child node
         /// @param node A shared pointer to the new left child node
-        auto setLeft(std::shared_ptr<RedBlackTreeNode> node) noexcept -> void;
+        void setLeft(std::shared_ptr<RedBlackTreeNode> node) noexcept;
 
         /// @brief Get the right child node
         /// @return A shared pointer to the right child node
-        [[nodiscard]] auto getRight() const noexcept -> std::shared_ptr<RedBlackTreeNode>;
+        [[nodiscard]] std::shared_ptr<RedBlackTreeNode> getRight() const noexcept;
 
         /// @brief Set the right child node
         /// @param node A shared pointer to the new right child node
-        auto setRight(std::shared_ptr<RedBlackTreeNode> node) noexcept -> void;
+        void setRight(std::shared_ptr<RedBlackTreeNode> node) noexcept;
 
         /// @brief Get the parent node
         /// @return A shared pointer to the parent node
-        [[nodiscard]] auto getParent() const noexcept -> std::shared_ptr<RedBlackTreeNode>;
+        [[nodiscard]] std::shared_ptr<RedBlackTreeNode> getParent() const noexcept;
 
         /// @brief Set the parent node
         /// @param node A shared pointer to the new parent node
-        auto setParent(std::shared_ptr<RedBlackTreeNode> node) noexcept -> void;
+        void setParent(std::shared_ptr<RedBlackTreeNode> node) noexcept;
 
         /// @brief Get the color of the node
         /// @return The color of the node
-        [[nodiscard]] auto getColor() const noexcept -> Color;
+        [[nodiscard]] Color getColor() const noexcept;
 
         /// @brief Set the color of the node
         /// @param c The new color for the node
-        auto setColor(Color c) noexcept -> void;
+        void setColor(Color c) noexcept;
 
     private:
         T data_{};
@@ -72,61 +72,61 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::getData() const noexcept -> T
+    T RedBlackTreeNode<T>::getData() const noexcept
     {
         return data_;
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::setData(const T& value) noexcept -> void
+    void RedBlackTreeNode<T>::setData(const T& value) noexcept
     {
         data_ = value;
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::getLeft() const noexcept -> std::shared_ptr<RedBlackTreeNode>
+    std::shared_ptr<RedBlackTreeNode> RedBlackTreeNode<T>::getLeft() const noexcept
     {
         return left_;
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::setLeft(std::shared_ptr<RedBlackTreeNode> node) noexcept -> void
+    void RedBlackTreeNode<T>::setLeft(std::shared_ptr<RedBlackTreeNode> node) noexcept
     {
         left_ = node;
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::getRight() const noexcept -> std::shared_ptr<RedBlackTreeNode>
+    std::shared_ptr<RedBlackTreeNode> RedBlackTreeNode<T>::getRight() const noexcept
     {
         return right_;
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::setRight(std::shared_ptr<RedBlackTreeNode> node) noexcept -> void
+    void RedBlackTreeNode<T>::setRight(std::shared_ptr<RedBlackTreeNode> node) noexcept
     {
         right_ = node;
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::getParent() const noexcept -> std::shared_ptr<RedBlackTreeNode>
+    std::shared_ptr<RedBlackTreeNode> RedBlackTreeNode<T>::getParent() const noexcept
     {
         return parent_;
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::setParent(std::shared_ptr<RedBlackTreeNode> node) noexcept -> void
+    void RedBlackTreeNode<T>::setParent(std::shared_ptr<RedBlackTreeNode> node) noexcept
     {
         parent_ = node;
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::getColor() const noexcept -> Color
+    Color RedBlackTreeNode<T>::getColor() const noexcept
     {
         return color_;
     }
 
     template <typename T>
-    auto RedBlackTreeNode<T>::setColor(const Color c) noexcept -> void
+    void RedBlackTreeNode<T>::setColor(const Color c) noexcept
     {
         color_ = c;
     }

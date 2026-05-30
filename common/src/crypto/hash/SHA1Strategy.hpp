@@ -47,7 +47,7 @@ namespace common::crypto::hash
         /**
          * @brief Deleted copy assignment to prevent sharing of internal state.
          */
-        auto operator=(const SHA1Strategy&) -> SHA1Strategy& = delete;
+        SHA1Strategy& operator=(const SHA1Strategy&) = delete;
 
         /**
          * @brief Move constructor.
@@ -57,7 +57,7 @@ namespace common::crypto::hash
         /**
          * @brief Move assignment operator.
          */
-        auto operator=(SHA1Strategy&&) noexcept -> SHA1Strategy&;
+        SHA1Strategy& operator=(SHA1Strategy&&) noexcept;
 
         /**
          * @brief Default destructor.
@@ -67,35 +67,35 @@ namespace common::crypto::hash
         /**
          * @brief Gets the digest size in bytes (20 for SHA-1).
          */
-        [[nodiscard]] auto getDigestSize() const noexcept -> size_t override;
+        [[nodiscard]] size_t getDigestSize() const noexcept override;
 
         /**
          * @brief Gets the hex digest size in characters (40 for SHA-1).
          */
-        [[nodiscard]] auto getHexDigestSize() const noexcept -> size_t override;
+        [[nodiscard]] size_t getHexDigestSize() const noexcept override;
 
         /**
          * @brief Updates the hash computation with additional data.
-         * 
+         *
          * @param data Pointer to the data buffer.
          * @param length Length of the data in bytes.
          * @return true if update succeeded, false otherwise.
          */
-        [[nodiscard]] auto update(const void* data, size_t length) noexcept -> bool override;
+        [[nodiscard]] bool update(const void* data, size_t length) noexcept override;
 
         /**
          * @brief Finalizes the hash computation and returns the digest.
-         * 
+         *
          * @return Optional containing the 20-byte digest, or nullopt on failure.
          */
-        [[nodiscard]] auto finalize() noexcept -> std::optional<std::vector<uint8_t>> override;
+        [[nodiscard]] std::optional<std::vector<uint8_t>> finalize() noexcept override;
 
         /**
          * @brief Resets the toolkit for a new hashing operation.
-         * 
+         *
          * @return true if reset succeeded, false otherwise.
          */
-        [[nodiscard]] auto reset() noexcept -> bool override;
+        [[nodiscard]] bool reset() noexcept override;
 
     private:
         /**
@@ -103,7 +103,7 @@ namespace common::crypto::hash
          */
         struct EvpDeleter
         {
-            auto operator()(EVP_MD_CTX* ctx) const noexcept -> void;
+            void operator()(EVP_MD_CTX* ctx) const noexcept;
         };
 
         std::unique_ptr<EVP_MD_CTX, EvpDeleter> ctx_{EVP_MD_CTX_new()};
@@ -113,6 +113,6 @@ namespace common::crypto::hash
          * @brief Validates that the context was properly allocated.
          * @throws std::runtime_error If context allocation failed.
          */
-        auto validateContext() const -> void;
+        void validateContext() const;
     };
 }

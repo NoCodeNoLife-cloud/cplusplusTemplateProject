@@ -26,17 +26,17 @@ namespace common::filesystem
 
         /// @brief Returns the number of bytes that can be read from this input stream without blocking.
         /// @return the number of bytes that can be read from this input stream without blocking.
-        [[nodiscard]] auto available() -> size_t override;
+        [[nodiscard]] size_t available() override;
 
         /// @brief Reads the next byte of data from the input stream.
         /// @return the next byte of data, or -1 if the end of the stream is reached.
-        [[nodiscard]] auto read() -> std::byte override;
+        [[nodiscard]] std::byte read() override;
 
         /// @brief Reads up to `buffer.size()` bytes of data from the input stream into the buffer.
         /// @param buffer the buffer into which the data is read.
         /// @return the total number of bytes read into the buffer, or 0 if there is no more data because the end of the
         /// stream has been reached.
-        [[nodiscard]] auto read(std::vector<std::byte>& buffer) -> size_t override;
+        [[nodiscard]] size_t read(std::vector<std::byte>& buffer) override;
 
         /// @brief Reads up to `len` bytes of data from the input stream into the buffer starting at `offset`.
         /// @param buffer the buffer into which the data is read.
@@ -44,7 +44,7 @@ namespace common::filesystem
         /// @param len the maximum number of bytes to read.
         /// @return the total number of bytes read into the buffer, or 0 if there is no more data because the end of the
         /// stream has been reached.
-        [[nodiscard]] auto read(std::vector<std::byte>& buffer, size_t offset, size_t len) -> size_t override;
+        [[nodiscard]] size_t read(std::vector<std::byte>& buffer, size_t offset, size_t len) override;
 
         /// @brief Pushes back the entire buffer into the stream.
         /// @param buffer the buffer to push back.
@@ -62,7 +62,7 @@ namespace common::filesystem
 
         /// @brief Checks if this input stream has been closed.
         /// @return true if this input stream has been closed, false otherwise.
-        [[nodiscard]] auto isClosed() const noexcept -> bool override;
+        [[nodiscard]] bool isClosed() const noexcept override;
 
     private:
         std::vector<std::byte> pushback_buffer_;

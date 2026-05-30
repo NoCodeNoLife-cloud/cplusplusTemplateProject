@@ -17,7 +17,7 @@ namespace common::filesystem
     {
     }
 
-    auto PushbackInputStream::available() -> size_t
+    size_t PushbackInputStream::available()
     {
         if (!input_stream_)
         {
@@ -26,7 +26,7 @@ namespace common::filesystem
         return pushback_buffer_.size() - buffer_pos_ + input_stream_->available();
     }
 
-    auto PushbackInputStream::read() -> std::byte
+    std::byte PushbackInputStream::read()
     {
         if (!input_stream_)
         {
@@ -40,7 +40,7 @@ namespace common::filesystem
         return input_stream_->read();
     }
 
-    auto PushbackInputStream::read(std::vector<std::byte>& buffer) -> size_t
+    size_t PushbackInputStream::read(std::vector<std::byte>& buffer)
     {
         if (!input_stream_)
         {
@@ -49,7 +49,7 @@ namespace common::filesystem
         return read(buffer, 0, buffer.size());
     }
 
-    auto PushbackInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len) -> size_t
+    size_t PushbackInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
         if (!input_stream_)
         {
@@ -105,7 +105,7 @@ namespace common::filesystem
         pushback_buffer_[--buffer_pos_] = b;
     }
 
-    auto PushbackInputStream::isClosed() const noexcept -> bool
+    bool PushbackInputStream::isClosed() const noexcept
     {
         return !input_stream_ || input_stream_->isClosed();
     }

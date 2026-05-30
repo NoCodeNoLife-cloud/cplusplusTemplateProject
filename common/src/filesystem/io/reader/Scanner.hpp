@@ -27,7 +27,7 @@ namespace common::filesystem
         /// @throws std::runtime_error if no more integers are available or parsing fails.
         /// @throws std::invalid_argument if the token cannot be converted to an integer.
         /// @throws std::out_of_range if the token represents a number out of the range of int32_t.
-        [[nodiscard]] auto nextInt() const -> int32_t;
+        [[nodiscard]] int32_t nextInt() const;
 
         /// @brief Reads the next double from the input stream.
         /// This method parses the next token from the input stream and converts it to a double precision floating point
@@ -36,27 +36,27 @@ namespace common::filesystem
         /// @throws std::runtime_error if no more doubles are available or parsing fails.
         /// @throws std::invalid_argument if the token cannot be converted to a double.
         /// @throws std::out_of_range if the token represents a number out of the range of double.
-        [[nodiscard]] auto nextDouble() const -> double;
+        [[nodiscard]] double nextDouble() const;
 
         /// @brief Reads the next line from the input stream.
         /// This method reads characters from the input stream until it encounters a newline character or the end of the
         /// stream.
         /// @return The next line as a string, excluding the newline character.
-        [[nodiscard]] auto nextLine() const -> std::string;
+        [[nodiscard]] std::string nextLine() const;
 
         /// @brief Reads the next token from the input stream.
         /// This method reads characters from the input stream until it encounters a whitespace character or the end of the
         /// stream.
         /// @param token A reference to a string where the next token will be stored.
         /// @return `true` if a token was successfully read, `false` if the end of the stream was reached.
-        auto getNextToken(std::string& token) const -> bool;
+        bool getNextToken(std::string& token) const;
 
         /// @brief Reads all tokens from the input stream until the end of the stream is reached.
         /// Tokens are separated by the specified delimiter character. By default, the delimiter is a space (' ').
         /// This method returns a vector containing all the tokens read from the stream.
         /// @param delimiter The character used to separate tokens in the input stream. Defaults to space (' ').
         /// @return A vector of strings, where each string is a token from the input stream.
-        [[nodiscard]] auto nextTokens(char delimiter = ' ') const -> std::vector<std::string>;
+        [[nodiscard]] std::vector<std::string> nextTokens(char delimiter = ' ') const;
 
     private:
         std::istream& input_;

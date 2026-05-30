@@ -21,7 +21,7 @@ namespace common::crypto::hash
     {
     }
 
-    auto SHAToolkit::operator=(SHAToolkit&& other) noexcept -> SHAToolkit&
+    SHAToolkit& SHAToolkit::operator=(SHAToolkit&& other) noexcept
     {
         if (this != &other)
         {
@@ -32,7 +32,7 @@ namespace common::crypto::hash
 
     SHAToolkit::~SHAToolkit() = default;
 
-    auto SHAToolkit::getDigestSize() const noexcept -> size_t
+    size_t SHAToolkit::getDigestSize() const noexcept
     {
         if (!strategy_)
         {
@@ -41,7 +41,7 @@ namespace common::crypto::hash
         return strategy_->getDigestSize();
     }
 
-    auto SHAToolkit::getHexDigestSize() const noexcept -> size_t
+    size_t SHAToolkit::getHexDigestSize() const noexcept
     {
         if (!strategy_)
         {
@@ -50,7 +50,7 @@ namespace common::crypto::hash
         return strategy_->getHexDigestSize();
     }
 
-    auto SHAToolkit::update(const void* data, const size_t length) noexcept -> bool
+    bool SHAToolkit::update(const void* data, const size_t length) noexcept
     {
         if (!strategy_)
         {
@@ -60,7 +60,7 @@ namespace common::crypto::hash
         return strategy_->update(data, length);
     }
 
-    auto SHAToolkit::update(const std::string_view data) noexcept -> bool
+    bool SHAToolkit::update(const std::string_view data) noexcept
     {
         if (!strategy_)
         {
@@ -69,7 +69,7 @@ namespace common::crypto::hash
         return strategy_->update(data);
     }
 
-    auto SHAToolkit::finalize() noexcept -> std::optional<std::vector<uint8_t>>
+    std::optional<std::vector<uint8_t>> SHAToolkit::finalize() noexcept
     {
         if (!strategy_)
         {
@@ -79,7 +79,7 @@ namespace common::crypto::hash
         return strategy_->finalize();
     }
 
-    auto SHAToolkit::reset() noexcept -> bool
+    bool SHAToolkit::reset() noexcept
     {
         if (!strategy_)
         {
@@ -88,57 +88,57 @@ namespace common::crypto::hash
         return strategy_->reset();
     }
 
-    auto SHAToolkit::toHexString(const std::vector<uint8_t>& digest, const size_t expected_size) -> std::optional<std::string>
+    std::optional<std::string> SHAToolkit::toHexString(const std::vector<uint8_t>& digest, const size_t expected_size)
     {
         return HashStrategy::toHexString(digest, expected_size);
     }
 
-    auto SHAToolkit::createSHA256() -> SHAToolkit
+    SHAToolkit SHAToolkit::createSHA256()
     {
         return SHAToolkit(std::make_unique<SHA256Strategy>());
     }
 
-    auto SHAToolkit::createSHA1() -> SHAToolkit
+    SHAToolkit SHAToolkit::createSHA1()
     {
         return SHAToolkit(std::make_unique<SHA1Strategy>());
     }
 
-    auto SHAToolkit::hashStringSHA256(const std::string_view input) noexcept -> std::optional<std::vector<uint8_t>>
+    std::optional<std::vector<uint8_t>> SHAToolkit::hashStringSHA256(const std::string_view input) noexcept
     {
         return HashStrategy::hashString(std::make_unique<SHA256Strategy>(), input);
     }
 
-    auto SHAToolkit::hashStringSHA1(const std::string_view input) noexcept -> std::optional<std::vector<uint8_t>>
+    std::optional<std::vector<uint8_t>> SHAToolkit::hashStringSHA1(const std::string_view input) noexcept
     {
         return HashStrategy::hashString(std::make_unique<SHA1Strategy>(), input);
     }
 
-    auto SHAToolkit::hashFileSHA256(const std::string& filePath, const size_t chunkSize) -> std::optional<std::vector<uint8_t>>
+    std::optional<std::vector<uint8_t>> SHAToolkit::hashFileSHA256(const std::string& filePath, const size_t chunkSize)
     {
         return HashStrategy::hashFile(std::make_unique<SHA256Strategy>(), filePath, chunkSize);
     }
 
-    auto SHAToolkit::hashFileSHA1(const std::string& filePath, const size_t chunkSize) -> std::optional<std::vector<uint8_t>>
+    std::optional<std::vector<uint8_t>> SHAToolkit::hashFileSHA1(const std::string& filePath, const size_t chunkSize)
     {
         return HashStrategy::hashFile(std::make_unique<SHA1Strategy>(), filePath, chunkSize);
     }
 
-    auto SHAToolkit::hashStringToHexSHA256(const std::string_view input) noexcept -> std::optional<std::string>
+    std::optional<std::string> SHAToolkit::hashStringToHexSHA256(const std::string_view input) noexcept
     {
         return HashStrategy::hashStringToHex(std::make_unique<SHA256Strategy>(), input);
     }
 
-    auto SHAToolkit::hashStringToHexSHA1(const std::string_view input) noexcept -> std::optional<std::string>
+    std::optional<std::string> SHAToolkit::hashStringToHexSHA1(const std::string_view input) noexcept
     {
         return HashStrategy::hashStringToHex(std::make_unique<SHA1Strategy>(), input);
     }
 
-    auto SHAToolkit::hashFileToHexSHA256(const std::string& filePath) -> std::optional<std::string>
+    std::optional<std::string> SHAToolkit::hashFileToHexSHA256(const std::string& filePath)
     {
         return HashStrategy::hashFileToHex(std::make_unique<SHA256Strategy>(), filePath);
     }
 
-    auto SHAToolkit::hashFileToHexSHA1(const std::string& filePath) -> std::optional<std::string>
+    std::optional<std::string> SHAToolkit::hashFileToHexSHA1(const std::string& filePath)
     {
         return HashStrategy::hashFileToHex(std::make_unique<SHA1Strategy>(), filePath);
     }

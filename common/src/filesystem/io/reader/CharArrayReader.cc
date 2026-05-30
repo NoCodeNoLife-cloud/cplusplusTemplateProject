@@ -42,7 +42,7 @@ namespace common::filesystem
 
     CharArrayReader::~CharArrayReader() = default;
 
-    auto CharArrayReader::read() -> int
+    int CharArrayReader::read()
     {
         if (closed_ || pos_ >= count_)
         {
@@ -51,7 +51,7 @@ namespace common::filesystem
         return static_cast<unsigned char>(buf_[pos_++]);
     }
 
-    auto CharArrayReader::read(std::vector<char>& b, const size_t off, const size_t len) -> int
+    int CharArrayReader::read(std::vector<char>& b, const size_t off, const size_t len)
     {
         validateTargetBufferParams(b.size(), off, len);
 
@@ -66,7 +66,7 @@ namespace common::filesystem
         return static_cast<int>(toRead);
     }
 
-    auto CharArrayReader::skip(const size_t n) -> size_t
+    size_t CharArrayReader::skip(const size_t n)
     {
         if (closed_) return 0;
 
@@ -75,17 +75,17 @@ namespace common::filesystem
         return skipped;
     }
 
-    auto CharArrayReader::ready() const noexcept -> bool
+    bool CharArrayReader::ready() const noexcept
     {
         return !closed_ && pos_ < count_;
     }
 
-    auto CharArrayReader::markSupported() const noexcept -> bool
+    bool CharArrayReader::markSupported() const noexcept
     {
         return true;
     }
 
-    auto CharArrayReader::mark(const size_t readAheadLimit) -> void
+    void CharArrayReader::mark(const size_t readAheadLimit)
     {
         if (closed_)
         {
@@ -94,7 +94,7 @@ namespace common::filesystem
         marked_pos_ = pos_;
     }
 
-    auto CharArrayReader::reset() -> void
+    void CharArrayReader::reset()
     {
         if (closed_)
         {
@@ -103,7 +103,7 @@ namespace common::filesystem
         pos_ = marked_pos_;
     }
 
-    auto CharArrayReader::close() -> void
+    void CharArrayReader::close()
     {
         closed_ = true;
         buf_.clear();
@@ -112,7 +112,7 @@ namespace common::filesystem
         count_ = 0;
     }
 
-    auto CharArrayReader::isClosed() const noexcept -> bool
+    bool CharArrayReader::isClosed() const noexcept
     {
         return closed_;
     }

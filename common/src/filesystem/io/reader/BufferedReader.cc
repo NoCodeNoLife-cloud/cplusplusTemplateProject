@@ -22,12 +22,12 @@ namespace common::filesystem
         buffer_.resize(size);
     }
 
-    auto BufferedReader::close() -> void
+    void BufferedReader::close()
     {
         reader_->close();
     }
 
-    auto BufferedReader::mark(const size_t readAheadLimit) -> void
+    void BufferedReader::mark(const size_t readAheadLimit)
     {
         if (readAheadLimit == 0)
         {
@@ -37,18 +37,18 @@ namespace common::filesystem
         mark_limit_ = pos_;
     }
 
-    auto BufferedReader::markSupported() const -> bool
+    bool BufferedReader::markSupported() const
     {
         return true;
     }
 
-    auto BufferedReader::reset() -> void
+    void BufferedReader::reset()
     {
         reader_->reset();
         pos_ = mark_limit_;
     }
 
-    auto BufferedReader::read() -> int
+    int BufferedReader::read()
     {
         if (pos_ >= count_)
         {
@@ -60,7 +60,7 @@ namespace common::filesystem
         return static_cast<unsigned char>(buffer_[pos_++]);
     }
 
-    auto BufferedReader::read(std::vector<char>& cBuf, const size_t off, const size_t len) -> int
+    int BufferedReader::read(std::vector<char>& cBuf, const size_t off, const size_t len)
     {
         if (off > cBuf.size() || len > cBuf.size() - off)
         {
@@ -98,7 +98,7 @@ namespace common::filesystem
         return totalBytesRead > 0 ? static_cast<int>(totalBytesRead) : -1;
     }
 
-    auto BufferedReader::readLine() -> std::string
+    std::string BufferedReader::readLine()
     {
         std::string line;
 
@@ -128,12 +128,12 @@ namespace common::filesystem
         return line;
     }
 
-    auto BufferedReader::ready() const -> bool
+    bool BufferedReader::ready() const
     {
         return reader_->ready();
     }
 
-    auto BufferedReader::skip(const size_t n) -> size_t
+    size_t BufferedReader::skip(const size_t n)
     {
         if (n == 0)
         {
@@ -162,21 +162,15 @@ namespace common::filesystem
         return skipped;
     }
 
-    auto BufferedReader::fillBuffer() -> bool
+    bool BufferedReader::fillBuffer()
     {
         pos_ = 0;
         const int bytesRead = reader_->read(buffer_, 0, buffer_size_);
         count_ = bytesRead > 0 ? static_cast<size_t>(bytesRead) : 0;
-        if (count_ > 0)
-        {
-        }
-        else
-        {
-        }
         return count_ > 0;
     }
 
-    auto BufferedReader::isClosed() const -> bool
+    bool BufferedReader::isClosed() const
     {
         return !reader_ || reader_->isClosed();
     }

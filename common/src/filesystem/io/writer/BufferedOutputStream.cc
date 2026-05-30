@@ -38,7 +38,7 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedOutputStream::write(const std::byte b) -> void
+    void BufferedOutputStream::write(const std::byte b)
     {
         if (buffer_position_ >= bufferSize_)
         {
@@ -47,7 +47,7 @@ namespace common::filesystem
         buffer_[buffer_position_++] = b;
     }
 
-    auto BufferedOutputStream::write(const std::vector<std::byte>& data, const size_t offset, const size_t len) -> void
+    void BufferedOutputStream::write(const std::vector<std::byte>& data, const size_t offset, const size_t len)
     {
         if (len == 0)
         {
@@ -72,7 +72,7 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedOutputStream::write(const std::byte* buffer, const size_t length) -> void
+    void BufferedOutputStream::write(const std::byte* buffer, const size_t length)
     {
         if (length == 0)
         {
@@ -98,7 +98,7 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedOutputStream::flush() -> void
+    void BufferedOutputStream::flush()
     {
         flushBuffer();
         if (output_stream_)
@@ -107,7 +107,7 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedOutputStream::close() -> void
+    void BufferedOutputStream::close()
     {
         flush();
         if (output_stream_)
@@ -116,7 +116,7 @@ namespace common::filesystem
         }
     }
 
-    auto BufferedOutputStream::flushBuffer() -> void
+    void BufferedOutputStream::flushBuffer()
     {
         if (buffer_position_ > 0 && output_stream_)
         {
@@ -125,17 +125,17 @@ namespace common::filesystem
         }
     }
 
-    [[nodiscard]] auto BufferedOutputStream::getBufferSize() const noexcept -> size_t
+    [[nodiscard]] size_t BufferedOutputStream::getBufferSize() const noexcept
     {
         return bufferSize_;
     }
 
-    [[nodiscard]] auto BufferedOutputStream::getBufferedDataSize() const noexcept -> size_t
+    [[nodiscard]] size_t BufferedOutputStream::getBufferedDataSize() const noexcept
     {
         return buffer_position_;
     }
 
-    [[nodiscard]] auto BufferedOutputStream::isClosed() const noexcept -> bool
+    [[nodiscard]] bool BufferedOutputStream::isClosed() const noexcept
     {
         return output_stream_ == nullptr;
     }

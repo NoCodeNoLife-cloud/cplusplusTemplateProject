@@ -15,7 +15,7 @@ namespace common::filesystem
     {
     }
 
-    auto FilterReader::close() -> void
+    void FilterReader::close()
     {
         if (!in_)
         {
@@ -24,7 +24,7 @@ namespace common::filesystem
         in_->close();
     }
 
-    auto FilterReader::mark(const size_t readAheadLimit) -> void
+    void FilterReader::mark(const size_t readAheadLimit)
     {
         if (!in_)
         {
@@ -33,7 +33,7 @@ namespace common::filesystem
         in_->mark(readAheadLimit);
     }
 
-    auto FilterReader::markSupported() const -> bool
+    bool FilterReader::markSupported() const
     {
         if (!in_)
         {
@@ -42,7 +42,7 @@ namespace common::filesystem
         return in_->markSupported();
     }
 
-    auto FilterReader::read() -> int
+    int FilterReader::read()
     {
         if (!in_)
         {
@@ -51,7 +51,7 @@ namespace common::filesystem
         return in_->read();
     }
 
-    auto FilterReader::read(std::vector<char>& cBuf, const size_t off, const size_t len) -> int
+    int FilterReader::read(std::vector<char>& cBuf, const size_t off, const size_t len)
     {
         if (!in_)
         {
@@ -65,7 +65,7 @@ namespace common::filesystem
         return in_->read(cBuf, off, len);
     }
 
-    auto FilterReader::read(std::vector<char>& cBuf) -> int
+    int FilterReader::read(std::vector<char>& cBuf)
     {
         if (!in_)
         {
@@ -74,7 +74,7 @@ namespace common::filesystem
         return in_->read(cBuf);
     }
 
-    auto FilterReader::ready() const -> bool
+    bool FilterReader::ready() const
     {
         if (!in_)
         {
@@ -83,7 +83,7 @@ namespace common::filesystem
         return in_->ready();
     }
 
-    auto FilterReader::reset() -> void
+    void FilterReader::reset()
     {
         if (!in_)
         {
@@ -92,7 +92,7 @@ namespace common::filesystem
         in_->reset();
     }
 
-    auto FilterReader::skip(const size_t n) -> size_t
+    size_t FilterReader::skip(const size_t n)
     {
         if (!in_)
         {
@@ -101,7 +101,7 @@ namespace common::filesystem
         return in_->skip(n);
     }
 
-    auto FilterReader::isClosed() const -> bool
+    bool FilterReader::isClosed() const
     {
         if (!in_)
         {

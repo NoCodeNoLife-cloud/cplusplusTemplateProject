@@ -32,41 +32,41 @@ namespace common::filesystem
         /// @brief Reads a single character.
         /// @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff), or -1 if the end of the stream
         /// has been reached
-        [[nodiscard]] auto read() -> int override;
+        [[nodiscard]] int read() override;
 
         /// @brief Reads characters into an array.
         /// @param b The buffer into which the read characters are stored
         /// @param off The offset at which to store the characters
         /// @param len The maximum number of characters to read
         /// @return The number of characters read, or -1 if the end of the stream has been reached
-        [[nodiscard]] auto read(std::vector<char>& b, size_t off, size_t len) -> int override;
+        [[nodiscard]] int read(std::vector<char>& b, size_t off, size_t len) override;
 
         /// @brief Skips characters.
         /// @param n The number of characters to skip
         /// @return The number of characters actually skipped
-        [[nodiscard]] auto skip(size_t n) -> size_t override;
+        [[nodiscard]] size_t skip(size_t n) override;
 
         /// @brief Tests if this reader can be read without blocking.
         /// @return True if this reader can be read without blocking, false otherwise
-        [[nodiscard]] auto ready() const noexcept -> bool override;
+        [[nodiscard]] bool ready() const noexcept override;
 
         /// @brief Tests if this reader supports the mark() operation.
         /// @return True if this reader supports the mark() operation, false otherwise
-        [[nodiscard]] auto markSupported() const noexcept -> bool override;
+        [[nodiscard]] bool markSupported() const noexcept override;
 
         /// @brief Marks the present position in the stream.
         /// @param readAheadLimit Limit on the number of characters that may be read while still preserving the mark.
-        auto mark(size_t readAheadLimit) -> void override;
+        void mark(size_t readAheadLimit) override;
 
         /// @brief Resets the stream to the most recent mark.
-        auto reset() -> void override;
+        void reset() override;
 
         /// @brief Closes the stream and releases any system resources associated with it.
-        auto close() -> void override;
+        void close() override;
 
         /// @brief Checks if this reader has been closed.
         /// @return true if this reader has been closed, false otherwise.
-        [[nodiscard]] auto isClosed() const noexcept -> bool override;
+        [[nodiscard]] bool isClosed() const noexcept override;
 
     private:
         std::vector<char> buf_;

@@ -17,7 +17,7 @@ namespace common::filesystem
     {
     }
 
-    auto Scanner::nextInt() const -> int32_t
+    int32_t Scanner::nextInt() const
     {
         std::string token;
         if (!getNextToken(token))
@@ -52,7 +52,7 @@ namespace common::filesystem
         }
     }
 
-    auto Scanner::nextDouble() const -> double
+    double Scanner::nextDouble() const
     {
         std::string token;
         if (!getNextToken(token))
@@ -81,14 +81,14 @@ namespace common::filesystem
         }
     }
 
-    auto Scanner::nextLine() const -> std::string
+    std::string Scanner::nextLine() const
     {
         std::string line;
         std::getline(input_, line);
         return line;
     }
 
-    auto Scanner::getNextToken(std::string& token) const -> bool
+    bool Scanner::getNextToken(std::string& token) const
     {
         // Skip leading whitespace
         while (input_.peek() != EOF && std::isspace(input_.peek()))
@@ -110,7 +110,7 @@ namespace common::filesystem
         return true;
     }
 
-    auto Scanner::nextTokens(const char delimiter) const -> std::vector<std::string>
+    std::vector<std::string> Scanner::nextTokens(const char delimiter) const
     {
         std::string line;
         std::getline(input_, line);

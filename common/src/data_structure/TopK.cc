@@ -25,7 +25,7 @@ namespace common::data_structure
         }
     }
 
-    auto TopK::add(const int32_t num) -> void
+    void TopK::add(const int32_t num)
     {
         // If capacity is bounded and heap is full
         if (max_capacity_ > 0 && static_cast<int32_t>(minHeap_.size()) >= max_capacity_)
@@ -44,7 +44,7 @@ namespace common::data_structure
         }
     }
 
-    auto TopK::getTopK(int32_t count, bool ascending) const -> std::vector<int32_t>
+    std::vector<int32_t> TopK::getTopK(int32_t count, bool ascending) const
     {
         if (count < 0)
         {
@@ -86,12 +86,12 @@ namespace common::data_structure
         return result;
     }
 
-    auto TopK::size() const -> size_t
+    size_t TopK::size() const
     {
         return minHeap_.size();
     }
 
-    auto TopK::empty() const -> bool
+    bool TopK::empty() const
     {
         return minHeap_.empty();
     }

@@ -20,12 +20,12 @@
 
 namespace common::crypto
 {
-    auto OpenSSLToolkit::deriveKey(const std::string& password, std::array<unsigned char, 32>& key, const std::array<unsigned char, 16>& salt) noexcept -> void
+    void OpenSSLToolkit::deriveKey(const std::string& password, std::array<unsigned char, 32>& key, const std::array<unsigned char, 16>& salt) noexcept
     {
         EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), salt.data(), reinterpret_cast<const unsigned char*>(password.c_str()), static_cast<int32_t>(password.size()), 1, key.data(), nullptr);
     }
 
-    auto OpenSSLToolkit::encryptAES256CBC(const std::string& plaintext, const std::string& password) -> std::vector<unsigned char>
+    std::vector<unsigned char> OpenSSLToolkit::encryptAES256CBC(const std::string& plaintext, const std::string& password)
     {
         std::array<unsigned char, 32> key{};
         std::array<unsigned char, 16> salt{};
@@ -87,7 +87,7 @@ namespace common::crypto
         return result;
     }
 
-    auto OpenSSLToolkit::decryptAES256CBC(const std::vector<unsigned char>& ciphertext, const std::string& password) -> std::string
+    std::string OpenSSLToolkit::decryptAES256CBC(const std::vector<unsigned char>& ciphertext, const std::string& password)
     {
         constexpr size_t metadata_size = 16 + AES_BLOCK_SIZE; // salt + iv
         if (ciphertext.size() < metadata_size)

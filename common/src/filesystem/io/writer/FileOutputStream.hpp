@@ -44,37 +44,37 @@ namespace common::filesystem
         /// @brief Writes a single byte to the file stream.
         /// @param b The byte to write.
         /// @throws std::ios_base::failure If the stream is not writable or in a bad state.
-        auto write(std::byte b) -> void override;
+        void write(std::byte b) override;
 
         /// @brief Writes a vector of bytes to the file stream.
         /// @param buffer The vector of bytes to write.
         /// @throws std::ios_base::failure If the stream is not writable or in a bad state.
-        auto write(const std::vector<std::byte>& buffer) -> void override;
+        void write(const std::vector<std::byte>& buffer) override;
 
         /// @brief Writes a portion of a vector of bytes to the file stream.
         /// @param buffer The vector of bytes to write from.
         /// @param offset The starting position in the buffer.
         /// @param len The number of bytes to write.
         /// @throws std::ios_base::failure If the stream is not writable or in a bad state.
-        auto write(const std::vector<std::byte>& buffer, size_t offset, size_t len) -> void override;
+        void write(const std::vector<std::byte>& buffer, size_t offset, size_t len) override;
 
         /// @brief Writes a sequence of bytes to the file stream.
         /// @param buffer The buffer containing bytes to write.
         /// @param length The number of bytes to write.
         /// @throws std::ios_base::failure If the stream is not writable or in a bad state.
-        auto write(const std::byte* buffer, size_t length) -> void override;
+        void write(const std::byte* buffer, size_t length) override;
 
         /// @brief Flushes the file stream.
         /// @throws std::ios_base::failure If the stream is not writable or in a bad state.
-        auto flush() -> void override;
+        void flush() override;
 
         /// @brief Closes the file stream.
         /// @throws std::ios_base::failure If the stream is not writable.
-        auto close() -> void override;
+        void close() override;
 
         /// @brief Checks if the stream is closed.
         /// @return true if the stream is closed, false otherwise.
-        [[nodiscard]] auto isClosed() const -> bool override;
+        [[nodiscard]] bool isClosed() const override;
 
     private:
         std::ofstream file_stream_;
@@ -83,10 +83,10 @@ namespace common::filesystem
         /// @brief Checks if the stream is writable, throwing an exception if not.
         /// @param message The message for the exception if the stream is not writable.
         /// @throws std::ios_base::failure If the stream is not open or not writable.
-        auto checkStreamWritable(const std::string& message) const -> void;
+        void checkStreamWritable(const std::string& message) const;
 
         /// @brief Checks the stream state and throws an exception if badbit or failbit is set.
         /// @throws std::ios_base::failure If the stream is in a bad state.
-        auto checkStreamState() const -> void;
+        void checkStreamState() const;
     };
 }
