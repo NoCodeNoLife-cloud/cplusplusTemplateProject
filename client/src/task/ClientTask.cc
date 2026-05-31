@@ -24,6 +24,8 @@ namespace client_app::task
     ClientTask::ClientTask(const std::string& project_name_) : timer_{project_name_}
     {
         rpc_options_.deserializedFromYamlFile(config::ConfigParam::getInstance().applicationDevConfigPath());
+        DLOG(INFO) << fmt::format("gRPC configuration loaded successfully - Keepalive Time: {}ms, Keepalive Timeout: {}ms, Permit Without Calls: {}, Server Address: {}", rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls(), rpc_options_.serverAddress());
+
         timer_.recordStart();
     }
 

@@ -41,7 +41,7 @@ namespace server_app::task
 
         /// @brief Initialize the service task and its associated resources
         /// @details Sets up logging, loads configuration, and validates gRPC parameters
-        void init();
+        void init() const;
 
         /// @brief Run the main task
         /// @details Initializes the server, establishes gRPC connection, and starts listening

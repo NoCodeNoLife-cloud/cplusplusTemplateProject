@@ -19,19 +19,17 @@ namespace server_app::task
 {
     ServerTask::ServerTask(std::string name) : timer_(std::move(name))
     {
+        grpc_options_.deserializedFromYamlFile(config::ConfigParam::getInstance().applicationDevConfigPath());
+        DLOG(INFO) << fmt::format("gRPC configuration loaded successfully - Max Connection Idle: {}ms, Max Connection Age: {}ms, Keepalive Time: {}ms, Keepalive Timeout: {}ms, Permit Without Calls: {}, Server Address: {}", grpc_options_.maxConnectionIdleMs(), grpc_options_.maxConnectionAgeMs(), grpc_options_.keepaliveTimeMs(), grpc_options_.keepaliveTimeoutMs(), grpc_options_.keepalivePermitWithoutCalls(), grpc_options_.serverAddress());
     }
 
     ServerTask::ServerTask(ServerTask&&) noexcept = default;
 
-    void ServerTask::init()
+    void ServerTask::init() const
     {
         const glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().glogConfigPath()};
         log_configurator.execute();
         DLOG(INFO) << fmt::format("Initializing ServerTask with glog config path: {}, loading gRPC configuration from: {}", config::ConfigParam::getInstance().glogConfigPath(), config::ConfigParam::getInstance().applicationDevConfigPath());
-
-        grpc_options_.deserializedFromYamlFile(config::ConfigParam::getInstance().applicationDevConfigPath());
-
-        DLOG(INFO) << fmt::format("gRPC configuration loaded successfully - Max Connection Idle: {}ms, Max Connection Age: {}ms, Keepalive Time: {}ms, Keepalive Timeout: {}ms, Permit Without Calls: {}, Server Address: {}", grpc_options_.maxConnectionIdleMs(), grpc_options_.maxConnectionAgeMs(), grpc_options_.keepaliveTimeMs(), grpc_options_.keepaliveTimeoutMs(), grpc_options_.keepalivePermitWithoutCalls(), grpc_options_.serverAddress());
     }
 
     void ServerTask::run()
