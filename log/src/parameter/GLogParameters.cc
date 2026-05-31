@@ -127,7 +127,7 @@ namespace glog::parameter
     }
 }
 
-bool YAML::convert<glog::parameter::GLogParameters>::decode(const YAML::Node& node, glog::parameter::GLogParameters& rhs)
+bool YAML::convert<glog::parameter::GLogParameters>::decode(const Node& node, glog::parameter::GLogParameters& rhs)
 {
     if (!node.IsMap())
     {
@@ -155,7 +155,7 @@ bool YAML::convert<glog::parameter::GLogParameters>::decode(const YAML::Node& no
 
 YAML::Node YAML::convert<glog::parameter::GLogParameters>::encode(const glog::parameter::GLogParameters& rhs)
 {
-    YAML::Node node;
+    Node node;
     node["minLogLevel"] = rhs.minLogLevel();
     node["logName"] = rhs.logName();
     node["logToStderr"] = rhs.logToStderr();

@@ -96,7 +96,7 @@ namespace client_app::auth
         /// @param[in] rpc_call Function that performs the actual RPC call
         /// @return rpc::AuthResponse containing operation result
         template <typename RequestType, typename ResponseType>
-        [[nodiscard]] ResponseType ExecuteRpcCall(const std::string& operation_name, const RequestType& request, const std::function<grpc::Status(grpc::ClientContext*, const RequestType&, ResponseType*)>& rpc_call) const noexcept;
+        [[nodiscard]] ResponseType ExecuteRpcCall(const std::string& operation_name, const RequestType& request, const std::function<grpc::Status(grpc::ClientContext *, const RequestType &, ResponseType *)>& rpc_call) const noexcept;
 
         /// @brief gRPC stub for making RPC calls
         std::unique_ptr<rpc::AuthService::Stub> stub_;

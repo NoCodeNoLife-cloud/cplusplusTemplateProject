@@ -158,7 +158,7 @@ namespace client_app::auth
     }
 }
 
-bool YAML::convert<client_app::auth::AuthRpcClientOptions>::decode(const YAML::Node& node, client_app::auth::AuthRpcClientOptions& rhs)
+bool YAML::convert<client_app::auth::AuthRpcClientOptions>::decode(const Node& node, client_app::auth::AuthRpcClientOptions& rhs)
 {
     if (const auto keepaliveTimeMsNode = node["keepaliveTimeMs"]; keepaliveTimeMsNode)
     {
@@ -181,7 +181,7 @@ bool YAML::convert<client_app::auth::AuthRpcClientOptions>::decode(const YAML::N
 
 YAML::Node YAML::convert<client_app::auth::AuthRpcClientOptions>::encode(const client_app::auth::AuthRpcClientOptions& rhs)
 {
-    YAML::Node node;
+    Node node;
     node["keepaliveTimeMs"] = rhs.keepaliveTimeMs();
     node["keepaliveTimeoutMs"] = rhs.keepaliveTimeoutMs();
     node["keepalivePermitWithoutCalls"] = rhs.keepalivePermitWithoutCalls();

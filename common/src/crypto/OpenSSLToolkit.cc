@@ -27,8 +27,8 @@ namespace common::crypto
 
     std::vector<unsigned char> OpenSSLToolkit::encryptAES256CBC(const std::string& plaintext, const std::string& password)
     {
-        std::array<unsigned char, 32> key{};
-        std::array<unsigned char, 16> salt{};
+        std::array < unsigned char, 32 > key{};
+        std::array < unsigned char, 16 > salt{};
 
         // Generate random salt
         if (RAND_bytes(salt.data(), 16) != 1)
@@ -95,13 +95,13 @@ namespace common::crypto
             throw std::runtime_error("Invalid ciphertext length: too short to contain salt and IV");
         }
         // Extract salt and IV from the beginning of the ciphertext
-        std::array<unsigned char, 16> salt{};
+        std::array < unsigned char, 16 > salt{};
         std::copy_n(ciphertext.begin(), 16, salt.data());
 
         std::array<unsigned char, AES_BLOCK_SIZE> iv{};
         std::copy_n(ciphertext.begin() + 16, AES_BLOCK_SIZE, iv.data());
 
-        std::array<unsigned char, 32> key{};
+        std::array < unsigned char, 32 > key{};
         deriveKey(password, key, salt);
 
         const auto ctx = EVP_CIPHER_CTX_new();

@@ -184,7 +184,7 @@ namespace common::sql::mysql
         ///       Parameters are safely escaped using comprehensive character escaping.
         /// @deprecated Use queryWithParamsStructured() for better type safety and column name support
         [[nodiscard]] std::vector<std::vector<std::string>> queryWithParams(const std::string& sql,
-                                                                           const std::vector<std::string>& params) const;
+                                                                            const std::vector<std::string>& params) const;
 
         /// @brief Executes a query and returns structured results with column names and typed values
         /// @param sql SQL query to execute

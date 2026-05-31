@@ -92,7 +92,10 @@ namespace common::filesystem
 
     void BufferedWriter::close()
     {
-        if (output_stream_ && output_stream_->is_open())
+        if (output_stream_&& output_stream_
+        ->
+        is_open()
+        )
         {
             flush();
             output_stream_->close();

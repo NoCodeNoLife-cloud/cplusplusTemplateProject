@@ -51,7 +51,7 @@ namespace client_app::task
         /// @brief Logs a message indicating that the client is logging in
         /// @param auth_rpc_client Reference to the RPC client for authentication
         /// @return Username of the authenticated user
-        [[nodiscard]] static std::string logIn(const client_app::auth::AuthRpcClient& auth_rpc_client);
+        [[nodiscard]] static std::string logIn(const auth::AuthRpcClient& auth_rpc_client);
 
         /// @brief Check if a new account should be created
         /// @return True if user wants to create a new account
@@ -62,18 +62,18 @@ namespace client_app::task
         /// @param username Username for the new account
         /// @param password Password for the new account
         /// @throws std::runtime_error if registration fails
-        static void registerNewUser(const client_app::auth::AuthRpcClient& auth_rpc_client, const std::string& username, const std::string& password);
+        static void registerNewUser(const auth::AuthRpcClient& auth_rpc_client, const std::string& username, const std::string& password);
 
         // Changed return type to void since it throws on failure
 
         /// @brief Logs a message indicating that the client is logging out
         /// @param auth_rpc_client Reference to the RPC client for logout operations
         /// @param username Username of the user to log out
-        static void logOut(const client_app::auth::AuthRpcClient& auth_rpc_client, const std::string& username) noexcept;
+        static void logOut(const auth::AuthRpcClient& auth_rpc_client, const std::string& username) noexcept;
 
         /// @brief Main task
         /// @param auth_rpc_client Reference to the RPC client for executing tasks
-        void task(const client_app::auth::AuthRpcClient& auth_rpc_client) noexcept;
+        void task(const auth::AuthRpcClient& auth_rpc_client) noexcept;
 
         /// @brief Create a gRPC channel with custom arguments
         /// @details This function sets up a gRPC channel with keepalive parameters and connects to the server
@@ -83,14 +83,14 @@ namespace client_app::task
         /// @brief Create RPC client with gRPC channel
         /// @details This function creates an RPC client using a gRPC channel
         /// @return An RPC client instance
-        [[nodiscard]] client_app::auth::AuthRpcClient createRpcClient() const;
+        [[nodiscard]] auth::AuthRpcClient createRpcClient() const;
 
         /// @brief Logs client system information
         /// @details Logs OS version and CPU model to the application log
         static void logClientInfo() noexcept;
 
         const std::string glog_config_path_{"../../log/src/config/glog-dev.yml"};
-        const std::string application_dev_config_path_{"../../client/src/application-dev.yml"};
+        const std::string application_dev_config_path_{"../../client/src/config/application-dev.yml"};
         mutable auth::AuthRpcClientOptions rpc_options_;
         mutable common::time::FunctionProfiler timer_;
     };

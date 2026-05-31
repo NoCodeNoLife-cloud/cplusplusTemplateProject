@@ -127,6 +127,6 @@ namespace common::auth
         PasswordPolicy password_policy_;
         std::unordered_map<std::string, std::unique_ptr<UserCredentials>> users_;
         mutable std::mutex users_mutex_;
-        common::sql::PasswordSQL password_sql_;
+        sql::PasswordSQL password_sql_;
     };
 }

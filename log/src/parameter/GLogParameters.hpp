@@ -99,5 +99,5 @@ struct YAML::convert<glog::parameter::GLogParameters>
     /// @brief Encode a GLogParameters object into a YAML node.
     /// @param rhs The GLogParameters object to encode.
     /// @return A YAML node containing the configuration data.
-    static YAML::Node encode(const glog::parameter::GLogParameters& rhs);
+    static Node encode(const glog::parameter::GLogParameters& rhs);
 };

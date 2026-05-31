@@ -113,7 +113,7 @@ namespace common::thread
     {
         while (true)
         {
-            std::function<void()> task;
+            std::function < void() > task;
             {
                 std::unique_lock lock(queue_mutex_);
                 // Wait for a task or until timeout occurs for non-core threads
@@ -123,7 +123,10 @@ namespace common::thread
                 });
 
                 // Exit if shutting down and no more tasks
-                if (stop_ && task_queue_.empty())
+                if (stop_&& task_queue_
+                .
+                empty()
+                )
                 {
                     return;
                 }

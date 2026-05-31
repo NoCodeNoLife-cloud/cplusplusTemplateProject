@@ -23,7 +23,7 @@ namespace common::rpc
     {
     public:
         /// @brief Callback type for state change notifications
-        using StateChangeCallback = std::function<void(common::rpc::GrpcConnectivityState)>;
+        using StateChangeCallback = std::function<void(GrpcConnectivityState)>;
 
         /// @brief Constructor
         /// @param channel The gRPC channel to monitor
@@ -39,15 +39,15 @@ namespace common::rpc
 
         /// @brief Get the current connectivity state of the channel
         /// @return Current GrpcConnectivityState
-        [[nodiscard]] common::rpc::GrpcConnectivityState getCurrentState() const noexcept
+        [[nodiscard]] GrpcConnectivityState getCurrentState() const noexcept
         {
             if (!channel_)
             {
-                return common::rpc::GrpcConnectivityState::SHUTDOWN;
+                return GrpcConnectivityState::SHUTDOWN;
             }
 
             const grpc_connectivity_state raw_state = channel_->GetState(false);
-            return common::rpc::RpcMetadata::grpcStateToEnum(raw_state);
+            return RpcMetadata::grpcStateToEnum(raw_state);
         }
 
         /// @brief Get the current connectivity state as string
@@ -55,7 +55,7 @@ namespace common::rpc
         [[nodiscard]] std::string getCurrentStateString() const noexcept
         {
             const auto state = getCurrentState();
-            return common::rpc::RpcMetadata::grpcStateToString(state);
+            return RpcMetadata::grpcStateToString(state);
         }
 
         /// @brief Start monitoring the channel's connectivity state
@@ -109,7 +109,7 @@ namespace common::rpc
         /// @param target_state The state to wait for
         /// @param timeout_seconds Maximum time to wait in seconds
         /// @return True if state was reached within timeout, false otherwise
-        [[nodiscard]] bool waitForState(common::rpc::GrpcConnectivityState target_state, int timeout_seconds = 10) const
+        [[nodiscard]] bool waitForState(GrpcConnectivityState target_state, int timeout_seconds = 10) const
         {
             const auto deadline = std::chrono::system_clock::now() + std::chrono::seconds(timeout_seconds);
 
@@ -130,7 +130,7 @@ namespace common::rpc
         /// @return True if channel is in READY state
         [[nodiscard]] bool isReady() const noexcept
         {
-            return getCurrentState() == common::rpc::GrpcConnectivityState::READY;
+            return getCurrentState() == GrpcConnectivityState::READY;
         }
 
     private:
@@ -144,7 +144,7 @@ namespace common::rpc
         std::atomic<bool> is_monitoring_;
 
         /// @brief Last known connectivity state
-        mutable common::rpc::GrpcConnectivityState last_known_state_;
+        mutable GrpcConnectivityState last_known_state_;
 
         /// @brief Callback for state change notifications
         StateChangeCallback callback_;

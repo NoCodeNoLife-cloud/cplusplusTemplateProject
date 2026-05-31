@@ -220,12 +220,12 @@ struct YAML::convert<client_app::auth::AuthRpcClientOptions>
     /// @return True if decoding was successful.
     /// @details Extracts configuration values from the YAML node and sets them
     /// in the AuthRpcClientOptions object. Missing values will retain their default values.
-    static bool decode(const YAML::Node& node, client_app::auth::AuthRpcClientOptions& rhs);
+    static bool decode(const Node& node, client_app::auth::AuthRpcClientOptions& rhs);
 
     /// @brief Encode a AuthRpcClientOptions object into a YAML node.
     /// @param rhs The AuthRpcClientOptions object to encode.
     /// @return A YAML node containing the configuration data.
     /// @details Converts the AuthRpcClientOptions object's configuration values into
     /// a YAML node representation that can be serialized to a file or string.
-    static YAML::Node encode(const client_app::auth::AuthRpcClientOptions& rhs);
+    static Node encode(const client_app::auth::AuthRpcClientOptions& rhs);
 };

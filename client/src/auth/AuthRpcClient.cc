@@ -29,7 +29,7 @@ namespace client_app::auth
     /// @param[in] rpc_call Function that performs the actual RPC call
     /// @return rpc::AuthResponse containing operation result
     template <typename RequestType, typename ResponseType>
-    [[nodiscard]] ResponseType AuthRpcClient::ExecuteRpcCall(const std::string& operation_name, const RequestType& request, const std::function<grpc::Status(grpc::ClientContext*, const RequestType&, ResponseType*)>& rpc_call) const noexcept
+    [[nodiscard]] ResponseType AuthRpcClient::ExecuteRpcCall(const std::string& operation_name, const RequestType& request, const std::function<grpc::Status(grpc::ClientContext *, const RequestType &, ResponseType *)>& rpc_call) const noexcept
     {
         ResponseType response{};
         grpc::ClientContext context{};
@@ -157,16 +157,3 @@ namespace client_app::auth
         return getConnectivityState() == common::rpc::GrpcConnectivityState::READY;
     }
 }
-
-// Explicit template instantiation for the methods used
-template rpc::AuthResponse client_app::auth::AuthRpcClient::ExecuteRpcCall<rpc::RegisterUserRequest, rpc::AuthResponse>(const std::string&, const rpc::RegisterUserRequest&, const std::function<grpc::Status(grpc::ClientContext*, const rpc::RegisterUserRequest&, rpc::AuthResponse*)>&) const noexcept;
-
-template rpc::AuthResponse client_app::auth::AuthRpcClient::ExecuteRpcCall<rpc::AuthenticateUserRequest, rpc::AuthResponse>(const std::string&, const rpc::AuthenticateUserRequest&, const std::function<grpc::Status(grpc::ClientContext*, const rpc::AuthenticateUserRequest&, rpc::AuthResponse*)>&) const noexcept;
-
-template rpc::AuthResponse client_app::auth::AuthRpcClient::ExecuteRpcCall<rpc::UserExistsRequest, rpc::AuthResponse>(const std::string&, const rpc::UserExistsRequest&, const std::function<grpc::Status(grpc::ClientContext*, const rpc::UserExistsRequest&, rpc::AuthResponse*)>&) const noexcept;
-
-template rpc::AuthResponse client_app::auth::AuthRpcClient::ExecuteRpcCall<rpc::ChangePasswordRequest, rpc::AuthResponse>(const std::string&, const rpc::ChangePasswordRequest&, const std::function<grpc::Status(grpc::ClientContext*, const rpc::ChangePasswordRequest&, rpc::AuthResponse*)>&) const noexcept;
-
-template rpc::AuthResponse client_app::auth::AuthRpcClient::ExecuteRpcCall<rpc::ResetPasswordRequest, rpc::AuthResponse>(const std::string&, const rpc::ResetPasswordRequest&, const std::function<grpc::Status(grpc::ClientContext*, const rpc::ResetPasswordRequest&, rpc::AuthResponse*)>&) const noexcept;
-
-template rpc::AuthResponse client_app::auth::AuthRpcClient::ExecuteRpcCall<rpc::DeleteUserRequest, rpc::AuthResponse>(const std::string&, const rpc::DeleteUserRequest&, const std::function<grpc::Status(grpc::ClientContext*, const rpc::DeleteUserRequest&, rpc::AuthResponse*)>&) const noexcept;

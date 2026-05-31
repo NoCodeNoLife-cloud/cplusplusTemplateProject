@@ -381,7 +381,7 @@ namespace common::filesystem
         }
 
         constexpr size_t bufferSize = 4096;
-        std::array<char, bufferSize> buffer{};
+        std::array < char, bufferSize > buffer{};
         while (file.read(buffer.data(), bufferSize))
         {
             if (const auto bytesRead = static_cast<size_t>(file.gcount()); EVP_DigestUpdate(mdContext.get(), buffer.data(), bytesRead) != 1)

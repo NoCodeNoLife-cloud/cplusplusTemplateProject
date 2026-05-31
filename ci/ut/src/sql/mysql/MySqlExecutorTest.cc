@@ -68,7 +68,7 @@ static auto createMySQLSession() -> std::unique_ptr<mysqlx::Session>
  * @brief Global test fixture to manage database lifecycle
  * @details Creates test database before all tests and drops it after all tests
  */
-class MySqlExecutorGlobalTest : public ::testing::Environment
+class MySqlExecutorGlobalTest : public testing::Environment
 {
 public:
     void SetUp() override
@@ -137,13 +137,13 @@ public:
 };
 
 // Register global test environment
-::testing::Environment* const global_env = ::testing::AddGlobalTestEnvironment(new MySqlExecutorGlobalTest);
+testing::Environment* const global_env = ::testing::AddGlobalTestEnvironment(new MySqlExecutorGlobalTest);
 
 /**
  * @brief Test fixture for MySqlExecutor tests
  * @details Provides a connected executor for each test
  */
-class MySqlExecutorTest : public ::testing::Test
+class MySqlExecutorTest : public testing::Test
 {
 protected:
     void SetUp() override

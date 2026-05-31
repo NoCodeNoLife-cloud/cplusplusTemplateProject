@@ -82,7 +82,7 @@ namespace server_app::task
         DLOG(INFO) << fmt::format("Channel arguments set - Max Connection Idle: {}ms, Max Connection Age: {}ms, Max Connection Age Grace: {}ms, Keepalive Time: {}ms, Keepalive Timeout: {}ms, Keepalive Permit Without Calls: {}", grpc_options_.maxConnectionIdleMs(), grpc_options_.maxConnectionAgeMs(), grpc_options_.maxConnectionAgeGraceMs(), grpc_options_.keepaliveTimeMs(), grpc_options_.keepaliveTimeoutMs(), grpc_options_.keepalivePermitWithoutCalls());
 
         DLOG(INFO) << "Registering RPC service implementation";
-        server_app::auth::AuthRpcService service("./users.db");
+        auth::AuthRpcService service("./users.db");
         builder.RegisterService(&service);
         DLOG(INFO) << "Service registered successfully";
 

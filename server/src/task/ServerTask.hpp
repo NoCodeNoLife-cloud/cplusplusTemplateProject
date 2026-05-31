@@ -52,8 +52,8 @@ namespace server_app::task
         void exit() const;
 
     private:
-        const std::string glog_config_path_{"../../log/src/config/glog-dev.yml"};
-        const std::string application_dev_config_path_{"../../server/src/application-dev.yml"};
+        const std::string glog_config_path_{"../../server/src/config/glog-dev.yml"};
+        const std::string application_dev_config_path_{"../../server/src/config/application-dev.yml"};
         app_server::auth::AuthRpcServiceOptions grpc_options_;
         common::time::FunctionProfiler timer_;
         std::unique_ptr<grpc::Server> server_;

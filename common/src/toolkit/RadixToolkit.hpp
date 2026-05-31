@@ -211,7 +211,7 @@ namespace common::toolkit
         UnsignedT abs_value;
         bool negative = false;
 
-        if constexpr (std::is_signed_v<T>)
+        if constexpr (std::is_signed_v < T >)
         {
             if (value < 0)
             {
@@ -263,7 +263,7 @@ namespace common::toolkit
         size_t pos = 0;
         bool negative = false;
 
-        if constexpr (std::is_signed_v<T>)
+        if constexpr (std::is_signed_v < T >)
         {
             if (str[0] == '-')
             {
@@ -310,7 +310,7 @@ namespace common::toolkit
             result = result * ubase + digit_val;
         }
 
-        if constexpr (std::is_signed_v<T>)
+        if constexpr (std::is_signed_v < T >)
         {
             if (negative)
             {

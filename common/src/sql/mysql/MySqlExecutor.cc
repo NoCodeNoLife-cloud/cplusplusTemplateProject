@@ -196,7 +196,7 @@ namespace common::sql::mysql
     }
 
     std::vector<std::vector<std::string>> MySqlExecutor::queryWithParams(const std::string& sql,
-                                                                        const std::vector<std::string>& params) const
+                                                                         const std::vector<std::string>& params) const
     {
         if (!session_)
         {
@@ -300,7 +300,7 @@ namespace common::sql::mysql
     }
 
     QueryResult MySqlExecutor::queryWithParamsStructured(const std::string& sql,
-                                                          const std::vector<std::string>& params) const
+                                                         const std::vector<std::string>& params) const
     {
         if (!session_)
         {

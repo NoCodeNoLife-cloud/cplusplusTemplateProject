@@ -53,7 +53,10 @@ namespace common::toolkit
         virtual void registerAll() = 0;
 
         /// @brief Get the registry map (using Meyer's singleton to ensure initialization order)
-        static std::unordered_map<std::string, std::function<std::unique_ptr<T>()>>& getRegistry();
+        static std::unordered_map<std::string, std::function < std::unique_ptr<T>()>
+        >
+        &
+        getRegistry();
 
         /// @brief Get the mutex for the registry (using Meyer's singleton)
         static std::mutex& getRegistryMutex();
@@ -130,9 +133,14 @@ namespace common::toolkit
     }
 
     template <typename T>
-    std::unordered_map<std::string, std::function<std::unique_ptr<T>()>>& ObjectFactory<T>::getRegistry()
+    std::unordered_map<std::string, std::function < std::unique_ptr<T>()>
+    >
+    &
+    ObjectFactory<T>::getRegistry()
     {
-        static std::unordered_map<std::string, std::function<std::unique_ptr<T>()>> registry{};
+        static std::unordered_map<std::string, std::function < std::unique_ptr<T>()>
+        >
+        registry{};
         return registry;
     }
 

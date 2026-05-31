@@ -80,7 +80,7 @@ namespace common::toolkit
             return false;
         }
 
-        optimal_parameters_t& parameters = optimal_parameters;
+        optimal_parameters_t & parameters = optimal_parameters;
 
         parameters.number_of_hashes = static_cast<uint32_t>(min_k);
 

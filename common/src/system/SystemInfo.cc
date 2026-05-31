@@ -28,7 +28,8 @@ namespace common::system
         }
     }
 
-    std::string SystemInfo::ReadRegistryStringValue(HKEY__* const hKeyRoot, const wchar_t* subKey, const wchar_t* valueName) noexcept
+    std::string SystemInfo::ReadRegistryStringValue(HKEY__ * const hKeyRoot, const wchar_t*subKey, const wchar_t*valueName)
+    noexcept
     {
         HKEY hKey;
         if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
@@ -51,7 +52,8 @@ namespace common::system
         return {}; // Return empty string if failed
     }
 
-    std::vector<std::string> SystemInfo::EnumerateRegistryValues(HKEY__* const hKeyRoot, const wchar_t* subKey) noexcept
+    std::vector<std::string> SystemInfo::EnumerateRegistryValues(HKEY__ * const hKeyRoot, const wchar_t*subKey)
+    noexcept
     {
         std::vector<std::string> values;
         HKEY hKey;

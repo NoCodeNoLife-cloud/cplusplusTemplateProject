@@ -82,8 +82,12 @@ namespace common::toolkit
             // Process each field using index-based access
             [&obj, &field_map, fields]<std::size_t... Is>(std::index_sequence<Is...>)
             {
-                ((field_map.insert(std::make_pair(std::get<Is>(fields).first, std::format("{}", invokeHelper(obj, std::get<Is>(fields).second))))), ...);
-            }(std::make_index_sequence<ReflectTraits<T>::field_count>{});
+                ((field_map.insert(std::make_pair(std::get < Is > (fields).first, std::format("{}", invokeHelper(obj, std::get < Is > (fields).second))))), ...);
+            }(std::make_index_sequence < ReflectTraits<T>::field_count >
+            {
+            }
+            )
+            ;
 
             return field_map;
         }
@@ -209,8 +213,12 @@ namespace common::toolkit
 
             [&field_names, fields]<std::size_t... Is>(std::index_sequence<Is...>)
             {
-                ((field_names.push_back(std::get<Is>(fields).first)), ...);
-            }(std::make_index_sequence<ReflectTraits<T>::field_count>{});
+                ((field_names.push_back(std::get < Is > (fields).first)), ...);
+            }(std::make_index_sequence < ReflectTraits<T>::field_count >
+            {
+            }
+            )
+            ;
 
             return field_names;
         }
@@ -243,14 +251,18 @@ namespace common::toolkit
 
                 ([&]()
                 {
-                    if (std::get<Is>(fields).first == fieldName)
+                    if (std::get < Is > (fields).first == fieldName)
                     {
-                        result_str = std::format("{}", invokeHelper(obj, std::get<Is>(fields).second));
+                        result_str = std::format("{}", invokeHelper(obj, std::get < Is > (fields).second));
                     }
                 }(), ...);
 
                 return result_str;
-            }(std::make_index_sequence<ReflectTraits<T>::field_count>{});
+            }(std::make_index_sequence < ReflectTraits<T>::field_count >
+            {
+            }
+            )
+            ;
 
             if (result == "Field '" + fieldName + "' not found")
             {
@@ -274,13 +286,17 @@ namespace common::toolkit
                 bool all_equal = true;
                 ([&]()
                 {
-                    if (invokeHelper(obj1, std::get<Is>(fields).second) != invokeHelper(obj2, std::get<Is>(fields).second))
+                    if (invokeHelper(obj1, std::get < Is > (fields).second) != invokeHelper(obj2, std::get < Is > (fields).second))
                     {
                         all_equal = false;
                     }
                 }(), ...);
                 return all_equal;
-            }(std::make_index_sequence<ReflectTraits<T>::field_count>{});
+            }(std::make_index_sequence < ReflectTraits<T>::field_count >
+            {
+            }
+            )
+            ;
         }
 
         /// @brief Gets the difference between two objects.
@@ -298,17 +314,21 @@ namespace common::toolkit
             {
                 ([&]()
                 {
-                    auto val1 = invokeHelper(obj1, std::get<Is>(fields).second);
-                    auto val2 = invokeHelper(obj2, std::get<Is>(fields).second);
+                    auto val1 = invokeHelper(obj1, std::get < Is > (fields).second);
+                    auto val2 = invokeHelper(obj2, std::get < Is > (fields).second);
                     if (val1 != val2)
                     {
-                        diff_map[std::get<Is>(fields).first] = std::make_pair(
+                        diff_map[std::get < Is > (fields).first] = std::make_pair(
                             std::format("{}", val1),
                             std::format("{}", val2)
                         );
                     }
                 }(), ...);
-            }(std::make_index_sequence<ReflectTraits<T>::field_count>{});
+            }(std::make_index_sequence < ReflectTraits<T>::field_count >
+            {
+            }
+            )
+            ;
 
             return diff_map;
         }
