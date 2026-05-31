@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the FilterReader class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/FilterReader.hpp"
+#include "filesystem/io/reader/FilterReader.hpp"
 
 #include <stdexcept>
 

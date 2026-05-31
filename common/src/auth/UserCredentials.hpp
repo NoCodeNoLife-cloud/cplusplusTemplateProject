@@ -18,38 +18,38 @@ namespace common::auth
         /// @param username User identifier
         /// @param hashed_password Hashed password value
         /// @param salt Salt used for password hashing
-        explicit UserCredentials(std::string username, std::string hashed_password, std::string salt) noexcept;
+        explicit UserCredentials(std::string username, std::string hashed_password, std::string salt) ;
 
         /// @brief Get username
         /// @return Username string
-        [[nodiscard]] const std::string& get_username() const noexcept;
+        [[nodiscard]] const std::string& get_username() const ;
 
         /// @brief Get hashed password
         /// @return Hashed password string
-        [[nodiscard]] const std::string& get_hashed_password() const noexcept;
+        [[nodiscard]] const std::string& get_hashed_password() const ;
 
         /// @brief Get salt value
         /// @return Salt string used for hashing
-        [[nodiscard]] const std::string& get_salt() const noexcept;
+        [[nodiscard]] const std::string& get_salt() const ;
 
         /// @brief Get number of failed login attempts
         /// @return Count of failed attempts
-        [[nodiscard]] size_t get_failed_attempts() const noexcept;
+        [[nodiscard]] size_t get_failed_attempts() const ;
 
         /// @brief Increment failed login attempt counter
-        void increment_failed_attempts() noexcept;
+        void increment_failed_attempts() ;
 
         /// @brief Reset failed attempt counter
-        void reset_failed_attempts() noexcept;
+        void reset_failed_attempts() ;
 
         /// @brief Check if account is locked due to excessive failed attempts
         /// @return true if account is locked, false otherwise
-        [[nodiscard]] bool is_locked() const noexcept;
+        [[nodiscard]] bool is_locked() const ;
 
         /// @brief Check if account lock will expire after a specific duration
         /// @param lockout_duration Duration in minutes after which lockout expires
         /// @return true if account is locked, false otherwise
-        [[nodiscard]] bool is_locked(std::chrono::minutes lockout_duration, size_t max_attempts) const noexcept;
+        [[nodiscard]] bool is_locked(std::chrono::minutes lockout_duration, size_t max_attempts) const ;
 
     private:
         std::string username_;

@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the DoubleBuffer class methods for Common library utilities.
  */
 
-#include "src/filesystem/nio/DoubleBuffer.hpp"
+#include "filesystem/nio/DoubleBuffer.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>
@@ -19,19 +19,19 @@ namespace common::filesystem
         buffer_.resize(capacity);
     }
 
-    void DoubleBuffer::clear() noexcept
+    void DoubleBuffer::clear()
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    void DoubleBuffer::flip() noexcept
+    void DoubleBuffer::flip()
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    void DoubleBuffer::rewind() noexcept
+    void DoubleBuffer::rewind()
     {
         position_ = 0;
     }
@@ -84,7 +84,7 @@ namespace common::filesystem
         return buffer_[position_++];
     }
 
-    size_t DoubleBuffer::position() const noexcept
+    size_t DoubleBuffer::position() const
     {
         return position_;
     }
@@ -98,7 +98,7 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    size_t DoubleBuffer::limit() const noexcept
+    size_t DoubleBuffer::limit() const
     {
         return limit_;
     }
@@ -116,17 +116,17 @@ namespace common::filesystem
         limit_ = newLimit;
     }
 
-    size_t DoubleBuffer::capacity() const noexcept
+    size_t DoubleBuffer::capacity() const
     {
         return capacity_;
     }
 
-    bool DoubleBuffer::hasRemaining() const noexcept
+    bool DoubleBuffer::hasRemaining() const
     {
         return position_ < limit_;
     }
 
-    size_t DoubleBuffer::remaining() const noexcept
+    size_t DoubleBuffer::remaining() const
     {
         return limit_ - position_;
     }

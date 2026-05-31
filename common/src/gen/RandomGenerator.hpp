@@ -21,11 +21,11 @@ namespace common::gen
     {
     public:
         /// @brief Default constructor: initializes seed using random device
-        RandomGenerator() noexcept;
+        RandomGenerator() ;
 
         /// @brief Constructor with specified seed
         /// @param seed The seed value for the random number generator
-        explicit RandomGenerator(unsigned int seed) noexcept;
+        explicit RandomGenerator(unsigned int seed) ;
 
         /// @brief Generates a random integer in the range [min, max]
         /// @param min The minimum value (inclusive)

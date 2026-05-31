@@ -16,7 +16,7 @@ namespace common::base_type
     {
     public:
         /// @brief Default constructor, initializes to zero
-        BigInteger() noexcept;
+        BigInteger() ;
 
         /// @brief Constructs a BigInteger from a string representation
         /// @param str The string representation of the integer
@@ -24,22 +24,22 @@ namespace common::base_type
 
         /// @brief Constructs a BigInteger from an int64_t value
         /// @param num The int64_t value to convert
-        explicit BigInteger(int64_t num) noexcept;
+        explicit BigInteger(int64_t num) ;
 
         /// @brief Addition operator
         /// @param other The BigInteger to add
         /// @return The result of the addition
-        [[nodiscard]] BigInteger operator+(const BigInteger& other) const noexcept;
+        [[nodiscard]] BigInteger operator+(const BigInteger& other) const ;
 
         /// @brief Subtraction operator
         /// @param other The BigInteger to subtract
         /// @return The result of the subtraction
-        [[nodiscard]] BigInteger operator-(const BigInteger& other) const noexcept;
+        [[nodiscard]] BigInteger operator-(const BigInteger& other) const ;
 
         /// @brief Multiplication operator
         /// @param other The BigInteger to multiply
         /// @return The result of the multiplication
-        [[nodiscard]] BigInteger operator*(const BigInteger& other) const noexcept;
+        [[nodiscard]] BigInteger operator*(const BigInteger& other) const ;
 
         /// @brief Division operator
         /// @param other The BigInteger to divide by
@@ -56,12 +56,12 @@ namespace common::base_type
         /// @brief Three-way comparison operator
         /// @param other The BigInteger to compare with
         /// @return The result of the comparison
-        [[nodiscard]] std::strong_ordering operator<=>(const BigInteger& other) const noexcept;
+        [[nodiscard]] std::strong_ordering operator<=>(const BigInteger& other) const ;
 
         /// @brief Equality comparison operator
         /// @param other The BigInteger to compare with
         /// @return true if the values are equal, false otherwise
-        [[nodiscard]] bool operator==(const BigInteger& other) const noexcept;
+        [[nodiscard]] bool operator==(const BigInteger& other) const ;
 
         /// @brief Create a BigInteger from a string
         /// @param str The string to convert
@@ -71,12 +71,12 @@ namespace common::base_type
         /// @brief Create a BigInteger from an int64_t
         /// @param num The int64_t to convert
         /// @return The resulting BigInteger
-        [[nodiscard]] static BigInteger fromInt(int64_t num) noexcept;
+        [[nodiscard]] static BigInteger fromInt(int64_t num) ;
 
     private:
         /// @brief Internal constructor from cpp_int (avoids string conversion overhead)
         /// @param value The cpp_int value to wrap
-        explicit BigInteger(boost::multiprecision::cpp_int value) noexcept : value_(std::move(value))
+        explicit BigInteger(boost::multiprecision::cpp_int value)  : value_(std::move(value))
         {
         }
 

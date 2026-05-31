@@ -7,13 +7,14 @@
  */
 
 #pragma once
-#include <src/auth/UserAuthenticator.hpp>
-#include <src/exception/AuthenticationException.hpp>
-
-#include "generated/RpcService.grpc.pb.h"
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <exception/AuthenticationException.hpp>
+#include <generated/RpcService.grpc.pb.h>
+
+#include "auth/UserAuthenticator.hpp"
+
 
 namespace server_app::auth
 {
@@ -25,10 +26,10 @@ namespace server_app::auth
     public:
         /// @brief Constructor with database path
         /// @param db_path Path to SQLite database file
-        explicit AuthRpcService(const std::string& db_path) noexcept;
+        explicit AuthRpcService(const std::string& db_path);
 
         /// @brief Default destructor
-        ~AuthRpcService() noexcept override = default;
+        ~AuthRpcService() override = default;
 
         /// @brief Copy constructor (deleted)
         AuthRpcService(const AuthRpcService&) = delete;
@@ -71,6 +72,6 @@ namespace server_app::auth
         /// @param e AuthenticationException to handle
         /// @param response Response to populate with error details
         /// @return Appropriate gRPC status
-        [[nodiscard]] static grpc::Status HandleAuthException(const common::exception::AuthenticationException& e, rpc::AuthResponse* response) noexcept;
+        [[nodiscard]] static grpc::Status HandleAuthException(const common::exception::AuthenticationException& e, rpc::AuthResponse* response);
     };
 }

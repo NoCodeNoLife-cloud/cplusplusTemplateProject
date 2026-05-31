@@ -25,7 +25,7 @@ namespace common::exception
 
         /// @brief Move constructor for efficient transfer of exception objects
         /// @param other Exception object to move from
-        AuthenticationException(AuthenticationException&& other) noexcept;
+        AuthenticationException(AuthenticationException&& other) ;
 
         /// @brief Copy constructor
         /// @param other Exception object to copy from
@@ -37,9 +37,9 @@ namespace common::exception
 
         /// @brief Move assignment operator
         /// @param other Exception object to move from
-        AuthenticationException& operator=(AuthenticationException&& other) noexcept = default;
+        AuthenticationException& operator=(AuthenticationException&& other)  = default;
 
         /// @brief Virtual destructor for proper cleanup in inheritance hierarchy
-        ~AuthenticationException() noexcept override;
+        ~AuthenticationException()  override;
     };
 }

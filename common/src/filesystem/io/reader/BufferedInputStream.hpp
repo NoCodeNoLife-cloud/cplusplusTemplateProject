@@ -20,16 +20,16 @@ namespace common::filesystem
     class BufferedInputStream final : public FilterInputStream
     {
     public:
-        explicit BufferedInputStream(std::unique_ptr<AbstractInputStream> in) noexcept;
+        explicit BufferedInputStream(std::unique_ptr<AbstractInputStream> in) ;
 
         BufferedInputStream(std::unique_ptr<AbstractInputStream> in, size_t size);
 
         /// @brief Returns the number of bytes that can be read (or skipped over) from this input stream without blocking.
         /// @return the number of bytes that can be read (or skipped over) from this input stream without blocking.
-        [[nodiscard]] size_t available() const noexcept;
+        [[nodiscard]] size_t available() const ;
 
         /// @brief Closes this input stream and releases any system resources associated with the stream.
-        void close() noexcept override;
+        void close()  override;
 
         /// @brief Marks the current position in this input stream.
         /// @param readLimit the maximum limit of bytes that can be read before the mark position becomes invalid.
@@ -37,7 +37,7 @@ namespace common::filesystem
 
         /// @brief Tests if this input stream supports the mark and reset methods.
         /// @return true if this stream instance supports the mark and reset methods; false otherwise.
-        [[nodiscard]] bool markSupported() const noexcept override;
+        [[nodiscard]] bool markSupported() const  override;
 
         /// @brief Reads the next byte of data from this input stream.
         /// @return the next byte of data, or -1 if the end of the stream is reached.
@@ -60,7 +60,7 @@ namespace common::filesystem
 
         /// @brief Checks if this input stream has been closed.
         /// @return true if this input stream has been closed, false otherwise.
-        [[nodiscard]] bool isClosed() const noexcept override;
+        [[nodiscard]] bool isClosed() const  override;
 
     protected:
         static constexpr size_t DEFAULT_BUFFER_SIZE = 8192;

@@ -37,18 +37,18 @@ namespace common::system
         /// @brief Helper function to extract ULARGE_INTEGER from FILETIME
         /// @param ft Filetime to convert
         /// @return ULARGE_INTEGER representation of the filetime
-        [[nodiscard]] static ULARGE_INTEGER FileTimeToULARGEInteger(const FILETIME& ft) noexcept;
+        [[nodiscard]] static ULARGE_INTEGER FileTimeToULARGEInteger(const FILETIME& ft) ;
 
     public:
         SystemPerformanceMonitor() = delete;
 
         /// @brief Get the current memory usage of the system
         /// @return MemoryUsage struct containing total, available, used memory and usage percentage
-        [[nodiscard]] static MemoryUsage GetMemoryUsage() noexcept;
+        [[nodiscard]] static MemoryUsage GetMemoryUsage() ;
 
         /// @brief Get the current CPU usage of the system
         /// @param interval Time interval in seconds for measuring CPU usage, default is 1 second
         /// @return CpuUsage struct containing CPU usage percentage
-        [[nodiscard]] static CpuUsage GetCpuUsage(int32_t interval = 1) noexcept;
+        [[nodiscard]] static CpuUsage GetCpuUsage(int32_t interval = 1) ;
     };
 }

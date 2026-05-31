@@ -7,7 +7,7 @@
 #pragma once
 #include <string>
 
-#include "src/exception/AuthenticationException.hpp"
+#include "exception/AuthenticationException.hpp"
 
 namespace common::crypto
 {
@@ -35,6 +35,6 @@ namespace common::crypto
         /// @param a First string to compare
         /// @param b Second string to compare
         /// @return true if strings are equal, false otherwise
-        [[nodiscard]] static bool secure_compare(const std::string& a, const std::string& b) noexcept;
+        [[nodiscard]] static bool secure_compare(const std::string& a, const std::string& b) ;
     };
 }

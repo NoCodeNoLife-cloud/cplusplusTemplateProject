@@ -49,12 +49,12 @@ namespace common::crypto::hash
         /**
          * @brief Move constructor.
          */
-        [[nodiscard]] SHA256Strategy(SHA256Strategy&&) noexcept;
+        [[nodiscard]] SHA256Strategy(SHA256Strategy&&) ;
 
         /**
          * @brief Move assignment operator.
          */
-        SHA256Strategy& operator=(SHA256Strategy&&) noexcept;
+        SHA256Strategy& operator=(SHA256Strategy&&) ;
 
         /**
          * @brief Default destructor.
@@ -64,12 +64,12 @@ namespace common::crypto::hash
         /**
          * @brief Gets the digest size in bytes (32 for SHA-256).
          */
-        [[nodiscard]] size_t getDigestSize() const noexcept override;
+        [[nodiscard]] size_t getDigestSize() const  override;
 
         /**
          * @brief Gets the hex digest size in characters (64 for SHA-256).
          */
-        [[nodiscard]] size_t getHexDigestSize() const noexcept override;
+        [[nodiscard]] size_t getHexDigestSize() const  override;
 
         /**
          * @brief Updates the hash computation with additional data.
@@ -78,21 +78,21 @@ namespace common::crypto::hash
          * @param length Length of the data in bytes.
          * @return true if update succeeded, false otherwise.
          */
-        [[nodiscard]] bool update(const void* data, size_t length) noexcept override;
+        [[nodiscard]] bool update(const void* data, size_t length)  override;
 
         /**
          * @brief Finalizes the hash computation and returns the digest.
          *
          * @return Optional containing the 32-byte digest, or nullopt on failure.
          */
-        [[nodiscard]] std::optional<std::vector<uint8_t>> finalize() noexcept override;
+        [[nodiscard]] std::optional<std::vector<uint8_t>> finalize()  override;
 
         /**
          * @brief Resets the toolkit for a new hashing operation.
          *
          * @return true if reset succeeded, false otherwise.
          */
-        [[nodiscard]] bool reset() noexcept override;
+        [[nodiscard]] bool reset()  override;
 
     private:
         /**
@@ -100,7 +100,7 @@ namespace common::crypto::hash
          */
         struct EvpDeleter
         {
-            void operator()(EVP_MD_CTX* ctx) const noexcept;
+            void operator()(EVP_MD_CTX* ctx) const ;
         };
 
         std::unique_ptr<EVP_MD_CTX, EvpDeleter> ctx_{EVP_MD_CTX_new()};

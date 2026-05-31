@@ -1,11 +1,12 @@
 /**
- * @file AuthRpcClient.cc
+ * @file AuthRpcService.cc
  * @brief Implementation of the authentication RPC client
  * @details This file contains the implementation of AuthRpcClient class methods,
  *          including RPC call execution, error handling, and connectivity state management.
  */
 
-#include "src/auth/AuthRpcClient.hpp"
+
+#include "AuthRpcService.hpp"
 
 #include <glog/logging.h>
 #include <functional>
@@ -16,7 +17,7 @@ namespace client_app::auth
 {
     /// @brief Construct a new AuthRpcClient object
     /// @param channel The gRPC channel to use for communication
-    AuthRpcClient::AuthRpcClient(const std::shared_ptr<grpc::Channel>& channel) noexcept : stub_(rpc::AuthService::NewStub(channel)), channel_(channel)
+    AuthRpcService::AuthRpcService(const std::shared_ptr<grpc::Channel>& channel) : stub_(rpc::AuthService::NewStub(channel)), channel_(channel)
     {
         LOG_IF(FATAL, !channel) << "RPC channel cannot be null";
     }
@@ -29,7 +30,7 @@ namespace client_app::auth
     /// @param[in] rpc_call Function that performs the actual RPC call
     /// @return rpc::AuthResponse containing operation result
     template <typename RequestType, typename ResponseType>
-    [[nodiscard]] ResponseType AuthRpcClient::ExecuteRpcCall(const std::string& operation_name, const RequestType& request, const std::function<grpc::Status(grpc::ClientContext *, const RequestType &, ResponseType *)>& rpc_call) const noexcept
+    [[nodiscard]] ResponseType AuthRpcService::ExecuteRpcCall(const std::string& operation_name, const RequestType& request, const std::function<grpc::Status(grpc::ClientContext*, const RequestType&, ResponseType*)>& rpc_call) const
     {
         ResponseType response{};
         grpc::ClientContext context{};
@@ -52,7 +53,7 @@ namespace client_app::auth
     /// @param[in] username The username to register
     /// @param[in] password The password for the user
     /// @return rpc::AuthResponse containing operation result
-    [[nodiscard]] rpc::AuthResponse AuthRpcClient::RegisterUser(const std::string& username, const std::string& password) const noexcept
+    [[nodiscard]] rpc::AuthResponse AuthRpcService::RegisterUser(const std::string& username, const std::string& password) const
     {
         rpc::RegisterUserRequest request{};
         request.set_username(username);
@@ -68,7 +69,7 @@ namespace client_app::auth
     /// @param[in] username The username to authenticate
     /// @param[in] password The password for the user
     /// @return rpc::AuthResponse containing operation result
-    [[nodiscard]] rpc::AuthResponse AuthRpcClient::AuthenticateUser(const std::string& username, const std::string& password) const noexcept
+    [[nodiscard]] rpc::AuthResponse AuthRpcService::AuthenticateUser(const std::string& username, const std::string& password) const
     {
         rpc::AuthenticateUserRequest request{};
         request.set_username(username);
@@ -83,7 +84,7 @@ namespace client_app::auth
     /// @brief Check if a user exists
     /// @param[in] username The username to check
     /// @return rpc::AuthResponse containing operation result
-    [[nodiscard]] rpc::AuthResponse AuthRpcClient::UserExists(const std::string& username) const noexcept
+    [[nodiscard]] rpc::AuthResponse AuthRpcService::UserExists(const std::string& username) const
     {
         rpc::UserExistsRequest request{};
         request.set_username(username);
@@ -99,7 +100,7 @@ namespace client_app::auth
     /// @param[in] current_password The current password
     /// @param[in] new_password The new password to set
     /// @return rpc::AuthResponse containing operation result
-    [[nodiscard]] rpc::AuthResponse AuthRpcClient::ChangePassword(const std::string& username, const std::string& current_password, const std::string& new_password) const noexcept
+    [[nodiscard]] rpc::AuthResponse AuthRpcService::ChangePassword(const std::string& username, const std::string& current_password, const std::string& new_password) const
     {
         rpc::ChangePasswordRequest request{};
         request.set_username(username);
@@ -116,7 +117,7 @@ namespace client_app::auth
     /// @param[in] username The username whose password to reset
     /// @param[in] new_password The new password to set
     /// @return rpc::AuthResponse containing operation result
-    [[nodiscard]] rpc::AuthResponse AuthRpcClient::ResetPassword(const std::string& username, const std::string& new_password) const noexcept
+    [[nodiscard]] rpc::AuthResponse AuthRpcService::ResetPassword(const std::string& username, const std::string& new_password) const
     {
         rpc::ResetPasswordRequest request{};
         request.set_username(username);
@@ -131,7 +132,7 @@ namespace client_app::auth
     /// @brief Delete a user
     /// @param[in] username The username to delete
     /// @return rpc::AuthResponse containing operation result
-    [[nodiscard]] rpc::AuthResponse AuthRpcClient::DeleteUser(const std::string& username) const noexcept
+    [[nodiscard]] rpc::AuthResponse AuthRpcService::DeleteUser(const std::string& username) const
     {
         rpc::DeleteUserRequest request{};
         request.set_username(username);
@@ -144,7 +145,7 @@ namespace client_app::auth
 
     /// @brief Get the underlying channel's current connectivity state
     /// @return Current GrpcConnectivityState of the channel
-    common::rpc::GrpcConnectivityState AuthRpcClient::getConnectivityState() const noexcept
+    common::rpc::GrpcConnectivityState AuthRpcService::getConnectivityState() const
     {
         const grpc_connectivity_state raw_state = channel_->GetState(false);
         return common::rpc::RpcMetadata::grpcStateToEnum(raw_state);
@@ -152,7 +153,7 @@ namespace client_app::auth
 
     /// @brief Check if the client channel is ready for RPC calls
     /// @return True if channel is in READY state
-    bool AuthRpcClient::isReady() const noexcept
+    bool AuthRpcService::isReady() const
     {
         return getConnectivityState() == common::rpc::GrpcConnectivityState::READY;
     }

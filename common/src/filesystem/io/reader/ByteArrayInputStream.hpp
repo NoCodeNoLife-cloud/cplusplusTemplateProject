@@ -50,14 +50,14 @@ namespace common::filesystem
 
         /// @brief Tests if this input stream supports the mark and reset methods.
         /// @return true if this stream instance supports the mark and reset methods; false otherwise.
-        [[nodiscard]] bool markSupported() const noexcept override;
+        [[nodiscard]] bool markSupported() const  override;
 
         /// @brief Closes this input stream and releases any system resources associated with the stream.
-        void close() noexcept override;
+        void close()  override;
 
         /// @brief Checks if this input stream has been closed.
         /// @return true if this input stream has been closed, false otherwise.
-        [[nodiscard]] bool isClosed() const noexcept override;
+        [[nodiscard]] bool isClosed() const  override;
 
     protected:
         const std::vector<std::byte> buffer_;

@@ -80,7 +80,7 @@ namespace common::filesystem
         /// @param r The red component of the color (0-255)
         /// @param g The green component of the color (0-255)
         /// @param b The blue component of the color (0-255)
-        void setPixel(int32_t x, int32_t y, uint8_t r, uint8_t g, uint8_t b) noexcept;
+        void setPixel(int32_t x, int32_t y, uint8_t r, uint8_t g, uint8_t b) ;
 
         /// @brief Gets the color of a pixel at the specified coordinates
         /// @param x The x-coordinate of the pixel
@@ -89,7 +89,7 @@ namespace common::filesystem
         /// @param g Reference to store the green component of the color (0-255)
         /// @param b Reference to store the blue component of the color (0-255)
         /// @return true if the coordinates are valid, false otherwise
-        [[nodiscard]] bool getPixel(int32_t x, int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const noexcept;
+        [[nodiscard]] bool getPixel(int32_t x, int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const ;
 
         /// @brief Saves the BMP image to a file
         /// @param filename The name of the file to save the image to
@@ -98,11 +98,11 @@ namespace common::filesystem
 
         /// @brief Gets the width of the image
         /// @return The width of the image in pixels
-        [[nodiscard]] int32_t getWidth() const noexcept;
+        [[nodiscard]] int32_t getWidth() const ;
 
         /// @brief Gets the height of the image
         /// @return The height of the image in pixels
-        [[nodiscard]] int32_t getHeight() const noexcept;
+        [[nodiscard]] int32_t getHeight() const ;
 
     private:
         int32_t width_{};

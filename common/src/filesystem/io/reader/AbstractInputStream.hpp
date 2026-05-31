@@ -10,7 +10,7 @@
 #include <vector>
 #include <cstdint>
 
-#include "src/interface/ICloseable.hpp"
+#include "interface/ICloseable.hpp"
 
 namespace common::filesystem
 {

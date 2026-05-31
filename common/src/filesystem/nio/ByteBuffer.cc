@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the ByteBuffer class methods for Common library utilities.
  */
 
-#include "src/filesystem/nio/ByteBuffer.hpp"
+#include "filesystem/nio/ByteBuffer.hpp"
 
 #include <fmt/format.h>
 #include <glog/logging.h>
@@ -17,12 +17,12 @@ namespace common::filesystem
         limit_ = capacity;
     }
 
-    size_t ByteBuffer::capacity() const noexcept
+    size_t ByteBuffer::capacity() const
     {
         return capacity_;
     }
 
-    size_t ByteBuffer::position() const noexcept
+    size_t ByteBuffer::position() const
     {
         return position_;
     }
@@ -37,7 +37,7 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    size_t ByteBuffer::limit() const noexcept
+    size_t ByteBuffer::limit() const
     {
         return limit_;
     }
@@ -56,29 +56,29 @@ namespace common::filesystem
         }
     }
 
-    void ByteBuffer::clear() noexcept
+    void ByteBuffer::clear()
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    void ByteBuffer::flip() noexcept
+    void ByteBuffer::flip()
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    void ByteBuffer::rewind() noexcept
+    void ByteBuffer::rewind()
     {
         position_ = 0;
     }
 
-    size_t ByteBuffer::remaining() const noexcept
+    size_t ByteBuffer::remaining() const
     {
         return limit_ - position_;
     }
 
-    bool ByteBuffer::hasRemaining() const noexcept
+    bool ByteBuffer::hasRemaining() const
     {
         return position_ < limit_;
     }

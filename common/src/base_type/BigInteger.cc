@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the BigInteger class methods for Base type classes providing fundamental object functionality.
  */
 
-#include "src/base_type/BigInteger.hpp"
+#include "base_type/BigInteger.hpp"
 
 #include <fmt/format.h>
 #include <boost/multiprecision/cpp_int.hpp>
@@ -15,7 +15,7 @@
 
 namespace common::base_type
 {
-    BigInteger::BigInteger() noexcept : value_(0)
+    BigInteger::BigInteger()  : value_(0)
     {
     }
 
@@ -29,21 +29,21 @@ namespace common::base_type
         value_ = boost::multiprecision::cpp_int(str);
     }
 
-    BigInteger::BigInteger(const int64_t num) noexcept : value_(num)
+    BigInteger::BigInteger(const int64_t num)  : value_(num)
     {
     }
 
-    BigInteger BigInteger::operator+(const BigInteger& other) const noexcept
+    BigInteger BigInteger::operator+(const BigInteger& other) const
     {
         return BigInteger(value_ + other.value_);
     }
 
-    BigInteger BigInteger::operator-(const BigInteger& other) const noexcept
+    BigInteger BigInteger::operator-(const BigInteger& other) const
     {
         return BigInteger(value_ - other.value_);
     }
 
-    BigInteger BigInteger::operator*(const BigInteger& other) const noexcept
+    BigInteger BigInteger::operator*(const BigInteger& other) const
     {
         return BigInteger(value_ * other.value_);
     }
@@ -68,7 +68,7 @@ namespace common::base_type
         return BigInteger(value_ % other.value_);
     }
 
-    std::strong_ordering BigInteger::operator<=>(const BigInteger& other) const noexcept
+    std::strong_ordering BigInteger::operator<=>(const BigInteger& other) const
     {
         if (value_ < other.value_)
         {
@@ -81,7 +81,7 @@ namespace common::base_type
         return std::strong_ordering::equal;
     }
 
-    bool BigInteger::operator==(const BigInteger& other) const noexcept
+    bool BigInteger::operator==(const BigInteger& other) const
     {
         return value_ == other.value_;
     }
@@ -91,7 +91,7 @@ namespace common::base_type
         return BigInteger(str);
     }
 
-    BigInteger BigInteger::fromInt(const int64_t num) noexcept
+    BigInteger BigInteger::fromInt(const int64_t num)
     {
         return BigInteger(num);
     }

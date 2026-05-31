@@ -34,7 +34,7 @@ namespace common::crypto
         return {reinterpret_cast<const char*>(hash), HASH_SIZE};
     }
 
-    bool CryptoToolKit::secure_compare(const std::string& a, const std::string& b) noexcept
+    bool CryptoToolKit::secure_compare(const std::string& a, const std::string& b)
     {
         if (a.length() != b.length())
         {

@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the InputStreamReader class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/InputStreamReader.hpp"
+#include "filesystem/io/reader/InputStreamReader.hpp"
 
 #include <fmt/format.h>
 

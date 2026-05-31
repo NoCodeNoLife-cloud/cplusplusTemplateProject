@@ -34,7 +34,7 @@ namespace common::toolkit
         /// @brief Safely converts an integer to its Roman numeral representation
         /// @param num The integer to convert (must be between 1 and 3999)
         /// @return Optional containing the Roman numeral if valid, otherwise empty
-        [[nodiscard]] static std::optional<std::string> tryIntToRoman(int32_t num) noexcept;
+        [[nodiscard]] static std::optional<std::string> tryIntToRoman(int32_t num) ;
 
         /// @brief Converts a Roman numeral string back to an integer
         /// @param roman The Roman numeral string to convert
@@ -45,11 +45,11 @@ namespace common::toolkit
         /// @brief Checks if an integer is a power of two
         /// @param num The integer to check
         /// @return true if the number is a power of two, false otherwise
-        [[nodiscard]] static bool isPowerOfTwo(int32_t num) noexcept;
+        [[nodiscard]] static bool isPowerOfTwo(int32_t num) ;
 
         /// @brief Counts the number of set bits in an integer
         /// @param num The integer to count bits for
         /// @return The number of set bits
-        [[nodiscard]] static int32_t countSetBits(int32_t num) noexcept;
+        [[nodiscard]] static int32_t countSetBits(int32_t num) ;
     };
 }

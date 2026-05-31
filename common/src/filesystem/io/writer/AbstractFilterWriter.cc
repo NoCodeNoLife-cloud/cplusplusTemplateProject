@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the AbstractFilterWriter class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/writer/AbstractFilterWriter.hpp"
+#include "filesystem/io/writer/AbstractFilterWriter.hpp"
 
 #include <stdexcept>
 

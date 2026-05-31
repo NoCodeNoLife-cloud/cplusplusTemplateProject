@@ -5,7 +5,6 @@
  *          including user registration, authentication, password management,
  *          account deletion, and exception handling for gRPC requests.
  */
-
 #include "AuthRpcService.hpp"
 
 #include <string_view>
@@ -24,7 +23,7 @@ namespace server_app::auth
 
     /// @brief Helper function to validate request parameters
     template <typename RequestType, typename ValidatorFunc>
-    [[nodiscard]] static std::optional<grpc::Status> ValidateRequest(const RequestType* request, ValidatorFunc&& validator, const std::string& error_msg, rpc::AuthResponse* response) noexcept
+    [[nodiscard]] static std::optional<grpc::Status> ValidateRequest(const RequestType* request, ValidatorFunc&& validator, const std::string& error_msg, rpc::AuthResponse* response)
     {
         if (!request || !validator(request))
         {
@@ -36,7 +35,7 @@ namespace server_app::auth
         return std::nullopt; // No error, continue with normal processing
     }
 
-    AuthRpcService::AuthRpcService(const std::string& db_path) noexcept : authenticator_(db_path)
+    AuthRpcService::AuthRpcService(const std::string& db_path) : authenticator_(db_path)
     {
     }
 
@@ -244,7 +243,7 @@ namespace server_app::auth
         }
     }
 
-    [[nodiscard]] grpc::Status AuthRpcService::HandleAuthException(const common::exception::AuthenticationException& e, rpc::AuthResponse* const response) noexcept
+    [[nodiscard]] grpc::Status AuthRpcService::HandleAuthException(const common::exception::AuthenticationException& e, rpc::AuthResponse* const response)
     {
         response->set_success(false);
         response->set_message(e.what());

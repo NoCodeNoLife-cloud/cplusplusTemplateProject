@@ -41,7 +41,7 @@ namespace common::toolkit
         return roman;
     }
 
-    std::optional<std::string> IntegerToolkit::tryIntToRoman(const int32_t num) noexcept
+    std::optional<std::string> IntegerToolkit::tryIntToRoman(const int32_t num)
     {
         if (num < ROMAN_MIN_VALUE || num > ROMAN_MAX_VALUE)
         {
@@ -100,12 +100,12 @@ namespace common::toolkit
         return result;
     }
 
-    bool IntegerToolkit::isPowerOfTwo(const int32_t num) noexcept
+    bool IntegerToolkit::isPowerOfTwo(const int32_t num)
     {
         return num > 0 && (num & num - 1) == 0;
     }
 
-    int32_t IntegerToolkit::countSetBits(int32_t num) noexcept
+    int32_t IntegerToolkit::countSetBits(int32_t num)
     {
         int32_t count = 0;
         while (num)

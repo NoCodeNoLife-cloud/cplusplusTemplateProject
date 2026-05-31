@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the LongBuffer class methods for Common library utilities.
  */
 
-#include "src/filesystem/nio/LongBuffer.hpp"
+#include "filesystem/nio/LongBuffer.hpp"
 
 #include <fmt/format.h>
 
@@ -33,17 +33,17 @@ namespace common::filesystem
         buffer_[position_++] = value;
     }
 
-    bool LongBuffer::hasRemaining() const noexcept
+    bool LongBuffer::hasRemaining() const
     {
         return position_ < limit_;
     }
 
-    std::size_t LongBuffer::remaining() const noexcept
+    std::size_t LongBuffer::remaining() const
     {
         return limit_ - position_;
     }
 
-    std::size_t LongBuffer::position() const noexcept
+    std::size_t LongBuffer::position() const
     {
         return position_;
     }
@@ -57,7 +57,7 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    std::size_t LongBuffer::limit() const noexcept
+    std::size_t LongBuffer::limit() const
     {
         return limit_;
     }
@@ -75,24 +75,24 @@ namespace common::filesystem
         }
     }
 
-    std::size_t LongBuffer::capacity() const noexcept
+    std::size_t LongBuffer::capacity() const
     {
         return capacity_;
     }
 
-    void LongBuffer::clear() noexcept
+    void LongBuffer::clear()
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    void LongBuffer::flip() noexcept
+    void LongBuffer::flip()
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    void LongBuffer::rewind() noexcept
+    void LongBuffer::rewind()
     {
         position_ = 0;
     }

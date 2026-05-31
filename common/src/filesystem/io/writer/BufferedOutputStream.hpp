@@ -56,15 +56,15 @@ namespace common::filesystem
 
         /// @brief Returns the current size of the buffer.
         /// @return The buffer size in bytes.
-        [[nodiscard]] size_t getBufferSize() const noexcept;
+        [[nodiscard]] size_t getBufferSize() const ;
 
         /// @brief Returns the number of bytes currently in the buffer.
         /// @return The number of bytes buffered.
-        [[nodiscard]] size_t getBufferedDataSize() const noexcept;
+        [[nodiscard]] size_t getBufferedDataSize() const ;
 
         /// @brief Checks if the stream is closed.
         /// @return True if the stream is closed, false otherwise.
-        [[nodiscard]] bool isClosed() const noexcept override;
+        [[nodiscard]] bool isClosed() const  override;
 
     protected:
         /// @brief Flushes the internal buffer to the underlying output stream.

@@ -28,7 +28,7 @@ namespace common::container
 
         /// @brief Move constructor transfers ownership from another queue
         /// @param other The queue to move from
-        Queue(Queue&& other) noexcept;
+        Queue(Queue&& other) ;
 
         /// @brief Copy assignment operator
         /// @param other The queue to copy from
@@ -38,7 +38,7 @@ namespace common::container
         /// @brief Move assignment operator
         /// @param other The queue to move from
         /// @return Reference to this queue
-        Queue& operator=(Queue&& other) noexcept;
+        Queue& operator=(Queue&& other) ;
 
         /// @brief Add an element to the back of the queue
         /// @param value The value to add
@@ -71,15 +71,15 @@ namespace common::container
 
         /// @brief Check if the queue is empty
         /// @return True if the queue is empty, false otherwise
-        [[nodiscard]] bool empty() const noexcept;
+        [[nodiscard]] bool empty() const ;
 
         /// @brief Get the number of elements in the queue
         /// @return The number of elements in the queue
-        [[nodiscard]] size_t size() const noexcept;
+        [[nodiscard]] size_t size() const ;
 
         /// @brief Swap the contents of this queue with another
         /// @param other The queue to swap with
-        void swap(Queue& other) noexcept;
+        void swap(Queue& other) ;
 
     private:
         /// @brief Internal node structure for the queue
@@ -121,7 +121,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    Queue<T>::Queue(Queue&& other) noexcept : head_(std::move(other.head_)), tail_(other.tail_), queue_size_(other.queue_size_)
+    Queue<T>::Queue(Queue&& other)  : head_(std::move(other.head_)), tail_(other.tail_), queue_size_(other.queue_size_)
     {
         other.tail_ = nullptr;
         other.queue_size_ = 0;
@@ -139,7 +139,7 @@ namespace common::container
     }
 
     template <std::movable T>
-    Queue<T>& Queue<T>::operator=(Queue&& other) noexcept
+    Queue<T>& Queue<T>::operator=(Queue&& other)
     {
         if (this != &other)
         {
@@ -229,19 +229,19 @@ namespace common::container
     }
 
     template <std::movable T>
-    bool Queue<T>::empty() const noexcept
+    bool Queue<T>::empty() const
     {
         return queue_size_ == 0;
     }
 
     template <std::movable T>
-    size_t Queue<T>::size() const noexcept
+    size_t Queue<T>::size() const
     {
         return queue_size_;
     }
 
     template <std::movable T>
-    void Queue<T>::swap(Queue& other) noexcept
+    void Queue<T>::swap(Queue& other)
     {
         using std::swap;
         head_.swap(other.head_);

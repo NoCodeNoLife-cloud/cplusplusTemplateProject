@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the OpenSSLToolkit class methods for Cryptographic utilities and toolkit.
  */
 
-#include "src/crypto/OpenSSLToolkit.hpp"
+#include "crypto/OpenSSLToolkit.hpp"
 #include <openssl/aes.h>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
@@ -20,7 +20,7 @@
 
 namespace common::crypto
 {
-    void OpenSSLToolkit::deriveKey(const std::string& password, std::array<unsigned char, 32>& key, const std::array<unsigned char, 16>& salt) noexcept
+    void OpenSSLToolkit::deriveKey(const std::string& password, std::array<unsigned char, 32>& key, const std::array<unsigned char, 16>& salt)
     {
         EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), salt.data(), reinterpret_cast<const unsigned char*>(password.c_str()), static_cast<int32_t>(password.size()), 1, key.data(), nullptr);
     }

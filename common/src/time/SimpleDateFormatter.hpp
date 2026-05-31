@@ -53,11 +53,11 @@ namespace common::time
         /// @brief Compares this formatter with another for equality.
         /// @param other The other formatter to compare with.
         /// @return True if both formatters are equal, false otherwise.
-        [[nodiscard]] bool equals(const SimpleDateFormatter& other) const noexcept;
+        [[nodiscard]] bool equals(const SimpleDateFormatter& other) const ;
 
         /// @brief Computes the hash code for this formatter.
         /// @return The hash code as a size_t.
-        [[nodiscard]] size_t hashCode() const noexcept;
+        [[nodiscard]] size_t hashCode() const ;
 
     private:
         std::string pattern_{};

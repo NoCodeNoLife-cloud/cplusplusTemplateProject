@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the FloatBuffer class methods for Common library utilities.
  */
 
-#include "src/filesystem/nio/FloatBuffer.hpp"
+#include "filesystem/nio/FloatBuffer.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>
@@ -24,19 +24,19 @@ namespace common::filesystem
         return FloatBuffer(capacity);
     }
 
-    void FloatBuffer::clear() noexcept
+    void FloatBuffer::clear()
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    void FloatBuffer::flip() noexcept
+    void FloatBuffer::flip()
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    void FloatBuffer::rewind() noexcept
+    void FloatBuffer::rewind()
     {
         position_ = 0;
     }
@@ -109,7 +109,7 @@ namespace common::filesystem
         return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
     }
 
-    size_t FloatBuffer::position() const noexcept
+    size_t FloatBuffer::position() const
     {
         return position_;
     }
@@ -123,7 +123,7 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    size_t FloatBuffer::limit() const noexcept
+    size_t FloatBuffer::limit() const
     {
         return limit_;
     }
@@ -141,17 +141,17 @@ namespace common::filesystem
         limit_ = newLimit;
     }
 
-    size_t FloatBuffer::capacity() const noexcept
+    size_t FloatBuffer::capacity() const
     {
         return capacity_;
     }
 
-    bool FloatBuffer::hasRemaining() const noexcept
+    bool FloatBuffer::hasRemaining() const
     {
         return position_ < limit_;
     }
 
-    size_t FloatBuffer::remaining() const noexcept
+    size_t FloatBuffer::remaining() const
     {
         return limit_ - position_;
     }

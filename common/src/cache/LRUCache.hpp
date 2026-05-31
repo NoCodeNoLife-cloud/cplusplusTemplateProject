@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <unordered_map>
 
-#include "src/interface/ICache.hpp"
+#include "interface/ICache.hpp"
 
 namespace common::cache
 {
@@ -58,24 +58,24 @@ namespace common::cache
         [[nodiscard]] bool remove(const Key& key) override;
 
         /// @brief Clears all entries from the cache
-        void clear() noexcept override;
+        void clear()  override;
 
         /// @brief Returns the current number of entries in the cache
         /// @return Number of entries currently in the cache
-        [[nodiscard]] size_t size() const noexcept override;
+        [[nodiscard]] size_t size() const  override;
 
         /// @brief Returns the maximum capacity of the cache
         /// @return Maximum number of entries the cache can hold
-        [[nodiscard]] size_t capacity() const noexcept override;
+        [[nodiscard]] size_t capacity() const  override;
 
         /// @brief Checks if the cache is empty
         /// @return true if the cache is empty, false otherwise
-        [[nodiscard]] bool empty() const noexcept override;
+        [[nodiscard]] bool empty() const  override;
 
         /// @brief Checks if a key exists in the cache
         /// @param key The key to check for
         /// @return true if the key exists in the cache, false otherwise
-        [[nodiscard]] bool contains(const Key& key) const noexcept override;
+        [[nodiscard]] bool contains(const Key& key) const  override;
 
     private:
         mutable std::list<std::pair<Key, Value>> cache_list_;
@@ -195,7 +195,7 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    void LRUCache<Key, Value, Map>::clear() noexcept
+    void LRUCache<Key, Value, Map>::clear()
     {
         const size_t previous_size = cache_list_.size();
         cache_list_.clear();
@@ -203,25 +203,25 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] size_t LRUCache<Key, Value, Map>::size() const noexcept
+    [[nodiscard]] size_t LRUCache<Key, Value, Map>::size() const
     {
         return cache_list_.size();
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] size_t LRUCache<Key, Value, Map>::capacity() const noexcept
+    [[nodiscard]] size_t LRUCache<Key, Value, Map>::capacity() const
     {
         return capacity_;
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] bool LRUCache<Key, Value, Map>::empty() const noexcept
+    [[nodiscard]] bool LRUCache<Key, Value, Map>::empty() const
     {
         return cache_list_.empty();
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] bool LRUCache<Key, Value, Map>::contains(const Key& key) const noexcept
+    [[nodiscard]] bool LRUCache<Key, Value, Map>::contains(const Key& key) const
     {
         return cache_map_.find(key) != cache_map_.end();
     }

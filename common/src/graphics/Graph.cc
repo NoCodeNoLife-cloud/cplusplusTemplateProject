@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the Graph class methods for Graphics and geometry utilities.
  */
 
-#include "src/graphics/Graph.hpp"
+#include "graphics/Graph.hpp"
 
 #include <fmt/format.h>
 #include <vector>
@@ -12,7 +12,7 @@
 #include <string>
 #include <glog/logging.h>
 
-#include "src/graphics/Edge.hpp"
+#include "graphics/Edge.hpp"
 
 namespace common::graphics
 {
@@ -47,12 +47,12 @@ namespace common::graphics
         return adj_list_[static_cast<size_t>(node)];
     }
 
-    int32_t Graph::getNodeCount() const noexcept
+    int32_t Graph::getNodeCount() const
     {
         return num_nodes_;
     }
 
-    bool Graph::isEmpty() const noexcept
+    bool Graph::isEmpty() const
     {
         return num_nodes_ == 0;
     }

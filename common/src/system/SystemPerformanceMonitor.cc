@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the SystemPerformanceMonitor class methods for System information and performance monitoring.
  */
 
-#include "src/system/SystemPerformanceMonitor.hpp"
+#include "system/SystemPerformanceMonitor.hpp"
 
 #include <windows.h>
 
@@ -14,7 +14,7 @@
 
 namespace common::system
 {
-    ULARGE_INTEGER SystemPerformanceMonitor::FileTimeToULARGEInteger(const FILETIME& ft) noexcept
+    ULARGE_INTEGER SystemPerformanceMonitor::FileTimeToULARGEInteger(const FILETIME& ft)
     {
         ULARGE_INTEGER result;
         result.LowPart = ft.dwLowDateTime;
@@ -22,7 +22,7 @@ namespace common::system
         return result;
     }
 
-    MemoryUsage SystemPerformanceMonitor::GetMemoryUsage() noexcept
+    MemoryUsage SystemPerformanceMonitor::GetMemoryUsage()
     {
         MemoryUsage memUsage{};
         MEMORYSTATUSEX memInfo{};
@@ -38,7 +38,7 @@ namespace common::system
         return memUsage;
     }
 
-    CpuUsage SystemPerformanceMonitor::GetCpuUsage(const int32_t interval) noexcept
+    CpuUsage SystemPerformanceMonitor::GetCpuUsage(const int32_t interval)
     {
         CpuUsage cpuUsage{};
 

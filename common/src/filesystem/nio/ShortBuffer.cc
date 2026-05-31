@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the ShortBuffer class methods for Common library utilities.
  */
 
-#include "src/filesystem/nio/ShortBuffer.hpp"
+#include "filesystem/nio/ShortBuffer.hpp"
 
 #include <fmt/format.h>
 
@@ -60,17 +60,17 @@ namespace common::filesystem
         buffer_[index] = value;
     }
 
-    bool ShortBuffer::hasRemaining() const noexcept
+    bool ShortBuffer::hasRemaining() const
     {
         return position_ < limit_;
     }
 
-    size_t ShortBuffer::remaining() const noexcept
+    size_t ShortBuffer::remaining() const
     {
         return limit_ - position_;
     }
 
-    size_t ShortBuffer::position() const noexcept
+    size_t ShortBuffer::position() const
     {
         return position_;
     }
@@ -84,7 +84,7 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    size_t ShortBuffer::limit() const noexcept
+    size_t ShortBuffer::limit() const
     {
         return limit_;
     }
@@ -102,24 +102,24 @@ namespace common::filesystem
         }
     }
 
-    size_t ShortBuffer::capacity() const noexcept
+    size_t ShortBuffer::capacity() const
     {
         return capacity_;
     }
 
-    void ShortBuffer::clear() noexcept
+    void ShortBuffer::clear()
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    void ShortBuffer::flip() noexcept
+    void ShortBuffer::flip()
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    void ShortBuffer::rewind() noexcept
+    void ShortBuffer::rewind()
     {
         position_ = 0;
     }

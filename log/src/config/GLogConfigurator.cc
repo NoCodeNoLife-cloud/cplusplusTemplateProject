@@ -20,7 +20,7 @@ namespace glog::config
     // Static variable to hold the custom log sink for cleanup
     static std::unique_ptr<google::LogSink> static_custom_log_sink_;
 
-    GLogConfigurator::GLogConfigurator(std::string glog_yaml_path) noexcept : glog_yaml_path_(std::move(glog_yaml_path))
+    GLogConfigurator::GLogConfigurator(std::string glog_yaml_path) : glog_yaml_path_(std::move(glog_yaml_path))
     {
         config_.deserializedFromYamlFile(glog_yaml_path_);
     }

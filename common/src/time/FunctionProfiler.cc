@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the FunctionProfiler class methods for Time and date utilities including profilers and formatters.
  */
 
-#include "src/time/FunctionProfiler.hpp"
+#include "time/FunctionProfiler.hpp"
 
 #include <fmt/format.h>
 #include <chrono>

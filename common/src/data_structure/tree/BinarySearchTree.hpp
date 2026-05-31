@@ -19,7 +19,7 @@ namespace common::data_structure::tree
     class BinarySearchTree
     {
     public:
-        BinarySearchTree() noexcept;
+        BinarySearchTree() ;
 
         /// @brief Inserts a value into the binary search tree.
         /// @param value The value to be inserted.
@@ -74,7 +74,7 @@ namespace common::data_structure::tree
     };
 
     template <typename T>
-    BinarySearchTree<T>::BinarySearchTree() noexcept = default;
+    BinarySearchTree<T>::BinarySearchTree()  = default;
 
     template <typename T>
     void BinarySearchTree<T>::insert(T value)

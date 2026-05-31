@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the FilterOutputStream class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/writer/FilterOutputStream.hpp"
+#include "filesystem/io/writer/FilterOutputStream.hpp"
 
 #include <fmt/format.h>
 

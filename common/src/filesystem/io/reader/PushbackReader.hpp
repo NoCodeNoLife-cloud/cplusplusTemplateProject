@@ -28,7 +28,7 @@ namespace common::filesystem
         /// @details Once the stream has been closed, further read(), unread(), ready(), mark(),
         /// reset(), or skip() invocations will throw an IOException.
         /// Closing a previously closed stream has no effect.
-        void close() noexcept override;
+        void close()  override;
 
         /// @brief Marks the current position in this stream.
         /// @details A subsequent call to the reset() method repositions this stream at the last marked position so that
@@ -87,7 +87,7 @@ namespace common::filesystem
         /// The characters are pushed back in reverse order, so that the next read operation will read
         /// the characters in the same order as they appear in the array.
         /// @param cbuf the array of characters to push back
-        void unread(const std::vector<char>& cbuf) noexcept;
+        void unread(const std::vector<char>& cbuf) ;
 
         /// @brief Pushes back a portion of the given character array into the pushback buffer.
         /// @details This method pushes back len characters from the given array starting at offset off

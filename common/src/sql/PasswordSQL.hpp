@@ -22,7 +22,7 @@ namespace common::sql
         /// @brief Constructs PasswordSQL and initializes database connection
         /// @param db_path Path to the SQLite database file
         /// @throws std::runtime_error if database initialization fails
-        explicit PasswordSQL(const std::string& db_path) noexcept(false);
+        explicit PasswordSQL(const std::string& db_path);
 
         /// @brief Copy constructor deleted to prevent copying
         PasswordSQL(const PasswordSQL&) = delete;
@@ -43,45 +43,45 @@ namespace common::sql
         /// @param username Username to register
         /// @param password Password for the user
         /// @return true if registration successful, false otherwise
-        [[nodiscard]] bool RegisterUser(const std::string& username, const std::string& password) const noexcept;
+        [[nodiscard]] bool RegisterUser(const std::string& username, const std::string& password) const ;
 
         /// @brief Authenticates a user with provided credentials
         /// @param username Username to authenticate
         /// @param password Password for the user
         /// @return true if authentication successful, false otherwise
-        [[nodiscard]] bool AuthenticateUser(const std::string& username, const std::string& password) const noexcept;
+        [[nodiscard]] bool AuthenticateUser(const std::string& username, const std::string& password) const ;
 
         /// @brief Changes password for a user after validating old password
         /// @param username Username whose password needs to be changed
         /// @param old_password Current password for validation
         /// @param new_password New password to set
         /// @return true if password changed successfully, false otherwise
-        [[nodiscard]] bool ChangePassword(const std::string& username, const std::string& old_password, const std::string& new_password) const noexcept;
+        [[nodiscard]] bool ChangePassword(const std::string& username, const std::string& old_password, const std::string& new_password) const ;
 
         /// @brief Resets password for a user without validating old password
         /// @param username Username whose password needs to be reset
         /// @param new_password New password to set
         /// @return true if password reset successfully, false otherwise
-        [[nodiscard]] bool ResetPassword(const std::string& username, const std::string& new_password) const noexcept;
+        [[nodiscard]] bool ResetPassword(const std::string& username, const std::string& new_password) const ;
 
         /// @brief Deletes a user from the database
         /// @param username Username to delete
         /// @return true if user deleted successfully, false otherwise
-        [[nodiscard]] bool DeleteUser(const std::string& username) const noexcept;
+        [[nodiscard]] bool DeleteUser(const std::string& username) const ;
 
         /// @brief Checks if a user exists in the database
         /// @param username Username to check
         /// @return true if user exists, false otherwise
-        [[nodiscard]] bool UserExists(const std::string& username) const noexcept;
+        [[nodiscard]] bool UserExists(const std::string& username) const ;
 
         /// @brief Retrieves a user's username from the database
         /// @param username Username to retrieve
         /// @return Username if found, empty string otherwise
-        [[nodiscard]] std::string GetUser(const std::string& username) const noexcept;
+        [[nodiscard]] std::string GetUser(const std::string& username) const ;
 
         /// @brief Retrieves all usernames from the database
         /// @return Vector containing all usernames
-        [[nodiscard]] std::vector<std::string> GetAllUsers() const noexcept;
+        [[nodiscard]] std::vector<std::string> GetAllUsers() const ;
 
     private:
         /// @brief SQLite manager instance for database operations

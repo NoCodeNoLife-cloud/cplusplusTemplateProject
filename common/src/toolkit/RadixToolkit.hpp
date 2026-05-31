@@ -137,25 +137,25 @@ namespace common::toolkit
             std::string_view str,
             int base,
             std::errc& ec
-        ) noexcept;
+        ) ;
 
         /**
          * @brief Get current default base configuration
          * @return Default base value
          */
-        [[nodiscard]] constexpr auto get_default_base() const noexcept -> int;
+        [[nodiscard]] constexpr auto get_default_base() const  -> int;
 
         /**
          * @brief Get current charset configuration
          * @return Character set string view
          */
-        [[nodiscard]] constexpr auto get_charset() const noexcept -> std::string_view;
+        [[nodiscard]] constexpr auto get_charset() const  -> std::string_view;
 
     private:
         int default_base_;
         std::string_view charset_;
 
-        [[nodiscard]] static constexpr auto char_to_digit(char c) noexcept -> int;
+        [[nodiscard]] static constexpr auto char_to_digit(char c)  -> int;
     };
 
     constexpr RadixToolkit::RadixToolkit(const int default_base, const std::string_view charset) : default_base_(default_base), charset_(charset)
@@ -355,7 +355,7 @@ namespace common::toolkit
     }
 
     template <std::integral T>
-    constexpr auto RadixToolkit::from_string_nothrow(std::string_view str, int base, std::errc& ec) noexcept -> T
+    constexpr auto RadixToolkit::from_string_nothrow(std::string_view str, int base, std::errc& ec)  -> T
     {
         T result{};
         const auto [ptr, err] = std::from_chars(str.data(), str.data() + str.size(), result, base);
@@ -370,17 +370,17 @@ namespace common::toolkit
         return result;
     }
 
-    constexpr auto RadixToolkit::get_default_base() const noexcept -> int
+    constexpr auto RadixToolkit::get_default_base() const  -> int
     {
         return default_base_;
     }
 
-    constexpr auto RadixToolkit::get_charset() const noexcept -> std::string_view
+    constexpr auto RadixToolkit::get_charset() const  -> std::string_view
     {
         return charset_;
     }
 
-    constexpr auto RadixToolkit::char_to_digit(const char c) noexcept -> int
+    constexpr auto RadixToolkit::char_to_digit(const char c)  -> int
     {
         if (c >= '0' && c <= '9') return c - '0';
         if (c >= 'A' && c <= 'Z') return c - 'A' + 10;

@@ -220,7 +220,7 @@ namespace common::data_structure
          * @brief Checks whether the container is empty.
          * @return @c true if no elements are stored.
          */
-        [[nodiscard]] bool empty() const noexcept
+        [[nodiscard]] bool empty() const
         {
             return size_ == 0;
         }
@@ -229,7 +229,7 @@ namespace common::data_structure
          * @brief Returns the number of elements stored.
          * @return The element count.
          */
-        [[nodiscard]] std::size_t size() const noexcept
+        [[nodiscard]] std::size_t size() const
         {
             return size_;
         }

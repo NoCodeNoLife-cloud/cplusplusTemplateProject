@@ -8,8 +8,8 @@
 #include <format>
 #include <vector>
 
-#include "src/interface/ICloseable.hpp"
-#include "src/interface/IFlushable.hpp"
+#include "interface/ICloseable.hpp"
+#include "interface/IFlushable.hpp"
 
 namespace common::filesystem
 {

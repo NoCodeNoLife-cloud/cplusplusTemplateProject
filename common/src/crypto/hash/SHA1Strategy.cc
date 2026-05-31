@@ -26,12 +26,12 @@ namespace common::crypto::hash
         }
     }
 
-    SHA1Strategy::SHA1Strategy(SHA1Strategy&& other) noexcept : ctx_(std::move(other.ctx_)), finalized_(other.finalized_)
+    SHA1Strategy::SHA1Strategy(SHA1Strategy&& other)  : ctx_(std::move(other.ctx_)), finalized_(other.finalized_)
     {
         other.finalized_ = true; // Prevent other from being used after move
     }
 
-    SHA1Strategy& SHA1Strategy::operator=(SHA1Strategy&& other) noexcept
+    SHA1Strategy& SHA1Strategy::operator=(SHA1Strategy&& other)
     {
         if (this != &other)
         {
@@ -44,17 +44,17 @@ namespace common::crypto::hash
 
     SHA1Strategy::~SHA1Strategy() = default;
 
-    size_t SHA1Strategy::getDigestSize() const noexcept
+    size_t SHA1Strategy::getDigestSize() const
     {
         return DIGEST_SIZE;
     }
 
-    size_t SHA1Strategy::getHexDigestSize() const noexcept
+    size_t SHA1Strategy::getHexDigestSize() const
     {
         return HEX_DIGEST_SIZE;
     }
 
-    bool SHA1Strategy::update(const void* data, const size_t length) noexcept
+    bool SHA1Strategy::update(const void* data, const size_t length)
     {
         if (finalized_)
         {
@@ -63,7 +63,7 @@ namespace common::crypto::hash
         return EVP_DigestUpdate(ctx_.get(), data, length) == 1;
     }
 
-    std::optional<std::vector<uint8_t>> SHA1Strategy::finalize() noexcept
+    std::optional<std::vector<uint8_t>> SHA1Strategy::finalize()
     {
         if (finalized_)
         {
@@ -87,13 +87,13 @@ namespace common::crypto::hash
         return digest;
     }
 
-    bool SHA1Strategy::reset() noexcept
+    bool SHA1Strategy::reset()
     {
         finalized_ = false;
         return EVP_DigestInit_ex(ctx_.get(), EVP_sha1(), nullptr) == 1;
     }
 
-    void SHA1Strategy::EvpDeleter::operator()(EVP_MD_CTX* ctx) const noexcept
+    void SHA1Strategy::EvpDeleter::operator()(EVP_MD_CTX* ctx) const
     {
         if (ctx != nullptr)
         {

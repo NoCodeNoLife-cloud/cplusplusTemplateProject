@@ -8,7 +8,7 @@
 #include <memory>
 
 #include "RedBlackTreeNode.hpp"
-#include "src/data_structure/Color.hpp"
+#include "data_structure/Color.hpp"
 
 namespace common::data_structure::tree
 {
@@ -26,7 +26,7 @@ namespace common::data_structure::tree
 
         /// @brief Get the root node for testing purposes
         /// @return A shared pointer to the root node
-        [[nodiscard]] std::shared_ptr<RedBlackTreeNode<T>> getRoot() const noexcept;
+        [[nodiscard]] std::shared_ptr<RedBlackTreeNode<T>> getRoot() const ;
 
     private:
         std::shared_ptr<RedBlackTreeNode<T>> root_{};
@@ -84,7 +84,7 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    std::shared_ptr<RedBlackTreeNode<T>> RedBlackTree<T>::getRoot() const noexcept
+    std::shared_ptr<RedBlackTreeNode<T>> RedBlackTree<T>::getRoot() const
     {
         return root_;
     }

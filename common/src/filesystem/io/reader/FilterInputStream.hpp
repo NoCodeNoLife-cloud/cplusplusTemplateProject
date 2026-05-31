@@ -16,7 +16,7 @@ namespace common::filesystem
     class FilterInputStream : public AbstractInputStream
     {
     public:
-        explicit FilterInputStream(std::unique_ptr<AbstractInputStream> inputStream) noexcept;
+        explicit FilterInputStream(std::unique_ptr<AbstractInputStream> inputStream) ;
 
         ~FilterInputStream() override = default;
 
@@ -30,7 +30,7 @@ namespace common::filesystem
 
         /// @brief Tests if this input stream supports the mark and reset methods.
         /// @return true if this input stream supports the mark and reset methods; false otherwise.
-        [[nodiscard]] bool markSupported() const noexcept override;
+        [[nodiscard]] bool markSupported() const  override;
 
         /// @brief Reads the next byte of data from this input stream.
         /// @return the next byte of data, or -1 if the end of the stream is reached.
@@ -63,7 +63,7 @@ namespace common::filesystem
 
         /// @brief Checks if this input stream has been closed.
         /// @return true if this input stream has been closed, false otherwise.
-        [[nodiscard]] bool isClosed() const noexcept override;
+        [[nodiscard]] bool isClosed() const  override;
 
     protected:
         std::unique_ptr<AbstractInputStream> input_stream_;

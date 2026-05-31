@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the BufferedReader class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/BufferedReader.hpp"
+#include "filesystem/io/reader/BufferedReader.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>

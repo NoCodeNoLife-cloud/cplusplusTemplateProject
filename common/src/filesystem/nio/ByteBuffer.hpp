@@ -8,7 +8,7 @@
 #include <span>
 #include <vector>
 
-#include "src/interface/IBuffer.hpp"
+#include "interface/IBuffer.hpp"
 
 namespace common::filesystem
 {
@@ -22,11 +22,11 @@ namespace common::filesystem
 
         /// @brief Get the capacity of the buffer
         /// @return The capacity of the buffer
-        [[nodiscard]] size_t capacity() const noexcept override;
+        [[nodiscard]] size_t capacity() const  override;
 
         /// @brief Get the current position of the buffer
         /// @return The current position of the buffer
-        [[nodiscard]] size_t position() const noexcept override;
+        [[nodiscard]] size_t position() const  override;
 
         /// @brief Set the position of the buffer
         /// @param newPosition The new position to set
@@ -35,7 +35,7 @@ namespace common::filesystem
 
         /// @brief Get the limit of the buffer
         /// @return The limit of the buffer
-        [[nodiscard]] size_t limit() const noexcept override;
+        [[nodiscard]] size_t limit() const  override;
 
         /// @brief Set the limit of the buffer
         /// @param newLimit The new limit to set
@@ -43,21 +43,21 @@ namespace common::filesystem
         void limit(size_t newLimit) override;
 
         /// @brief Clear the buffer by resetting position and limit
-        void clear() noexcept override;
+        void clear()  override;
 
         /// @brief Flip the buffer by setting limit to current position and resetting position to zero
-        void flip() noexcept override;
+        void flip()  override;
 
         /// @brief Rewind the buffer by resetting position to zero
-        void rewind() noexcept override;
+        void rewind()  override;
 
         /// @brief Get the number of remaining elements in the buffer
         /// @return The number of remaining elements
-        [[nodiscard]] size_t remaining() const noexcept override;
+        [[nodiscard]] size_t remaining() const  override;
 
         /// @brief Check if there are remaining elements in the buffer
         /// @return True if there are remaining elements, false otherwise
-        [[nodiscard]] bool hasRemaining() const noexcept override;
+        [[nodiscard]] bool hasRemaining() const  override;
 
         /// @brief Puts a single byte into the buffer
         /// @param value The byte value to put into the buffer

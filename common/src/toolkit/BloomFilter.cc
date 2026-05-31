@@ -17,18 +17,18 @@
 namespace common::toolkit
 {
     // BloomParameters implementation
-    BloomParameters::BloomParameters() noexcept : minimum_size(1), maximum_size(std::numeric_limits<uint64_t>::max()), minimum_number_of_hashes(1), maximum_number_of_hashes(std::numeric_limits<uint32_t>::max()), projected_element_count(10000), false_positive_probability(1.0 / static_cast<double>(projected_element_count)), random_seed(0xA5A5A5A55A5A5A5AULL)
+    BloomParameters::BloomParameters()  : minimum_size(1), maximum_size(std::numeric_limits<uint64_t>::max()), minimum_number_of_hashes(1), maximum_number_of_hashes(std::numeric_limits<uint32_t>::max()), projected_element_count(10000), false_positive_probability(1.0 / static_cast<double>(projected_element_count)), random_seed(0xA5A5A5A55A5A5A5AULL)
     {
     }
 
-    bool BloomParameters::operator!() const noexcept
+    bool BloomParameters::operator!() const
     {
         return minimum_size > maximum_size || minimum_number_of_hashes > maximum_number_of_hashes || minimum_number_of_hashes < 1 || 0 == maximum_number_of_hashes || 0 == projected_element_count || false_positive_probability < 0.0 || std::numeric_limits<double>::infinity() == std::abs(false_positive_probability) || 0 == random_seed || 0xFFFFFFFFFFFFFFFFULL == random_seed;
     }
 
-    BloomParameters::optimal_parameters_t::optimal_parameters_t() noexcept = default;
+    BloomParameters::optimal_parameters_t::optimal_parameters_t()  = default;
 
-    bool BloomParameters::compute_optimal_parameters() noexcept
+    bool BloomParameters::compute_optimal_parameters()
     {
         if (!*this)
         {
@@ -114,7 +114,7 @@ namespace common::toolkit
         return true;
     }
 
-    double BloomParameters::safe_log(const double value) noexcept
+    double BloomParameters::safe_log(const double value)
     {
         if (value <= 0.0)
         {
@@ -124,13 +124,13 @@ namespace common::toolkit
     }
 
     // BloomFilter implementation
-    BloomFilter::BloomFilter(const BloomParameters& p) noexcept : salt_count_(p.optimal_parameters.number_of_hashes), table_size_(p.optimal_parameters.table_size), projected_element_count_(p.projected_element_count), random_seed_(p.random_seed * 0xA5A5A5A5 + 1), desired_false_positive_probability_(p.false_positive_probability)
+    BloomFilter::BloomFilter(const BloomParameters& p)  : salt_count_(p.optimal_parameters.number_of_hashes), table_size_(p.optimal_parameters.table_size), projected_element_count_(p.projected_element_count), random_seed_(p.random_seed * 0xA5A5A5A5 + 1), desired_false_positive_probability_(p.false_positive_probability)
     {
         generate_unique_salt();
         bit_table_.resize(table_size_ / 8, 0x00);
     }
 
-    bool BloomFilter::operator==(const BloomFilter& f) const noexcept
+    bool BloomFilter::operator==(const BloomFilter& f) const
     {
         if (this != &f)
         {
@@ -139,12 +139,12 @@ namespace common::toolkit
         return true;
     }
 
-    bool BloomFilter::operator!=(const BloomFilter& f) const noexcept
+    bool BloomFilter::operator!=(const BloomFilter& f) const
     {
         return !operator==(f);
     }
 
-    bool BloomFilter::operator!() const noexcept
+    bool BloomFilter::operator!() const
     {
         return 0 == table_size_;
     }
@@ -191,7 +191,7 @@ namespace common::toolkit
         return *this;
     }
 
-    void BloomFilter::clear() noexcept
+    void BloomFilter::clear()
     {
         std::ranges::fill(bit_table_, static_cast<unsigned char>(0x00));
         inserted_element_count_ = 0;
@@ -270,17 +270,17 @@ namespace common::toolkit
 
     // Template implementations moved to header file for proper instantiation
 
-    uint64_t BloomFilter::size() const noexcept
+    uint64_t BloomFilter::size() const
     {
         return table_size_;
     }
 
-    uint64_t BloomFilter::element_count() const noexcept
+    uint64_t BloomFilter::element_count() const
     {
         return inserted_element_count_;
     }
 
-    double BloomFilter::effective_fpp() const noexcept
+    double BloomFilter::effective_fpp() const
     {
         const auto salt_size = static_cast<double>(salt_.size());
         const auto inserted_count = static_cast<double>(inserted_element_count_);
@@ -289,17 +289,17 @@ namespace common::toolkit
         return std::pow(1.0 - std::exp(-salt_size * inserted_count / size_val), salt_size);
     }
 
-    const BloomFilter::cell_type_* BloomFilter::table() const noexcept
+    const BloomFilter::cell_type_* BloomFilter::table() const
     {
         return bit_table_.data();
     }
 
-    std::size_t BloomFilter::hash_count() const noexcept
+    std::size_t BloomFilter::hash_count() const
     {
         return salt_.size();
     }
 
-    void BloomFilter::compute_indices(const bloom_type_& hash, std::size_t& bit_index, std::size_t& bit) const noexcept
+    void BloomFilter::compute_indices(const bloom_type_& hash, std::size_t& bit_index, std::size_t& bit) const
     {
         bit_index = hash % table_size_;
         bit = bit_index % 8;
@@ -343,7 +343,7 @@ namespace common::toolkit
         }
     }
 
-    BloomFilter::bloom_type_ BloomFilter::hash_ap(const unsigned char* begin, std::size_t remaining_length, bloom_type_ hash) noexcept
+    BloomFilter::bloom_type_ BloomFilter::hash_ap(const unsigned char* begin, std::size_t remaining_length, bloom_type_ hash)
     {
         const unsigned char* itr = begin;
 
@@ -407,21 +407,21 @@ namespace common::toolkit
         return hash;
     }
 
-    BloomFilter operator&(const BloomFilter& a, const BloomFilter& b) noexcept
+    BloomFilter operator&(const BloomFilter& a, const BloomFilter& b)
     {
         BloomFilter result = a;
         result &= b;
         return result;
     }
 
-    BloomFilter operator|(const BloomFilter& a, const BloomFilter& b) noexcept
+    BloomFilter operator|(const BloomFilter& a, const BloomFilter& b)
     {
         BloomFilter result = a;
         result |= b;
         return result;
     }
 
-    BloomFilter operator^(const BloomFilter& a, const BloomFilter& b) noexcept
+    BloomFilter operator^(const BloomFilter& a, const BloomFilter& b)
     {
         BloomFilter result = a;
         result ^= b;

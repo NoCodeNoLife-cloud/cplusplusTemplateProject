@@ -9,8 +9,8 @@
 #include <gtest/gtest.h>
 #include <optional>
 
-#include "src/data_structure/tree/AVLTree.hpp"
-#include "src/data_structure/tree/BinarySearchTree.hpp"
+#include "data_structure/tree/AVLTree.hpp"
+#include "data_structure/tree/BinarySearchTree.hpp"
 
 using namespace common::data_structure::tree;
 

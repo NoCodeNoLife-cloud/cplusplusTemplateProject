@@ -15,66 +15,66 @@ namespace common::graphics
     class Point3D
     {
     public:
-        Point3D() noexcept;
+        Point3D() ;
 
-        Point3D(double x, double y, double z) noexcept;
+        Point3D(double x, double y, double z) ;
 
         /// @brief Get the X coordinate
         /// @return X coordinate value
-        [[nodiscard]] double getX() const noexcept;
+        [[nodiscard]] double getX() const ;
 
         /// @brief Get the Y coordinate
         /// @return Y coordinate value
-        [[nodiscard]] double getY() const noexcept;
+        [[nodiscard]] double getY() const ;
 
         /// @brief Get the Z coordinate
         /// @return Z coordinate value
-        [[nodiscard]] double getZ() const noexcept;
+        [[nodiscard]] double getZ() const ;
 
         /// @brief Set the X coordinate
         /// @param x X coordinate value
-        void setX(double x) noexcept;
+        void setX(double x) ;
 
         /// @brief Set the Y coordinate
         /// @param y Y coordinate value
-        void setY(double y) noexcept;
+        void setY(double y) ;
 
         /// @brief Set the Z coordinate
         /// @param z Z coordinate value
-        void setZ(double z) noexcept;
+        void setZ(double z) ;
 
         /// @brief Add another Point3D to this point
         /// @param other Point3D to add
         /// @return Reference to this point
-        Point3D& operator+=(const Point3D& other) noexcept;
+        Point3D& operator+=(const Point3D& other) ;
 
         /// @brief Subtract another Point3D from this point
         /// @param other Point3D to subtract
         /// @return Reference to this point
-        Point3D& operator-=(const Point3D& other) noexcept;
+        Point3D& operator-=(const Point3D& other) ;
 
         /// @brief Negate this point
         /// @return Negated point
-        [[nodiscard]] Point3D operator-() const noexcept;
+        [[nodiscard]] Point3D operator-() const ;
 
         /// @brief Calculate Euclidean distance to another point
         /// @param other Point to calculate distance to
         /// @return Euclidean distance
-        [[nodiscard]] double distanceTo(const Point3D& other) const noexcept;
+        [[nodiscard]] double distanceTo(const Point3D& other) const ;
 
         /// @brief Calculate squared distance to another point (avoids sqrt)
         /// @param other Point to calculate distance to
         /// @return Squared Euclidean distance
-        [[nodiscard]] double distanceSquaredTo(const Point3D& other) const noexcept;
+        [[nodiscard]] double distanceSquaredTo(const Point3D& other) const ;
 
         // Friend operators
-        friend Point3D operator+(Point3D lhs, const Point3D& rhs) noexcept;
+        friend Point3D operator+(Point3D lhs, const Point3D& rhs) ;
 
-        friend Point3D operator-(Point3D lhs, const Point3D& rhs) noexcept;
+        friend Point3D operator-(Point3D lhs, const Point3D& rhs) ;
 
-        friend bool operator==(const Point3D& lhs, const Point3D& rhs) noexcept;
+        friend bool operator==(const Point3D& lhs, const Point3D& rhs) ;
 
-        friend bool operator!=(const Point3D& lhs, const Point3D& rhs) noexcept;
+        friend bool operator!=(const Point3D& lhs, const Point3D& rhs) ;
 
         friend std::ostream& operator<<(std::ostream& os, const Point3D& point);
 

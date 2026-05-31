@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the AbstractReader class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/AbstractReader.hpp"
+#include "filesystem/io/reader/AbstractReader.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>

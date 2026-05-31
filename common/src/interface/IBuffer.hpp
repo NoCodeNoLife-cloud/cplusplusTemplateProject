@@ -22,11 +22,11 @@ namespace common::interfaces
 
         /// @brief Get the capacity of the buffer
         /// @return The capacity of the buffer
-        [[nodiscard]] virtual size_t capacity() const noexcept = 0;
+        [[nodiscard]] virtual size_t capacity() const  = 0;
 
         /// @brief Get the current position of the buffer
         /// @return The current position of the buffer
-        [[nodiscard]] virtual size_t position() const noexcept = 0;
+        [[nodiscard]] virtual size_t position() const  = 0;
 
         /// @brief Set the position of the buffer
         /// @param newPosition The new position to set
@@ -35,7 +35,7 @@ namespace common::interfaces
 
         /// @brief Get the limit of the buffer
         /// @return The limit of the buffer
-        [[nodiscard]] virtual size_t limit() const noexcept = 0;
+        [[nodiscard]] virtual size_t limit() const  = 0;
 
         /// @brief Set the limit of the buffer
         /// @param newLimit The new limit to set
@@ -53,11 +53,11 @@ namespace common::interfaces
 
         /// @brief Get the number of remaining elements in the buffer
         /// @return The number of remaining elements
-        [[nodiscard]] virtual size_t remaining() const noexcept = 0;
+        [[nodiscard]] virtual size_t remaining() const  = 0;
 
         /// @brief Check if there are remaining elements in the buffer
         /// @return True if there are remaining elements, false otherwise
-        [[nodiscard]] virtual bool hasRemaining() const noexcept = 0;
+        [[nodiscard]] virtual bool hasRemaining() const  = 0;
 
     protected:
         size_t position_{0};

@@ -63,15 +63,15 @@ namespace common::container
 
         /// @brief Checks whether the stack is empty.
         /// @return True if the stack is empty, false otherwise.
-        [[nodiscard]] bool empty() const noexcept;
+        [[nodiscard]] bool empty() const ;
 
         /// @brief Returns the number of elements in the stack.
         /// @return The number of elements in the stack.
-        [[nodiscard]] std::size_t size() const noexcept;
+        [[nodiscard]] std::size_t size() const ;
 
         /// @brief Swaps the contents of this stack with another stack.
         /// @param other The stack to swap with.
-        void swap(Stack& other) noexcept;
+        void swap(Stack& other) ;
 
     private:
         Container data_{};
@@ -150,19 +150,19 @@ namespace common::container
     }
 
     template <std::movable T, typename Container>
-    bool Stack<T, Container>::empty() const noexcept
+    bool Stack<T, Container>::empty() const
     {
         return data_.empty();
     }
 
     template <std::movable T, typename Container>
-    std::size_t Stack<T, Container>::size() const noexcept
+    std::size_t Stack<T, Container>::size() const
     {
         return data_.size();
     }
 
     template <std::movable T, typename Container>
-    void Stack<T, Container>::swap(Stack& other) noexcept
+    void Stack<T, Container>::swap(Stack& other)
     {
         using std::swap;
         swap(data_, other.data_);

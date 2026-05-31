@@ -9,7 +9,7 @@
 #include <iostream>
 #include <string>
 
-#include "src/interface/IFlushable.hpp"
+#include "interface/IFlushable.hpp"
 
 namespace common::filesystem
 {

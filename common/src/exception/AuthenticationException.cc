@@ -18,7 +18,7 @@ namespace common::exception
     {
     }
 
-    AuthenticationException::AuthenticationException(AuthenticationException&& other) noexcept : std::runtime_error(other.what())
+    AuthenticationException::AuthenticationException(AuthenticationException&& other)  : std::runtime_error(other.what())
     {
     }
 
@@ -26,5 +26,5 @@ namespace common::exception
     {
     }
 
-    AuthenticationException::~AuthenticationException() noexcept = default;
+    AuthenticationException::~AuthenticationException()  = default;
 } // common

@@ -27,7 +27,7 @@ namespace common::serializer
         /// @param defaultValue The default value to return if key is not found or not of expected type
         /// @return The extracted value or the default value
         template <typename T>
-        [[nodiscard]] static auto getValueOrDefault(const rapidjson::Value& json, const std::string& key, T defaultValue) noexcept -> T;
+        [[nodiscard]] static auto getValueOrDefault(const rapidjson::Value& json, const std::string& key, T defaultValue)  -> T;
 
     public:
         /// @brief Gets a string value from JSON or returns a default value.
@@ -35,51 +35,51 @@ namespace common::serializer
         /// @param key The key of the value to extract.
         /// @param defaultValue The default value to return if key is not found or not a string.
         /// @return The extracted string value or the default value.
-        [[nodiscard]] static std::string getStringOrDefault(const rapidjson::Value& json, const std::string& key, const std::string& defaultValue) noexcept;
+        [[nodiscard]] static std::string getStringOrDefault(const rapidjson::Value& json, const std::string& key, const std::string& defaultValue) ;
 
         /// @brief Gets an integer value from JSON or returns a default value.
         /// @param json The JSON object to extract the value from.
         /// @param key The key of the value to extract.
         /// @param defaultValue The default value to return if key is not found or not an integer.
         /// @return The extracted integer value or the default value.
-        [[nodiscard]] static int32_t getIntOrDefault(const rapidjson::Value& json, const std::string& key, int32_t defaultValue) noexcept;
+        [[nodiscard]] static int32_t getIntOrDefault(const rapidjson::Value& json, const std::string& key, int32_t defaultValue) ;
 
         /// @brief Gets a double value from JSON or returns a default value.
         /// @param json The JSON object to extract the value from.
         /// @param key The key of the value to extract.
         /// @param defaultValue The default value to return if key is not found or not a double.
         /// @return The extracted double value or the default value.
-        [[nodiscard]] static double getDoubleOrDefault(const rapidjson::Value& json, const std::string& key, double defaultValue) noexcept;
+        [[nodiscard]] static double getDoubleOrDefault(const rapidjson::Value& json, const std::string& key, double defaultValue) ;
 
         /// @brief Gets a boolean value from JSON or returns a default value.
         /// @param json The JSON object to extract the value from.
         /// @param key The key of the value to extract.
         /// @param defaultValue The default value to return if key is not found or not a boolean.
         /// @return The extracted boolean value or the default value.
-        [[nodiscard]] static bool getBoolOrDefault(const rapidjson::Value& json, const std::string& key, bool defaultValue) noexcept;
+        [[nodiscard]] static bool getBoolOrDefault(const rapidjson::Value& json, const std::string& key, bool defaultValue) ;
 
         /// @brief Serializes a string field to JSON.
         /// @param writer The JSON writer to use for serialization.
         /// @param key The key for the field.
         /// @param value The string value to serialize.
-        static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const std::string& value) noexcept;
+        static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const std::string& value) ;
 
         /// @brief Serializes an integer field to JSON.
         /// @param writer The JSON writer to use for serialization.
         /// @param key The key for the field.
         /// @param value The integer value to serialize.
-        static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, int32_t value) noexcept;
+        static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, int32_t value) ;
 
         /// @brief Serializes a double field to JSON.
         /// @param writer The JSON writer to use for serialization.
         /// @param key The key for the field.
         /// @param value The double value to serialize.
-        static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, double value) noexcept;
+        static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, double value) ;
 
         /// @brief Serializes a boolean field to JSON.
         /// @param writer The JSON writer to use for serialization.
         /// @param key The key for the field.
         /// @param value The boolean value to serialize.
-        static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, bool value) noexcept;
+        static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, bool value) ;
     };
 }

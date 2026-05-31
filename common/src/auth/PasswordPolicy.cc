@@ -16,7 +16,7 @@ namespace common::auth
     {
     }
 
-    bool PasswordPolicy::validate(const std::string& password) const noexcept
+    bool PasswordPolicy::validate(const std::string& password) const
     {
         // Removed frequent validation logging to avoid spam
         // DLOG(INFO) << "Validating password with length: " << password.length();
@@ -71,52 +71,52 @@ namespace common::auth
         return result;
     }
 
-    bool PasswordPolicy::is_uppercase_char(const char c) noexcept
+    bool PasswordPolicy::is_uppercase_char(const char c)
     {
         return std::isupper(static_cast<unsigned char>(c));
     }
 
-    bool PasswordPolicy::is_lowercase_char(const char c) noexcept
+    bool PasswordPolicy::is_lowercase_char(const char c)
     {
         return std::islower(static_cast<unsigned char>(c));
     }
 
-    bool PasswordPolicy::is_digit_char(const char c) noexcept
+    bool PasswordPolicy::is_digit_char(const char c)
     {
         return std::isdigit(static_cast<unsigned char>(c));
     }
 
-    bool PasswordPolicy::is_special_char(const char c) noexcept
+    bool PasswordPolicy::is_special_char(const char c)
     {
         return std::ispunct(static_cast<unsigned char>(c)) || std::isspace(static_cast<unsigned char>(c));
     }
 
-    void PasswordPolicy::set_min_length(const size_t length) noexcept
+    void PasswordPolicy::set_min_length(const size_t length)
     {
         min_length_ = length;
     }
 
-    void PasswordPolicy::set_max_length(const size_t length) noexcept
+    void PasswordPolicy::set_max_length(const size_t length)
     {
         max_length_ = length;
     }
 
-    void PasswordPolicy::set_require_uppercase(const bool require) noexcept
+    void PasswordPolicy::set_require_uppercase(const bool require)
     {
         require_uppercase_ = require;
     }
 
-    void PasswordPolicy::set_require_lowercase(const bool require) noexcept
+    void PasswordPolicy::set_require_lowercase(const bool require)
     {
         require_lowercase_ = require;
     }
 
-    void PasswordPolicy::set_require_digits(const bool require) noexcept
+    void PasswordPolicy::set_require_digits(const bool require)
     {
         require_digits_ = require;
     }
 
-    void PasswordPolicy::set_require_special(const bool require) noexcept
+    void PasswordPolicy::set_require_special(const bool require)
     {
         require_special_ = require;
     }

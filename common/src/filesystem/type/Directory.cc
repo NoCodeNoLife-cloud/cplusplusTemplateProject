@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the Directory class methods for Common library utilities.
  */
 
-#include "src/filesystem/type/Directory.hpp"
+#include "filesystem/type/Directory.hpp"
 
 #include <fmt/format.h>
 #include <filesystem>
@@ -17,11 +17,11 @@
 
 namespace common::filesystem
 {
-    Directory::Directory(std::filesystem::path filePath) noexcept : dir_path_(std::move(filePath))
+    Directory::Directory(std::filesystem::path filePath)  : dir_path_(std::move(filePath))
     {
     }
 
-    bool Directory::mkdir() const noexcept
+    bool Directory::mkdir() const
     {
         try
         {
@@ -64,17 +64,17 @@ namespace common::filesystem
         }
     }
 
-    bool Directory::exists() const noexcept
+    bool Directory::exists() const
     {
         return std::filesystem::exists(dir_path_);
     }
 
-    bool Directory::isDirectory() const noexcept
+    bool Directory::isDirectory() const
     {
         return std::filesystem::is_directory(dir_path_);
     }
 
-    bool Directory::isEmpty() const noexcept
+    bool Directory::isEmpty() const
     {
         try
         {
@@ -86,7 +86,7 @@ namespace common::filesystem
         }
     }
 
-    bool Directory::remove() const noexcept
+    bool Directory::remove() const
     {
         try
         {
@@ -98,7 +98,7 @@ namespace common::filesystem
         }
     }
 
-    std::uintmax_t Directory::removeAll() const noexcept
+    std::uintmax_t Directory::removeAll() const
     {
         try
         {
@@ -110,7 +110,7 @@ namespace common::filesystem
         }
     }
 
-    bool Directory::move(const std::filesystem::path& destination) const noexcept
+    bool Directory::move(const std::filesystem::path& destination) const
     {
         try
         {
@@ -123,7 +123,7 @@ namespace common::filesystem
         }
     }
 
-    bool Directory::rename(const std::string& newName) const noexcept
+    bool Directory::rename(const std::string& newName) const
     {
         try
         {
@@ -187,7 +187,7 @@ namespace common::filesystem
         }
     }
 
-    std::uintmax_t Directory::size() const noexcept
+    std::uintmax_t Directory::size() const
     {
         std::uintmax_t total = 0;
         try

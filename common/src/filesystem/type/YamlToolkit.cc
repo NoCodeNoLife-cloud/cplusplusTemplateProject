@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the YamlToolkit class methods for Common library utilities.
  */
 
-#include "src/filesystem/type/YamlToolkit.hpp"
+#include "filesystem/type/YamlToolkit.hpp"
 
 #include <fmt/format.h>
 #include <yaml-cpp/yaml.h>

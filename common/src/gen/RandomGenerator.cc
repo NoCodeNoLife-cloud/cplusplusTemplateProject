@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the RandomGenerator class methods for Random number and ID generation utilities.
  */
 
-#include "src/gen/RandomGenerator.hpp"
+#include "gen/RandomGenerator.hpp"
 
 #include <fmt/format.h>
 #include <random>
@@ -15,11 +15,11 @@
 
 namespace common::gen
 {
-    RandomGenerator::RandomGenerator() noexcept : engine_(std::random_device{}())
+    RandomGenerator::RandomGenerator()  : engine_(std::random_device{}())
     {
     }
 
-    RandomGenerator::RandomGenerator(const unsigned int seed) noexcept : engine_(seed)
+    RandomGenerator::RandomGenerator(const unsigned int seed)  : engine_(seed)
     {
     }
 

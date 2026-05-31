@@ -8,7 +8,7 @@
 
 #include <regex>
 #include <fmt/format.h>
-#include "src/exception/AuthenticationException.hpp"
+#include "exception/AuthenticationException.hpp"
 #include <sstream>
 
 #include "crypto/CryptoToolKit.hpp"
@@ -232,7 +232,7 @@ namespace common::auth
         password_policy_ = policy;
     }
 
-    bool UserAuthenticator::validate_username(const std::string& username) noexcept
+    bool UserAuthenticator::validate_username(const std::string& username)
     {
         // Allow letters, numbers, underscores, hyphens; 3-20 characters
         const std::regex username_pattern("^[a-zA-Z0-9_-]{3,20}$");

@@ -39,11 +39,11 @@ namespace common::graphics
 
         /// @brief Get number of nodes
         /// @return Number of nodes
-        [[nodiscard]] int32_t getNodeCount() const noexcept;
+        [[nodiscard]] int32_t getNodeCount() const ;
 
         /// @brief Check if the graph is empty
         /// @return True if the graph has no nodes
-        [[nodiscard]] bool isEmpty() const noexcept;
+        [[nodiscard]] bool isEmpty() const ;
 
     private:
         int32_t num_nodes_{0};

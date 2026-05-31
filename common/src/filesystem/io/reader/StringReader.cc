@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the StringReader class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/StringReader.hpp"
+#include "filesystem/io/reader/StringReader.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>
@@ -16,7 +16,7 @@ namespace common::filesystem
     {
     }
 
-    void StringReader::close() noexcept
+    void StringReader::close()
     {
         closed_ = true;
         source_.clear();
@@ -36,7 +36,7 @@ namespace common::filesystem
         static_cast<void>(readAheadLimit); // Unused parameter
     }
 
-    bool StringReader::markSupported() const noexcept
+    bool StringReader::markSupported() const
     {
         return true;
     }
@@ -84,7 +84,7 @@ namespace common::filesystem
         return static_cast<int>(actualRead > 0 ? actualRead : -1);
     }
 
-    bool StringReader::ready() const noexcept
+    bool StringReader::ready() const
     {
         return !closed_ && position_ < source_.size();
     }
@@ -105,7 +105,7 @@ namespace common::filesystem
         }
     }
 
-    size_t StringReader::skip(const size_t ns) noexcept
+    size_t StringReader::skip(const size_t ns)
     {
         if (closed_)
         {
@@ -116,7 +116,7 @@ namespace common::filesystem
         return charsToSkip;
     }
 
-    bool StringReader::isClosed() const noexcept
+    bool StringReader::isClosed() const
     {
         return closed_;
     }

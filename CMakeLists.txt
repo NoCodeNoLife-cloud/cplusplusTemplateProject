@@ -33,14 +33,6 @@ endif ()
 set(MAIN_PROJECT cpp_project)
 project(${MAIN_PROJECT})
 
-# Include directories
-include_directories(common)
-include_directories(proto)
-include_directories(log)
-include_directories(client)
-include_directories(server)
-include_directories(ci)
-
 # Vcpkg dependencies
 find_package(Boost CONFIG REQUIRED)
 find_package(glog CONFIG REQUIRED)

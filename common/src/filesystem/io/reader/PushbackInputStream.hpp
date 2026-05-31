@@ -62,7 +62,7 @@ namespace common::filesystem
 
         /// @brief Checks if this input stream has been closed.
         /// @return true if this input stream has been closed, false otherwise.
-        [[nodiscard]] bool isClosed() const noexcept override;
+        [[nodiscard]] bool isClosed() const  override;
 
     private:
         std::vector<std::byte> pushback_buffer_;

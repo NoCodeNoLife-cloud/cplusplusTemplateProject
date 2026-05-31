@@ -37,7 +37,7 @@ namespace common::crypto::cipher
         return CaesarCipher(shift).Decrypt(text);
     }
 
-    bool CaesarCipher::IsValidInput(const std::string_view text) noexcept
+    bool CaesarCipher::IsValidInput(const std::string_view text)
     {
         return std::ranges::all_of(text, [](const unsigned char c)
         {
@@ -71,7 +71,7 @@ namespace common::crypto::cipher
         return {transformed.begin(), transformed.end()};
     }
 
-    char CaesarCipher::ShiftChar(const char c, const int shift) noexcept
+    char CaesarCipher::ShiftChar(const char c, const int shift)
     {
         const char base = std::isupper(c) ? 'A' : 'a';
         // Modular arithmetic ensures wrap-around handling

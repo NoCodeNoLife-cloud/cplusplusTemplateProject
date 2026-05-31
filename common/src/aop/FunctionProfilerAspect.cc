@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the FunctionProfilerAspect class methods for Aspect-Oriented Programming support.
  */
 
-#include "src/aop/FunctionProfilerAspect.hpp"
+#include "aop/FunctionProfilerAspect.hpp"
 #include <utility>
 
 #include <glog/logging.h>

@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the Object class methods for Base type classes providing fundamental object functionality.
  */
 
-#include "src/base_type/Object.hpp"
+#include "base_type/Object.hpp"
 
 #include <fmt/format.h>
 #include <format>
@@ -15,7 +15,7 @@
 
 namespace common::base_type
 {
-    const std::type_info& Object::getClass() const noexcept
+    const std::type_info& Object::getClass() const
     {
         return typeid(*this);
     }
@@ -25,7 +25,7 @@ namespace common::base_type
         return this == &other;
     }
 
-    size_t Object::hashCode() const noexcept
+    size_t Object::hashCode() const
     {
         return std::hash<const void*>{}(this);
     }
@@ -43,7 +43,7 @@ namespace common::base_type
         throw std::logic_error("clone() must be implemented by derived classes");
     }
 
-    bool Object::isInstance(const std::type_info& target_type) const noexcept
+    bool Object::isInstance(const std::type_info& target_type) const
     {
         return target_type == typeid(*this);
     }
@@ -53,7 +53,7 @@ namespace common::base_type
         return std::string{getClass().name()};
     }
 
-    bool Object::is(const Object& other) const noexcept
+    bool Object::is(const Object& other) const
     {
         return this == &other;
     }

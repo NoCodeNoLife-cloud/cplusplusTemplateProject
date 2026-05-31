@@ -38,13 +38,13 @@ namespace common::container
         Heap(const Heap& other);
 
         /// @brief Move constructor
-        Heap(Heap&& other) noexcept;
+        Heap(Heap&& other) ;
 
         /// @brief Assignment operator
         Heap& operator=(const Heap& other);
 
         /// @brief Move assignment operator
-        Heap& operator=(Heap&& other) noexcept;
+        Heap& operator=(Heap&& other) ;
 
         /// @brief Destructor
         ~Heap();
@@ -80,14 +80,14 @@ namespace common::container
 
         /// @brief Returns the number of elements in the heap.
         /// @return The number of elements.
-        [[nodiscard]] std::size_t size() const noexcept;
+        [[nodiscard]] std::size_t size() const ;
 
         /// @brief Checks if the heap is empty.
         /// @return True if the heap is empty, false otherwise.
-        [[nodiscard]] bool empty() const noexcept;
+        [[nodiscard]] bool empty() const ;
 
         /// @brief Clears the heap contents
-        void clear() noexcept;
+        void clear() ;
 
         /// @brief Checks if the heap is valid (maintains heap property)
         /// @return True if heap property is maintained
@@ -95,7 +95,7 @@ namespace common::container
 
         /// @brief Swaps the contents of this heap with another heap.
         /// @param other The heap to swap with.
-        void swap(Heap& other) noexcept;
+        void swap(Heap& other) ;
 
     private:
         std::vector<T> data_{};
@@ -131,13 +131,13 @@ namespace common::container
     Heap<T, Compare>::Heap(const Heap& other) = default;
 
     template <std::copyable T, typename Compare>
-    Heap<T, Compare>::Heap(Heap&& other) noexcept = default;
+    Heap<T, Compare>::Heap(Heap&& other)  = default;
 
     template <std::copyable T, typename Compare>
     Heap<T, Compare>& Heap<T, Compare>::operator=(const Heap& other) = default;
 
     template <std::copyable T, typename Compare>
-    Heap<T, Compare>& Heap<T, Compare>::operator=(Heap&& other) noexcept = default;
+    Heap<T, Compare>& Heap<T, Compare>::operator=(Heap&& other)  = default;
 
     template <std::copyable T, typename Compare>
     Heap<T, Compare>::~Heap() = default;
@@ -214,19 +214,19 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    std::size_t Heap<T, Compare>::size() const noexcept
+    std::size_t Heap<T, Compare>::size() const
     {
         return data_.size();
     }
 
     template <std::copyable T, typename Compare>
-    bool Heap<T, Compare>::empty() const noexcept
+    bool Heap<T, Compare>::empty() const
     {
         return data_.empty();
     }
 
     template <std::copyable T, typename Compare>
-    void Heap<T, Compare>::clear() noexcept
+    void Heap<T, Compare>::clear()
     {
         data_.clear();
     }
@@ -321,7 +321,7 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    void Heap<T, Compare>::swap(Heap& other) noexcept
+    void Heap<T, Compare>::swap(Heap& other)
     {
         using std::swap;
         swap(data_, other.data_);

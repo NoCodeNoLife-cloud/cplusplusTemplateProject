@@ -11,10 +11,10 @@
 #include <string>
 #include <grpcpp/grpcpp.h>
 
-#include "src/auth/AuthRpcClient.hpp"
-#include "src/auth/AuthRpcClientOptions.hpp"
-#include "src/time/FunctionProfiler.hpp"
-#include "src/interface/ITask.hpp"
+#include "auth/AuthRpcService.hpp"
+#include "auth/AuthRpcParam.hpp"
+#include "time/FunctionProfiler.hpp"
+#include "interface/ITask.hpp"
 
 namespace client_app::task
 {
@@ -26,7 +26,7 @@ namespace client_app::task
 
         /// @brief Construct a ClientTask with the specified project name
         /// @param project_name_ The name of the project for profiling purposes
-        explicit ClientTask(const std::string& project_name_) noexcept;
+        explicit ClientTask(const std::string& project_name_) ;
 
         /// @brief Copy constructor deleted to prevent unintended resource duplication
         ClientTask(const ClientTask&) = delete;
@@ -36,7 +36,7 @@ namespace client_app::task
 
         /// @brief Initialize the client task
         /// @details Sets up logging, loads configuration, and logs system information
-        void init() const noexcept;
+        void init() const ;
 
         /// @brief Run the main task
         /// @details Initializes the client, creates a gRPC channel, sends a message to the server,
@@ -45,13 +45,13 @@ namespace client_app::task
 
         /// @brief Exit the client task
         /// @details Records the end time and logs completion
-        void exit() const noexcept;
+        void exit() ;
 
     private:
         /// @brief Logs a message indicating that the client is logging in
         /// @param auth_rpc_client Reference to the RPC client for authentication
         /// @return Username of the authenticated user
-        [[nodiscard]] static std::string logIn(const auth::AuthRpcClient& auth_rpc_client);
+        [[nodiscard]] static std::string logIn(const auth::AuthRpcService& auth_rpc_client);
 
         /// @brief Check if a new account should be created
         /// @return True if user wants to create a new account
@@ -62,18 +62,18 @@ namespace client_app::task
         /// @param username Username for the new account
         /// @param password Password for the new account
         /// @throws std::runtime_error if registration fails
-        static void registerNewUser(const auth::AuthRpcClient& auth_rpc_client, const std::string& username, const std::string& password);
+        static void registerNewUser(const auth::AuthRpcService& auth_rpc_client, const std::string& username, const std::string& password);
 
         // Changed return type to void since it throws on failure
 
         /// @brief Logs a message indicating that the client is logging out
         /// @param auth_rpc_client Reference to the RPC client for logout operations
         /// @param username Username of the user to log out
-        static void logOut(const auth::AuthRpcClient& auth_rpc_client, const std::string& username) noexcept;
+        static void logOut(const auth::AuthRpcService& auth_rpc_client, const std::string& username) ;
 
         /// @brief Main task
         /// @param auth_rpc_client Reference to the RPC client for executing tasks
-        void task(const auth::AuthRpcClient& auth_rpc_client) noexcept;
+        void task(const auth::AuthRpcService& auth_rpc_client) ;
 
         /// @brief Create a gRPC channel with custom arguments
         /// @details This function sets up a gRPC channel with keepalive parameters and connects to the server
@@ -83,15 +83,13 @@ namespace client_app::task
         /// @brief Create RPC client with gRPC channel
         /// @details This function creates an RPC client using a gRPC channel
         /// @return An RPC client instance
-        [[nodiscard]] auth::AuthRpcClient createRpcClient() const;
+        [[nodiscard]] auth::AuthRpcService createRpcClient() const;
 
         /// @brief Logs client system information
         /// @details Logs OS version and CPU model to the application log
-        static void logClientInfo() noexcept;
+        static void logClientInfo() ;
 
-        const std::string glog_config_path_{"../../log/src/config/glog-dev.yml"};
-        const std::string application_dev_config_path_{"../../client/src/config/application-dev.yml"};
-        mutable auth::AuthRpcClientOptions rpc_options_;
-        mutable common::time::FunctionProfiler timer_;
+        auth::AuthRpcParam rpc_options_;
+        common::time::FunctionProfiler timer_;
     };
 }

@@ -11,7 +11,7 @@
 #include <thread>
 #include <boost/asio.hpp>
 
-#include "src/interface/ITimerTask.hpp"
+#include "interface/ITimerTask.hpp"
 
 namespace common::thread
 {

@@ -12,7 +12,7 @@
 
 #include "PasswordPolicy.hpp"
 #include "UserCredentials.hpp"
-#include "src/sql/PasswordSQL.hpp"
+#include "sql/PasswordSQL.hpp"
 
 namespace common::auth
 {
@@ -106,7 +106,7 @@ namespace common::auth
         /// @brief Validate username format against security requirements
         /// @param username Username string to validate
         /// @return true if username format is valid, false otherwise
-        static bool validate_username(const std::string& username) noexcept;
+        static bool validate_username(const std::string& username) ;
 
         /// @brief Load user credentials from database
         /// @param username User identifier to load

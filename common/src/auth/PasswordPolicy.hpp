@@ -26,79 +26,79 @@ namespace common::auth
         /// @brief Validate password against current policy rules
         /// @param password Password string to validate
         /// @return true if password meets all requirements, false otherwise
-        [[nodiscard]] bool validate(const std::string& password) const noexcept;
+        [[nodiscard]] bool validate(const std::string& password) const ;
 
         /// @brief Set minimum password length requirement
         /// @param length New minimum length value
-        void set_min_length(size_t length) noexcept;
+        void set_min_length(size_t length) ;
 
         /// @brief Set maximum password length requirement
         /// @param length New maximum length value
-        void set_max_length(size_t length) noexcept;
+        void set_max_length(size_t length) ;
 
         /// @brief Enable/disable uppercase letter requirement
         /// @param require true to require uppercase letters
-        void set_require_uppercase(bool require) noexcept;
+        void set_require_uppercase(bool require) ;
 
         /// @brief Enable/disable lowercase letter requirement
         /// @param require true to require lowercase letters
-        void set_require_lowercase(bool require) noexcept;
+        void set_require_lowercase(bool require) ;
 
         /// @brief Enable/disable digit requirement
         /// @param require true to require numeric digits
-        void set_require_digits(bool require) noexcept;
+        void set_require_digits(bool require) ;
 
         /// @brief Enable/disable special character requirement
         /// @param require true to require special characters
-        void set_require_special(bool require) noexcept;
+        void set_require_special(bool require) ;
 
-        [[nodiscard]] size_t min_length() const noexcept
+        [[nodiscard]] size_t min_length() const
         {
             return min_length_;
         }
 
-        [[nodiscard]] size_t max_length() const noexcept
+        [[nodiscard]] size_t max_length() const
         {
             return max_length_;
         }
 
-        [[nodiscard]] bool require_uppercase() const noexcept
+        [[nodiscard]] bool require_uppercase() const
         {
             return require_uppercase_;
         }
 
-        [[nodiscard]] bool require_lowercase() const noexcept
+        [[nodiscard]] bool require_lowercase() const
         {
             return require_lowercase_;
         }
 
-        [[nodiscard]] bool require_digits() const noexcept
+        [[nodiscard]] bool require_digits() const
         {
             return require_digits_;
         }
 
-        [[nodiscard]] bool require_special() const noexcept
+        [[nodiscard]] bool require_special() const
         {
             return require_special_;
         }
 
-        [[nodiscard]] size_t max_login_attempts() const noexcept
+        [[nodiscard]] size_t max_login_attempts() const
         {
             return max_login_attempts_;
         }
 
     private:
         /// @brief Check if character is uppercase letter
-        [[nodiscard]] static bool is_uppercase_char(char c) noexcept;
+        [[nodiscard]] static bool is_uppercase_char(char c) ;
 
         /// @brief Check if character is lowercase letter
-        [[nodiscard]] static bool is_lowercase_char(char c) noexcept;
+        [[nodiscard]] static bool is_lowercase_char(char c) ;
 
         /// @brief Check if character is digit
-        [[nodiscard]] static bool is_digit_char(char c) noexcept;
+        [[nodiscard]] static bool is_digit_char(char c) ;
 
         /// @brief Check if character is special character
-        [[nodiscard]] static bool is_special_char(char c) noexcept;
+        [[nodiscard]] static bool is_special_char(char c) ;
 
         size_t min_length_;
         size_t max_length_;

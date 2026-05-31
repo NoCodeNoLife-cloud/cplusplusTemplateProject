@@ -18,7 +18,7 @@ namespace common::data_structure::tree
     public:
         /// @brief Construct a TreeNode with the given value
         /// @param value The value to store in the node
-        explicit TreeNode(T value) noexcept;
+        explicit TreeNode(T value) ;
 
         T data{};
         std::shared_ptr<TreeNode> left_{};
@@ -27,7 +27,7 @@ namespace common::data_structure::tree
     };
 
     template <typename T>
-    TreeNode<T>::TreeNode(T value) noexcept : data(value), left_(nullptr), right_(nullptr)
+    TreeNode<T>::TreeNode(T value)  : data(value), left_(nullptr), right_(nullptr)
     {
     }
 }

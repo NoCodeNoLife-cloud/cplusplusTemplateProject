@@ -22,18 +22,18 @@ namespace common::toolkit
     class BloomParameters final
     {
     public:
-        BloomParameters() noexcept;
+        BloomParameters() ;
 
         ~BloomParameters() = default;
 
         /// @brief Checks if the Bloom parameters are valid.
         /// @return True if the parameters are invalid, false otherwise.
-        [[nodiscard]] bool operator!() const noexcept;
+        [[nodiscard]] bool operator!() const ;
 
         /// @brief Computes the optimal parameters for the bloom filter based on the
         ///        projected element count and false positive probability.
         /// @return true if the parameters were successfully computed, false otherwise.
-        [[nodiscard]] auto compute_optimal_parameters() noexcept -> bool;
+        [[nodiscard]] auto compute_optimal_parameters()  -> bool;
 
         /// Allowable min/max size of the bloom filter in bits
         uint64_t minimum_size{};
@@ -56,7 +56,7 @@ namespace common::toolkit
         /// and table size based on the projected element count and false positive probability.
         struct optimal_parameters_t
         {
-            optimal_parameters_t() noexcept;
+            optimal_parameters_t() ;
 
             uint32_t number_of_hashes{};
             uint64_t table_size{};
@@ -68,7 +68,7 @@ namespace common::toolkit
         /// @brief Computes natural logarithm with error handling
         /// @param value The value to compute logarithm for
         /// @return The natural logarithm of value, or 0 if value is non-positive
-        [[nodiscard]] static double safe_log(double value) noexcept;
+        [[nodiscard]] static double safe_log(double value) ;
     };
 
     static constexpr unsigned char bit_mask[8] = {
@@ -100,7 +100,7 @@ namespace common::toolkit
     public:
         BloomFilter() = default;
 
-        explicit BloomFilter(const BloomParameters& p) noexcept;
+        explicit BloomFilter(const BloomParameters& p) ;
 
         BloomFilter(const BloomFilter& filter) = default;
 
@@ -109,12 +109,12 @@ namespace common::toolkit
         /// @brief Compares two Bloom filters for equality.
         /// @param f The Bloom filter to compare with.
         /// @return True if the filters are equal, false otherwise.
-        [[nodiscard]] auto operator==(const BloomFilter& f) const noexcept -> bool;
+        [[nodiscard]] auto operator==(const BloomFilter& f) const  -> bool;
 
         /// @brief Compares two Bloom filters for inequality.
         /// @param f The Bloom filter to compare with.
         /// @return True if the filters are not equal, false otherwise.
-        [[nodiscard]] auto operator!=(const BloomFilter& f) const noexcept -> bool;
+        [[nodiscard]] auto operator!=(const BloomFilter& f) const  -> bool;
 
         /// @brief Assigns one Bloom filter to another.
         /// @param f The Bloom filter to assign from.
@@ -123,7 +123,7 @@ namespace common::toolkit
 
         /// @brief Checks if the Bloom filter is empty.
         /// @return True if the filter is empty, false otherwise.
-        [[nodiscard]] bool operator!() const noexcept;
+        [[nodiscard]] bool operator!() const ;
 
         /// @brief Performs bitwise AND operation with another Bloom filter.
         /// @param f The Bloom filter to perform AND with.
@@ -141,7 +141,7 @@ namespace common::toolkit
         auto operator^=(const BloomFilter& f) -> BloomFilter&;
 
         /// @brief Clears all elements from the Bloom filter.
-        void clear() noexcept;
+        void clear() ;
 
         /// @brief Inserts a key into the Bloom filter.
         /// @param key_begin Pointer to the beginning of the key.
@@ -221,30 +221,30 @@ namespace common::toolkit
 
         /// @brief Gets the size of the Bloom filter table in bits.
         /// @return The size of the table in bits.
-        [[nodiscard]] uint64_t size() const noexcept;
+        [[nodiscard]] uint64_t size() const ;
 
         /// @brief Gets the number of elements inserted into the Bloom filter.
         /// @return The number of elements inserted.
-        [[nodiscard]] uint64_t element_count() const noexcept;
+        [[nodiscard]] uint64_t element_count() const ;
 
         /// @brief Gets the effective false positive probability.
         /// @return The effective false positive probability.
-        [[nodiscard]] double effective_fpp() const noexcept;
+        [[nodiscard]] double effective_fpp() const ;
 
         /// @brief Gets a pointer to the Bloom filter table.
         /// @return A pointer to the table.
-        [[nodiscard]] const cell_type_* table() const noexcept;
+        [[nodiscard]] const cell_type_* table() const ;
 
         /// @brief Gets the number of hash functions used.
         /// @return The number of hash functions.
-        [[nodiscard]] std::size_t hash_count() const noexcept;
+        [[nodiscard]] std::size_t hash_count() const ;
 
     private:
         /// @brief Computes the bit index and a bit of value from a hash value.
         /// @param hash The hash value to compute indices from.
         /// @param bit_index Reference to store the computed bit index.
         /// @param bit Reference to store the computed bit value.
-        void compute_indices(const bloom_type_& hash, std::size_t& bit_index, std::size_t& bit) const noexcept;
+        void compute_indices(const bloom_type_& hash, std::size_t& bit_index, std::size_t& bit) const ;
 
         /// @brief Generates unique salt values for hash functions.
         void generate_unique_salt();
@@ -254,7 +254,7 @@ namespace common::toolkit
         /// @param remaining_length Length of the data to hash.
         /// @param hash Initial hash value.
         /// @return The computed hash value.
-        static bloom_type_ hash_ap(const unsigned char* begin, std::size_t remaining_length, bloom_type_ hash) noexcept;
+        static bloom_type_ hash_ap(const unsigned char* begin, std::size_t remaining_length, bloom_type_ hash) ;
 
         std::vector<bloom_type_> salt_{};
         std::vector<unsigned char> bit_table_{};
@@ -266,11 +266,11 @@ namespace common::toolkit
         double desired_false_positive_probability_{};
     };
 
-    [[nodiscard]] BloomFilter operator&(const BloomFilter& a, const BloomFilter& b) noexcept;
+    [[nodiscard]] BloomFilter operator&(const BloomFilter& a, const BloomFilter& b) ;
 
-    [[nodiscard]] BloomFilter operator|(const BloomFilter& a, const BloomFilter& b) noexcept;
+    [[nodiscard]] BloomFilter operator|(const BloomFilter& a, const BloomFilter& b) ;
 
-    [[nodiscard]] BloomFilter operator^(const BloomFilter& a, const BloomFilter& b) noexcept;
+    [[nodiscard]] BloomFilter operator^(const BloomFilter& a, const BloomFilter& b) ;
 
     // Template implementations must be in header for proper instantiation
     template <typename T>

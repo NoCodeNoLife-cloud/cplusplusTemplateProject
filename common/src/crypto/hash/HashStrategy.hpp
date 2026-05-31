@@ -29,13 +29,13 @@ namespace common::crypto::hash
          * @brief Gets the digest size in bytes for this hash algorithm.
          * @return The size of the hash output in bytes.
          */
-        [[nodiscard]] virtual size_t getDigestSize() const noexcept = 0;
+        [[nodiscard]] virtual size_t getDigestSize() const  = 0;
 
         /**
          * @brief Gets the hex digest size in characters for this hash algorithm.
          * @return The size of the hex representation (digest_size * 2).
          */
-        [[nodiscard]] virtual size_t getHexDigestSize() const noexcept = 0;
+        [[nodiscard]] virtual size_t getHexDigestSize() const  = 0;
 
         /**
          * @brief Updates the hash computation with additional data.
@@ -44,7 +44,7 @@ namespace common::crypto::hash
          * @param length Length of the data in bytes.
          * @return true if update succeeded, false otherwise.
          */
-        [[nodiscard]] virtual bool update(const void* data, size_t length) noexcept = 0;
+        [[nodiscard]] virtual bool update(const void* data, size_t length)  = 0;
 
         /**
          * @brief Updates the hash computation with a string view.
@@ -52,7 +52,7 @@ namespace common::crypto::hash
          * @param data String data to hash.
          * @return true if update succeeded, false otherwise.
          */
-        [[nodiscard]] bool update(std::string_view data) noexcept
+        [[nodiscard]] bool update(std::string_view data)
         {
             return update(data.data(), data.size());
         }
@@ -65,7 +65,7 @@ namespace common::crypto::hash
          *
          * @return Optional containing the binary digest, or nullopt on failure.
          */
-        [[nodiscard]] virtual std::optional<std::vector<uint8_t>> finalize() noexcept = 0;
+        [[nodiscard]] virtual std::optional<std::vector<uint8_t>> finalize()  = 0;
 
         /**
          * @brief Resets the toolkit for a new hashing operation.
@@ -74,7 +74,7 @@ namespace common::crypto::hash
          *
          * @return true if reset succeeded, false otherwise.
          */
-        [[nodiscard]] virtual bool reset() noexcept = 0;
+        [[nodiscard]] virtual bool reset()  = 0;
 
         /**
          * @brief Converts binary digest to hexadecimal string representation.
@@ -90,7 +90,7 @@ namespace common::crypto::hash
          * @param input String to hash.
          * @return Optional containing the binary digest, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::vector<uint8_t>> hashString(std::unique_ptr<HashStrategy> strategy, std::string_view input) noexcept;
+        [[nodiscard]] static std::optional<std::vector<uint8_t>> hashString(std::unique_ptr<HashStrategy> strategy, std::string_view input) ;
 
         /**
          * @brief Computes hash of a file in one operation.
@@ -107,7 +107,7 @@ namespace common::crypto::hash
          * @param input String to hash.
          * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::string> hashStringToHex(std::unique_ptr<HashStrategy> strategy, std::string_view input) noexcept;
+        [[nodiscard]] static std::optional<std::string> hashStringToHex(std::unique_ptr<HashStrategy> strategy, std::string_view input) ;
 
         /**
          * @brief Computes hash of a file and returns hex representation.

@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the PushbackReader class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/PushbackReader.hpp"
+#include "filesystem/io/reader/PushbackReader.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>
@@ -40,7 +40,7 @@ namespace common::filesystem
         }
     }
 
-    void PushbackReader::close() noexcept
+    void PushbackReader::close()
     {
         closed_ = true;
         FilterReader::close();
@@ -128,7 +128,7 @@ namespace common::filesystem
         return skipped;
     }
 
-    void PushbackReader::unread(const std::vector<char>& cbuf) noexcept
+    void PushbackReader::unread(const std::vector<char>& cbuf)
     {
         unread(cbuf, 0, cbuf.size());
     }

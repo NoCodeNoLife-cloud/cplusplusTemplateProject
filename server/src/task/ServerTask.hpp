@@ -11,8 +11,8 @@
 #include <string>
 #include <grpcpp/server_builder.h>
 
-#include "src/auth/AuthRpcServiceOptions.hpp"
-#include "src/time/FunctionProfiler.hpp"
+#include "auth/AuthRpcParam.hpp"
+#include "time/FunctionProfiler.hpp"
 #include "task/interface/ITask.h"
 
 namespace server_app::task
@@ -25,7 +25,7 @@ namespace server_app::task
     public:
         /// @brief Construct a ServerTask with the specified name
         /// @param name The name of the server task for profiling purposes
-        explicit ServerTask(std::string name) noexcept;
+        explicit ServerTask(std::string name);
 
         /// @brief Copy constructor deleted to prevent copying
         ServerTask(const ServerTask&) = delete;
@@ -52,9 +52,7 @@ namespace server_app::task
         void exit() const;
 
     private:
-        const std::string glog_config_path_{"../../server/src/config/glog-dev.yml"};
-        const std::string application_dev_config_path_{"../../server/src/config/application-dev.yml"};
-        app_server::auth::AuthRpcServiceOptions grpc_options_;
+        auth::AuthRpcParam grpc_options_;
         common::time::FunctionProfiler timer_;
         std::unique_ptr<grpc::Server> server_;
 

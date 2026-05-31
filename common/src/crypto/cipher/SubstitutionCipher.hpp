@@ -99,14 +99,14 @@ namespace common::crypto::cipher
         /** Disabled copy assignment (key material protection) */
         SubstitutionCipher& operator=(const SubstitutionCipher&) = delete;
 
-        /** Default move constructor (noexcept guarantee) */
-        SubstitutionCipher(SubstitutionCipher&&) noexcept = default;
+        /** Default move constructor ( guarantee) */
+        SubstitutionCipher(SubstitutionCipher&&)  = default;
 
-        /** Default move assignment (noexcept guarantee) */
-        SubstitutionCipher& operator=(SubstitutionCipher&&) noexcept = default;
+        /** Default move assignment ( guarantee) */
+        SubstitutionCipher& operator=(SubstitutionCipher&&)  = default;
 
         /** Default destructor (no dynamic resources to release) */
-        ~SubstitutionCipher() noexcept = default;
+        ~SubstitutionCipher()  = default;
 
         /**@}*/
 
@@ -156,7 +156,7 @@ namespace common::crypto::cipher
          * @warning Use only for debugging or serialization scenarios; production code should not
          *          rely on this method for key retrieval
          */
-        [[nodiscard]] const std::unordered_map<char, char>& GetMapping() const noexcept
+        [[nodiscard]] const std::unordered_map<char, char>& GetMapping() const
         {
             return encode_map_;
         }

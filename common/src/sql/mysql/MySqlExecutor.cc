@@ -36,7 +36,7 @@ namespace common::sql::mysql
         disconnect();
     }
 
-    MySqlExecutor::MySqlExecutor(MySqlExecutor&& other) noexcept : session_(std::move(other.session_)),
+    MySqlExecutor::MySqlExecutor(MySqlExecutor&& other)  : session_(std::move(other.session_)),
                                                                    connected_(other.connected_),
                                                                    last_error_(std::move(other.last_error_)),
                                                                    host_(std::move(other.host_)),
@@ -50,7 +50,7 @@ namespace common::sql::mysql
         other.port_ = 33060; // X Protocol default port
     }
 
-    auto MySqlExecutor::operator=(MySqlExecutor&& other) noexcept -> MySqlExecutor&
+    auto MySqlExecutor::operator=(MySqlExecutor&& other)  -> MySqlExecutor&
     {
         if (this != &other)
         {

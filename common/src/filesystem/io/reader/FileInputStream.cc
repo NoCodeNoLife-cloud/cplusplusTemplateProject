@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the FileInputStream class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/FileInputStream.hpp"
+#include "filesystem/io/reader/FileInputStream.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>
@@ -49,7 +49,7 @@ namespace common::filesystem
         close();
     }
 
-    bool FileInputStream::isValid() const noexcept
+    bool FileInputStream::isValid() const
     {
         return !closed_ && file_stream_.good();
     }

@@ -53,12 +53,12 @@ namespace common::crypto::cipher
         bit_pos_ = 0;
     }
 
-    std::string XorBitCipher::getAlgorithmName() const noexcept
+    std::string XorBitCipher::getAlgorithmName() const
     {
         return "XorBitCipher";
     }
 
-    bool XorBitCipher::isInitialized() const noexcept
+    bool XorBitCipher::isInitialized() const
     {
         return hasKey();
     }
@@ -72,12 +72,12 @@ namespace common::crypto::cipher
         }
     }
 
-    size_t XorBitCipher::getCurrentPosition() const noexcept
+    size_t XorBitCipher::getCurrentPosition() const
     {
         return key_pos_;
     }
 
-    bool XorBitCipher::hasKey() const noexcept
+    bool XorBitCipher::hasKey() const
     {
         return !key_stream_.empty();
     }

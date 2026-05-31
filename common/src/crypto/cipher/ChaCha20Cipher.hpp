@@ -49,10 +49,10 @@ namespace common::crypto::cipher
          * @brief Default constructor.
          * @note Cipher must be initialized with initialize() before use.
          */
-        ChaCha20Cipher() noexcept;
+        ChaCha20Cipher() ;
 
         /// @brief Destructor - cleans up OpenSSL resources
-        ~ChaCha20Cipher() noexcept override;
+        ~ChaCha20Cipher()  override;
 
         // Delete copy operations to prevent resource management issues
         ChaCha20Cipher(const ChaCha20Cipher&) = delete;
@@ -60,9 +60,9 @@ namespace common::crypto::cipher
         ChaCha20Cipher& operator=(const ChaCha20Cipher&) = delete;
 
         // Enable move operations
-        ChaCha20Cipher(ChaCha20Cipher&& other) noexcept;
+        ChaCha20Cipher(ChaCha20Cipher&& other) ;
 
-        ChaCha20Cipher& operator=(ChaCha20Cipher&& other) noexcept;
+        ChaCha20Cipher& operator=(ChaCha20Cipher&& other) ;
 
         /**
          * @brief Initialize the cipher with key and nonce.
@@ -118,13 +118,13 @@ namespace common::crypto::cipher
          * @brief Get algorithm name.
          * @return "ChaCha20"
          */
-        [[nodiscard]] std::string getAlgorithmName() const noexcept override;
+        [[nodiscard]] std::string getAlgorithmName() const  override;
 
         /**
          * @brief Check if cipher is initialized.
          * @return true if initialize() has been called successfully.
          */
-        [[nodiscard]] bool isInitialized() const noexcept override;
+        [[nodiscard]] bool isInitialized() const  override;
 
     private:
         /** @brief OpenSSL cipher context */
@@ -150,6 +150,6 @@ namespace common::crypto::cipher
         /**
          * @brief Cleanup OpenSSL resources.
          */
-        void cleanup() noexcept;
+        void cleanup() ;
     };
 }

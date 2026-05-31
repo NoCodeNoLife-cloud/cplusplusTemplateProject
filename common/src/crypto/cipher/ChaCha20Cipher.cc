@@ -14,16 +14,16 @@
 
 namespace common::crypto::cipher
 {
-    ChaCha20Cipher::ChaCha20Cipher() noexcept : ctx_(nullptr), key_{}, nonce_{}, initialized_(false)
+    ChaCha20Cipher::ChaCha20Cipher()  : ctx_(nullptr), key_{}, nonce_{}, initialized_(false)
     {
     }
 
-    ChaCha20Cipher::~ChaCha20Cipher() noexcept
+    ChaCha20Cipher::~ChaCha20Cipher()
     {
         cleanup();
     }
 
-    ChaCha20Cipher::ChaCha20Cipher(ChaCha20Cipher&& other) noexcept : ctx_(other.ctx_),
+    ChaCha20Cipher::ChaCha20Cipher(ChaCha20Cipher&& other)  : ctx_(other.ctx_),
                                                                       key_(other.key_),
                                                                       nonce_(other.nonce_),
                                                                       initialized_(other.initialized_)
@@ -33,7 +33,7 @@ namespace common::crypto::cipher
         other.initialized_ = false;
     }
 
-    ChaCha20Cipher& ChaCha20Cipher::operator=(ChaCha20Cipher&& other) noexcept
+    ChaCha20Cipher& ChaCha20Cipher::operator=(ChaCha20Cipher&& other)
     {
         if (this != &other)
         {
@@ -157,12 +157,12 @@ namespace common::crypto::cipher
         }
     }
 
-    std::string ChaCha20Cipher::getAlgorithmName() const noexcept
+    std::string ChaCha20Cipher::getAlgorithmName() const
     {
         return "ChaCha20";
     }
 
-    bool ChaCha20Cipher::isInitialized() const noexcept
+    bool ChaCha20Cipher::isInitialized() const
     {
         return initialized_;
     }
@@ -203,7 +203,7 @@ namespace common::crypto::cipher
         return output;
     }
 
-    void ChaCha20Cipher::cleanup() noexcept
+    void ChaCha20Cipher::cleanup()
     {
         if (ctx_)
         {

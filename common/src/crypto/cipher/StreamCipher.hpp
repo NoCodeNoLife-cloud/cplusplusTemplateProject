@@ -54,7 +54,7 @@ namespace common::crypto::cipher
     {
     public:
         /// @brief Virtual destructor for proper cleanup in inheritance hierarchy
-        virtual ~StreamCipher() noexcept = default;
+        virtual ~StreamCipher()  = default;
 
         /**
          * @brief Initialize the cipher with key and nonce.
@@ -111,12 +111,12 @@ namespace common::crypto::cipher
          * @brief Get the algorithm name.
          * @return Human-readable algorithm name (e.g., "ChaCha20").
          */
-        [[nodiscard]] virtual std::string getAlgorithmName() const noexcept = 0;
+        [[nodiscard]] virtual std::string getAlgorithmName() const  = 0;
 
         /**
          * @brief Check if the cipher has been initialized.
          * @return true if initialized, false otherwise.
          */
-        [[nodiscard]] virtual bool isInitialized() const noexcept = 0;
+        [[nodiscard]] virtual bool isInitialized() const  = 0;
     };
 }

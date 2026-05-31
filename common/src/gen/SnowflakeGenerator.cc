@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the SnowflakeGenerator class methods for Random number and ID generation utilities.
  */
 
-#include "src/gen/SnowflakeGenerator.hpp"
+#include "gen/SnowflakeGenerator.hpp"
 
 #include <fmt/format.h>
 #include <chrono>
@@ -52,7 +52,7 @@ namespace common::gen
         return uniqueId;
     }
 
-    int64_t SnowflakeGenerator::GetCurrentTimestamp() noexcept
+    int64_t SnowflakeGenerator::GetCurrentTimestamp()
     {
         const auto now = std::chrono::system_clock::now();
         const auto duration = now.time_since_epoch();
@@ -60,7 +60,7 @@ namespace common::gen
         return timestamp - SnowflakeOption::TWEPOCH;
     }
 
-    int64_t SnowflakeGenerator::TilNextMillis(const int64_t last_timestamp) noexcept
+    int64_t SnowflakeGenerator::TilNextMillis(const int64_t last_timestamp)
     {
         int64_t timestamp = GetCurrentTimestamp();
         while (timestamp <= last_timestamp)

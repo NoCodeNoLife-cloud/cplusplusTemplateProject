@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the SimpleDateFormatter class methods for Time and date utilities including profilers and formatters.
  */
 
-#include "src/time/SimpleDateFormatter.hpp"
+#include "time/SimpleDateFormatter.hpp"
 
 #include <fmt/format.h>
 #include <functional>
@@ -92,12 +92,12 @@ namespace common::time
         return date;
     }
 
-    bool SimpleDateFormatter::equals(const SimpleDateFormatter& other) const noexcept
+    bool SimpleDateFormatter::equals(const SimpleDateFormatter& other) const
     {
         return pattern_ == other.pattern_;
     }
 
-    size_t SimpleDateFormatter::hashCode() const noexcept
+    size_t SimpleDateFormatter::hashCode() const
     {
         return std::hash<std::string>{}(pattern_);
     }

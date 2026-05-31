@@ -72,7 +72,7 @@ namespace common::crypto::cipher
          * @param algo The algorithm to check.
          * @return true if supported, false otherwise.
          */
-        [[nodiscard]] static bool isSupported(Algorithm algo) noexcept;
+        [[nodiscard]] static bool isSupported(Algorithm algo) ;
 
     private:
         /**

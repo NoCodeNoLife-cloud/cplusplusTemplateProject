@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the SpinlockMutex class methods for Threading utilities and thread pool implementation.
  */
 
-#include "src/thread/SpinlockMutex.hpp"
+#include "thread/SpinlockMutex.hpp"
 
 #include <fmt/format.h>
 #include <atomic>
@@ -25,7 +25,7 @@ namespace common::thread
         }
     }
 
-    void SpinlockMutex::lock() noexcept
+    void SpinlockMutex::lock()
     {
         // Use exponential backoff to reduce contention
         int spin_count = 0;
@@ -47,14 +47,14 @@ namespace common::thread
         }
     }
 
-    bool SpinlockMutex::try_lock() noexcept
+    bool SpinlockMutex::try_lock()
     {
         // Attempt to acquire the lock without blocking
         return !flag_.test_and_set(std::memory_order_acquire);
     }
 
     template <typename Rep, typename Period>
-    bool SpinlockMutex::try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration) noexcept
+    bool SpinlockMutex::try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration)
     {
         auto start_time = std::chrono::high_resolution_clock::now();
         auto end_time = start_time + timeout_duration;
@@ -80,15 +80,15 @@ namespace common::thread
         return false;
     }
 
-    void SpinlockMutex::unlock() noexcept
+    void SpinlockMutex::unlock()
     {
         flag_.clear(std::memory_order_release);
     }
 
     // Explicitly instantiate the template method for common duration types
-    template bool SpinlockMutex::try_lock_for<>(const std::chrono::duration<int64_t, std::milli>&) noexcept;
+    template bool SpinlockMutex::try_lock_for<>(const std::chrono::duration<int64_t, std::milli>&) ;
 
-    template bool SpinlockMutex::try_lock_for<>(const std::chrono::duration<int64_t, std::nano>&) noexcept;
+    template bool SpinlockMutex::try_lock_for<>(const std::chrono::duration<int64_t, std::nano>&) ;
 
-    template bool SpinlockMutex::try_lock_for<>(const std::chrono::duration<double, std::milli>&) noexcept;
+    template bool SpinlockMutex::try_lock_for<>(const std::chrono::duration<double, std::milli>&) ;
 }

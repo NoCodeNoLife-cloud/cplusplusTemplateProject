@@ -18,7 +18,7 @@ namespace common::thread
     {
     public:
         /// @brief Default constructor initializes the spinlock in unlocked state.
-        SpinlockMutex() noexcept = default;
+        SpinlockMutex()  = default;
 
         /// @brief Copy constructor is deleted to prevent copying of mutex.
         SpinlockMutex(const SpinlockMutex&) = delete;
@@ -34,21 +34,21 @@ namespace common::thread
 
         /// @brief Locks the spinlock, blocking until the lock is acquired.
         /// Uses test_and_set in a loop with yielding to reduce CPU usage.
-        void lock() noexcept;
+        void lock() ;
 
         /// @brief Attempts to lock the spinlock without blocking.
         /// @return true if the lock was acquired, false otherwise.
-        [[nodiscard]] bool try_lock() noexcept;
+        [[nodiscard]] bool try_lock() ;
 
         /// @brief Attempts to lock the spinlock within the specified timeout period.
         /// @param timeout_duration Maximum time to wait for the lock
         /// @return true if the lock was acquired, false if timeout occurred
         template <typename Rep, typename Period>
-        [[nodiscard]] bool try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration) noexcept;
+        [[nodiscard]] bool try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration) ;
 
         /// @brief Unlocks the spinlock, allowing other threads to acquire it.
         /// Clears the atomic flag with release memory ordering.
-        void unlock() noexcept;
+        void unlock() ;
 
     private:
         std::atomic_flag flag_{};

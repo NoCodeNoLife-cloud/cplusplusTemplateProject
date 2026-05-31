@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the PeriodicActuator class methods for Threading utilities and thread pool implementation.
  */
 
-#include "src/thread/PeriodicActuator.hpp"
+#include "thread/PeriodicActuator.hpp"
 
 #include <fmt/format.h>
 #include <boost/asio.hpp>
@@ -13,7 +13,7 @@
 #include <stdexcept>
 #include <glog/logging.h>
 
-#include "src/interface/ITimerTask.hpp"
+#include "interface/ITimerTask.hpp"
 
 namespace common::thread
 {

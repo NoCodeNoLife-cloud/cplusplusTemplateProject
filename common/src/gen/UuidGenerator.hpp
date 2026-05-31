@@ -34,6 +34,6 @@ namespace common::gen
 
         /// @brief Generates a random UUID string.
         /// @return A string representation of the generated UUID.
-        [[nodiscard]] static std::string GenerateRandomUuid() noexcept;
+        [[nodiscard]] static std::string GenerateRandomUuid() ;
     };
 }

@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the AutoJoinThread class methods for Threading utilities and thread pool implementation.
  */
 
-#include "src/thread/AutoJoinThread.hpp"
+#include "thread/AutoJoinThread.hpp"
 
 #include <fmt/format.h>
 #include <thread>
@@ -13,7 +13,7 @@
 
 namespace common::thread
 {
-    AutoJoinThread::AutoJoinThread(AutoJoinThread&& other) noexcept : thread_(std::move(other.thread_))
+    AutoJoinThread::AutoJoinThread(AutoJoinThread&& other)  : thread_(std::move(other.thread_))
     {
     }
 
@@ -43,12 +43,12 @@ namespace common::thread
         }
     }
 
-    bool AutoJoinThread::joinable() const noexcept
+    bool AutoJoinThread::joinable() const
     {
         return thread_.joinable();
     }
 
-    void AutoJoinThread::swap(AutoJoinThread& other) noexcept
+    void AutoJoinThread::swap(AutoJoinThread& other)
     {
         thread_.swap(other.thread_);
     }
@@ -58,7 +58,7 @@ namespace common::thread
         return thread_.native_handle();
     }
 
-    auto AutoJoinThread::operator=(AutoJoinThread&& other) noexcept -> AutoJoinThread&
+    auto AutoJoinThread::operator=(AutoJoinThread&& other)  -> AutoJoinThread&
     {
         if (this != &other)
         {

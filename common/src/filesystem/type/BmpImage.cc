@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the BmpImage class methods for Common library utilities.
  */
 
-#include "src/filesystem/type/BmpImage.hpp"
+#include "filesystem/type/BmpImage.hpp"
 
 #include <fmt/format.h>
 #include <fstream>
@@ -27,7 +27,7 @@ namespace common::filesystem
         load(filename);
     }
 
-    void BmpImage::setPixel(const int32_t x, const int32_t y, const uint8_t r, const uint8_t g, const uint8_t b) noexcept
+    void BmpImage::setPixel(const int32_t x, const int32_t y, const uint8_t r, const uint8_t g, const uint8_t b)
     {
         if (x < 0 || x >= width_ || y < 0 || y >= height_)
         {
@@ -40,7 +40,7 @@ namespace common::filesystem
         pixels_[index + 2] = r;
     }
 
-    bool BmpImage::getPixel(const int32_t x, const int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const noexcept
+    bool BmpImage::getPixel(const int32_t x, const int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const
     {
         if (x < 0 || x >= width_ || y < 0 || y >= height_)
         {
@@ -87,12 +87,12 @@ namespace common::filesystem
         }
     }
 
-    int32_t BmpImage::getWidth() const noexcept
+    int32_t BmpImage::getWidth() const
     {
         return width_;
     }
 
-    int32_t BmpImage::getHeight() const noexcept
+    int32_t BmpImage::getHeight() const
     {
         return height_;
     }

@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the Clock class methods for Time and date utilities including profilers and formatters.
  */
 
-#include "src/time/Clock.hpp"
+#include "time/Clock.hpp"
 
 #include <fmt/format.h>
 #include <chrono>
@@ -29,7 +29,7 @@ namespace common::time
         return oss.str();
     }
 
-    std::string Clock::getCurrentDateTimeString() noexcept
+    std::string Clock::getCurrentDateTimeString()
     {
         const auto now = std::chrono::system_clock::now();
         const auto time_t = std::chrono::system_clock::to_time_t(now);
@@ -37,7 +37,7 @@ namespace common::time
         return result;
     }
 
-    std::string Clock::getCompressedCurrentDateTimeString() noexcept
+    std::string Clock::getCompressedCurrentDateTimeString()
     {
         const auto now = std::chrono::system_clock::now();
         const auto time_t = std::chrono::system_clock::to_time_t(now);
@@ -45,14 +45,14 @@ namespace common::time
         return result;
     }
 
-    std::chrono::milliseconds::rep Clock::getCurrentTimestampMs() noexcept
+    std::chrono::milliseconds::rep Clock::getCurrentTimestampMs()
     {
         const auto now = std::chrono::system_clock::now();
         const auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
         return timestamp;
     }
 
-    std::chrono::seconds::rep Clock::getCurrentTimestamp() noexcept
+    std::chrono::seconds::rep Clock::getCurrentTimestamp()
     {
         const auto now = std::chrono::system_clock::now();
         const auto timestamp = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();

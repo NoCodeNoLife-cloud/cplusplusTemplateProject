@@ -30,7 +30,7 @@ namespace common::crypto::hash
         return oss.str();
     }
 
-    std::optional<std::vector<uint8_t>> HashStrategy::hashString(std::unique_ptr<HashStrategy> strategy, const std::string_view input) noexcept
+    std::optional<std::vector<uint8_t>> HashStrategy::hashString(std::unique_ptr<HashStrategy> strategy, const std::string_view input)
     {
         if (!strategy->update(input))
         {
@@ -71,7 +71,7 @@ namespace common::crypto::hash
         return strategy->finalize();
     }
 
-    std::optional<std::string> HashStrategy::hashStringToHex(std::unique_ptr<HashStrategy> strategy, const std::string_view input) noexcept
+    std::optional<std::string> HashStrategy::hashStringToHex(std::unique_ptr<HashStrategy> strategy, const std::string_view input)
     {
         const auto digest_size = strategy->getDigestSize();
         const auto digest = hashString(std::move(strategy), input);

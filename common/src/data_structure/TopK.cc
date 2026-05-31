@@ -12,7 +12,7 @@
 
 namespace common::data_structure
 {
-    TopK::TopK() noexcept : max_capacity_(0)
+    TopK::TopK()  : max_capacity_(0)
     {
     }
 

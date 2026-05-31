@@ -39,18 +39,18 @@ namespace common::crypto::cipher
          * @brief Default constructor. Initializes cipher with empty key.
          * @note Must call initialize() before encrypt/decrypt operations.
          */
-        XorBitCipher() noexcept = default;
+        XorBitCipher()  = default;
 
         /**
          * @brief Constructor with key initialization.
          * @param key The initial key stream as byte vector.
          */
-        explicit XorBitCipher(std::vector<uint8_t> key) noexcept : key_stream_(std::move(key))
+        explicit XorBitCipher(std::vector<uint8_t> key)  : key_stream_(std::move(key))
         {
         }
 
         /// @brief Destructor
-        ~XorBitCipher() noexcept override = default;
+        ~XorBitCipher()  override = default;
 
         /**
          * @brief Initialize the cipher with key.
@@ -106,13 +106,13 @@ namespace common::crypto::cipher
          * @brief Get algorithm name.
          * @return "XorBitCipher"
          */
-        [[nodiscard]] std::string getAlgorithmName() const noexcept override;
+        [[nodiscard]] std::string getAlgorithmName() const  override;
 
         /**
          * @brief Check if cipher is initialized (has key).
          * @return true if key is set, false otherwise.
          */
-        [[nodiscard]] bool isInitialized() const noexcept override;
+        [[nodiscard]] bool isInitialized() const  override;
 
         /**
          * @brief Process (encrypt/decrypt) data using XOR with key stream.
@@ -153,13 +153,13 @@ namespace common::crypto::cipher
          * @brief Get current key stream position.
          * @return Current byte position in key stream.
          */
-        [[nodiscard]] size_t getCurrentPosition() const noexcept;
+        [[nodiscard]] size_t getCurrentPosition() const ;
 
         /**
          * @brief Check if key is set.
          * @return True if key stream is not empty, false otherwise.
          */
-        [[nodiscard]] bool hasKey() const noexcept;
+        [[nodiscard]] bool hasKey() const ;
 
         /**
          * @brief Create a new cipher instance with auto-generated random key.

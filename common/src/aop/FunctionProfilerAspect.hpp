@@ -8,8 +8,8 @@
 #include <string>
 #include <exception>
 
-#include "src/time/FunctionProfiler.hpp"
-#include "src/interface/IAopAspect.hpp"
+#include "time/FunctionProfiler.hpp"
+#include "interface/IAopAspect.hpp"
 
 namespace common::aop
 {

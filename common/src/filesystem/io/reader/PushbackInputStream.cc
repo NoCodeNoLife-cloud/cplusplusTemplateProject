@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the PushbackInputStream class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/PushbackInputStream.hpp"
+#include "filesystem/io/reader/PushbackInputStream.hpp"
 
 #include <fmt/format.h>
 #include <cstddef>
@@ -105,7 +105,7 @@ namespace common::filesystem
         pushback_buffer_[--buffer_pos_] = b;
     }
 
-    bool PushbackInputStream::isClosed() const noexcept
+    bool PushbackInputStream::isClosed() const
     {
         return !input_stream_ || input_stream_->isClosed();
     }

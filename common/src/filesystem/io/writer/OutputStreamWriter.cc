@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the OutputStreamWriter class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/writer/OutputStreamWriter.hpp"
+#include "filesystem/io/writer/OutputStreamWriter.hpp"
 
 #include <fmt/format.h>
 

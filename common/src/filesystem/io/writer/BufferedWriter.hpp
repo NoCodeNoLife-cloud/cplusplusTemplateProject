@@ -101,7 +101,7 @@ namespace common::filesystem
 
         /// @brief Checks if the writer is closed.
         /// @return True if the writer is closed, false otherwise.
-        [[nodiscard]] bool isClosed() const noexcept override;
+        [[nodiscard]] bool isClosed() const  override;
 
     private:
         static constexpr size_t DEFAULT_BUFFER_SIZE = 1024;

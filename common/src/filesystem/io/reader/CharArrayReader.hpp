@@ -48,11 +48,11 @@ namespace common::filesystem
 
         /// @brief Tests if this reader can be read without blocking.
         /// @return True if this reader can be read without blocking, false otherwise
-        [[nodiscard]] bool ready() const noexcept override;
+        [[nodiscard]] bool ready() const  override;
 
         /// @brief Tests if this reader supports the mark() operation.
         /// @return True if this reader supports the mark() operation, false otherwise
-        [[nodiscard]] bool markSupported() const noexcept override;
+        [[nodiscard]] bool markSupported() const  override;
 
         /// @brief Marks the present position in the stream.
         /// @param readAheadLimit Limit on the number of characters that may be read while still preserving the mark.
@@ -66,7 +66,7 @@ namespace common::filesystem
 
         /// @brief Checks if this reader has been closed.
         /// @return true if this reader has been closed, false otherwise.
-        [[nodiscard]] bool isClosed() const noexcept override;
+        [[nodiscard]] bool isClosed() const  override;
 
     private:
         std::vector<char> buf_;

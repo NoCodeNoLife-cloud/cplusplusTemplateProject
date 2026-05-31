@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the BufferedInputStream class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/BufferedInputStream.hpp"
+#include "filesystem/io/reader/BufferedInputStream.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>
@@ -12,13 +12,13 @@
 #include <memory>
 #include <stdexcept>
 
-#include "src/filesystem/io/reader/AbstractInputStream.hpp"
-#include "src/filesystem/io/reader/BufferedReader.hpp"
-#include "src/filesystem/io/reader/FilterInputStream.hpp"
+#include "filesystem/io/reader/AbstractInputStream.hpp"
+#include "filesystem/io/reader/BufferedReader.hpp"
+#include "filesystem/io/reader/FilterInputStream.hpp"
 
 namespace common::filesystem
 {
-    BufferedInputStream::BufferedInputStream(std::unique_ptr<AbstractInputStream> in) noexcept : BufferedInputStream(std::move(in), DEFAULT_BUFFER_SIZE)
+    BufferedInputStream::BufferedInputStream(std::unique_ptr<AbstractInputStream> in)  : BufferedInputStream(std::move(in), DEFAULT_BUFFER_SIZE)
     {
     }
 
@@ -34,12 +34,12 @@ namespace common::filesystem
         }
     }
 
-    size_t BufferedInputStream::available() const noexcept
+    size_t BufferedInputStream::available() const
     {
         return count_ - pos_ + input_stream_->available();
     }
 
-    void BufferedInputStream::close() noexcept
+    void BufferedInputStream::close()
     {
         input_stream_->close();
         buf_.clear();
@@ -52,7 +52,7 @@ namespace common::filesystem
         mark_pos_ = pos_;
     }
 
-    bool BufferedInputStream::markSupported() const noexcept
+    bool BufferedInputStream::markSupported() const
     {
         return true;
     }
@@ -161,7 +161,7 @@ namespace common::filesystem
         return skipped;
     }
 
-    bool BufferedInputStream::isClosed() const noexcept
+    bool BufferedInputStream::isClosed() const
     {
         return !input_stream_ || input_stream_->isClosed();
     }

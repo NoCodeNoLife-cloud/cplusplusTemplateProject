@@ -3,8 +3,8 @@ set(CI_TEST_PROJECT ci_tests)
 
 # Source files collection
 file(GLOB_RECURSE CI_TEST_SRC_FILES
-        ut/src/*.cc
-        ut/src/*.cpp
+        ut/*.cc
+        ut/*.cpp
 )
 
 # Enable testing
@@ -12,6 +12,13 @@ enable_testing()
 
 # Define the test executable
 add_executable(${CI_TEST_PROJECT} ${CI_TEST_SRC_FILES})
+
+target_include_directories(${CI_TEST_PROJECT} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/ut
+        ${CMAKE_CURRENT_SOURCE_DIR}/../common/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/../proto
+        ${CMAKE_CURRENT_SOURCE_DIR}/../log/src
+)
 
 # Link required libraries
 target_link_libraries(${CI_TEST_PROJECT} PRIVATE

@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the CharBuffer class methods for Common library utilities.
  */
 
-#include "src/filesystem/nio/CharBuffer.hpp"
+#include "filesystem/nio/CharBuffer.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>
@@ -19,19 +19,19 @@ namespace common::filesystem
         capacity_ = cap;
     }
 
-    void CharBuffer::clear() noexcept
+    void CharBuffer::clear()
     {
         position_ = 0;
         limit_ = capacity_;
     }
 
-    void CharBuffer::flip() noexcept
+    void CharBuffer::flip()
     {
         limit_ = position_;
         position_ = 0;
     }
 
-    void CharBuffer::rewind() noexcept
+    void CharBuffer::rewind()
     {
         position_ = 0;
     }
@@ -88,7 +88,7 @@ namespace common::filesystem
         return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_), buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
     }
 
-    size_t CharBuffer::position() const noexcept
+    size_t CharBuffer::position() const
     {
         return position_;
     }
@@ -102,7 +102,7 @@ namespace common::filesystem
         position_ = newPosition;
     }
 
-    size_t CharBuffer::limit() const noexcept
+    size_t CharBuffer::limit() const
     {
         return limit_;
     }
@@ -120,17 +120,17 @@ namespace common::filesystem
         limit_ = newLimit;
     }
 
-    size_t CharBuffer::capacity() const noexcept
+    size_t CharBuffer::capacity() const
     {
         return capacity_;
     }
 
-    bool CharBuffer::hasRemaining() const noexcept
+    bool CharBuffer::hasRemaining() const
     {
         return position_ < limit_;
     }
 
-    size_t CharBuffer::remaining() const noexcept
+    size_t CharBuffer::remaining() const
     {
         return limit_ - position_;
     }

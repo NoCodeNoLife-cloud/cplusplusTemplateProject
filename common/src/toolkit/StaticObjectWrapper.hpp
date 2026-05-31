@@ -29,7 +29,7 @@ namespace common::toolkit
         /// @tparam Args Types of arguments to forward to T's constructor
         /// @param args Arguments to forward to T's constructor
         template <typename... Args>
-        static void init(Args&&... args) noexcept;
+        static void init(Args&&... args) ;
 
         /// @brief Get a mutable reference to the static object
         /// @return Reference to the static object
@@ -37,7 +37,7 @@ namespace common::toolkit
         [[nodiscard]] static T& get();
 
         /// @brief Destroy the static object if it exists
-        static void destroy() noexcept;
+        static void destroy() ;
 
         /// @brief Check if the static object has been initialized
         /// @return true if initialized, false otherwise
@@ -56,7 +56,7 @@ namespace common::toolkit
 
     template <typename T>
     template <typename... Args>
-    void StaticObjectWrapper<T>::init(Args&&... args) noexcept
+    void StaticObjectWrapper<T>::init(Args&&... args)
     {
         std::call_once(init_flag_, construct<Args...>, std::forward<Args>(args)...);
     }
@@ -80,7 +80,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    void StaticObjectWrapper<T>::destroy() noexcept
+    void StaticObjectWrapper<T>::destroy()
     {
         instance_.reset(); // Automatically deletes and sets to nullptr
     }

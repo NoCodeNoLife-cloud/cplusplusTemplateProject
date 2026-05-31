@@ -27,7 +27,7 @@ namespace common::rpc
 
         /// @brief Constructor
         /// @param channel The gRPC channel to monitor
-        explicit GrpcConnectivityManager(const std::shared_ptr<grpc::Channel>& channel) noexcept : channel_(channel), is_monitoring_(false)
+        explicit GrpcConnectivityManager(const std::shared_ptr<grpc::Channel>& channel)  : channel_(channel), is_monitoring_(false)
         {
         }
 
@@ -39,7 +39,7 @@ namespace common::rpc
 
         /// @brief Get the current connectivity state of the channel
         /// @return Current GrpcConnectivityState
-        [[nodiscard]] GrpcConnectivityState getCurrentState() const noexcept
+        [[nodiscard]] GrpcConnectivityState getCurrentState() const
         {
             if (!channel_)
             {
@@ -52,7 +52,7 @@ namespace common::rpc
 
         /// @brief Get the current connectivity state as string
         /// @return String representation of current state
-        [[nodiscard]] std::string getCurrentStateString() const noexcept
+        [[nodiscard]] std::string getCurrentStateString() const
         {
             const auto state = getCurrentState();
             return RpcMetadata::grpcStateToString(state);
@@ -128,7 +128,7 @@ namespace common::rpc
 
         /// @brief Check if the channel is ready for RPC calls
         /// @return True if channel is in READY state
-        [[nodiscard]] bool isReady() const noexcept
+        [[nodiscard]] bool isReady() const
         {
             return getCurrentState() == GrpcConnectivityState::READY;
         }

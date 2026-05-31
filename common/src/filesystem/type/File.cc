@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the File class methods for Common library utilities.
  */
 
-#include "src/filesystem/type/File.hpp"
+#include "filesystem/type/File.hpp"
 #include <windows.h>
 #include <openssl/evp.h>
 
@@ -36,25 +36,25 @@ namespace common::filesystem
 
     File::~File() = default;
 
-    bool File::canExecute() const noexcept
+    bool File::canExecute() const
     {
         const DWORD attributes = GetFileAttributesW(file_path_.c_str());
         return attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
     }
 
-    bool File::canRead() const noexcept
+    bool File::canRead() const
     {
         const std::ifstream file(file_path_);
         return file.good();
     }
 
-    bool File::canWrite() const noexcept
+    bool File::canWrite() const
     {
         const std::ofstream file(file_path_, std::ios::app);
         return file.good();
     }
 
-    bool File::exists() const noexcept
+    bool File::exists() const
     {
         try
         {
@@ -66,7 +66,7 @@ namespace common::filesystem
         }
     }
 
-    bool File::isFile() const noexcept
+    bool File::isFile() const
     {
         try
         {
@@ -78,13 +78,13 @@ namespace common::filesystem
         }
     }
 
-    bool File::isHidden() const noexcept
+    bool File::isHidden() const
     {
         const DWORD attributes = GetFileAttributesW(file_path_.c_str());
         return attributes != INVALID_FILE_ATTRIBUTES && attributes & FILE_ATTRIBUTE_HIDDEN;
     }
 
-    bool File::isAbsolute() const noexcept
+    bool File::isAbsolute() const
     {
         return file_path_.is_absolute();
     }
@@ -99,7 +99,7 @@ namespace common::filesystem
         return file.good();
     }
 
-    bool File::deleteFile() const noexcept
+    bool File::deleteFile() const
     {
         try
         {
@@ -111,7 +111,7 @@ namespace common::filesystem
         }
     }
 
-    bool File::renameTo(const File& dest) const noexcept
+    bool File::renameTo(const File& dest) const
     {
         try
         {
@@ -137,7 +137,7 @@ namespace common::filesystem
         }
     }
 
-    int64_t File::length() const noexcept
+    int64_t File::length() const
     {
         try
         {
@@ -153,7 +153,7 @@ namespace common::filesystem
         }
     }
 
-    int64_t File::lastModified() const noexcept
+    int64_t File::lastModified() const
     {
         try
         {
@@ -167,7 +167,7 @@ namespace common::filesystem
         }
     }
 
-    bool File::setLastModified(const int64_t time) const noexcept
+    bool File::setLastModified(const int64_t time) const
     {
         try
         {
@@ -182,7 +182,7 @@ namespace common::filesystem
         }
     }
 
-    bool File::setReadOnly() const noexcept
+    bool File::setReadOnly() const
     {
         try
         {
@@ -228,12 +228,12 @@ namespace common::filesystem
         }
     }
 
-    std::string File::getName() const noexcept
+    std::string File::getName() const
     {
         return file_path_.filename().string();
     }
 
-    std::string File::getExtension() const noexcept
+    std::string File::getExtension() const
     {
         try
         {
@@ -246,7 +246,7 @@ namespace common::filesystem
         }
     }
 
-    std::string File::getParent() const noexcept
+    std::string File::getParent() const
     {
         return file_path_.parent_path().string();
     }
@@ -256,12 +256,12 @@ namespace common::filesystem
         return file_path_.has_parent_path() ? File(file_path_.parent_path()) : File(std::string(""));
     }
 
-    std::string File::getPath() const noexcept
+    std::string File::getPath() const
     {
         return file_path_.string();
     }
 
-    int64_t File::getTotalSpace() const noexcept
+    int64_t File::getTotalSpace() const
     {
         try
         {
@@ -274,7 +274,7 @@ namespace common::filesystem
         }
     }
 
-    int64_t File::getUsableSpace() const noexcept
+    int64_t File::getUsableSpace() const
     {
         try
         {
@@ -287,7 +287,7 @@ namespace common::filesystem
         }
     }
 
-    std::string File::getSizeString() const noexcept
+    std::string File::getSizeString() const
     {
         const auto size = length();
         if (size < 0)
@@ -322,12 +322,12 @@ namespace common::filesystem
         return oss.str();
     }
 
-    size_t File::hashCode() const noexcept
+    size_t File::hashCode() const
     {
         return std::hash<std::string>{}(file_path_.string());
     }
 
-    std::string File::toURI() const noexcept
+    std::string File::toURI() const
     {
         return "file://" + file_path_.string();
     }

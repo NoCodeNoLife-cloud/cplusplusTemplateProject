@@ -139,12 +139,12 @@ namespace common::sql::mysql
 
         /// @brief Move constructor
         /// @param other Another MySqlExecutor instance to move from
-        MySqlExecutor(MySqlExecutor&& other) noexcept;
+        MySqlExecutor(MySqlExecutor&& other) ;
 
         /// @brief Move assignment operator
         /// @param other Another MySqlExecutor instance to move from
         /// @return Reference to this instance
-        MySqlExecutor& operator=(MySqlExecutor&& other) noexcept;
+        MySqlExecutor& operator=(MySqlExecutor&& other) ;
 
         /// @brief Connect to MySQL database
         /// @param host MySQL server host

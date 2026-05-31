@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the SystemInfo class methods for System information and performance monitoring.
  */
 
-#include "src/system/SystemInfo.hpp"
+#include "system/SystemInfo.hpp"
 
 #include <fmt/format.h>
 #include <cwctype>
@@ -29,7 +29,7 @@ namespace common::system
     }
 
     std::string SystemInfo::ReadRegistryStringValue(HKEY__ * const hKeyRoot, const wchar_t*subKey, const wchar_t*valueName)
-    noexcept
+
     {
         HKEY hKey;
         if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
@@ -53,7 +53,7 @@ namespace common::system
     }
 
     std::vector<std::string> SystemInfo::EnumerateRegistryValues(HKEY__ * const hKeyRoot, const wchar_t*subKey)
-    noexcept
+
     {
         std::vector<std::string> values;
         HKEY hKey;
@@ -85,20 +85,20 @@ namespace common::system
         return values;
     }
 
-    std::string SystemInfo::GetCpuModelFromRegistry() noexcept
+    std::string SystemInfo::GetCpuModelFromRegistry()
     {
         const std::string cpuModel = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", L"ProcessorNameString");
         const std::string result = cpuModel.empty() ? "Unknown CPU Model" : cpuModel;
         return result;
     }
 
-    std::string SystemInfo::GetMemoryDetails() noexcept
+    std::string SystemInfo::GetMemoryDetails()
     {
         const std::string result = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E965-E325-11CE-BFC1-08002BE10318}", L"DeviceDesc");
         return result.empty() ? "Memory details not available" : result;
     }
 
-    std::string SystemInfo::GetOSVersion() noexcept
+    std::string SystemInfo::GetOSVersion()
     {
         std::string result = ReadRegistryStringValue(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", L"ProductName");
 
@@ -117,7 +117,7 @@ namespace common::system
         return finalResult;
     }
 
-    MotherboardInfo SystemInfo::GetMotherboardInfo() noexcept
+    MotherboardInfo SystemInfo::GetMotherboardInfo()
     {
         MotherboardInfo info{};
 
@@ -136,7 +136,7 @@ namespace common::system
         return info;
     }
 
-    std::string SystemInfo::GetGraphicsCardInfo() noexcept
+    std::string SystemInfo::GetGraphicsCardInfo()
     {
         // Open the graphics drivers devices key
         HKEY hKey;
@@ -173,12 +173,12 @@ namespace common::system
         return "Graphics card information not available";
     }
 
-    std::vector<std::string> SystemInfo::GetDiskDriveInfo() noexcept
+    std::vector<std::string> SystemInfo::GetDiskDriveInfo()
     {
         return EnumerateRegistryValues(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\Disk\\Enum");
     }
 
-    std::vector<std::string> SystemInfo::GetBIOSInfo() noexcept
+    std::vector<std::string> SystemInfo::GetBIOSInfo()
     {
         std::vector<std::string> adapters;
         HKEY hKey;

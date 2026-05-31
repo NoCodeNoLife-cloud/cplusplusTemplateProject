@@ -41,7 +41,7 @@ namespace common::crypto::cipher
         return {"ChaCha20"};
     }
 
-    bool StreamCipherFactory::isSupported(Algorithm algo) noexcept
+    bool StreamCipherFactory::isSupported(Algorithm algo)
     {
         switch (algo)
         {

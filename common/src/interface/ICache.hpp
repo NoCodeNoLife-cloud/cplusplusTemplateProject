@@ -41,23 +41,23 @@ namespace common::interfaces
         [[nodiscard]] virtual bool remove(const Key& key) = 0;
 
         /// @brief Clears all entries from the cache
-        virtual void clear() noexcept = 0;
+        virtual void clear()  = 0;
 
         /// @brief Returns the current number of entries in the cache
         /// @return Number of entries currently in the cache
-        [[nodiscard]] virtual size_t size() const noexcept = 0;
+        [[nodiscard]] virtual size_t size() const  = 0;
 
         /// @brief Returns the maximum capacity of the cache
         /// @return Maximum number of entries the cache can hold
-        [[nodiscard]] virtual size_t capacity() const noexcept = 0;
+        [[nodiscard]] virtual size_t capacity() const  = 0;
 
         /// @brief Checks if the cache is empty
         /// @return true if the cache is empty, false otherwise
-        [[nodiscard]] virtual bool empty() const noexcept = 0;
+        [[nodiscard]] virtual bool empty() const  = 0;
 
         /// @brief Checks if a key exists in the cache
         /// @param key The key to check for
         /// @return true if the key exists in the cache, false otherwise
-        [[nodiscard]] virtual bool contains(const Key& key) const noexcept = 0;
+        [[nodiscard]] virtual bool contains(const Key& key) const  = 0;
     };
 }

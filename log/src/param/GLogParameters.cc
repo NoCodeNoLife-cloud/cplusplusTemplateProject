@@ -63,56 +63,45 @@ namespace glog::parameter
             throw std::runtime_error(fmt::format("Configuration file does not exist: {}", path.string()));
         }
 
-        try
+        if (const YAML::Node node = YAML::LoadFile(path.string()); node["glog"])
         {
-            if (const YAML::Node node = YAML::LoadFile(path.string()); node["glog"])
+            const YAML::Node& glog_node = node["glog"];
+            if (glog_node["minLogLevel"])
             {
-                const YAML::Node& glog_node = node["glog"];
-                if (glog_node["minLogLevel"])
-                {
-                    min_log_level_ = glog_node["minLogLevel"].as<int32_t>();
-                }
-                if (glog_node["logName"])
-                {
-                    log_name_ = glog_node["logName"].as<std::string>();
-                }
-                if (glog_node["logToStderr"])
-                {
-                    log_to_stderr_ = glog_node["logToStderr"].as<bool>();
-                }
-                if (glog_node["customLogFormat"])
-                {
-                    custom_log_format_ = glog_node["customLogFormat"].as<bool>();
-                }
+                min_log_level_ = glog_node["minLogLevel"].as<int32_t>();
             }
-            else
+            if (glog_node["logName"])
             {
-                // If there's no "glog" section, try to parse the fields directly from root
-                if (node["minLogLevel"])
-                {
-                    min_log_level_ = node["minLogLevel"].as<int32_t>();
-                }
-                if (node["logName"])
-                {
-                    log_name_ = node["logName"].as<std::string>();
-                }
-                if (node["logToStderr"])
-                {
-                    log_to_stderr_ = node["logToStderr"].as<bool>();
-                }
-                if (node["customLogFormat"])
-                {
-                    custom_log_format_ = node["customLogFormat"].as<bool>();
-                }
+                log_name_ = glog_node["logName"].as<std::string>();
+            }
+            if (glog_node["logToStderr"])
+            {
+                log_to_stderr_ = glog_node["logToStderr"].as<bool>();
+            }
+            if (glog_node["customLogFormat"])
+            {
+                custom_log_format_ = glog_node["customLogFormat"].as<bool>();
             }
         }
-        catch (const YAML::Exception& e)
+        else
         {
-            throw std::runtime_error(fmt::format("Failed to parse YAML file '{}': {}", path.string(), e.what()));
-        }
-        catch (const std::exception& e)
-        {
-            throw std::runtime_error(fmt::format("Error processing configuration file '{}': {}", path.string(), e.what()));
+            // If there's no "glog" section, try to parse the fields directly from root
+            if (node["minLogLevel"])
+            {
+                min_log_level_ = node["minLogLevel"].as<int32_t>();
+            }
+            if (node["logName"])
+            {
+                log_name_ = node["logName"].as<std::string>();
+            }
+            if (node["logToStderr"])
+            {
+                log_to_stderr_ = node["logToStderr"].as<bool>();
+            }
+            if (node["customLogFormat"])
+            {
+                custom_log_format_ = node["customLogFormat"].as<bool>();
+            }
         }
     }
 

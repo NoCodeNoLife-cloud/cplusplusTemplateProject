@@ -1,102 +1,67 @@
 /**
- * @file AuthRpcClientOptions.cc
+ * @file AuthRpcParam.cc
  * @brief Implementation of authentication RPC client configuration options
  * @details This file contains the implementation of AuthRpcClientOptions class methods,
  *          including builder pattern, YAML deserialization, and parameter validation.
  */
 
-#include "AuthRpcClientOptions.hpp"
+#include "AuthRpcParam.hpp"
 
 #include <glog/logging.h>
 #include <chrono>  // C++20
 
 namespace client_app::auth
 {
-    AuthRpcClientOptions::AuthRpcClientOptions(const int32_t keepalive_time_ms, const int32_t keepalive_timeout_ms, const int32_t keepalive_permit_without_calls, std::string server_address) noexcept : keepalive_time_ms_(keepalive_time_ms), keepalive_timeout_ms_(keepalive_timeout_ms), keepalive_permit_without_calls_(keepalive_permit_without_calls), server_address_(std::move(server_address))
+    AuthRpcParam::AuthRpcParam(const int32_t keepalive_time_ms, const int32_t keepalive_timeout_ms, const int32_t keepalive_permit_without_calls, std::string server_address) : keepalive_time_ms_(keepalive_time_ms), keepalive_timeout_ms_(keepalive_timeout_ms), keepalive_permit_without_calls_(keepalive_permit_without_calls), server_address_(std::move(server_address))
     {
-        validate(); // Validate parameters after construction
     }
 
-    AuthRpcClientOptions::Builder& AuthRpcClientOptions::Builder::keepaliveTimeMs(const int32_t value) noexcept
-    {
-        keepalive_time_ms_ = value;
-        return *this;
-    }
-
-    AuthRpcClientOptions::Builder& AuthRpcClientOptions::Builder::keepaliveTimeoutMs(const int32_t value) noexcept
-    {
-        keepalive_timeout_ms_ = value;
-        return *this;
-    }
-
-    AuthRpcClientOptions::Builder& AuthRpcClientOptions::Builder::keepalivePermitWithoutCalls(const int32_t value) noexcept
-    {
-        keepalive_permit_without_calls_ = value;
-        return *this;
-    }
-
-    AuthRpcClientOptions::Builder& AuthRpcClientOptions::Builder::serverAddress(const std::string& value) noexcept
-    {
-        server_address_ = value;
-        return *this;
-    }
-
-    AuthRpcClientOptions AuthRpcClientOptions::Builder::build() const
-    {
-        return AuthRpcClientOptions{keepalive_time_ms_, keepalive_timeout_ms_, keepalive_permit_without_calls_, server_address_};
-    }
-
-    AuthRpcClientOptions::Builder AuthRpcClientOptions::builder()
-    {
-        return {};
-    }
-
-    int32_t AuthRpcClientOptions::keepaliveTimeMs() const noexcept
+    int32_t AuthRpcParam::keepaliveTimeMs() const
     {
         return keepalive_time_ms_;
     }
 
-    void AuthRpcClientOptions::keepaliveTimeMs(const int32_t value) noexcept
+    void AuthRpcParam::keepaliveTimeMs(const int32_t value)
     {
         keepalive_time_ms_ = value;
         validate(); // Validate after setting new value
     }
 
-    int32_t AuthRpcClientOptions::keepaliveTimeoutMs() const noexcept
+    int32_t AuthRpcParam::keepaliveTimeoutMs() const
     {
         return keepalive_timeout_ms_;
     }
 
-    void AuthRpcClientOptions::keepaliveTimeoutMs(const int32_t value) noexcept
+    void AuthRpcParam::keepaliveTimeoutMs(const int32_t value)
     {
         keepalive_timeout_ms_ = value;
         validate(); // Validate after setting new value
     }
 
-    int32_t AuthRpcClientOptions::keepalivePermitWithoutCalls() const noexcept
+    int32_t AuthRpcParam::keepalivePermitWithoutCalls() const
     {
         return keepalive_permit_without_calls_;
     }
 
-    void AuthRpcClientOptions::keepalivePermitWithoutCalls(const int32_t value) noexcept
+    void AuthRpcParam::keepalivePermitWithoutCalls(const int32_t value)
     {
         keepalive_permit_without_calls_ = value;
         validate(); // Validate after setting new value
     }
 
     // ReSharper disable once CppDFAConstantFunctionResult
-    const std::string& AuthRpcClientOptions::serverAddress() const noexcept
+    const std::string& AuthRpcParam::serverAddress() const
     {
         return server_address_;
     }
 
-    void AuthRpcClientOptions::serverAddress(const std::string& value) noexcept
+    void AuthRpcParam::serverAddress(const std::string& value)
     {
         server_address_ = value;
         validate(); // Validate after setting new value
     }
 
-    void AuthRpcClientOptions::deserializedFromYamlFile(const std::filesystem::path& path)
+    void AuthRpcParam::deserializedFromYamlFile(const std::filesystem::path& path)
     {
         if (!std::filesystem::exists(path))
         {
@@ -137,7 +102,7 @@ namespace client_app::auth
         validate(); // Validate after loading from YAML
     }
 
-    void AuthRpcClientOptions::validate() const noexcept
+    void AuthRpcParam::validate() const
     {
         // Validate keepalive time (should be positive)
         LOG_IF(WARNING, keepalive_time_ms_ <= 0) << "Invalid keepalive time: " << keepalive_time_ms_ << "ms. Using default value of 30000ms.";
@@ -158,7 +123,7 @@ namespace client_app::auth
     }
 }
 
-bool YAML::convert<client_app::auth::AuthRpcClientOptions>::decode(const Node& node, client_app::auth::AuthRpcClientOptions& rhs)
+bool YAML::convert<client_app::auth::AuthRpcParam>::decode(const Node& node, client_app::auth::AuthRpcParam& rhs)
 {
     if (const auto keepaliveTimeMsNode = node["keepaliveTimeMs"]; keepaliveTimeMsNode)
     {
@@ -179,7 +144,7 @@ bool YAML::convert<client_app::auth::AuthRpcClientOptions>::decode(const Node& n
     return true;
 }
 
-YAML::Node YAML::convert<client_app::auth::AuthRpcClientOptions>::encode(const client_app::auth::AuthRpcClientOptions& rhs)
+YAML::Node YAML::convert<client_app::auth::AuthRpcParam>::encode(const client_app::auth::AuthRpcParam& rhs)
 {
     Node node;
     node["keepaliveTimeMs"] = rhs.keepaliveTimeMs();

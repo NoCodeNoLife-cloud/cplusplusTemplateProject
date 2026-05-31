@@ -11,7 +11,7 @@
 #include <filesystem>
 #include <string>
 
-#include "src/interface/IYamlConfigurable.hpp"
+#include "interface/IYamlConfigurable.hpp"
 
 namespace glog::parameter
 {

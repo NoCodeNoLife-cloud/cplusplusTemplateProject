@@ -20,7 +20,7 @@ namespace common::data_structure
     {
     public:
         /// @brief Default constructor (unbounded heap, grows as elements are added).
-        TopK() noexcept;
+        TopK() ;
 
         /// @brief Constructs a TopK with a maximum capacity.
         /// @param max_capacity Maximum number of elements to maintain in the heap.

@@ -6,7 +6,7 @@
  *          system information logging, and application lifecycle control.
  */
 
-#include "src/task/ClientTask.hpp"
+#include "task/ClientTask.hpp"
 
 #include <fmt/format.h>
 #include <glog/logging.h>
@@ -14,22 +14,24 @@
 
 #include "config/GLogConfigurator.hpp"
 #include "rpc/RpcMetadata.hpp"
-#include "src/auth/AuthRpcClient.hpp"
-#include "src/filesystem/io/Console.hpp"
-#include "src/system/SystemInfo.hpp"
+#include "auth/AuthRpcService.hpp"
+#include "config/ConfigParam.h"
+#include "filesystem/io/Console.hpp"
+#include "system/SystemInfo.hpp"
 
 namespace client_app::task
 {
-    ClientTask::ClientTask(const std::string& project_name_) noexcept : rpc_options_{auth::AuthRpcClientOptions::builder().build()}, timer_{project_name_}
+    ClientTask::ClientTask(const std::string& project_name_) : timer_{project_name_}
     {
+        rpc_options_.deserializedFromYamlFile(config::ConfigParam::getInstance().applicationDevConfigPath());
         timer_.recordStart();
     }
 
-    void ClientTask::init() const noexcept
+    void ClientTask::init() const
     {
-        const glog::config::GLogConfigurator log_configurator{glog_config_path_};
+        const glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().glogConfigPath()};
         log_configurator.execute();
-        DLOG(INFO) << fmt::format("Initializing GLog configuration from: {}, RPC Options - Keepalive Time: {}ms, Timeout: {}ms, Permit Without Calls: {}, configuration initialized successfully", glog_config_path_, rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls());
+        DLOG(INFO) << fmt::format("Initializing GLog configuration from: {}, RPC Options - Keepalive Time: {}ms, Timeout: {}ms, Permit Without Calls: {}, configuration initialized successfully", config::ConfigParam::getInstance().glogConfigPath(), rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls());
 
         DLOG(INFO) << "Application starting...";
         logClientInfo();
@@ -39,6 +41,7 @@ namespace client_app::task
     void ClientTask::run()
     {
         init();
+
         const auto client = createRpcClient();
 
         // Log initial connection state
@@ -53,7 +56,7 @@ namespace client_app::task
         exit();
     }
 
-    void ClientTask::exit() const noexcept
+    void ClientTask::exit()
     {
         timer_.recordEnd();
         const auto time_info = timer_.getRunTime();
@@ -61,7 +64,7 @@ namespace client_app::task
         DLOG(INFO) << "Application finished successfully.";
     }
 
-    std::string ClientTask::logIn(const auth::AuthRpcClient& auth_rpc_client)
+    std::string ClientTask::logIn(const auth::AuthRpcService& auth_rpc_client)
     {
         DLOG(INFO) << "Starting authentication process";
 
@@ -118,7 +121,7 @@ namespace client_app::task
         return createNewAccount == "y" || createNewAccount == "Y";
     }
 
-    void ClientTask::registerNewUser(const auth::AuthRpcClient& auth_rpc_client, const std::string& username, const std::string& password)
+    void ClientTask::registerNewUser(const auth::AuthRpcService& auth_rpc_client, const std::string& username, const std::string& password)
     {
         DLOG(INFO) << "Registering user...";
         const auto registerUserResponse = auth_rpc_client.RegisterUser(username, password);
@@ -132,7 +135,7 @@ namespace client_app::task
         DLOG(INFO) << fmt::format("Registered user successfully, return value: {}", registerUserResponse.message());
     }
 
-    void ClientTask::logOut(const auth::AuthRpcClient& auth_rpc_client, const std::string& username) noexcept
+    void ClientTask::logOut(const auth::AuthRpcService& auth_rpc_client, const std::string& username)
     {
         if (const auto deleteUserResponse = auth_rpc_client.DeleteUser(username); !deleteUserResponse.success())
         {
@@ -145,10 +148,10 @@ namespace client_app::task
     }
 
     // ReSharper disable once CppMemberFunctionMayBeStatic
-    void ClientTask::task(const auth::AuthRpcClient& auth_rpc_client) noexcept
+    void ClientTask::task(const auth::AuthRpcService& auth_rpc_client)
     {
-        // Implement actual task logic here
         DLOG(INFO) << "Current connection state: " << common::rpc::RpcMetadata::grpcStateToString(auth_rpc_client.getConnectivityState());
+        // Implement actual task logic here
     }
 
     std::shared_ptr<grpc::Channel> ClientTask::createChannel() const
@@ -198,7 +201,7 @@ namespace client_app::task
         return channel;
     }
 
-    auth::AuthRpcClient ClientTask::createRpcClient() const
+    auth::AuthRpcService ClientTask::createRpcClient() const
     {
         DLOG(INFO) << "Creating gRPC channel";
         // Create channel using the existing createChannel method with custom arguments
@@ -211,13 +214,13 @@ namespace client_app::task
         DLOG(INFO) << fmt::format("gRPC channel created with state: {}", state_str);
         DLOG(INFO) << "Creating RPC client";
         // Create client using the channel with custom arguments
-        auth::AuthRpcClient client{channel};
+        auth::AuthRpcService client{channel};
         DLOG(INFO) << "RPC client created successfully";
 
         return client;
     }
 
-    void ClientTask::logClientInfo() noexcept
+    void ClientTask::logClientInfo()
     {
         DLOG(INFO) << fmt::format("OS Version: {}, CPU Model: {}, Memory Details: {}, Graphics Card Info: {}", common::system::SystemInfo::GetOSVersion(), common::system::SystemInfo::GetCpuModelFromRegistry(), common::system::SystemInfo::GetMemoryDetails(), common::system::SystemInfo::GetGraphicsCardInfo());
     }

@@ -59,12 +59,12 @@ namespace common::crypto::hash
         /**
          * @brief Move constructor.
          */
-        [[nodiscard]] SHAToolkit(SHAToolkit&&) noexcept;
+        [[nodiscard]] SHAToolkit(SHAToolkit&&) ;
 
         /**
          * @brief Move assignment operator.
          */
-        SHAToolkit& operator=(SHAToolkit&&) noexcept;
+        SHAToolkit& operator=(SHAToolkit&&) ;
 
         /**
          * @brief Default destructor.
@@ -75,13 +75,13 @@ namespace common::crypto::hash
          * @brief Gets the digest size in bytes for the current algorithm.
          * @return The size of the hash output in bytes.
          */
-        [[nodiscard]] size_t getDigestSize() const noexcept;
+        [[nodiscard]] size_t getDigestSize() const ;
 
         /**
          * @brief Gets the hex digest size in characters for the current algorithm.
          * @return The size of the hex representation.
          */
-        [[nodiscard]] size_t getHexDigestSize() const noexcept;
+        [[nodiscard]] size_t getHexDigestSize() const ;
 
         /**
          * @brief Updates the hash computation with additional data.
@@ -90,7 +90,7 @@ namespace common::crypto::hash
          * @param length Length of the data in bytes.
          * @return true if update succeeded, false otherwise.
          */
-        [[nodiscard]] bool update(const void* data, size_t length) noexcept;
+        [[nodiscard]] bool update(const void* data, size_t length) ;
 
         /**
          * @brief Updates the hash computation with a string view.
@@ -98,21 +98,21 @@ namespace common::crypto::hash
          * @param data String data to hash.
          * @return true if update succeeded, false otherwise.
          */
-        [[nodiscard]] bool update(std::string_view data) noexcept;
+        [[nodiscard]] bool update(std::string_view data) ;
 
         /**
          * @brief Finalizes the hash computation and returns the digest.
          *
          * @return Optional containing the binary digest, or nullopt on failure.
          */
-        [[nodiscard]] std::optional<std::vector<uint8_t>> finalize() noexcept;
+        [[nodiscard]] std::optional<std::vector<uint8_t>> finalize() ;
 
         /**
          * @brief Resets the toolkit for a new hashing operation.
          *
          * @return true if reset succeeded, false otherwise.
          */
-        [[nodiscard]] bool reset() noexcept;
+        [[nodiscard]] bool reset() ;
 
         /**
          * @brief Converts binary digest to hexadecimal string representation.
@@ -141,7 +141,7 @@ namespace common::crypto::hash
          * @param input String to hash.
          * @return Optional containing the binary digest, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::vector<uint8_t>> hashStringSHA256(std::string_view input) noexcept;
+        [[nodiscard]] static std::optional<std::vector<uint8_t>> hashStringSHA256(std::string_view input) ;
 
         /**
          * @brief Computes SHA-1 hash of a string in one operation.
@@ -149,7 +149,7 @@ namespace common::crypto::hash
          * @param input String to hash.
          * @return Optional containing the binary digest, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::vector<uint8_t>> hashStringSHA1(std::string_view input) noexcept;
+        [[nodiscard]] static std::optional<std::vector<uint8_t>> hashStringSHA1(std::string_view input) ;
 
         /**
          * @brief Computes SHA-256 hash of a file in one operation.
@@ -175,7 +175,7 @@ namespace common::crypto::hash
          * @param input String to hash.
          * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::string> hashStringToHexSHA256(std::string_view input) noexcept;
+        [[nodiscard]] static std::optional<std::string> hashStringToHexSHA256(std::string_view input) ;
 
         /**
          * @brief Computes SHA-1 hash of a string and returns hex representation.
@@ -183,7 +183,7 @@ namespace common::crypto::hash
          * @param input String to hash.
          * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::string> hashStringToHexSHA1(std::string_view input) noexcept;
+        [[nodiscard]] static std::optional<std::string> hashStringToHexSHA1(std::string_view input) ;
 
         /**
          * @brief Computes SHA-256 hash of a file and returns hex representation.

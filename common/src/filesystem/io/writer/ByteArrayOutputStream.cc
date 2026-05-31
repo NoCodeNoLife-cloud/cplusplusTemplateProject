@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the ByteArrayOutputStream class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/writer/ByteArrayOutputStream.hpp"
+#include "filesystem/io/writer/ByteArrayOutputStream.hpp"
 
 #include <fmt/format.h>
 #include <stdexcept>

@@ -18,19 +18,19 @@ namespace common::time
 
         /// @brief Get current date and time as a string in format "YYYY-MM-DD HH:MM:SS"
         /// @return Formatted date and time string
-        [[nodiscard]] static std::string getCurrentDateTimeString() noexcept;
+        [[nodiscard]] static std::string getCurrentDateTimeString() ;
 
         /// @brief Get current date and time as a compressed string in format "YYYYMMDD_HHMMSS"
         /// @return Compressed date and time string
-        [[nodiscard]] static std::string getCompressedCurrentDateTimeString() noexcept;
+        [[nodiscard]] static std::string getCompressedCurrentDateTimeString() ;
 
         /// @brief Get current timestamp as a count of milliseconds since epoch
         /// @return Milliseconds since epoch
-        [[nodiscard]] static std::chrono::milliseconds::rep getCurrentTimestampMs() noexcept;
+        [[nodiscard]] static std::chrono::milliseconds::rep getCurrentTimestampMs() ;
 
         /// @brief Get current timestamp as a count of seconds since epoch
         /// @return Seconds since epoch
-        [[nodiscard]] static std::chrono::seconds::rep getCurrentTimestamp() noexcept;
+        [[nodiscard]] static std::chrono::seconds::rep getCurrentTimestamp() ;
 
         /// @brief Format current time with a custom format string
         /// @param format Format string using strftime-compatible format specifiers

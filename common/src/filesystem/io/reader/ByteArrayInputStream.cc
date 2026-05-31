@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the ByteArrayInputStream class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/ByteArrayInputStream.hpp"
+#include "filesystem/io/reader/ByteArrayInputStream.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>
@@ -87,17 +87,17 @@ namespace common::filesystem
         mark_position_ = pos_;
     }
 
-    bool ByteArrayInputStream::markSupported() const noexcept
+    bool ByteArrayInputStream::markSupported() const
     {
         return true;
     }
 
-    void ByteArrayInputStream::close() noexcept
+    void ByteArrayInputStream::close()
     {
         closed_ = true;
     }
 
-    bool ByteArrayInputStream::isClosed() const noexcept
+    bool ByteArrayInputStream::isClosed() const
     {
         return closed_;
     }

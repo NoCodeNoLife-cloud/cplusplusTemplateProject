@@ -69,7 +69,7 @@ namespace common::filesystem
     private:
         /// @brief Check if the stream is valid for operations
         /// @return true if stream is open and not closed, false otherwise
-        [[nodiscard]] bool isValid() const noexcept;
+        [[nodiscard]] bool isValid() const ;
 
         /// @brief Validate that the buffer parameters are within bounds
         /// @param buffer The buffer to validate

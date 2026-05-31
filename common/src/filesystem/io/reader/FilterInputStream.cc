@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the FilterInputStream class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/FilterInputStream.hpp"
+#include "filesystem/io/reader/FilterInputStream.hpp"
 
 #include <fmt/format.h>
 #include <cstddef>
@@ -12,7 +12,7 @@
 
 namespace common::filesystem
 {
-    FilterInputStream::FilterInputStream(std::unique_ptr<AbstractInputStream> inputStream) noexcept : input_stream_(std::move(inputStream))
+    FilterInputStream::FilterInputStream(std::unique_ptr<AbstractInputStream> inputStream)  : input_stream_(std::move(inputStream))
     {
     }
 
@@ -36,7 +36,7 @@ namespace common::filesystem
         input_stream_->mark(readLimit);
     }
 
-    bool FilterInputStream::markSupported() const noexcept
+    bool FilterInputStream::markSupported() const
     {
         if (!input_stream_)
         {
@@ -83,7 +83,7 @@ namespace common::filesystem
         }
     }
 
-    bool FilterInputStream::isClosed() const noexcept
+    bool FilterInputStream::isClosed() const
     {
         if (!input_stream_)
         {

@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the CharArrayReader class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/CharArrayReader.hpp"
+#include "filesystem/io/reader/CharArrayReader.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>
@@ -75,12 +75,12 @@ namespace common::filesystem
         return skipped;
     }
 
-    bool CharArrayReader::ready() const noexcept
+    bool CharArrayReader::ready() const
     {
         return !closed_ && pos_ < count_;
     }
 
-    bool CharArrayReader::markSupported() const noexcept
+    bool CharArrayReader::markSupported() const
     {
         return true;
     }
@@ -112,7 +112,7 @@ namespace common::filesystem
         count_ = 0;
     }
 
-    bool CharArrayReader::isClosed() const noexcept
+    bool CharArrayReader::isClosed() const
     {
         return closed_;
     }

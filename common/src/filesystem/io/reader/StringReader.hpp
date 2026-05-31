@@ -25,7 +25,7 @@ namespace common::filesystem
         ~StringReader() override = default;
 
         /// @brief Closes the StringReader and releases any associated resources.
-        void close() noexcept override;
+        void close()  override;
 
         /// @brief Marks the current position in the stream.
         /// @param readAheadLimit the maximum number of characters that can be read from the stream before the mark position
@@ -34,7 +34,7 @@ namespace common::filesystem
 
         /// @brief Tests if this input stream supports the mark and reset methods.
         /// @return true if this stream type supports the mark and reset methods; false otherwise.
-        [[nodiscard]] bool markSupported() const noexcept override;
+        [[nodiscard]] bool markSupported() const  override;
 
         /// @brief Reads a single character from the string.
         /// @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff),
@@ -51,7 +51,7 @@ namespace common::filesystem
 
         /// @brief Tests if this input stream is ready to be read.
         /// @return true if the next read() is guaranteed not to block for input, false otherwise.
-        [[nodiscard]] bool ready() const noexcept override;
+        [[nodiscard]] bool ready() const  override;
 
         /// @brief Resets the stream to the most recent mark position.
         void reset() override;
@@ -59,11 +59,11 @@ namespace common::filesystem
         /// @brief Skips over and discards n characters from the input stream.
         /// @param ns The number of characters to skip.
         /// @return The actual number of characters skipped.
-        [[nodiscard]] size_t skip(size_t ns) noexcept override;
+        [[nodiscard]] size_t skip(size_t ns)  override;
 
         /// @brief Checks if this reader has been closed.
         /// @return true if this reader has been closed, false otherwise.
-        [[nodiscard]] bool isClosed() const noexcept override;
+        [[nodiscard]] bool isClosed() const  override;
 
     private:
         std::string source_;

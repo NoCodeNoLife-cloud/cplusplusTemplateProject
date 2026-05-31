@@ -9,7 +9,7 @@
 #include <cstddef>
 #include <vector>
 
-#include "src/filesystem/io/writer/AbstractOutputStream.hpp"
+#include "filesystem/io/writer/AbstractOutputStream.hpp"
 
 namespace common::filesystem
 {

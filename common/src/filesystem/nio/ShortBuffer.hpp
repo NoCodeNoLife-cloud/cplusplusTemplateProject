@@ -8,7 +8,7 @@
 #include <cstring>
 #include <vector>
 
-#include "src/interface/IBuffer.hpp"
+#include "interface/IBuffer.hpp"
 
 namespace common::filesystem
 {
@@ -53,15 +53,15 @@ namespace common::filesystem
 
         /// @brief Check if there are remaining elements in the buffer
         /// @return True if there are remaining elements, false otherwise
-        [[nodiscard]] bool hasRemaining() const noexcept override;
+        [[nodiscard]] bool hasRemaining() const  override;
 
         /// @brief Get the number of remaining elements in the buffer
         /// @return Number of remaining elements
-        [[nodiscard]] size_t remaining() const noexcept override;
+        [[nodiscard]] size_t remaining() const  override;
 
         /// @brief Get the current position in the buffer
         /// @return The current position
-        [[nodiscard]] size_t position() const noexcept override;
+        [[nodiscard]] size_t position() const  override;
 
         /// @brief Set the position in the buffer
         /// @param newPosition The new position to set
@@ -70,7 +70,7 @@ namespace common::filesystem
 
         /// @brief Get the limit of the buffer
         /// @return The current limit
-        [[nodiscard]] size_t limit() const noexcept override;
+        [[nodiscard]] size_t limit() const  override;
 
         /// @brief Set the limit of the buffer
         /// @param newLimit The new limit to set
@@ -79,16 +79,16 @@ namespace common::filesystem
 
         /// @brief Get the capacity of the buffer
         /// @return The capacity
-        [[nodiscard]] size_t capacity() const noexcept override;
+        [[nodiscard]] size_t capacity() const  override;
 
         /// @brief Reset the buffer position to zero and set limit to capacity
-        void clear() noexcept override;
+        void clear()  override;
 
         /// @brief Flip the buffer (limit = position, position = 0)
-        void flip() noexcept override;
+        void flip()  override;
 
         /// @brief Resets the position of the buffer to zero.
-        void rewind() noexcept override;
+        void rewind()  override;
 
         /// @brief Returns a pointer to the underlying data array.
         /// @return Pointer to the data array.

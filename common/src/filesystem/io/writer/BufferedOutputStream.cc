@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the BufferedOutputStream class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/writer/BufferedOutputStream.hpp"
+#include "filesystem/io/writer/BufferedOutputStream.hpp"
 
 #include <fmt/format.h>
 
@@ -125,17 +125,17 @@ namespace common::filesystem
         }
     }
 
-    [[nodiscard]] size_t BufferedOutputStream::getBufferSize() const noexcept
+    [[nodiscard]] size_t BufferedOutputStream::getBufferSize() const
     {
         return bufferSize_;
     }
 
-    [[nodiscard]] size_t BufferedOutputStream::getBufferedDataSize() const noexcept
+    [[nodiscard]] size_t BufferedOutputStream::getBufferedDataSize() const
     {
         return buffer_position_;
     }
 
-    [[nodiscard]] bool BufferedOutputStream::isClosed() const noexcept
+    [[nodiscard]] bool BufferedOutputStream::isClosed() const
     {
         return output_stream_ == nullptr;
     }

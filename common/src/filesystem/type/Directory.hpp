@@ -20,11 +20,11 @@ namespace common::filesystem
     public:
         /// @brief Constructs a Directory object with the specified path
         /// @param filePath The path to the directory
-        explicit Directory(std::filesystem::path filePath) noexcept;
+        explicit Directory(std::filesystem::path filePath) ;
 
         /// @brief Create a directory
         /// @return true if the directory was created successfully, false otherwise
-        [[nodiscard]] bool mkdir() const noexcept;
+        [[nodiscard]] bool mkdir() const ;
 
         /// @brief Create directories recursively
         /// @param exist_ok If true, no error will be thrown if the directory already exists
@@ -33,33 +33,33 @@ namespace common::filesystem
 
         /// @brief Check if the directory exists
         /// @return true if the directory exists, false otherwise
-        [[nodiscard]] bool exists() const noexcept;
+        [[nodiscard]] bool exists() const ;
 
         /// @brief Check if the path is a directory
         /// @return true if the path is a directory, false otherwise
-        [[nodiscard]] bool isDirectory() const noexcept;
+        [[nodiscard]] bool isDirectory() const ;
 
         /// @brief Check if the directory is empty
         /// @return true if the directory is empty, false otherwise
-        [[nodiscard]] bool isEmpty() const noexcept;
+        [[nodiscard]] bool isEmpty() const ;
 
         /// @brief Remove the directory
         /// @return true if the directory was removed successfully, false otherwise
-        [[nodiscard]] bool remove() const noexcept;
+        [[nodiscard]] bool remove() const ;
 
         /// @brief Remove the directory and all its contents
         /// @return The number of files removed
-        [[nodiscard]] std::uintmax_t removeAll() const noexcept;
+        [[nodiscard]] std::uintmax_t removeAll() const ;
 
         /// @brief Move the directory to a destination
         /// @param destination The destination path
         /// @return true if the directory was moved successfully, false otherwise
-        [[nodiscard]] bool move(const std::filesystem::path& destination) const noexcept;
+        [[nodiscard]] bool move(const std::filesystem::path& destination) const ;
 
         /// @brief Rename the directory
         /// @param newName The new name for the directory
         /// @return true if the directory was renamed successfully, false otherwise
-        [[nodiscard]] bool rename(const std::string& newName) const noexcept;
+        [[nodiscard]] bool rename(const std::string& newName) const ;
 
         /// @brief Copy the directory to a destination
         /// @param destination The destination path
@@ -68,7 +68,7 @@ namespace common::filesystem
 
         /// @brief Get the size of the directory
         /// @return The size of the directory in bytes
-        [[nodiscard]] std::uintmax_t size() const noexcept;
+        [[nodiscard]] std::uintmax_t size() const ;
 
         /// @brief Get the last modified time of the directory
         /// @return The last modified time, or std::nullopt if an error occurred

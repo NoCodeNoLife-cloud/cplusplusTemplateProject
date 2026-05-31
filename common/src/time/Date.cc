@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the Date class methods for Time and date utilities including profilers and formatters.
  */
 
-#include "src/time/Date.hpp"
+#include "time/Date.hpp"
 
 #include <fmt/format.h>
 #include <chrono>
@@ -70,7 +70,7 @@ namespace common::time
         return true;
     }
 
-    Date::Date() noexcept : time_point_(std::chrono::system_clock::now())
+    Date::Date()  : time_point_(std::chrono::system_clock::now())
     {
     }
 
@@ -123,7 +123,7 @@ namespace common::time
         time_point_ = std::chrono::system_clock::from_time_t(timeT);
     }
 
-    Date::Date(const int64_t timestamp) noexcept : time_point_(std::chrono::milliseconds(timestamp))
+    Date::Date(const int64_t timestamp)  : time_point_(std::chrono::milliseconds(timestamp))
     {
     }
 
@@ -132,22 +132,22 @@ namespace common::time
         return Date(getTime());
     }
 
-    bool Date::equals(const Date& other) const noexcept
+    bool Date::equals(const Date& other) const
     {
         return time_point_ == other.time_point_;
     }
 
-    bool Date::after(const Date& other) const noexcept
+    bool Date::after(const Date& other) const
     {
         return time_point_ > other.time_point_;
     }
 
-    bool Date::before(const Date& other) const noexcept
+    bool Date::before(const Date& other) const
     {
         return time_point_ < other.time_point_;
     }
 
-    int64_t Date::getTime() const noexcept
+    int64_t Date::getTime() const
     {
         return std::chrono::duration_cast<std::chrono::milliseconds>(time_point_.time_since_epoch()).count();
     }
@@ -191,7 +191,7 @@ namespace common::time
         return result;
     }
 
-    size_t Date::hashCode() const noexcept
+    size_t Date::hashCode() const
     {
         return std::hash<int64_t>{}(getTime());
     }
@@ -209,32 +209,32 @@ namespace common::time
     }
 
     // Comparison operators
-    bool Date::operator==(const Date& other) const noexcept
+    bool Date::operator==(const Date& other) const
     {
         return equals(other);
     }
 
-    bool Date::operator!=(const Date& other) const noexcept
+    bool Date::operator!=(const Date& other) const
     {
         return !equals(other);
     }
 
-    bool Date::operator<(const Date& other) const noexcept
+    bool Date::operator<(const Date& other) const
     {
         return before(other);
     }
 
-    bool Date::operator<=(const Date& other) const noexcept
+    bool Date::operator<=(const Date& other) const
     {
         return before(other) || equals(other);
     }
 
-    bool Date::operator>(const Date& other) const noexcept
+    bool Date::operator>(const Date& other) const
     {
         return after(other);
     }
 
-    bool Date::operator>=(const Date& other) const noexcept
+    bool Date::operator>=(const Date& other) const
     {
         return after(other) || equals(other);
     }

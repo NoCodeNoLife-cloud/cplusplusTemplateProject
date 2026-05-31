@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the AbstractInputStream class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/reader/AbstractInputStream.hpp"
+#include "filesystem/io/reader/AbstractInputStream.hpp"
 
 #include <fmt/format.h>
 #include <algorithm>

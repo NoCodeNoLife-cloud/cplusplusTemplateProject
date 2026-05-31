@@ -24,11 +24,11 @@ namespace common::system
     class RegistryKey
     {
     public:
-        explicit RegistryKey(HKEY__* const hKey = nullptr) noexcept : hKey_(hKey)
+        explicit RegistryKey(HKEY__* const hKey = nullptr)  : hKey_(hKey)
         {
         }
 
-        ~RegistryKey() noexcept
+        ~RegistryKey()
         {
             if (hKey_)
             {
@@ -40,12 +40,12 @@ namespace common::system
 
         RegistryKey& operator=(const RegistryKey&) = delete;
 
-        RegistryKey(RegistryKey&& other) noexcept : hKey_(other.hKey_)
+        RegistryKey(RegistryKey&& other)  : hKey_(other.hKey_)
         {
             other.hKey_ = nullptr;
         }
 
-        RegistryKey& operator=(RegistryKey&& other) noexcept
+        RegistryKey& operator=(RegistryKey&& other)
         {
             if (this != &other)
             {
@@ -59,12 +59,12 @@ namespace common::system
             return *this;
         }
 
-        [[nodiscard]] HKEY get() const noexcept
+        [[nodiscard]] HKEY get() const
         {
             return hKey_;
         }
 
-        explicit operator bool() const noexcept
+        explicit operator bool() const
         {
             return hKey_ != nullptr;
         }
@@ -84,31 +84,31 @@ namespace common::system
 
         /// @brief Get CPU model from registry
         /// @return CPU model as string
-        [[nodiscard]] static std::string GetCpuModelFromRegistry() noexcept;
+        [[nodiscard]] static std::string GetCpuModelFromRegistry() ;
 
         /// @brief Get memory details
         /// @return Memory details as string
-        [[nodiscard]] static std::string GetMemoryDetails() noexcept;
+        [[nodiscard]] static std::string GetMemoryDetails() ;
 
         /// @brief Get OS version
         /// @return OS version as string
-        [[nodiscard]] static std::string GetOSVersion() noexcept;
+        [[nodiscard]] static std::string GetOSVersion() ;
 
         /// @brief Get motherboard information
         /// @return MotherboardInfo struct
-        [[nodiscard]] static MotherboardInfo GetMotherboardInfo() noexcept;
+        [[nodiscard]] static MotherboardInfo GetMotherboardInfo() ;
 
         /// @brief Get graphics card information
         /// @return Graphics card info as string
-        [[nodiscard]] static std::string GetGraphicsCardInfo() noexcept;
+        [[nodiscard]] static std::string GetGraphicsCardInfo() ;
 
         /// @brief Get disk drive information
         /// @return Vector of disk drive info strings
-        [[nodiscard]] static std::vector<std::string> GetDiskDriveInfo() noexcept;
+        [[nodiscard]] static std::vector<std::string> GetDiskDriveInfo() ;
 
         /// @brief Get BIOS information
         /// @return Vector of BIOS info strings
-        [[nodiscard]] static std::vector<std::string> GetBIOSInfo() noexcept;
+        [[nodiscard]] static std::vector<std::string> GetBIOSInfo() ;
 
     private:
         /// @brief Helper function to read string value from registry
@@ -116,12 +116,12 @@ namespace common::system
         /// @param subKey Subkey path
         /// @param valueName Value name to read
         /// @return String value from registry or empty string if failed
-        [[nodiscard]] static std::string ReadRegistryStringValue(HKEY hKeyRoot, const wchar_t* subKey, const wchar_t* valueName) noexcept;
+        [[nodiscard]] static std::string ReadRegistryStringValue(HKEY hKeyRoot, const wchar_t* subKey, const wchar_t* valueName) ;
 
         /// @brief Helper function to enumerate registry values
         /// @param hKeyRoot Root key to open
         /// @param subKey Subkey path to enumerate
         /// @return Vector of string values from registry
-        [[nodiscard]] static std::vector<std::string> EnumerateRegistryValues(HKEY hKeyRoot, const wchar_t* subKey) noexcept;
+        [[nodiscard]] static std::vector<std::string> EnumerateRegistryValues(HKEY hKeyRoot, const wchar_t* subKey) ;
     };
 }

@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the BufferedWriter class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/writer/BufferedWriter.hpp"
+#include "filesystem/io/writer/BufferedWriter.hpp"
 
 #include <fmt/format.h>
 #include <stdexcept>
@@ -198,7 +198,7 @@ namespace common::filesystem
         return {buffer_.begin(), buffer_.end()};
     }
 
-    bool BufferedWriter::isClosed() const noexcept
+    bool BufferedWriter::isClosed() const
     {
         return output_stream_ == nullptr || !output_stream_->is_open();
     }

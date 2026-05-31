@@ -61,19 +61,19 @@ namespace common::crypto::cipher
         explicit CaesarCipher(int shift = kDefaultShift);
 
         /** @brief Destructor */
-        ~CaesarCipher() noexcept = default;
+        ~CaesarCipher()  = default;
 
         /** @brief Copy constructor */
-        constexpr CaesarCipher(const CaesarCipher& other) noexcept = default;
+        constexpr CaesarCipher(const CaesarCipher& other)  = default;
 
         /** @brief Copy assignment */
-        constexpr CaesarCipher& operator=(const CaesarCipher& other) noexcept = default;
+        constexpr CaesarCipher& operator=(const CaesarCipher& other)  = default;
 
         /** @brief Move constructor */
-        constexpr CaesarCipher(CaesarCipher&& other) noexcept = default;
+        constexpr CaesarCipher(CaesarCipher&& other)  = default;
 
         /** @brief Move assignment */
-        constexpr CaesarCipher& operator=(CaesarCipher&& other) noexcept = default;
+        constexpr CaesarCipher& operator=(CaesarCipher&& other)  = default;
 
         /**
          * @brief Encrypts plaintext using configured shift
@@ -116,7 +116,7 @@ namespace common::crypto::cipher
          * @param[in] text String to validate
          * @return true if all chars are ASCII (0-127)
          */
-        [[nodiscard]] static bool IsValidInput(std::string_view text) noexcept;
+        [[nodiscard]] static bool IsValidInput(std::string_view text) ;
 
         /**
          * @brief Factory method for ROT13 variant
@@ -129,7 +129,7 @@ namespace common::crypto::cipher
          * @brief Current shift value accessor
          * @return Normalized shift in range [0, 25]
          */
-        [[nodiscard]] int GetShift() const noexcept
+        [[nodiscard]] int GetShift() const
         {
             return shift_;
         }
@@ -162,7 +162,7 @@ namespace common::crypto::cipher
          * @return Shifted character preserving case
          * @pre std::isalpha(c) == true
          */
-        [[nodiscard]] static char ShiftChar(char c, int shift) noexcept;
+        [[nodiscard]] static char ShiftChar(char c, int shift) ;
 
         /**
          * @brief Normalizes any integer to valid shift range

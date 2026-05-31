@@ -66,12 +66,12 @@ namespace common::gen
 
         /// @brief Get current timestamp in milliseconds.
         /// @return Current timestamp.
-        [[nodiscard]] static int64_t GetCurrentTimestamp() noexcept;
+        [[nodiscard]] static int64_t GetCurrentTimestamp() ;
 
         /// @brief Wait until next millisecond when sequence number overflows.
         /// @param last_timestamp The last timestamp.
         /// @return The next valid timestamp.
-        [[nodiscard]] static int64_t TilNextMillis(int64_t last_timestamp) noexcept;
+        [[nodiscard]] static int64_t TilNextMillis(int64_t last_timestamp) ;
 
         int64_t last_timestamp_{-1};
         int64_t sequence_{0};

@@ -26,12 +26,12 @@ namespace common::service::interfaces
         /// @param argv An array of pointers to null-terminated strings representing the command-line arguments.
         /// @return true if the execution was successful, false otherwise.
         /// @throws std::runtime_error if execution fails with details about the failure
-        [[nodiscard]] virtual bool execute(int32_t argc, char* argv[]) noexcept = 0;
+        [[nodiscard]] virtual bool execute(int32_t argc, char* argv[])  = 0;
 
         /// @brief Executes the application with vector of string arguments (modern alternative).
         /// @param args Vector of string arguments representing the command-line arguments.
         /// @return true if the execution was successful, false otherwise.
         /// @throws std::runtime_error if execution fails with details about the failure
-        [[nodiscard]] virtual bool execute(const std::vector<std::string>& args) noexcept = 0;
+        [[nodiscard]] virtual bool execute(const std::vector<std::string>& args)  = 0;
     };
 }

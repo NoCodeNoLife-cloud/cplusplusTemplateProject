@@ -20,7 +20,7 @@ namespace common::time
     {
     public:
         /// @brief Default constructor, initializes to current time
-        Date() noexcept;
+        Date() ;
 
         /// @brief Construct a date with year, month, and day
         /// @param year The year (e.g., 2023)
@@ -41,7 +41,7 @@ namespace common::time
 
         /// @brief Construct a date from a timestamp
         /// @param timestamp Milliseconds since Unix epoch
-        explicit Date(int64_t timestamp) noexcept;
+        explicit Date(int64_t timestamp) ;
 
         /// @brief Destructor
         ~Date() = default;
@@ -53,21 +53,21 @@ namespace common::time
         /// @brief Compares this date to the specified date.
         /// @param other The date to compare with
         /// @return true if the dates are equal, false otherwise
-        [[nodiscard]] bool equals(const Date& other) const noexcept;
+        [[nodiscard]] bool equals(const Date& other) const ;
 
         /// @brief Tests if this date is after the specified date.
         /// @param other The date to compare with
         /// @return true if this date is after the other date, false otherwise
-        [[nodiscard]] bool after(const Date& other) const noexcept;
+        [[nodiscard]] bool after(const Date& other) const ;
 
         /// @brief Tests if this date is before the specified date.
         /// @param other The date to compare with
         /// @return true if this date is before the other date, false otherwise
-        [[nodiscard]] bool before(const Date& other) const noexcept;
+        [[nodiscard]] bool before(const Date& other) const ;
 
         /// @brief Returns the number of milliseconds since January 1, 1970, 00:00:00 GMT.
         /// @return The timestamp in milliseconds
-        [[nodiscard]] int64_t getTime() const noexcept;
+        [[nodiscard]] int64_t getTime() const ;
 
         /// @brief Returns the year represented by this date.
         /// @return The year (e.g., 2023)
@@ -99,20 +99,20 @@ namespace common::time
 
         /// @brief Returns a hash code value for this date.
         /// @return The hash code value
-        [[nodiscard]] size_t hashCode() const noexcept;
+        [[nodiscard]] size_t hashCode() const ;
 
         // Comparison operators
-        [[nodiscard]] bool operator==(const Date& other) const noexcept;
+        [[nodiscard]] bool operator==(const Date& other) const ;
 
-        [[nodiscard]] bool operator!=(const Date& other) const noexcept;
+        [[nodiscard]] bool operator!=(const Date& other) const ;
 
-        [[nodiscard]] bool operator<(const Date& other) const noexcept;
+        [[nodiscard]] bool operator<(const Date& other) const ;
 
-        [[nodiscard]] bool operator<=(const Date& other) const noexcept;
+        [[nodiscard]] bool operator<=(const Date& other) const ;
 
-        [[nodiscard]] bool operator>(const Date& other) const noexcept;
+        [[nodiscard]] bool operator>(const Date& other) const ;
 
-        [[nodiscard]] bool operator>=(const Date& other) const noexcept;
+        [[nodiscard]] bool operator>=(const Date& other) const ;
 
     private:
         std::chrono::system_clock::time_point time_point_{};

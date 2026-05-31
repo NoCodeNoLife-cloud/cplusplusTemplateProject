@@ -12,7 +12,7 @@
 #include <type_traits>
 #include <unordered_map>
 
-#include "src/interface/ICache.hpp"
+#include "interface/ICache.hpp"
 
 namespace common::cache
 {
@@ -59,24 +59,24 @@ namespace common::cache
         [[nodiscard]] bool remove(const Key& key) override;
 
         /// @brief Clears all entries from the cache
-        void clear() noexcept override;
+        void clear()  override;
 
         /// @brief Returns the current number of entries in the cache
         /// @return Number of entries currently in the cache
-        [[nodiscard]] size_t size() const noexcept override;
+        [[nodiscard]] size_t size() const  override;
 
         /// @brief Returns the maximum capacity of the cache
         /// @return Maximum number of entries the cache can hold
-        [[nodiscard]] size_t capacity() const noexcept override;
+        [[nodiscard]] size_t capacity() const  override;
 
         /// @brief Checks if the cache is empty
         /// @return true if the cache is empty, false otherwise
-        [[nodiscard]] bool empty() const noexcept override;
+        [[nodiscard]] bool empty() const  override;
 
         /// @brief Checks if a key exists in the cache
         /// @param key The key to check for
         /// @return true if the key exists in the cache, false otherwise
-        [[nodiscard]] bool contains(const Key& key) const noexcept override;
+        [[nodiscard]] bool contains(const Key& key) const  override;
 
     private:
         // Structure to hold frequency to list mapping
@@ -244,7 +244,7 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    void LFUCache<Key, Value, Map>::clear() noexcept
+    void LFUCache<Key, Value, Map>::clear()
     {
         freq_list_map_.clear();
         key_map_.clear();
@@ -252,25 +252,25 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] size_t LFUCache<Key, Value, Map>::size() const noexcept
+    [[nodiscard]] size_t LFUCache<Key, Value, Map>::size() const
     {
         return key_map_.size(); // Size is the number of entries in the key map
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] size_t LFUCache<Key, Value, Map>::capacity() const noexcept
+    [[nodiscard]] size_t LFUCache<Key, Value, Map>::capacity() const
     {
         return capacity_;
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] bool LFUCache<Key, Value, Map>::empty() const noexcept
+    [[nodiscard]] bool LFUCache<Key, Value, Map>::empty() const
     {
         return key_map_.empty();
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] bool LFUCache<Key, Value, Map>::contains(const Key& key) const noexcept
+    [[nodiscard]] bool LFUCache<Key, Value, Map>::contains(const Key& key) const
     {
         return key_map_.find(key) != key_map_.end();
     }

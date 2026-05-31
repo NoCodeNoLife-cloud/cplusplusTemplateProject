@@ -12,7 +12,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "src/interface/IStartupTask.hpp"
+#include "interface/IStartupTask.hpp"
 
 namespace common::toolkit
 {
@@ -43,7 +43,7 @@ namespace common::toolkit
 
         /// @brief Executes the startup task.
         /// @return True if successful, false otherwise.
-        [[nodiscard]] bool execute() noexcept override;
+        [[nodiscard]] bool execute()  override;
 
         /// @brief Clears all registered types from the factory.
         static void clearRegistry();
@@ -111,7 +111,7 @@ namespace common::toolkit
     }
 
     template <typename T>
-    bool ObjectFactory<T>::execute() noexcept
+    bool ObjectFactory<T>::execute()
     {
         try
         {

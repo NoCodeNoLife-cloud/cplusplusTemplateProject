@@ -51,12 +51,12 @@ namespace common::data_structure::tree
         /// @brief Get the height of a node
         /// @param node The node to get the height of
         /// @return int32_t The height of the node
-        [[nodiscard]] int32_t getHeight(const std::shared_ptr<TreeNode<T>>& node) const noexcept;
+        [[nodiscard]] int32_t getHeight(const std::shared_ptr<TreeNode<T>>& node) const ;
 
         /// @brief Get the balance factor of a node
         /// @param node The node to get the balance factor of
         /// @return int32_t The balance factor of the node
-        [[nodiscard]] int32_t getBalance(const std::shared_ptr<TreeNode<T>>& node) const noexcept;
+        [[nodiscard]] int32_t getBalance(const std::shared_ptr<TreeNode<T>>& node) const ;
 
         /// @brief Rotate a subtree to the right
         /// @param y The root of the subtree to rotate
@@ -125,13 +125,13 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    int32_t AVLTree<T>::getHeight(const std::shared_ptr<TreeNode<T>>& node) const noexcept
+    int32_t AVLTree<T>::getHeight(const std::shared_ptr<TreeNode<T>>& node) const
     {
         return node ? node->height_ : 0;
     }
 
     template <typename T>
-    int32_t AVLTree<T>::getBalance(const std::shared_ptr<TreeNode<T>>& node) const noexcept
+    int32_t AVLTree<T>::getBalance(const std::shared_ptr<TreeNode<T>>& node) const
     {
         return node ? getHeight(node->left_) - getHeight(node->right_) : 0;
     }

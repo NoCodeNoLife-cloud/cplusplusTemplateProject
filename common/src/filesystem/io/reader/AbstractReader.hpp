@@ -9,8 +9,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "src/interface/ICloseable.hpp"
-#include "src/interface/IReadable.hpp"
+#include "interface/ICloseable.hpp"
+#include "interface/IReadable.hpp"
 
 namespace common::filesystem
 {

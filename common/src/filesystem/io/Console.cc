@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the Console class methods for Common library utilities.
  */
 
-#include "src/filesystem/io/Console.hpp"
+#include "filesystem/io/Console.hpp"
 
 #include <fmt/format.h>
 

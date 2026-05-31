@@ -14,7 +14,7 @@
 
 namespace common::auth
 {
-    UserCredentials::UserCredentials(std::string username, std::string hashed_password, std::string salt) noexcept
+    UserCredentials::UserCredentials(std::string username, std::string hashed_password, std::string salt)
         : username_(std::move(username)),
           hashed_password_(std::move(hashed_password)),
           salt_(std::move(salt)),
@@ -23,27 +23,27 @@ namespace common::auth
     {
     }
 
-    const std::string& UserCredentials::get_username() const noexcept
+    const std::string& UserCredentials::get_username() const
     {
         return username_;
     }
 
-    const std::string& UserCredentials::get_hashed_password() const noexcept
+    const std::string& UserCredentials::get_hashed_password() const
     {
         return hashed_password_;
     }
 
-    const std::string& UserCredentials::get_salt() const noexcept
+    const std::string& UserCredentials::get_salt() const
     {
         return salt_;
     }
 
-    size_t UserCredentials::get_failed_attempts() const noexcept
+    size_t UserCredentials::get_failed_attempts() const
     {
         return failed_attempts_;
     }
 
-    void UserCredentials::increment_failed_attempts() noexcept
+    void UserCredentials::increment_failed_attempts()
     {
         failed_attempts_++;
         last_failed_attempt_ = std::chrono::system_clock::now();
@@ -55,7 +55,7 @@ namespace common::auth
         }
     }
 
-    void UserCredentials::reset_failed_attempts() noexcept
+    void UserCredentials::reset_failed_attempts()
     {
         // Only log if there were previous failures to report
         if (failed_attempts_ > 0)
@@ -67,12 +67,12 @@ namespace common::auth
         last_failed_attempt_ = std::chrono::system_clock::time_point::min();
     }
 
-    bool UserCredentials::is_locked() const noexcept
+    bool UserCredentials::is_locked() const
     {
         return is_locked(DEFAULT_LOCKOUT_DURATION, DEFAULT_MAX_ATTEMPTS);
     }
 
-    bool UserCredentials::is_locked(const std::chrono::minutes lockout_duration, const size_t max_attempts) const noexcept
+    bool UserCredentials::is_locked(const std::chrono::minutes lockout_duration, const size_t max_attempts) const
     {
         const auto now = std::chrono::system_clock::now();
         const auto time_since_last_fail = now - last_failed_attempt_;

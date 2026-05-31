@@ -9,7 +9,7 @@
 #pragma once
 #include <string>
 
-#include "parameter/GLogParameters.hpp"
+#include "param/GLogParameters.hpp"
 
 namespace glog::config
 {
@@ -24,7 +24,7 @@ namespace glog::config
 
         /// @brief Constructor with YAML configuration file path
         /// @param glog_yaml_path Path to the YAML configuration file
-        explicit GLogConfigurator(std::string glog_yaml_path) noexcept;
+        explicit GLogConfigurator(std::string glog_yaml_path);
 
         /// @brief Destructor
         ~GLogConfigurator() noexcept = default;
