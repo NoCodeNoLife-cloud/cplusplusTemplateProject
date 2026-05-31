@@ -108,13 +108,13 @@ namespace common::toolkit
             throw std::invalid_argument("Start position exceeds string length");
         }
         const auto pos = str.find(substr, start);
-        return (pos != std::string::npos) ? std::optional<size_t>(pos) : std::nullopt;
+        return pos != std::string::npos ? std::optional(pos) : std::nullopt;
     }
 
     std::optional<size_t> StringToolkit::lastIndexOf(const std::string& str, const std::string& substr)
     {
         const auto pos = str.rfind(substr);
-        return (pos != std::string::npos) ? std::optional<size_t>(pos) : std::nullopt;
+        return pos != std::string::npos ? std::optional(pos) : std::nullopt;
     }
 
     std::string StringToolkit::substring(const std::string& str, const size_t start, const size_t length)

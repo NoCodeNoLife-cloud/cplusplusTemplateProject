@@ -121,7 +121,7 @@ TEST(SkipListTest, Insert_MultipleElements_RandomOrder)
 {
     SkipList<int> list;
 
-    std::vector<int> values = {5, 3, 8, 1, 9, 2, 7, 4, 6, 10};
+    std::vector values = {5, 3, 8, 1, 9, 2, 7, 4, 6, 10};
 
     for (const auto& val : values)
     {

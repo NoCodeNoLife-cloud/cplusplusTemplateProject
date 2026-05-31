@@ -46,10 +46,7 @@ namespace common::sql
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
         catch (...)
         {

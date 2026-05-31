@@ -270,7 +270,7 @@ TEST(XorBitCipherTest, ProcessBits_Basic)
 
     cipher.initialize(key, nonce);
 
-    std::vector<bool> bits = {true, false, true, false, true, false, true, false};
+    std::vector bits = {true, false, true, false, true, false, true, false};
     const auto processed = cipher.processBits(bits);
 
     EXPECT_EQ(processed.size(), bits.size());

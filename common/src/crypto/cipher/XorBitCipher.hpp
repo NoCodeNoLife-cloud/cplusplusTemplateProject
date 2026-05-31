@@ -45,7 +45,7 @@ namespace common::crypto::cipher
          * @brief Constructor with key initialization.
          * @param key The initial key stream as byte vector.
          */
-        explicit XorBitCipher(std::vector<uint8_t> key) noexcept : key_stream_(std::move(key)), key_pos_(0), bit_pos_(0)
+        explicit XorBitCipher(std::vector<uint8_t> key) noexcept : key_stream_(std::move(key))
         {
         }
 

@@ -53,11 +53,8 @@ namespace server_app::sql
                 DLOG(INFO) << "User registered successfully: " << username;
                 return true;
             }
-            else
-            {
-                LOG(WARNING) << "User registration affected no rows for user: " << username;
-                return false;
-            }
+            LOG(WARNING) << "User registration affected no rows for user: " << username;
+            return false;
         }
         catch (const std::exception& e)
         {

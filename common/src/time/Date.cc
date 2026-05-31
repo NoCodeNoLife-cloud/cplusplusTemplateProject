@@ -23,7 +23,7 @@ namespace common::time
         // Helper function to check if a year is a leap year
         bool isLeapYear(const int32_t year)
         {
-            return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+            return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
         }
 
         // Helper function to get days in a month

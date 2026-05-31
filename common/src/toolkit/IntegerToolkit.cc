@@ -102,7 +102,7 @@ namespace common::toolkit
 
     bool IntegerToolkit::isPowerOfTwo(const int32_t num) noexcept
     {
-        return num > 0 && (num & (num - 1)) == 0;
+        return num > 0 && (num & num - 1) == 0;
     }
 
     int32_t IntegerToolkit::countSetBits(int32_t num) noexcept

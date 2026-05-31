@@ -49,6 +49,6 @@ namespace common::system
         /// @brief Get the current CPU usage of the system
         /// @param interval Time interval in seconds for measuring CPU usage, default is 1 second
         /// @return CpuUsage struct containing CPU usage percentage
-        [[nodiscard]] static CpuUsage GetCpuUsage(const int32_t interval = 1) noexcept;
+        [[nodiscard]] static CpuUsage GetCpuUsage(int32_t interval = 1) noexcept;
     };
 }

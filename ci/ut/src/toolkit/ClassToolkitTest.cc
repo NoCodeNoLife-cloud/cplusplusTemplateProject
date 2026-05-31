@@ -313,7 +313,7 @@ TEST(ClassToolkitTest, IsPolymorphic_PolymorphicClass)
         virtual ~Polymorphic() = default;
     };
 
-    EXPECT_TRUE((ClassToolkit::isPolymorphic<Polymorphic>()));
+    EXPECT_TRUE(ClassToolkit::isPolymorphic<Polymorphic>());
 }
 
 /**
@@ -327,7 +327,7 @@ TEST(ClassToolkitTest, IsPolymorphic_NonPolymorphicClass)
         int x;
     };
 
-    EXPECT_FALSE((ClassToolkit::isPolymorphic<NonPolymorphic>()));
+    EXPECT_FALSE(ClassToolkit::isPolymorphic<NonPolymorphic>());
 }
 
 /**
@@ -343,7 +343,7 @@ TEST(ClassToolkitTest, IsAbstract_AbstractClass)
         virtual ~Abstract() = default;
     };
 
-    EXPECT_TRUE((ClassToolkit::isAbstract<Abstract>()));
+    EXPECT_TRUE(ClassToolkit::isAbstract<Abstract>());
 }
 
 /**
@@ -359,7 +359,7 @@ TEST(ClassToolkitTest, IsAbstract_ConcreteClass)
         }
     };
 
-    EXPECT_FALSE((ClassToolkit::isAbstract<Concrete>()));
+    EXPECT_FALSE(ClassToolkit::isAbstract<Concrete>());
 }
 
 /**
@@ -399,9 +399,9 @@ TEST(ClassToolkitTest, GetTypeAlignment_BasicTypes)
  */
 TEST(ClassToolkitTest, IsDefaultConstructible_ConstructibleTypes)
 {
-    EXPECT_TRUE((ClassToolkit::isDefaultConstructible<int>()));
-    EXPECT_TRUE((ClassToolkit::isDefaultConstructible<std::string>()));
-    EXPECT_TRUE((ClassToolkit::isDefaultConstructible<TestPerson>()));
+    EXPECT_TRUE(ClassToolkit::isDefaultConstructible<int>());
+    EXPECT_TRUE(ClassToolkit::isDefaultConstructible<std::string>());
+    EXPECT_TRUE(ClassToolkit::isDefaultConstructible<TestPerson>());
 }
 
 /**
@@ -410,8 +410,8 @@ TEST(ClassToolkitTest, IsDefaultConstructible_ConstructibleTypes)
  */
 TEST(ClassToolkitTest, IsCopyConstructible_CopyableTypes)
 {
-    EXPECT_TRUE((ClassToolkit::isCopyConstructible<int>()));
-    EXPECT_TRUE((ClassToolkit::isCopyConstructible<std::string>()));
+    EXPECT_TRUE(ClassToolkit::isCopyConstructible<int>());
+    EXPECT_TRUE(ClassToolkit::isCopyConstructible<std::string>());
 }
 
 /**
@@ -420,8 +420,8 @@ TEST(ClassToolkitTest, IsCopyConstructible_CopyableTypes)
  */
 TEST(ClassToolkitTest, IsMoveConstructible_MovableTypes)
 {
-    EXPECT_TRUE((ClassToolkit::isMoveConstructible<int>()));
-    EXPECT_TRUE((ClassToolkit::isMoveConstructible<std::string>()));
+    EXPECT_TRUE(ClassToolkit::isMoveConstructible<int>());
+    EXPECT_TRUE(ClassToolkit::isMoveConstructible<std::string>());
 }
 
 /**
@@ -430,8 +430,8 @@ TEST(ClassToolkitTest, IsMoveConstructible_MovableTypes)
  */
 TEST(ClassToolkitTest, IsTriviallyCopyable_TrivialTypes)
 {
-    EXPECT_TRUE((ClassToolkit::isTriviallyCopyable<int>()));
-    EXPECT_TRUE((ClassToolkit::isTriviallyCopyable<double>()));
+    EXPECT_TRUE(ClassToolkit::isTriviallyCopyable<int>());
+    EXPECT_TRUE(ClassToolkit::isTriviallyCopyable<double>());
 }
 
 /**
@@ -440,8 +440,8 @@ TEST(ClassToolkitTest, IsTriviallyCopyable_TrivialTypes)
  */
 TEST(ClassToolkitTest, IsTriviallyDestructible_TrivialTypes)
 {
-    EXPECT_TRUE((ClassToolkit::isTriviallyDestructible<int>()));
-    EXPECT_TRUE((ClassToolkit::isTriviallyDestructible<double>()));
+    EXPECT_TRUE(ClassToolkit::isTriviallyDestructible<int>());
+    EXPECT_TRUE(ClassToolkit::isTriviallyDestructible<double>());
 }
 
 /**

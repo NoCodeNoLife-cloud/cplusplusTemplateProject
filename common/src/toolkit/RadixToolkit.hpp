@@ -33,8 +33,8 @@ namespace common::toolkit
          * @throws std::invalid_argument If charset too small for default_base
          */
         constexpr explicit RadixToolkit(
-            const int default_base = 10,
-            const std::string_view charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            int default_base = 10,
+            std::string_view charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         );
 
         /**
@@ -45,7 +45,7 @@ namespace common::toolkit
          * @return String representation
          */
         template <std::integral T>
-        [[nodiscard]] constexpr std::string to_string(T value, const int override_base = 0) const;
+        [[nodiscard]] constexpr std::string to_string(T value, int override_base = 0) const;
 
         /**
          * @brief Parse string using instance default base
@@ -55,7 +55,7 @@ namespace common::toolkit
          * @return Converted integral value
          */
         template <std::integral T>
-        [[nodiscard]] constexpr auto from_string(const std::string_view str, const int override_base = 0) const -> T;
+        [[nodiscard]] constexpr auto from_string(std::string_view str, int override_base = 0) const -> T;
 
         /**
          * @brief Stateless conversion to specified base with custom charset
@@ -84,7 +84,7 @@ namespace common::toolkit
          */
         template <std::integral T>
         [[nodiscard]] static constexpr T convert_from_string(
-            const std::string_view str,
+            std::string_view str,
             int base
         );
 
@@ -155,7 +155,7 @@ namespace common::toolkit
         int default_base_;
         std::string_view charset_;
 
-        [[nodiscard]] static constexpr auto char_to_digit(const char c) noexcept -> int;
+        [[nodiscard]] static constexpr auto char_to_digit(char c) noexcept -> int;
     };
 
     constexpr RadixToolkit::RadixToolkit(const int default_base, const std::string_view charset) : default_base_(default_base), charset_(charset)
@@ -169,14 +169,14 @@ namespace common::toolkit
     template <std::integral T>
     constexpr std::string RadixToolkit::to_string(T value, const int override_base) const
     {
-        const int base = (override_base == 0) ? default_base_ : override_base;
+        const int base = override_base == 0 ? default_base_ : override_base;
         return convert_to_string(value, base, charset_);
     }
 
     template <std::integral T>
     constexpr auto RadixToolkit::from_string(const std::string_view str, const int override_base) const -> T
     {
-        const int base = (override_base == 0) ? default_base_ : override_base;
+        const int base = override_base == 0 ? default_base_ : override_base;
         return convert_from_string<T>(str, base);
     }
 
@@ -321,12 +321,9 @@ namespace common::toolkit
                 }
                 return -static_cast<T>(result);
             }
-            else
+            if (result > static_cast<UnsignedT>(Limits::max()))
             {
-                if (result > static_cast<UnsignedT>(Limits::max()))
-                {
-                    throw std::out_of_range("Value exceeds type maximum");
-                }
+                throw std::out_of_range("Value exceeds type maximum");
             }
         }
 

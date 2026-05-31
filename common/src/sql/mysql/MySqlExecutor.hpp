@@ -33,7 +33,7 @@ namespace common::sql::mysql
         [[nodiscard]] std::optional<QueryValue> getColumn(const std::string& column_name) const
         {
             const auto it = columns.find(column_name);
-            return (it != columns.end()) ? std::make_optional(it->second) : std::nullopt;
+            return it != columns.end() ? std::make_optional(it->second) : std::nullopt;
         }
 
         /// @brief Get column value as string by name

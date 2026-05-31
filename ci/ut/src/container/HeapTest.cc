@@ -30,7 +30,7 @@ TEST(HeapTest, DefaultConstructor_EmptyHeap)
  */
 TEST(HeapTest, IteratorConstructor_BuildsValidHeap)
 {
-    std::vector<int> data = {5, 3, 8, 1, 9, 2};
+    std::vector data = {5, 3, 8, 1, 9, 2};
     Heap<int> heap(data.begin(), data.end());
 
     EXPECT_EQ(heap.size(), 6);
@@ -49,7 +49,7 @@ TEST(HeapTest, CopyConstructor_IndependentCopy)
     heap1.push(20);
     heap1.push(30);
 
-    Heap<int> heap2(heap1);
+    Heap heap2(heap1);
 
     EXPECT_EQ(heap2.size(), heap1.size());
     EXPECT_EQ(heap2.top(), heap1.top());
@@ -72,7 +72,7 @@ TEST(HeapTest, MoveConstructor_TransfersOwnership)
     heap1.push(20);
     heap1.push(30);
 
-    Heap<int> heap2(std::move(heap1));
+    Heap heap2(std::move(heap1));
 
     EXPECT_EQ(heap2.size(), 3);
     EXPECT_EQ(heap2.top(), 30);
@@ -481,7 +481,7 @@ TEST(HeapTest, MultiplePushPopCycles_MaintainsValidity)
  */
 TEST(HeapTest, IteratorConstructor_SortedInput)
 {
-    std::vector<int> sorted = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector sorted = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     Heap<int> heap(sorted.begin(), sorted.end());
 
     EXPECT_EQ(heap.size(), 10);
@@ -495,7 +495,7 @@ TEST(HeapTest, IteratorConstructor_SortedInput)
  */
 TEST(HeapTest, IteratorConstructor_ReverseSortedInput)
 {
-    std::vector<int> reverseSorted = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    std::vector reverseSorted = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     Heap<int> heap(reverseSorted.begin(), reverseSorted.end());
 
     EXPECT_EQ(heap.size(), 10);
@@ -622,7 +622,7 @@ TEST(HeapTest, ZeroValues_CorrectHandling)
 TEST(HeapTest, Extraction_SortedOrder)
 {
     Heap<int> heap;
-    std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
+    std::vector input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
 
     for (int val : input)
     {
@@ -663,6 +663,6 @@ TEST(HeapTest, MinHeap_ExtractionOrder)
     }
 
     // Should be in ascending order for min-heap
-    std::vector<int> expected = {1, 3, 5, 8, 9};
+    std::vector expected = {1, 3, 5, 8, 9};
     EXPECT_EQ(extracted, expected);
 }

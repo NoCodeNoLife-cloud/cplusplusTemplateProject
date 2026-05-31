@@ -38,7 +38,7 @@ namespace common::thread
         /// @brief Checks if a task is currently pending execution.
         /// @param taskId The ID of the task to check.
         /// @return true if the task is pending, false otherwise.
-        bool isTaskPending(const int32_t taskId) const;
+        bool isTaskPending(int32_t taskId) const;
 
         /// @brief Cancels a scheduled task if it hasn't started yet.
         /// @param taskId The ID of the task to cancel.
@@ -106,7 +106,7 @@ namespace common::thread
                 const auto it = pendingTasks_.find(taskId);
                 if (it != pendingTasks_.end())
                 {
-                    *(it->second) = false; // Mark as completed
+                    *it->second = false; // Mark as completed
                     pendingTasks_.erase(it);
                 }
                 cv_.notify_all(); // Notify waiting threads that task state changed
@@ -147,11 +147,8 @@ namespace common::thread
             results_.erase(it);
             return result;
         }
-        else
-        {
-            // Task completed but result was already retrieved
-            throw std::runtime_error("DelayedTaskActuator::getTaskResult: Task result not available, possibly already retrieved");
-        }
+        // Task completed but result was already retrieved
+        throw std::runtime_error("DelayedTaskActuator::getTaskResult: Task result not available, possibly already retrieved");
     }
 
     template <typename ResultType>
@@ -161,7 +158,7 @@ namespace common::thread
         const auto it = pendingTasks_.find(taskId);
         if (it != pendingTasks_.end())
         {
-            return *(it->second); // Return the boolean value indicating pending status
+            return *it->second; // Return the boolean value indicating pending status
         }
         // If not in pendingTasks_, it's either completed or doesn't exist
         return false;

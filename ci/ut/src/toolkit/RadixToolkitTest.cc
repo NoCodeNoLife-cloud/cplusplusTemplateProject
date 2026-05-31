@@ -480,7 +480,7 @@ TEST(RadixToolkitTest, TypeVariants_UnsignedBoundary)
 TEST(RadixToolkitTest, RoundTrip_ConversionConsistency)
 {
     const RadixToolkit toolkit;
-    const std::vector<int> test_values = {0, 1, -1, 42, -42, 100, -100, 255, 1024, -1024};
+    const std::vector test_values = {0, 1, -1, 42, -42, 100, -100, 255, 1024, -1024};
 
     for (int val : test_values)
     {
@@ -496,8 +496,8 @@ TEST(RadixToolkitTest, RoundTrip_ConversionConsistency)
  */
 TEST(RadixToolkitTest, RoundTrip_DifferentBases)
 {
-    const std::vector<int> bases = {2, 8, 10, 16, 32};
-    const std::vector<int> values = {0, 1, 42, 255, 1024};
+    const std::vector bases = {2, 8, 10, 16, 32};
+    const std::vector values = {0, 1, 42, 255, 1024};
 
     for (int base : bases)
     {

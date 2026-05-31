@@ -241,13 +241,13 @@ namespace common::toolkit
                 const std::string not_found = "Field '" + fieldName + "' not found";
                 std::string result_str = not_found;
 
-                (([&]()
+                ([&]()
                 {
                     if (std::get<Is>(fields).first == fieldName)
                     {
                         result_str = std::format("{}", invokeHelper(obj, std::get<Is>(fields).second));
                     }
-                })(), ...);
+                }(), ...);
 
                 return result_str;
             }(std::make_index_sequence<ReflectTraits<T>::field_count>{});
@@ -272,13 +272,13 @@ namespace common::toolkit
             return [&obj1, &obj2, fields]<std::size_t... Is>(std::index_sequence<Is...>) -> bool
             {
                 bool all_equal = true;
-                (([&]()
+                ([&]()
                 {
                     if (invokeHelper(obj1, std::get<Is>(fields).second) != invokeHelper(obj2, std::get<Is>(fields).second))
                     {
                         all_equal = false;
                     }
-                })(), ...);
+                }(), ...);
                 return all_equal;
             }(std::make_index_sequence<ReflectTraits<T>::field_count>{});
         }
@@ -296,7 +296,7 @@ namespace common::toolkit
 
             [&obj1, &obj2, &diff_map, fields]<std::size_t... Is>(std::index_sequence<Is...>)
             {
-                (([&]()
+                ([&]()
                 {
                     auto val1 = invokeHelper(obj1, std::get<Is>(fields).second);
                     auto val2 = invokeHelper(obj2, std::get<Is>(fields).second);
@@ -307,7 +307,7 @@ namespace common::toolkit
                             std::format("{}", val2)
                         );
                     }
-                })(), ...);
+                }(), ...);
             }(std::make_index_sequence<ReflectTraits<T>::field_count>{});
 
             return diff_map;

@@ -72,7 +72,7 @@ namespace common::crypto::cipher
         if (!std::isalpha(c)) return c;
 
         const auto it = map.find(c);
-        return (it != map.end()) ? it->second : c;
+        return it != map.end() ? it->second : c;
     }
 
     std::string SubstitutionCipher::Encrypt(const std::string& plaintext) const

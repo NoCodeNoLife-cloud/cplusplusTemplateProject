@@ -113,43 +113,43 @@ namespace app_server::auth
             // Table-driven configuration loading for gRPC parameters
             const std::vector<std::pair<std::string, std::function<void()>>> config_handlers = {
                 {
-                    "maxConnectionIdleMs", [&]()
+                    "maxConnectionIdleMs", [&]
                     {
                         max_connection_idle_ms_ = grpcNode["maxConnectionIdleMs"].as<int32_t>();
                     }
                 },
                 {
-                    "maxConnectionAgeMs", [&]()
+                    "maxConnectionAgeMs", [&]
                     {
                         max_connection_age_ms_ = grpcNode["maxConnectionAgeMs"].as<int32_t>();
                     }
                 },
                 {
-                    "maxConnectionAgeGraceMs", [&]()
+                    "maxConnectionAgeGraceMs", [&]
                     {
                         max_connection_age_grace_ms_ = grpcNode["maxConnectionAgeGraceMs"].as<int32_t>();
                     }
                 },
                 {
-                    "keepaliveTimeMs", [&]()
+                    "keepaliveTimeMs", [&]
                     {
                         keepalive_time_ms_ = grpcNode["keepaliveTimeMs"].as<int32_t>();
                     }
                 },
                 {
-                    "keepaliveTimeoutMs", [&]()
+                    "keepaliveTimeoutMs", [&]
                     {
                         keepalive_timeout_ms_ = grpcNode["keepaliveTimeoutMs"].as<int32_t>();
                     }
                 },
                 {
-                    "keepalivePermitWithoutCalls", [&]()
+                    "keepalivePermitWithoutCalls", [&]
                     {
                         keepalive_permit_without_calls_ = grpcNode["keepalivePermitWithoutCalls"].as<int32_t>();
                     }
                 },
                 {
-                    "serverAddress", [&]()
+                    "serverAddress", [&]
                     {
                         server_address_ = grpcNode["serverAddress"].as<std::string>();
                     }
@@ -183,7 +183,7 @@ namespace app_server::auth
     void AuthRpcServiceOptions::validateParameters() const
     {
         // Table-driven validation for numeric parameter checks
-        const std::vector<std::tuple<bool, std::string, const char*>> numeric_validations = {
+        const std::vector numeric_validations = {
             std::make_tuple(max_connection_idle_ms_ <= 0, fmt::format("Invalid max connection idle time: {}ms. Value must be greater than 0.", max_connection_idle_ms_), "max_connection_idle_ms_"), std::make_tuple(max_connection_age_ms_ <= 0, fmt::format("Invalid max connection age: {}ms. Value must be greater than 0.", max_connection_age_ms_), "max_connection_age_ms_"), std::make_tuple(max_connection_age_grace_ms_ < 0, fmt::format("Invalid max connection age grace period: {}ms. Value must be greater than or equal to 0.", max_connection_age_grace_ms_), "max_connection_age_grace_ms_"),
             std::make_tuple(keepalive_time_ms_ <= 0, fmt::format("Invalid keepalive time: {}ms. Value must be greater than 0.", keepalive_time_ms_), "keepalive_time_ms_"), std::make_tuple(keepalive_timeout_ms_ <= 0, fmt::format("Invalid keepalive timeout: {}ms. Value must be greater than 0.", keepalive_timeout_ms_), "keepalive_timeout_ms_"), std::make_tuple(keepalive_permit_without_calls_ != 0 && keepalive_permit_without_calls_ != 1, fmt::format("Invalid keepalive permit without calls: {}. Valid values are 0 or 1.", keepalive_permit_without_calls_), "keepalive_permit_without_calls_"),
             std::make_tuple(server_address_.empty(), fmt::format("Server address is empty."), "server_address_")
@@ -200,7 +200,7 @@ namespace app_server::auth
         }
 
         // Table-driven validation for warning conditions
-        const std::vector<std::tuple<bool, std::string>> warning_checks = {
+        const std::vector warning_checks = {
             std::make_tuple(max_connection_idle_ms_ > 0 && max_connection_idle_ms_ < 1000, fmt::format("Max connection idle time is set to a very short interval ({}ms). This may cause excessive connection churn.", max_connection_idle_ms_)), std::make_tuple(keepalive_time_ms_ > 0 && keepalive_time_ms_ < 1000, fmt::format("Keepalive time is set to a very short interval ({}ms). This may cause excessive network traffic.", keepalive_time_ms_)),
             std::make_tuple(keepalive_timeout_ms_ > 0 && keepalive_timeout_ms_ > keepalive_time_ms_, fmt::format("Keepalive timeout ({}ms) is greater than keepalive time ({}ms). This may lead to unexpected connection issues.", keepalive_timeout_ms_, keepalive_time_ms_)), std::make_tuple(max_connection_age_ms_ > 0 && max_connection_idle_ms_ > 0 && max_connection_age_ms_ < max_connection_idle_ms_, fmt::format("Max connection age ({}ms) is less than max connection idle time ({}ms). This may lead to unexpected connection behavior.", max_connection_age_ms_, max_connection_idle_ms_))
         };
@@ -274,43 +274,43 @@ bool YAML::convert<app_server::auth::AuthRpcServiceOptions>::decode(const Node& 
 {
     const std::vector<std::pair<std::string, std::function<void()>>> config_handlers = {
         {
-            "maxConnectionIdleMs", [&]()
+            "maxConnectionIdleMs", [&]
             {
                 rhs.maxConnectionIdleMs(node["maxConnectionIdleMs"].as<int32_t>());
             }
         },
         {
-            "maxConnectionAgeMs", [&]()
+            "maxConnectionAgeMs", [&]
             {
                 rhs.maxConnectionAgeMs(node["maxConnectionAgeMs"].as<int32_t>());
             }
         },
         {
-            "maxConnectionAgeGraceMs", [&]()
+            "maxConnectionAgeGraceMs", [&]
             {
                 rhs.maxConnectionAgeGraceMs(node["maxConnectionAgeGraceMs"].as<int32_t>());
             }
         },
         {
-            "keepaliveTimeMs", [&]()
+            "keepaliveTimeMs", [&]
             {
                 rhs.keepaliveTimeMs(node["keepaliveTimeMs"].as<int32_t>());
             }
         },
         {
-            "keepaliveTimeoutMs", [&]()
+            "keepaliveTimeoutMs", [&]
             {
                 rhs.keepaliveTimeoutMs(node["keepaliveTimeoutMs"].as<int32_t>());
             }
         },
         {
-            "keepalivePermitWithoutCalls", [&]()
+            "keepalivePermitWithoutCalls", [&]
             {
                 rhs.keepalivePermitWithoutCalls(node["keepalivePermitWithoutCalls"].as<int32_t>());
             }
         },
         {
-            "serverAddress", [&]()
+            "serverAddress", [&]
             {
                 rhs.serverAddress(node["serverAddress"].as<std::string>());
             }

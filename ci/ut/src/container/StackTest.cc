@@ -29,7 +29,7 @@ TEST(StackTest, DefaultConstructor_EmptyStack)
  */
 TEST(StackTest, IteratorConstructor_InitializesCorrectly)
 {
-    std::vector<int> data = {1, 2, 3, 4, 5};
+    std::vector data = {1, 2, 3, 4, 5};
     Stack<int> stack(data.begin(), data.end());
 
     EXPECT_EQ(stack.size(), 5);
@@ -406,7 +406,7 @@ TEST(StackTest, PreservesLIFOProperty)
 {
     Stack<int> stack;
 
-    std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
+    std::vector input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
 
     for (int val : input)
     {
@@ -495,7 +495,7 @@ TEST(StackTest, MoveSemantics_Efficiency)
     }
 
     // Move should be efficient
-    Stack<std::string> stack2(std::move(stack1));
+    Stack stack2(std::move(stack1));
 
     EXPECT_EQ(stack2.size(), 100);
     EXPECT_TRUE(stack1.empty());

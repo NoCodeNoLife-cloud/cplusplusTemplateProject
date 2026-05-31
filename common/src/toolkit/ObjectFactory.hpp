@@ -68,7 +68,7 @@ namespace common::toolkit
             throw std::invalid_argument("ObjectFactory::registerType: Type name cannot be empty");
         }
 
-        std::lock_guard<std::mutex> lock(getRegistryMutex());
+        std::lock_guard lock(getRegistryMutex());
         getRegistry()[type_name] = [args = std::make_tuple(std::forward<Args>(args)...)]() mutable
         {
             return std::apply([]<typename... T0>(T0&&... inner_args) -> std::unique_ptr<V>
@@ -86,7 +86,7 @@ namespace common::toolkit
             throw std::invalid_argument("ObjectFactory::createObject: Type name cannot be empty");
         }
 
-        std::lock_guard<std::mutex> lock(getRegistryMutex());
+        std::lock_guard lock(getRegistryMutex());
         auto it = getRegistry().find(type_name);
         if (it != getRegistry().end())
         {
@@ -103,7 +103,7 @@ namespace common::toolkit
             return false;
         }
 
-        std::lock_guard<std::mutex> lock(getRegistryMutex());
+        std::lock_guard lock(getRegistryMutex());
         return getRegistry().contains(type_name);
     }
 
@@ -125,7 +125,7 @@ namespace common::toolkit
     template <typename T>
     void ObjectFactory<T>::clearRegistry()
     {
-        std::lock_guard<std::mutex> lock(getRegistryMutex());
+        std::lock_guard lock(getRegistryMutex());
         getRegistry().clear();
     }
 

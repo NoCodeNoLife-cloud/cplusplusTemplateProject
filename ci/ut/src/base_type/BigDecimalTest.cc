@@ -637,7 +637,7 @@ TEST(BigDecimalTest, Addition_Associativity)
     const BigDecimal b{"2.2"};
     const BigDecimal c{"3.3"};
 
-    const auto result1 = (a + b) + c;
+    const auto result1 = a + b + c;
     const auto result2 = a + (b + c);
 
     EXPECT_EQ(result1, result2);

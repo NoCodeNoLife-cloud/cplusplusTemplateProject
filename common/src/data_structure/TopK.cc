@@ -69,10 +69,10 @@ namespace common::data_structure
 
         // Determine how many elements to return
         const auto heap_size = static_cast<int32_t>(all_elements.size());
-        const auto elements_to_return = (count <= 0 || count > heap_size) ? heap_size : count;
+        const auto elements_to_return = count <= 0 || count > heap_size ? heap_size : count;
 
         // Get the largest 'elements_to_return' elements (last N elements from ascending list)
-        std::vector<int32_t> result(
+        std::vector result(
             all_elements.end() - elements_to_return,
             all_elements.end()
         );

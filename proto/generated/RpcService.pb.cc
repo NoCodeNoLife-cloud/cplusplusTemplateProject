@@ -26,7 +26,7 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace rpc {
 
-inline constexpr UserExistsRequest::Impl_::Impl_(
+ constexpr UserExistsRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : username_(
             &::google::protobuf::internal::fixed_address_empty_string,
@@ -38,7 +38,7 @@ PROTOBUF_CONSTEXPR UserExistsRequest::UserExistsRequest(::_pbi::ConstantInitiali
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
+    :
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
@@ -53,7 +53,7 @@ struct UserExistsRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 UserExistsRequestDefaultTypeInternal _UserExistsRequest_default_instance_;
 
-inline constexpr ResetPasswordRequest::Impl_::Impl_(
+ constexpr ResetPasswordRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : username_(
             &::google::protobuf::internal::fixed_address_empty_string,
@@ -68,7 +68,7 @@ PROTOBUF_CONSTEXPR ResetPasswordRequest::ResetPasswordRequest(::_pbi::ConstantIn
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
+    :
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
@@ -83,7 +83,7 @@ struct ResetPasswordRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ResetPasswordRequestDefaultTypeInternal _ResetPasswordRequest_default_instance_;
 
-inline constexpr RegisterUserRequest::Impl_::Impl_(
+ constexpr RegisterUserRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : username_(
             &::google::protobuf::internal::fixed_address_empty_string,
@@ -98,7 +98,7 @@ PROTOBUF_CONSTEXPR RegisterUserRequest::RegisterUserRequest(::_pbi::ConstantInit
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
+    :
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
@@ -113,7 +113,7 @@ struct RegisterUserRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RegisterUserRequestDefaultTypeInternal _RegisterUserRequest_default_instance_;
 
-inline constexpr DeleteUserRequest::Impl_::Impl_(
+ constexpr DeleteUserRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : username_(
             &::google::protobuf::internal::fixed_address_empty_string,
@@ -125,7 +125,7 @@ PROTOBUF_CONSTEXPR DeleteUserRequest::DeleteUserRequest(::_pbi::ConstantInitiali
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
+    :
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
@@ -140,7 +140,7 @@ struct DeleteUserRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeleteUserRequestDefaultTypeInternal _DeleteUserRequest_default_instance_;
 
-inline constexpr ChangePasswordRequest::Impl_::Impl_(
+ constexpr ChangePasswordRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : username_(
             &::google::protobuf::internal::fixed_address_empty_string,
@@ -158,7 +158,7 @@ PROTOBUF_CONSTEXPR ChangePasswordRequest::ChangePasswordRequest(::_pbi::Constant
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
+    :
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
@@ -173,7 +173,7 @@ struct ChangePasswordRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ChangePasswordRequestDefaultTypeInternal _ChangePasswordRequest_default_instance_;
 
-inline constexpr AuthenticateUserRequest::Impl_::Impl_(
+ constexpr AuthenticateUserRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : username_(
             &::google::protobuf::internal::fixed_address_empty_string,
@@ -188,7 +188,7 @@ PROTOBUF_CONSTEXPR AuthenticateUserRequest::AuthenticateUserRequest(::_pbi::Cons
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
+    :
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }
@@ -203,7 +203,7 @@ struct AuthenticateUserRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AuthenticateUserRequestDefaultTypeInternal _AuthenticateUserRequest_default_instance_;
 
-inline constexpr AuthResponse::Impl_::Impl_(
+ constexpr AuthResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : message_(
             &::google::protobuf::internal::fixed_address_empty_string,
@@ -217,7 +217,7 @@ PROTOBUF_CONSTEXPR AuthResponse::AuthResponse(::_pbi::ConstantInitialized)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(_class_data_.base()),
 #else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
+    :
 #endif  // PROTOBUF_CUSTOM_VTABLE
       _impl_(::_pbi::ConstantInitialized()) {
 }

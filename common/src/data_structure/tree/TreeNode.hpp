@@ -21,13 +21,13 @@ namespace common::data_structure::tree
         explicit TreeNode(T value) noexcept;
 
         T data{};
-        std::shared_ptr<TreeNode<T>> left_{};
-        std::shared_ptr<TreeNode<T>> right_{};
+        std::shared_ptr<TreeNode> left_{};
+        std::shared_ptr<TreeNode> right_{};
         int32_t height_{1};
     };
 
     template <typename T>
-    TreeNode<T>::TreeNode(T value) noexcept : data(value), left_(nullptr), right_(nullptr), height_(1)
+    TreeNode<T>::TreeNode(T value) noexcept : data(value), left_(nullptr), right_(nullptr)
     {
     }
 }

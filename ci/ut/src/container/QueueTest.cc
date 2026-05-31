@@ -34,7 +34,7 @@ TEST(QueueTest, CopyConstructor_DeepCopy)
     queue1.push(20);
     queue1.push(30);
 
-    Queue<int> queue2(queue1);
+    Queue queue2(queue1);
 
     EXPECT_EQ(queue2.size(), queue1.size());
     EXPECT_EQ(queue2.front(), queue1.front());
@@ -53,7 +53,7 @@ TEST(QueueTest, CopyConstructor_DeepCopy)
 TEST(QueueTest, CopyConstructor_EmptyQueue)
 {
     const Queue<int> queue1;
-    const Queue<int> queue2(queue1);
+    const Queue queue2(queue1);
 
     EXPECT_TRUE(queue2.empty());
     EXPECT_EQ(queue2.size(), 0);
@@ -70,7 +70,7 @@ TEST(QueueTest, MoveConstructor_TransfersOwnership)
     queue1.push(20);
     queue1.push(30);
 
-    Queue<int> queue2(std::move(queue1));
+    Queue queue2(std::move(queue1));
 
     EXPECT_EQ(queue2.size(), 3);
     EXPECT_EQ(queue2.front(), 10);
@@ -598,7 +598,7 @@ TEST(QueueTest, PreservesInsertionOrder)
 {
     Queue<int> queue;
 
-    const std::vector<int> input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
+    const std::vector input = {5, 3, 8, 1, 9, 2, 7, 4, 6};
 
     for (int val : input)
     {

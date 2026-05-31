@@ -501,7 +501,7 @@ namespace common::toolkit
     template <typename T>
     bool ArraysToolkit::isEmpty(const T* array, size_t size)
     {
-        return (array == nullptr) || (size == 0);
+        return array == nullptr || size == 0;
     }
 
     template <typename T>

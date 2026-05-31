@@ -287,7 +287,7 @@ TEST(SnowflakeGeneratorTest, NextId_Consistency_MultipleCalls)
     }
 
     // Verify all IDs are unique
-    const std::set<int64_t> uniqueIds(ids.begin(), ids.end());
+    const std::set uniqueIds(ids.begin(), ids.end());
     EXPECT_EQ(uniqueIds.size(), ids.size());
 
     // Verify IDs are in ascending order

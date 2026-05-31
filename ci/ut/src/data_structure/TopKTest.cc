@@ -65,7 +65,7 @@ TEST(TopKTest, Add_MaintainsTopKLargest)
     EXPECT_EQ(result.size(), 3);
 
     // Sort to verify correct values
-    std::vector<int32_t> sorted(result.begin(), result.end());
+    std::vector sorted(result.begin(), result.end());
     std::sort(sorted.begin(), sorted.end());
 
     EXPECT_EQ(sorted[0], 3);
@@ -90,7 +90,7 @@ TEST(TopKTest, Add_FewerThanKElements)
     // Should contain all 3 elements
     EXPECT_EQ(result.size(), 3);
 
-    std::vector<int32_t> sorted(result.begin(), result.end());
+    std::vector sorted(result.begin(), result.end());
     std::sort(sorted.begin(), sorted.end());
 
     EXPECT_EQ(sorted[0], 10);
@@ -142,7 +142,7 @@ TEST(TopKTest, Add_NegativeNumbers)
     // Top 3 largest (least negative): -5, -1, -10
     EXPECT_EQ(result.size(), 3);
 
-    std::vector<int32_t> sorted(result.begin(), result.end());
+    std::vector sorted(result.begin(), result.end());
     std::sort(sorted.begin(), sorted.end());
 
     EXPECT_EQ(sorted[0], -10);
@@ -170,7 +170,7 @@ TEST(TopKTest, Add_MixedSignNumbers)
     // Top 4 largest: 0, 25, 50, 100
     EXPECT_EQ(result.size(), 4);
 
-    std::vector<int32_t> sorted(result.begin(), result.end());
+    std::vector sorted(result.begin(), result.end());
     std::sort(sorted.begin(), sorted.end());
 
     EXPECT_EQ(sorted[0], 0);
@@ -253,7 +253,7 @@ TEST(TopKTest, GetTopK_AfterAddingMoreElements)
     // Should now contain 30, 40, 50
     EXPECT_EQ(result2.size(), 3);
 
-    std::vector<int32_t> sorted(result2.begin(), result2.end());
+    std::vector sorted(result2.begin(), result2.end());
     std::sort(sorted.begin(), sorted.end());
 
     EXPECT_EQ(sorted[0], 30);
@@ -474,7 +474,7 @@ TEST(TopKTest, GetTopK_NonDestructive_HeapUsableAfterRetrieval)
     EXPECT_NE(result1, result2);
 
     // Verify second result contains the largest 3 numbers
-    std::vector<int32_t> sorted(result2.begin(), result2.end());
+    std::vector sorted(result2.begin(), result2.end());
     std::sort(sorted.begin(), sorted.end());
     EXPECT_EQ(sorted[0], 30);
     EXPECT_EQ(sorted[1], 40);

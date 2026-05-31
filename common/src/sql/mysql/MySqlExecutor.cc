@@ -12,7 +12,6 @@
 namespace common::sql::mysql
 {
     MySqlExecutor::MySqlExecutor() : session_(nullptr),
-                                     connected_(false),
                                      port_(33060)
     {
         // X Protocol default port
@@ -23,7 +22,6 @@ namespace common::sql::mysql
                                  const std::string& user,
                                  const std::string& password,
                                  const std::string& database) : session_(nullptr),
-                                                                connected_(false),
                                                                 host_(host),
                                                                 port_(port),
                                                                 user_(user),
@@ -524,7 +522,7 @@ namespace common::sql::mysql
 
             for (size_t i = 0; i < num_columns; ++i)
             {
-                const std::string& column_name = (i < query_result.column_names.size())
+                const std::string& column_name = i < query_result.column_names.size()
                                                      ? query_result.column_names[i]
                                                      : "column_" + std::to_string(i);
 
