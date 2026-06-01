@@ -5,10 +5,10 @@
  */
 
 #pragma once
+#include <exception>
 #include <functional>
 #include <type_traits>
 #include <utility>
-#include <exception>
 
 namespace common::interfaces
 {

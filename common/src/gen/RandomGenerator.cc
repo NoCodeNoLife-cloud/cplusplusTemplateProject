@@ -5,7 +5,6 @@
  */
 
 #include "gen/RandomGenerator.hpp"
-
 #include <fmt/format.h>
 #include <random>
 #include <string>

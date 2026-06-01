@@ -6,10 +6,10 @@
 
 #include "toolkit/StringToolkit.hpp"
 
-#include <fmt/format.h>
 #include <cctype>
 #include <string>
 #include <vector>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::toolkit
@@ -42,6 +42,142 @@ namespace common::toolkit
             ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
         }
         return result;
+    }
+
+    std::vector<std::string> StringToolkit::split(const std::string& target, const char split_char)
+    {
+        std::vector<std::string> result;
+        size_t start = 0;
+        size_t pos = target.find(split_char);
+        while (pos != std::string::npos)
+        {
+            result.push_back(target.substr(start, pos - start));
+            start = pos + 1;
+            pos = target.find(split_char, start);
+        }
+        result.push_back(target.substr(start));
+        return result;
+    }
+
+    std::vector<std::string> StringToolkit::splitWithEmpty(const std::string& target, const char split_char)
+    {
+        std::vector<std::string> result;
+        size_t start = 0;
+        size_t pos = 0;
+
+        while (pos <= target.length())
+        {
+            if (pos == target.length() || target[pos] == split_char)
+            {
+                result.push_back(target.substr(start, pos - start));
+                start = pos + 1;
+            }
+            pos++;
+        }
+
+        return result;
+    }
+
+    std::vector<std::string> StringToolkit::split(const std::string& target, const std::string& delimiter)
+    {
+        if (delimiter.empty())
+        {
+            std::vector<std::string> result;
+            result.push_back(target);
+            return result;
+        }
+
+        std::vector<std::string> result;
+        size_t start = 0;
+        size_t pos = target.find(delimiter);
+        while (pos != std::string::npos)
+        {
+            result.push_back(target.substr(start, pos - start));
+            start = pos + delimiter.length();
+            pos = target.find(delimiter, start);
+        }
+        result.push_back(target.substr(start));
+        return result;
+    }
+
+    std::string StringToolkit::concatenate(const std::vector<std::string>& source, const char split_char)
+    {
+        if (source.empty())
+        {
+            return "";
+        }
+        std::string result = source[0];
+        for (size_t i = 1; i < source.size(); ++i)
+        {
+            result += split_char;
+            result += source[i];
+        }
+        return result;
+    }
+
+    std::string StringToolkit::concatenate(const std::vector<std::string>& source, const std::string& delimiter)
+    {
+        if (source.empty())
+        {
+            return "";
+        }
+        if (source.size() == 1)
+        {
+            return source[0];
+        }
+
+        std::string result = source[0];
+        for (size_t i = 1; i < source.size(); ++i)
+        {
+            result += delimiter;
+            result += source[i];
+        }
+        return result;
+    }
+
+    bool StringToolkit::startsWith(const std::string& str, const std::string& prefix)
+    {
+        if (prefix.length() > str.length())
+        {
+            return false;
+        }
+        return str.compare(0, prefix.length(), prefix) == 0;
+    }
+
+    bool StringToolkit::endsWith(const std::string& str, const std::string& suffix)
+    {
+        if (suffix.length() > str.length())
+        {
+            return false;
+        }
+        return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
+    }
+
+    std::string StringToolkit::trim(const std::string& str)
+    {
+        if (str.empty())
+        {
+            return str;
+        }
+
+        size_t start = 0;
+        while (start < str.length() && std::isspace(static_cast<unsigned char>(str[start])))
+        {
+            ++start;
+        }
+
+        if (start == str.length())
+        {
+            return "";
+        }
+
+        size_t end = str.length() - 1;
+        while (end > start && std::isspace(static_cast<unsigned char>(str[end])))
+        {
+            --end;
+        }
+
+        return str.substr(start, end - start + 1);
     }
 
     std::string StringToolkit::trimLeft(const std::string& str)
@@ -85,6 +221,23 @@ namespace common::toolkit
         }
 
         return str.substr(0, end + 1);
+    }
+
+    std::string StringToolkit::replaceAll(const std::string& str, const std::string& from, const std::string& to)
+    {
+        if (from.empty())
+        {
+            return str;
+        }
+
+        std::string result = str;
+        size_t pos = 0;
+        while ((pos = result.find(from, pos)) != std::string::npos)
+        {
+            result.replace(pos, from.length(), to);
+            pos += to.length();
+        }
+        return result;
     }
 
     bool StringToolkit::contains(const std::string& str, const std::string& substr)
@@ -371,159 +524,6 @@ namespace common::toolkit
 
         const size_t contentLength = maxLength - suffix.length();
         return str.substr(0, contentLength) + suffix;
-    }
-
-    std::vector<std::string> StringToolkit::split(const std::string& target, const char split_char)
-    {
-        std::vector<std::string> result;
-        size_t start = 0;
-        size_t pos = target.find(split_char);
-        while (pos != std::string::npos)
-        {
-            result.push_back(target.substr(start, pos - start));
-            start = pos + 1;
-            pos = target.find(split_char, start);
-        }
-        result.push_back(target.substr(start));
-        return result;
-    }
-
-    std::vector<std::string> StringToolkit::splitWithEmpty(const std::string& target, const char split_char)
-    {
-        std::vector<std::string> result;
-        size_t start = 0;
-        size_t pos = 0;
-
-        while (pos <= target.length())
-        {
-            if (pos == target.length() || target[pos] == split_char)
-            {
-                result.push_back(target.substr(start, pos - start));
-                start = pos + 1;
-            }
-            pos++;
-        }
-
-        return result;
-    }
-
-    std::vector<std::string> StringToolkit::split(const std::string& target, const std::string& delimiter)
-    {
-        if (delimiter.empty())
-        {
-            std::vector<std::string> result;
-            result.push_back(target);
-            return result;
-        }
-
-        std::vector<std::string> result;
-        size_t start = 0;
-        size_t pos = target.find(delimiter);
-        while (pos != std::string::npos)
-        {
-            result.push_back(target.substr(start, pos - start));
-            start = pos + delimiter.length();
-            pos = target.find(delimiter, start);
-        }
-        result.push_back(target.substr(start));
-        return result;
-    }
-
-    std::string StringToolkit::concatenate(const std::vector<std::string>& source, const char split_char)
-    {
-        if (source.empty())
-        {
-            return "";
-        }
-        std::string result = source[0];
-        for (size_t i = 1; i < source.size(); ++i)
-        {
-            result += split_char;
-            result += source[i];
-        }
-        return result;
-    }
-
-    std::string StringToolkit::concatenate(const std::vector<std::string>& source, const std::string& delimiter)
-    {
-        if (source.empty())
-        {
-            return "";
-        }
-        if (source.size() == 1)
-        {
-            return source[0];
-        }
-
-        std::string result = source[0];
-        for (size_t i = 1; i < source.size(); ++i)
-        {
-            result += delimiter;
-            result += source[i];
-        }
-        return result;
-    }
-
-    bool StringToolkit::startsWith(const std::string& str, const std::string& prefix)
-    {
-        if (prefix.length() > str.length())
-        {
-            return false;
-        }
-        return str.compare(0, prefix.length(), prefix) == 0;
-    }
-
-    bool StringToolkit::endsWith(const std::string& str, const std::string& suffix)
-    {
-        if (suffix.length() > str.length())
-        {
-            return false;
-        }
-        return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
-    }
-
-    std::string StringToolkit::trim(const std::string& str)
-    {
-        if (str.empty())
-        {
-            return str;
-        }
-
-        size_t start = 0;
-        while (start < str.length() && std::isspace(static_cast<unsigned char>(str[start])))
-        {
-            ++start;
-        }
-
-        if (start == str.length())
-        {
-            return "";
-        }
-
-        size_t end = str.length() - 1;
-        while (end > start && std::isspace(static_cast<unsigned char>(str[end])))
-        {
-            --end;
-        }
-
-        return str.substr(start, end - start + 1);
-    }
-
-    std::string StringToolkit::replaceAll(const std::string& str, const std::string& from, const std::string& to)
-    {
-        if (from.empty())
-        {
-            return str;
-        }
-
-        std::string result = str;
-        size_t pos = 0;
-        while ((pos = result.find(from, pos)) != std::string::npos)
-        {
-            result.replace(pos, from.length(), to);
-            pos += to.length();
-        }
-        return result;
     }
 
     std::string StringToolkit::join(const std::vector<std::string>& parts, const std::string& delimiter)

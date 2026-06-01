@@ -5,10 +5,10 @@
  */
 
 #pragma once
-#include "StreamCipher.hpp"
-
 #include <array>
 #include <openssl/evp.h>
+
+#include "StreamCipher.hpp"
 
 namespace common::crypto::cipher
 {

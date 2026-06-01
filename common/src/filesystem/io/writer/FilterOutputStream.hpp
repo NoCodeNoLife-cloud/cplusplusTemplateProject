@@ -5,9 +5,10 @@
  */
 
 #pragma once
-#include "AbstractOutputStream.hpp"
 #include <memory>
 #include <vector>
+
+#include "AbstractOutputStream.hpp"
 
 namespace common::filesystem
 {

@@ -6,22 +6,14 @@
 
 #include "filesystem/io/reader/FilterInputStream.hpp"
 
-#include <fmt/format.h>
 #include <cstddef>
 #include <stdexcept>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {
     FilterInputStream::FilterInputStream(std::unique_ptr<AbstractInputStream> inputStream)  : input_stream_(std::move(inputStream))
     {
-    }
-
-    void FilterInputStream::validateInputStream() const
-    {
-        if (!input_stream_)
-        {
-            throw std::runtime_error("FilterInputStream::validateInputStream: Input stream is not available");
-        }
     }
 
     size_t FilterInputStream::available()
@@ -90,5 +82,13 @@ namespace common::filesystem
             return true;
         }
         return input_stream_->isClosed();
+    }
+
+    void FilterInputStream::validateInputStream() const
+    {
+        if (!input_stream_)
+        {
+            throw std::runtime_error("FilterInputStream::validateInputStream: Input stream is not available");
+        }
     }
 }

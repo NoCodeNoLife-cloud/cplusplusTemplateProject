@@ -6,11 +6,11 @@
 
 #include "system/SystemInfo.hpp"
 
-#include <fmt/format.h>
 #include <cwctype>
 #include <string>
 #include <vector>
 #include <windows.h>
+#include <fmt/format.h>
 
 namespace common::system
 {
@@ -26,63 +26,6 @@ namespace common::system
             WideCharToMultiByte(CP_UTF8, 0, wideStr, -1, &result[0], len, nullptr, nullptr);
             return result;
         }
-    }
-
-    std::string SystemInfo::ReadRegistryStringValue(HKEY__ * const hKeyRoot, const wchar_t*subKey, const wchar_t*valueName)
-
-    {
-        HKEY hKey;
-        if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
-        {
-            RegistryKey keyGuard(hKey);
-
-            wchar_t buffer[512]; // Increased buffer size for safety
-            DWORD size = sizeof(buffer);
-
-            if (RegQueryValueExW(hKey, valueName, nullptr, nullptr, reinterpret_cast<LPBYTE>(buffer), &size) == ERROR_SUCCESS)
-            {
-                if (const int32_t len = WideCharToMultiByte(CP_UTF8, 0, buffer, -1, nullptr, 0, nullptr, nullptr); len > 0)
-                {
-                    std::string basic_string(len - 1, 0); // len includes null terminator, so subtract 1
-                    WideCharToMultiByte(CP_UTF8, 0, buffer, -1, &basic_string[0], len, nullptr, nullptr);
-                    return basic_string;
-                }
-            }
-        }
-        return {}; // Return empty string if failed
-    }
-
-    std::vector<std::string> SystemInfo::EnumerateRegistryValues(HKEY__ * const hKeyRoot, const wchar_t*subKey)
-
-    {
-        std::vector<std::string> values;
-        HKEY hKey;
-
-        if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
-        {
-            RegistryKey keyGuard(hKey);
-
-            DWORD index = 0;
-            wchar_t valueName[256];
-            wchar_t valueData[512];
-            DWORD valueNameSize = sizeof(valueName) / sizeof(wchar_t);
-            DWORD valueDataSize = sizeof(valueData);
-
-            while (RegEnumValueW(hKey, index++, valueName, &valueNameSize, nullptr, nullptr, reinterpret_cast<LPBYTE>(valueData), &valueDataSize) == ERROR_SUCCESS)
-            {
-                if (const int32_t len = WideCharToMultiByte(CP_UTF8, 0, valueData, -1, nullptr, 0, nullptr, nullptr); len > 0)
-                {
-                    std::string value(len - 1, 0); // len includes null terminator, so subtract 1
-                    WideCharToMultiByte(CP_UTF8, 0, valueData, -1, &value[0], len, nullptr, nullptr);
-                    values.emplace_back(std::move(value));
-                }
-
-                valueNameSize = sizeof(valueName) / sizeof(wchar_t);
-                valueDataSize = sizeof(valueData);
-            }
-        }
-
-        return values;
     }
 
     std::string SystemInfo::GetCpuModelFromRegistry()
@@ -220,5 +163,62 @@ namespace common::system
         }
 
         return adapters;
+    }
+
+    std::string SystemInfo::ReadRegistryStringValue(HKEY__ * const hKeyRoot, const wchar_t*subKey, const wchar_t*valueName)
+
+    {
+        HKEY hKey;
+        if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
+        {
+            RegistryKey keyGuard(hKey);
+
+            wchar_t buffer[512]; // Increased buffer size for safety
+            DWORD size = sizeof(buffer);
+
+            if (RegQueryValueExW(hKey, valueName, nullptr, nullptr, reinterpret_cast<LPBYTE>(buffer), &size) == ERROR_SUCCESS)
+            {
+                if (const int32_t len = WideCharToMultiByte(CP_UTF8, 0, buffer, -1, nullptr, 0, nullptr, nullptr); len > 0)
+                {
+                    std::string basic_string(len - 1, 0); // len includes null terminator, so subtract 1
+                    WideCharToMultiByte(CP_UTF8, 0, buffer, -1, &basic_string[0], len, nullptr, nullptr);
+                    return basic_string;
+                }
+            }
+        }
+        return {}; // Return empty string if failed
+    }
+
+    std::vector<std::string> SystemInfo::EnumerateRegistryValues(HKEY__ * const hKeyRoot, const wchar_t*subKey)
+
+    {
+        std::vector<std::string> values;
+        HKEY hKey;
+
+        if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
+        {
+            RegistryKey keyGuard(hKey);
+
+            DWORD index = 0;
+            wchar_t valueName[256];
+            wchar_t valueData[512];
+            DWORD valueNameSize = sizeof(valueName) / sizeof(wchar_t);
+            DWORD valueDataSize = sizeof(valueData);
+
+            while (RegEnumValueW(hKey, index++, valueName, &valueNameSize, nullptr, nullptr, reinterpret_cast<LPBYTE>(valueData), &valueDataSize) == ERROR_SUCCESS)
+            {
+                if (const int32_t len = WideCharToMultiByte(CP_UTF8, 0, valueData, -1, nullptr, 0, nullptr, nullptr); len > 0)
+                {
+                    std::string value(len - 1, 0); // len includes null terminator, so subtract 1
+                    WideCharToMultiByte(CP_UTF8, 0, valueData, -1, &value[0], len, nullptr, nullptr);
+                    values.emplace_back(std::move(value));
+                }
+
+                valueNameSize = sizeof(valueName) / sizeof(wchar_t);
+                valueDataSize = sizeof(valueData);
+            }
+        }
+
+        return values;
     }
 }

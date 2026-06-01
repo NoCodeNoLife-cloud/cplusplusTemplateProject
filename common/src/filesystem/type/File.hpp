@@ -5,11 +5,10 @@
  */
 
 #pragma once
-#include <windows.h>
-
 #include <chrono>
 #include <filesystem>
 #include <string>
+#include <windows.h>
 
 namespace common::filesystem
 {

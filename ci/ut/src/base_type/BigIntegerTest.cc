@@ -4,10 +4,11 @@
  * @details Tests cover construction, arithmetic operations, comparison, and factory methods.
  */
 
-#include <gtest/gtest.h>
-#include "base_type/BigInteger.hpp"
-#include <string>
 #include <stdexcept>
+#include <string>
+#include <gtest/gtest.h>
+
+#include "base_type/BigInteger.hpp"
 
 using namespace common::base_type;
 

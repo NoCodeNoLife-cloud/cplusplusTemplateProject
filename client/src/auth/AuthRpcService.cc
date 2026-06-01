@@ -8,8 +8,8 @@
 
 #include "AuthRpcService.hpp"
 
-#include <glog/logging.h>
 #include <functional>
+#include <glog/logging.h>
 
 #include "rpc/RpcMetadata.hpp"
 
@@ -20,33 +20,6 @@ namespace client_app::auth
     AuthRpcService::AuthRpcService(const std::shared_ptr<grpc::Channel>& channel) : stub_(rpc::AuthService::NewStub(channel)), channel_(channel)
     {
         LOG_IF(FATAL, !channel) << "RPC channel cannot be null";
-    }
-
-    /// @brief Execute RPC call with error handling and logging
-    /// @tparam RequestType Type of the request message
-    /// @tparam ResponseType Type of the response message
-    /// @param[in] operation_name Name of the operation for logging
-    /// @param[in] request The request message to send
-    /// @param[in] rpc_call Function that performs the actual RPC call
-    /// @return rpc::AuthResponse containing operation result
-    template <typename RequestType, typename ResponseType>
-    [[nodiscard]] ResponseType AuthRpcService::ExecuteRpcCall(const std::string& operation_name, const RequestType& request, const std::function<grpc::Status(grpc::ClientContext*, const RequestType&, ResponseType*)>& rpc_call) const
-    {
-        ResponseType response{};
-        grpc::ClientContext context{};
-
-        if (const grpc::Status status = rpc_call(&context, request, &response); !status.ok())
-        {
-            LOG_IF(WARNING, !status.ok()) << "RPC " << operation_name << " failed: " << status.error_message();
-            response.set_success(false);
-            response.set_message("RPC failed: " + status.error_message());
-            response.set_error_code(status.error_code());
-        }
-        else
-        {
-            LOG_IF(INFO, status.ok()) << "RPC " << operation_name << " succeeded";
-        }
-        return response;
     }
 
     /// @brief Register a new user with username and password
@@ -156,5 +129,32 @@ namespace client_app::auth
     bool AuthRpcService::isReady() const
     {
         return getConnectivityState() == common::rpc::GrpcConnectivityState::READY;
+    }
+
+    /// @brief Execute RPC call with error handling and logging
+    /// @tparam RequestType Type of the request message
+    /// @tparam ResponseType Type of the response message
+    /// @param[in] operation_name Name of the operation for logging
+    /// @param[in] request The request message to send
+    /// @param[in] rpc_call Function that performs the actual RPC call
+    /// @return rpc::AuthResponse containing operation result
+    template <typename RequestType, typename ResponseType>
+    [[nodiscard]] ResponseType AuthRpcService::ExecuteRpcCall(const std::string& operation_name, const RequestType& request, const std::function<grpc::Status(grpc::ClientContext*, const RequestType&, ResponseType*)>& rpc_call) const
+    {
+        ResponseType response{};
+        grpc::ClientContext context{};
+
+        if (const grpc::Status status = rpc_call(&context, request, &response); !status.ok())
+        {
+            LOG_IF(WARNING, !status.ok()) << "RPC " << operation_name << " failed: " << status.error_message();
+            response.set_success(false);
+            response.set_message("RPC failed: " + status.error_message());
+            response.set_error_code(status.error_code());
+        }
+        else
+        {
+            LOG_IF(INFO, status.ok()) << "RPC " << operation_name << " succeeded";
+        }
+        return response;
     }
 }

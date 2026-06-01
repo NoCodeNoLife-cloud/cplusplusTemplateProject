@@ -6,10 +6,10 @@
 
 #include "filesystem/type/BmpImage.hpp"
 
-#include <fmt/format.h>
 #include <fstream>
 #include <stdexcept>
 #include <vector>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

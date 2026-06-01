@@ -5,13 +5,14 @@
  */
 
 #include "StreamCipherFactory.hpp"
-#include "ChaCha20Cipher.hpp"
 
-#include <fmt/format.h>
 #include <stdexcept>
-#include <vector>
 #include <string>
+#include <vector>
+#include <fmt/format.h>
 #include <glog/logging.h>
+
+#include "ChaCha20Cipher.hpp"
 
 namespace common::crypto::cipher
 {

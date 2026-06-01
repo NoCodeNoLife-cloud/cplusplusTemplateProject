@@ -5,10 +5,11 @@
  *          emplace, size management, and edge cases with different data types.
  */
 
-#include <gtest/gtest.h>
-#include "container/Stack.hpp"
 #include <string>
 #include <vector>
+#include <gtest/gtest.h>
+
+#include "container/Stack.hpp"
 
 using namespace common::container;
 

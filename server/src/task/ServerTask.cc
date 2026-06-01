@@ -11,9 +11,9 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "config/GLogConfigurator.hpp"
 #include "auth/AuthRpcService.hpp"
-#include "config/ConfigParam.h"
+#include "config/ConfigParam.hpp"
+#include "config/GLogConfigurator.hpp"
 
 namespace server_app::task
 {
@@ -25,11 +25,11 @@ namespace server_app::task
 
     ServerTask::ServerTask(ServerTask&&) noexcept = default;
 
-    void ServerTask::init() const
+    void ServerTask::init()
     {
-        const glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().glogConfigPath()};
+        const glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().applicationDevConfigPath()};
         log_configurator.execute();
-        DLOG(INFO) << fmt::format("Initializing ServerTask with glog config path: {}, loading gRPC configuration from: {}", config::ConfigParam::getInstance().glogConfigPath(), config::ConfigParam::getInstance().applicationDevConfigPath());
+        DLOG(INFO) << fmt::format("Initializing ServerTask with config path: {}, loading gRPC configuration from: {}", config::ConfigParam::getInstance().applicationDevConfigPath(), config::ConfigParam::getInstance().applicationDevConfigPath());
     }
 
     void ServerTask::run()
@@ -59,6 +59,22 @@ namespace server_app::task
         }
 
         exit();
+    }
+
+    void ServerTask::exit() const
+    {
+        DLOG(INFO) << "Shutting down service task...";
+        if (server_)
+        {
+            DLOG(INFO) << "Initiating gRPC server shutdown";
+            server_->Shutdown();
+            DLOG(INFO) << "gRPC server shutdown complete.";
+        }
+        else
+        {
+            LOG(WARNING) << "Server object is null during shutdown. Nothing to shutdown.";
+        }
+        DLOG(INFO) << "Service task shutdown complete.";
     }
 
     [[nodiscard]] bool ServerTask::establishGrpcConnection()
@@ -99,21 +115,5 @@ namespace server_app::task
 
         DLOG(INFO) << "gRPC connection established.";
         return true;
-    }
-
-    void ServerTask::exit() const
-    {
-        DLOG(INFO) << "Shutting down service task...";
-        if (server_)
-        {
-            DLOG(INFO) << "Initiating gRPC server shutdown";
-            server_->Shutdown();
-            DLOG(INFO) << "gRPC server shutdown complete.";
-        }
-        else
-        {
-            LOG(WARNING) << "Server object is null during shutdown. Nothing to shutdown.";
-        }
-        DLOG(INFO) << "Service task shutdown complete.";
     }
 }

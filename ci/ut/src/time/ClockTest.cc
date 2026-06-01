@@ -5,11 +5,12 @@
  *          timestamp retrieval, and custom format support.
  */
 
-#include <gtest/gtest.h>
-#include "time/Clock.hpp"
 #include <chrono>
 #include <regex>
 #include <thread>
+#include <gtest/gtest.h>
+
+#include "time/Clock.hpp"
 
 using namespace common::time;
 

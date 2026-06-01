@@ -4,10 +4,11 @@
  * @details Tests cover enum-to-string conversion, string-to-enum parsing, and round-trip validation.
  */
 
-#include <gtest/gtest.h>
-#include "toolkit/EnumToolkit.hpp"
-#include <string>
 #include <optional>
+#include <string>
+#include <gtest/gtest.h>
+
+#include "toolkit/EnumToolkit.hpp"
 
 using namespace common::toolkit;
 

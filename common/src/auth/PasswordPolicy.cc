@@ -5,9 +5,9 @@
  */
 
 #include "PasswordPolicy.hpp"
+
 #include <cctype>
 #include <fmt/format.h>
-
 #include <glog/logging.h>
 
 namespace common::auth
@@ -71,26 +71,6 @@ namespace common::auth
         return result;
     }
 
-    bool PasswordPolicy::is_uppercase_char(const char c)
-    {
-        return std::isupper(static_cast<unsigned char>(c));
-    }
-
-    bool PasswordPolicy::is_lowercase_char(const char c)
-    {
-        return std::islower(static_cast<unsigned char>(c));
-    }
-
-    bool PasswordPolicy::is_digit_char(const char c)
-    {
-        return std::isdigit(static_cast<unsigned char>(c));
-    }
-
-    bool PasswordPolicy::is_special_char(const char c)
-    {
-        return std::ispunct(static_cast<unsigned char>(c)) || std::isspace(static_cast<unsigned char>(c));
-    }
-
     void PasswordPolicy::set_min_length(const size_t length)
     {
         min_length_ = length;
@@ -119,5 +99,25 @@ namespace common::auth
     void PasswordPolicy::set_require_special(const bool require)
     {
         require_special_ = require;
+    }
+
+    bool PasswordPolicy::is_uppercase_char(const char c)
+    {
+        return std::isupper(static_cast<unsigned char>(c));
+    }
+
+    bool PasswordPolicy::is_lowercase_char(const char c)
+    {
+        return std::islower(static_cast<unsigned char>(c));
+    }
+
+    bool PasswordPolicy::is_digit_char(const char c)
+    {
+        return std::isdigit(static_cast<unsigned char>(c));
+    }
+
+    bool PasswordPolicy::is_special_char(const char c)
+    {
+        return std::ispunct(static_cast<unsigned char>(c)) || std::isspace(static_cast<unsigned char>(c));
     }
 }

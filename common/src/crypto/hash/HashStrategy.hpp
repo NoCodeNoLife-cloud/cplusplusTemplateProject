@@ -5,11 +5,10 @@
  */
 
 #pragma once
-
-#include <vector>
-#include <string>
-#include <optional>
 #include <memory>
+#include <optional>
+#include <string>
+#include <vector>
 
 namespace common::crypto::hash
 {

@@ -5,8 +5,9 @@
  */
 
 #include "AuthenticationException.hpp"
-#include <fmt/format.h>
+
 #include <string_view>
+#include <fmt/format.h>
 
 namespace common::exception
 {

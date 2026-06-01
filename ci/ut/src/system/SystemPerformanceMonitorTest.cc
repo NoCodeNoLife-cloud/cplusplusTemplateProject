@@ -5,9 +5,10 @@
  *          memory usage retrieval and CPU usage measurement.
  */
 
-#include <gtest/gtest.h>
-#include "system/SystemPerformanceMonitor.hpp"
 #include <chrono>
+#include <gtest/gtest.h>
+
+#include "system/SystemPerformanceMonitor.hpp"
 
 using namespace common::system;
 

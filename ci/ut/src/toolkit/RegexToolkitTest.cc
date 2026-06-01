@@ -4,11 +4,12 @@
  * @details Tests cover pattern matching, search, extraction, replacement, and splitting.
  */
 
-#include <gtest/gtest.h>
-#include "toolkit/RegexToolkit.hpp"
+#include <stdexcept>
 #include <string>
 #include <vector>
-#include <stdexcept>
+#include <gtest/gtest.h>
+
+#include "toolkit/RegexToolkit.hpp"
 
 using namespace common::toolkit;
 

@@ -6,13 +6,13 @@
 
 #include "time/SimpleDateFormatter.hpp"
 
-#include <fmt/format.h>
+#include <ctime>
 #include <functional>
 #include <iomanip>
 #include <sstream>
-#include <string>
 #include <stdexcept>
-#include <ctime>
+#include <string>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::time

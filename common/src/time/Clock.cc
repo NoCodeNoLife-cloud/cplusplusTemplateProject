@@ -6,12 +6,12 @@
 
 #include "time/Clock.hpp"
 
-#include <fmt/format.h>
 #include <chrono>
-#include <string>
-#include <sstream>
-#include <iomanip>
 #include <ctime>
+#include <iomanip>
+#include <sstream>
+#include <string>
+#include <fmt/format.h>
 
 namespace common::time
 {

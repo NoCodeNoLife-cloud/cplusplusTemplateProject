@@ -5,13 +5,14 @@
  *          ID uniqueness, ordering, component validation, and error handling.
  */
 
-#include <gtest/gtest.h>
-#include "gen/SnowflakeGenerator.hpp"
-#include <stdexcept>
-#include <set>
-#include <vector>
-#include <thread>
 #include <algorithm>
+#include <set>
+#include <stdexcept>
+#include <thread>
+#include <vector>
+#include <gtest/gtest.h>
+
+#include "gen/SnowflakeGenerator.hpp"
 
 using namespace common::gen;
 

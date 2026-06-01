@@ -4,11 +4,12 @@
  * @details Tests cover object registration, creation, error handling, and polymorphic behavior.
  */
 
-#include <gtest/gtest.h>
-#include "toolkit/ObjectFactory.hpp"
-#include <string>
 #include <memory>
+#include <string>
 #include <type_traits>
+#include <gtest/gtest.h>
+
+#include "toolkit/ObjectFactory.hpp"
 
 using namespace common::toolkit;
 

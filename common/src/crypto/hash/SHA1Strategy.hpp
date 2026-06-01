@@ -5,10 +5,10 @@
  */
 
 #pragma once
+#include <memory>
+#include <openssl/evp.h>
 
 #include "HashStrategy.hpp"
-#include <openssl/evp.h>
-#include <memory>
 
 namespace common::crypto::hash
 {

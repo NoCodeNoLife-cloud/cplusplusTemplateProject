@@ -12,11 +12,11 @@
 #include <glog/logging.h>
 #include <grpcpp/grpcpp.h>
 
-#include "config/GLogConfigurator.hpp"
-#include "rpc/RpcMetadata.hpp"
 #include "auth/AuthRpcService.hpp"
 #include "config/ConfigParam.h"
+#include "config/GLogConfigurator.hpp"
 #include "filesystem/io/Console.hpp"
+#include "rpc/RpcMetadata.hpp"
 #include "system/SystemInfo.hpp"
 
 namespace client_app::task
@@ -31,9 +31,9 @@ namespace client_app::task
 
     void ClientTask::init() const
     {
-        const glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().glogConfigPath()};
+        const glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().applicationDevConfigPath()};
         log_configurator.execute();
-        DLOG(INFO) << fmt::format("Initializing GLog configuration from: {}, RPC Options - Keepalive Time: {}ms, Timeout: {}ms, Permit Without Calls: {}, configuration initialized successfully", config::ConfigParam::getInstance().glogConfigPath(), rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls());
+        DLOG(INFO) << fmt::format("Initializing GLog configuration from: {}, RPC Options - Keepalive Time: {}ms, Timeout: {}ms, Permit Without Calls: {}, configuration initialized successfully", config::ConfigParam::getInstance().applicationDevConfigPath(), rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls());
 
         DLOG(INFO) << "Application starting...";
         logClientInfo();

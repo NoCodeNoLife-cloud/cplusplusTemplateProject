@@ -5,11 +5,11 @@
  */
 
 #pragma once
-#include <string>
 #include <exception>
+#include <string>
 
-#include "time/FunctionProfiler.hpp"
 #include "interface/IAopAspect.hpp"
+#include "time/FunctionProfiler.hpp"
 
 namespace common::aop
 {

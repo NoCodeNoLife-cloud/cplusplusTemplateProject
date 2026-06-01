@@ -5,10 +5,11 @@
  *          fill, sort, and string representation.
  */
 
-#include <gtest/gtest.h>
-#include "toolkit/ArraysToolkit.hpp"
-#include <vector>
 #include <string>
+#include <vector>
+#include <gtest/gtest.h>
+
+#include "toolkit/ArraysToolkit.hpp"
 
 using namespace common::toolkit;
 

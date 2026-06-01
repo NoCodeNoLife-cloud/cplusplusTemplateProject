@@ -5,10 +5,11 @@
  *          searching, and edge cases with various data types.
  */
 
-#include <gtest/gtest.h>
-#include "data_structure/SkipList.hpp"
 #include <string>
 #include <vector>
+#include <gtest/gtest.h>
+
+#include "data_structure/SkipList.hpp"
 
 using namespace common::data_structure;
 

@@ -7,8 +7,8 @@
 
 #include "AuthRpcParam.hpp"
 
-#include <glog/logging.h>
 #include <chrono>  // C++20
+#include <glog/logging.h>
 
 namespace client_app::auth
 {

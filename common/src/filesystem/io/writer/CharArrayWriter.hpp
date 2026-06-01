@@ -6,9 +6,9 @@
 
 #pragma once
 #include <algorithm>
-#include <vector>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include "AbstractWriter.hpp"
 

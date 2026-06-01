@@ -6,8 +6,8 @@
 
 #include "filesystem/io/writer/ByteArrayOutputStream.hpp"
 
-#include <fmt/format.h>
 #include <stdexcept>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {
@@ -91,12 +91,12 @@ namespace common::filesystem
         return {reinterpret_cast<const char*>(buf_.data()), count_};
     }
 
-    void ByteArrayOutputStream::close()
+    void ByteArrayOutputStream::flush()
     {
         // No operation for ByteArrayOutputStream.
     }
 
-    void ByteArrayOutputStream::flush()
+    void ByteArrayOutputStream::close()
     {
         // No operation for ByteArrayOutputStream.
     }

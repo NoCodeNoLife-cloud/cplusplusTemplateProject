@@ -6,13 +6,13 @@
 
 #include "filesystem/io/reader/AbstractInputStream.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
 #include <cstddef>
+#include <cstdint>
 #include <limits>
 #include <stdexcept>
 #include <vector>
-#include <cstdint>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

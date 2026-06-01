@@ -6,10 +6,9 @@
 
 #include "UserCredentials.hpp"
 
-#include <fmt/format.h>
-#include <utility>
 #include <chrono>
-
+#include <utility>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::auth

@@ -5,8 +5,8 @@
  */
 
 #pragma once
-#include <memory>
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 #include "FilterInputStream.hpp"

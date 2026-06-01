@@ -6,14 +6,14 @@
 
 #include "time/Date.hpp"
 
-#include <fmt/format.h>
 #include <chrono>
+#include <ctime>
+#include <functional>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <functional>
-#include <ctime>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::time
@@ -38,36 +38,6 @@ namespace common::time
 
             return days;
         }
-    }
-
-    bool Date::isValidDate(const int32_t year, const int32_t month, const int32_t day, const int32_t hours, const int32_t minutes, const int32_t seconds)
-    {
-        if (month < 1 || month > 12)
-        {
-            return false;
-        }
-
-        if (day < 1 || day > getDaysInMonth(year, month))
-        {
-            return false;
-        }
-
-        if (hours < 0 || hours > 23)
-        {
-            return false;
-        }
-
-        if (minutes < 0 || minutes > 59)
-        {
-            return false;
-        }
-
-        if (seconds < 0 || seconds > 59)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     Date::Date()  : time_point_(std::chrono::system_clock::now())
@@ -196,18 +166,6 @@ namespace common::time
         return std::hash<int64_t>{}(getTime());
     }
 
-    std::tm Date::toTm() const
-    {
-        const auto timeT = std::chrono::system_clock::to_time_t(time_point_);
-        std::tm tm = {};
-#ifdef _WIN32
-        localtime_s(&tm, &timeT);
-#else
-        localtime_r(&timeT, &tm);
-#endif
-        return tm;
-    }
-
     // Comparison operators
     bool Date::operator==(const Date& other) const
     {
@@ -237,5 +195,47 @@ namespace common::time
     bool Date::operator>=(const Date& other) const
     {
         return after(other) || equals(other);
+    }
+
+    std::tm Date::toTm() const
+    {
+        const auto timeT = std::chrono::system_clock::to_time_t(time_point_);
+        std::tm tm = {};
+#ifdef _WIN32
+        localtime_s(&tm, &timeT);
+#else
+        localtime_r(&timeT, &tm);
+#endif
+        return tm;
+    }
+
+    bool Date::isValidDate(const int32_t year, const int32_t month, const int32_t day, const int32_t hours, const int32_t minutes, const int32_t seconds)
+    {
+        if (month < 1 || month > 12)
+        {
+            return false;
+        }
+
+        if (day < 1 || day > getDaysInMonth(year, month))
+        {
+            return false;
+        }
+
+        if (hours < 0 || hours > 23)
+        {
+            return false;
+        }
+
+        if (minutes < 0 || minutes > 59)
+        {
+            return false;
+        }
+
+        if (seconds < 0 || seconds > 59)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

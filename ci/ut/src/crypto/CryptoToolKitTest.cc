@@ -5,11 +5,12 @@
  *          password hashing with PBKDF2-HMAC-SHA256, and secure constant-time comparison.
  */
 
-#include <gtest/gtest.h>
-#include "crypto/CryptoToolKit.hpp"
-#include <string>
 #include <set>
+#include <string>
 #include <vector>
+#include <gtest/gtest.h>
+
+#include "crypto/CryptoToolKit.hpp"
 
 using namespace common::crypto;
 

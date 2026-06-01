@@ -6,8 +6,8 @@
  *          and type consistency with various data types.
  */
 
-#include <gtest/gtest.h>
 #include <optional>
+#include <gtest/gtest.h>
 
 #include "data_structure/tree/AVLTree.hpp"
 #include "data_structure/tree/BinarySearchTree.hpp"

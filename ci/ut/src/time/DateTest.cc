@@ -4,10 +4,11 @@
  * @details Tests cover date construction, manipulation, comparison, and conversion functionality.
  */
 
-#include <gtest/gtest.h>
-#include "time/Date.hpp"
 #include <chrono>
 #include <stdexcept>
+#include <gtest/gtest.h>
+
+#include "time/Date.hpp"
 
 using namespace common::time;
 

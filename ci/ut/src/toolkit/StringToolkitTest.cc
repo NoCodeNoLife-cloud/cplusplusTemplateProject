@@ -4,10 +4,11 @@
  * @details Tests cover string splitting, concatenation, trimming, replacement, and prefix/suffix checking.
  */
 
-#include <gtest/gtest.h>
-#include "toolkit/StringToolkit.hpp"
 #include <string>
 #include <vector>
+#include <gtest/gtest.h>
+
+#include "toolkit/StringToolkit.hpp"
 
 using namespace common::toolkit;
 

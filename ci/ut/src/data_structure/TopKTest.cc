@@ -5,11 +5,12 @@
  *          adding numbers, retrieving top-K results, size management, and edge cases.
  */
 
-#include <gtest/gtest.h>
-#include "data_structure/TopK.hpp"
-#include <stdexcept>
 #include <algorithm>
+#include <stdexcept>
 #include <vector>
+#include <gtest/gtest.h>
+
+#include "data_structure/TopK.hpp"
 
 using namespace common::data_structure;
 

@@ -6,28 +6,12 @@
 
 #include "filesystem/io/reader/PushbackReader.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
 #include <stdexcept>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {
-    void PushbackReader::validateOpen() const
-    {
-        if (closed_ || !in_)
-        {
-            throw std::runtime_error("PushbackReader::operation: Stream is closed");
-        }
-    }
-
-    void PushbackReader::validateNotClosed() const
-    {
-        if (closed_)
-        {
-            throw std::runtime_error("PushbackReader::operation: Stream is closed");
-        }
-    }
-
     PushbackReader::PushbackReader(std::shared_ptr<AbstractReader> reader) : PushbackReader(std::move(reader), DEFAULT_BUFFER_SIZE)
     {
     }
@@ -167,5 +151,21 @@ namespace common::filesystem
     bool PushbackReader::isClosed() const
     {
         return closed_ || !in_ || in_->isClosed();
+    }
+
+    void PushbackReader::validateOpen() const
+    {
+        if (closed_ || !in_)
+        {
+            throw std::runtime_error("PushbackReader::operation: Stream is closed");
+        }
+    }
+
+    void PushbackReader::validateNotClosed() const
+    {
+        if (closed_)
+        {
+            throw std::runtime_error("PushbackReader::operation: Stream is closed");
+        }
     }
 }

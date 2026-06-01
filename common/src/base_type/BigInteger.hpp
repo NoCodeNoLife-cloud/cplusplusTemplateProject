@@ -5,9 +5,9 @@
  */
 
 #pragma once
-#include <boost/multiprecision/cpp_int.hpp>
-#include <string>
 #include <compare>
+#include <string>
+#include <boost/multiprecision/cpp_int.hpp>
 
 namespace common::base_type
 {

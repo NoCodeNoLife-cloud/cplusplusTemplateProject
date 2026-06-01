@@ -6,11 +6,11 @@
 
 #include "base_type/BigDecimal.hpp"
 
-#include <fmt/format.h>
-#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <compare>
 #include <stdexcept>
 #include <string>
-#include <compare>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::base_type

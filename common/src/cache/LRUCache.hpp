@@ -5,12 +5,11 @@
  */
 
 #pragma once
-#include <fmt/format.h>
 #include <list>
 #include <optional>
 #include <stdexcept>
 #include <unordered_map>
-
+#include <fmt/format.h>
 #include "interface/ICache.hpp"
 
 namespace common::cache
@@ -113,20 +112,6 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    template <typename CacheType>
-    std::optional<Value> LRUCache<Key, Value, Map>::get_impl(CacheType& cache, const Key& key)
-    {
-        auto it = cache.cache_map_.find(key);
-        if (it == cache.cache_map_.end())
-        {
-            return std::nullopt;
-        }
-
-        cache.move_to_front(it->second);
-        return it->second->second;
-    }
-
-    template <typename Key, typename Value, typename Map>
     std::optional<Value> LRUCache<Key, Value, Map>::get(const Key& key) const
     {
         return get_impl(*this, key);
@@ -136,36 +121,6 @@ namespace common::cache
     std::optional<Value> LRUCache<Key, Value, Map>::get(const Key& key)
     {
         return get_impl(*this, key);
-    }
-
-    template <typename Key, typename Value, typename Map>
-    template <typename ValueType>
-    bool LRUCache<Key, Value, Map>::put_impl(const Key& key, ValueType&& value)
-    {
-        auto it = cache_map_.find(key);
-        if (it != cache_map_.end())
-        {
-            it->second->second = std::forward<ValueType>(value);
-            move_to_front(it->second);
-            return true;
-        }
-
-        if (cache_list_.size() >= capacity_)
-        {
-            if (capacity_ == 0)
-            {
-                return false;
-            }
-
-            auto last_it = cache_list_.end();
-            --last_it;
-            cache_map_.erase(last_it->first);
-            cache_list_.pop_back();
-        }
-
-        cache_list_.emplace_front(key, std::forward<ValueType>(value));
-        cache_map_[key] = cache_list_.begin();
-        return true;
     }
 
     template <typename Key, typename Value, typename Map>
@@ -236,5 +191,49 @@ namespace common::cache
 
         // Using splice to move the element to the front maintains list validity
         cache_list_.splice(cache_list_.begin(), cache_list_, it);
+    }
+
+    template <typename Key, typename Value, typename Map>
+    template <typename CacheType>
+    std::optional<Value> LRUCache<Key, Value, Map>::get_impl(CacheType& cache, const Key& key)
+    {
+        auto it = cache.cache_map_.find(key);
+        if (it == cache.cache_map_.end())
+        {
+            return std::nullopt;
+        }
+
+        cache.move_to_front(it->second);
+        return it->second->second;
+    }
+
+    template <typename Key, typename Value, typename Map>
+    template <typename ValueType>
+    bool LRUCache<Key, Value, Map>::put_impl(const Key& key, ValueType&& value)
+    {
+        auto it = cache_map_.find(key);
+        if (it != cache_map_.end())
+        {
+            it->second->second = std::forward<ValueType>(value);
+            move_to_front(it->second);
+            return true;
+        }
+
+        if (cache_list_.size() >= capacity_)
+        {
+            if (capacity_ == 0)
+            {
+                return false;
+            }
+
+            auto last_it = cache_list_.end();
+            --last_it;
+            cache_map_.erase(last_it->first);
+            cache_list_.pop_back();
+        }
+
+        cache_list_.emplace_front(key, std::forward<ValueType>(value));
+        cache_map_[key] = cache_list_.begin();
+        return true;
     }
 }

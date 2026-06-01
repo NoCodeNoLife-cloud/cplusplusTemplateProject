@@ -8,9 +8,9 @@
 
 #pragma once
 #include <memory>
+#include <auth/AuthRpcParam.hpp>
 #include <grpcpp/server_builder.h>
 
-#include "auth/AuthRpcParam.hpp"
 #include "task/interface/ITask.h"
 
 namespace server_app::task
@@ -38,7 +38,7 @@ namespace server_app::task
 
         /// @brief Initialize the service task and its associated resources
         /// @details Sets up logging, loads configuration, and validates gRPC parameters
-        void init() const;
+        static void init();
 
         /// @brief Run the main task
         /// @details Initializes the server, establishes gRPC connection, and starts listening

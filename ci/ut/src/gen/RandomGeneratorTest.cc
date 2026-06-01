@@ -6,11 +6,12 @@
  *          as well as seed management and error handling.
  */
 
-#include <gtest/gtest.h>
-#include "gen/RandomGenerator.hpp"
-#include <stdexcept>
-#include <set>
 #include <cmath>
+#include <set>
+#include <stdexcept>
+#include <gtest/gtest.h>
+
+#include "gen/RandomGenerator.hpp"
 
 using namespace common::gen;
 

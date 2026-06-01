@@ -10,9 +10,10 @@
 
 #include <functional>
 #include <utility>
-#include <yaml-cpp/yaml.h>
-#include <glog/logging.h>
 #include <fmt/format.h>
+#include <glog/logging.h>
+#include <yaml-cpp/yaml.h>
+
 #include "filesystem/type/YamlToolkit.hpp"
 
 namespace server_app::auth
@@ -20,7 +21,7 @@ namespace server_app::auth
     AuthRpcParam::AuthRpcParam() = default;
 
     AuthRpcParam::AuthRpcParam(const int32_t max_connection_idle_ms, const int32_t max_connection_age_ms, const int32_t max_connection_age_grace_ms, const int32_t keepalive_time_ms, const int32_t keepalive_timeout_ms, const int32_t keepalive_permit_without_calls, std::string server_address) : max_connection_idle_ms_(max_connection_idle_ms), max_connection_age_ms_(max_connection_age_ms), max_connection_age_grace_ms_(max_connection_age_grace_ms), keepalive_time_ms_(keepalive_time_ms), keepalive_timeout_ms_(keepalive_timeout_ms),
-                                                                                                                                                                                                                                                                                                                        keepalive_permit_without_calls_(keepalive_permit_without_calls), server_address_(std::move(server_address))
+                                                                                                                                                                                                                                                                                                      keepalive_permit_without_calls_(keepalive_permit_without_calls), server_address_(std::move(server_address))
     {
         validateParameters();
     }
@@ -202,7 +203,7 @@ namespace server_app::auth
         // Table-driven validation for warning conditions
         const std::vector warning_checks = {
             std::make_tuple(max_connection_idle_ms_ > 0 && max_connection_idle_ms_ < 1000, fmt::format("Max connection idle time is set to a very short interval ({}ms). This may cause excessive connection churn.", max_connection_idle_ms_)), std::make_tuple(keepalive_time_ms_ > 0 && keepalive_time_ms_ < 1000, fmt::format("Keepalive time is set to a very short interval ({}ms). This may cause excessive network traffic.", keepalive_time_ms_)),
-            std::make_tuple(keepalive_timeout_ms_ > 0 && keepalive_timeout_ms_ > keepalive_time_ms_, fmt::format("Keepalive timeout ({}ms) is greater than keepalive time ({}ms). This may lead to unexpected connection issues.", keepalive_timeout_ms_, keepalive_time_ms_)), std::make_tuple(max_connection_age_ms_ > 0 && max_connection_idle_ms_ > 0 && max_connection_age_ms_<max_connection_idle_ms_, fmt::format("Max connection age ({}ms) is less than max connection idle time ({}ms). This may lead to unexpected connection behavior.", max_connection_age_ms_, max_connection_idle_ms_))
+            std::make_tuple(keepalive_timeout_ms_ > 0 && keepalive_timeout_ms_ > keepalive_time_ms_, fmt::format("Keepalive timeout ({}ms) is greater than keepalive time ({}ms). This may lead to unexpected connection issues.", keepalive_timeout_ms_, keepalive_time_ms_)), std::make_tuple(max_connection_age_ms_ > 0 && max_connection_idle_ms_ > 0 && max_connection_age_ms_ < max_connection_idle_ms_, fmt::format("Max connection age ({}ms) is less than max connection idle time ({}ms). This may lead to unexpected connection behavior.", max_connection_age_ms_, max_connection_idle_ms_))
         };
 
         // Execute warning checks

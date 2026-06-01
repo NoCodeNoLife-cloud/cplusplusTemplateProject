@@ -6,10 +6,10 @@
 
 #include "filesystem/io/reader/BufferedReader.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
 #include <stdexcept>
 #include <utility>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {
@@ -162,16 +162,16 @@ namespace common::filesystem
         return skipped;
     }
 
+    bool BufferedReader::isClosed() const
+    {
+        return !reader_ || reader_->isClosed();
+    }
+
     bool BufferedReader::fillBuffer()
     {
         pos_ = 0;
         const int bytesRead = reader_->read(buffer_, 0, buffer_size_);
         count_ = bytesRead > 0 ? static_cast<size_t>(bytesRead) : 0;
         return count_ > 0;
-    }
-
-    bool BufferedReader::isClosed() const
-    {
-        return !reader_ || reader_->isClosed();
     }
 }

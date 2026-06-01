@@ -6,6 +6,7 @@
  */
 
 #include <gtest/gtest.h>
+
 #include "auth/PasswordPolicy.hpp"
 
 using namespace common::auth;

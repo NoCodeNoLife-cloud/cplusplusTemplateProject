@@ -5,11 +5,12 @@
  *          pattern management, date/time formatting, string parsing, and equality operations.
  */
 
-#include <gtest/gtest.h>
-#include "time/SimpleDateFormatter.hpp"
 #include <chrono>
-#include <stdexcept>
 #include <regex>
+#include <stdexcept>
+#include <gtest/gtest.h>
+
+#include "time/SimpleDateFormatter.hpp"
 
 using namespace common::time;
 

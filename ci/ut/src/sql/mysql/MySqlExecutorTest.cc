@@ -5,12 +5,13 @@
  * and structured query results with automatic database setup and cleanup.
  */
 
-#include <gtest/gtest.h>
-#include "sql/mysql/MySqlExecutor.hpp"
-#include <mysqlx/xdevapi.h>
+#include <chrono>
 #include <string>
 #include <vector>
-#include <chrono>
+#include <gtest/gtest.h>
+#include <mysqlx/xdevapi.h>
+
+#include "sql/mysql/MySqlExecutor.hpp"
 
 using namespace common::sql::mysql;
 

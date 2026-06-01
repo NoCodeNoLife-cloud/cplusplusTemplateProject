@@ -7,8 +7,8 @@
 
 #include "GLogParameters.hpp"
 
-#include <yaml-cpp/yaml.h>
 #include <fmt/format.h>
+#include <yaml-cpp/yaml.h>
 
 namespace glog::parameter
 {

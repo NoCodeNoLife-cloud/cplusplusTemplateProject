@@ -6,29 +6,13 @@
 
 #include "filesystem/io/reader/CharArrayReader.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
-#include <stdexcept>
 #include <iterator>
+#include <stdexcept>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {
-    void CharArrayReader::validateConstructorParams(const size_t buffer_size, const size_t offset, const size_t length)
-    {
-        if (offset > buffer_size || offset + length > buffer_size)
-        {
-            throw std::invalid_argument("CharArrayReader::CharArrayReader: Invalid offset or length");
-        }
-    }
-
-    void CharArrayReader::validateTargetBufferParams(const size_t target_buffer_size, const size_t offset, const size_t length)
-    {
-        if (offset > target_buffer_size || length > target_buffer_size - offset)
-        {
-            throw std::out_of_range("CharArrayReader::read: Invalid offset or length for target buffer");
-        }
-    }
-
     CharArrayReader::CharArrayReader(const std::vector<char>& buffer) : buf_(buffer), count_(buffer.size())
     {
     }
@@ -115,5 +99,21 @@ namespace common::filesystem
     bool CharArrayReader::isClosed() const
     {
         return closed_;
+    }
+
+    void CharArrayReader::validateConstructorParams(const size_t buffer_size, const size_t offset, const size_t length)
+    {
+        if (offset > buffer_size || offset + length > buffer_size)
+        {
+            throw std::invalid_argument("CharArrayReader::CharArrayReader: Invalid offset or length");
+        }
+    }
+
+    void CharArrayReader::validateTargetBufferParams(const size_t target_buffer_size, const size_t offset, const size_t length)
+    {
+        if (offset > target_buffer_size || length > target_buffer_size - offset)
+        {
+            throw std::out_of_range("CharArrayReader::read: Invalid offset or length for target buffer");
+        }
     }
 }

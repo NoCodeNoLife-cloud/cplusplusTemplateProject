@@ -6,11 +6,11 @@
 
 #include "ChaCha20Cipher.hpp"
 
-#include <fmt/format.h>
-#include <stdexcept>
 #include <algorithm>
-#include <openssl/err.h>
+#include <stdexcept>
+#include <fmt/format.h>
 #include <glog/logging.h>
+#include <openssl/err.h>
 
 namespace common::crypto::cipher
 {

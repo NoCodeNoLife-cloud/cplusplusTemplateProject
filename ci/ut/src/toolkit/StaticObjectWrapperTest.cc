@@ -4,10 +4,11 @@
  * @details Tests cover initialization, retrieval, destruction, and state management.
  */
 
-#include <gtest/gtest.h>
-#include "toolkit/StaticObjectWrapper.hpp"
 #include <string>
 #include <type_traits>
+#include <gtest/gtest.h>
+
+#include "toolkit/StaticObjectWrapper.hpp"
 
 using namespace common::toolkit;
 

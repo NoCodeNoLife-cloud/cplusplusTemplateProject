@@ -5,9 +5,9 @@
  */
 
 #pragma once
+#include <cstdint>
 #include <queue>
 #include <vector>
-#include <cstdint>
 
 namespace common::data_structure
 {

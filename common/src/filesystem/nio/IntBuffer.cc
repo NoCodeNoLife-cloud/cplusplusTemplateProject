@@ -6,8 +6,8 @@
 
 #include "filesystem/nio/IntBuffer.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

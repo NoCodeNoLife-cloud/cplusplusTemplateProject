@@ -6,10 +6,10 @@
 
 #include "graphics/Graph.hpp"
 
-#include <fmt/format.h>
-#include <vector>
 #include <stdexcept>
 #include <string>
+#include <vector>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 #include "graphics/Edge.hpp"

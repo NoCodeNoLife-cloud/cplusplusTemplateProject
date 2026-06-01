@@ -5,9 +5,10 @@
  *          path compression, union by rank, and edge cases with different data types.
  */
 
-#include <gtest/gtest.h>
-#include "container/UnionSet.hpp"
 #include <string>
+#include <gtest/gtest.h>
+
+#include "container/UnionSet.hpp"
 
 using namespace common::container;
 

@@ -6,8 +6,8 @@
 
 #pragma once
 #include <chrono>
-#include <string>
 #include <cstdint>
+#include <string>
 
 namespace common::time
 {

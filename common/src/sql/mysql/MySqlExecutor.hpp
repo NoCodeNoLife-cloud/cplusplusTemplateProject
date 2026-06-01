@@ -5,13 +5,12 @@
  */
 
 #pragma once
-#include <string>
-#include <vector>
 #include <memory>
-#include <stdexcept>
 #include <optional>
+#include <string>
 #include <unordered_map>
 #include <variant>
+#include <vector>
 
 // MySQL Connector/C++ 8.0+ X DevAPI headers
 #include <mysqlx/xdevapi.h>

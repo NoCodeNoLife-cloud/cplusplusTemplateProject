@@ -5,33 +5,13 @@
  */
 
 #include "SubstitutionCipher.hpp"
-#include <fmt/format.h>
+
 #include <cctype>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::crypto::cipher
 {
-    void SubstitutionCipher::ValidateAndBuildReverseMap()
-    {
-        // Verify bijectivity: encoded values must be unique and alphabetic
-        std::unordered_map<char, char> reverse_check;
-        for (const auto& [from, to] : encode_map_)
-        {
-            if (!std::isalpha(from) || !std::isalpha(to))
-            {
-                DLOG(WARNING) << "Substitution cipher mapping contains non-alphabetic characters";
-                throw std::invalid_argument("Mapping must contain only alphabetic characters");
-            }
-            if (reverse_check.contains(to))
-            {
-                DLOG(WARNING) << "Substitution cipher mapping is not bijective (not one-to-one)";
-                throw std::invalid_argument("Mapping must be bijective (one-to-one)");
-            }
-            reverse_check[to] = from; ///< Build reverse lookup table
-            decode_map_[to] = from;
-        }
-    }
-
     SubstitutionCipher::SubstitutionCipher(const std::unordered_map<char, char>& mapping) : encode_map_(mapping)
     {
         ValidateAndBuildReverseMap();
@@ -67,14 +47,6 @@ namespace common::crypto::cipher
         ValidateAndBuildReverseMap();
     }
 
-    char SubstitutionCipher::TransformChar(const char c, const std::unordered_map<char, char>& map)
-    {
-        if (!std::isalpha(c)) return c;
-
-        const auto it = map.find(c);
-        return it != map.end() ? it->second : c;
-    }
-
     std::string SubstitutionCipher::Encrypt(const std::string& plaintext) const
     {
         std::string result;
@@ -95,5 +67,34 @@ namespace common::crypto::cipher
             result.push_back(TransformChar(c, decode_map_));
         }
         return result;
+    }
+
+    void SubstitutionCipher::ValidateAndBuildReverseMap()
+    {
+        // Verify bijectivity: encoded values must be unique and alphabetic
+        std::unordered_map<char, char> reverse_check;
+        for (const auto& [from, to] : encode_map_)
+        {
+            if (!std::isalpha(from) || !std::isalpha(to))
+            {
+                DLOG(WARNING) << "Substitution cipher mapping contains non-alphabetic characters";
+                throw std::invalid_argument("Mapping must contain only alphabetic characters");
+            }
+            if (reverse_check.contains(to))
+            {
+                DLOG(WARNING) << "Substitution cipher mapping is not bijective (not one-to-one)";
+                throw std::invalid_argument("Mapping must be bijective (one-to-one)");
+            }
+            reverse_check[to] = from; ///< Build reverse lookup table
+            decode_map_[to] = from;
+        }
+    }
+
+    char SubstitutionCipher::TransformChar(const char c, const std::unordered_map<char, char>& map)
+    {
+        if (!std::isalpha(c)) return c;
+
+        const auto it = map.find(c);
+        return it != map.end() ? it->second : c;
     }
 }

@@ -6,11 +6,11 @@
 
 #include "thread/SpinlockMutex.hpp"
 
-#include <fmt/format.h>
 #include <atomic>
-#include <thread>
 #include <chrono>
 #include <sstream>
+#include <thread>
+#include <fmt/format.h>
 
 namespace common::thread
 {

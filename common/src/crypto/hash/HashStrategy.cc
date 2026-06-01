@@ -6,10 +6,10 @@
 
 #include "HashStrategy.hpp"
 
-#include <fmt/format.h>
 #include <fstream>
-#include <sstream>
 #include <iomanip>
+#include <sstream>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::crypto::hash

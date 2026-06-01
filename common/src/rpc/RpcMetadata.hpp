@@ -7,6 +7,7 @@
 #pragma once
 #include <string>
 #include <grpc/impl/connectivity_state.h>
+
 #include "GrpcConnectivityState.hpp"
 
 namespace common::rpc

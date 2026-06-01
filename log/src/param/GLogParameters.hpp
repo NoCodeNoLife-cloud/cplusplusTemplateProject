@@ -7,9 +7,9 @@
  */
 
 #pragma once
-#include <yaml-cpp/node/node.h>
 #include <filesystem>
 #include <string>
+#include <yaml-cpp/node/node.h>
 
 #include "interface/IYamlConfigurable.hpp"
 

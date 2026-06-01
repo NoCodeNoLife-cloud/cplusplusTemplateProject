@@ -6,9 +6,9 @@
 
 #include "RpcMetadata.hpp"
 
-#include <fmt/format.h>
 #include <unordered_map>
 #include <utility>
+#include <fmt/format.h>
 
 namespace common::rpc
 {

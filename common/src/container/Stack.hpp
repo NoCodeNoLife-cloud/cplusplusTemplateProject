@@ -6,11 +6,11 @@
 
 #pragma once
 #include <concepts>
-#include <fmt/format.h>
-#include <vector>
 #include <iterator>
 #include <stdexcept>
 #include <utility>
+#include <vector>
+#include <fmt/format.h>
 
 namespace common::container
 {

@@ -6,8 +6,8 @@
 
 #include "filesystem/nio/DoubleBuffer.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

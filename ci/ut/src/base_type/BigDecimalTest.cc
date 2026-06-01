@@ -5,10 +5,11 @@
  *          for high-precision decimal arithmetic.
  */
 
-#include <gtest/gtest.h>
-#include "base_type/BigDecimal.hpp"
-#include <string>
 #include <stdexcept>
+#include <string>
+#include <gtest/gtest.h>
+
+#include "base_type/BigDecimal.hpp"
 
 using namespace common::base_type;
 

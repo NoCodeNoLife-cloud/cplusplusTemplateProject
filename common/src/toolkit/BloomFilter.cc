@@ -6,13 +6,13 @@
 
 #include "BloomFilter.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
 #include <iterator>
 #include <limits>
 #include <random>
 #include <string>
 #include <vector>
+#include <fmt/format.h>
 
 namespace common::toolkit
 {
@@ -25,8 +25,6 @@ namespace common::toolkit
     {
         return minimum_size > maximum_size || minimum_number_of_hashes > maximum_number_of_hashes || minimum_number_of_hashes < 1 || 0 == maximum_number_of_hashes || 0 == projected_element_count || false_positive_probability < 0.0 || std::numeric_limits<double>::infinity() == std::abs(false_positive_probability) || 0 == random_seed || 0xFFFFFFFFFFFFFFFFULL == random_seed;
     }
-
-    BloomParameters::optimal_parameters_t::optimal_parameters_t()  = default;
 
     bool BloomParameters::compute_optimal_parameters()
     {
@@ -113,6 +111,8 @@ namespace common::toolkit
 
         return true;
     }
+
+    BloomParameters::optimal_parameters_t::optimal_parameters_t()  = default;
 
     double BloomParameters::safe_log(const double value)
     {

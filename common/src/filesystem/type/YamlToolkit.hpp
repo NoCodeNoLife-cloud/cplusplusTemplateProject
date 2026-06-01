@@ -5,9 +5,8 @@
  */
 
 #pragma once
-
-#include <yaml-cpp/yaml.h>
 #include <string>
+#include <yaml-cpp/yaml.h>
 
 namespace common::filesystem
 {

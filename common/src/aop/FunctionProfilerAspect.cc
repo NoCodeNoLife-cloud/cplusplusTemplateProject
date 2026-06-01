@@ -5,8 +5,8 @@
  */
 
 #include "aop/FunctionProfilerAspect.hpp"
-#include <utility>
 
+#include <utility>
 #include <glog/logging.h>
 
 namespace common::aop

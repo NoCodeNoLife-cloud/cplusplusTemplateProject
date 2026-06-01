@@ -6,11 +6,11 @@
 
 #include "base_type/Object.hpp"
 
-#include <fmt/format.h>
 #include <format>
-#include <typeinfo>
 #include <memory>
 #include <string>
+#include <typeinfo>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::base_type

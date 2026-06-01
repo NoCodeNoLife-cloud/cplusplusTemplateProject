@@ -6,11 +6,11 @@
 
 #include "XorBitCipher.hpp"
 
-#include <fmt/format.h>
+#include <algorithm>
+#include <ranges>
 #include <stdexcept>
 #include <string>
-#include <ranges>
-#include <algorithm>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::crypto::cipher
@@ -63,54 +63,6 @@ namespace common::crypto::cipher
         return hasKey();
     }
 
-    void XorBitCipher::validateInitialized() const
-    {
-        if (!hasKey())
-        {
-            DLOG(WARNING) << "XorBitCipher operation called without initialization";
-            throw std::runtime_error("XorBitCipher not initialized. Call initialize() first.");
-        }
-    }
-
-    size_t XorBitCipher::getCurrentPosition() const
-    {
-        return key_pos_;
-    }
-
-    bool XorBitCipher::hasKey() const
-    {
-        return !key_stream_.empty();
-    }
-
-    uint8_t XorBitCipher::nextKeyByte() const
-    {
-        if (key_stream_.empty())
-        {
-            throw std::invalid_argument("Key stream is empty. Set key before processing.");
-        }
-        const uint8_t byte = key_stream_[key_pos_];
-        key_pos_ = (key_pos_ + 1) % key_stream_.size();
-        bit_pos_ = 0;
-        return byte;
-    }
-
-    bool XorBitCipher::nextKeyBit() const
-    {
-        if (key_stream_.empty())
-        {
-            throw std::invalid_argument("Key stream is empty. Set key before processing.");
-        }
-        const uint8_t current_byte = key_stream_[key_pos_];
-        const bool bit = current_byte >> (MSB_POSITION - bit_pos_) & 0x01;
-        bit_pos_++;
-        if (bit_pos_ >= BITS_PER_BYTE)
-        {
-            bit_pos_ = 0;
-            key_pos_ = (key_pos_ + 1) % key_stream_.size();
-        }
-        return bit;
-    }
-
     std::vector<uint8_t> XorBitCipher::process(const std::vector<uint8_t>& data) const
     {
         std::vector<uint8_t> result;
@@ -159,6 +111,16 @@ namespace common::crypto::cipher
         return stream;
     }
 
+    size_t XorBitCipher::getCurrentPosition() const
+    {
+        return key_pos_;
+    }
+
+    bool XorBitCipher::hasKey() const
+    {
+        return !key_stream_.empty();
+    }
+
     XorBitCipher XorBitCipher::createWithRandomKey(const size_t key_length)
     {
         std::vector<uint8_t> random_key;
@@ -177,5 +139,43 @@ namespace common::crypto::cipher
         }
 
         return XorBitCipher(std::move(random_key));
+    }
+
+    void XorBitCipher::validateInitialized() const
+    {
+        if (!hasKey())
+        {
+            DLOG(WARNING) << "XorBitCipher operation called without initialization";
+            throw std::runtime_error("XorBitCipher not initialized. Call initialize() first.");
+        }
+    }
+
+    uint8_t XorBitCipher::nextKeyByte() const
+    {
+        if (key_stream_.empty())
+        {
+            throw std::invalid_argument("Key stream is empty. Set key before processing.");
+        }
+        const uint8_t byte = key_stream_[key_pos_];
+        key_pos_ = (key_pos_ + 1) % key_stream_.size();
+        bit_pos_ = 0;
+        return byte;
+    }
+
+    bool XorBitCipher::nextKeyBit() const
+    {
+        if (key_stream_.empty())
+        {
+            throw std::invalid_argument("Key stream is empty. Set key before processing.");
+        }
+        const uint8_t current_byte = key_stream_[key_pos_];
+        const bool bit = current_byte >> (MSB_POSITION - bit_pos_) & 0x01;
+        bit_pos_++;
+        if (bit_pos_ >= BITS_PER_BYTE)
+        {
+            bit_pos_ = 0;
+            key_pos_ = (key_pos_ + 1) % key_stream_.size();
+        }
+        return bit;
     }
 }

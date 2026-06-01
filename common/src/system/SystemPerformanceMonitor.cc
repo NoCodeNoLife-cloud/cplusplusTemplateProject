@@ -6,11 +6,10 @@
 
 #include "system/SystemPerformanceMonitor.hpp"
 
-#include <windows.h>
-
 #include <chrono>
 #include <cstdint>
 #include <thread>
+#include <windows.h>
 
 namespace common::system
 {

@@ -5,9 +5,10 @@
  *          and basic cache management functions including remove, clear, and status queries.
  */
 
-#include <gtest/gtest.h>
-#include "cache/LRUCache.hpp"
 #include <string>
+#include <gtest/gtest.h>
+
+#include "cache/LRUCache.hpp"
 
 using namespace common::cache;
 

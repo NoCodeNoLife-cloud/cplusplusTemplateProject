@@ -1628,13 +1628,13 @@ inline void RegisterUserRequest::clear_username() {
   _impl_.username_.ClearToEmpty();
 }
 inline const std::string& RegisterUserRequest::username() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.RegisterUserRequest.username)
   return _internal_username();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void RegisterUserRequest::set_username(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void RegisterUserRequest::set_username(Arg_&& arg,
+                                                              Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.username_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.RegisterUserRequest.username)
@@ -1643,18 +1643,6 @@ inline std::string* RegisterUserRequest::mutable_username() ABSL_ATTRIBUTE_LIFET
   std::string* _s = _internal_mutable_username();
   // @@protoc_insertion_point(field_mutable:rpc.RegisterUserRequest.username)
   return _s;
-}
-inline const std::string& RegisterUserRequest::_internal_username() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.username_.Get();
-}
-inline void RegisterUserRequest::_internal_set_username(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.username_.Set(value, GetArena());
-}
-inline std::string* RegisterUserRequest::_internal_mutable_username() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.username_.Mutable( GetArena());
 }
 inline std::string* RegisterUserRequest::release_username() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -1669,6 +1657,18 @@ inline void RegisterUserRequest::set_allocated_username(std::string* value) {
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.RegisterUserRequest.username)
 }
+inline const std::string& RegisterUserRequest::_internal_username() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.username_.Get();
+}
+inline void RegisterUserRequest::_internal_set_username(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.username_.Set(value, GetArena());
+}
+inline std::string* RegisterUserRequest::_internal_mutable_username() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.username_.Mutable( GetArena());
+}
 
 // string password = 2;
 inline void RegisterUserRequest::clear_password() {
@@ -1676,13 +1676,13 @@ inline void RegisterUserRequest::clear_password() {
   _impl_.password_.ClearToEmpty();
 }
 inline const std::string& RegisterUserRequest::password() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.RegisterUserRequest.password)
   return _internal_password();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void RegisterUserRequest::set_password(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void RegisterUserRequest::set_password(Arg_&& arg,
+                                                              Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.password_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.RegisterUserRequest.password)
@@ -1691,18 +1691,6 @@ inline std::string* RegisterUserRequest::mutable_password() ABSL_ATTRIBUTE_LIFET
   std::string* _s = _internal_mutable_password();
   // @@protoc_insertion_point(field_mutable:rpc.RegisterUserRequest.password)
   return _s;
-}
-inline const std::string& RegisterUserRequest::_internal_password() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.password_.Get();
-}
-inline void RegisterUserRequest::_internal_set_password(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.password_.Set(value, GetArena());
-}
-inline std::string* RegisterUserRequest::_internal_mutable_password() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.password_.Mutable( GetArena());
 }
 inline std::string* RegisterUserRequest::release_password() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -1717,6 +1705,18 @@ inline void RegisterUserRequest::set_allocated_password(std::string* value) {
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.RegisterUserRequest.password)
 }
+inline const std::string& RegisterUserRequest::_internal_password() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.password_.Get();
+}
+inline void RegisterUserRequest::_internal_set_password(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.password_.Set(value, GetArena());
+}
+inline std::string* RegisterUserRequest::_internal_mutable_password() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.password_.Mutable( GetArena());
+}
 
 // -------------------------------------------------------------------
 
@@ -1728,13 +1728,13 @@ inline void AuthenticateUserRequest::clear_username() {
   _impl_.username_.ClearToEmpty();
 }
 inline const std::string& AuthenticateUserRequest::username() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.AuthenticateUserRequest.username)
   return _internal_username();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void AuthenticateUserRequest::set_username(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void AuthenticateUserRequest::set_username(Arg_&& arg,
+                                                                  Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.username_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.AuthenticateUserRequest.username)
@@ -1743,18 +1743,6 @@ inline std::string* AuthenticateUserRequest::mutable_username() ABSL_ATTRIBUTE_L
   std::string* _s = _internal_mutable_username();
   // @@protoc_insertion_point(field_mutable:rpc.AuthenticateUserRequest.username)
   return _s;
-}
-inline const std::string& AuthenticateUserRequest::_internal_username() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.username_.Get();
-}
-inline void AuthenticateUserRequest::_internal_set_username(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.username_.Set(value, GetArena());
-}
-inline std::string* AuthenticateUserRequest::_internal_mutable_username() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.username_.Mutable( GetArena());
 }
 inline std::string* AuthenticateUserRequest::release_username() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -1769,6 +1757,18 @@ inline void AuthenticateUserRequest::set_allocated_username(std::string* value) 
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.AuthenticateUserRequest.username)
 }
+inline const std::string& AuthenticateUserRequest::_internal_username() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.username_.Get();
+}
+inline void AuthenticateUserRequest::_internal_set_username(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.username_.Set(value, GetArena());
+}
+inline std::string* AuthenticateUserRequest::_internal_mutable_username() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.username_.Mutable( GetArena());
+}
 
 // string password = 2;
 inline void AuthenticateUserRequest::clear_password() {
@@ -1776,13 +1776,13 @@ inline void AuthenticateUserRequest::clear_password() {
   _impl_.password_.ClearToEmpty();
 }
 inline const std::string& AuthenticateUserRequest::password() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.AuthenticateUserRequest.password)
   return _internal_password();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void AuthenticateUserRequest::set_password(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void AuthenticateUserRequest::set_password(Arg_&& arg,
+                                                                  Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.password_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.AuthenticateUserRequest.password)
@@ -1791,18 +1791,6 @@ inline std::string* AuthenticateUserRequest::mutable_password() ABSL_ATTRIBUTE_L
   std::string* _s = _internal_mutable_password();
   // @@protoc_insertion_point(field_mutable:rpc.AuthenticateUserRequest.password)
   return _s;
-}
-inline const std::string& AuthenticateUserRequest::_internal_password() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.password_.Get();
-}
-inline void AuthenticateUserRequest::_internal_set_password(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.password_.Set(value, GetArena());
-}
-inline std::string* AuthenticateUserRequest::_internal_mutable_password() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.password_.Mutable( GetArena());
 }
 inline std::string* AuthenticateUserRequest::release_password() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -1817,6 +1805,18 @@ inline void AuthenticateUserRequest::set_allocated_password(std::string* value) 
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.AuthenticateUserRequest.password)
 }
+inline const std::string& AuthenticateUserRequest::_internal_password() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.password_.Get();
+}
+inline void AuthenticateUserRequest::_internal_set_password(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.password_.Set(value, GetArena());
+}
+inline std::string* AuthenticateUserRequest::_internal_mutable_password() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.password_.Mutable( GetArena());
+}
 
 // -------------------------------------------------------------------
 
@@ -1828,13 +1828,13 @@ inline void ChangePasswordRequest::clear_username() {
   _impl_.username_.ClearToEmpty();
 }
 inline const std::string& ChangePasswordRequest::username() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.ChangePasswordRequest.username)
   return _internal_username();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void ChangePasswordRequest::set_username(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void ChangePasswordRequest::set_username(Arg_&& arg,
+                                                                Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.username_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.ChangePasswordRequest.username)
@@ -1843,18 +1843,6 @@ inline std::string* ChangePasswordRequest::mutable_username() ABSL_ATTRIBUTE_LIF
   std::string* _s = _internal_mutable_username();
   // @@protoc_insertion_point(field_mutable:rpc.ChangePasswordRequest.username)
   return _s;
-}
-inline const std::string& ChangePasswordRequest::_internal_username() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.username_.Get();
-}
-inline void ChangePasswordRequest::_internal_set_username(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.username_.Set(value, GetArena());
-}
-inline std::string* ChangePasswordRequest::_internal_mutable_username() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.username_.Mutable( GetArena());
 }
 inline std::string* ChangePasswordRequest::release_username() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -1869,6 +1857,18 @@ inline void ChangePasswordRequest::set_allocated_username(std::string* value) {
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.ChangePasswordRequest.username)
 }
+inline const std::string& ChangePasswordRequest::_internal_username() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.username_.Get();
+}
+inline void ChangePasswordRequest::_internal_set_username(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.username_.Set(value, GetArena());
+}
+inline std::string* ChangePasswordRequest::_internal_mutable_username() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.username_.Mutable( GetArena());
+}
 
 // string current_password = 2;
 inline void ChangePasswordRequest::clear_current_password() {
@@ -1876,13 +1876,13 @@ inline void ChangePasswordRequest::clear_current_password() {
   _impl_.current_password_.ClearToEmpty();
 }
 inline const std::string& ChangePasswordRequest::current_password() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.ChangePasswordRequest.current_password)
   return _internal_current_password();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void ChangePasswordRequest::set_current_password(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void ChangePasswordRequest::set_current_password(Arg_&& arg,
+                                                                        Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.current_password_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.ChangePasswordRequest.current_password)
@@ -1891,18 +1891,6 @@ inline std::string* ChangePasswordRequest::mutable_current_password() ABSL_ATTRI
   std::string* _s = _internal_mutable_current_password();
   // @@protoc_insertion_point(field_mutable:rpc.ChangePasswordRequest.current_password)
   return _s;
-}
-inline const std::string& ChangePasswordRequest::_internal_current_password() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.current_password_.Get();
-}
-inline void ChangePasswordRequest::_internal_set_current_password(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.current_password_.Set(value, GetArena());
-}
-inline std::string* ChangePasswordRequest::_internal_mutable_current_password() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.current_password_.Mutable( GetArena());
 }
 inline std::string* ChangePasswordRequest::release_current_password() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -1917,6 +1905,18 @@ inline void ChangePasswordRequest::set_allocated_current_password(std::string* v
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.ChangePasswordRequest.current_password)
 }
+inline const std::string& ChangePasswordRequest::_internal_current_password() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.current_password_.Get();
+}
+inline void ChangePasswordRequest::_internal_set_current_password(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.current_password_.Set(value, GetArena());
+}
+inline std::string* ChangePasswordRequest::_internal_mutable_current_password() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.current_password_.Mutable( GetArena());
+}
 
 // string new_password = 3;
 inline void ChangePasswordRequest::clear_new_password() {
@@ -1924,13 +1924,13 @@ inline void ChangePasswordRequest::clear_new_password() {
   _impl_.new_password_.ClearToEmpty();
 }
 inline const std::string& ChangePasswordRequest::new_password() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.ChangePasswordRequest.new_password)
   return _internal_new_password();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void ChangePasswordRequest::set_new_password(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void ChangePasswordRequest::set_new_password(Arg_&& arg,
+                                                                    Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.new_password_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.ChangePasswordRequest.new_password)
@@ -1939,18 +1939,6 @@ inline std::string* ChangePasswordRequest::mutable_new_password() ABSL_ATTRIBUTE
   std::string* _s = _internal_mutable_new_password();
   // @@protoc_insertion_point(field_mutable:rpc.ChangePasswordRequest.new_password)
   return _s;
-}
-inline const std::string& ChangePasswordRequest::_internal_new_password() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.new_password_.Get();
-}
-inline void ChangePasswordRequest::_internal_set_new_password(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.new_password_.Set(value, GetArena());
-}
-inline std::string* ChangePasswordRequest::_internal_mutable_new_password() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.new_password_.Mutable( GetArena());
 }
 inline std::string* ChangePasswordRequest::release_new_password() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -1965,6 +1953,18 @@ inline void ChangePasswordRequest::set_allocated_new_password(std::string* value
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.ChangePasswordRequest.new_password)
 }
+inline const std::string& ChangePasswordRequest::_internal_new_password() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.new_password_.Get();
+}
+inline void ChangePasswordRequest::_internal_set_new_password(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.new_password_.Set(value, GetArena());
+}
+inline std::string* ChangePasswordRequest::_internal_mutable_new_password() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.new_password_.Mutable( GetArena());
+}
 
 // -------------------------------------------------------------------
 
@@ -1976,13 +1976,13 @@ inline void ResetPasswordRequest::clear_username() {
   _impl_.username_.ClearToEmpty();
 }
 inline const std::string& ResetPasswordRequest::username() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.ResetPasswordRequest.username)
   return _internal_username();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void ResetPasswordRequest::set_username(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void ResetPasswordRequest::set_username(Arg_&& arg,
+                                                               Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.username_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.ResetPasswordRequest.username)
@@ -1991,18 +1991,6 @@ inline std::string* ResetPasswordRequest::mutable_username() ABSL_ATTRIBUTE_LIFE
   std::string* _s = _internal_mutable_username();
   // @@protoc_insertion_point(field_mutable:rpc.ResetPasswordRequest.username)
   return _s;
-}
-inline const std::string& ResetPasswordRequest::_internal_username() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.username_.Get();
-}
-inline void ResetPasswordRequest::_internal_set_username(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.username_.Set(value, GetArena());
-}
-inline std::string* ResetPasswordRequest::_internal_mutable_username() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.username_.Mutable( GetArena());
 }
 inline std::string* ResetPasswordRequest::release_username() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -2017,6 +2005,18 @@ inline void ResetPasswordRequest::set_allocated_username(std::string* value) {
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.ResetPasswordRequest.username)
 }
+inline const std::string& ResetPasswordRequest::_internal_username() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.username_.Get();
+}
+inline void ResetPasswordRequest::_internal_set_username(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.username_.Set(value, GetArena());
+}
+inline std::string* ResetPasswordRequest::_internal_mutable_username() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.username_.Mutable( GetArena());
+}
 
 // string new_password = 2;
 inline void ResetPasswordRequest::clear_new_password() {
@@ -2024,13 +2024,13 @@ inline void ResetPasswordRequest::clear_new_password() {
   _impl_.new_password_.ClearToEmpty();
 }
 inline const std::string& ResetPasswordRequest::new_password() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.ResetPasswordRequest.new_password)
   return _internal_new_password();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void ResetPasswordRequest::set_new_password(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void ResetPasswordRequest::set_new_password(Arg_&& arg,
+                                                                   Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.new_password_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.ResetPasswordRequest.new_password)
@@ -2039,18 +2039,6 @@ inline std::string* ResetPasswordRequest::mutable_new_password() ABSL_ATTRIBUTE_
   std::string* _s = _internal_mutable_new_password();
   // @@protoc_insertion_point(field_mutable:rpc.ResetPasswordRequest.new_password)
   return _s;
-}
-inline const std::string& ResetPasswordRequest::_internal_new_password() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.new_password_.Get();
-}
-inline void ResetPasswordRequest::_internal_set_new_password(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.new_password_.Set(value, GetArena());
-}
-inline std::string* ResetPasswordRequest::_internal_mutable_new_password() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.new_password_.Mutable( GetArena());
 }
 inline std::string* ResetPasswordRequest::release_new_password() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -2065,6 +2053,18 @@ inline void ResetPasswordRequest::set_allocated_new_password(std::string* value)
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.ResetPasswordRequest.new_password)
 }
+inline const std::string& ResetPasswordRequest::_internal_new_password() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.new_password_.Get();
+}
+inline void ResetPasswordRequest::_internal_set_new_password(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.new_password_.Set(value, GetArena());
+}
+inline std::string* ResetPasswordRequest::_internal_mutable_new_password() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.new_password_.Mutable( GetArena());
+}
 
 // -------------------------------------------------------------------
 
@@ -2076,13 +2076,13 @@ inline void DeleteUserRequest::clear_username() {
   _impl_.username_.ClearToEmpty();
 }
 inline const std::string& DeleteUserRequest::username() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.DeleteUserRequest.username)
   return _internal_username();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void DeleteUserRequest::set_username(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void DeleteUserRequest::set_username(Arg_&& arg,
+                                                            Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.username_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.DeleteUserRequest.username)
@@ -2091,18 +2091,6 @@ inline std::string* DeleteUserRequest::mutable_username() ABSL_ATTRIBUTE_LIFETIM
   std::string* _s = _internal_mutable_username();
   // @@protoc_insertion_point(field_mutable:rpc.DeleteUserRequest.username)
   return _s;
-}
-inline const std::string& DeleteUserRequest::_internal_username() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.username_.Get();
-}
-inline void DeleteUserRequest::_internal_set_username(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.username_.Set(value, GetArena());
-}
-inline std::string* DeleteUserRequest::_internal_mutable_username() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.username_.Mutable( GetArena());
 }
 inline std::string* DeleteUserRequest::release_username() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -2117,6 +2105,18 @@ inline void DeleteUserRequest::set_allocated_username(std::string* value) {
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.DeleteUserRequest.username)
 }
+inline const std::string& DeleteUserRequest::_internal_username() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.username_.Get();
+}
+inline void DeleteUserRequest::_internal_set_username(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.username_.Set(value, GetArena());
+}
+inline std::string* DeleteUserRequest::_internal_mutable_username() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.username_.Mutable( GetArena());
+}
 
 // -------------------------------------------------------------------
 
@@ -2128,13 +2128,13 @@ inline void UserExistsRequest::clear_username() {
   _impl_.username_.ClearToEmpty();
 }
 inline const std::string& UserExistsRequest::username() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:rpc.UserExistsRequest.username)
   return _internal_username();
 }
 template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void UserExistsRequest::set_username(Arg_&& arg,
-                                                     Args_... args) {
+PROTOBUF_ALWAYS_INLINE void UserExistsRequest::set_username(Arg_&& arg,
+                                                            Args_... args) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.username_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
   // @@protoc_insertion_point(field_set:rpc.UserExistsRequest.username)
@@ -2143,18 +2143,6 @@ inline std::string* UserExistsRequest::mutable_username() ABSL_ATTRIBUTE_LIFETIM
   std::string* _s = _internal_mutable_username();
   // @@protoc_insertion_point(field_mutable:rpc.UserExistsRequest.username)
   return _s;
-}
-inline const std::string& UserExistsRequest::_internal_username() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.username_.Get();
-}
-inline void UserExistsRequest::_internal_set_username(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.username_.Set(value, GetArena());
-}
-inline std::string* UserExistsRequest::_internal_mutable_username() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.username_.Mutable( GetArena());
 }
 inline std::string* UserExistsRequest::release_username() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -2169,11 +2157,71 @@ inline void UserExistsRequest::set_allocated_username(std::string* value) {
   }
   // @@protoc_insertion_point(field_set_allocated:rpc.UserExistsRequest.username)
 }
+inline const std::string& UserExistsRequest::_internal_username() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.username_.Get();
+}
+inline void UserExistsRequest::_internal_set_username(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.username_.Set(value, GetArena());
+}
+inline std::string* UserExistsRequest::_internal_mutable_username() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.username_.Mutable( GetArena());
+}
 
 // -------------------------------------------------------------------
 
 // AuthResponse
 
+// string message = 2;
+inline void AuthResponse::clear_message() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.message_.ClearToEmpty();
+}
+inline const std::string& AuthResponse::message() const
+ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:rpc.AuthResponse.message)
+  return _internal_message();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void AuthResponse::set_message(Arg_&& arg,
+                                                      Args_... args) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.message_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:rpc.AuthResponse.message)
+}
+inline std::string* AuthResponse::mutable_message() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_message();
+  // @@protoc_insertion_point(field_mutable:rpc.AuthResponse.message)
+  return _s;
+}
+inline std::string* AuthResponse::release_message() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:rpc.AuthResponse.message)
+  return _impl_.message_.Release();
+}
+
+inline void AuthResponse::set_allocated_message(std::string* value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.message_.SetAllocated(value, GetArena());
+  if (google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.message_.IsDefault()) {
+    _impl_.message_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:rpc.AuthResponse.message)
+}
+inline const std::string& AuthResponse::_internal_message() const {
+  google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.message_.Get();
+}
+inline void AuthResponse::_internal_set_message(const std::string& value) {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.message_.Set(value, GetArena());
+}
+inline std::string* AuthResponse::_internal_mutable_message() {
+  google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.message_.Mutable( GetArena());
+}
 // bool success = 1;
 inline void AuthResponse::clear_success() {
   google::protobuf::internal::TSanWrite(&_impl_);
@@ -2194,54 +2242,6 @@ inline bool AuthResponse::_internal_success() const {
 inline void AuthResponse::_internal_set_success(bool value) {
   google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.success_ = value;
-}
-
-// string message = 2;
-inline void AuthResponse::clear_message() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.message_.ClearToEmpty();
-}
-inline const std::string& AuthResponse::message() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:rpc.AuthResponse.message)
-  return _internal_message();
-}
-template <typename Arg_, typename... Args_>
- PROTOBUF_ALWAYS_INLINE void AuthResponse::set_message(Arg_&& arg,
-                                                     Args_... args) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.message_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:rpc.AuthResponse.message)
-}
-inline std::string* AuthResponse::mutable_message() ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  std::string* _s = _internal_mutable_message();
-  // @@protoc_insertion_point(field_mutable:rpc.AuthResponse.message)
-  return _s;
-}
-inline const std::string& AuthResponse::_internal_message() const {
-  google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.message_.Get();
-}
-inline void AuthResponse::_internal_set_message(const std::string& value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.message_.Set(value, GetArena());
-}
-inline std::string* AuthResponse::_internal_mutable_message() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.message_.Mutable( GetArena());
-}
-inline std::string* AuthResponse::release_message() {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:rpc.AuthResponse.message)
-  return _impl_.message_.Release();
-}
-inline void AuthResponse::set_allocated_message(std::string* value) {
-  google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.message_.SetAllocated(value, GetArena());
-  if (google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.message_.IsDefault()) {
-    _impl_.message_.Set("", GetArena());
-  }
-  // @@protoc_insertion_point(field_set_allocated:rpc.AuthResponse.message)
 }
 
 // int32 error_code = 3;

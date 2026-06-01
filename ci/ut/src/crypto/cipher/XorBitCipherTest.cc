@@ -5,6 +5,7 @@
  */
 
 #include <gtest/gtest.h>
+
 #include "crypto/cipher/XorBitCipher.hpp"
 
 using namespace common::crypto::cipher;

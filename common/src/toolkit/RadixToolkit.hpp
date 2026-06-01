@@ -5,7 +5,6 @@
  */
 
 #pragma once
-
 #include <algorithm>
 #include <charconv>
 #include <concepts>

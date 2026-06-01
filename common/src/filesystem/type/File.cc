@@ -5,10 +5,7 @@
  */
 
 #include "filesystem/type/File.hpp"
-#include <windows.h>
-#include <openssl/evp.h>
 
-#include <fmt/format.h>
 #include <array>
 #include <chrono>
 #include <filesystem>
@@ -18,7 +15,10 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <windows.h>
+#include <fmt/format.h>
 #include <glog/logging.h>
+#include <openssl/evp.h>
 
 namespace common::filesystem
 {

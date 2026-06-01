@@ -6,8 +6,8 @@
 
 #include "filesystem/io/writer/CharArrayWriter.hpp"
 
-#include <fmt/format.h>
 #include <stdexcept>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

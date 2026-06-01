@@ -6,13 +6,13 @@
 
 #include "time/FunctionProfiler.hpp"
 
-#include <fmt/format.h>
 #include <chrono>
-#include <string>
-#include <utility>
-#include <stdexcept>
 #include <iomanip>
 #include <sstream>
+#include <stdexcept>
+#include <string>
+#include <utility>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::time

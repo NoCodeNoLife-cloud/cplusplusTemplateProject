@@ -4,10 +4,11 @@
  * @details Tests cover type identification, reflection, and field extraction functionality.
  */
 
-#include <gtest/gtest.h>
-#include "toolkit/ClassToolkit.hpp"
 #include <string>
 #include <type_traits>
+#include <gtest/gtest.h>
+
+#include "toolkit/ClassToolkit.hpp"
 
 using namespace common::toolkit;
 

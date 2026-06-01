@@ -1,4 +1,4 @@
-#include "ConfigParam.h"
+#include "ConfigParam.hpp"
 
 namespace server_app::config
 {
@@ -6,11 +6,6 @@ namespace server_app::config
     {
         static ConfigParam instance;
         return instance;
-    }
-
-    const std::string& ConfigParam::glogConfigPath() const
-    {
-        return glog_config_path_;
     }
 
     const std::string& ConfigParam::applicationDevConfigPath() const

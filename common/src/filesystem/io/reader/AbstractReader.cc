@@ -6,10 +6,10 @@
 
 #include "filesystem/io/reader/AbstractReader.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
-#include <vector>
 #include <stdexcept>
+#include <vector>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

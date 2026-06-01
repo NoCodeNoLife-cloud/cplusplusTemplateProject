@@ -116,15 +116,6 @@ namespace common::filesystem
         }
     }
 
-    void BufferedOutputStream::flushBuffer()
-    {
-        if (buffer_position_ > 0 && output_stream_)
-        {
-            output_stream_->write(buffer_, 0, buffer_position_);
-            buffer_position_ = 0;
-        }
-    }
-
     [[nodiscard]] size_t BufferedOutputStream::getBufferSize() const
     {
         return bufferSize_;
@@ -138,5 +129,14 @@ namespace common::filesystem
     [[nodiscard]] bool BufferedOutputStream::isClosed() const
     {
         return output_stream_ == nullptr;
+    }
+
+    void BufferedOutputStream::flushBuffer()
+    {
+        if (buffer_position_ > 0 && output_stream_)
+        {
+            output_stream_->write(buffer_, 0, buffer_position_);
+            buffer_position_ = 0;
+        }
     }
 }

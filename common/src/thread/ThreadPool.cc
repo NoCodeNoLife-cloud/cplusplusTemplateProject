@@ -6,18 +6,18 @@
 
 #include "thread/ThreadPool.hpp"
 
-#include <fmt/format.h>
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
 #include <functional>
 #include <future>
 #include <queue>
-#include <thread>
-#include <vector>
-#include <stdexcept>
-#include <type_traits>
 #include <sstream>
+#include <stdexcept>
+#include <thread>
+#include <type_traits>
+#include <vector>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::thread

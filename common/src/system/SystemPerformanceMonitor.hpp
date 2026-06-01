@@ -5,9 +5,8 @@
  */
 
 #pragma once
-#include <windows.h>
-
 #include <cstdint>
+#include <windows.h>
 
 namespace common::system
 {

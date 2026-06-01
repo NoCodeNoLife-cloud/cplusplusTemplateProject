@@ -10,12 +10,12 @@
 #include <condition_variable>
 #include <functional>
 #include <future>
-#include <queue>
-#include <thread>
-#include <vector>
-#include <type_traits>
-#include <stdexcept>
 #include <memory>
+#include <queue>
+#include <stdexcept>
+#include <thread>
+#include <type_traits>
+#include <vector>
 
 namespace common::thread
 {

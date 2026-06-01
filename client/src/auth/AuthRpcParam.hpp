@@ -7,13 +7,13 @@
  */
 
 #pragma once
-#include <yaml-cpp/node/node.h>
+#include <chrono>    // C++20
 #include <filesystem>
 #include <string>
-#include <chrono>    // C++20
+#include <yaml-cpp/node/node.h>
 
-#include "interface/IYamlConfigurable.hpp"
 #include "filesystem/type/YamlToolkit.hpp"
+#include "interface/IYamlConfigurable.hpp"
 
 namespace client_app::auth
 {

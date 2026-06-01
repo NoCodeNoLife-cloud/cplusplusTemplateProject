@@ -6,11 +6,11 @@
 
 #include "base_type/BigInteger.hpp"
 
-#include <fmt/format.h>
-#include <boost/multiprecision/cpp_int.hpp>
-#include <string>
 #include <compare>
 #include <stdexcept>
+#include <string>
+#include <boost/multiprecision/cpp_int.hpp>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::base_type

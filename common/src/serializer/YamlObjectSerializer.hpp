@@ -5,12 +5,11 @@
  */
 
 #pragma once
-
-#include <yaml-cpp/yaml.h>
 #include <filesystem>
 #include <fstream>
-#include <string>
 #include <stdexcept>
+#include <string>
+#include <yaml-cpp/yaml.h>
 
 namespace common::serializer
 {

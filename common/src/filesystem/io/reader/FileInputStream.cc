@@ -6,11 +6,11 @@
 
 #include "filesystem/io/reader/FileInputStream.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
 #include <cstddef>
 #include <stdexcept>
 #include <string>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::filesystem
@@ -47,19 +47,6 @@ namespace common::filesystem
     FileInputStream::~FileInputStream()
     {
         close();
-    }
-
-    bool FileInputStream::isValid() const
-    {
-        return !closed_ && file_stream_.good();
-    }
-
-    void FileInputStream::validateBufferParams(const std::vector<std::byte>& buffer, const size_t offset, const size_t len)
-    {
-        if (offset > buffer.size() || len > buffer.size() - offset)
-        {
-            throw std::out_of_range("FileInputStream::validateBufferParams: Invalid buffer, offset, or length - offset: " + std::to_string(offset) + ", len: " + std::to_string(len) + ", buffer_size: " + std::to_string(buffer.size()));
-        }
     }
 
     std::byte FileInputStream::read()
@@ -170,5 +157,18 @@ namespace common::filesystem
     [[nodiscard]] bool FileInputStream::markSupported() const
     {
         return false;
+    }
+
+    bool FileInputStream::isValid() const
+    {
+        return !closed_ && file_stream_.good();
+    }
+
+    void FileInputStream::validateBufferParams(const std::vector<std::byte>& buffer, const size_t offset, const size_t len)
+    {
+        if (offset > buffer.size() || len > buffer.size() - offset)
+        {
+            throw std::out_of_range("FileInputStream::validateBufferParams: Invalid buffer, offset, or length - offset: " + std::to_string(offset) + ", len: " + std::to_string(len) + ", buffer_size: " + std::to_string(buffer.size()));
+        }
     }
 }

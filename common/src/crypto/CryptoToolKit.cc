@@ -7,8 +7,8 @@
 #include "CryptoToolKit.hpp"
 
 #include <fmt/format.h>
-#include <openssl/rand.h>
 #include <glog/logging.h>
+#include <openssl/rand.h>
 
 namespace common::crypto
 {

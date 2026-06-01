@@ -6,11 +6,11 @@
 
 #include "IntegerToolkit.hpp"
 
-#include <fmt/format.h>
+#include <cctype>
+#include <stdexcept>
 #include <string>
 #include <utility>
-#include <stdexcept>
-#include <cctype>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::toolkit

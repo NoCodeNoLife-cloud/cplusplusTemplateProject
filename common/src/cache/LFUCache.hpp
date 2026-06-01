@@ -5,12 +5,12 @@
  */
 
 #pragma once
-#include <fmt/format.h>
 #include <list>
 #include <optional>
 #include <stdexcept>
 #include <type_traits>
 #include <unordered_map>
+#include <fmt/format.h>
 
 #include "interface/ICache.hpp"
 
@@ -132,29 +132,6 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    template <typename CacheType>
-    std::optional<Value> LFUCache<Key, Value, Map>::get_impl(CacheType& cache, const Key& key)
-    {
-        auto it = cache.key_map_.find(key);
-        if (it == cache.key_map_.end())
-        {
-            return std::nullopt;
-        }
-
-        // Extract the iterator to the actual cache entry
-        auto cache_entry_it = it->second;
-        Value value = cache_entry_it->second.first; // Store value to return
-
-        // Update frequency of accessed item (only for non-const version)
-        if constexpr (!std::is_const_v<CacheType>)
-        {
-            cache.update_frequency(cache_entry_it);
-        }
-
-        return value;
-    }
-
-    template <typename Key, typename Value, typename Map>
     std::optional<Value> LFUCache<Key, Value, Map>::get(const Key& key) const
     {
         return get_impl(*this, key);
@@ -164,47 +141,6 @@ namespace common::cache
     std::optional<Value> LFUCache<Key, Value, Map>::get(const Key& key)
     {
         return get_impl(*this, key);
-    }
-
-    template <typename Key, typename Value, typename Map>
-    template <typename ValueType>
-    bool LFUCache<Key, Value, Map>::put_impl(const Key& key, ValueType&& value)
-    {
-        auto it = key_map_.find(key);
-        if (it != key_map_.end())
-        {
-            // Key exists, update the value and increment frequency
-            auto cache_entry_it = it->second;
-            cache_entry_it->second.first = std::forward<ValueType>(value);
-            update_frequency(cache_entry_it);
-            return true;
-        }
-
-        // Key doesn't exist, need to insert new key
-        if (key_map_.size() >= capacity_)
-        {
-            if (capacity_ == 0)
-            {
-                return false;
-            }
-
-            if (!evict_lfu_item())
-            {
-                return false; // Failed to evict an item
-            }
-        }
-
-        // Add new key-value pair with frequency 1
-        auto& freq_list = get_or_create_freq_list(1);
-        freq_list.emplace_front(key, std::make_pair(std::forward<ValueType>(value), 1));
-
-        // Update key map
-        key_map_[key] = freq_list.begin();
-
-        // Since we added a new item with frequency 1, update min_freq_
-        min_freq_ = 1;
-
-        return true;
     }
 
     template <typename Key, typename Value, typename Map>
@@ -276,6 +212,99 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
+    template <typename CacheType>
+    std::optional<Value> LFUCache<Key, Value, Map>::get_impl(CacheType& cache, const Key& key)
+    {
+        auto it = cache.key_map_.find(key);
+        if (it == cache.key_map_.end())
+        {
+            return std::nullopt;
+        }
+
+        // Extract the iterator to the actual cache entry
+        auto cache_entry_it = it->second;
+        Value value = cache_entry_it->second.first; // Store value to return
+
+        // Update frequency of accessed item (only for non-const version)
+        if constexpr (!std::is_const_v<CacheType>)
+        {
+            cache.update_frequency(cache_entry_it);
+        }
+
+        return value;
+    }
+
+    template <typename Key, typename Value, typename Map>
+    template <typename ValueType>
+    bool LFUCache<Key, Value, Map>::put_impl(const Key& key, ValueType&& value)
+    {
+        auto it = key_map_.find(key);
+        if (it != key_map_.end())
+        {
+            // Key exists, update the value and increment frequency
+            auto cache_entry_it = it->second;
+            cache_entry_it->second.first = std::forward<ValueType>(value);
+            update_frequency(cache_entry_it);
+            return true;
+        }
+
+        // Key doesn't exist, need to insert new key
+        if (key_map_.size() >= capacity_)
+        {
+            if (capacity_ == 0)
+            {
+                return false;
+            }
+
+            if (!evict_lfu_item())
+            {
+                return false; // Failed to evict an item
+            }
+        }
+
+        // Add new key-value pair with frequency 1
+        auto& freq_list = get_or_create_freq_list(1);
+        freq_list.emplace_front(key, std::make_pair(std::forward<ValueType>(value), 1));
+
+        // Update key map
+        key_map_[key] = freq_list.begin();
+
+        // Since we added a new item with frequency 1, update min_freq_
+        min_freq_ = 1;
+
+        return true;
+    }
+
+    template <typename Key, typename Value, typename Map>
+    void LFUCache<Key, Value, Map>::update_frequency(typename std::list<std::pair<Key, std::pair<Value, size_t>>>::iterator it)
+    {
+        Key key = it->first;
+        Value value = it->second.first;
+        size_t old_freq = it->second.second;
+        size_t new_freq = old_freq + 1;
+
+        // Get the old frequency list and remove the element
+        auto& old_freq_list = freq_list_map_[old_freq];
+        old_freq_list.erase(it);
+
+        // If the old frequency list becomes empty, remove the frequency entry
+        remove_empty_freq_list(old_freq);
+
+        // Add to new frequency list
+        auto& new_freq_list = get_or_create_freq_list(new_freq);
+        new_freq_list.push_front({key, {value, new_freq}});
+
+        // Update key map to point to the new location
+        key_map_[key] = new_freq_list.begin();
+
+        // Update min frequency if necessary
+        if (min_freq_ == 0 || new_freq < min_freq_)
+        {
+            min_freq_ = new_freq;
+        }
+    }
+
+    template <typename Key, typename Value, typename Map>
     bool LFUCache<Key, Value, Map>::evict_lfu_item()
     {
         // Find the list with minimum frequency
@@ -339,35 +368,6 @@ namespace common::cache
                     min_freq_ = 0;
                 }
             }
-        }
-    }
-
-    template <typename Key, typename Value, typename Map>
-    void LFUCache<Key, Value, Map>::update_frequency(typename std::list<std::pair<Key, std::pair<Value, size_t>>>::iterator it)
-    {
-        Key key = it->first;
-        Value value = it->second.first;
-        size_t old_freq = it->second.second;
-        size_t new_freq = old_freq + 1;
-
-        // Get the old frequency list and remove the element
-        auto& old_freq_list = freq_list_map_[old_freq];
-        old_freq_list.erase(it);
-
-        // If the old frequency list becomes empty, remove the frequency entry
-        remove_empty_freq_list(old_freq);
-
-        // Add to new frequency list
-        auto& new_freq_list = get_or_create_freq_list(new_freq);
-        new_freq_list.push_front({key, {value, new_freq}});
-
-        // Update key map to point to the new location
-        key_map_[key] = new_freq_list.begin();
-
-        // Update min frequency if necessary
-        if (min_freq_ == 0 || new_freq < min_freq_)
-        {
-            min_freq_ = new_freq;
         }
     }
 }

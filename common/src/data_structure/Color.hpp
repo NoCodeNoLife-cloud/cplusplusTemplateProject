@@ -5,6 +5,7 @@
  */
 
 #pragma once
+
 namespace common::data_structure
 {
     /// @brief Enumeration representing various colors.

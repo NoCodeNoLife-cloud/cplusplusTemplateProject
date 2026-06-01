@@ -5,10 +5,11 @@
  *          size management, copy/move semantics, and edge cases.
  */
 
-#include <gtest/gtest.h>
-#include "container/Queue.hpp"
 #include <string>
 #include <vector>
+#include <gtest/gtest.h>
+
+#include "container/Queue.hpp"
 
 using namespace common::container;
 

@@ -6,10 +6,10 @@
 
 #include "filesystem/io/reader/PushbackInputStream.hpp"
 
-#include <fmt/format.h>
+#include <algorithm>
 #include <cstddef>
 #include <stdexcept>
-#include <algorithm>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

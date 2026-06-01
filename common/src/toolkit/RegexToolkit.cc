@@ -6,11 +6,11 @@
 
 #include "toolkit/RegexToolkit.hpp"
 
-#include <fmt/format.h>
 #include <regex>
+#include <stdexcept>
 #include <string>
 #include <vector>
-#include <stdexcept>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::toolkit

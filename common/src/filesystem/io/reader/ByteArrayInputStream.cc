@@ -6,11 +6,11 @@
 
 #include "filesystem/io/reader/ByteArrayInputStream.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
 #include <cstddef>
 #include <stdexcept>
 #include <string>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

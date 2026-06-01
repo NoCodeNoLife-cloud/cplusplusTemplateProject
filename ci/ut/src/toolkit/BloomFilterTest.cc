@@ -5,10 +5,10 @@
  *          set operations (AND/OR/XOR), false positive probability, and edge cases.
  */
 
-#include <gtest/gtest.h>
+#include <set>
 #include <string>
 #include <vector>
-#include <set>
+#include <gtest/gtest.h>
 
 #include "toolkit/BloomFilter.hpp"
 

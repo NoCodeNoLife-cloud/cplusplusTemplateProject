@@ -5,13 +5,12 @@
  */
 
 #pragma once
-
-#include <grpcpp/grpcpp.h>
-#include <string>
-#include <memory>
-#include <thread>
 #include <atomic>
 #include <functional>
+#include <memory>
+#include <string>
+#include <thread>
+#include <grpcpp/grpcpp.h>
 
 #include "GrpcConnectivityState.hpp"
 #include "RpcMetadata.hpp"

@@ -5,11 +5,12 @@
  *          heap property validation, and edge cases with different comparison functions.
  */
 
-#include <gtest/gtest.h>
-#include "container/Heap.hpp"
-#include <vector>
-#include <string>
 #include <functional>
+#include <string>
+#include <vector>
+#include <gtest/gtest.h>
+
+#include "container/Heap.hpp"
 
 using namespace common::container;
 

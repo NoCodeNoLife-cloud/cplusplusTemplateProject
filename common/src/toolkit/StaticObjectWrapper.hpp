@@ -5,10 +5,10 @@
  */
 
 #pragma once
-#include <type_traits>
-#include <mutex>
 #include <memory>
+#include <mutex>
 #include <stdexcept>
+#include <type_traits>
 
 namespace common::toolkit
 {

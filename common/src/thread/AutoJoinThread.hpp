@@ -5,7 +5,6 @@
  */
 
 #pragma once
-
 #include <thread>
 #include <utility>
 
@@ -23,12 +22,12 @@ namespace common::thread
 
         /// @brief Move constructor
         /// @param other The source object to move from
-        AutoJoinThread(AutoJoinThread&& other) ;
+        AutoJoinThread(AutoJoinThread&& other) noexcept;
 
         /// @brief Move assignment operator
         /// @param other The source object to move from
         /// @return Reference to this object
-        auto operator=(AutoJoinThread&& other)  -> AutoJoinThread&;
+        auto operator=(AutoJoinThread&& other) noexcept -> AutoJoinThread&;
 
         /// @brief Template constructor that accepts any callable object and its arguments
         /// @tparam Function The type of the callable object
@@ -51,11 +50,11 @@ namespace common::thread
 
         /// @brief Checks if the thread is joinable
         /// @return true if the thread is joinable, false otherwise
-        [[nodiscard]] bool joinable() const ;
+        [[nodiscard]] bool joinable() const;
 
         /// @brief Swaps this thread with another AutoJoinThread object
         /// @param other The other AutoJoinThread object to swap with
-        void swap(AutoJoinThread& other) ;
+        void swap(AutoJoinThread& other);
 
         /// @brief Gets the native handle of the underlying thread
         /// @return The native handle of the thread

@@ -5,9 +5,9 @@
  */
 
 #pragma once
+#include <memory>
 
 #include "HashStrategy.hpp"
-#include <memory>
 
 namespace common::crypto::hash
 {

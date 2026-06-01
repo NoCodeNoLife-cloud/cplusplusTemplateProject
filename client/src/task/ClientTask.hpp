@@ -11,10 +11,10 @@
 #include <string>
 #include <grpcpp/grpcpp.h>
 
-#include "auth/AuthRpcService.hpp"
 #include "auth/AuthRpcParam.hpp"
-#include "time/FunctionProfiler.hpp"
+#include "auth/AuthRpcService.hpp"
 #include "interface/ITask.hpp"
+#include "time/FunctionProfiler.hpp"
 
 namespace client_app::task
 {

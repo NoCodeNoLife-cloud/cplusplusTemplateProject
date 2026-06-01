@@ -8,11 +8,6 @@ namespace client_app::config
         return instance;
     }
 
-    const std::string& ConfigParam::glogConfigPath() const
-    {
-        return glog_config_path_;
-    }
-
     const std::string& ConfigParam::applicationDevConfigPath() const
     {
         return application_dev_config_path_;

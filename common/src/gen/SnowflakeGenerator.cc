@@ -52,24 +52,6 @@ namespace common::gen
         return uniqueId;
     }
 
-    int64_t SnowflakeGenerator::GetCurrentTimestamp()
-    {
-        const auto now = std::chrono::system_clock::now();
-        const auto duration = now.time_since_epoch();
-        const int64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-        return timestamp - SnowflakeOption::TWEPOCH;
-    }
-
-    int64_t SnowflakeGenerator::TilNextMillis(const int64_t last_timestamp)
-    {
-        int64_t timestamp = GetCurrentTimestamp();
-        while (timestamp <= last_timestamp)
-        {
-            timestamp = GetCurrentTimestamp();
-        }
-        return timestamp;
-    }
-
     void SnowflakeGenerator::UpdateSequenceAndTimestamp(int64_t& timestamp, const int64_t last_timestamp)
     {
         if (timestamp == last_timestamp)
@@ -89,5 +71,23 @@ namespace common::gen
     int64_t SnowflakeGenerator::GenerateUniqueId(const int64_t timestamp, const int16_t datacenter_id, const int16_t machine_id, const int64_t sequence)
     {
         return timestamp << (static_cast<int64_t>(SnowflakeOption::machine_bits_) + static_cast<int64_t>(SnowflakeOption::sequence_bits_)) | static_cast<int64_t>(datacenter_id << 5 | machine_id) << static_cast<int64_t>(SnowflakeOption::sequence_bits_) | sequence;
+    }
+
+    int64_t SnowflakeGenerator::GetCurrentTimestamp()
+    {
+        const auto now = std::chrono::system_clock::now();
+        const auto duration = now.time_since_epoch();
+        const int64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+        return timestamp - SnowflakeOption::TWEPOCH;
+    }
+
+    int64_t SnowflakeGenerator::TilNextMillis(const int64_t last_timestamp)
+    {
+        int64_t timestamp = GetCurrentTimestamp();
+        while (timestamp <= last_timestamp)
+        {
+            timestamp = GetCurrentTimestamp();
+        }
+        return timestamp;
     }
 }

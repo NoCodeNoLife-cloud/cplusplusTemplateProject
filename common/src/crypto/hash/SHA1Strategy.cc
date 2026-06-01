@@ -6,8 +6,8 @@
 
 #include "SHA1Strategy.hpp"
 
-#include <fmt/format.h>
 #include <stdexcept>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::crypto::hash

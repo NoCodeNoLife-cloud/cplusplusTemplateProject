@@ -5,9 +5,10 @@
  *          various numeric bases (binary, octal, hexadecimal), error handling, and edge cases.
  */
 
-#include <gtest/gtest.h>
-#include "toolkit/RadixToolkit.hpp"
 #include <limits>
+#include <gtest/gtest.h>
+
+#include "toolkit/RadixToolkit.hpp"
 
 using namespace common::toolkit;
 

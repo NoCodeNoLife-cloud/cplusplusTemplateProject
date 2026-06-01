@@ -3,3 +3,8 @@ grpc:
   keepalivePermitWithoutCalls: 1
   keepaliveTimeMs: 30000
   keepaliveTimeoutMs: 5000
+glog:
+  minLogLevel: 0
+  logName: glog_main
+  logToStderr: true
+  customLogFormat: true

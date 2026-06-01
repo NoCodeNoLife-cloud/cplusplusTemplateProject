@@ -5,9 +5,10 @@
  *          conversions between different representations (enum to string, grpc enum to internal enum).
  */
 
-#include <gtest/gtest.h>
-#include "rpc/RpcMetadata.hpp"
 #include <grpc/impl/connectivity_state.h>
+#include <gtest/gtest.h>
+
+#include "rpc/RpcMetadata.hpp"
 
 using namespace common::rpc;
 

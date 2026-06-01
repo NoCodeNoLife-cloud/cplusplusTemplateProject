@@ -5,8 +5,8 @@
  */
 
 #pragma once
-#include <mutex>
 #include <cstdint>
+#include <mutex>
 
 namespace common::gen
 {

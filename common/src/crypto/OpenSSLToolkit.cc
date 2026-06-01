@@ -5,18 +5,18 @@
  */
 
 #include "crypto/OpenSSLToolkit.hpp"
-#include <openssl/aes.h>
-#include <openssl/evp.h>
-#include <openssl/rand.h>
 
-#include <fmt/format.h>
+#include <algorithm>
+#include <array>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <memory>
-#include <algorithm>
-#include <array>
+#include <fmt/format.h>
 #include <glog/logging.h>
+#include <openssl/aes.h>
+#include <openssl/evp.h>
+#include <openssl/rand.h>
 
 namespace common::crypto
 {

@@ -6,11 +6,11 @@
 
 #include "filesystem/io/reader/BufferedInputStream.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
 #include <cstddef>
 #include <memory>
 #include <stdexcept>
+#include <fmt/format.h>
 
 #include "filesystem/io/reader/AbstractInputStream.hpp"
 #include "filesystem/io/reader/BufferedReader.hpp"
@@ -68,21 +68,6 @@ namespace common::filesystem
             }
         }
         return buf_[pos_++];
-    }
-
-    template <typename Operation>
-    size_t BufferedInputStream::processWithBuffer(Operation&& op)
-    {
-        if (const size_t bytesAvailable = count_ - pos_; bytesAvailable == 0)
-        {
-            fillBuffer();
-            if (count_ - pos_ == 0)
-            {
-                return 0; // No more data available
-            }
-        }
-
-        return op(count_ - pos_); // Pass available bytes to the operation
     }
 
     size_t BufferedInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len)
@@ -176,5 +161,20 @@ namespace common::filesystem
         else
         {
         }
+    }
+
+    template <typename Operation>
+    size_t BufferedInputStream::processWithBuffer(Operation&& op)
+    {
+        if (const size_t bytesAvailable = count_ - pos_; bytesAvailable == 0)
+        {
+            fillBuffer();
+            if (count_ - pos_ == 0)
+            {
+                return 0; // No more data available
+            }
+        }
+
+        return op(count_ - pos_); // Pass available bytes to the operation
     }
 }

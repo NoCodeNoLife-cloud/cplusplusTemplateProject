@@ -6,10 +6,10 @@
 
 #include "filesystem/io/reader/Scanner.hpp"
 
-#include <fmt/format.h>
 #include <istream>
-#include <stdexcept>
 #include <limits>
+#include <stdexcept>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

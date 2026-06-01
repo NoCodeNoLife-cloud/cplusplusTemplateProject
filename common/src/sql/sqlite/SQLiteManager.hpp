@@ -5,11 +5,10 @@
  */
 
 #pragma once
-#include <sqlite3.h>
-#include <vector>
-#include <string>
-#include <stdexcept>
 #include <memory>
+#include <sqlite3.h>
+#include <string>
+#include <vector>
 
 namespace common::sql::sqlite
 {

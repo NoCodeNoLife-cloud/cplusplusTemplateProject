@@ -30,23 +30,37 @@ static const char* AuthService_method_names[] = {
   "/rpc.AuthService/UserExists",
 };
 
-std::unique_ptr< AuthService::Stub> AuthService::NewStub(const std::shared_ptr< grpc::ChannelInterface>& channel, const grpc::StubOptions& options) {
-  (void)options;
-  std::unique_ptr< Stub> stub(new Stub(channel, options));
-  return stub;
-}
-
 AuthService::Stub::Stub(const std::shared_ptr< grpc::ChannelInterface>& channel, const grpc::StubOptions& options)
   : channel_(channel), rpcmethod_RegisterUser_(AuthService_method_names[0], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_AuthenticateUser_(AuthService_method_names[1], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ChangePassword_(AuthService_method_names[2], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ResetPassword_(AuthService_method_names[3], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_DeleteUser_(AuthService_method_names[4], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_UserExists_(AuthService_method_names[5], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  {}
+    , rpcmethod_AuthenticateUser_(AuthService_method_names[1], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
+    , rpcmethod_ChangePassword_(AuthService_method_names[2], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
+    , rpcmethod_ResetPassword_(AuthService_method_names[3], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
+    , rpcmethod_DeleteUser_(AuthService_method_names[4], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
+    , rpcmethod_UserExists_(AuthService_method_names[5], options.suffix_for_stats(),grpc::internal::RpcMethod::NORMAL_RPC, channel)
+{}
 
 grpc::Status AuthService::Stub::RegisterUser(grpc::ClientContext* context, const RegisterUserRequest& request, AuthResponse* response) {
   return ::grpc::internal::BlockingUnaryCall< RegisterUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_RegisterUser_, context, request, response);
+}
+
+grpc::Status AuthService::Stub::AuthenticateUser(grpc::ClientContext* context, const AuthenticateUserRequest& request, AuthResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< AuthenticateUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_AuthenticateUser_, context, request, response);
+}
+
+grpc::Status AuthService::Stub::ChangePassword(grpc::ClientContext* context, const ChangePasswordRequest& request, AuthResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ChangePasswordRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ChangePassword_, context, request, response);
+}
+
+grpc::Status AuthService::Stub::ResetPassword(grpc::ClientContext* context, const ResetPasswordRequest& request, AuthResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ResetPasswordRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ResetPassword_, context, request, response);
+}
+
+grpc::Status AuthService::Stub::DeleteUser(grpc::ClientContext* context, const DeleteUserRequest& request, AuthResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< DeleteUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_DeleteUser_, context, request, response);
+}
+
+grpc::Status AuthService::Stub::UserExists(grpc::ClientContext* context, const UserExistsRequest& request, AuthResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< UserExistsRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_UserExists_, context, request, response);
 }
 
 void AuthService::Stub::async::RegisterUser(grpc::ClientContext* context, const RegisterUserRequest* request, AuthResponse* response, std::function<void(grpc::Status)> f) {
@@ -57,42 +71,12 @@ void AuthService::Stub::async::RegisterUser(grpc::ClientContext* context, const 
   grpc::internal::ClientCallbackUnaryFactory::Create< grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RegisterUser_, context, request, response, reactor);
 }
 
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncRegisterUserRaw(grpc::ClientContext* context, const RegisterUserRequest& request, grpc::CompletionQueue* cq) {
-  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, RegisterUserRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_RegisterUser_, context, request);
-}
-
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncRegisterUserRaw(grpc::ClientContext* context, const RegisterUserRequest& request, grpc::CompletionQueue* cq) {
-  auto* result =
-    this->PrepareAsyncRegisterUserRaw(context, request, cq);
-  result->StartCall();
-  return result;
-}
-
-grpc::Status AuthService::Stub::AuthenticateUser(grpc::ClientContext* context, const AuthenticateUserRequest& request, AuthResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< AuthenticateUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_AuthenticateUser_, context, request, response);
-}
-
 void AuthService::Stub::async::AuthenticateUser(grpc::ClientContext* context, const AuthenticateUserRequest* request, AuthResponse* response, std::function<void(grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< AuthenticateUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_AuthenticateUser_, context, request, response, std::move(f));
 }
 
 void AuthService::Stub::async::AuthenticateUser(grpc::ClientContext* context, const AuthenticateUserRequest* request, AuthResponse* response, grpc::ClientUnaryReactor* reactor) {
   grpc::internal::ClientCallbackUnaryFactory::Create< grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_AuthenticateUser_, context, request, response, reactor);
-}
-
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncAuthenticateUserRaw(grpc::ClientContext* context, const AuthenticateUserRequest& request, grpc::CompletionQueue* cq) {
-  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, AuthenticateUserRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_AuthenticateUser_, context, request);
-}
-
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncAuthenticateUserRaw(grpc::ClientContext* context, const AuthenticateUserRequest& request, grpc::CompletionQueue* cq) {
-  auto* result =
-    this->PrepareAsyncAuthenticateUserRaw(context, request, cq);
-  result->StartCall();
-  return result;
-}
-
-grpc::Status AuthService::Stub::ChangePassword(grpc::ClientContext* context, const ChangePasswordRequest& request, AuthResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< ChangePasswordRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ChangePassword_, context, request, response);
 }
 
 void AuthService::Stub::async::ChangePassword(grpc::ClientContext* context, const ChangePasswordRequest* request, AuthResponse* response, std::function<void(grpc::Status)> f) {
@@ -103,42 +87,12 @@ void AuthService::Stub::async::ChangePassword(grpc::ClientContext* context, cons
   grpc::internal::ClientCallbackUnaryFactory::Create< grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ChangePassword_, context, request, response, reactor);
 }
 
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncChangePasswordRaw(grpc::ClientContext* context, const ChangePasswordRequest& request, grpc::CompletionQueue* cq) {
-  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, ChangePasswordRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ChangePassword_, context, request);
-}
-
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncChangePasswordRaw(grpc::ClientContext* context, const ChangePasswordRequest& request, grpc::CompletionQueue* cq) {
-  auto* result =
-    this->PrepareAsyncChangePasswordRaw(context, request, cq);
-  result->StartCall();
-  return result;
-}
-
-grpc::Status AuthService::Stub::ResetPassword(grpc::ClientContext* context, const ResetPasswordRequest& request, AuthResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< ResetPasswordRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ResetPassword_, context, request, response);
-}
-
 void AuthService::Stub::async::ResetPassword(grpc::ClientContext* context, const ResetPasswordRequest* request, AuthResponse* response, std::function<void(grpc::Status)> f) {
   ::grpc::internal::CallbackUnaryCall< ResetPasswordRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ResetPassword_, context, request, response, std::move(f));
 }
 
 void AuthService::Stub::async::ResetPassword(grpc::ClientContext* context, const ResetPasswordRequest* request, AuthResponse* response, grpc::ClientUnaryReactor* reactor) {
   grpc::internal::ClientCallbackUnaryFactory::Create< grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ResetPassword_, context, request, response, reactor);
-}
-
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncResetPasswordRaw(grpc::ClientContext* context, const ResetPasswordRequest& request, grpc::CompletionQueue* cq) {
-  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, ResetPasswordRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ResetPassword_, context, request);
-}
-
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncResetPasswordRaw(grpc::ClientContext* context, const ResetPasswordRequest& request, grpc::CompletionQueue* cq) {
-  auto* result =
-    this->PrepareAsyncResetPasswordRaw(context, request, cq);
-  result->StartCall();
-  return result;
-}
-
-grpc::Status AuthService::Stub::DeleteUser(grpc::ClientContext* context, const DeleteUserRequest& request, AuthResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< DeleteUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_DeleteUser_, context, request, response);
 }
 
 void AuthService::Stub::async::DeleteUser(grpc::ClientContext* context, const DeleteUserRequest* request, AuthResponse* response, std::function<void(grpc::Status)> f) {
@@ -149,8 +103,56 @@ void AuthService::Stub::async::DeleteUser(grpc::ClientContext* context, const De
   grpc::internal::ClientCallbackUnaryFactory::Create< grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_DeleteUser_, context, request, response, reactor);
 }
 
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncDeleteUserRaw(grpc::ClientContext* context, const DeleteUserRequest& request, grpc::CompletionQueue* cq) {
-  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, DeleteUserRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_DeleteUser_, context, request);
+void AuthService::Stub::async::UserExists(grpc::ClientContext* context, const UserExistsRequest* request, AuthResponse* response, std::function<void(grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< UserExistsRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_UserExists_, context, request, response, std::move(f));
+}
+
+void AuthService::Stub::async::UserExists(grpc::ClientContext* context, const UserExistsRequest* request, AuthResponse* response, grpc::ClientUnaryReactor* reactor) {
+  grpc::internal::ClientCallbackUnaryFactory::Create< grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_UserExists_, context, request, response, reactor);
+}
+
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncRegisterUserRaw(grpc::ClientContext* context, const RegisterUserRequest& request, grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncRegisterUserRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncRegisterUserRaw(grpc::ClientContext* context, const RegisterUserRequest& request, grpc::CompletionQueue* cq) {
+  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, RegisterUserRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_RegisterUser_, context, request);
+}
+
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncAuthenticateUserRaw(grpc::ClientContext* context, const AuthenticateUserRequest& request, grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncAuthenticateUserRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncAuthenticateUserRaw(grpc::ClientContext* context, const AuthenticateUserRequest& request, grpc::CompletionQueue* cq) {
+  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, AuthenticateUserRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_AuthenticateUser_, context, request);
+}
+
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncChangePasswordRaw(grpc::ClientContext* context, const ChangePasswordRequest& request, grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncChangePasswordRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncChangePasswordRaw(grpc::ClientContext* context, const ChangePasswordRequest& request, grpc::CompletionQueue* cq) {
+  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, ChangePasswordRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ChangePassword_, context, request);
+}
+
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncResetPasswordRaw(grpc::ClientContext* context, const ResetPasswordRequest& request, grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncResetPasswordRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncResetPasswordRaw(grpc::ClientContext* context, const ResetPasswordRequest& request, grpc::CompletionQueue* cq) {
+  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, ResetPasswordRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ResetPassword_, context, request);
 }
 
 grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncDeleteUserRaw(grpc::ClientContext* context, const DeleteUserRequest& request, grpc::CompletionQueue* cq) {
@@ -160,20 +162,8 @@ grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncDeleteUs
   return result;
 }
 
-grpc::Status AuthService::Stub::UserExists(grpc::ClientContext* context, const UserExistsRequest& request, AuthResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< UserExistsRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_UserExists_, context, request, response);
-}
-
-void AuthService::Stub::async::UserExists(grpc::ClientContext* context, const UserExistsRequest* request, AuthResponse* response, std::function<void(grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< UserExistsRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_UserExists_, context, request, response, std::move(f));
-}
-
-void AuthService::Stub::async::UserExists(grpc::ClientContext* context, const UserExistsRequest* request, AuthResponse* response, grpc::ClientUnaryReactor* reactor) {
-  grpc::internal::ClientCallbackUnaryFactory::Create< grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_UserExists_, context, request, response, reactor);
-}
-
-grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncUserExistsRaw(grpc::ClientContext* context, const UserExistsRequest& request, grpc::CompletionQueue* cq) {
-  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, UserExistsRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_UserExists_, context, request);
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncDeleteUserRaw(grpc::ClientContext* context, const DeleteUserRequest& request, grpc::CompletionQueue* cq) {
+  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, DeleteUserRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_DeleteUser_, context, request);
 }
 
 grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncUserExistsRaw(grpc::ClientContext* context, const UserExistsRequest& request, grpc::CompletionQueue* cq) {
@@ -183,67 +173,77 @@ grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::AsyncUserExis
   return result;
 }
 
+grpc::ClientAsyncResponseReader< AuthResponse>* AuthService::Stub::PrepareAsyncUserExistsRaw(grpc::ClientContext* context, const UserExistsRequest& request, grpc::CompletionQueue* cq) {
+  return grpc::internal::ClientAsyncResponseReaderHelper::Create< AuthResponse, UserExistsRequest, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_UserExists_, context, request);
+}
+
+std::unique_ptr< AuthService::Stub> AuthService::NewStub(const std::shared_ptr< grpc::ChannelInterface>& channel, const grpc::StubOptions& options) {
+  (void)options;
+  std::unique_ptr< Stub> stub(new Stub(channel, options));
+  return stub;
+}
+
 AuthService::Service::Service() {
   AddMethod(new grpc::internal::RpcServiceMethod(
-      AuthService_method_names[0],
-      grpc::internal::RpcMethod::NORMAL_RPC,
-      new grpc::internal::RpcMethodHandler< Service, RegisterUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
-          [](Service* service,
-             grpc::ServerContext* ctx,
-             const RegisterUserRequest* req,
-             AuthResponse* resp) {
-               return service->RegisterUser(ctx, req, resp);
-             }, this)));
+    AuthService_method_names[0],
+    grpc::internal::RpcMethod::NORMAL_RPC,
+    new grpc::internal::RpcMethodHandler< Service, RegisterUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
+      [](Service* service,
+         grpc::ServerContext* ctx,
+         const RegisterUserRequest* req,
+         AuthResponse* resp) {
+        return service->RegisterUser(ctx, req, resp);
+      }, this)));
   AddMethod(new grpc::internal::RpcServiceMethod(
-      AuthService_method_names[1],
-      grpc::internal::RpcMethod::NORMAL_RPC,
-      new grpc::internal::RpcMethodHandler< Service, AuthenticateUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
-          [](Service* service,
-             grpc::ServerContext* ctx,
-             const AuthenticateUserRequest* req,
-             AuthResponse* resp) {
-               return service->AuthenticateUser(ctx, req, resp);
-             }, this)));
+    AuthService_method_names[1],
+    grpc::internal::RpcMethod::NORMAL_RPC,
+    new grpc::internal::RpcMethodHandler< Service, AuthenticateUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
+      [](Service* service,
+         grpc::ServerContext* ctx,
+         const AuthenticateUserRequest* req,
+         AuthResponse* resp) {
+        return service->AuthenticateUser(ctx, req, resp);
+      }, this)));
   AddMethod(new grpc::internal::RpcServiceMethod(
-      AuthService_method_names[2],
-      grpc::internal::RpcMethod::NORMAL_RPC,
-      new grpc::internal::RpcMethodHandler< Service, ChangePasswordRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
-          [](Service* service,
-             grpc::ServerContext* ctx,
-             const ChangePasswordRequest* req,
-             AuthResponse* resp) {
-               return service->ChangePassword(ctx, req, resp);
-             }, this)));
+    AuthService_method_names[2],
+    grpc::internal::RpcMethod::NORMAL_RPC,
+    new grpc::internal::RpcMethodHandler< Service, ChangePasswordRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
+      [](Service* service,
+         grpc::ServerContext* ctx,
+         const ChangePasswordRequest* req,
+         AuthResponse* resp) {
+        return service->ChangePassword(ctx, req, resp);
+      }, this)));
   AddMethod(new grpc::internal::RpcServiceMethod(
-      AuthService_method_names[3],
-      grpc::internal::RpcMethod::NORMAL_RPC,
-      new grpc::internal::RpcMethodHandler< Service, ResetPasswordRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
-          [](Service* service,
-             grpc::ServerContext* ctx,
-             const ResetPasswordRequest* req,
-             AuthResponse* resp) {
-               return service->ResetPassword(ctx, req, resp);
-             }, this)));
+    AuthService_method_names[3],
+    grpc::internal::RpcMethod::NORMAL_RPC,
+    new grpc::internal::RpcMethodHandler< Service, ResetPasswordRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
+      [](Service* service,
+         grpc::ServerContext* ctx,
+         const ResetPasswordRequest* req,
+         AuthResponse* resp) {
+        return service->ResetPassword(ctx, req, resp);
+      }, this)));
   AddMethod(new grpc::internal::RpcServiceMethod(
-      AuthService_method_names[4],
-      grpc::internal::RpcMethod::NORMAL_RPC,
-      new grpc::internal::RpcMethodHandler< Service, DeleteUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
-          [](Service* service,
-             grpc::ServerContext* ctx,
-             const DeleteUserRequest* req,
-             AuthResponse* resp) {
-               return service->DeleteUser(ctx, req, resp);
-             }, this)));
+    AuthService_method_names[4],
+    grpc::internal::RpcMethod::NORMAL_RPC,
+    new grpc::internal::RpcMethodHandler< Service, DeleteUserRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
+      [](Service* service,
+         grpc::ServerContext* ctx,
+         const DeleteUserRequest* req,
+         AuthResponse* resp) {
+        return service->DeleteUser(ctx, req, resp);
+      }, this)));
   AddMethod(new grpc::internal::RpcServiceMethod(
-      AuthService_method_names[5],
-      grpc::internal::RpcMethod::NORMAL_RPC,
-      new grpc::internal::RpcMethodHandler< Service, UserExistsRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
-          [](Service* service,
-             grpc::ServerContext* ctx,
-             const UserExistsRequest* req,
-             AuthResponse* resp) {
-               return service->UserExists(ctx, req, resp);
-             }, this)));
+    AuthService_method_names[5],
+    grpc::internal::RpcMethod::NORMAL_RPC,
+    new grpc::internal::RpcMethodHandler< Service, UserExistsRequest, AuthResponse, grpc::protobuf::MessageLite, grpc::protobuf::MessageLite>(
+      [](Service* service,
+         grpc::ServerContext* ctx,
+         const UserExistsRequest* req,
+         AuthResponse* resp) {
+        return service->UserExists(ctx, req, resp);
+      }, this)));
 }
 
 AuthService::Service::~Service() {

@@ -5,10 +5,10 @@
  */
 
 #pragma once
-#include <vector>
 #include <cstdint>
-#include <string>
 #include <memory>
+#include <string>
+#include <vector>
 
 namespace common::crypto::cipher
 {

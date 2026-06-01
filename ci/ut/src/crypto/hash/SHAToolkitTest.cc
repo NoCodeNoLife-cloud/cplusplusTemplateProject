@@ -4,14 +4,14 @@
  * @details Tests cover SHA-256 and SHA-1 hash algorithms through the unified SHAToolkit interface.
  */
 
-#include <gtest/gtest.h>
-#include <string>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
+#include <string>
+#include <gtest/gtest.h>
 
-#include "crypto/hash/SHAToolkit.hpp"
-#include "crypto/hash/SHA256Strategy.hpp"
 #include "crypto/hash/SHA1Strategy.hpp"
+#include "crypto/hash/SHA256Strategy.hpp"
+#include "crypto/hash/SHAToolkit.hpp"
 
 using namespace common::crypto::hash;
 

@@ -6,12 +6,13 @@
  * @note Some tests are disabled due to implementation issues with EVP_BytesToKey.
  */
 
-#include <gtest/gtest.h>
-#include "crypto/OpenSSLToolkit.hpp"
+#include <array>
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <array>
+#include <gtest/gtest.h>
+
+#include "crypto/OpenSSLToolkit.hpp"
 
 using namespace common::crypto;
 

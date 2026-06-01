@@ -5,11 +5,11 @@
  */
 
 #pragma once
-#include <string>
-#include <vector>
 #include <optional>
-#include <type_traits>
 #include <sstream>
+#include <string>
+#include <type_traits>
+#include <vector>
 #include <magic_enum/magic_enum.hpp>
 
 namespace common::toolkit

@@ -5,16 +5,16 @@
  */
 
 #pragma once
+#include <chrono>
 #include <condition_variable>
+#include <cstdint>
 #include <functional>
 #include <future>
-#include <mutex>
-#include <unordered_map>
 #include <memory>
-#include <chrono>
-#include <thread>
+#include <mutex>
 #include <stdexcept>
-#include <cstdint>
+#include <thread>
+#include <unordered_map>
 
 namespace common::thread
 {

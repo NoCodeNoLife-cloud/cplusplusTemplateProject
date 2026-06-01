@@ -6,11 +6,11 @@
 
 #include "thread/PeriodicActuator.hpp"
 
-#include <fmt/format.h>
-#include <boost/asio.hpp>
 #include <chrono>
 #include <memory>
 #include <stdexcept>
+#include <boost/asio.hpp>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 #include "interface/ITimerTask.hpp"

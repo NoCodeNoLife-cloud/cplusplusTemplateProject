@@ -7,8 +7,8 @@
 #pragma once
 #include <algorithm>
 #include <cstddef>
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 #include "interface/ICloseable.hpp"
 

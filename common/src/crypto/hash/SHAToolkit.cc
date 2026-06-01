@@ -5,11 +5,12 @@
  */
 
 #include "SHAToolkit.hpp"
-#include "SHA256Strategy.hpp"
-#include "SHA1Strategy.hpp"
 
 #include <fmt/format.h>
 #include <glog/logging.h>
+
+#include "SHA1Strategy.hpp"
+#include "SHA256Strategy.hpp"
 
 namespace common::crypto::hash
 {

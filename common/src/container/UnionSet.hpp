@@ -5,9 +5,9 @@
  */
 
 #pragma once
-#include <fmt/format.h>
-#include <unordered_map>
 #include <cstdint>
+#include <unordered_map>
+#include <fmt/format.h>
 
 namespace common::container
 {

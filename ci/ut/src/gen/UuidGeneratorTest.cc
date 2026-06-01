@@ -5,11 +5,12 @@
  *          uniqueness verification, and consistency checks.
  */
 
-#include <gtest/gtest.h>
-#include "gen/UuidGenerator.hpp"
-#include <set>
 #include <regex>
+#include <set>
 #include <string>
+#include <gtest/gtest.h>
+
+#include "gen/UuidGenerator.hpp"
 
 using namespace common::gen;
 

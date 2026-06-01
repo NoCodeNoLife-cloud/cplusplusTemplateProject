@@ -5,11 +5,11 @@
  *          Test vectors from RFC 8439 Section 2.3.2.
  */
 
-#include <gtest/gtest.h>
-#include "crypto/cipher/ChaCha20Cipher.hpp"
-
 #include <algorithm>
 #include <ranges>
+#include <gtest/gtest.h>
+
+#include "crypto/cipher/ChaCha20Cipher.hpp"
 
 using namespace common::crypto::cipher;
 

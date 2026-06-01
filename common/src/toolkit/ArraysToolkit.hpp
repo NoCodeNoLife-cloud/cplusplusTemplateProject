@@ -6,18 +6,18 @@
 
 #pragma once
 #include <algorithm>
+#include <cstdint>
+#include <functional>
+#include <numeric>
+#include <optional>
+#include <random>
+#include <ranges>
+#include <set>
+#include <span>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
-#include <cstdint>
-#include <stdexcept>
-#include <numeric>
-#include <functional>
-#include <set>
-#include <random>
-#include <optional>
-#include <ranges>
-#include <span>
 
 namespace common::toolkit
 {

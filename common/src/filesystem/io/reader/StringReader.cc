@@ -6,9 +6,9 @@
 
 #include "filesystem/io/reader/StringReader.hpp"
 
-#include <fmt/format.h>
 #include <algorithm>
 #include <stdexcept>
+#include <fmt/format.h>
 
 namespace common::filesystem
 {

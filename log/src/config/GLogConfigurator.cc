@@ -8,10 +8,9 @@
 
 #include "GLogConfigurator.hpp"
 
-#include <glog/logging.h>
-#include <iostream>
 #include <thread>
 #include <fmt/format.h>
+#include <glog/logging.h>
 
 #include "formatter/CustomGlogPrefixFormatter.hpp"
 

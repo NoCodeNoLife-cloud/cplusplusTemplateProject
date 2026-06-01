@@ -5,13 +5,13 @@
  */
 
 #pragma once
+#include <cstddef>
 #include <filesystem>
 #include <fstream>
-#include <cstddef>
+#include <string>
 #include <vector>
 
 #include "AbstractInputStream.hpp"
-#include <string>
 
 namespace common::filesystem
 {

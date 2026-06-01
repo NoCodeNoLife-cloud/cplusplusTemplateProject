@@ -5,12 +5,13 @@
  *          and integration with the AOP execution framework.
  */
 
-#include <gtest/gtest.h>
-#include "aop/FunctionProfilerAspect.hpp"
-#include <string>
-#include <stdexcept>
-#include <thread>
 #include <chrono>
+#include <stdexcept>
+#include <string>
+#include <thread>
+#include <gtest/gtest.h>
+
+#include "aop/FunctionProfilerAspect.hpp"
 
 using namespace common::aop;
 

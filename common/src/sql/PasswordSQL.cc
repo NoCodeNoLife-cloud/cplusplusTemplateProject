@@ -5,6 +5,7 @@
  */
 
 #include "PasswordSQL.hpp"
+
 #include <stdexcept>
 #include <string_view>
 

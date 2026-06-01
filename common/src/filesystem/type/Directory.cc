@@ -6,13 +6,13 @@
 
 #include "filesystem/type/Directory.hpp"
 
-#include <fmt/format.h>
+#include <chrono>
 #include <filesystem>
+#include <optional>
 #include <queue>
 #include <utility>
 #include <vector>
-#include <optional>
-#include <chrono>
+#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::filesystem

@@ -5,11 +5,12 @@
  * and object utilities functionality.
  */
 
-#include <gtest/gtest.h>
-#include "base_type/Object.hpp"
 #include <memory>
 #include <string>
 #include <typeinfo>
+#include <gtest/gtest.h>
+
+#include "base_type/Object.hpp"
 
 using namespace common::base_type;
 

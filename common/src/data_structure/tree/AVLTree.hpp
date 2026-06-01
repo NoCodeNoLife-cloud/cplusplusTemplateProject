@@ -6,8 +6,8 @@
 
 #pragma once
 #include <algorithm>
-#include <memory>
 #include <cstdint>
+#include <memory>
 #include <optional>
 
 #include "TreeNode.hpp"

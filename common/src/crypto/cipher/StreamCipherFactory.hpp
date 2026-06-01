@@ -5,10 +5,10 @@
  */
 
 #pragma once
-#include "StreamCipher.hpp"
-
 #include <memory>
 #include <string>
+
+#include "StreamCipher.hpp"
 
 namespace common::crypto::cipher
 {

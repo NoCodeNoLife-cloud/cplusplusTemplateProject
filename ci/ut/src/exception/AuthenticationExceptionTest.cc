@@ -5,10 +5,11 @@
  *          and copy/move semantics.
  */
 
-#include <gtest/gtest.h>
-#include "exception/AuthenticationException.hpp"
 #include <string>
 #include <string_view>
+#include <gtest/gtest.h>
+
+#include "exception/AuthenticationException.hpp"
 
 using namespace common::exception;
 

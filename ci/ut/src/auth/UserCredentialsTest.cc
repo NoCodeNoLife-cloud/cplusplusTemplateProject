@@ -5,9 +5,10 @@
  *          and account lockout functionality.
  */
 
-#include <gtest/gtest.h>
-#include "auth/UserCredentials.hpp"
 #include <chrono>
+#include <gtest/gtest.h>
+
+#include "auth/UserCredentials.hpp"
 
 using namespace common::auth;
 

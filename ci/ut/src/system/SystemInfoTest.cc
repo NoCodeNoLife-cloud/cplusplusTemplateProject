@@ -6,10 +6,11 @@
  *          disk drives, and BIOS information.
  */
 
-#include <gtest/gtest.h>
-#include "system/SystemInfo.hpp"
 #include <string>
 #include <vector>
+#include <gtest/gtest.h>
+
+#include "system/SystemInfo.hpp"
 
 using namespace common::system;
 

@@ -5,15 +5,15 @@
  */
 
 #pragma once
-#include <fmt/format.h>
+#include <algorithm>
 #include <concepts>
 #include <functional>
-#include <stdexcept>
-#include <vector>
-#include <algorithm>
 #include <iterator>
+#include <stdexcept>
 #include <type_traits>
 #include <utility>
+#include <vector>
+#include <fmt/format.h>
 
 namespace common::container
 {
@@ -238,6 +238,14 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
+    void Heap<T, Compare>::swap(Heap& other)
+    {
+        using std::swap;
+        swap(data_, other.data_);
+        swap(compare_, other.compare_);
+    }
+
+    template <std::copyable T, typename Compare>
     void Heap<T, Compare>::heapify()
     {
         const auto size = data_.size();
@@ -318,13 +326,5 @@ namespace common::container
             }
         }
         return true;
-    }
-
-    template <std::copyable T, typename Compare>
-    void Heap<T, Compare>::swap(Heap& other)
-    {
-        using std::swap;
-        swap(data_, other.data_);
-        swap(compare_, other.compare_);
     }
 }
