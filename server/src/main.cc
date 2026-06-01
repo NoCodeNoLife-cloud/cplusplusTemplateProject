@@ -13,7 +13,7 @@ int32_t main(const int32_t, char*[])
 {
     try
     {
-        server_app::task::ServerTask service_task("server");
+        server_app::task::ServerTask service_task;
         service_task.run();
     }
     catch (const std::exception& ex)

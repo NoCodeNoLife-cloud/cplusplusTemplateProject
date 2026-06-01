@@ -8,11 +8,9 @@
 
 #pragma once
 #include <memory>
-#include <string>
 #include <grpcpp/server_builder.h>
 
 #include "auth/AuthRpcParam.hpp"
-#include "time/FunctionProfiler.hpp"
 #include "task/interface/ITask.h"
 
 namespace server_app::task
@@ -24,8 +22,7 @@ namespace server_app::task
     {
     public:
         /// @brief Construct a ServerTask with the specified name
-        /// @param name The name of the server task for profiling purposes
-        explicit ServerTask(std::string name);
+        explicit ServerTask();
 
         /// @brief Copy constructor deleted to prevent copying
         ServerTask(const ServerTask&) = delete;
@@ -53,7 +50,6 @@ namespace server_app::task
 
     private:
         auth::AuthRpcParam grpc_options_;
-        common::time::FunctionProfiler timer_;
         std::unique_ptr<grpc::Server> server_;
 
         /// @brief Establish a gRPC connection to the specified service
