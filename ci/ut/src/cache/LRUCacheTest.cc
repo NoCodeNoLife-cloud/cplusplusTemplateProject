@@ -13,10 +13,25 @@
 using namespace common::cache;
 
 /**
+ * @brief Test fixture for LRUCacheTest tests
+ */
+class LRUCacheTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test LRUCache constructor with valid capacity
  * @details Verifies cache is created successfully with positive capacity
  */
-TEST(LRUCacheTest, Constructor_ValidCapacity)
+TEST_F(LRUCacheTest, Constructor_ValidCapacity)
 {
     EXPECT_NO_THROW((LRUCache<int, std::string>(10)));
 }
@@ -25,7 +40,7 @@ TEST(LRUCacheTest, Constructor_ValidCapacity)
  * @brief Test LRUCache constructor with zero capacity
  * @details Verifies exception is thrown when capacity is zero
  */
-TEST(LRUCacheTest, Constructor_ZeroCapacity)
+TEST_F(LRUCacheTest, Constructor_ZeroCapacity)
 {
     EXPECT_THROW((LRUCache<int, std::string>(0)), std::invalid_argument);
 }
@@ -34,7 +49,7 @@ TEST(LRUCacheTest, Constructor_ZeroCapacity)
  * @brief Test LRUCache constructor with negative capacity
  * @details Verifies exception is thrown when capacity is negative
  */
-TEST(LRUCacheTest, Constructor_NegativeCapacity)
+TEST_F(LRUCacheTest, Constructor_NegativeCapacity)
 {
     EXPECT_THROW((LRUCache<int, std::string>(-5)), std::invalid_argument);
 }
@@ -43,7 +58,7 @@ TEST(LRUCacheTest, Constructor_NegativeCapacity)
  * @brief Test basic put and get operations
  * @details Verifies that values can be stored and retrieved correctly
  */
-TEST(LRUCacheTest, PutAndGet_Basic)
+TEST_F(LRUCacheTest, PutAndGet_Basic)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -63,7 +78,7 @@ TEST(LRUCacheTest, PutAndGet_Basic)
  * @brief Test get operation for non-existent key
  * @details Verifies that get returns std::nullopt for missing keys
  */
-TEST(LRUCacheTest, Get_NonExistentKey)
+TEST_F(LRUCacheTest, Get_NonExistentKey)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -77,7 +92,7 @@ TEST(LRUCacheTest, Get_NonExistentKey)
  * @brief Test put operation updates existing key
  * @details Verifies that putting an existing key updates its value and moves it to front
  */
-TEST(LRUCacheTest, Put_UpdateExistingKey)
+TEST_F(LRUCacheTest, Put_UpdateExistingKey)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -93,7 +108,7 @@ TEST(LRUCacheTest, Put_UpdateExistingKey)
  * @brief Test LRU eviction policy - least recently used item is evicted
  * @details When cache is full, the item that was accessed least recently should be removed
  */
-TEST(LRUCacheTest, Eviction_LRU_Policy)
+TEST_F(LRUCacheTest, Eviction_LRU_Policy)
 {
     LRUCache<int, std::string> cache(2);
 
@@ -125,7 +140,7 @@ TEST(LRUCacheTest, Eviction_LRU_Policy)
  * @brief Test eviction order based on access pattern
  * @details Verifies that the least recently accessed item is evicted first
  */
-TEST(LRUCacheTest, Eviction_AccessPattern)
+TEST_F(LRUCacheTest, Eviction_AccessPattern)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -152,7 +167,7 @@ TEST(LRUCacheTest, Eviction_AccessPattern)
  * @brief Test put with rvalue reference
  * @details Verifies move semantics work correctly for put operation
  */
-TEST(LRUCacheTest, Put_RValueReference)
+TEST_F(LRUCacheTest, Put_RValueReference)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -168,7 +183,7 @@ TEST(LRUCacheTest, Put_RValueReference)
  * @brief Test remove operation
  * @details Verifies that entries can be removed from cache
  */
-TEST(LRUCacheTest, Remove_ExistingKey)
+TEST_F(LRUCacheTest, Remove_ExistingKey)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -191,7 +206,7 @@ TEST(LRUCacheTest, Remove_ExistingKey)
  * @brief Test remove operation for non-existent key
  * @details Verifies that removing a non-existent key returns false
  */
-TEST(LRUCacheTest, Remove_NonExistentKey)
+TEST_F(LRUCacheTest, Remove_NonExistentKey)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -205,7 +220,7 @@ TEST(LRUCacheTest, Remove_NonExistentKey)
  * @brief Test clear operation
  * @details Verifies that all entries are removed from cache
  */
-TEST(LRUCacheTest, Clear_AllEntries)
+TEST_F(LRUCacheTest, Clear_AllEntries)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -228,7 +243,7 @@ TEST(LRUCacheTest, Clear_AllEntries)
  * @brief Test size operation
  * @details Verifies that size returns correct number of entries
  */
-TEST(LRUCacheTest, Size_CorrectCount)
+TEST_F(LRUCacheTest, Size_CorrectCount)
 {
     LRUCache<int, std::string> cache(5);
 
@@ -248,7 +263,7 @@ TEST(LRUCacheTest, Size_CorrectCount)
  * @brief Test capacity operation
  * @details Verifies that capacity returns the configured maximum capacity
  */
-TEST(LRUCacheTest, Capacity_CorrectValue)
+TEST_F(LRUCacheTest, Capacity_CorrectValue)
 {
     const LRUCache<int, std::string> cache(10);
 
@@ -259,7 +274,7 @@ TEST(LRUCacheTest, Capacity_CorrectValue)
  * @brief Test empty operation
  * @details Verifies that empty returns correct state
  */
-TEST(LRUCacheTest, Empty_CorrectState)
+TEST_F(LRUCacheTest, Empty_CorrectState)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -276,7 +291,7 @@ TEST(LRUCacheTest, Empty_CorrectState)
  * @brief Test contains operation
  * @details Verifies that contains correctly identifies existing keys
  */
-TEST(LRUCacheTest, Contains_ExistingKey)
+TEST_F(LRUCacheTest, Contains_ExistingKey)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -293,7 +308,7 @@ TEST(LRUCacheTest, Contains_ExistingKey)
  * @brief Test LRU order update on get operation
  * @details Verifies that accessing an item moves it to the front (most recently used)
  */
-TEST(LRUCacheTest, LRUOrderUpdate_OnGet)
+TEST_F(LRUCacheTest, LRUOrderUpdate_OnGet)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -318,7 +333,7 @@ TEST(LRUCacheTest, LRUOrderUpdate_OnGet)
  * @brief Test LRU order update on put operation for existing key
  * @details Verifies that updating an existing key moves it to the front
  */
-TEST(LRUCacheTest, LRUOrderUpdate_OnPutUpdate)
+TEST_F(LRUCacheTest, LRUOrderUpdate_OnPutUpdate)
 {
     LRUCache<int, std::string> cache(3);
 
@@ -342,7 +357,7 @@ TEST(LRUCacheTest, LRUOrderUpdate_OnPutUpdate)
  * @brief Test cache with capacity 1
  * @details Verifies edge case of single-element cache
  */
-TEST(LRUCacheTest, EdgeCase_CapacityOne)
+TEST_F(LRUCacheTest, EdgeCase_CapacityOne)
 {
     LRUCache<int, std::string> cache(1);
 
@@ -362,7 +377,7 @@ TEST(LRUCacheTest, EdgeCase_CapacityOne)
  * @brief Test const get operation
  * @details Verifies that const version of get works correctly and updates LRU order
  */
-TEST(LRUCacheTest, Get_ConstVersion)
+TEST_F(LRUCacheTest, Get_ConstVersion)
 {
     LRUCache<int, std::string> cache(3);
     EXPECT_TRUE(cache.put(1, "one"));
@@ -378,7 +393,7 @@ TEST(LRUCacheTest, Get_ConstVersion)
  * @brief Test multiple evictions in sequence
  * @details Verifies that consecutive evictions maintain correct LRU order
  */
-TEST(LRUCacheTest, MultipleEvictions_Sequence)
+TEST_F(LRUCacheTest, MultipleEvictions_Sequence)
 {
     LRUCache<int, std::string> cache(2);
 

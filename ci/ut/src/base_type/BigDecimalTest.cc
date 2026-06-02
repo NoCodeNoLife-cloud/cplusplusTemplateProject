@@ -14,10 +14,25 @@
 using namespace common::base_type;
 
 /**
+ * @brief Test fixture for BigDecimalTest tests
+ */
+class BigDecimalTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test constructor from string with positive decimal
  * @details Verifies correct parsing of positive decimal string
  */
-TEST(BigDecimalTest, Constructor_FromPositiveString)
+TEST_F(BigDecimalTest, Constructor_FromPositiveString)
 {
     const BigDecimal big_decimal{"123.456"};
 
@@ -28,7 +43,7 @@ TEST(BigDecimalTest, Constructor_FromPositiveString)
  * @brief Test constructor from string with negative decimal
  * @details Verifies correct parsing of negative decimal string
  */
-TEST(BigDecimalTest, Constructor_FromNegativeString)
+TEST_F(BigDecimalTest, Constructor_FromNegativeString)
 {
     const BigDecimal big_decimal{"-789.012"};
 
@@ -39,7 +54,7 @@ TEST(BigDecimalTest, Constructor_FromNegativeString)
  * @brief Test constructor from string with zero
  * @details Verifies correct parsing of zero string
  */
-TEST(BigDecimalTest, Constructor_FromZeroString)
+TEST_F(BigDecimalTest, Constructor_FromZeroString)
 {
     const BigDecimal big_decimal{"0.0"};
 
@@ -50,7 +65,7 @@ TEST(BigDecimalTest, Constructor_FromZeroString)
  * @brief Test constructor from string with integer value
  * @details Verifies correct parsing of integer as decimal
  */
-TEST(BigDecimalTest, Constructor_FromIntegerString)
+TEST_F(BigDecimalTest, Constructor_FromIntegerString)
 {
     const BigDecimal big_decimal{"100"};
 
@@ -61,7 +76,7 @@ TEST(BigDecimalTest, Constructor_FromIntegerString)
  * @brief Test constructor from string with very small decimal
  * @details Verifies correct parsing of very small decimal values
  */
-TEST(BigDecimalTest, Constructor_FromVerySmallDecimal)
+TEST_F(BigDecimalTest, Constructor_FromVerySmallDecimal)
 {
     const BigDecimal big_decimal{"0.000000001"};
 
@@ -72,7 +87,7 @@ TEST(BigDecimalTest, Constructor_FromVerySmallDecimal)
  * @brief Test constructor from string with very large number
  * @details Verifies correct parsing of very large decimal values
  */
-TEST(BigDecimalTest, Constructor_FromVeryLargeNumber)
+TEST_F(BigDecimalTest, Constructor_FromVeryLargeNumber)
 {
     const BigDecimal big_decimal{"999999999999.999999999"};
 
@@ -83,7 +98,7 @@ TEST(BigDecimalTest, Constructor_FromVeryLargeNumber)
  * @brief Test constructor from double with positive value
  * @details Verifies correct conversion from positive double
  */
-TEST(BigDecimalTest, Constructor_FromPositiveDouble)
+TEST_F(BigDecimalTest, Constructor_FromPositiveDouble)
 {
     const BigDecimal big_decimal{3.14159};
 
@@ -97,7 +112,7 @@ TEST(BigDecimalTest, Constructor_FromPositiveDouble)
  * @brief Test constructor from double with negative value
  * @details Verifies correct conversion from negative double
  */
-TEST(BigDecimalTest, Constructor_FromNegativeDouble)
+TEST_F(BigDecimalTest, Constructor_FromNegativeDouble)
 {
     const BigDecimal big_decimal{-2.71828};
 
@@ -108,7 +123,7 @@ TEST(BigDecimalTest, Constructor_FromNegativeDouble)
  * @brief Test constructor from double with zero
  * @details Verifies correct conversion from zero double
  */
-TEST(BigDecimalTest, Constructor_FromZeroDouble)
+TEST_F(BigDecimalTest, Constructor_FromZeroDouble)
 {
     const BigDecimal big_decimal{0.0};
 
@@ -119,7 +134,7 @@ TEST(BigDecimalTest, Constructor_FromZeroDouble)
  * @brief Test addition operator with positive numbers
  * @details Verifies correct addition of two positive BigDecimals
  */
-TEST(BigDecimalTest, Addition_PositiveNumbers)
+TEST_F(BigDecimalTest, Addition_PositiveNumbers)
 {
     const BigDecimal a{"10.5"};
     const BigDecimal b{"20.3"};
@@ -133,7 +148,7 @@ TEST(BigDecimalTest, Addition_PositiveNumbers)
  * @brief Test addition operator with negative numbers
  * @details Verifies correct addition involving negative numbers
  */
-TEST(BigDecimalTest, Addition_NegativeNumbers)
+TEST_F(BigDecimalTest, Addition_NegativeNumbers)
 {
     const BigDecimal a{"-15.5"};
     const BigDecimal b{"-10.2"};
@@ -147,7 +162,7 @@ TEST(BigDecimalTest, Addition_NegativeNumbers)
  * @brief Test addition operator with mixed signs
  * @details Verifies correct addition of positive and negative numbers
  */
-TEST(BigDecimalTest, Addition_MixedSigns)
+TEST_F(BigDecimalTest, Addition_MixedSigns)
 {
     const BigDecimal a{"50.0"};
     const BigDecimal b{"-20.5"};
@@ -161,7 +176,7 @@ TEST(BigDecimalTest, Addition_MixedSigns)
  * @brief Test addition with zero
  * @details Verifies that adding zero doesn't change the value
  */
-TEST(BigDecimalTest, Addition_WithZero)
+TEST_F(BigDecimalTest, Addition_WithZero)
 {
     const BigDecimal a{"123.456"};
     const BigDecimal b{"0.0"};
@@ -175,7 +190,7 @@ TEST(BigDecimalTest, Addition_WithZero)
  * @brief Test subtraction operator with positive result
  * @details Verifies correct subtraction when result is positive
  */
-TEST(BigDecimalTest, Subtraction_PositiveResult)
+TEST_F(BigDecimalTest, Subtraction_PositiveResult)
 {
     const BigDecimal a{"100.5"};
     const BigDecimal b{"30.2"};
@@ -189,7 +204,7 @@ TEST(BigDecimalTest, Subtraction_PositiveResult)
  * @brief Test subtraction operator with negative result
  * @details Verifies correct subtraction when result is negative
  */
-TEST(BigDecimalTest, Subtraction_NegativeResult)
+TEST_F(BigDecimalTest, Subtraction_NegativeResult)
 {
     const BigDecimal a{"30.2"};
     const BigDecimal b{"100.5"};
@@ -203,7 +218,7 @@ TEST(BigDecimalTest, Subtraction_NegativeResult)
  * @brief Test subtraction with zero
  * @details Verifies that subtracting zero doesn't change the value
  */
-TEST(BigDecimalTest, Subtraction_ByZero)
+TEST_F(BigDecimalTest, Subtraction_ByZero)
 {
     const BigDecimal a{"456.789"};
     const BigDecimal b{"0.0"};
@@ -217,7 +232,7 @@ TEST(BigDecimalTest, Subtraction_ByZero)
  * @brief Test subtraction resulting in zero
  * @details Verifies that subtracting equal values yields zero
  */
-TEST(BigDecimalTest, Subtraction_EqualValues)
+TEST_F(BigDecimalTest, Subtraction_EqualValues)
 {
     const BigDecimal a{"99.99"};
     const BigDecimal b{"99.99"};
@@ -231,7 +246,7 @@ TEST(BigDecimalTest, Subtraction_EqualValues)
  * @brief Test multiplication operator with positive numbers
  * @details Verifies correct multiplication of positive BigDecimals
  */
-TEST(BigDecimalTest, Multiplication_PositiveNumbers)
+TEST_F(BigDecimalTest, Multiplication_PositiveNumbers)
 {
     const BigDecimal a{"2.5"};
     const BigDecimal b{"4.0"};
@@ -245,7 +260,7 @@ TEST(BigDecimalTest, Multiplication_PositiveNumbers)
  * @brief Test multiplication operator with negative numbers
  * @details Verifies correct multiplication involving negative numbers
  */
-TEST(BigDecimalTest, Multiplication_NegativeNumbers)
+TEST_F(BigDecimalTest, Multiplication_NegativeNumbers)
 {
     const BigDecimal a{"-3.0"};
     const BigDecimal b{"5.0"};
@@ -259,7 +274,7 @@ TEST(BigDecimalTest, Multiplication_NegativeNumbers)
  * @brief Test multiplication by zero
  * @details Verifies that multiplication by zero yields zero
  */
-TEST(BigDecimalTest, Multiplication_ByZero)
+TEST_F(BigDecimalTest, Multiplication_ByZero)
 {
     const BigDecimal a{"123.456"};
     const BigDecimal b{"0.0"};
@@ -273,7 +288,7 @@ TEST(BigDecimalTest, Multiplication_ByZero)
  * @brief Test multiplication with decimal precision
  * @details Verifies correct handling of decimal places in multiplication
  */
-TEST(BigDecimalTest, Multiplication_DecimalPrecision)
+TEST_F(BigDecimalTest, Multiplication_DecimalPrecision)
 {
     const BigDecimal a{"0.1"};
     const BigDecimal b{"0.2"};
@@ -287,7 +302,7 @@ TEST(BigDecimalTest, Multiplication_DecimalPrecision)
  * @brief Test division operator with exact division
  * @details Verifies correct division when result is exact
  */
-TEST(BigDecimalTest, Division_ExactDivision)
+TEST_F(BigDecimalTest, Division_ExactDivision)
 {
     const BigDecimal a{"10.0"};
     const BigDecimal b{"2.0"};
@@ -301,7 +316,7 @@ TEST(BigDecimalTest, Division_ExactDivision)
  * @brief Test division operator with decimal result
  * @details Verifies correct division with decimal quotient
  */
-TEST(BigDecimalTest, Division_DecimalResult)
+TEST_F(BigDecimalTest, Division_DecimalResult)
 {
     const BigDecimal a{"10.0"};
     const BigDecimal b{"3.0"};
@@ -319,7 +334,7 @@ TEST(BigDecimalTest, Division_DecimalResult)
  * @brief Test division by zero throws exception
  * @details Verifies that division by zero throws std::invalid_argument
  */
-TEST(BigDecimalTest, Division_ByZero_ThrowsException)
+TEST_F(BigDecimalTest, Division_ByZero_ThrowsException)
 {
     const BigDecimal a{"100.0"};
     const BigDecimal b{"0.0"};
@@ -331,7 +346,7 @@ TEST(BigDecimalTest, Division_ByZero_ThrowsException)
  * @brief Test division with negative numbers
  * @details Verifies correct division involving negative numbers
  */
-TEST(BigDecimalTest, Division_NegativeNumbers)
+TEST_F(BigDecimalTest, Division_NegativeNumbers)
 {
     const BigDecimal a{"-20.0"};
     const BigDecimal b{"4.0"};
@@ -345,7 +360,7 @@ TEST(BigDecimalTest, Division_NegativeNumbers)
  * @brief Test equality operator for equal values
  * @details Verifies that equal BigDecimals compare as equal
  */
-TEST(BigDecimalTest, Equality_EqualValues)
+TEST_F(BigDecimalTest, Equality_EqualValues)
 {
     const BigDecimal a{"123.456"};
     const BigDecimal b{"123.456"};
@@ -357,7 +372,7 @@ TEST(BigDecimalTest, Equality_EqualValues)
  * @brief Test equality operator for different values
  * @details Verifies that different BigDecimals compare as not equal
  */
-TEST(BigDecimalTest, Equality_DifferentValues)
+TEST_F(BigDecimalTest, Equality_DifferentValues)
 {
     const BigDecimal a{"123.456"};
     const BigDecimal b{"123.457"};
@@ -369,7 +384,7 @@ TEST(BigDecimalTest, Equality_DifferentValues)
  * @brief Test three-way comparison - less than
  * @details Verifies correct comparison when first operand is less
  */
-TEST(BigDecimalTest, Comparison_LessThan)
+TEST_F(BigDecimalTest, Comparison_LessThan)
 {
     const BigDecimal a{"10.5"};
     const BigDecimal b{"20.3"};
@@ -382,7 +397,7 @@ TEST(BigDecimalTest, Comparison_LessThan)
  * @brief Test three-way comparison - greater than
  * @details Verifies correct comparison when first operand is greater
  */
-TEST(BigDecimalTest, Comparison_GreaterThan)
+TEST_F(BigDecimalTest, Comparison_GreaterThan)
 {
     const BigDecimal a{"30.7"};
     const BigDecimal b{"20.3"};
@@ -395,7 +410,7 @@ TEST(BigDecimalTest, Comparison_GreaterThan)
  * @brief Test three-way comparison - equal
  * @details Verifies correct comparison when operands are equal
  */
-TEST(BigDecimalTest, Comparison_Equal)
+TEST_F(BigDecimalTest, Comparison_Equal)
 {
     const BigDecimal a{"25.5"};
     const BigDecimal b{"25.5"};
@@ -409,7 +424,7 @@ TEST(BigDecimalTest, Comparison_Equal)
  * @brief Test three-way comparison with negative numbers
  * @details Verifies correct comparison involving negative numbers
  */
-TEST(BigDecimalTest, Comparison_NegativeNumbers)
+TEST_F(BigDecimalTest, Comparison_NegativeNumbers)
 {
     const BigDecimal a{"-10.5"};
     const BigDecimal b{"10.5"};
@@ -422,7 +437,7 @@ TEST(BigDecimalTest, Comparison_NegativeNumbers)
  * @brief Test three-way comparison with very small differences
  * @details Verifies correct comparison with minimal value differences
  */
-TEST(BigDecimalTest, Comparison_SmallDifferences)
+TEST_F(BigDecimalTest, Comparison_SmallDifferences)
 {
     const BigDecimal a{"1.000000001"};
     const BigDecimal b{"1.000000002"};
@@ -434,7 +449,7 @@ TEST(BigDecimalTest, Comparison_SmallDifferences)
  * @brief Test chained arithmetic operations
  * @details Verifies that multiple operations can be chained correctly
  */
-TEST(BigDecimalTest, ChainedOperations)
+TEST_F(BigDecimalTest, ChainedOperations)
 {
     const BigDecimal a{"10.0"};
     const BigDecimal b{"5.0"};
@@ -449,7 +464,7 @@ TEST(BigDecimalTest, ChainedOperations)
  * @brief Test operations preserve immutability
  * @details Verifies that original operands are not modified by operations
  */
-TEST(BigDecimalTest, Operations_PreserveImmutability)
+TEST_F(BigDecimalTest, Operations_PreserveImmutability)
 {
     const BigDecimal a{"100.0"};
     const BigDecimal b{"50.0"};
@@ -471,7 +486,7 @@ TEST(BigDecimalTest, Operations_PreserveImmutability)
  * @brief Test high precision arithmetic
  * @details Verifies that BigDecimal maintains precision in calculations
  */
-TEST(BigDecimalTest, HighPrecision_Arithmetic)
+TEST_F(BigDecimalTest, HighPrecision_Arithmetic)
 {
     const BigDecimal a{"0.1"};
     const BigDecimal b{"0.2"};
@@ -486,7 +501,7 @@ TEST(BigDecimalTest, HighPrecision_Arithmetic)
  * @brief Test complex arithmetic expression
  * @details Verifies correctness of complex multi-step calculations
  */
-TEST(BigDecimalTest, ComplexExpression)
+TEST_F(BigDecimalTest, ComplexExpression)
 {
     const BigDecimal price{"19.99"};
     const BigDecimal quantity{"3"};
@@ -509,7 +524,7 @@ TEST(BigDecimalTest, ComplexExpression)
  * @brief Test comparison consistency with arithmetic
  * @details Verifies that comparison operators are consistent with arithmetic
  */
-TEST(BigDecimalTest, Comparison_ConsistencyWithArithmetic)
+TEST_F(BigDecimalTest, Comparison_ConsistencyWithArithmetic)
 {
     const BigDecimal a{"10.0"};
     const BigDecimal b{"5.0"};
@@ -524,7 +539,7 @@ TEST(BigDecimalTest, Comparison_ConsistencyWithArithmetic)
  * @brief Test constructor from empty string throws exception
  * @details Verifies proper error handling for empty string input
  */
-TEST(BigDecimalTest, Constructor_EmptyString_ThrowsException)
+TEST_F(BigDecimalTest, Constructor_EmptyString_ThrowsException)
 {
     EXPECT_THROW(BigDecimal big_decimal{""}, std::exception);
 }
@@ -533,7 +548,7 @@ TEST(BigDecimalTest, Constructor_EmptyString_ThrowsException)
  * @brief Test constructor from invalid string throws exception
  * @details Verifies proper error handling for non-numeric strings
  */
-TEST(BigDecimalTest, Constructor_InvalidString_ThrowsException)
+TEST_F(BigDecimalTest, Constructor_InvalidString_ThrowsException)
 {
     EXPECT_THROW(BigDecimal big_decimal{"abc"}, std::exception);
     EXPECT_THROW(BigDecimal big_decimal{"12.34.56"}, std::exception);
@@ -544,7 +559,7 @@ TEST(BigDecimalTest, Constructor_InvalidString_ThrowsException)
  * @brief Test constructor from string with only whitespace
  * @details Verifies behavior with whitespace-only input
  */
-TEST(BigDecimalTest, Constructor_WhitespaceString)
+TEST_F(BigDecimalTest, Constructor_WhitespaceString)
 {
     EXPECT_THROW(BigDecimal big_decimal{"   "}, std::exception);
 }
@@ -553,7 +568,7 @@ TEST(BigDecimalTest, Constructor_WhitespaceString)
  * @brief Test constructor from very large number string
  * @details Verifies handling of extremely large numbers
  */
-TEST(BigDecimalTest, Constructor_VeryLargeNumber)
+TEST_F(BigDecimalTest, Constructor_VeryLargeNumber)
 {
     const std::string large_num = "9" + std::string(100, '9') + "." + std::string(100, '9');
     EXPECT_NO_THROW(BigDecimal big_decimal{large_num});
@@ -563,7 +578,7 @@ TEST(BigDecimalTest, Constructor_VeryLargeNumber)
  * @brief Test constructor from very small number string
  * @details Verifies handling of extremely small numbers close to zero
  */
-TEST(BigDecimalTest, Constructor_VerySmallNumber)
+TEST_F(BigDecimalTest, Constructor_VerySmallNumber)
 {
     const std::string small_num = "0." + std::string(99, '0') + "1";
     EXPECT_NO_THROW(BigDecimal big_decimal{small_num});
@@ -573,7 +588,7 @@ TEST(BigDecimalTest, Constructor_VerySmallNumber)
  * @brief Test division by very small number (near overflow)
  * @details Verifies behavior when division result is extremely large
  */
-TEST(BigDecimalTest, Division_ByVerySmallNumber)
+TEST_F(BigDecimalTest, Division_ByVerySmallNumber)
 {
     const BigDecimal a{"1.0"};
     const BigDecimal b{"0.00000000000000000001"}; // 1e-20
@@ -591,7 +606,7 @@ TEST(BigDecimalTest, Division_ByVerySmallNumber)
  * @brief Test multiplication overflow behavior
  * @details Verifies behavior with extremely large multiplication results
  */
-TEST(BigDecimalTest, Multiplication_LargeResult)
+TEST_F(BigDecimalTest, Multiplication_LargeResult)
 {
     const BigDecimal a{"999999999999999999999999999999"};
     const BigDecimal b{"999999999999999999999999999999"};
@@ -606,7 +621,7 @@ TEST(BigDecimalTest, Multiplication_LargeResult)
  * @brief Test operations with negative zero
  * @details Verifies that -0.0 is handled correctly
  */
-TEST(BigDecimalTest, Operations_NegativeZero)
+TEST_F(BigDecimalTest, Operations_NegativeZero)
 {
     const BigDecimal a{"-0.0"};
     const BigDecimal b{"0.0"};
@@ -619,7 +634,7 @@ TEST(BigDecimalTest, Operations_NegativeZero)
  * @brief Test comparison with very close values
  * @details Verifies precision in comparing nearly equal values
  */
-TEST(BigDecimalTest, Comparison_VeryCloseValues)
+TEST_F(BigDecimalTest, Comparison_VeryCloseValues)
 {
     const BigDecimal a{"1.00000000000000000001"};
     const BigDecimal b{"1.00000000000000000002"};
@@ -632,7 +647,7 @@ TEST(BigDecimalTest, Comparison_VeryCloseValues)
  * @brief Test addition associativity
  * @details Verifies that (a + b) + c == a + (b + c)
  */
-TEST(BigDecimalTest, Addition_Associativity)
+TEST_F(BigDecimalTest, Addition_Associativity)
 {
     const BigDecimal a{"1.1"};
     const BigDecimal b{"2.2"};
@@ -648,7 +663,7 @@ TEST(BigDecimalTest, Addition_Associativity)
  * @brief Test multiplication distributivity
  * @details Verifies that a * (b + c) == a * b + a * c
  */
-TEST(BigDecimalTest, Multiplication_Distributivity)
+TEST_F(BigDecimalTest, Multiplication_Distributivity)
 {
     const BigDecimal a{"2.5"};
     const BigDecimal b{"3.0"};

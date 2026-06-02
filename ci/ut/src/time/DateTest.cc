@@ -13,10 +13,25 @@
 using namespace common::time;
 
 /**
+ * @brief Test fixture for DateTest tests
+ */
+class DateTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test default constructor initializes to current time
  * @details Verifies default constructor creates a valid Date with current timestamp
  */
-TEST(DateTest, DefaultConstructor_CurrentTime)
+TEST_F(DateTest, DefaultConstructor_CurrentTime)
 {
     const Date now;
     const auto timestamp = now.getTime();
@@ -30,7 +45,7 @@ TEST(DateTest, DefaultConstructor_CurrentTime)
  * @brief Test constructor with year, month, day
  * @details Verifies date-only construction works correctly
  */
-TEST(DateTest, Constructor_YearMonthDay)
+TEST_F(DateTest, Constructor_YearMonthDay)
 {
     const Date date(2024, 1, 15);
 
@@ -46,7 +61,7 @@ TEST(DateTest, Constructor_YearMonthDay)
  * @brief Test constructor with full date-time components
  * @details Verifies complete date-time construction works correctly
  */
-TEST(DateTest, Constructor_FullDateTime)
+TEST_F(DateTest, Constructor_FullDateTime)
 {
     const Date date(2024, 6, 15, 14, 30, 45);
 
@@ -62,7 +77,7 @@ TEST(DateTest, Constructor_FullDateTime)
  * @brief Test constructor from timestamp
  * @details Verifies construction from millisecond timestamp
  */
-TEST(DateTest, Constructor_FromTimestamp)
+TEST_F(DateTest, Constructor_FromTimestamp)
 {
     const int64_t timestamp = 1705276800000LL; // 2024-01-15 00:00:00 UTC (approximate)
     const Date date(timestamp);
@@ -74,7 +89,7 @@ TEST(DateTest, Constructor_FromTimestamp)
  * @brief Test constructor with invalid month throws exception
  * @details Verifies proper error handling for invalid month values
  */
-TEST(DateTest, Constructor_InvalidMonth_ThrowsException)
+TEST_F(DateTest, Constructor_InvalidMonth_ThrowsException)
 {
     EXPECT_THROW(Date(2024, 0, 1), std::invalid_argument);
     EXPECT_THROW(Date(2024, 13, 1), std::invalid_argument);
@@ -84,7 +99,7 @@ TEST(DateTest, Constructor_InvalidMonth_ThrowsException)
  * @brief Test constructor with invalid day throws exception
  * @details Verifies proper error handling for invalid day values
  */
-TEST(DateTest, Constructor_InvalidDay_ThrowsException)
+TEST_F(DateTest, Constructor_InvalidDay_ThrowsException)
 {
     EXPECT_THROW(Date(2024, 1, 0), std::invalid_argument);
     EXPECT_THROW(Date(2024, 1, 32), std::invalid_argument);
@@ -94,7 +109,7 @@ TEST(DateTest, Constructor_InvalidDay_ThrowsException)
  * @brief Test constructor with invalid hour throws exception
  * @details Verifies proper error handling for invalid hour values
  */
-TEST(DateTest, Constructor_InvalidHour_ThrowsException)
+TEST_F(DateTest, Constructor_InvalidHour_ThrowsException)
 {
     EXPECT_THROW(Date(2024, 1, 1, 24, 0, 0), std::invalid_argument);
     EXPECT_THROW(Date(2024, 1, 1, -1, 0, 0), std::invalid_argument);
@@ -104,7 +119,7 @@ TEST(DateTest, Constructor_InvalidHour_ThrowsException)
  * @brief Test constructor handles leap year correctly
  * @details Verifies February 29 is valid in leap years
  */
-TEST(DateTest, Constructor_LeapYear_ValidFeb29)
+TEST_F(DateTest, Constructor_LeapYear_ValidFeb29)
 {
     EXPECT_NO_THROW(Date(2024, 2, 29)); // 2024 is a leap year
 
@@ -118,7 +133,7 @@ TEST(DateTest, Constructor_LeapYear_ValidFeb29)
  * @brief Test constructor rejects Feb 29 in non-leap year
  * @details Verifies February 29 is invalid in non-leap years
  */
-TEST(DateTest, Constructor_NonLeapYear_InvalidFeb29)
+TEST_F(DateTest, Constructor_NonLeapYear_InvalidFeb29)
 {
     EXPECT_THROW(Date(2023, 2, 29), std::invalid_argument); // 2023 is not a leap year
 }
@@ -127,7 +142,7 @@ TEST(DateTest, Constructor_NonLeapYear_InvalidFeb29)
  * @brief Test clone creates independent copy
  * @details Verifies clone produces an equal but independent Date object
  */
-TEST(DateTest, Clone_CreatesIndependentCopy)
+TEST_F(DateTest, Clone_CreatesIndependentCopy)
 {
     const Date original(2024, 6, 15, 10, 30, 0);
     const Date cloned = original.clone();
@@ -140,7 +155,7 @@ TEST(DateTest, Clone_CreatesIndependentCopy)
  * @brief Test equals method for identical dates
  * @details Verifies equality comparison works correctly
  */
-TEST(DateTest, Equals_IdenticalDates)
+TEST_F(DateTest, Equals_IdenticalDates)
 {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 0);
@@ -152,7 +167,7 @@ TEST(DateTest, Equals_IdenticalDates)
  * @brief Test equals method for different dates
  * @details Verifies inequality is detected correctly
  */
-TEST(DateTest, Equals_DifferentDates)
+TEST_F(DateTest, Equals_DifferentDates)
 {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 1);
@@ -164,7 +179,7 @@ TEST(DateTest, Equals_DifferentDates)
  * @brief Test after method
  * @details Verifies temporal ordering detection (later than)
  */
-TEST(DateTest, After_LaterDate)
+TEST_F(DateTest, After_LaterDate)
 {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
@@ -177,7 +192,7 @@ TEST(DateTest, After_LaterDate)
  * @brief Test before method
  * @details Verifies temporal ordering detection (earlier than)
  */
-TEST(DateTest, Before_EarlierDate)
+TEST_F(DateTest, Before_EarlierDate)
 {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
@@ -190,7 +205,7 @@ TEST(DateTest, Before_EarlierDate)
  * @brief Test getTime returns correct timestamp
  * @details Verifies millisecond timestamp retrieval
  */
-TEST(DateTest, GetTime_ReturnsTimestamp)
+TEST_F(DateTest, GetTime_ReturnsTimestamp)
 {
     const Date date(2024, 1, 15, 12, 0, 0);
     const auto timestamp = date.getTime();
@@ -203,7 +218,7 @@ TEST(DateTest, GetTime_ReturnsTimestamp)
  * @brief Test getter methods return correct components
  * @details Verifies all component getters work correctly
  */
-TEST(DateTest, Getters_AllComponents)
+TEST_F(DateTest, Getters_AllComponents)
 {
     const Date date(2024, 6, 15, 14, 30, 45);
 
@@ -219,7 +234,7 @@ TEST(DateTest, Getters_AllComponents)
  * @brief Test toString returns formatted string
  * @details Verifies string representation format "YYYY-MM-DD HH:MM:SS"
  */
-TEST(DateTest, ToString_FormattedString)
+TEST_F(DateTest, ToString_FormattedString)
 {
     const Date date(2024, 6, 15, 14, 30, 45);
     const auto str = date.toString();
@@ -231,7 +246,7 @@ TEST(DateTest, ToString_FormattedString)
  * @brief Test hashCode consistency
  * @details Verifies equal dates produce same hash code
  */
-TEST(DateTest, HashCode_ConsistentForEqualDates)
+TEST_F(DateTest, HashCode_ConsistentForEqualDates)
 {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 0);
@@ -243,7 +258,7 @@ TEST(DateTest, HashCode_ConsistentForEqualDates)
  * @brief Test hashCode difference for different dates
  * @details Verifies different dates typically produce different hash codes
  */
-TEST(DateTest, HashCode_DifferentForDifferentDates)
+TEST_F(DateTest, HashCode_DifferentForDifferentDates)
 {
     const Date date1(2024, 1, 1);
     const Date date2(2024, 12, 31);
@@ -255,7 +270,7 @@ TEST(DateTest, HashCode_DifferentForDifferentDates)
  * @brief Test equality operator
  * @details Verifies operator== works correctly
  */
-TEST(DateTest, OperatorEquals)
+TEST_F(DateTest, OperatorEquals)
 {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 0);
@@ -269,7 +284,7 @@ TEST(DateTest, OperatorEquals)
  * @brief Test inequality operator
  * @details Verifies operator!= works correctly
  */
-TEST(DateTest, OperatorNotEquals)
+TEST_F(DateTest, OperatorNotEquals)
 {
     const Date date1(2024, 6, 15, 10, 30, 0);
     const Date date2(2024, 6, 15, 10, 30, 1);
@@ -282,7 +297,7 @@ TEST(DateTest, OperatorNotEquals)
  * @brief Test less-than operator
  * @details Verifies operator< works correctly
  */
-TEST(DateTest, OperatorLessThan)
+TEST_F(DateTest, OperatorLessThan)
 {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
@@ -296,7 +311,7 @@ TEST(DateTest, OperatorLessThan)
  * @brief Test less-than-or-equal operator
  * @details Verifies operator<= works correctly
  */
-TEST(DateTest, OperatorLessThanOrEqual)
+TEST_F(DateTest, OperatorLessThanOrEqual)
 {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
@@ -311,7 +326,7 @@ TEST(DateTest, OperatorLessThanOrEqual)
  * @brief Test greater-than operator
  * @details Verifies operator> works correctly
  */
-TEST(DateTest, OperatorGreaterThan)
+TEST_F(DateTest, OperatorGreaterThan)
 {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
@@ -325,7 +340,7 @@ TEST(DateTest, OperatorGreaterThan)
  * @brief Test greater-than-or-equal operator
  * @details Verifies operator>= works correctly
  */
-TEST(DateTest, OperatorGreaterThanOrEqual)
+TEST_F(DateTest, OperatorGreaterThanOrEqual)
 {
     const Date earlier(2024, 1, 1);
     const Date later(2024, 12, 31);
@@ -340,7 +355,7 @@ TEST(DateTest, OperatorGreaterThanOrEqual)
  * @brief Test comparison across different months
  * @details Verifies correct ordering when months differ
  */
-TEST(DateTest, Comparison_DifferentMonths)
+TEST_F(DateTest, Comparison_DifferentMonths)
 {
     const Date jan(2024, 1, 15);
     const Date dec(2024, 12, 15);
@@ -353,7 +368,7 @@ TEST(DateTest, Comparison_DifferentMonths)
  * @brief Test comparison across different years
  * @details Verifies correct ordering when years differ
  */
-TEST(DateTest, Comparison_DifferentYears)
+TEST_F(DateTest, Comparison_DifferentYears)
 {
     const Date year2023(2023, 12, 31);
     const Date year2024(2024, 1, 1);
@@ -366,7 +381,7 @@ TEST(DateTest, Comparison_DifferentYears)
  * @brief Test constructor with edge case: last day of month
  * @details Verifies correct handling of month boundaries
  */
-TEST(DateTest, Constructor_LastDayOfMonth)
+TEST_F(DateTest, Constructor_LastDayOfMonth)
 {
     EXPECT_NO_THROW(Date(2024, 1, 31));
     EXPECT_NO_THROW(Date(2024, 4, 30));
@@ -379,7 +394,7 @@ TEST(DateTest, Constructor_LastDayOfMonth)
  * @brief Test constructor with edge case: first day of month
  * @details Verifies correct handling of month start
  */
-TEST(DateTest, Constructor_FirstDayOfMonth)
+TEST_F(DateTest, Constructor_FirstDayOfMonth)
 {
     EXPECT_NO_THROW(Date(2024, 1, 1));
 
@@ -392,7 +407,7 @@ TEST(DateTest, Constructor_FirstDayOfMonth)
  * @brief Test constructor with various year values
  * @details Verifies handling of different years within reasonable range
  */
-TEST(DateTest, Constructor_VariousYears)
+TEST_F(DateTest, Constructor_VariousYears)
 {
     // Test modern years that should be widely supported
     EXPECT_NO_THROW(Date(2000, 1, 1));
@@ -407,7 +422,7 @@ TEST(DateTest, Constructor_VariousYears)
  * @brief Test constructor with various month boundaries
  * @details Verifies last day of each month is handled correctly
  */
-TEST(DateTest, Constructor_MonthBoundaries)
+TEST_F(DateTest, Constructor_MonthBoundaries)
 {
     // January has 31 days
     EXPECT_NO_THROW(Date(2024, 1, 31));
@@ -430,7 +445,7 @@ TEST(DateTest, Constructor_MonthBoundaries)
  * @brief Test time component boundaries
  * @details Verifies hour, minute, second boundary values
  */
-TEST(DateTest, Constructor_TimeBoundaries)
+TEST_F(DateTest, Constructor_TimeBoundaries)
 {
     // Maximum valid time
     EXPECT_NO_THROW(Date(2024, 1, 1, 23, 59, 59));
@@ -452,7 +467,7 @@ TEST(DateTest, Constructor_TimeBoundaries)
  * @brief Test comparison operators consistency
  * @details Verifies that all comparison operators are consistent
  */
-TEST(DateTest, Comparison_OperatorConsistency)
+TEST_F(DateTest, Comparison_OperatorConsistency)
 {
     const Date date1(2024, 1, 15, 10, 30, 0);
     const Date date2(2024, 1, 15, 10, 30, 0);
@@ -481,7 +496,7 @@ TEST(DateTest, Comparison_OperatorConsistency)
  * @brief Test date arithmetic edge cases
  * @details Verifies behavior near month/year boundaries
  */
-TEST(DateTest, DateArithmetic_MonthBoundary)
+TEST_F(DateTest, DateArithmetic_MonthBoundary)
 {
     const Date endOfMonth(2024, 1, 31, 23, 59, 59);
     const auto timestamp = endOfMonth.getTime();
@@ -494,7 +509,7 @@ TEST(DateTest, DateArithmetic_MonthBoundary)
  * @brief Test hashCode for different dates
  * @details Verifies hash code generation for different dates
  */
-TEST(DateTest, HashCode_DifferentDates)
+TEST_F(DateTest, HashCode_DifferentDates)
 {
     const Date date1(2000, 1, 1, 0, 0, 0);
     const Date date2(2024, 12, 31, 23, 59, 59);

@@ -15,10 +15,25 @@
 using namespace common::time;
 
 /**
+ * @brief Test fixture for ClockTest tests
+ */
+class ClockTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test getCurrentDateTimeString returns valid format
  * @details Verifies that the returned string matches the expected "YYYY-MM-DD HH:MM:SS" pattern
  */
-TEST(ClockTest, GetCurrentDateTimeString_ValidFormat)
+TEST_F(ClockTest, GetCurrentDateTimeString_ValidFormat)
 {
     const auto dateTimeStr = Clock::getCurrentDateTimeString();
 
@@ -31,7 +46,7 @@ TEST(ClockTest, GetCurrentDateTimeString_ValidFormat)
  * @brief Test getCurrentDateTimeString returns non-empty string
  * @details Ensures the method always returns a valid, non-empty result
  */
-TEST(ClockTest, GetCurrentDateTimeString_NonEmpty)
+TEST_F(ClockTest, GetCurrentDateTimeString_NonEmpty)
 {
     const auto dateTimeStr = Clock::getCurrentDateTimeString();
     EXPECT_FALSE(dateTimeStr.empty());
@@ -41,7 +56,7 @@ TEST(ClockTest, GetCurrentDateTimeString_NonEmpty)
  * @brief Test getCompressedCurrentDateTimeString returns valid format
  * @details Verifies that the returned string matches the expected "YYYYMMDD_HHMMSS" pattern
  */
-TEST(ClockTest, GetCompressedCurrentDateTimeString_ValidFormat)
+TEST_F(ClockTest, GetCompressedCurrentDateTimeString_ValidFormat)
 {
     const auto dateTimeStr = Clock::getCompressedCurrentDateTimeString();
 
@@ -54,7 +69,7 @@ TEST(ClockTest, GetCompressedCurrentDateTimeString_ValidFormat)
  * @brief Test getCompressedCurrentDateTimeString returns non-empty string
  * @details Ensures the method always returns a valid, non-empty result
  */
-TEST(ClockTest, GetCompressedCurrentDateTimeString_NonEmpty)
+TEST_F(ClockTest, GetCompressedCurrentDateTimeString_NonEmpty)
 {
     const auto dateTimeStr = Clock::getCompressedCurrentDateTimeString();
     EXPECT_FALSE(dateTimeStr.empty());
@@ -64,7 +79,7 @@ TEST(ClockTest, GetCompressedCurrentDateTimeString_NonEmpty)
  * @brief Test getCurrentTimestampMs returns positive value
  * @details Verifies that millisecond timestamp is greater than zero
  */
-TEST(ClockTest, GetCurrentTimestampMs_PositiveValue)
+TEST_F(ClockTest, GetCurrentTimestampMs_PositiveValue)
 {
     const auto timestamp = Clock::getCurrentTimestampMs();
     EXPECT_GT(timestamp, 0);
@@ -74,7 +89,7 @@ TEST(ClockTest, GetCurrentTimestampMs_PositiveValue)
  * @brief Test getCurrentTimestampMs returns reasonable value (after year 2020)
  * @details Validates that the timestamp represents a realistic modern time value
  */
-TEST(ClockTest, GetCurrentTimestampMs_ReasonableValue)
+TEST_F(ClockTest, GetCurrentTimestampMs_ReasonableValue)
 {
     const auto timestamp = Clock::getCurrentTimestampMs();
     // Timestamp for 2020-01-01 00:00:00 UTC in milliseconds
@@ -86,7 +101,7 @@ TEST(ClockTest, GetCurrentTimestampMs_ReasonableValue)
  * @brief Test getCurrentTimestamp returns positive value
  * @details Verifies that second timestamp is greater than zero
  */
-TEST(ClockTest, GetCurrentTimestamp_PositiveValue)
+TEST_F(ClockTest, GetCurrentTimestamp_PositiveValue)
 {
     const auto timestamp = Clock::getCurrentTimestamp();
     EXPECT_GT(timestamp, 0);
@@ -96,7 +111,7 @@ TEST(ClockTest, GetCurrentTimestamp_PositiveValue)
  * @brief Test getCurrentTimestamp returns reasonable value (after year 2020)
  * @details Validates that the timestamp represents a realistic modern time value
  */
-TEST(ClockTest, GetCurrentTimestamp_ReasonableValue)
+TEST_F(ClockTest, GetCurrentTimestamp_ReasonableValue)
 {
     const auto timestamp = Clock::getCurrentTimestamp();
     // Timestamp for 2020-01-01 00:00:00 UTC in seconds
@@ -108,7 +123,7 @@ TEST(ClockTest, GetCurrentTimestamp_ReasonableValue)
  * @brief Test relationship between millisecond and second timestamps
  * @details Verifies consistency between ms and s timestamp values
  */
-TEST(ClockTest, TimestampRelationship_MsAndSeconds)
+TEST_F(ClockTest, TimestampRelationship_MsAndSeconds)
 {
     const auto timestampMs = Clock::getCurrentTimestampMs();
     const auto timestampSec = Clock::getCurrentTimestamp();
@@ -122,7 +137,7 @@ TEST(ClockTest, TimestampRelationship_MsAndSeconds)
  * @brief Test formatCurrentTime with standard format
  * @details Tests custom formatting with "%Y-%m-%d %H:%M:%S" pattern
  */
-TEST(ClockTest, FormatCurrentTime_StandardFormat)
+TEST_F(ClockTest, FormatCurrentTime_StandardFormat)
 {
     const auto formatted = Clock::formatCurrentTime("%Y-%m-%d %H:%M:%S");
 
@@ -134,7 +149,7 @@ TEST(ClockTest, FormatCurrentTime_StandardFormat)
  * @brief Test formatCurrentTime with date only format
  * @details Tests custom formatting with "%Y/%m/%d" pattern
  */
-TEST(ClockTest, FormatCurrentTime_DateOnly)
+TEST_F(ClockTest, FormatCurrentTime_DateOnly)
 {
     const auto formatted = Clock::formatCurrentTime("%Y/%m/%d");
 
@@ -146,7 +161,7 @@ TEST(ClockTest, FormatCurrentTime_DateOnly)
  * @brief Test formatCurrentTime with time only format
  * @details Tests custom formatting with "%H:%M:%S" pattern
  */
-TEST(ClockTest, FormatCurrentTime_TimeOnly)
+TEST_F(ClockTest, FormatCurrentTime_TimeOnly)
 {
     const auto formatted = Clock::formatCurrentTime("%H:%M:%S");
 
@@ -158,7 +173,7 @@ TEST(ClockTest, FormatCurrentTime_TimeOnly)
  * @brief Test formatCurrentTime returns non-empty string
  * @details Ensures the method always returns a valid, non-empty result
  */
-TEST(ClockTest, FormatCurrentTime_NonEmpty)
+TEST_F(ClockTest, FormatCurrentTime_NonEmpty)
 {
     const auto formatted = Clock::formatCurrentTime("%Y-%m-%d");
     EXPECT_FALSE(formatted.empty());
@@ -168,7 +183,7 @@ TEST(ClockTest, FormatCurrentTime_NonEmpty)
  * @brief Test that consecutive calls return different or equal timestamps (monotonic)
  * @details Verifies temporal monotonicity by ensuring later calls don't return earlier times
  */
-TEST(ClockTest, TimestampMonotonicity_Milliseconds)
+TEST_F(ClockTest, TimestampMonotonicity_Milliseconds)
 {
     const auto timestamp1 = Clock::getCurrentTimestampMs();
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -181,7 +196,7 @@ TEST(ClockTest, TimestampMonotonicity_Milliseconds)
  * @brief Test consistency between different time retrieval methods
  * @details Validates that all time methods return coherent, valid results simultaneously
  */
-TEST(ClockTest, Consistency_BetweenMethods)
+TEST_F(ClockTest, Consistency_BetweenMethods)
 {
     const auto dateTimeStr = Clock::getCurrentDateTimeString();
     const auto compressedStr = Clock::getCompressedCurrentDateTimeString();

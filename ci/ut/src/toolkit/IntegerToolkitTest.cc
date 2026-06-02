@@ -14,10 +14,25 @@
 using namespace common::toolkit;
 
 /**
+ * @brief Test fixture for IntegerToolkitTest tests
+ */
+class IntegerToolkitTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test intToRoman with basic numbers
  * @details Verifies correct Roman numeral representation for standard values
  */
-TEST(IntegerToolkitTest, IntToRoman_BasicNumbers)
+TEST_F(IntegerToolkitTest, IntToRoman_BasicNumbers)
 {
     EXPECT_EQ(IntegerToolkit::intToRoman(1), "I");
     EXPECT_EQ(IntegerToolkit::intToRoman(4), "IV");
@@ -30,7 +45,7 @@ TEST(IntegerToolkitTest, IntToRoman_BasicNumbers)
  * @brief Test intToRoman with edge cases
  * @details Verifies boundary values (1 and 3999)
  */
-TEST(IntegerToolkitTest, IntToRoman_EdgeCases)
+TEST_F(IntegerToolkitTest, IntToRoman_EdgeCases)
 {
     EXPECT_EQ(IntegerToolkit::intToRoman(1), "I");
     EXPECT_EQ(IntegerToolkit::intToRoman(3999), "MMMCMXCIX");
@@ -40,7 +55,7 @@ TEST(IntegerToolkitTest, IntToRoman_EdgeCases)
  * @brief Test intToRoman with invalid range throws exception
  * @details Verifies proper error handling for out-of-range values
  */
-TEST(IntegerToolkitTest, IntToRoman_InvalidRange_ThrowsException)
+TEST_F(IntegerToolkitTest, IntToRoman_InvalidRange_ThrowsException)
 {
     EXPECT_THROW(IntegerToolkit::intToRoman(0), std::out_of_range);
     EXPECT_THROW(IntegerToolkit::intToRoman(4000), std::out_of_range);
@@ -51,7 +66,7 @@ TEST(IntegerToolkitTest, IntToRoman_InvalidRange_ThrowsException)
  * @brief Test tryIntToRoman with valid numbers
  * @details Verifies safe conversion returns std::optional with value
  */
-TEST(IntegerToolkitTest, TryIntToRoman_ValidNumbers)
+TEST_F(IntegerToolkitTest, TryIntToRoman_ValidNumbers)
 {
     const auto result1 = IntegerToolkit::tryIntToRoman(1);
     const auto result2 = IntegerToolkit::tryIntToRoman(58);
@@ -71,7 +86,7 @@ TEST(IntegerToolkitTest, TryIntToRoman_ValidNumbers)
  * @brief Test tryIntToRoman with invalid range
  * @details Verifies safe conversion returns std::nullopt for invalid input
  */
-TEST(IntegerToolkitTest, TryIntToRoman_InvalidRange)
+TEST_F(IntegerToolkitTest, TryIntToRoman_InvalidRange)
 {
     const auto result1 = IntegerToolkit::tryIntToRoman(0);
     const auto result2 = IntegerToolkit::tryIntToRoman(4000);
@@ -86,7 +101,7 @@ TEST(IntegerToolkitTest, TryIntToRoman_InvalidRange)
  * @brief Test romanToInt with basic numerals
  * @details Verifies correct integer conversion from Roman numeral strings
  */
-TEST(IntegerToolkitTest, RomanToInt_BasicNumerals)
+TEST_F(IntegerToolkitTest, RomanToInt_BasicNumerals)
 {
     EXPECT_EQ(IntegerToolkit::romanToInt("I"), 1);
     EXPECT_EQ(IntegerToolkit::romanToInt("IV"), 4);
@@ -99,7 +114,7 @@ TEST(IntegerToolkitTest, RomanToInt_BasicNumerals)
  * @brief Test romanToInt case insensitivity
  * @details Verifies parsing works regardless of letter case
  */
-TEST(IntegerToolkitTest, RomanToInt_CaseInsensitive)
+TEST_F(IntegerToolkitTest, RomanToInt_CaseInsensitive)
 {
     EXPECT_EQ(IntegerToolkit::romanToInt("i"), 1);
     EXPECT_EQ(IntegerToolkit::romanToInt("iv"), 4);
@@ -111,7 +126,7 @@ TEST(IntegerToolkitTest, RomanToInt_CaseInsensitive)
  * @brief Test romanToInt with empty string throws exception
  * @details Verifies proper error handling for empty input
  */
-TEST(IntegerToolkitTest, RomanToInt_EmptyString_ThrowsException)
+TEST_F(IntegerToolkitTest, RomanToInt_EmptyString_ThrowsException)
 {
     EXPECT_THROW(IntegerToolkit::romanToInt(""), std::invalid_argument);
 }
@@ -120,7 +135,7 @@ TEST(IntegerToolkitTest, RomanToInt_EmptyString_ThrowsException)
  * @brief Test romanToInt with invalid numerals throws exception
  * @details Verifies proper error handling for malformed Roman numerals
  */
-TEST(IntegerToolkitTest, RomanToInt_InvalidNumeral_ThrowsException)
+TEST_F(IntegerToolkitTest, RomanToInt_InvalidNumeral_ThrowsException)
 {
     EXPECT_THROW(IntegerToolkit::romanToInt("IIII"), std::invalid_argument);
     EXPECT_THROW(IntegerToolkit::romanToInt("ABC"), std::invalid_argument);
@@ -131,7 +146,7 @@ TEST(IntegerToolkitTest, RomanToInt_InvalidNumeral_ThrowsException)
  * @brief Test round-trip conversion: int to Roman and back
  * @details Verifies bidirectional conversion preserves original integer value
  */
-TEST(IntegerToolkitTest, RoundTrip_IntToRomanAndBack)
+TEST_F(IntegerToolkitTest, RoundTrip_IntToRomanAndBack)
 {
     const int test_values[] = {1, 4, 9, 58, 100, 400, 900, 1994, 3999};
 
@@ -147,7 +162,7 @@ TEST(IntegerToolkitTest, RoundTrip_IntToRomanAndBack)
  * @brief Test round-trip conversion: Roman to int and back
  * @details Verifies bidirectional conversion preserves original Roman numeral string
  */
-TEST(IntegerToolkitTest, RoundTrip_RomanToIntAndBack)
+TEST_F(IntegerToolkitTest, RoundTrip_RomanToIntAndBack)
 {
     const auto test_romans = {"I", "IV", "IX", "LVIII", "C", "CD", "CM", "MCMXCIV", "MMMCMXCIX"};
 
@@ -163,7 +178,7 @@ TEST(IntegerToolkitTest, RoundTrip_RomanToIntAndBack)
  * @brief Test isPowerOfTwo with actual powers of two
  * @details Verifies correct identification of 2^n values
  */
-TEST(IntegerToolkitTest, IsPowerOfTwo_PowersOfTwo)
+TEST_F(IntegerToolkitTest, IsPowerOfTwo_PowersOfTwo)
 {
     EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(1)); // 2^0
     EXPECT_TRUE(IntegerToolkit::isPowerOfTwo(2)); // 2^1
@@ -177,7 +192,7 @@ TEST(IntegerToolkitTest, IsPowerOfTwo_PowersOfTwo)
  * @brief Test isPowerOfTwo with non-powers of two
  * @details Verifies false is returned for non-power-of-two values
  */
-TEST(IntegerToolkitTest, IsPowerOfTwo_NotPowersOfTwo)
+TEST_F(IntegerToolkitTest, IsPowerOfTwo_NotPowersOfTwo)
 {
     EXPECT_FALSE(IntegerToolkit::isPowerOfTwo(0));
     EXPECT_FALSE(IntegerToolkit::isPowerOfTwo(3));
@@ -190,7 +205,7 @@ TEST(IntegerToolkitTest, IsPowerOfTwo_NotPowersOfTwo)
  * @brief Test isPowerOfTwo with negative numbers
  * @details Verifies negative values are correctly identified as non-powers-of-two
  */
-TEST(IntegerToolkitTest, IsPowerOfTwo_NegativeNumbers)
+TEST_F(IntegerToolkitTest, IsPowerOfTwo_NegativeNumbers)
 {
     EXPECT_FALSE(IntegerToolkit::isPowerOfTwo(-1));
     EXPECT_FALSE(IntegerToolkit::isPowerOfTwo(-2));
@@ -201,7 +216,7 @@ TEST(IntegerToolkitTest, IsPowerOfTwo_NegativeNumbers)
  * @brief Test countSetBits with basic numbers
  * @details Verifies correct counting of 1-bits in binary representation
  */
-TEST(IntegerToolkitTest, CountSetBits_BasicNumbers)
+TEST_F(IntegerToolkitTest, CountSetBits_BasicNumbers)
 {
     EXPECT_EQ(IntegerToolkit::countSetBits(0), 0);
     EXPECT_EQ(IntegerToolkit::countSetBits(1), 1); // binary: 1
@@ -215,7 +230,7 @@ TEST(IntegerToolkitTest, CountSetBits_BasicNumbers)
  * @brief Test countSetBits with powers of two
  * @details Verifies powers of two always have exactly one set bit
  */
-TEST(IntegerToolkitTest, CountSetBits_PowersOfTwo)
+TEST_F(IntegerToolkitTest, CountSetBits_PowersOfTwo)
 {
     // Powers of two should always have exactly 1 set bit
     EXPECT_EQ(IntegerToolkit::countSetBits(1), 1);
@@ -230,7 +245,7 @@ TEST(IntegerToolkitTest, CountSetBits_PowersOfTwo)
  * @brief Test countSetBits with all bits set
  * @details Verifies correct counting for maximum bit patterns
  */
-TEST(IntegerToolkitTest, CountSetBits_AllBitsSet)
+TEST_F(IntegerToolkitTest, CountSetBits_AllBitsSet)
 {
     EXPECT_EQ(IntegerToolkit::countSetBits(0xFF), 8); // 8 bits set
     EXPECT_EQ(IntegerToolkit::countSetBits(0xFFFF), 16); // 16 bits set
@@ -240,7 +255,7 @@ TEST(IntegerToolkitTest, CountSetBits_AllBitsSet)
  * @brief Test that constructor is deleted (compile-time check)
  * @details Verifies IntegerToolkit cannot be instantiated as it's a utility class
  */
-TEST(IntegerToolkitTest, ConstructorDeleted)
+TEST_F(IntegerToolkitTest, ConstructorDeleted)
 {
     static_assert(std::is_constructible_v<IntegerToolkit> == false,
                   "IntegerToolkit should not be constructible");

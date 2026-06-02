@@ -17,10 +17,25 @@
 using namespace common::crypto;
 
 /**
+ * @brief Test fixture for OpenSSLToolkitTest tests
+ */
+class OpenSSLToolkitTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test deriveKey produces consistent output
  * @details Verifies that same password and salt produce same key
  */
-TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput)
+TEST_F(OpenSSLToolkitTest, DeriveKey_ConsistentOutput)
 {
     const std::string password = "test_password";
     std::array<unsigned char, 16> salt{};
@@ -39,7 +54,7 @@ TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput)
  * @brief Test deriveKey with different passwords produces different keys
  * @details Verifies that different passwords result in different derived keys
  */
-TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys)
+TEST_F(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys)
 {
     std::array<unsigned char, 16> salt{};
     salt.fill(0x42);
@@ -57,7 +72,7 @@ TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys)
  * @brief Test deriveKey with different salts produces different keys
  * @details Verifies that same password with different salts produces different keys
  */
-TEST(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys)
+TEST_F(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys)
 {
     const std::string password = "same_password";
 
@@ -80,7 +95,7 @@ TEST(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys)
  * @brief Test decryptAES256CBC with wrong password fails
  * @details Verifies that incorrect password causes decryption failure
  */
-TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException)
+TEST_F(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException)
 {
     // Create a minimal valid ciphertext structure (salt + IV + some data)
     const std::vector<unsigned char> ciphertext(48, 0x42); // 16 salt + 16 IV + 16 data
@@ -94,7 +109,7 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException)
  * @brief Test decryptAES256CBC with truncated ciphertext fails
  * @details Verifies that incomplete ciphertext is rejected
  */
-TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException)
+TEST_F(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException)
 {
     // Create ciphertext that's too short (less than salt + IV)
     const std::vector<unsigned char> truncated(10, 0x42);
@@ -107,7 +122,7 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException)
  * @brief Test decryptAES256CBC with empty ciphertext fails
  * @details Verifies that empty input is properly rejected
  */
-TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException)
+TEST_F(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException)
 {
     const std::vector<unsigned char> emptyCiphertext;
     const std::string password = "password";
@@ -120,7 +135,7 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException)
  * @details Verifies error handling in encryption path
  * @note This test validates the API structure; actual encryption may fail due to implementation issues
  */
-TEST(OpenSSLToolkitTest, EncryptAES256CBC_APIValidation)
+TEST_F(OpenSSLToolkitTest, EncryptAES256CBC_APIValidation)
 {
     const std::string plaintext = "Test";
     const std::string password = "password";

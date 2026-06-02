@@ -16,10 +16,25 @@
 using namespace common::aop;
 
 /**
+ * @brief Test fixture for FunctionProfilerAspect tests
+ */
+class FunctionProfilerAspectTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test FunctionProfilerAspect constructor
  * @details Verifies that the aspect can be constructed with a function name
  */
-TEST(FunctionProfilerAspectTest, Constructor_ValidFunctionName)
+TEST_F(FunctionProfilerAspectTest, Constructor_ValidFunctionName)
 {
     EXPECT_NO_THROW(FunctionProfilerAspect aspect{"testFunction"});
 }
@@ -28,7 +43,7 @@ TEST(FunctionProfilerAspectTest, Constructor_ValidFunctionName)
  * @brief Test FunctionProfilerAspect construction with empty name
  * @details Verifies that the aspect can be constructed with an empty string
  */
-TEST(FunctionProfilerAspectTest, Constructor_EmptyFunctionName)
+TEST_F(FunctionProfilerAspectTest, Constructor_EmptyFunctionName)
 {
     EXPECT_NO_THROW(FunctionProfilerAspect aspect{""});
 }
@@ -37,7 +52,7 @@ TEST(FunctionProfilerAspectTest, Constructor_EmptyFunctionName)
  * @brief Test onEntry method does not throw
  * @details Verifies that onEntry can be called without exceptions
  */
-TEST(FunctionProfilerAspectTest, OnEntry_NoException)
+TEST_F(FunctionProfilerAspectTest, OnEntry_NoException)
 {
     FunctionProfilerAspect aspect{"testFunction"};
 
@@ -48,7 +63,7 @@ TEST(FunctionProfilerAspectTest, OnEntry_NoException)
  * @brief Test onExit method records end time
  * @details Verifies that onExit completes successfully after onEntry
  */
-TEST(FunctionProfilerAspectTest, OnExit_AfterEntry)
+TEST_F(FunctionProfilerAspectTest, OnExit_AfterEntry)
 {
     FunctionProfilerAspect aspect{"testFunction"};
 
@@ -64,7 +79,7 @@ TEST(FunctionProfilerAspectTest, OnExit_AfterEntry)
  * @brief Test onExit method without prior onEntry
  * @details Verifies that onExit handles being called without onEntry
  */
-TEST(FunctionProfilerAspectTest, OnExit_WithoutEntry)
+TEST_F(FunctionProfilerAspectTest, OnExit_WithoutEntry)
 {
     FunctionProfilerAspect aspect{"testFunction"};
 
@@ -76,7 +91,7 @@ TEST(FunctionProfilerAspectTest, OnExit_WithoutEntry)
  * @brief Test onException method with valid exception pointer
  * @details Verifies that onException handles exception pointers correctly
  */
-TEST(FunctionProfilerAspectTest, OnException_WithExceptionPointer)
+TEST_F(FunctionProfilerAspectTest, OnException_WithExceptionPointer)
 {
     FunctionProfilerAspect aspect{"testFunction"};
 
@@ -92,7 +107,7 @@ TEST(FunctionProfilerAspectTest, OnException_WithExceptionPointer)
  * @brief Test onException method without prior onEntry
  * @details Verifies that onException handles being called without onEntry
  */
-TEST(FunctionProfilerAspectTest, OnException_WithoutEntry)
+TEST_F(FunctionProfilerAspectTest, OnException_WithoutEntry)
 {
     FunctionProfilerAspect aspect{"testFunction"};
 
@@ -105,7 +120,7 @@ TEST(FunctionProfilerAspectTest, OnException_WithoutEntry)
  * @brief Test complete profiling lifecycle: entry -> exit
  * @details Verifies the normal execution flow of the aspect
  */
-TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenExit)
+TEST_F(FunctionProfilerAspectTest, Lifecycle_EntryThenExit)
 {
     FunctionProfilerAspect aspect{"lifecycleTest"};
 
@@ -120,7 +135,7 @@ TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenExit)
  * @brief Test complete profiling lifecycle: entry -> exception
  * @details Verifies the exception execution flow of the aspect
  */
-TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenException)
+TEST_F(FunctionProfilerAspectTest, Lifecycle_EntryThenException)
 {
     FunctionProfilerAspect aspect{"exceptionTest"};
 
@@ -136,7 +151,7 @@ TEST(FunctionProfilerAspectTest, Lifecycle_EntryThenException)
  * @brief Test aspect with AOP exec for void function
  * @details Verifies that the aspect works correctly with void-returning functions
  */
-TEST(FunctionProfilerAspectTest, Exec_VoidFunction)
+TEST_F(FunctionProfilerAspectTest, Exec_VoidFunction)
 {
     FunctionProfilerAspect aspect{"voidFunctionTest"};
 
@@ -156,7 +171,7 @@ TEST(FunctionProfilerAspectTest, Exec_VoidFunction)
  * @brief Test aspect with AOP exec for function returning value
  * @details Verifies that the aspect works correctly with value-returning functions
  */
-TEST(FunctionProfilerAspectTest, Exec_FunctionReturningValue)
+TEST_F(FunctionProfilerAspectTest, Exec_FunctionReturningValue)
 {
     FunctionProfilerAspect aspect{"valueFunctionTest"};
 
@@ -173,7 +188,7 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionReturningValue)
  * @brief Test aspect with AOP exec for function with arguments
  * @details Verifies that the aspect correctly forwards arguments to the function
  */
-TEST(FunctionProfilerAspectTest, Exec_FunctionWithArguments)
+TEST_F(FunctionProfilerAspectTest, Exec_FunctionWithArguments)
 {
     FunctionProfilerAspect aspect{"argsFunctionTest"};
 
@@ -190,7 +205,7 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionWithArguments)
  * @brief Test aspect with AOP exec when function throws exception
  * @details Verifies that the aspect handles exceptions correctly and re-throws them
  */
-TEST(FunctionProfilerAspectTest, Exec_FunctionThrowsException)
+TEST_F(FunctionProfilerAspectTest, Exec_FunctionThrowsException)
 {
     FunctionProfilerAspect aspect{"throwingFunctionTest"};
 
@@ -206,7 +221,7 @@ TEST(FunctionProfilerAspectTest, Exec_FunctionThrowsException)
  * @brief Test aspect with AOP exec preserves exception type
  * @details Verifies that the original exception type is preserved through the aspect
  */
-TEST(FunctionProfilerAspectTest, Exec_PreservesExceptionType)
+TEST_F(FunctionProfilerAspectTest, Exec_PreservesExceptionType)
 {
     FunctionProfilerAspect aspect{"exceptionTypeTest"};
 
@@ -232,7 +247,7 @@ TEST(FunctionProfilerAspectTest, Exec_PreservesExceptionType)
  * @brief Test multiple sequential executions with same aspect
  * @details Verifies that the aspect can be reused for multiple function calls
  */
-TEST(FunctionProfilerAspectTest, MultipleExecutions_Sequential)
+TEST_F(FunctionProfilerAspectTest, MultipleExecutions_Sequential)
 {
     FunctionProfilerAspect aspect{"multipleExecTest"};
 
@@ -254,7 +269,7 @@ TEST(FunctionProfilerAspectTest, MultipleExecutions_Sequential)
  * @brief Test aspect with different function types
  * @details Verifies that the aspect works with various callable types
  */
-TEST(FunctionProfilerAspectTest, Exec_DifferentCallableTypes)
+TEST_F(FunctionProfilerAspectTest, Exec_DifferentCallableTypes)
 {
     FunctionProfilerAspect aspect{"callableTest"};
 
@@ -281,7 +296,7 @@ TEST(FunctionProfilerAspectTest, Exec_DifferentCallableTypes)
  * @brief Test aspect timing accuracy
  * @details Verifies that the aspect correctly measures execution time
  */
-TEST(FunctionProfilerAspectTest, Timing_Accuracy)
+TEST_F(FunctionProfilerAspectTest, Timing_Accuracy)
 {
     FunctionProfilerAspect aspect{"timingTest"};
 
@@ -304,7 +319,7 @@ TEST(FunctionProfilerAspectTest, Timing_Accuracy)
  * @brief Test aspect with nested function calls
  * @details Verifies that the aspect handles nested executions correctly
  */
-TEST(FunctionProfilerAspectTest, NestedExecutions)
+TEST_F(FunctionProfilerAspectTest, NestedExecutions)
 {
     FunctionProfilerAspect outerAspect{"outerFunction"};
     FunctionProfilerAspect innerAspect{"innerFunction"};
@@ -324,7 +339,7 @@ TEST(FunctionProfilerAspectTest, NestedExecutions)
  * @brief Test aspect with long-running function
  * @details Verifies that the aspect handles long execution times correctly
  */
-TEST(FunctionProfilerAspectTest, LongRunningFunction)
+TEST_F(FunctionProfilerAspectTest, LongRunningFunction)
 {
     FunctionProfilerAspect aspect{"longRunningTest"};
 
@@ -339,7 +354,7 @@ TEST(FunctionProfilerAspectTest, LongRunningFunction)
  * @brief Test aspect with immediate function
  * @details Verifies that the aspect handles very fast execution correctly
  */
-TEST(FunctionProfilerAspectTest, ImmediateFunction)
+TEST_F(FunctionProfilerAspectTest, ImmediateFunction)
 {
     FunctionProfilerAspect aspect{"immediateTest"};
 

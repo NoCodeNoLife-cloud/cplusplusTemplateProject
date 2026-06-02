@@ -13,10 +13,25 @@
 using namespace common::rpc;
 
 /**
+ * @brief Test fixture for RpcMetadataTest tests
+ */
+class RpcMetadataTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test grpcStateToString with GRPC_CHANNEL_IDLE
  * @details Verifies conversion of IDLE state to string representation
  */
-TEST(RpcMetadataTest, GrpcStateToString_Idle)
+TEST_F(RpcMetadataTest, GrpcStateToString_Idle)
 {
     const auto result = RpcMetadata::grpcStateToString(GRPC_CHANNEL_IDLE);
     EXPECT_EQ(result, "IDLE");
@@ -26,7 +41,7 @@ TEST(RpcMetadataTest, GrpcStateToString_Idle)
  * @brief Test grpcStateToString with GRPC_CHANNEL_CONNECTING
  * @details Verifies conversion of CONNECTING state to string representation
  */
-TEST(RpcMetadataTest, GrpcStateToString_Connecting)
+TEST_F(RpcMetadataTest, GrpcStateToString_Connecting)
 {
     const auto result = RpcMetadata::grpcStateToString(GRPC_CHANNEL_CONNECTING);
     EXPECT_EQ(result, "CONNECTING");
@@ -36,7 +51,7 @@ TEST(RpcMetadataTest, GrpcStateToString_Connecting)
  * @brief Test grpcStateToString with GRPC_CHANNEL_READY
  * @details Verifies conversion of READY state to string representation
  */
-TEST(RpcMetadataTest, GrpcStateToString_Ready)
+TEST_F(RpcMetadataTest, GrpcStateToString_Ready)
 {
     const auto result = RpcMetadata::grpcStateToString(GRPC_CHANNEL_READY);
     EXPECT_EQ(result, "READY");
@@ -46,7 +61,7 @@ TEST(RpcMetadataTest, GrpcStateToString_Ready)
  * @brief Test grpcStateToString with GRPC_CHANNEL_TRANSIENT_FAILURE
  * @details Verifies conversion of TRANSIENT_FAILURE state to string representation
  */
-TEST(RpcMetadataTest, GrpcStateToString_TransientFailure)
+TEST_F(RpcMetadataTest, GrpcStateToString_TransientFailure)
 {
     const auto result = RpcMetadata::grpcStateToString(GRPC_CHANNEL_TRANSIENT_FAILURE);
     EXPECT_EQ(result, "TRANSIENT_FAILURE");
@@ -56,7 +71,7 @@ TEST(RpcMetadataTest, GrpcStateToString_TransientFailure)
  * @brief Test grpcStateToString with GRPC_CHANNEL_SHUTDOWN
  * @details Verifies conversion of SHUTDOWN state to string representation
  */
-TEST(RpcMetadataTest, GrpcStateToString_Shutdown)
+TEST_F(RpcMetadataTest, GrpcStateToString_Shutdown)
 {
     const auto result = RpcMetadata::grpcStateToString(GRPC_CHANNEL_SHUTDOWN);
     EXPECT_EQ(result, "SHUTDOWN");
@@ -66,7 +81,7 @@ TEST(RpcMetadataTest, GrpcStateToString_Shutdown)
  * @brief Test grpcStateToString with unknown state
  * @details Verifies that unknown states return "UNKNOWN" string
  */
-TEST(RpcMetadataTest, GrpcStateToString_Unknown)
+TEST_F(RpcMetadataTest, GrpcStateToString_Unknown)
 {
     // Use an invalid state value to test unknown handling
     const auto result = RpcMetadata::grpcStateToString(static_cast<grpc_connectivity_state>(999));
@@ -77,7 +92,7 @@ TEST(RpcMetadataTest, GrpcStateToString_Unknown)
  * @brief Test grpcStateToEnum with GRPC_CHANNEL_IDLE
  * @details Verifies conversion of gRPC IDLE state to internal enum
  */
-TEST(RpcMetadataTest, GrpcStateToEnum_Idle)
+TEST_F(RpcMetadataTest, GrpcStateToEnum_Idle)
 {
     const auto result = RpcMetadata::grpcStateToEnum(GRPC_CHANNEL_IDLE);
     EXPECT_EQ(result, GrpcConnectivityState::IDLE);
@@ -87,7 +102,7 @@ TEST(RpcMetadataTest, GrpcStateToEnum_Idle)
  * @brief Test grpcStateToEnum with GRPC_CHANNEL_CONNECTING
  * @details Verifies conversion of gRPC CONNECTING state to internal enum
  */
-TEST(RpcMetadataTest, GrpcStateToEnum_Connecting)
+TEST_F(RpcMetadataTest, GrpcStateToEnum_Connecting)
 {
     const auto result = RpcMetadata::grpcStateToEnum(GRPC_CHANNEL_CONNECTING);
     EXPECT_EQ(result, GrpcConnectivityState::CONNECTING);
@@ -97,7 +112,7 @@ TEST(RpcMetadataTest, GrpcStateToEnum_Connecting)
  * @brief Test grpcStateToEnum with GRPC_CHANNEL_READY
  * @details Verifies conversion of gRPC READY state to internal enum
  */
-TEST(RpcMetadataTest, GrpcStateToEnum_Ready)
+TEST_F(RpcMetadataTest, GrpcStateToEnum_Ready)
 {
     const auto result = RpcMetadata::grpcStateToEnum(GRPC_CHANNEL_READY);
     EXPECT_EQ(result, GrpcConnectivityState::READY);
@@ -107,7 +122,7 @@ TEST(RpcMetadataTest, GrpcStateToEnum_Ready)
  * @brief Test grpcStateToEnum with GRPC_CHANNEL_TRANSIENT_FAILURE
  * @details Verifies conversion of gRPC TRANSIENT_FAILURE state to internal enum
  */
-TEST(RpcMetadataTest, GrpcStateToEnum_TransientFailure)
+TEST_F(RpcMetadataTest, GrpcStateToEnum_TransientFailure)
 {
     const auto result = RpcMetadata::grpcStateToEnum(GRPC_CHANNEL_TRANSIENT_FAILURE);
     EXPECT_EQ(result, GrpcConnectivityState::TRANSIENT_FAILURE);
@@ -117,7 +132,7 @@ TEST(RpcMetadataTest, GrpcStateToEnum_TransientFailure)
  * @brief Test grpcStateToEnum with GRPC_CHANNEL_SHUTDOWN
  * @details Verifies conversion of gRPC SHUTDOWN state to internal enum
  */
-TEST(RpcMetadataTest, GrpcStateToEnum_Shutdown)
+TEST_F(RpcMetadataTest, GrpcStateToEnum_Shutdown)
 {
     const auto result = RpcMetadata::grpcStateToEnum(GRPC_CHANNEL_SHUTDOWN);
     EXPECT_EQ(result, GrpcConnectivityState::SHUTDOWN);
@@ -127,7 +142,7 @@ TEST(RpcMetadataTest, GrpcStateToEnum_Shutdown)
  * @brief Test grpcStateToEnum with unknown state
  * @details Verifies that unknown states default to IDLE enum value
  */
-TEST(RpcMetadataTest, GrpcStateToEnum_Unknown)
+TEST_F(RpcMetadataTest, GrpcStateToEnum_Unknown)
 {
     // Use an invalid state value to test default handling
     const auto result = RpcMetadata::grpcStateToEnum(static_cast<grpc_connectivity_state>(999));
@@ -138,7 +153,7 @@ TEST(RpcMetadataTest, GrpcStateToEnum_Unknown)
  * @brief Test grpcStateToString with GrpcConnectivityState::IDLE
  * @details Verifies conversion of internal IDLE enum to string
  */
-TEST(RpcMetadataTest, InternalStateToString_Idle)
+TEST_F(RpcMetadataTest, InternalStateToString_Idle)
 {
     const auto result = RpcMetadata::grpcStateToString(GrpcConnectivityState::IDLE);
     EXPECT_EQ(result, "IDLE");
@@ -148,7 +163,7 @@ TEST(RpcMetadataTest, InternalStateToString_Idle)
  * @brief Test grpcStateToString with GrpcConnectivityState::CONNECTING
  * @details Verifies conversion of internal CONNECTING enum to string
  */
-TEST(RpcMetadataTest, InternalStateToString_Connecting)
+TEST_F(RpcMetadataTest, InternalStateToString_Connecting)
 {
     const auto result = RpcMetadata::grpcStateToString(GrpcConnectivityState::CONNECTING);
     EXPECT_EQ(result, "CONNECTING");
@@ -158,7 +173,7 @@ TEST(RpcMetadataTest, InternalStateToString_Connecting)
  * @brief Test grpcStateToString with GrpcConnectivityState::READY
  * @details Verifies conversion of internal READY enum to string
  */
-TEST(RpcMetadataTest, InternalStateToString_Ready)
+TEST_F(RpcMetadataTest, InternalStateToString_Ready)
 {
     const auto result = RpcMetadata::grpcStateToString(GrpcConnectivityState::READY);
     EXPECT_EQ(result, "READY");
@@ -168,7 +183,7 @@ TEST(RpcMetadataTest, InternalStateToString_Ready)
  * @brief Test grpcStateToString with GrpcConnectivityState::TRANSIENT_FAILURE
  * @details Verifies conversion of internal TRANSIENT_FAILURE enum to string
  */
-TEST(RpcMetadataTest, InternalStateToString_TransientFailure)
+TEST_F(RpcMetadataTest, InternalStateToString_TransientFailure)
 {
     const auto result = RpcMetadata::grpcStateToString(GrpcConnectivityState::TRANSIENT_FAILURE);
     EXPECT_EQ(result, "TRANSIENT_FAILURE");
@@ -178,7 +193,7 @@ TEST(RpcMetadataTest, InternalStateToString_TransientFailure)
  * @brief Test grpcStateToString with GrpcConnectivityState::SHUTDOWN
  * @details Verifies conversion of internal SHUTDOWN enum to string
  */
-TEST(RpcMetadataTest, InternalStateToString_Shutdown)
+TEST_F(RpcMetadataTest, InternalStateToString_Shutdown)
 {
     const auto result = RpcMetadata::grpcStateToString(GrpcConnectivityState::SHUTDOWN);
     EXPECT_EQ(result, "SHUTDOWN");
@@ -188,7 +203,7 @@ TEST(RpcMetadataTest, InternalStateToString_Shutdown)
  * @brief Test round-trip conversion: gRPC state -> internal enum -> string
  * @details Verifies consistency across different conversion methods
  */
-TEST(RpcMetadataTest, RoundTrip_GrpcToInternalToString)
+TEST_F(RpcMetadataTest, RoundTrip_GrpcToInternalToString)
 {
     const grpc_connectivity_state grpcState = GRPC_CHANNEL_READY;
     const auto internalEnum = RpcMetadata::grpcStateToEnum(grpcState);
@@ -203,7 +218,7 @@ TEST(RpcMetadataTest, RoundTrip_GrpcToInternalToString)
  * @brief Test all gRPC connectivity states have consistent string representations
  * @details Verifies that converting through internal enum produces same result as direct conversion
  */
-TEST(RpcMetadataTest, Consistency_AllStates)
+TEST_F(RpcMetadataTest, Consistency_AllStates)
 {
     // Test IDLE
     {
@@ -245,7 +260,7 @@ TEST(RpcMetadataTest, Consistency_AllStates)
  * @brief Test all conversion methods return non-empty strings
  * @details Ensures no conversion method returns an empty string
  */
-TEST(RpcMetadataTest, NonEmpty_Results)
+TEST_F(RpcMetadataTest, NonEmpty_Results)
 {
     EXPECT_FALSE(RpcMetadata::grpcStateToString(GRPC_CHANNEL_IDLE).empty());
     EXPECT_FALSE(RpcMetadata::grpcStateToString(GRPC_CHANNEL_CONNECTING).empty());

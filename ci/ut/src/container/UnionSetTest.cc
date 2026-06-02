@@ -13,10 +13,25 @@
 using namespace common::container;
 
 /**
+ * @brief Test fixture for UnionSet tests
+ */
+class UnionSetTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test default constructor creates empty UnionSet
  * @details Verifies that a newly constructed UnionSet is ready to use
  */
-TEST(UnionSetTest, DefaultConstructor_EmptyUnionSet)
+TEST_F(UnionSetTest, DefaultConstructor_EmptyUnionSet)
 {
     const UnionSet<int> unionSet;
     // UnionSet should be usable after construction
@@ -27,7 +42,7 @@ TEST(UnionSetTest, DefaultConstructor_EmptyUnionSet)
  * @brief Test find returns the element itself for single element
  * @details Verifies that an unconnected element is its own root
  */
-TEST(UnionSetTest, Find_SingleElement_ReturnsSelf)
+TEST_F(UnionSetTest, Find_SingleElement_ReturnsSelf)
 {
     UnionSet<int> unionSet;
 
@@ -40,7 +55,7 @@ TEST(UnionSetTest, Find_SingleElement_ReturnsSelf)
  * @brief Test find with path compression
  * @details Verifies that path compression optimizes future lookups
  */
-TEST(UnionSetTest, Find_PathCompression)
+TEST_F(UnionSetTest, Find_PathCompression)
 {
     UnionSet<int> unionSet;
 
@@ -61,7 +76,7 @@ TEST(UnionSetTest, Find_PathCompression)
  * @brief Test unionSets merges two separate sets
  * @details Verifies that union operation correctly combines two disjoint sets
  */
-TEST(UnionSetTest, UnionSets_MergesTwoSets)
+TEST_F(UnionSetTest, UnionSets_MergesTwoSets)
 {
     UnionSet<int> unionSet;
 
@@ -75,7 +90,7 @@ TEST(UnionSetTest, UnionSets_MergesTwoSets)
  * @brief Test unionSets returns false for already connected elements
  * @details Verifies that union operation detects redundant unions
  */
-TEST(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse)
+TEST_F(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse)
 {
     UnionSet<int> unionSet;
 
@@ -89,7 +104,7 @@ TEST(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse)
  * @brief Test unionSets with multiple elements maintains connectivity
  * @details Verifies transitive property of union operations
  */
-TEST(UnionSetTest, UnionSets_MultipleElements_TransitiveConnectivity)
+TEST_F(UnionSetTest, UnionSets_MultipleElements_TransitiveConnectivity)
 {
     UnionSet<int> unionSet;
 
@@ -106,7 +121,7 @@ TEST(UnionSetTest, UnionSets_MultipleElements_TransitiveConnectivity)
  * @brief Test unionSets maintains separate sets when not united
  * @details Verifies that unrelated elements remain in different sets
  */
-TEST(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected)
+TEST_F(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected)
 {
     UnionSet<int> unionSet;
 
@@ -123,7 +138,7 @@ TEST(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected)
  * @brief Test connected returns true for same element
  * @details Verifies reflexivity property
  */
-TEST(UnionSetTest, Connected_SameElement_ReturnsTrue)
+TEST_F(UnionSetTest, Connected_SameElement_ReturnsTrue)
 {
     const UnionSet<int> unionSet;
 
@@ -134,7 +149,7 @@ TEST(UnionSetTest, Connected_SameElement_ReturnsTrue)
  * @brief Test connected returns false for unconnected elements
  * @details Verifies that elements without union are not connected
  */
-TEST(UnionSetTest, Connected_UnconnectedElements_ReturnsFalse)
+TEST_F(UnionSetTest, Connected_UnconnectedElements_ReturnsFalse)
 {
     const UnionSet<int> unionSet;
 
@@ -145,7 +160,7 @@ TEST(UnionSetTest, Connected_UnconnectedElements_ReturnsFalse)
  * @brief Test connected after union operation
  * @details Verifies that connected correctly identifies united elements
  */
-TEST(UnionSetTest, Connected_AfterUnion_ReturnsTrue)
+TEST_F(UnionSetTest, Connected_AfterUnion_ReturnsTrue)
 {
     UnionSet<int> unionSet;
 
@@ -161,7 +176,7 @@ TEST(UnionSetTest, Connected_AfterUnion_ReturnsTrue)
  * @brief Test connected with const reference
  * @details Verifies const-correctness of connected method
  */
-TEST(UnionSetTest, Connected_ConstReference_CorrectBehavior)
+TEST_F(UnionSetTest, Connected_ConstReference_CorrectBehavior)
 {
     UnionSet<int> unionSet;
 
@@ -178,7 +193,7 @@ TEST(UnionSetTest, Connected_ConstReference_CorrectBehavior)
  * @brief Test union by rank optimization
  * @details Verifies that union by rank creates balanced trees
  */
-TEST(UnionSetTest, UnionByRank_BalancedStructure)
+TEST_F(UnionSetTest, UnionByRank_BalancedStructure)
 {
     UnionSet<int> unionSet;
 
@@ -205,7 +220,7 @@ TEST(UnionSetTest, UnionByRank_BalancedStructure)
  * @brief Test UnionSet with string elements
  * @details Verifies UnionSet works correctly with non-numeric types
  */
-TEST(UnionSetTest, StringElements_CorrectBehavior)
+TEST_F(UnionSetTest, StringElements_CorrectBehavior)
 {
     UnionSet<std::string> unionSet;
 
@@ -221,7 +236,7 @@ TEST(UnionSetTest, StringElements_CorrectBehavior)
  * @brief Test UnionSet with large number of elements
  * @details Verifies scalability and correctness with many elements
  */
-TEST(UnionSetTest, LargeNumberOfElements_Correctness)
+TEST_F(UnionSetTest, LargeNumberOfElements_Correctness)
 {
     UnionSet<int> unionSet;
 
@@ -243,7 +258,7 @@ TEST(UnionSetTest, LargeNumberOfElements_Correctness)
  * @brief Test multiple independent components
  * @details Verifies correct handling of multiple disjoint sets
  */
-TEST(UnionSetTest, MultipleIndependentComponents_CorrectHandling)
+TEST_F(UnionSetTest, MultipleIndependentComponents_CorrectHandling)
 {
     UnionSet<int> unionSet;
 
@@ -273,7 +288,7 @@ TEST(UnionSetTest, MultipleIndependentComponents_CorrectHandling)
  * @brief Test UnionSet with negative numbers
  * @details Verifies correct handling of negative values
  */
-TEST(UnionSetTest, NegativeNumbers_CorrectHandling)
+TEST_F(UnionSetTest, NegativeNumbers_CorrectHandling)
 {
     UnionSet<int> unionSet;
 
@@ -288,7 +303,7 @@ TEST(UnionSetTest, NegativeNumbers_CorrectHandling)
  * @brief Test UnionSet with mixed positive and negative numbers
  * @details Verifies correct handling of mixed sign values
  */
-TEST(UnionSetTest, MixedSignNumbers_CorrectHandling)
+TEST_F(UnionSetTest, MixedSignNumbers_CorrectHandling)
 {
     UnionSet<int> unionSet;
 
@@ -304,7 +319,7 @@ TEST(UnionSetTest, MixedSignNumbers_CorrectHandling)
  * @brief Test repeated union operations on same elements
  * @details Verifies idempotency of union operations
  */
-TEST(UnionSetTest, RepeatedUnions_Idempotent)
+TEST_F(UnionSetTest, RepeatedUnions_Idempotent)
 {
     UnionSet<int> unionSet;
 
@@ -319,7 +334,7 @@ TEST(UnionSetTest, RepeatedUnions_Idempotent)
  * @brief Test UnionSet forms correct equivalence classes
  * @details Verifies reflexive, symmetric, and transitive properties
  */
-TEST(UnionSetTest, EquivalenceClasses_CorrectProperties)
+TEST_F(UnionSetTest, EquivalenceClasses_CorrectProperties)
 {
     UnionSet<int> unionSet;
 

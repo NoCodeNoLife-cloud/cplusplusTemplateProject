@@ -14,6 +14,21 @@
 using namespace common::toolkit;
 
 /**
+ * @brief Test fixture for ObjectFactoryTest tests
+ */
+class ObjectFactoryTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test interface for factory pattern
  */
 class IShape
@@ -112,7 +127,7 @@ protected:
  * @brief Test registration and creation of basic types
  * @details Verifies types can be registered and queried
  */
-TEST(ObjectFactoryTest, RegisterAndCreate_BasicTypes)
+TEST_F(ObjectFactoryTest, RegisterAndCreate_BasicTypes)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -130,7 +145,7 @@ TEST(ObjectFactoryTest, RegisterAndCreate_BasicTypes)
  * @brief Test object creation for valid registered types
  * @details Verifies created objects have correct properties
  */
-TEST(ObjectFactoryTest, CreateObject_ValidTypes)
+TEST_F(ObjectFactoryTest, CreateObject_ValidTypes)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -159,7 +174,7 @@ TEST(ObjectFactoryTest, CreateObject_ValidTypes)
  * @brief Test creation of multiple instances of same type
  * @details Verifies each call creates a new independent instance
  */
-TEST(ObjectFactoryTest, CreateObject_MultipleInstances)
+TEST_F(ObjectFactoryTest, CreateObject_MultipleInstances)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -179,7 +194,7 @@ TEST(ObjectFactoryTest, CreateObject_MultipleInstances)
  * @brief Test error handling for unregistered type
  * @details Verifies std::runtime_error is thrown for unknown types
  */
-TEST(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException)
+TEST_F(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -195,7 +210,7 @@ TEST(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException)
  * @brief Test error handling for empty type name
  * @details Verifies std::invalid_argument is thrown for empty string
  */
-TEST(ObjectFactoryTest, CreateObject_EmptyTypeName_ThrowsException)
+TEST_F(ObjectFactoryTest, CreateObject_EmptyTypeName_ThrowsException)
 {
     EXPECT_THROW(
         ObjectFactory<IShape>::createObject(""),
@@ -203,7 +218,7 @@ TEST(ObjectFactoryTest, CreateObject_EmptyTypeName_ThrowsException)
     );
 }
 
-TEST(ObjectFactoryTest, RegisterType_EmptyTypeName_ThrowsException)
+TEST_F(ObjectFactoryTest, RegisterType_EmptyTypeName_ThrowsException)
 {
     ShapeFactory factory;
 
@@ -217,7 +232,7 @@ TEST(ObjectFactoryTest, RegisterType_EmptyTypeName_ThrowsException)
  * @brief Test isRegistered functionality after execution
  * @details Verifies registration state changes correctly before and after execute
  */
-TEST(ObjectFactoryTest, IsRegistered_AfterExecution)
+TEST_F(ObjectFactoryTest, IsRegistered_AfterExecution)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -231,12 +246,12 @@ TEST(ObjectFactoryTest, IsRegistered_AfterExecution)
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Rectangle"));
 }
 
-TEST(ObjectFactoryTest, IsRegistered_EmptyTypeName)
+TEST_F(ObjectFactoryTest, IsRegistered_EmptyTypeName)
 {
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered(""));
 }
 
-TEST(ObjectFactoryTest, IsRegistered_NonExistentType)
+TEST_F(ObjectFactoryTest, IsRegistered_NonExistentType)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -250,7 +265,7 @@ TEST(ObjectFactoryTest, IsRegistered_NonExistentType)
  * @brief Test execute functionality for successful registration
  * @details Verifies execute returns true and types are registered
  */
-TEST(ObjectFactoryTest, Execute_SuccessfulRegistration)
+TEST_F(ObjectFactoryTest, Execute_SuccessfulRegistration)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -262,7 +277,7 @@ TEST(ObjectFactoryTest, Execute_SuccessfulRegistration)
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Circle"));
 }
 
-TEST(ObjectFactoryTest, Execute_MultipleCalls)
+TEST_F(ObjectFactoryTest, Execute_MultipleCalls)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -281,7 +296,7 @@ TEST(ObjectFactoryTest, Execute_MultipleCalls)
  * @brief Test clearRegistry functionality after registration
  * @details Verifies registry can be cleared and types become unregistered
  */
-TEST(ObjectFactoryTest, ClearRegistry_AfterRegistration)
+TEST_F(ObjectFactoryTest, ClearRegistry_AfterRegistration)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -298,7 +313,7 @@ TEST(ObjectFactoryTest, ClearRegistry_AfterRegistration)
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered("Rectangle"));
 }
 
-TEST(ObjectFactoryTest, ClearRegistry_AndReregister)
+TEST_F(ObjectFactoryTest, ClearRegistry_AndReregister)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -322,7 +337,7 @@ TEST(ObjectFactoryTest, ClearRegistry_AndReregister)
 }
 
 // Test with different constructor arguments
-TEST(ObjectFactoryTest, RegisterWithDifferentArguments)
+TEST_F(ObjectFactoryTest, RegisterWithDifferentArguments)
 {
     // Clear any existing registrations
     ObjectFactory<IShape>::clearRegistry();
@@ -358,7 +373,7 @@ TEST(ObjectFactoryTest, RegisterWithDifferentArguments)
  * @brief Test polymorphic behavior of created objects
  * @details Verifies virtual methods work correctly on factory-created objects
  */
-TEST(ObjectFactoryTest, PolymorphicBehavior)
+TEST_F(ObjectFactoryTest, PolymorphicBehavior)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -384,7 +399,7 @@ TEST(ObjectFactoryTest, PolymorphicBehavior)
 }
 
 // Test thread safety (basic test)
-TEST(ObjectFactoryTest, ThreadSafety_BasicOperations)
+TEST_F(ObjectFactoryTest, ThreadSafety_BasicOperations)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
@@ -403,7 +418,7 @@ TEST(ObjectFactoryTest, ThreadSafety_BasicOperations)
  * @brief Test that ObjectFactory inherits from IStartupTask
  * @details Verifies inheritance relationship and interface compatibility
  */
-TEST(ObjectFactoryTest, Inheritance_FromIStartupTask)
+TEST_F(ObjectFactoryTest, Inheritance_FromIStartupTask)
 {
     ObjectFactory<IShape>::clearRegistry();
     static_assert(

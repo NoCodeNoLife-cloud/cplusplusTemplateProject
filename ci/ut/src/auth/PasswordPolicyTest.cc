@@ -12,10 +12,25 @@
 using namespace common::auth;
 
 /**
+ * @brief Test fixture for PasswordPolicy tests
+ */
+class PasswordPolicyTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test default password policy configuration
  * @details Verifies that default policy has expected values
  */
-TEST(PasswordPolicyTest, DefaultConfiguration)
+TEST_F(PasswordPolicyTest, DefaultConfiguration)
 {
     const PasswordPolicy policy;
 
@@ -32,7 +47,7 @@ TEST(PasswordPolicyTest, DefaultConfiguration)
  * @brief Test custom password policy configuration
  * @details Verifies that custom parameters are properly set
  */
-TEST(PasswordPolicyTest, CustomConfiguration)
+TEST_F(PasswordPolicyTest, CustomConfiguration)
 {
     const PasswordPolicy policy(12, 128, false, true, false, false, 3);
 
@@ -49,7 +64,7 @@ TEST(PasswordPolicyTest, CustomConfiguration)
  * @brief Test valid password with all requirements
  * @details Verifies that a password meeting all default requirements passes validation
  */
-TEST(PasswordPolicyTest, Validate_ValidPassword_AllRequirements)
+TEST_F(PasswordPolicyTest, Validate_ValidPassword_AllRequirements)
 {
     const PasswordPolicy policy;
 
@@ -63,7 +78,7 @@ TEST(PasswordPolicyTest, Validate_ValidPassword_AllRequirements)
  * @brief Test password too short
  * @details Verifies that passwords below minimum length fail validation
  */
-TEST(PasswordPolicyTest, Validate_PasswordTooShort)
+TEST_F(PasswordPolicyTest, Validate_PasswordTooShort)
 {
     const PasswordPolicy policy;
 
@@ -76,7 +91,7 @@ TEST(PasswordPolicyTest, Validate_PasswordTooShort)
  * @brief Test password too long
  * @details Verifies that passwords exceeding maximum length fail validation
  */
-TEST(PasswordPolicyTest, Validate_PasswordTooLong)
+TEST_F(PasswordPolicyTest, Validate_PasswordTooLong)
 {
     const PasswordPolicy policy(8, 20);
 
@@ -88,7 +103,7 @@ TEST(PasswordPolicyTest, Validate_PasswordTooLong)
  * @brief Test password missing uppercase
  * @details Verifies that passwords without uppercase letters fail when required
  */
-TEST(PasswordPolicyTest, Validate_MissingUppercase)
+TEST_F(PasswordPolicyTest, Validate_MissingUppercase)
 {
     const PasswordPolicy policy;
 
@@ -100,7 +115,7 @@ TEST(PasswordPolicyTest, Validate_MissingUppercase)
  * @brief Test password missing lowercase
  * @details Verifies that passwords without lowercase letters fail when required
  */
-TEST(PasswordPolicyTest, Validate_MissingLowercase)
+TEST_F(PasswordPolicyTest, Validate_MissingLowercase)
 {
     const PasswordPolicy policy;
 
@@ -112,7 +127,7 @@ TEST(PasswordPolicyTest, Validate_MissingLowercase)
  * @brief Test password missing digits
  * @details Verifies that passwords without digits fail when required
  */
-TEST(PasswordPolicyTest, Validate_MissingDigits)
+TEST_F(PasswordPolicyTest, Validate_MissingDigits)
 {
     const PasswordPolicy policy;
 
@@ -124,7 +139,7 @@ TEST(PasswordPolicyTest, Validate_MissingDigits)
  * @brief Test password missing special characters
  * @details Verifies that passwords without special characters fail when required
  */
-TEST(PasswordPolicyTest, Validate_MissingSpecial)
+TEST_F(PasswordPolicyTest, Validate_MissingSpecial)
 {
     const PasswordPolicy policy;
 
@@ -136,7 +151,7 @@ TEST(PasswordPolicyTest, Validate_MissingSpecial)
  * @brief Test password validation with uppercase requirement disabled
  * @details Verifies that uppercase is not required when disabled
  */
-TEST(PasswordPolicyTest, Validate_UppercaseNotRequired)
+TEST_F(PasswordPolicyTest, Validate_UppercaseNotRequired)
 {
     PasswordPolicy policy;
     policy.set_require_uppercase(false);
@@ -149,7 +164,7 @@ TEST(PasswordPolicyTest, Validate_UppercaseNotRequired)
  * @brief Test password validation with lowercase requirement disabled
  * @details Verifies that lowercase is not required when disabled
  */
-TEST(PasswordPolicyTest, Validate_LowercaseNotRequired)
+TEST_F(PasswordPolicyTest, Validate_LowercaseNotRequired)
 {
     PasswordPolicy policy;
     policy.set_require_lowercase(false);
@@ -162,7 +177,7 @@ TEST(PasswordPolicyTest, Validate_LowercaseNotRequired)
  * @brief Test password validation with digit requirement disabled
  * @details Verifies that digits are not required when disabled
  */
-TEST(PasswordPolicyTest, Validate_DigitsNotRequired)
+TEST_F(PasswordPolicyTest, Validate_DigitsNotRequired)
 {
     PasswordPolicy policy;
     policy.set_require_digits(false);
@@ -175,7 +190,7 @@ TEST(PasswordPolicyTest, Validate_DigitsNotRequired)
  * @brief Test password validation with special character requirement disabled
  * @details Verifies that special characters are not required when disabled
  */
-TEST(PasswordPolicyTest, Validate_SpecialNotRequired)
+TEST_F(PasswordPolicyTest, Validate_SpecialNotRequired)
 {
     PasswordPolicy policy;
     policy.set_require_special(false);
@@ -188,7 +203,7 @@ TEST(PasswordPolicyTest, Validate_SpecialNotRequired)
  * @brief Test empty password validation
  * @details Verifies that empty password fails validation
  */
-TEST(PasswordPolicyTest, Validate_EmptyPassword)
+TEST_F(PasswordPolicyTest, Validate_EmptyPassword)
 {
     const PasswordPolicy policy;
 
@@ -199,7 +214,7 @@ TEST(PasswordPolicyTest, Validate_EmptyPassword)
  * @brief Test password with only spaces
  * @details Verifies that password with only whitespace fails validation
  */
-TEST(PasswordPolicyTest, Validate_OnlySpaces)
+TEST_F(PasswordPolicyTest, Validate_OnlySpaces)
 {
     const PasswordPolicy policy;
 
@@ -210,7 +225,7 @@ TEST(PasswordPolicyTest, Validate_OnlySpaces)
  * @brief Test password with special characters variety
  * @details Verifies that various special characters are accepted
  */
-TEST(PasswordPolicyTest, Validate_SpecialCharactersVariety)
+TEST_F(PasswordPolicyTest, Validate_SpecialCharactersVariety)
 {
     const PasswordPolicy policy;
 
@@ -227,7 +242,7 @@ TEST(PasswordPolicyTest, Validate_SpecialCharactersVariety)
  * @brief Test password at exact boundary lengths
  * @details Verifies that passwords at min/max boundaries are accepted
  */
-TEST(PasswordPolicyTest, Validate_BoundaryLengths)
+TEST_F(PasswordPolicyTest, Validate_BoundaryLengths)
 {
     const PasswordPolicy policy(8, 16);
 
@@ -242,7 +257,7 @@ TEST(PasswordPolicyTest, Validate_BoundaryLengths)
  * @brief Test setter methods for policy configuration
  * @details Verifies that all setter methods work correctly
  */
-TEST(PasswordPolicyTest, SetterMethods)
+TEST_F(PasswordPolicyTest, SetterMethods)
 {
     PasswordPolicy policy;
 
@@ -269,7 +284,7 @@ TEST(PasswordPolicyTest, SetterMethods)
  * @brief Test password with Unicode characters
  * @details Verifies that Unicode passwords are handled correctly
  */
-TEST(PasswordPolicyTest, Validate_UnicodePassword)
+TEST_F(PasswordPolicyTest, Validate_UnicodePassword)
 {
     const PasswordPolicy policy;
 
@@ -282,7 +297,7 @@ TEST(PasswordPolicyTest, Validate_UnicodePassword)
  * @brief Test relaxed policy allows simpler passwords
  * @details Verifies that disabling all requirements allows simple passwords
  */
-TEST(PasswordPolicyTest, Validate_RelaxedPolicy)
+TEST_F(PasswordPolicyTest, Validate_RelaxedPolicy)
 {
     PasswordPolicy policy;
     policy.set_require_uppercase(false);
@@ -300,7 +315,7 @@ TEST(PasswordPolicyTest, Validate_RelaxedPolicy)
  * @brief Test strict policy requires complex passwords
  * @details Verifies that strict policy enforces all requirements
  */
-TEST(PasswordPolicyTest, Validate_StrictPolicy)
+TEST_F(PasswordPolicyTest, Validate_StrictPolicy)
 {
     PasswordPolicy policy;
     policy.set_min_length(12);

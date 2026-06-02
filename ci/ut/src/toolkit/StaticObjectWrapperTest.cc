@@ -13,6 +13,21 @@
 using namespace common::toolkit;
 
 /**
+ * @brief Test fixture for StaticObjectWrapperTest tests
+ */
+class StaticObjectWrapperTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Simple test class for wrapper tests
  */
 struct TestConfig
@@ -91,7 +106,7 @@ using Wrapper8 = StaticObjectWrapper<std::pair<TestConfig, TestConfigWrapper8>>;
  * @brief Test init with parameters and get
  * @details Verifies parameterized initialization and retrieval
  */
-TEST(StaticObjectWrapperTest, InitWithParamsAndGet)
+TEST_F(StaticObjectWrapperTest, InitWithParamsAndGet)
 {
     // Clean state
     Wrapper1::destroy();
@@ -111,7 +126,7 @@ TEST(StaticObjectWrapperTest, InitWithParamsAndGet)
 }
 
 // Test init without parameters (default constructible)
-TEST(StaticObjectWrapperTest, InitDefaultConstructible)
+TEST_F(StaticObjectWrapperTest, InitDefaultConstructible)
 {
     // Clean state
     Wrapper2::destroy();
@@ -130,7 +145,7 @@ TEST(StaticObjectWrapperTest, InitDefaultConstructible)
 }
 
 // Test get without initialization for default constructible type
-TEST(StaticObjectWrapperTest, GetWithoutInitDefaultConstructible)
+TEST_F(StaticObjectWrapperTest, GetWithoutInitDefaultConstructible)
 {
     // Clean state
     Wrapper3::destroy();
@@ -147,7 +162,7 @@ TEST(StaticObjectWrapperTest, GetWithoutInitDefaultConstructible)
 }
 
 // Test get without initialization for non-default constructible type
-TEST(StaticObjectWrapperTest, GetWithoutInitNonDefaultConstructible)
+TEST_F(StaticObjectWrapperTest, GetWithoutInitNonDefaultConstructible)
 {
     // Clean state
     Wrapper4::destroy();
@@ -159,7 +174,7 @@ TEST(StaticObjectWrapperTest, GetWithoutInitNonDefaultConstructible)
 }
 
 // Test init with non-default constructible type
-TEST(StaticObjectWrapperTest, InitNonDefaultConstructible)
+TEST_F(StaticObjectWrapperTest, InitNonDefaultConstructible)
 {
     // Clean state
     Wrapper5::destroy();
@@ -182,7 +197,7 @@ TEST(StaticObjectWrapperTest, InitNonDefaultConstructible)
  * @brief Test destroy functionality
  * @details Verifies object can be destroyed and state is reset
  */
-TEST(StaticObjectWrapperTest, Destroy)
+TEST_F(StaticObjectWrapperTest, Destroy)
 {
     // Initialize with explicit pair construction
     const auto config_pair = std::make_pair(TestConfig{"test", 123}, TestConfigWrapper6{});
@@ -195,7 +210,7 @@ TEST(StaticObjectWrapperTest, Destroy)
 }
 
 // Test isInitialized state tracking
-TEST(StaticObjectWrapperTest, IsInitializedStateTracking)
+TEST_F(StaticObjectWrapperTest, IsInitializedStateTracking)
 {
     // Initial state
     Wrapper7::destroy();
@@ -212,7 +227,7 @@ TEST(StaticObjectWrapperTest, IsInitializedStateTracking)
 }
 
 // Test multiple calls to init (only first should take effect)
-TEST(StaticObjectWrapperTest, MultipleInitCalls)
+TEST_F(StaticObjectWrapperTest, MultipleInitCalls)
 {
     // Clean state
     Wrapper8::destroy();
@@ -238,7 +253,7 @@ TEST(StaticObjectWrapperTest, MultipleInitCalls)
  * @brief Test that constructor is deleted (compile-time check)
  * @details Verifies StaticObjectWrapper cannot be instantiated
  */
-TEST(StaticObjectWrapperTest, ConstructorDeleted)
+TEST_F(StaticObjectWrapperTest, ConstructorDeleted)
 {
     // This test verifies at compile time that StaticObjectWrapper cannot be instantiated
     static_assert(std::is_constructible_v<StaticObjectWrapper<TestConfig>> == false,
@@ -246,14 +261,14 @@ TEST(StaticObjectWrapperTest, ConstructorDeleted)
 }
 
 // Test copy constructor is deleted (compile-time check)
-TEST(StaticObjectWrapperTest, CopyConstructorDeleted)
+TEST_F(StaticObjectWrapperTest, CopyConstructorDeleted)
 {
     static_assert(std::is_copy_constructible_v<StaticObjectWrapper<TestConfig>> == false,
                   "StaticObjectWrapper should not be copy constructible");
 }
 
 // Test copy assignment is deleted (compile-time check)
-TEST(StaticObjectWrapperTest, CopyAssignmentDeleted)
+TEST_F(StaticObjectWrapperTest, CopyAssignmentDeleted)
 {
     static_assert(std::is_copy_assignable_v<StaticObjectWrapper<TestConfig>> == false,
                   "StaticObjectWrapper should not be copy assignable");

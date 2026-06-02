@@ -14,13 +14,43 @@
 
 using namespace common::data_structure::tree;
 
+/**
+ * @brief Test fixture for AVLTreeTest tests
+ */
+class AVLTreeTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
+ * @brief Test fixture for BinarySearchTreeTest tests
+ */
+class BinarySearchTreeTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
 // ==================== AVLTree findValue Tests ====================
 
 /**
  * @brief Test AVLTree findValue with existing value
  * @details Verifies that findValue returns the correct value when found
  */
-TEST(AVLTreeTest, FindValue_ExistingValue_ReturnsValue)
+TEST_F(AVLTreeTest, FindValue_ExistingValue_ReturnsValue)
 {
     AVLTree<int> tree;
     tree.insert(10);
@@ -39,7 +69,7 @@ TEST(AVLTreeTest, FindValue_ExistingValue_ReturnsValue)
  * @brief Test AVLTree findValue with non-existing value
  * @details Verifies that findValue returns std::nullopt when value not found
  */
-TEST(AVLTreeTest, FindValue_NonExistingValue_ReturnsNullopt)
+TEST_F(AVLTreeTest, FindValue_NonExistingValue_ReturnsNullopt)
 {
     AVLTree<int> tree;
     tree.insert(10);
@@ -54,7 +84,7 @@ TEST(AVLTreeTest, FindValue_NonExistingValue_ReturnsNullopt)
  * @brief Test AVLTree findValue with empty tree
  * @details Verifies that findValue returns std::nullopt for empty tree
  */
-TEST(AVLTreeTest, FindValue_EmptyTree_ReturnsNullopt)
+TEST_F(AVLTreeTest, FindValue_EmptyTree_ReturnsNullopt)
 {
     const AVLTree<int> tree;
 
@@ -66,7 +96,7 @@ TEST(AVLTreeTest, FindValue_EmptyTree_ReturnsNullopt)
  * @brief Test AVLTree findValue with root node
  * @details Verifies that findValue works correctly for root node
  */
-TEST(AVLTreeTest, FindValue_RootNode_ReturnsValue)
+TEST_F(AVLTreeTest, FindValue_RootNode_ReturnsValue)
 {
     AVLTree<int> tree;
     tree.insert(50);
@@ -82,7 +112,7 @@ TEST(AVLTreeTest, FindValue_RootNode_ReturnsValue)
  * @brief Test AVLTree findValue with leaf node
  * @details Verifies that findValue works correctly for leaf nodes
  */
-TEST(AVLTreeTest, FindValue_LeafNode_ReturnsValue)
+TEST_F(AVLTreeTest, FindValue_LeafNode_ReturnsValue)
 {
     AVLTree<int> tree;
     tree.insert(50);
@@ -100,7 +130,7 @@ TEST(AVLTreeTest, FindValue_LeafNode_ReturnsValue)
  * @brief Test AVLTree findValue with string type
  * @details Verifies that findValue works with different types
  */
-TEST(AVLTreeTest, FindValue_StringType_ReturnsValue)
+TEST_F(AVLTreeTest, FindValue_StringType_ReturnsValue)
 {
     AVLTree<std::string> tree;
     tree.insert("apple");
@@ -116,7 +146,7 @@ TEST(AVLTreeTest, FindValue_StringType_ReturnsValue)
  * @brief Test AVLTree findValue consistency with find
  * @details Verifies that findValue and find return consistent results
  */
-TEST(AVLTreeTest, FindValue_ConsistencyWithFind)
+TEST_F(AVLTreeTest, FindValue_ConsistencyWithFind)
 {
     AVLTree<int> tree;
     tree.insert(10);
@@ -136,7 +166,7 @@ TEST(AVLTreeTest, FindValue_ConsistencyWithFind)
  * @brief Test BinarySearchTree findValue with existing value
  * @details Verifies that findValue returns the correct value when found
  */
-TEST(BinarySearchTreeTest, FindValue_ExistingValue_ReturnsValue)
+TEST_F(BinarySearchTreeTest, FindValue_ExistingValue_ReturnsValue)
 {
     BinarySearchTree<int> tree;
     tree.insert(50);
@@ -156,7 +186,7 @@ TEST(BinarySearchTreeTest, FindValue_ExistingValue_ReturnsValue)
  * @brief Test BinarySearchTree findValue with non-existing value
  * @details Verifies that findValue returns std::nullopt when value not found
  */
-TEST(BinarySearchTreeTest, FindValue_NonExistingValue_ReturnsNullopt)
+TEST_F(BinarySearchTreeTest, FindValue_NonExistingValue_ReturnsNullopt)
 {
     BinarySearchTree<int> tree;
     tree.insert(50);
@@ -171,7 +201,7 @@ TEST(BinarySearchTreeTest, FindValue_NonExistingValue_ReturnsNullopt)
  * @brief Test BinarySearchTree findValue with empty tree
  * @details Verifies that findValue returns std::nullopt for empty tree
  */
-TEST(BinarySearchTreeTest, FindValue_EmptyTree_ReturnsNullopt)
+TEST_F(BinarySearchTreeTest, FindValue_EmptyTree_ReturnsNullopt)
 {
     const BinarySearchTree<int> tree;
 
@@ -183,7 +213,7 @@ TEST(BinarySearchTreeTest, FindValue_EmptyTree_ReturnsNullopt)
  * @brief Test BinarySearchTree findValue with root node
  * @details Verifies that findValue works correctly for root node
  */
-TEST(BinarySearchTreeTest, FindValue_RootNode_ReturnsValue)
+TEST_F(BinarySearchTreeTest, FindValue_RootNode_ReturnsValue)
 {
     BinarySearchTree<int> tree;
     tree.insert(100);
@@ -199,7 +229,7 @@ TEST(BinarySearchTreeTest, FindValue_RootNode_ReturnsValue)
  * @brief Test BinarySearchTree findValue with left subtree
  * @details Verifies that findValue works correctly for nodes in left subtree
  */
-TEST(BinarySearchTreeTest, FindValue_LeftSubtree_ReturnsValue)
+TEST_F(BinarySearchTreeTest, FindValue_LeftSubtree_ReturnsValue)
 {
     BinarySearchTree<int> tree;
     tree.insert(100);
@@ -216,7 +246,7 @@ TEST(BinarySearchTreeTest, FindValue_LeftSubtree_ReturnsValue)
  * @brief Test BinarySearchTree findValue with right subtree
  * @details Verifies that findValue works correctly for nodes in right subtree
  */
-TEST(BinarySearchTreeTest, FindValue_RightSubtree_ReturnsValue)
+TEST_F(BinarySearchTreeTest, FindValue_RightSubtree_ReturnsValue)
 {
     BinarySearchTree<int> tree;
     tree.insert(100);
@@ -233,7 +263,7 @@ TEST(BinarySearchTreeTest, FindValue_RightSubtree_ReturnsValue)
  * @brief Test BinarySearchTree findValue with double type
  * @details Verifies that findValue works with floating point types
  */
-TEST(BinarySearchTreeTest, FindValue_DoubleType_ReturnsValue)
+TEST_F(BinarySearchTreeTest, FindValue_DoubleType_ReturnsValue)
 {
     BinarySearchTree<double> tree;
     tree.insert(3.14);
@@ -249,7 +279,7 @@ TEST(BinarySearchTreeTest, FindValue_DoubleType_ReturnsValue)
  * @brief Test BinarySearchTree findValue consistency with find
  * @details Verifies that findValue and find return consistent results
  */
-TEST(BinarySearchTreeTest, FindValue_ConsistencyWithFind)
+TEST_F(BinarySearchTreeTest, FindValue_ConsistencyWithFind)
 {
     BinarySearchTree<int> tree;
     tree.insert(10);
@@ -267,7 +297,7 @@ TEST(BinarySearchTreeTest, FindValue_ConsistencyWithFind)
  * @brief Test BinarySearchTree findValue after removal
  * @details Verifies that findValue correctly reflects tree state after removal
  */
-TEST(BinarySearchTreeTest, FindValue_AfterRemoval_ReturnsNullopt)
+TEST_F(BinarySearchTreeTest, FindValue_AfterRemoval_ReturnsNullopt)
 {
     BinarySearchTree<int> tree;
     tree.insert(50);
@@ -291,7 +321,7 @@ TEST(BinarySearchTreeTest, FindValue_AfterRemoval_ReturnsNullopt)
  * @brief Test BinarySearchTree findValue with large dataset
  * @details Verifies that findValue works efficiently with many elements
  */
-TEST(BinarySearchTreeTest, FindValue_LargeDataset_ReturnsCorrectValue)
+TEST_F(BinarySearchTreeTest, FindValue_LargeDataset_ReturnsCorrectValue)
 {
     BinarySearchTree<int> tree;
 

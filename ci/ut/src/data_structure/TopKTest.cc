@@ -15,10 +15,25 @@
 using namespace common::data_structure;
 
 /**
+ * @brief Test fixture for TopKTest tests
+ */
+class TopKTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test default constructor (unbounded heap)
  * @details Verifies that TopK can be created without capacity limit
  */
-TEST(TopKTest, Constructor_Default_Unbounded)
+TEST_F(TopKTest, Constructor_Default_Unbounded)
 {
     EXPECT_NO_THROW(TopK topK);
 }
@@ -27,7 +42,7 @@ TEST(TopKTest, Constructor_Default_Unbounded)
  * @brief Test constructor with valid max_capacity value
  * @details Verifies that non-negative max_capacity values are accepted
  */
-TEST(TopKTest, Constructor_ValidMaxCapacity)
+TEST_F(TopKTest, Constructor_ValidMaxCapacity)
 {
     EXPECT_NO_THROW(TopK topK(0)); // Unbounded
     EXPECT_NO_THROW(TopK topK(1));
@@ -39,7 +54,7 @@ TEST(TopKTest, Constructor_ValidMaxCapacity)
  * @brief Test constructor with invalid max_capacity value throws exception
  * @details Verifies proper error handling for negative max_capacity values
  */
-TEST(TopKTest, Constructor_InvalidMaxCapacity_ThrowsException)
+TEST_F(TopKTest, Constructor_InvalidMaxCapacity_ThrowsException)
 {
     EXPECT_THROW(TopK topK(-1), std::invalid_argument);
     EXPECT_THROW(TopK topK(-100), std::invalid_argument);
@@ -49,7 +64,7 @@ TEST(TopKTest, Constructor_InvalidMaxCapacity_ThrowsException)
  * @brief Test add maintains top K largest numbers
  * @details Verifies that only the K largest numbers are kept
  */
-TEST(TopKTest, Add_MaintainsTopKLargest)
+TEST_F(TopKTest, Add_MaintainsTopKLargest)
 {
     TopK topK(3);
 
@@ -78,7 +93,7 @@ TEST(TopKTest, Add_MaintainsTopKLargest)
  * @brief Test add with fewer than K elements
  * @details Verifies behavior when less than K numbers have been added
  */
-TEST(TopKTest, Add_FewerThanKElements)
+TEST_F(TopKTest, Add_FewerThanKElements)
 {
     TopK topK(5);
 
@@ -103,7 +118,7 @@ TEST(TopKTest, Add_FewerThanKElements)
  * @brief Test add with duplicate numbers
  * @details Verifies that duplicates are handled correctly
  */
-TEST(TopKTest, Add_DuplicateNumbers)
+TEST_F(TopKTest, Add_DuplicateNumbers)
 {
     TopK topK(3);
 
@@ -128,7 +143,7 @@ TEST(TopKTest, Add_DuplicateNumbers)
  * @brief Test add with negative numbers
  * @details Verifies that negative numbers are handled correctly
  */
-TEST(TopKTest, Add_NegativeNumbers)
+TEST_F(TopKTest, Add_NegativeNumbers)
 {
     TopK topK(3);
 
@@ -155,7 +170,7 @@ TEST(TopKTest, Add_NegativeNumbers)
  * @brief Test add with mixed positive and negative numbers
  * @details Verifies correct handling of mixed sign numbers
  */
-TEST(TopKTest, Add_MixedSignNumbers)
+TEST_F(TopKTest, Add_MixedSignNumbers)
 {
     TopK topK(4);
 
@@ -184,7 +199,7 @@ TEST(TopKTest, Add_MixedSignNumbers)
  * @brief Test getTopK returns elements in min-heap order
  * @details Verifies that getTopK returns elements from smallest to largest
  */
-TEST(TopKTest, GetTopK_MinHeapOrder)
+TEST_F(TopKTest, GetTopK_MinHeapOrder)
 {
     TopK topK(5);
 
@@ -210,7 +225,7 @@ TEST(TopKTest, GetTopK_MinHeapOrder)
  * @brief Test getTopK preserves heap state
  * @details Verifies that calling getTopK doesn't destroy the heap
  */
-TEST(TopKTest, GetTopK_PreservesHeapState)
+TEST_F(TopKTest, GetTopK_PreservesHeapState)
 {
     TopK topK(3);
 
@@ -234,7 +249,7 @@ TEST(TopKTest, GetTopK_PreservesHeapState)
  * @brief Test getTopK after adding more elements
  * @details Verifies that heap updates correctly after retrieval
  */
-TEST(TopKTest, GetTopK_AfterAddingMoreElements)
+TEST_F(TopKTest, GetTopK_AfterAddingMoreElements)
 {
     TopK topK(3);
 
@@ -266,7 +281,7 @@ TEST(TopKTest, GetTopK_AfterAddingMoreElements)
  * @brief Test size returns correct count
  * @details Verifies that size() returns accurate element count
  */
-TEST(TopKTest, Size_CorrectCount)
+TEST_F(TopKTest, Size_CorrectCount)
 {
     TopK topK(5);
 
@@ -292,7 +307,7 @@ TEST(TopKTest, Size_CorrectCount)
  * @brief Test size does not exceed K
  * @details Verifies that heap size is capped at K
  */
-TEST(TopKTest, Size_DoesNotExceedK)
+TEST_F(TopKTest, Size_DoesNotExceedK)
 {
     TopK topK(3);
 
@@ -308,7 +323,7 @@ TEST(TopKTest, Size_DoesNotExceedK)
  * @brief Test empty returns correct state
  * @details Verifies that empty() accurately reflects heap state
  */
-TEST(TopKTest, Empty_CorrectState)
+TEST_F(TopKTest, Empty_CorrectState)
 {
     TopK topK(5);
 
@@ -325,7 +340,7 @@ TEST(TopKTest, Empty_CorrectState)
  * @brief Test empty after construction
  * @details Verifies that newly constructed TopK is empty
  */
-TEST(TopKTest, Empty_AfterConstruction)
+TEST_F(TopKTest, Empty_AfterConstruction)
 {
     const TopK topK(10);
     EXPECT_TRUE(topK.empty());
@@ -336,7 +351,7 @@ TEST(TopKTest, Empty_AfterConstruction)
  * @brief Test with K=1 (edge case)
  * @details Verifies behavior with minimum valid K value
  */
-TEST(TopKTest, EdgeCase_KEqualsOne)
+TEST_F(TopKTest, EdgeCase_KEqualsOne)
 {
     TopK topK(1);
 
@@ -355,7 +370,7 @@ TEST(TopKTest, EdgeCase_KEqualsOne)
  * @brief Test with large K value
  * @details Verifies behavior with large K value
  */
-TEST(TopKTest, EdgeCase_LargeK)
+TEST_F(TopKTest, EdgeCase_LargeK)
 {
     TopK topK(1000);
 
@@ -374,7 +389,7 @@ TEST(TopKTest, EdgeCase_LargeK)
  * @brief Test sequential addition maintains ordering
  * @details Verifies that adding numbers in sequence works correctly
  */
-TEST(TopKTest, SequentialAddition_MaintainsOrdering)
+TEST_F(TopKTest, SequentialAddition_MaintainsOrdering)
 {
     TopK topK(5);
 
@@ -399,7 +414,7 @@ TEST(TopKTest, SequentialAddition_MaintainsOrdering)
  * @brief Test sequential addition in descending order
  * @details Verifies that adding numbers in descending order works correctly
  */
-TEST(TopKTest, SequentialAddition_DescendingOrder)
+TEST_F(TopKTest, SequentialAddition_DescendingOrder)
 {
     TopK topK(5);
 
@@ -424,7 +439,7 @@ TEST(TopKTest, SequentialAddition_DescendingOrder)
  * @brief Test multiple getTopK calls consistency
  * @details Verifies that multiple retrievals return consistent results
  */
-TEST(TopKTest, MultipleGetTopK_Consistency)
+TEST_F(TopKTest, MultipleGetTopK_Consistency)
 {
     TopK topK(4);
 
@@ -448,7 +463,7 @@ TEST(TopKTest, MultipleGetTopK_Consistency)
  * @details Verifies that after calling getTopK(), the heap state is preserved
  *          and new elements can still be added correctly
  */
-TEST(TopKTest, GetTopK_NonDestructive_HeapUsableAfterRetrieval)
+TEST_F(TopKTest, GetTopK_NonDestructive_HeapUsableAfterRetrieval)
 {
     TopK topK(3);
 
@@ -486,7 +501,7 @@ TEST(TopKTest, GetTopK_NonDestructive_HeapUsableAfterRetrieval)
  * @brief Test getTopK with descending order parameter
  * @details Verifies that getTopK(false) returns elements in descending order
  */
-TEST(TopKTest, GetTopK_DescendingOrder_ReturnsLargestFirst)
+TEST_F(TopKTest, GetTopK_DescendingOrder_ReturnsLargestFirst)
 {
     TopK topK(5);
 
@@ -512,7 +527,7 @@ TEST(TopKTest, GetTopK_DescendingOrder_ReturnsLargestFirst)
  * @brief Test getTopK with ascending order parameter (explicit)
  * @details Verifies that getTopK(true) returns elements in ascending order
  */
-TEST(TopKTest, GetTopK_AscendingOrderExplicit_ReturnsSmallestFirst)
+TEST_F(TopKTest, GetTopK_AscendingOrderExplicit_ReturnsSmallestFirst)
 {
     TopK topK(5);
 
@@ -537,7 +552,7 @@ TEST(TopKTest, GetTopK_AscendingOrderExplicit_ReturnsSmallestFirst)
  * @brief Test getTopK default parameter is ascending
  * @details Verifies that getTopK() without parameter defaults to ascending order
  */
-TEST(TopKTest, GetTopK_DefaultParameter_IsAscending)
+TEST_F(TopKTest, GetTopK_DefaultParameter_IsAscending)
 {
     TopK topK(5);
 
@@ -560,7 +575,7 @@ TEST(TopKTest, GetTopK_DefaultParameter_IsAscending)
  * @brief Test getTopK descending order preserves heap state
  * @details Verifies that using descending order doesn't affect heap state
  */
-TEST(TopKTest, GetTopK_DescendingOrder_PreservesHeapState)
+TEST_F(TopKTest, GetTopK_DescendingOrder_PreservesHeapState)
 {
     TopK topK(3);
 
@@ -589,7 +604,7 @@ TEST(TopKTest, GetTopK_DescendingOrder_PreservesHeapState)
  * @brief Test getTopK with dynamic count parameter
  * @details Verifies that getTopK can return fewer elements than heap size
  */
-TEST(TopKTest, GetTopK_DynamicCount_ReturnsSpecifiedNumberOfElements)
+TEST_F(TopKTest, GetTopK_DynamicCount_ReturnsSpecifiedNumberOfElements)
 {
     TopK topK(10); // Maintain top 10
 
@@ -623,7 +638,7 @@ TEST(TopKTest, GetTopK_DynamicCount_ReturnsSpecifiedNumberOfElements)
  * @brief Test getTopK with dynamic count and descending order
  * @details Verifies that count and order parameters work together correctly
  */
-TEST(TopKTest, GetTopK_DynamicCountWithDescending_ReturnsLargestFirst)
+TEST_F(TopKTest, GetTopK_DynamicCountWithDescending_ReturnsLargestFirst)
 {
     TopK topK(10);
 
@@ -650,7 +665,7 @@ TEST(TopKTest, GetTopK_DynamicCountWithDescending_ReturnsLargestFirst)
  * @brief Test getTopK with count=0 returns all elements
  * @details Verifies that count=0 returns all elements
  */
-TEST(TopKTest, GetTopK_ZeroCount_ReturnsAllElements)
+TEST_F(TopKTest, GetTopK_ZeroCount_ReturnsAllElements)
 {
     TopK topK(10);
 
@@ -672,7 +687,7 @@ TEST(TopKTest, GetTopK_ZeroCount_ReturnsAllElements)
  * @brief Test getTopK with negative count throws exception
  * @details Verifies proper error handling for negative count values
  */
-TEST(TopKTest, GetTopK_NegativeCount_ThrowsException)
+TEST_F(TopKTest, GetTopK_NegativeCount_ThrowsException)
 {
     TopK topK(10);
 
@@ -692,7 +707,7 @@ TEST(TopKTest, GetTopK_NegativeCount_ThrowsException)
  * @brief Test unbounded TopK (default constructor)
  * @details Verifies that TopK without capacity limit can grow indefinitely
  */
-TEST(TopKTest, Unbounded_TopK_GrowsIndefinitely)
+TEST_F(TopKTest, Unbounded_TopK_GrowsIndefinitely)
 {
     TopK topK; // No capacity limit
 
@@ -716,7 +731,7 @@ TEST(TopKTest, Unbounded_TopK_GrowsIndefinitely)
  * @brief Test unbounded TopK with getTopK dynamic count
  * @details Verifies that unbounded TopK works correctly with dynamic count parameter
  */
-TEST(TopKTest, Unbounded_TopK_DynamicCountWorks)
+TEST_F(TopKTest, Unbounded_TopK_DynamicCountWorks)
 {
     TopK topK; // Unbounded
 
@@ -745,7 +760,7 @@ TEST(TopKTest, Unbounded_TopK_DynamicCountWorks)
  * @brief Test bounded vs unbounded TopK behavior difference
  * @details Compares behavior of bounded and unbounded TopK
  */
-TEST(TopKTest, BoundedVsUnbounded_BehaviorComparison)
+TEST_F(TopKTest, BoundedVsUnbounded_BehaviorComparison)
 {
     TopK bounded(3);
     TopK unbounded;

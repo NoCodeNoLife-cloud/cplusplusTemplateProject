@@ -14,10 +14,25 @@
 using namespace common::container;
 
 /**
+ * @brief Test fixture for QueueTest tests
+ */
+class QueueTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test default constructor creates empty queue
  * @details Verifies that a newly constructed queue is empty with zero size
  */
-TEST(QueueTest, DefaultConstructor_EmptyQueue)
+TEST_F(QueueTest, DefaultConstructor_EmptyQueue)
 {
     const Queue<int> queue;
     EXPECT_TRUE(queue.empty());
@@ -28,7 +43,7 @@ TEST(QueueTest, DefaultConstructor_EmptyQueue)
  * @brief Test copy constructor creates deep copy
  * @details Verifies that copy constructor performs deep copy of all elements
  */
-TEST(QueueTest, CopyConstructor_DeepCopy)
+TEST_F(QueueTest, CopyConstructor_DeepCopy)
 {
     Queue<int> queue1;
     queue1.push(10);
@@ -51,7 +66,7 @@ TEST(QueueTest, CopyConstructor_DeepCopy)
  * @brief Test copy constructor with empty queue
  * @details Verifies copying an empty queue works correctly
  */
-TEST(QueueTest, CopyConstructor_EmptyQueue)
+TEST_F(QueueTest, CopyConstructor_EmptyQueue)
 {
     const Queue<int> queue1;
     const Queue queue2(queue1);
@@ -64,7 +79,7 @@ TEST(QueueTest, CopyConstructor_EmptyQueue)
  * @brief Test move constructor transfers ownership
  * @details Verifies that move constructor transfers all elements efficiently
  */
-TEST(QueueTest, MoveConstructor_TransfersOwnership)
+TEST_F(QueueTest, MoveConstructor_TransfersOwnership)
 {
     Queue<int> queue1;
     queue1.push(10);
@@ -86,7 +101,7 @@ TEST(QueueTest, MoveConstructor_TransfersOwnership)
  * @brief Test copy assignment operator
  * @details Verifies copy assignment performs deep copy correctly
  */
-TEST(QueueTest, CopyAssignment_DeepCopy)
+TEST_F(QueueTest, CopyAssignment_DeepCopy)
 {
     Queue<int> queue1;
     queue1.push(10);
@@ -111,7 +126,7 @@ TEST(QueueTest, CopyAssignment_DeepCopy)
  * @brief Test copy assignment to self
  * @details Verifies self-assignment is handled safely
  */
-TEST(QueueTest, CopyAssignment_SelfAssignment)
+TEST_F(QueueTest, CopyAssignment_SelfAssignment)
 {
     Queue<int> queue;
     queue.push(10);
@@ -128,7 +143,7 @@ TEST(QueueTest, CopyAssignment_SelfAssignment)
  * @brief Test move assignment operator
  * @details Verifies move assignment transfers ownership efficiently
  */
-TEST(QueueTest, MoveAssignment_TransfersOwnership)
+TEST_F(QueueTest, MoveAssignment_TransfersOwnership)
 {
     Queue<int> queue1;
     queue1.push(10);
@@ -150,7 +165,7 @@ TEST(QueueTest, MoveAssignment_TransfersOwnership)
  * @brief Test push adds element to back of queue
  * @details Verifies FIFO ordering is maintained after push operations
  */
-TEST(QueueTest, Push_MaintainsFIFOOrder)
+TEST_F(QueueTest, Push_MaintainsFIFOOrder)
 {
     Queue<int> queue;
 
@@ -167,7 +182,7 @@ TEST(QueueTest, Push_MaintainsFIFOOrder)
  * @brief Test push with single element
  * @details Verifies behavior when adding first element to empty queue
  */
-TEST(QueueTest, Push_SingleElement)
+TEST_F(QueueTest, Push_SingleElement)
 {
     Queue<int> queue;
     queue.push(42);
@@ -181,7 +196,7 @@ TEST(QueueTest, Push_SingleElement)
  * @brief Test push with multiple elements
  * @details Verifies correct ordering with many elements
  */
-TEST(QueueTest, Push_MultipleElements)
+TEST_F(QueueTest, Push_MultipleElements)
 {
     Queue<int> queue;
 
@@ -199,7 +214,7 @@ TEST(QueueTest, Push_MultipleElements)
  * @brief Test pop removes front element
  * @details Verifies that pop correctly removes the front element and updates queue
  */
-TEST(QueueTest, Pop_RemovesFrontElement)
+TEST_F(QueueTest, Pop_RemovesFrontElement)
 {
     Queue<int> queue;
     queue.push(10);
@@ -222,7 +237,7 @@ TEST(QueueTest, Pop_RemovesFrontElement)
  * @brief Test pop on empty queue throws exception
  * @details Verifies proper error handling when popping from empty queue
  */
-TEST(QueueTest, Pop_EmptyQueue_ThrowsException)
+TEST_F(QueueTest, Pop_EmptyQueue_ThrowsException)
 {
     Queue<int> queue;
     EXPECT_THROW(queue.pop(), std::out_of_range);
@@ -232,7 +247,7 @@ TEST(QueueTest, Pop_EmptyQueue_ThrowsException)
  * @brief Test pop until queue becomes empty
  * @details Verifies that queue correctly transitions to empty state
  */
-TEST(QueueTest, Pop_UntilEmpty)
+TEST_F(QueueTest, Pop_UntilEmpty)
 {
     Queue<int> queue;
     queue.push(10);
@@ -249,7 +264,7 @@ TEST(QueueTest, Pop_UntilEmpty)
  * @brief Test front returns reference to first element
  * @details Verifies const and non-const front accessors work correctly
  */
-TEST(QueueTest, Front_ReturnsFirstElement)
+TEST_F(QueueTest, Front_ReturnsFirstElement)
 {
     Queue<int> queue;
     queue.push(10);
@@ -267,7 +282,7 @@ TEST(QueueTest, Front_ReturnsFirstElement)
  * @brief Test front on empty queue throws exception
  * @details Verifies proper error handling for empty queue
  */
-TEST(QueueTest, Front_EmptyQueue_ThrowsException)
+TEST_F(QueueTest, Front_EmptyQueue_ThrowsException)
 {
     Queue<int> queue;
     EXPECT_THROW(queue.front(), std::out_of_range);
@@ -277,7 +292,7 @@ TEST(QueueTest, Front_EmptyQueue_ThrowsException)
  * @brief Test const front accessor
  * @details Verifies const-correctness of front method
  */
-TEST(QueueTest, Front_ConstAccessor)
+TEST_F(QueueTest, Front_ConstAccessor)
 {
     Queue<int> queue;
     queue.push(10);
@@ -291,7 +306,7 @@ TEST(QueueTest, Front_ConstAccessor)
  * @brief Test back returns reference to last element
  * @details Verifies const and non-const back accessors work correctly
  */
-TEST(QueueTest, Back_ReturnsLastElement)
+TEST_F(QueueTest, Back_ReturnsLastElement)
 {
     Queue<int> queue;
     queue.push(10);
@@ -309,7 +324,7 @@ TEST(QueueTest, Back_ReturnsLastElement)
  * @brief Test back on empty queue throws exception
  * @details Verifies proper error handling for empty queue
  */
-TEST(QueueTest, Back_EmptyQueue_ThrowsException)
+TEST_F(QueueTest, Back_EmptyQueue_ThrowsException)
 {
     Queue<int> queue;
     EXPECT_THROW(queue.back(), std::out_of_range);
@@ -319,7 +334,7 @@ TEST(QueueTest, Back_EmptyQueue_ThrowsException)
  * @brief Test const back accessor
  * @details Verifies const-correctness of back method
  */
-TEST(QueueTest, Back_ConstAccessor)
+TEST_F(QueueTest, Back_ConstAccessor)
 {
     Queue<int> queue;
     queue.push(10);
@@ -333,7 +348,7 @@ TEST(QueueTest, Back_ConstAccessor)
  * @brief Test empty returns correct state
  * @details Verifies accurate empty state detection throughout queue lifecycle
  */
-TEST(QueueTest, Empty_CorrectState)
+TEST_F(QueueTest, Empty_CorrectState)
 {
     Queue<int> queue;
     EXPECT_TRUE(queue.empty());
@@ -349,7 +364,7 @@ TEST(QueueTest, Empty_CorrectState)
  * @brief Test size returns correct count
  * @details Verifies accurate element counting after various operations
  */
-TEST(QueueTest, Size_CorrectCount)
+TEST_F(QueueTest, Size_CorrectCount)
 {
     Queue<int> queue;
     EXPECT_EQ(queue.size(), 0);
@@ -373,7 +388,7 @@ TEST(QueueTest, Size_CorrectCount)
  * @brief Test swap exchanges contents of two queues
  * @details Verifies that swap efficiently exchanges all elements
  */
-TEST(QueueTest, Swap_ExchangesContents)
+TEST_F(QueueTest, Swap_ExchangesContents)
 {
     Queue<int> queue1;
     queue1.push(10);
@@ -399,7 +414,7 @@ TEST(QueueTest, Swap_ExchangesContents)
  * @brief Test swap with empty queue
  * @details Verifies swapping with an empty queue works correctly
  */
-TEST(QueueTest, Swap_WithEmptyQueue)
+TEST_F(QueueTest, Swap_WithEmptyQueue)
 {
     Queue<int> queue1;
     queue1.push(10);
@@ -418,7 +433,7 @@ TEST(QueueTest, Swap_WithEmptyQueue)
  * @brief Test swap is symmetric
  * @details Verifies that swapping twice restores original state
  */
-TEST(QueueTest, Swap_Symmetric)
+TEST_F(QueueTest, Swap_Symmetric)
 {
     Queue<int> queue1;
     queue1.push(10);
@@ -444,7 +459,7 @@ TEST(QueueTest, Swap_Symmetric)
  * @brief Test queue with string elements
  * @details Verifies queue works correctly with non-numeric types
  */
-TEST(QueueTest, StringElements_CorrectBehavior)
+TEST_F(QueueTest, StringElements_CorrectBehavior)
 {
     Queue<std::string> queue;
 
@@ -464,7 +479,7 @@ TEST(QueueTest, StringElements_CorrectBehavior)
  * @brief Test queue with duplicate values
  * @details Verifies correct handling of duplicate elements
  */
-TEST(QueueTest, DuplicateValues_CorrectHandling)
+TEST_F(QueueTest, DuplicateValues_CorrectHandling)
 {
     Queue<int> queue;
 
@@ -486,7 +501,7 @@ TEST(QueueTest, DuplicateValues_CorrectHandling)
  * @brief Test queue with negative numbers
  * @details Verifies correct handling of negative values
  */
-TEST(QueueTest, NegativeNumbers_CorrectHandling)
+TEST_F(QueueTest, NegativeNumbers_CorrectHandling)
 {
     Queue<int> queue;
 
@@ -507,7 +522,7 @@ TEST(QueueTest, NegativeNumbers_CorrectHandling)
  * @brief Test queue with mixed positive and negative numbers
  * @details Verifies correct handling of mixed sign values
  */
-TEST(QueueTest, MixedSignNumbers_CorrectHandling)
+TEST_F(QueueTest, MixedSignNumbers_CorrectHandling)
 {
     Queue<int> queue;
 
@@ -526,7 +541,7 @@ TEST(QueueTest, MixedSignNumbers_CorrectHandling)
  * @brief Test large number of elements
  * @details Verifies scalability and correctness with many elements
  */
-TEST(QueueTest, LargeNumberOfElements_Correctness)
+TEST_F(QueueTest, LargeNumberOfElements_Correctness)
 {
     Queue<int> queue;
 
@@ -555,7 +570,7 @@ TEST(QueueTest, LargeNumberOfElements_Correctness)
  * @brief Test alternating push and pop operations
  * @details Verifies queue maintains correctness through mixed operations
  */
-TEST(QueueTest, AlternatingPushPop_Correctness)
+TEST_F(QueueTest, AlternatingPushPop_Correctness)
 {
     Queue<int> queue;
 
@@ -576,7 +591,7 @@ TEST(QueueTest, AlternatingPushPop_Correctness)
  * @brief Test single element push and pop cycle
  * @details Verifies edge case with one element being added and removed repeatedly
  */
-TEST(QueueTest, SingleElementCycle_Correctness)
+TEST_F(QueueTest, SingleElementCycle_Correctness)
 {
     Queue<int> queue;
 
@@ -595,7 +610,7 @@ TEST(QueueTest, SingleElementCycle_Correctness)
  * @brief Test queue preserves insertion order
  * @details Verifies FIFO property is strictly maintained
  */
-TEST(QueueTest, PreservesInsertionOrder)
+TEST_F(QueueTest, PreservesInsertionOrder)
 {
     Queue<int> queue;
 

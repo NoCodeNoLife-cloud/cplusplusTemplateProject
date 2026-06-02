@@ -15,10 +15,25 @@
 using namespace common::time;
 
 /**
+ * @brief Test fixture for SimpleDateFormatterTest tests
+ */
+class SimpleDateFormatterTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test constructor with valid pattern
  * @details Verifies that a SimpleDateFormatter can be constructed with a valid pattern
  */
-TEST(SimpleDateFormatterTest, Constructor_ValidPattern)
+TEST_F(SimpleDateFormatterTest, Constructor_ValidPattern)
 {
     EXPECT_NO_THROW(SimpleDateFormatter("%Y-%m-%d"));
 
@@ -30,7 +45,7 @@ TEST(SimpleDateFormatterTest, Constructor_ValidPattern)
  * @brief Test constructor with empty pattern throws exception
  * @details Verifies proper error handling for empty pattern strings
  */
-TEST(SimpleDateFormatterTest, Constructor_EmptyPattern_ThrowsException)
+TEST_F(SimpleDateFormatterTest, Constructor_EmptyPattern_ThrowsException)
 {
     EXPECT_THROW(SimpleDateFormatter(""), std::invalid_argument);
 }
@@ -39,7 +54,7 @@ TEST(SimpleDateFormatterTest, Constructor_EmptyPattern_ThrowsException)
  * @brief Test applyPattern with valid pattern
  * @details Verifies that patterns can be changed after construction
  */
-TEST(SimpleDateFormatterTest, ApplyPattern_ValidPattern)
+TEST_F(SimpleDateFormatterTest, ApplyPattern_ValidPattern)
 {
     SimpleDateFormatter formatter("%Y-%m-%d");
     EXPECT_EQ(formatter.toPattern(), "%Y-%m-%d");
@@ -52,7 +67,7 @@ TEST(SimpleDateFormatterTest, ApplyPattern_ValidPattern)
  * @brief Test applyPattern with empty pattern throws exception
  * @details Verifies proper error handling when applying empty pattern
  */
-TEST(SimpleDateFormatterTest, ApplyPattern_EmptyPattern_ThrowsException)
+TEST_F(SimpleDateFormatterTest, ApplyPattern_EmptyPattern_ThrowsException)
 {
     SimpleDateFormatter formatter("%Y-%m-%d");
     EXPECT_THROW(formatter.applyPattern(""), std::invalid_argument);
@@ -65,7 +80,7 @@ TEST(SimpleDateFormatterTest, ApplyPattern_EmptyPattern_ThrowsException)
  * @brief Test toPattern returns current pattern
  * @details Verifies pattern retrieval works correctly
  */
-TEST(SimpleDateFormatterTest, ToPattern_ReturnsCurrentPattern)
+TEST_F(SimpleDateFormatterTest, ToPattern_ReturnsCurrentPattern)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
     EXPECT_EQ(formatter.toPattern(), "%Y-%m-%d %H:%M:%S");
@@ -75,7 +90,7 @@ TEST(SimpleDateFormatterTest, ToPattern_ReturnsCurrentPattern)
  * @brief Test format with std::tm using date-only pattern
  * @details Verifies formatting of tm structure with date format
  */
-TEST(SimpleDateFormatterTest, Format_Tm_DateOnly)
+TEST_F(SimpleDateFormatterTest, Format_Tm_DateOnly)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d");
 
@@ -92,7 +107,7 @@ TEST(SimpleDateFormatterTest, Format_Tm_DateOnly)
  * @brief Test format with std::tm using datetime pattern
  * @details Verifies formatting of tm structure with full datetime format
  */
-TEST(SimpleDateFormatterTest, Format_Tm_DateTime)
+TEST_F(SimpleDateFormatterTest, Format_Tm_DateTime)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
 
@@ -112,7 +127,7 @@ TEST(SimpleDateFormatterTest, Format_Tm_DateTime)
  * @brief Test format with std::tm using custom separator
  * @details Verifies formatting with different separators works correctly
  */
-TEST(SimpleDateFormatterTest, Format_Tm_CustomSeparator)
+TEST_F(SimpleDateFormatterTest, Format_Tm_CustomSeparator)
 {
     const SimpleDateFormatter formatter("%Y/%m/%d");
 
@@ -129,7 +144,7 @@ TEST(SimpleDateFormatterTest, Format_Tm_CustomSeparator)
  * @brief Test format with system_clock::time_point
  * @details Verifies formatting of chrono time_point works correctly
  */
-TEST(SimpleDateFormatterTest, Format_TimePoint_Success)
+TEST_F(SimpleDateFormatterTest, Format_TimePoint_Success)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
 
@@ -156,7 +171,7 @@ TEST(SimpleDateFormatterTest, Format_TimePoint_Success)
  * @brief Test parse with date-only string
  * @details Verifies parsing of date-only strings works correctly
  */
-TEST(SimpleDateFormatterTest, Parse_DateOnly_Success)
+TEST_F(SimpleDateFormatterTest, Parse_DateOnly_Success)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d");
 
@@ -171,7 +186,7 @@ TEST(SimpleDateFormatterTest, Parse_DateOnly_Success)
  * @brief Test parse with datetime string
  * @details Verifies parsing of full datetime strings works correctly
  */
-TEST(SimpleDateFormatterTest, Parse_DateTime_Success)
+TEST_F(SimpleDateFormatterTest, Parse_DateTime_Success)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
 
@@ -189,7 +204,7 @@ TEST(SimpleDateFormatterTest, Parse_DateTime_Success)
  * @brief Test parse with invalid format throws exception
  * @details Verifies proper error handling for malformed date strings
  */
-TEST(SimpleDateFormatterTest, Parse_InvalidFormat_ThrowsException)
+TEST_F(SimpleDateFormatterTest, Parse_InvalidFormat_ThrowsException)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d");
 
@@ -201,7 +216,7 @@ TEST(SimpleDateFormatterTest, Parse_InvalidFormat_ThrowsException)
  * @brief Test parse with extra characters throws exception
  * @details Verifies strict parsing rejects strings with trailing content
  */
-TEST(SimpleDateFormatterTest, Parse_ExtraCharacters_ThrowsException)
+TEST_F(SimpleDateFormatterTest, Parse_ExtraCharacters_ThrowsException)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d");
 
@@ -212,7 +227,7 @@ TEST(SimpleDateFormatterTest, Parse_ExtraCharacters_ThrowsException)
  * @brief Test round-trip: format then parse
  * @details Verifies that formatting and parsing are inverse operations
  */
-TEST(SimpleDateFormatterTest, RoundTrip_FormatThenParse)
+TEST_F(SimpleDateFormatterTest, RoundTrip_FormatThenParse)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d %H:%M:%S");
 
@@ -239,7 +254,7 @@ TEST(SimpleDateFormatterTest, RoundTrip_FormatThenParse)
  * @brief Test equals with identical patterns
  * @details Verifies equality comparison for formatters with same pattern
  */
-TEST(SimpleDateFormatterTest, Equals_IdenticalPatterns)
+TEST_F(SimpleDateFormatterTest, Equals_IdenticalPatterns)
 {
     const SimpleDateFormatter formatter1("%Y-%m-%d");
     const SimpleDateFormatter formatter2("%Y-%m-%d");
@@ -251,7 +266,7 @@ TEST(SimpleDateFormatterTest, Equals_IdenticalPatterns)
  * @brief Test equals with different patterns
  * @details Verifies inequality detection for formatters with different patterns
  */
-TEST(SimpleDateFormatterTest, Equals_DifferentPatterns)
+TEST_F(SimpleDateFormatterTest, Equals_DifferentPatterns)
 {
     const SimpleDateFormatter formatter1("%Y-%m-%d");
     const SimpleDateFormatter formatter2("%Y/%m/%d");
@@ -263,7 +278,7 @@ TEST(SimpleDateFormatterTest, Equals_DifferentPatterns)
  * @brief Test hashCode consistency
  * @details Verifies that equal formatters produce the same hash code
  */
-TEST(SimpleDateFormatterTest, HashCode_ConsistentForEqualFormatters)
+TEST_F(SimpleDateFormatterTest, HashCode_ConsistentForEqualFormatters)
 {
     const SimpleDateFormatter formatter1("%Y-%m-%d %H:%M:%S");
     const SimpleDateFormatter formatter2("%Y-%m-%d %H:%M:%S");
@@ -275,7 +290,7 @@ TEST(SimpleDateFormatterTest, HashCode_ConsistentForEqualFormatters)
  * @brief Test hashCode difference for different patterns
  * @details Verifies that different patterns typically produce different hash codes
  */
-TEST(SimpleDateFormatterTest, HashCode_DifferentForDifferentPatterns)
+TEST_F(SimpleDateFormatterTest, HashCode_DifferentForDifferentPatterns)
 {
     const SimpleDateFormatter formatter1("%Y-%m-%d");
     const SimpleDateFormatter formatter2("%Y/%m/%d");
@@ -287,7 +302,7 @@ TEST(SimpleDateFormatterTest, HashCode_DifferentForDifferentPatterns)
  * @brief Test format with various standard patterns
  * @details Verifies support for multiple strftime format specifiers
  */
-TEST(SimpleDateFormatterTest, Format_VariousPatterns)
+TEST_F(SimpleDateFormatterTest, Format_VariousPatterns)
 {
     std::tm date = {};
     date.tm_year = 2024 - 1900;
@@ -323,7 +338,7 @@ TEST(SimpleDateFormatterTest, Format_VariousPatterns)
  * @brief Test parse with various date formats
  * @details Verifies parsing works with different date string formats
  */
-TEST(SimpleDateFormatterTest, Parse_VariousFormats)
+TEST_F(SimpleDateFormatterTest, Parse_VariousFormats)
 {
     // Test ISO format
     {

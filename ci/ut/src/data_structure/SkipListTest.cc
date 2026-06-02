@@ -14,10 +14,25 @@
 using namespace common::data_structure;
 
 /**
+ * @brief Test fixture for SkipListTest tests
+ */
+class SkipListTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test default constructor
  * @details Verifies that SkipList can be created with default parameters
  */
-TEST(SkipListTest, Constructor_Default_CreatesEmptyList)
+TEST_F(SkipListTest, Constructor_Default_CreatesEmptyList)
 {
     EXPECT_NO_THROW(SkipList<int> list);
 }
@@ -26,7 +41,7 @@ TEST(SkipListTest, Constructor_Default_CreatesEmptyList)
  * @brief Test constructor with custom maxLevel
  * @details Verifies that non-default maxLevel values are accepted
  */
-TEST(SkipListTest, Constructor_CustomMaxLevel)
+TEST_F(SkipListTest, Constructor_CustomMaxLevel)
 {
     EXPECT_NO_THROW(SkipList<int> list(8));
     EXPECT_NO_THROW(SkipList<int> list(32));
@@ -37,7 +52,7 @@ TEST(SkipListTest, Constructor_CustomMaxLevel)
  * @brief Test constructor with custom probability
  * @details Verifies that different probability values are accepted
  */
-TEST(SkipListTest, Constructor_CustomProbability)
+TEST_F(SkipListTest, Constructor_CustomProbability)
 {
     EXPECT_NO_THROW(SkipList<int> list(16, 0.25f));
     EXPECT_NO_THROW(SkipList<int> list(16, 0.75f));
@@ -48,7 +63,7 @@ TEST(SkipListTest, Constructor_CustomProbability)
  * @brief Test initial state is empty
  * @details Verifies that newly constructed SkipList is empty
  */
-TEST(SkipListTest, InitialState_EmptyAndZeroSize)
+TEST_F(SkipListTest, InitialState_EmptyAndZeroSize)
 {
     const SkipList<int> list;
     EXPECT_TRUE(list.empty());
@@ -59,7 +74,7 @@ TEST(SkipListTest, InitialState_EmptyAndZeroSize)
  * @brief Test insert single element
  * @details Verifies basic insertion functionality
  */
-TEST(SkipListTest, Insert_SingleElement_Success)
+TEST_F(SkipListTest, Insert_SingleElement_Success)
 {
     SkipList<int> list;
 
@@ -74,7 +89,7 @@ TEST(SkipListTest, Insert_SingleElement_Success)
  * @brief Test insert multiple elements in ascending order
  * @details Verifies correct handling of sorted insertion
  */
-TEST(SkipListTest, Insert_MultipleElements_AscendingOrder)
+TEST_F(SkipListTest, Insert_MultipleElements_AscendingOrder)
 {
     SkipList<int> list;
 
@@ -96,7 +111,7 @@ TEST(SkipListTest, Insert_MultipleElements_AscendingOrder)
  * @brief Test insert multiple elements in descending order
  * @details Verifies correct handling of reverse-sorted insertion
  */
-TEST(SkipListTest, Insert_MultipleElements_DescendingOrder)
+TEST_F(SkipListTest, Insert_MultipleElements_DescendingOrder)
 {
     SkipList<int> list;
 
@@ -118,7 +133,7 @@ TEST(SkipListTest, Insert_MultipleElements_DescendingOrder)
  * @brief Test insert multiple elements in random order
  * @details Verifies correct handling of unsorted insertion
  */
-TEST(SkipListTest, Insert_MultipleElements_RandomOrder)
+TEST_F(SkipListTest, Insert_MultipleElements_RandomOrder)
 {
     SkipList<int> list;
 
@@ -142,7 +157,7 @@ TEST(SkipListTest, Insert_MultipleElements_RandomOrder)
  * @brief Test insert duplicate elements (idempotent)
  * @details Verifies that duplicate insertions have no effect
  */
-TEST(SkipListTest, Insert_DuplicateElements_Idempotent)
+TEST_F(SkipListTest, Insert_DuplicateElements_Idempotent)
 {
     SkipList<int> list;
 
@@ -162,7 +177,7 @@ TEST(SkipListTest, Insert_DuplicateElements_Idempotent)
  * @brief Test search for existing element
  * @details Verifies that search returns true for inserted elements
  */
-TEST(SkipListTest, Search_ExistingElement_ReturnsTrue)
+TEST_F(SkipListTest, Search_ExistingElement_ReturnsTrue)
 {
     SkipList<int> list;
 
@@ -179,7 +194,7 @@ TEST(SkipListTest, Search_ExistingElement_ReturnsTrue)
  * @brief Test search for non-existing element
  * @details Verifies that search returns false for absent elements
  */
-TEST(SkipListTest, Search_NonExistingElement_ReturnsFalse)
+TEST_F(SkipListTest, Search_NonExistingElement_ReturnsFalse)
 {
     SkipList<int> list;
 
@@ -196,7 +211,7 @@ TEST(SkipListTest, Search_NonExistingElement_ReturnsFalse)
  * @brief Test search on empty list
  * @details Verifies that search returns false for empty list
  */
-TEST(SkipListTest, Search_EmptyList_ReturnsFalse)
+TEST_F(SkipListTest, Search_EmptyList_ReturnsFalse)
 {
     const SkipList<int> list;
 
@@ -207,7 +222,7 @@ TEST(SkipListTest, Search_EmptyList_ReturnsFalse)
  * @brief Test erase existing element
  * @details Verifies successful deletion of existing elements
  */
-TEST(SkipListTest, Erase_ExistingElement_ReturnsTrue)
+TEST_F(SkipListTest, Erase_ExistingElement_ReturnsTrue)
 {
     SkipList<int> list;
 
@@ -226,7 +241,7 @@ TEST(SkipListTest, Erase_ExistingElement_ReturnsTrue)
  * @brief Test erase non-existing element
  * @details Verifies that erasing absent element returns false
  */
-TEST(SkipListTest, Erase_NonExistingElement_ReturnsFalse)
+TEST_F(SkipListTest, Erase_NonExistingElement_ReturnsFalse)
 {
     SkipList<int> list;
 
@@ -241,7 +256,7 @@ TEST(SkipListTest, Erase_NonExistingElement_ReturnsFalse)
  * @brief Test erase from empty list
  * @details Verifies that erasing from empty list returns false
  */
-TEST(SkipListTest, Erase_EmptyList_ReturnsFalse)
+TEST_F(SkipListTest, Erase_EmptyList_ReturnsFalse)
 {
     SkipList<int> list;
 
@@ -253,7 +268,7 @@ TEST(SkipListTest, Erase_EmptyList_ReturnsFalse)
  * @brief Test erase all elements
  * @details Verifies that all elements can be removed
  */
-TEST(SkipListTest, Erase_AllElements_ListBecomesEmpty)
+TEST_F(SkipListTest, Erase_AllElements_ListBecomesEmpty)
 {
     SkipList<int> list;
 
@@ -275,7 +290,7 @@ TEST(SkipListTest, Erase_AllElements_ListBecomesEmpty)
  * @brief Test erase first element
  * @details Verifies correct deletion of minimum element
  */
-TEST(SkipListTest, Erase_FirstElement_Success)
+TEST_F(SkipListTest, Erase_FirstElement_Success)
 {
     SkipList<int> list;
 
@@ -294,7 +309,7 @@ TEST(SkipListTest, Erase_FirstElement_Success)
  * @brief Test erase last element
  * @details Verifies correct deletion of maximum element
  */
-TEST(SkipListTest, Erase_LastElement_Success)
+TEST_F(SkipListTest, Erase_LastElement_Success)
 {
     SkipList<int> list;
 
@@ -313,7 +328,7 @@ TEST(SkipListTest, Erase_LastElement_Success)
  * @brief Test insert after erase
  * @details Verifies that re-insertion works after deletion
  */
-TEST(SkipListTest, Insert_AfterErase_Success)
+TEST_F(SkipListTest, Insert_AfterErase_Success)
 {
     SkipList<int> list;
 
@@ -334,7 +349,7 @@ TEST(SkipListTest, Insert_AfterErase_Success)
  * @brief Test with negative numbers
  * @details Verifies correct handling of negative integers
  */
-TEST(SkipListTest, NegativeNumbers_InsertAndSearch_Success)
+TEST_F(SkipListTest, NegativeNumbers_InsertAndSearch_Success)
 {
     SkipList<int> list;
 
@@ -357,7 +372,7 @@ TEST(SkipListTest, NegativeNumbers_InsertAndSearch_Success)
  * @brief Test with mixed positive and negative numbers
  * @details Verifies correct handling of mixed sign integers
  */
-TEST(SkipListTest, MixedSignNumbers_InsertAndSearch_Success)
+TEST_F(SkipListTest, MixedSignNumbers_InsertAndSearch_Success)
 {
     SkipList<int> list;
 
@@ -379,7 +394,7 @@ TEST(SkipListTest, MixedSignNumbers_InsertAndSearch_Success)
  * @brief Test with string type
  * @details Verifies that SkipList works with string keys
  */
-TEST(SkipListTest, StringType_InsertAndSearch_Success)
+TEST_F(SkipListTest, StringType_InsertAndSearch_Success)
 {
     SkipList<std::string> list;
 
@@ -400,7 +415,7 @@ TEST(SkipListTest, StringType_InsertAndSearch_Success)
  * @brief Test erase with string type
  * @details Verifies deletion works correctly with strings
  */
-TEST(SkipListTest, StringType_Erase_Success)
+TEST_F(SkipListTest, StringType_Erase_Success)
 {
     SkipList<std::string> list;
 
@@ -419,7 +434,7 @@ TEST(SkipListTest, StringType_Erase_Success)
  * @brief Test with double type
  * @details Verifies that SkipList works with floating point numbers
  */
-TEST(SkipListTest, DoubleType_InsertAndSearch_Success)
+TEST_F(SkipListTest, DoubleType_InsertAndSearch_Success)
 {
     SkipList<double> list;
 
@@ -439,7 +454,7 @@ TEST(SkipListTest, DoubleType_InsertAndSearch_Success)
  * @brief Test large dataset performance
  * @details Verifies correct behavior with many elements
  */
-TEST(SkipListTest, LargeDataset_InsertAndSearch_Success)
+TEST_F(SkipListTest, LargeDataset_InsertAndSearch_Success)
 {
     SkipList<int> list;
 
@@ -468,7 +483,7 @@ TEST(SkipListTest, LargeDataset_InsertAndSearch_Success)
  * @brief Test large dataset with erasure
  * @details Verifies correct deletion with many elements
  */
-TEST(SkipListTest, LargeDataset_Erase_Success)
+TEST_F(SkipListTest, LargeDataset_Erase_Success)
 {
     SkipList<int> list;
 
@@ -507,7 +522,7 @@ TEST(SkipListTest, LargeDataset_Erase_Success)
  * @brief Test size consistency after multiple operations
  * @details Verifies that size() accurately reflects list state
  */
-TEST(SkipListTest, Size_ConsistencyAfterOperations)
+TEST_F(SkipListTest, Size_ConsistencyAfterOperations)
 {
     SkipList<int> list;
 
@@ -536,7 +551,7 @@ TEST(SkipListTest, Size_ConsistencyAfterOperations)
  * @brief Test empty consistency after operations
  * @details Verifies that empty() accurately reflects list state
  */
-TEST(SkipListTest, Empty_ConsistencyAfterOperations)
+TEST_F(SkipListTest, Empty_ConsistencyAfterOperations)
 {
     SkipList<int> list;
 
@@ -553,7 +568,7 @@ TEST(SkipListTest, Empty_ConsistencyAfterOperations)
  * @brief Test sequential insert and erase pattern
  * @details Verifies correctness under alternating operations
  */
-TEST(SkipListTest, SequentialInsertErase_Pattern_Success)
+TEST_F(SkipListTest, SequentialInsertErase_Pattern_Success)
 {
     SkipList<int> list;
 
@@ -597,7 +612,7 @@ TEST(SkipListTest, SequentialInsertErase_Pattern_Success)
  * @brief Test with single element repeated operations
  * @details Verifies behavior with minimal data
  */
-TEST(SkipListTest, SingleElement_RepeatedOperations_Success)
+TEST_F(SkipListTest, SingleElement_RepeatedOperations_Success)
 {
     SkipList<int> list;
 
@@ -623,7 +638,7 @@ TEST(SkipListTest, SingleElement_RepeatedOperations_Success)
  * @brief Test toVector method returns sorted elements
  * @details Verifies that toVector returns elements in sorted order
  */
-TEST(SkipListTest, ToVector_ReturnsSortedElements)
+TEST_F(SkipListTest, ToVector_ReturnsSortedElements)
 {
     SkipList<int> list;
 
@@ -644,7 +659,7 @@ TEST(SkipListTest, ToVector_ReturnsSortedElements)
  * @brief Test copy semantics are disabled
  * @details Verifies that copy construction and assignment are deleted
  */
-TEST(SkipListTest, CopySemantics_Disabled)
+TEST_F(SkipListTest, CopySemantics_Disabled)
 {
     SkipList<int> list1;
     list1.insert(10);

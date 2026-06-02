@@ -15,10 +15,25 @@
 using namespace common::gen;
 
 /**
+ * @brief Test fixture for UuidGeneratorTest tests
+ */
+class UuidGeneratorTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test GenerateRandomUuid returns non-empty string
  * @details Verifies that UUID generation returns a valid, non-empty result
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_NonEmpty)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_NonEmpty)
 {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
     EXPECT_FALSE(uuid.empty());
@@ -28,7 +43,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_NonEmpty)
  * @brief Test GenerateRandomUuid returns correct format
  * @details Verifies that generated UUID matches standard UUID format (8-4-4-4-12)
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectFormat)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_CorrectFormat)
 {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
 
@@ -41,7 +56,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectFormat)
  * @brief Test GenerateRandomUuid returns lowercase hexadecimal
  * @details Verifies that UUID contains only lowercase hex characters and hyphens
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_LowercaseHex)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_LowercaseHex)
 {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
 
@@ -59,7 +74,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_LowercaseHex)
  * @brief Test GenerateRandomUuid has correct length
  * @details Verifies that UUID string has exactly 36 characters (32 hex + 4 hyphens)
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectLength)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_CorrectLength)
 {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
     EXPECT_EQ(uuid.length(), UuidGenerator::UUID_STRING_LENGTH);
@@ -69,7 +84,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectLength)
  * @brief Test GenerateRandomUuid generates unique values
  * @details Verifies that multiple calls produce different UUIDs
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_UniqueValues)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_UniqueValues)
 {
     std::set<std::string> uniqueUuids;
 
@@ -87,7 +102,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_UniqueValues)
  * @brief Test GenerateRandomUuid has correct hyphen positions
  * @details Verifies that hyphens appear at positions 8, 13, 18, and 23
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectHyphenPositions)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_CorrectHyphenPositions)
 {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
 
@@ -101,7 +116,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_CorrectHyphenPositions)
  * @brief Test GenerateRandomUuid version indicator
  * @details Verifies that UUID version 4 indicator is present (position 14 should be '4')
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_Version4Indicator)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_Version4Indicator)
 {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
 
@@ -113,7 +128,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_Version4Indicator)
  * @brief Test GenerateRandomUuid variant indicator
  * @details Verifies that UUID variant bits are correct (position 19 should be '8', '9', 'a', or 'b')
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_VariantIndicator)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_VariantIndicator)
 {
     const auto uuid = UuidGenerator::GenerateRandomUuid();
 
@@ -127,7 +142,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_VariantIndicator)
  * @brief Test GenerateRandomUuid produces different UUIDs in sequence
  * @details Verifies that consecutive calls don't return the same value
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_DifferentInSequence)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_DifferentInSequence)
 {
     const auto uuid1 = UuidGenerator::GenerateRandomUuid();
     const auto uuid2 = UuidGenerator::GenerateRandomUuid();
@@ -143,7 +158,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_DifferentInSequence)
  * @details Verifies that concurrent calls from multiple threads produce mostly unique UUIDs
  * @note Due to static generator in implementation, rare collisions may occur under high concurrency
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_ThreadSafety)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_ThreadSafety)
 {
     std::set<std::string> uniqueUuids;
     std::mutex uuidsMutex;
@@ -179,7 +194,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_ThreadSafety)
  * @brief Test GenerateRandomUuid no exceptions thrown
  * @details Verifies that the method is noexcept and never throws
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_NoExceptions)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_NoExceptions)
 {
     EXPECT_NO_THROW(UuidGenerator::GenerateRandomUuid());
 
@@ -194,7 +209,7 @@ TEST(UuidGeneratorTest, GenerateRandomUuid_NoExceptions)
  * @brief Test GenerateRandomUuid statistical distribution
  * @details Verifies that generated UUIDs have good randomness characteristics
  */
-TEST(UuidGeneratorTest, GenerateRandomUuid_GoodDistribution)
+TEST_F(UuidGeneratorTest, GenerateRandomUuid_GoodDistribution)
 {
     std::set<char> uniqueChars;
 

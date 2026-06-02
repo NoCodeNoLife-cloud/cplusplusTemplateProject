@@ -13,10 +13,25 @@
 using namespace common::auth;
 
 /**
+ * @brief Test fixture for UserCredentialsTest tests
+ */
+class UserCredentialsTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test UserCredentials construction
  * @details Verifies that credentials are properly initialized
  */
-TEST(UserCredentialsTest, Construction)
+TEST_F(UserCredentialsTest, Construction)
 {
     const UserCredentials creds("testuser", "hashed_pass_123", "salt_456");
 
@@ -30,7 +45,7 @@ TEST(UserCredentialsTest, Construction)
  * @brief Test get_username returns correct value
  * @details Verifies username accessor works correctly
  */
-TEST(UserCredentialsTest, GetUsername)
+TEST_F(UserCredentialsTest, GetUsername)
 {
     const UserCredentials creds("john_doe", "hash", "salt");
 
@@ -41,7 +56,7 @@ TEST(UserCredentialsTest, GetUsername)
  * @brief Test get_hashed_password returns correct value
  * @details Verifies hashed password accessor works correctly
  */
-TEST(UserCredentialsTest, GetHashedPassword)
+TEST_F(UserCredentialsTest, GetHashedPassword)
 {
     const UserCredentials creds("user", "secure_hash_value", "salt");
 
@@ -52,7 +67,7 @@ TEST(UserCredentialsTest, GetHashedPassword)
  * @brief Test get_salt returns correct value
  * @details Verifies salt accessor works correctly
  */
-TEST(UserCredentialsTest, GetSalt)
+TEST_F(UserCredentialsTest, GetSalt)
 {
     const UserCredentials creds("user", "hash", "unique_salt_value");
 
@@ -63,7 +78,7 @@ TEST(UserCredentialsTest, GetSalt)
  * @brief Test initial failed attempts is zero
  * @details Verifies that new credentials start with zero failed attempts
  */
-TEST(UserCredentialsTest, InitialFailedAttempts)
+TEST_F(UserCredentialsTest, InitialFailedAttempts)
 {
     const UserCredentials creds("user", "hash", "salt");
 
@@ -74,7 +89,7 @@ TEST(UserCredentialsTest, InitialFailedAttempts)
  * @brief Test increment_failed_attempts increases counter
  * @details Verifies that failed attempts counter increments correctly
  */
-TEST(UserCredentialsTest, IncrementFailedAttempts)
+TEST_F(UserCredentialsTest, IncrementFailedAttempts)
 {
     UserCredentials creds("user", "hash", "salt");
 
@@ -94,7 +109,7 @@ TEST(UserCredentialsTest, IncrementFailedAttempts)
  * @brief Test reset_failed_attempts clears counter
  * @details Verifies that failed attempts can be reset to zero
  */
-TEST(UserCredentialsTest, ResetFailedAttempts)
+TEST_F(UserCredentialsTest, ResetFailedAttempts)
 {
     UserCredentials creds("user", "hash", "salt");
 
@@ -114,7 +129,7 @@ TEST(UserCredentialsTest, ResetFailedAttempts)
  * @brief Test is_locked with default parameters
  * @details Verifies account lockout with default max attempts (5)
  */
-TEST(UserCredentialsTest, IsLocked_DefaultParameters)
+TEST_F(UserCredentialsTest, IsLocked_DefaultParameters)
 {
     UserCredentials creds("user", "hash", "salt");
 
@@ -137,7 +152,7 @@ TEST(UserCredentialsTest, IsLocked_DefaultParameters)
  * @brief Test is_locked with custom duration and max attempts
  * @details Verifies account lockout with custom parameters
  */
-TEST(UserCredentialsTest, IsLocked_CustomParameters)
+TEST_F(UserCredentialsTest, IsLocked_CustomParameters)
 {
     UserCredentials creds("user", "hash", "salt");
 
@@ -161,7 +176,7 @@ TEST(UserCredentialsTest, IsLocked_CustomParameters)
  * @brief Test is_locked after exceeding max attempts
  * @details Verifies that account remains locked after exceeding limit
  */
-TEST(UserCredentialsTest, IsLocked_ExceedsMaxAttempts)
+TEST_F(UserCredentialsTest, IsLocked_ExceedsMaxAttempts)
 {
     UserCredentials creds("user", "hash", "salt");
 
@@ -179,7 +194,7 @@ TEST(UserCredentialsTest, IsLocked_ExceedsMaxAttempts)
  * @brief Test multiple increment and reset cycles
  * @details Verifies that increment/reset cycle works correctly multiple times
  */
-TEST(UserCredentialsTest, MultipleIncrementResetCycles)
+TEST_F(UserCredentialsTest, MultipleIncrementResetCycles)
 {
     UserCredentials creds("user", "hash", "salt");
 
@@ -208,7 +223,7 @@ TEST(UserCredentialsTest, MultipleIncrementResetCycles)
  * @brief Test credentials with empty strings
  * @details Verifies that credentials can be created with empty strings
  */
-TEST(UserCredentialsTest, EmptyStrings)
+TEST_F(UserCredentialsTest, EmptyStrings)
 {
     const UserCredentials creds("", "", "");
 
@@ -222,7 +237,7 @@ TEST(UserCredentialsTest, EmptyStrings)
  * @brief Test credentials with long strings
  * @details Verifies that credentials handle long strings correctly
  */
-TEST(UserCredentialsTest, LongStrings)
+TEST_F(UserCredentialsTest, LongStrings)
 {
     const std::string long_username(1000, 'u');
     const std::string long_hash(1000, 'h');
@@ -239,7 +254,7 @@ TEST(UserCredentialsTest, LongStrings)
  * @brief Test credentials with special characters
  * @details Verifies that credentials handle special characters correctly
  */
-TEST(UserCredentialsTest, SpecialCharacters)
+TEST_F(UserCredentialsTest, SpecialCharacters)
 {
     const UserCredentials creds(
         "user@domain.com",
@@ -256,7 +271,7 @@ TEST(UserCredentialsTest, SpecialCharacters)
  * @brief Test lockout behavior at exact boundary
  * @details Verifies lockout occurs exactly at max_attempts threshold
  */
-TEST(UserCredentialsTest, LockoutBoundary)
+TEST_F(UserCredentialsTest, LockoutBoundary)
 {
     UserCredentials creds("user", "hash", "salt");
 
@@ -279,7 +294,7 @@ TEST(UserCredentialsTest, LockoutBoundary)
  * @brief Test that successful login resets failed attempts
  * @details Simulates successful authentication by resetting attempts
  */
-TEST(UserCredentialsTest, SuccessfulLoginResetsAttempts)
+TEST_F(UserCredentialsTest, SuccessfulLoginResetsAttempts)
 {
     UserCredentials creds("user", "hash", "salt");
 

@@ -15,10 +15,25 @@
 using namespace common::crypto;
 
 /**
+ * @brief Test fixture for CryptoToolKitTest tests
+ */
+class CryptoToolKitTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test generate_salt returns correct size
  * @details Verifies that generated salt has exactly SALT_SIZE bytes
  */
-TEST(CryptoToolKitTest, GenerateSalt_CorrectSize)
+TEST_F(CryptoToolKitTest, GenerateSalt_CorrectSize)
 {
     const auto salt = CryptoToolKit::generate_salt();
     EXPECT_EQ(salt.size(), CryptoToolKit::SALT_SIZE);
@@ -28,7 +43,7 @@ TEST(CryptoToolKitTest, GenerateSalt_CorrectSize)
  * @brief Test generate_salt produces unique values
  * @details Verifies that multiple salt generations produce different values
  */
-TEST(CryptoToolKitTest, GenerateSalt_UniqueValues)
+TEST_F(CryptoToolKitTest, GenerateSalt_UniqueValues)
 {
     std::set<std::string> uniqueSalts;
 
@@ -46,7 +61,7 @@ TEST(CryptoToolKitTest, GenerateSalt_UniqueValues)
  * @brief Test generate_salt contains binary data
  * @details Verifies that salt can contain any byte value (not just printable)
  */
-TEST(CryptoToolKitTest, GenerateSalt_BinaryData)
+TEST_F(CryptoToolKitTest, GenerateSalt_BinaryData)
 {
     const auto salt = CryptoToolKit::generate_salt();
 
@@ -58,7 +73,7 @@ TEST(CryptoToolKitTest, GenerateSalt_BinaryData)
  * @brief Test hash_password produces consistent output
  * @details Verifies that same password and salt produce same hash
  */
-TEST(CryptoToolKitTest, HashPassword_ConsistentOutput)
+TEST_F(CryptoToolKitTest, HashPassword_ConsistentOutput)
 {
     const std::string password = "test_password";
     const std::string salt = "test_salt_123456"; // 16 bytes
@@ -73,7 +88,7 @@ TEST(CryptoToolKitTest, HashPassword_ConsistentOutput)
  * @brief Test hash_password produces correct size
  * @details Verifies that hash output has exactly HASH_SIZE bytes
  */
-TEST(CryptoToolKitTest, HashPassword_CorrectSize)
+TEST_F(CryptoToolKitTest, HashPassword_CorrectSize)
 {
     const std::string password = "password";
     const auto salt = CryptoToolKit::generate_salt();
@@ -86,7 +101,7 @@ TEST(CryptoToolKitTest, HashPassword_CorrectSize)
  * @brief Test hash_password with different passwords produces different hashes
  * @details Verifies that different passwords result in different hashes
  */
-TEST(CryptoToolKitTest, HashPassword_DifferentPasswords_DifferentHashes)
+TEST_F(CryptoToolKitTest, HashPassword_DifferentPasswords_DifferentHashes)
 {
     const auto salt = CryptoToolKit::generate_salt();
 
@@ -100,7 +115,7 @@ TEST(CryptoToolKitTest, HashPassword_DifferentPasswords_DifferentHashes)
  * @brief Test hash_password with different salts produces different hashes
  * @details Verifies that same password with different salts produces different hashes
  */
-TEST(CryptoToolKitTest, HashPassword_DifferentSalts_DifferentHashes)
+TEST_F(CryptoToolKitTest, HashPassword_DifferentSalts_DifferentHashes)
 {
     const std::string password = "same_password";
 
@@ -117,7 +132,7 @@ TEST(CryptoToolKitTest, HashPassword_DifferentSalts_DifferentHashes)
  * @brief Test hash_password with custom iterations
  * @details Verifies that custom iteration count works correctly
  */
-TEST(CryptoToolKitTest, HashPassword_CustomIterations)
+TEST_F(CryptoToolKitTest, HashPassword_CustomIterations)
 {
     const std::string password = "test";
     const auto salt = CryptoToolKit::generate_salt();
@@ -138,7 +153,7 @@ TEST(CryptoToolKitTest, HashPassword_CustomIterations)
  * @brief Test hash_password with empty password
  * @details Verifies that empty password can be hashed
  */
-TEST(CryptoToolKitTest, HashPassword_EmptyPassword)
+TEST_F(CryptoToolKitTest, HashPassword_EmptyPassword)
 {
     const std::string password = "";
     const auto salt = CryptoToolKit::generate_salt();
@@ -154,7 +169,7 @@ TEST(CryptoToolKitTest, HashPassword_EmptyPassword)
  * @brief Test hash_password with long password
  * @details Verifies that long passwords are handled correctly
  */
-TEST(CryptoToolKitTest, HashPassword_LongPassword)
+TEST_F(CryptoToolKitTest, HashPassword_LongPassword)
 {
     const std::string password(10000, 'a'); // 10KB password
     const auto salt = CryptoToolKit::generate_salt();
@@ -170,7 +185,7 @@ TEST(CryptoToolKitTest, HashPassword_LongPassword)
  * @brief Test hash_password with special characters
  * @details Verifies that passwords with special characters work correctly
  */
-TEST(CryptoToolKitTest, HashPassword_SpecialCharacters)
+TEST_F(CryptoToolKitTest, HashPassword_SpecialCharacters)
 {
     const std::string password = "P@ssw0rd!#$%^&*()_+-=[]{}|;:',.<>?/~`";
     const auto salt = CryptoToolKit::generate_salt();
@@ -186,7 +201,7 @@ TEST(CryptoToolKitTest, HashPassword_SpecialCharacters)
  * @brief Test hash_password with Unicode characters
  * @details Verifies that Unicode passwords are handled (as UTF-8 bytes)
  */
-TEST(CryptoToolKitTest, HashPassword_UnicodePassword)
+TEST_F(CryptoToolKitTest, HashPassword_UnicodePassword)
 {
     const std::string password = "密码测试🔐"; // Chinese + emoji
     const auto salt = CryptoToolKit::generate_salt();
@@ -202,7 +217,7 @@ TEST(CryptoToolKitTest, HashPassword_UnicodePassword)
  * @brief Test secure_compare with equal strings
  * @details Verifies that identical strings return true
  */
-TEST(CryptoToolKitTest, SecureCompare_EqualStrings)
+TEST_F(CryptoToolKitTest, SecureCompare_EqualStrings)
 {
     const std::string a = "test_string";
     const std::string b = "test_string";
@@ -214,7 +229,7 @@ TEST(CryptoToolKitTest, SecureCompare_EqualStrings)
  * @brief Test secure_compare with different strings
  * @details Verifies that different strings return false
  */
-TEST(CryptoToolKitTest, SecureCompare_DifferentStrings)
+TEST_F(CryptoToolKitTest, SecureCompare_DifferentStrings)
 {
     const std::string a = "string1";
     const std::string b = "string2";
@@ -226,7 +241,7 @@ TEST(CryptoToolKitTest, SecureCompare_DifferentStrings)
  * @brief Test secure_compare with different lengths
  * @details Verifies that strings of different lengths return false
  */
-TEST(CryptoToolKitTest, SecureCompare_DifferentLengths)
+TEST_F(CryptoToolKitTest, SecureCompare_DifferentLengths)
 {
     const std::string a = "short";
     const std::string b = "much_longer_string";
@@ -238,7 +253,7 @@ TEST(CryptoToolKitTest, SecureCompare_DifferentLengths)
  * @brief Test secure_compare with empty strings
  * @details Verifies that empty string comparison works correctly
  */
-TEST(CryptoToolKitTest, SecureCompare_EmptyStrings)
+TEST_F(CryptoToolKitTest, SecureCompare_EmptyStrings)
 {
     const std::string a = "";
     const std::string b = "";
@@ -250,7 +265,7 @@ TEST(CryptoToolKitTest, SecureCompare_EmptyStrings)
  * @brief Test secure_compare with one empty string
  * @details Verifies comparison when only one string is empty
  */
-TEST(CryptoToolKitTest, SecureCompare_OneEmptyString)
+TEST_F(CryptoToolKitTest, SecureCompare_OneEmptyString)
 {
     const std::string a = "";
     const std::string b = "not_empty";
@@ -262,7 +277,7 @@ TEST(CryptoToolKitTest, SecureCompare_OneEmptyString)
  * @brief Test secure_compare with single character difference
  * @details Verifies that even single character differences are detected
  */
-TEST(CryptoToolKitTest, SecureCompare_SingleCharDifference)
+TEST_F(CryptoToolKitTest, SecureCompare_SingleCharDifference)
 {
     const std::string a = "test_string";
     const std::string b = "test_strong"; // Only one char different
@@ -274,7 +289,7 @@ TEST(CryptoToolKitTest, SecureCompare_SingleCharDifference)
  * @brief Test secure_compare with binary data
  * @details Verifies that binary data comparison works correctly
  */
-TEST(CryptoToolKitTest, SecureCompare_BinaryData)
+TEST_F(CryptoToolKitTest, SecureCompare_BinaryData)
 {
     const std::string a(32, '\0'); // 32 null bytes
     const std::string b(32, '\0');
@@ -288,7 +303,7 @@ TEST(CryptoToolKitTest, SecureCompare_BinaryData)
  * @brief Test secure_compare is case-sensitive
  * @details Verifies that comparison distinguishes between cases
  */
-TEST(CryptoToolKitTest, SecureCompare_CaseSensitive)
+TEST_F(CryptoToolKitTest, SecureCompare_CaseSensitive)
 {
     const std::string a = "Password";
     const std::string b = "password";
@@ -300,7 +315,7 @@ TEST(CryptoToolKitTest, SecureCompare_CaseSensitive)
  * @brief Test constants have correct values
  * @details Verifies that class constants are properly defined
  */
-TEST(CryptoToolKitTest, Constants_CorrectValues)
+TEST_F(CryptoToolKitTest, Constants_CorrectValues)
 {
     EXPECT_EQ(CryptoToolKit::SALT_SIZE, 16);
     EXPECT_EQ(CryptoToolKit::HASH_SIZE, 32);
@@ -310,7 +325,7 @@ TEST(CryptoToolKitTest, Constants_CorrectValues)
  * @brief Test complete password verification workflow
  * @details Verifies the typical use case: hash password, then verify
  */
-TEST(CryptoToolKitTest, PasswordVerification_Workflow)
+TEST_F(CryptoToolKitTest, PasswordVerification_Workflow)
 {
     const std::string password = "secure_password_123";
     const auto salt = CryptoToolKit::generate_salt();
@@ -331,7 +346,7 @@ TEST(CryptoToolKitTest, PasswordVerification_Workflow)
  * @brief Test multiple password hashing consistency
  * @details Verifies that multiple hashes of same input are consistent
  */
-TEST(CryptoToolKitTest, MultipleHashing_Consistency)
+TEST_F(CryptoToolKitTest, MultipleHashing_Consistency)
 {
     const std::string password = "consistent_test";
     const auto salt = CryptoToolKit::generate_salt();
@@ -353,7 +368,7 @@ TEST(CryptoToolKitTest, MultipleHashing_Consistency)
  * @brief Test salt randomness quality
  * @details Verifies that generated salts have good entropy
  */
-TEST(CryptoToolKitTest, SaltRandomness_Quality)
+TEST_F(CryptoToolKitTest, SaltRandomness_Quality)
 {
     std::set<unsigned char> uniqueBytes;
 

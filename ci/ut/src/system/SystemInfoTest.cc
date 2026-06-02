@@ -15,10 +15,25 @@
 using namespace common::system;
 
 /**
+ * @brief Test fixture for SystemInfoTest tests
+ */
+class SystemInfoTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test GetCpuModelFromRegistry returns non-empty string
  * @details Verifies that CPU model retrieval returns a valid, non-empty result
  */
-TEST(SystemInfoTest, GetCpuModelFromRegistry_NonEmpty)
+TEST_F(SystemInfoTest, GetCpuModelFromRegistry_NonEmpty)
 {
     const auto cpuModel = SystemInfo::GetCpuModelFromRegistry();
     EXPECT_FALSE(cpuModel.empty());
@@ -28,7 +43,7 @@ TEST(SystemInfoTest, GetCpuModelFromRegistry_NonEmpty)
  * @brief Test GetCpuModelFromRegistry returns reasonable value
  * @details Ensures the CPU model is not just the fallback "Unknown CPU Model" on typical systems
  */
-TEST(SystemInfoTest, GetCpuModelFromRegistry_ReasonableValue)
+TEST_F(SystemInfoTest, GetCpuModelFromRegistry_ReasonableValue)
 {
     const auto cpuModel = SystemInfo::GetCpuModelFromRegistry();
 
@@ -41,7 +56,7 @@ TEST(SystemInfoTest, GetCpuModelFromRegistry_ReasonableValue)
  * @brief Test GetMemoryDetails returns non-empty string
  * @details Verifies that memory details retrieval returns a valid result
  */
-TEST(SystemInfoTest, GetMemoryDetails_NonEmpty)
+TEST_F(SystemInfoTest, GetMemoryDetails_NonEmpty)
 {
     const auto memoryDetails = SystemInfo::GetMemoryDetails();
     EXPECT_FALSE(memoryDetails.empty());
@@ -51,7 +66,7 @@ TEST(SystemInfoTest, GetMemoryDetails_NonEmpty)
  * @brief Test GetOSVersion returns non-empty string
  * @details Verifies that OS version retrieval returns a valid, non-empty result
  */
-TEST(SystemInfoTest, GetOSVersion_NonEmpty)
+TEST_F(SystemInfoTest, GetOSVersion_NonEmpty)
 {
     const auto osVersion = SystemInfo::GetOSVersion();
     EXPECT_FALSE(osVersion.empty());
@@ -61,7 +76,7 @@ TEST(SystemInfoTest, GetOSVersion_NonEmpty)
  * @brief Test GetOSVersion contains Windows-related information
  * @details Ensures the OS version string contains expected Windows identifiers
  */
-TEST(SystemInfoTest, GetOSVersion_ContainsWindowsInfo)
+TEST_F(SystemInfoTest, GetOSVersion_ContainsWindowsInfo)
 {
     const auto osVersion = SystemInfo::GetOSVersion();
 
@@ -76,7 +91,7 @@ TEST(SystemInfoTest, GetOSVersion_ContainsWindowsInfo)
  * @brief Test GetMotherboardInfo returns valid structure
  * @details Verifies that motherboard information retrieval returns a populated structure
  */
-TEST(SystemInfoTest, GetMotherboardInfo_ValidStructure)
+TEST_F(SystemInfoTest, GetMotherboardInfo_ValidStructure)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
 
@@ -89,7 +104,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_ValidStructure)
  * @brief Test GetMotherboardInfo manufacturer field accessibility
  * @details Verifies that the manufacturer field can be accessed
  */
-TEST(SystemInfoTest, GetMotherboardInfo_ManufacturerField)
+TEST_F(SystemInfoTest, GetMotherboardInfo_ManufacturerField)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
 
@@ -102,7 +117,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_ManufacturerField)
  * @brief Test GetMotherboardInfo model field accessibility
  * @details Verifies that the model field can be accessed
  */
-TEST(SystemInfoTest, GetMotherboardInfo_ModelField)
+TEST_F(SystemInfoTest, GetMotherboardInfo_ModelField)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
 
@@ -115,7 +130,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_ModelField)
  * @brief Test GetMotherboardInfo biosVersion field accessibility
  * @details Verifies that the BIOS version field can be accessed
  */
-TEST(SystemInfoTest, GetMotherboardInfo_BiosVersionField)
+TEST_F(SystemInfoTest, GetMotherboardInfo_BiosVersionField)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
 
@@ -128,7 +143,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_BiosVersionField)
  * @brief Test GetMotherboardInfo systemSerial field accessibility
  * @details Verifies that the system serial field can be accessed
  */
-TEST(SystemInfoTest, GetMotherboardInfo_SystemSerialField)
+TEST_F(SystemInfoTest, GetMotherboardInfo_SystemSerialField)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
 
@@ -141,7 +156,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_SystemSerialField)
  * @brief Test GetGraphicsCardInfo returns non-empty string
  * @details Verifies that graphics card information retrieval returns a valid result
  */
-TEST(SystemInfoTest, GetGraphicsCardInfo_NonEmpty)
+TEST_F(SystemInfoTest, GetGraphicsCardInfo_NonEmpty)
 {
     const auto graphicsInfo = SystemInfo::GetGraphicsCardInfo();
     EXPECT_FALSE(graphicsInfo.empty());
@@ -151,7 +166,7 @@ TEST(SystemInfoTest, GetGraphicsCardInfo_NonEmpty)
  * @brief Test GetDiskDriveInfo returns vector
  * @details Verifies that disk drive information retrieval returns a valid vector
  */
-TEST(SystemInfoTest, GetDiskDriveInfo_ReturnsVector)
+TEST_F(SystemInfoTest, GetDiskDriveInfo_ReturnsVector)
 {
     const auto diskInfo = SystemInfo::GetDiskDriveInfo();
 
@@ -163,7 +178,7 @@ TEST(SystemInfoTest, GetDiskDriveInfo_ReturnsVector)
  * @brief Test GetDiskDriveInfo vector size is reasonable
  * @details Ensures the disk drive list size is within expected bounds
  */
-TEST(SystemInfoTest, GetDiskDriveInfo_ReasonableSize)
+TEST_F(SystemInfoTest, GetDiskDriveInfo_ReasonableSize)
 {
     const auto diskInfo = SystemInfo::GetDiskDriveInfo();
 
@@ -175,7 +190,7 @@ TEST(SystemInfoTest, GetDiskDriveInfo_ReasonableSize)
  * @brief Test GetBIOSInfo returns vector
  * @details Verifies that BIOS information retrieval returns a valid vector
  */
-TEST(SystemInfoTest, GetBIOSInfo_ReturnsVector)
+TEST_F(SystemInfoTest, GetBIOSInfo_ReturnsVector)
 {
     const auto biosInfo = SystemInfo::GetBIOSInfo();
 
@@ -187,7 +202,7 @@ TEST(SystemInfoTest, GetBIOSInfo_ReturnsVector)
  * @brief Test GetBIOSInfo vector size is reasonable
  * @details Ensures the BIOS adapter list size is within expected bounds
  */
-TEST(SystemInfoTest, GetBIOSInfo_ReasonableSize)
+TEST_F(SystemInfoTest, GetBIOSInfo_ReasonableSize)
 {
     const auto biosInfo = SystemInfo::GetBIOSInfo();
 
@@ -199,7 +214,7 @@ TEST(SystemInfoTest, GetBIOSInfo_ReasonableSize)
  * @brief Test all system info methods can be called without crashing
  * @details Verifies that all public methods execute without exceptions or crashes
  */
-TEST(SystemInfoTest, AllMethods_ExecuteWithoutCrash)
+TEST_F(SystemInfoTest, AllMethods_ExecuteWithoutCrash)
 {
     EXPECT_NO_THROW(SystemInfo::GetCpuModelFromRegistry());
     EXPECT_NO_THROW(SystemInfo::GetMemoryDetails());
@@ -214,7 +229,7 @@ TEST(SystemInfoTest, AllMethods_ExecuteWithoutCrash)
  * @brief Test consistency of multiple calls to GetCpuModelFromRegistry
  * @details Verifies that repeated calls return consistent results
  */
-TEST(SystemInfoTest, GetCpuModelFromRegistry_ConsistentResults)
+TEST_F(SystemInfoTest, GetCpuModelFromRegistry_ConsistentResults)
 {
     const auto result1 = SystemInfo::GetCpuModelFromRegistry();
     const auto result2 = SystemInfo::GetCpuModelFromRegistry();
@@ -226,7 +241,7 @@ TEST(SystemInfoTest, GetCpuModelFromRegistry_ConsistentResults)
  * @brief Test consistency of multiple calls to GetOSVersion
  * @details Verifies that repeated calls return consistent results
  */
-TEST(SystemInfoTest, GetOSVersion_ConsistentResults)
+TEST_F(SystemInfoTest, GetOSVersion_ConsistentResults)
 {
     const auto result1 = SystemInfo::GetOSVersion();
     const auto result2 = SystemInfo::GetOSVersion();
@@ -238,7 +253,7 @@ TEST(SystemInfoTest, GetOSVersion_ConsistentResults)
  * @brief Test consistency of multiple calls to GetMotherboardInfo
  * @details Verifies that repeated calls return consistent results
  */
-TEST(SystemInfoTest, GetMotherboardInfo_ConsistentResults)
+TEST_F(SystemInfoTest, GetMotherboardInfo_ConsistentResults)
 {
     const auto result1 = SystemInfo::GetMotherboardInfo();
     const auto result2 = SystemInfo::GetMotherboardInfo();
@@ -253,7 +268,7 @@ TEST(SystemInfoTest, GetMotherboardInfo_ConsistentResults)
  * @brief Test RegistryKey default constructor
  * @details Verifies that RegistryKey can be constructed with nullptr
  */
-TEST(SystemInfoTest, RegistryKey_DefaultConstructor)
+TEST_F(SystemInfoTest, RegistryKey_DefaultConstructor)
 {
     const RegistryKey key;
     EXPECT_FALSE(key); // Should be falsy when constructed with nullptr
@@ -263,7 +278,7 @@ TEST(SystemInfoTest, RegistryKey_DefaultConstructor)
  * @brief Test RegistryKey boolean conversion operator
  * @details Verifies that RegistryKey properly converts to bool based on handle validity
  */
-TEST(SystemInfoTest, RegistryKey_BoolConversion)
+TEST_F(SystemInfoTest, RegistryKey_BoolConversion)
 {
     const RegistryKey nullKey(nullptr);
     EXPECT_FALSE(nullKey);
@@ -276,7 +291,7 @@ TEST(SystemInfoTest, RegistryKey_BoolConversion)
  * @brief Test RegistryKey move constructor
  * @details Verifies that RegistryKey can be moved correctly
  */
-TEST(SystemInfoTest, RegistryKey_MoveConstructor)
+TEST_F(SystemInfoTest, RegistryKey_MoveConstructor)
 {
     RegistryKey key1(nullptr);
     const RegistryKey key2(std::move(key1));
@@ -289,7 +304,7 @@ TEST(SystemInfoTest, RegistryKey_MoveConstructor)
  * @brief Test RegistryKey move assignment operator
  * @details Verifies that RegistryKey move assignment works correctly
  */
-TEST(SystemInfoTest, RegistryKey_MoveAssignment)
+TEST_F(SystemInfoTest, RegistryKey_MoveAssignment)
 {
     RegistryKey key1(nullptr);
     RegistryKey key2(nullptr);
@@ -305,7 +320,7 @@ TEST(SystemInfoTest, RegistryKey_MoveAssignment)
  * @details Verifies that RegistryKey cannot be copied (compile-time check)
  * @note This is a compile-time verification - if it compiles, the test passes
  */
-TEST(SystemInfoTest, RegistryKey_CopyOperationsDeleted)
+TEST_F(SystemInfoTest, RegistryKey_CopyOperationsDeleted)
 {
     // This test verifies at compile time that copy operations are deleted
     // If the following lines would compile, it would indicate a design flaw

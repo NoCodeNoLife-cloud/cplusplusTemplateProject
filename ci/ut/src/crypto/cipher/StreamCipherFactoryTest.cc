@@ -11,9 +11,24 @@
 using namespace common::crypto::cipher;
 
 /**
+ * @brief Test fixture for StreamCipherFactoryTest tests
+ */
+class StreamCipherFactoryTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test ChaCha20 cipher creation via factory
  */
-TEST(StreamCipherFactoryTest, CreateChaCha20)
+TEST_F(StreamCipherFactoryTest, CreateChaCha20)
 {
     const auto cipher = StreamCipherFactory::create(StreamCipherFactory::Algorithm::CHACHA20);
 
@@ -25,7 +40,7 @@ TEST(StreamCipherFactoryTest, CreateChaCha20)
 /**
  * @brief Test convenience method for ChaCha20 creation
  */
-TEST(StreamCipherFactoryTest, CreateChaCha20_ConvenienceMethod)
+TEST_F(StreamCipherFactoryTest, CreateChaCha20_ConvenienceMethod)
 {
     const auto cipher = StreamCipherFactory::createChaCha20();
 
@@ -36,7 +51,7 @@ TEST(StreamCipherFactoryTest, CreateChaCha20_ConvenienceMethod)
 /**
  * @brief Test supported algorithms list
  */
-TEST(StreamCipherFactoryTest, GetSupportedAlgorithms)
+TEST_F(StreamCipherFactoryTest, GetSupportedAlgorithms)
 {
     const auto algorithms = StreamCipherFactory::getSupportedAlgorithms();
 
@@ -47,7 +62,7 @@ TEST(StreamCipherFactoryTest, GetSupportedAlgorithms)
 /**
  * @brief Test algorithm support check
  */
-TEST(StreamCipherFactoryTest, IsSupported)
+TEST_F(StreamCipherFactoryTest, IsSupported)
 {
     EXPECT_TRUE(StreamCipherFactory::isSupported(StreamCipherFactory::Algorithm::CHACHA20));
 }
@@ -55,7 +70,7 @@ TEST(StreamCipherFactoryTest, IsSupported)
 /**
  * @brief Test polymorphic behavior through base class interface
  */
-TEST(StreamCipherFactoryTest, PolymorphicBehavior)
+TEST_F(StreamCipherFactoryTest, PolymorphicBehavior)
 {
     const auto cipher = StreamCipherFactory::createChaCha20();
 

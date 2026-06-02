@@ -13,6 +13,21 @@
 using namespace common::toolkit;
 
 /**
+ * @brief Test fixture for EnumToolkitTest tests
+ */
+class EnumToolkitTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test enum for testing purposes
  */
 enum class Color
@@ -32,7 +47,7 @@ enum class Status : int
  * @brief Test getEnumName with basic enum values
  * @details Verifies correct string representation of enum constants
  */
-TEST(EnumToolkitTest, GetEnumName_BasicEnum)
+TEST_F(EnumToolkitTest, GetEnumName_BasicEnum)
 {
     const auto name_red = EnumToolkit::getEnumName(Color::Red);
     const auto name_green = EnumToolkit::getEnumName(Color::Green);
@@ -47,7 +62,7 @@ TEST(EnumToolkitTest, GetEnumName_BasicEnum)
  * @brief Test getEnumName with custom underlying type enum
  * @details Verifies enums with explicit values are handled correctly
  */
-TEST(EnumToolkitTest, GetEnumName_EnumWithCustomValues)
+TEST_F(EnumToolkitTest, GetEnumName_EnumWithCustomValues)
 {
     const auto name_success = EnumToolkit::getEnumName(Status::Success);
     const auto name_failed = EnumToolkit::getEnumName(Status::Failed);
@@ -62,7 +77,7 @@ TEST(EnumToolkitTest, GetEnumName_EnumWithCustomValues)
  * @brief Test getEnumTypeName for basic enum
  * @details Verifies enum type name extraction
  */
-TEST(EnumToolkitTest, GetEnumTypeName_BasicEnum)
+TEST_F(EnumToolkitTest, GetEnumTypeName_BasicEnum)
 {
     const auto type_name = EnumToolkit::getEnumTypeName<Color>();
 
@@ -74,7 +89,7 @@ TEST(EnumToolkitTest, GetEnumTypeName_BasicEnum)
  * @brief Test getEnumTypeName for enum with underlying type
  * @details Verifies type name includes enum identifier
  */
-TEST(EnumToolkitTest, GetEnumTypeName_EnumWithUnderlyingType)
+TEST_F(EnumToolkitTest, GetEnumTypeName_EnumWithUnderlyingType)
 {
     const auto type_name = EnumToolkit::getEnumTypeName<Status>();
 
@@ -86,7 +101,7 @@ TEST(EnumToolkitTest, GetEnumTypeName_EnumWithUnderlyingType)
  * @brief Test stringToEnum with valid strings
  * @details Verifies correct parsing of enum names to enum values
  */
-TEST(EnumToolkitTest, StringToEnum_ValidString)
+TEST_F(EnumToolkitTest, StringToEnum_ValidString)
 {
     const auto red = EnumToolkit::stringToEnum<Color>("Red");
     const auto green = EnumToolkit::stringToEnum<Color>("Green");
@@ -106,7 +121,7 @@ TEST(EnumToolkitTest, StringToEnum_ValidString)
  * @brief Test stringToEnum with invalid strings
  * @details Verifies std::nullopt is returned for unrecognized names
  */
-TEST(EnumToolkitTest, StringToEnum_InvalidString)
+TEST_F(EnumToolkitTest, StringToEnum_InvalidString)
 {
     const auto invalid = EnumToolkit::stringToEnum<Color>("InvalidColor");
     const auto empty = EnumToolkit::stringToEnum<Color>("");
@@ -119,7 +134,7 @@ TEST(EnumToolkitTest, StringToEnum_InvalidString)
  * @brief Test stringToEnum case sensitivity
  * @details Verifies that parsing is case-sensitive (magic_enum default behavior)
  */
-TEST(EnumToolkitTest, StringToEnum_CaseSensitive)
+TEST_F(EnumToolkitTest, StringToEnum_CaseSensitive)
 {
     // magic_enum is case-sensitive by default
     const auto lowercase_red = EnumToolkit::stringToEnum<Color>("red");
@@ -133,7 +148,7 @@ TEST(EnumToolkitTest, StringToEnum_CaseSensitive)
  * @brief Test stringToEnum with custom value enum
  * @details Verifies parsing works for enums with non-sequential values
  */
-TEST(EnumToolkitTest, StringToEnum_EnumWithCustomValues)
+TEST_F(EnumToolkitTest, StringToEnum_EnumWithCustomValues)
 {
     const auto success = EnumToolkit::stringToEnum<Status>("Success");
     const auto failed = EnumToolkit::stringToEnum<Status>("Failed");
@@ -153,7 +168,7 @@ TEST(EnumToolkitTest, StringToEnum_EnumWithCustomValues)
  * @brief Test round-trip conversion: enum to string and back
  * @details Verifies bidirectional conversion preserves original value
  */
-TEST(EnumToolkitTest, RoundTrip_EnumToStringAndBack)
+TEST_F(EnumToolkitTest, RoundTrip_EnumToStringAndBack)
 {
     constexpr auto original = Color::Yellow;
     const auto name = EnumToolkit::getEnumName(original);
@@ -167,7 +182,7 @@ TEST(EnumToolkitTest, RoundTrip_EnumToStringAndBack)
  * @brief Test round-trip conversion for Status enum
  * @details Verifies bidirectional conversion for enums with custom values
  */
-TEST(EnumToolkitTest, RoundTrip_StatusEnum)
+TEST_F(EnumToolkitTest, RoundTrip_StatusEnum)
 {
     constexpr auto original = Status::Failed;
     const auto name = EnumToolkit::getEnumName(original);
@@ -181,7 +196,7 @@ TEST(EnumToolkitTest, RoundTrip_StatusEnum)
  * @brief Test that constructor is deleted (compile-time check)
  * @details Verifies EnumToolkit cannot be instantiated as it's a utility class
  */
-TEST(EnumToolkitTest, ConstructorDeleted)
+TEST_F(EnumToolkitTest, ConstructorDeleted)
 {
     // This test verifies at compile time that EnumToolkit cannot be instantiated
     static_assert(std::is_constructible_v<EnumToolkit> == false,
@@ -192,7 +207,7 @@ TEST(EnumToolkitTest, ConstructorDeleted)
  * @brief Test getAllEnumValues with basic enum
  * @details Verifies all enum values are returned in a vector
  */
-TEST(EnumToolkitTest, GetAllEnumValues_BasicEnum)
+TEST_F(EnumToolkitTest, GetAllEnumValues_BasicEnum)
 {
     const auto values = EnumToolkit::getAllEnumValues<Color>();
 
@@ -207,7 +222,7 @@ TEST(EnumToolkitTest, GetAllEnumValues_BasicEnum)
  * @brief Test getAllEnumValues with custom value enum
  * @details Verifies all enum values including negative values are returned
  */
-TEST(EnumToolkitTest, GetAllEnumValues_CustomValueEnum)
+TEST_F(EnumToolkitTest, GetAllEnumValues_CustomValueEnum)
 {
     const auto values = EnumToolkit::getAllEnumValues<Status>();
 
@@ -229,7 +244,7 @@ TEST(EnumToolkitTest, GetAllEnumValues_CustomValueEnum)
  * @brief Test getAllEnumNames with basic enum
  * @details Verifies all enum names are returned as strings
  */
-TEST(EnumToolkitTest, GetAllEnumNames_BasicEnum)
+TEST_F(EnumToolkitTest, GetAllEnumNames_BasicEnum)
 {
     const auto names = EnumToolkit::getAllEnumNames<Color>();
 
@@ -244,7 +259,7 @@ TEST(EnumToolkitTest, GetAllEnumNames_BasicEnum)
  * @brief Test getAllEnumNames with custom value enum
  * @details Verifies all enum names are returned correctly
  */
-TEST(EnumToolkitTest, GetAllEnumNames_CustomValueEnum)
+TEST_F(EnumToolkitTest, GetAllEnumNames_CustomValueEnum)
 {
     const auto names = EnumToolkit::getAllEnumNames<Status>();
 
@@ -265,7 +280,7 @@ TEST(EnumToolkitTest, GetAllEnumNames_CustomValueEnum)
  * @brief Test isValidEnumName with valid names
  * @details Verifies valid enum names return true
  */
-TEST(EnumToolkitTest, IsValidEnumName_ValidNames)
+TEST_F(EnumToolkitTest, IsValidEnumName_ValidNames)
 {
     EXPECT_TRUE(EnumToolkit::isValidEnumName<Color>("Red"));
     EXPECT_TRUE(EnumToolkit::isValidEnumName<Color>("Green"));
@@ -277,7 +292,7 @@ TEST(EnumToolkitTest, IsValidEnumName_ValidNames)
  * @brief Test isValidEnumName with invalid names
  * @details Verifies invalid enum names return false
  */
-TEST(EnumToolkitTest, IsValidEnumName_InvalidNames)
+TEST_F(EnumToolkitTest, IsValidEnumName_InvalidNames)
 {
     EXPECT_FALSE(EnumToolkit::isValidEnumName<Color>("InvalidColor"));
     EXPECT_FALSE(EnumToolkit::isValidEnumName<Color>(""));
@@ -288,7 +303,7 @@ TEST(EnumToolkitTest, IsValidEnumName_InvalidNames)
  * @brief Test getEnumCount with basic enum
  * @details Verifies correct count of enum values
  */
-TEST(EnumToolkitTest, GetEnumCount_BasicEnum)
+TEST_F(EnumToolkitTest, GetEnumCount_BasicEnum)
 {
     EXPECT_EQ(EnumToolkit::getEnumCount<Color>(), 4);
 }
@@ -297,7 +312,7 @@ TEST(EnumToolkitTest, GetEnumCount_BasicEnum)
  * @brief Test getEnumCount with custom value enum
  * @details Verifies correct count for enums with custom values
  */
-TEST(EnumToolkitTest, GetEnumCount_CustomValueEnum)
+TEST_F(EnumToolkitTest, GetEnumCount_CustomValueEnum)
 {
     EXPECT_EQ(EnumToolkit::getEnumCount<Status>(), 3);
 }
@@ -306,7 +321,7 @@ TEST(EnumToolkitTest, GetEnumCount_CustomValueEnum)
  * @brief Test enumToInteger with basic enum
  * @details Verifies conversion to underlying integer values
  */
-TEST(EnumToolkitTest, EnumToInteger_BasicEnum)
+TEST_F(EnumToolkitTest, EnumToInteger_BasicEnum)
 {
     EXPECT_EQ(EnumToolkit::enumToInteger(Color::Red), 0);
     EXPECT_EQ(EnumToolkit::enumToInteger(Color::Green), 1);
@@ -318,7 +333,7 @@ TEST(EnumToolkitTest, EnumToInteger_BasicEnum)
  * @brief Test enumToInteger with custom value enum
  * @details Verifies conversion preserves custom integer values
  */
-TEST(EnumToolkitTest, EnumToInteger_CustomValueEnum)
+TEST_F(EnumToolkitTest, EnumToInteger_CustomValueEnum)
 {
     EXPECT_EQ(EnumToolkit::enumToInteger(Status::Success), 0);
     EXPECT_EQ(EnumToolkit::enumToInteger(Status::Failed), -1);
@@ -329,7 +344,7 @@ TEST(EnumToolkitTest, EnumToInteger_CustomValueEnum)
  * @brief Test integerToEnum with valid integers
  * @details Verifies safe conversion from integers to enum values
  */
-TEST(EnumToolkitTest, IntegerToEnum_ValidIntegers)
+TEST_F(EnumToolkitTest, IntegerToEnum_ValidIntegers)
 {
     const auto red = EnumToolkit::integerToEnum<Color>(0);
     const auto green = EnumToolkit::integerToEnum<Color>(1);
@@ -349,7 +364,7 @@ TEST(EnumToolkitTest, IntegerToEnum_ValidIntegers)
  * @brief Test integerToEnum with invalid integers
  * @details Verifies empty optional is returned for out-of-range values
  */
-TEST(EnumToolkitTest, IntegerToEnum_InvalidIntegers)
+TEST_F(EnumToolkitTest, IntegerToEnum_InvalidIntegers)
 {
     const auto invalid = EnumToolkit::integerToEnum<Color>(999);
     EXPECT_FALSE(invalid.has_value());
@@ -359,7 +374,7 @@ TEST(EnumToolkitTest, IntegerToEnum_InvalidIntegers)
  * @brief Test integerToEnum with custom value enum
  * @details Verifies conversion works with negative and non-sequential values
  */
-TEST(EnumToolkitTest, IntegerToEnum_CustomValueEnum)
+TEST_F(EnumToolkitTest, IntegerToEnum_CustomValueEnum)
 {
     const auto success = EnumToolkit::integerToEnum<Status>(0);
     const auto failed = EnumToolkit::integerToEnum<Status>(-1);
@@ -379,7 +394,7 @@ TEST(EnumToolkitTest, IntegerToEnum_CustomValueEnum)
  * @brief Test integerToEnum round-trip conversion
  * @details Verifies enum -> int -> enum conversion preserves value
  */
-TEST(EnumToolkitTest, IntegerToEnum_RoundTrip)
+TEST_F(EnumToolkitTest, IntegerToEnum_RoundTrip)
 {
     constexpr auto original = Color::Yellow;
     const auto int_value = EnumToolkit::enumToInteger(original);
@@ -393,7 +408,7 @@ TEST(EnumToolkitTest, IntegerToEnum_RoundTrip)
  * @brief Test formatEnumInfo output
  * @details Verifies formatted string contains expected information
  */
-TEST(EnumToolkitTest, FormatEnumInfo_BasicEnum)
+TEST_F(EnumToolkitTest, FormatEnumInfo_BasicEnum)
 {
     const auto info = EnumToolkit::formatEnumInfo<Color>();
 
@@ -411,7 +426,7 @@ TEST(EnumToolkitTest, FormatEnumInfo_BasicEnum)
  * @brief Test formatEnumInfo with custom value enum
  * @details Verifies formatted string includes custom values
  */
-TEST(EnumToolkitTest, FormatEnumInfo_CustomValueEnum)
+TEST_F(EnumToolkitTest, FormatEnumInfo_CustomValueEnum)
 {
     const auto info = EnumToolkit::formatEnumInfo<Status>();
 

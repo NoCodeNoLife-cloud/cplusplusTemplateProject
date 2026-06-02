@@ -17,10 +17,25 @@
 using namespace common::gen;
 
 /**
+ * @brief Test fixture for SnowflakeGeneratorTest tests
+ */
+class SnowflakeGeneratorTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test constructor with valid machine and datacenter IDs
  * @details Verifies that valid IDs (0-31) are accepted
  */
-TEST(SnowflakeGeneratorTest, Constructor_ValidIds)
+TEST_F(SnowflakeGeneratorTest, Constructor_ValidIds)
 {
     EXPECT_NO_THROW(SnowflakeGenerator generator(0, 0));
     EXPECT_NO_THROW(SnowflakeGenerator generator(31, 31));
@@ -31,7 +46,7 @@ TEST(SnowflakeGeneratorTest, Constructor_ValidIds)
  * @brief Test constructor with invalid machine ID throws exception
  * @details Verifies proper error handling for machine_id out of range
  */
-TEST(SnowflakeGeneratorTest, Constructor_InvalidMachineId_ThrowsException)
+TEST_F(SnowflakeGeneratorTest, Constructor_InvalidMachineId_ThrowsException)
 {
     EXPECT_THROW(SnowflakeGenerator generator(-1, 0), std::invalid_argument);
     EXPECT_THROW(SnowflakeGenerator generator(32, 0), std::invalid_argument);
@@ -42,7 +57,7 @@ TEST(SnowflakeGeneratorTest, Constructor_InvalidMachineId_ThrowsException)
  * @brief Test constructor with invalid datacenter ID throws exception
  * @details Verifies proper error handling for datacenter_id out of range
  */
-TEST(SnowflakeGeneratorTest, Constructor_InvalidDatacenterId_ThrowsException)
+TEST_F(SnowflakeGeneratorTest, Constructor_InvalidDatacenterId_ThrowsException)
 {
     EXPECT_THROW(SnowflakeGenerator generator(0, -1), std::invalid_argument);
     EXPECT_THROW(SnowflakeGenerator generator(0, 32), std::invalid_argument);
@@ -53,7 +68,7 @@ TEST(SnowflakeGeneratorTest, Constructor_InvalidDatacenterId_ThrowsException)
  * @brief Test NextId generates positive IDs
  * @details Verifies that generated IDs are positive values
  */
-TEST(SnowflakeGeneratorTest, NextId_GeneratesPositiveIds)
+TEST_F(SnowflakeGeneratorTest, NextId_GeneratesPositiveIds)
 {
     SnowflakeGenerator generator(1, 1);
 
@@ -68,7 +83,7 @@ TEST(SnowflakeGeneratorTest, NextId_GeneratesPositiveIds)
  * @brief Test NextId generates unique IDs
  * @details Verifies that all generated IDs are unique within a batch
  */
-TEST(SnowflakeGeneratorTest, NextId_GeneratesUniqueIds)
+TEST_F(SnowflakeGeneratorTest, NextId_GeneratesUniqueIds)
 {
     SnowflakeGenerator generator(1, 1);
     std::set<int64_t> uniqueIds;
@@ -87,7 +102,7 @@ TEST(SnowflakeGeneratorTest, NextId_GeneratesUniqueIds)
  * @brief Test NextId generates monotonically increasing IDs
  * @details Verifies that IDs are generated in ascending order
  */
-TEST(SnowflakeGeneratorTest, NextId_MonotonicallyIncreasing)
+TEST_F(SnowflakeGeneratorTest, NextId_MonotonicallyIncreasing)
 {
     SnowflakeGenerator generator(1, 1);
 
@@ -104,7 +119,7 @@ TEST(SnowflakeGeneratorTest, NextId_MonotonicallyIncreasing)
  * @brief Test NextId with different machine IDs produces different sequences
  * @details Verifies that different machine configurations produce different IDs
  */
-TEST(SnowflakeGeneratorTest, NextId_DifferentMachineIds_ProduceDifferentIds)
+TEST_F(SnowflakeGeneratorTest, NextId_DifferentMachineIds_ProduceDifferentIds)
 {
     SnowflakeGenerator generator1(1, 1);
     SnowflakeGenerator generator2(2, 1);
@@ -120,7 +135,7 @@ TEST(SnowflakeGeneratorTest, NextId_DifferentMachineIds_ProduceDifferentIds)
  * @brief Test NextId with different datacenter IDs produces different sequences
  * @details Verifies that different datacenter configurations produce different IDs
  */
-TEST(SnowflakeGeneratorTest, NextId_DifferentDatacenterIds_ProduceDifferentIds)
+TEST_F(SnowflakeGeneratorTest, NextId_DifferentDatacenterIds_ProduceDifferentIds)
 {
     SnowflakeGenerator generator1(1, 1);
     SnowflakeGenerator generator2(1, 2);
@@ -136,7 +151,7 @@ TEST(SnowflakeGeneratorTest, NextId_DifferentDatacenterIds_ProduceDifferentIds)
  * @brief Test rapid ID generation handles sequence overflow
  * @details Verifies that generating many IDs quickly handles sequence number correctly
  */
-TEST(SnowflakeGeneratorTest, NextId_RapidGeneration_HandlesSequenceOverflow)
+TEST_F(SnowflakeGeneratorTest, NextId_RapidGeneration_HandlesSequenceOverflow)
 {
     SnowflakeGenerator generator(1, 1);
     std::set<int64_t> uniqueIds;
@@ -156,7 +171,7 @@ TEST(SnowflakeGeneratorTest, NextId_RapidGeneration_HandlesSequenceOverflow)
  * @brief Test thread safety with concurrent ID generation
  * @details Verifies that multiple threads can safely generate unique IDs
  */
-TEST(SnowflakeGeneratorTest, NextId_ThreadSafety_ConcurrentGeneration)
+TEST_F(SnowflakeGeneratorTest, NextId_ThreadSafety_ConcurrentGeneration)
 {
     SnowflakeGenerator generator(1, 1);
     std::set<int64_t> uniqueIds;
@@ -192,7 +207,7 @@ TEST(SnowflakeGeneratorTest, NextId_ThreadSafety_ConcurrentGeneration)
  * @brief Test thread safety maintains monotonic ordering
  * @details Verifies that IDs maintain ordering even with concurrent access
  */
-TEST(SnowflakeGeneratorTest, NextId_ThreadSafety_MaintainsOrdering)
+TEST_F(SnowflakeGeneratorTest, NextId_ThreadSafety_MaintainsOrdering)
 {
     SnowflakeGenerator generator(1, 1);
     std::vector<int64_t> generatedIds;
@@ -231,7 +246,7 @@ TEST(SnowflakeGeneratorTest, NextId_ThreadSafety_MaintainsOrdering)
  * @brief Test boundary machine ID values
  * @details Verifies that boundary values (0 and 31) work correctly
  */
-TEST(SnowflakeGeneratorTest, Constructor_BoundaryMachineIds)
+TEST_F(SnowflakeGeneratorTest, Constructor_BoundaryMachineIds)
 {
     EXPECT_NO_THROW(SnowflakeGenerator generator(0, 0));
     EXPECT_NO_THROW(SnowflakeGenerator generator(31, 0));
@@ -251,7 +266,7 @@ TEST(SnowflakeGeneratorTest, Constructor_BoundaryMachineIds)
  * @brief Test boundary datacenter ID values
  * @details Verifies that boundary values (0 and 31) work correctly
  */
-TEST(SnowflakeGeneratorTest, Constructor_BoundaryDatacenterIds)
+TEST_F(SnowflakeGeneratorTest, Constructor_BoundaryDatacenterIds)
 {
     EXPECT_NO_THROW(SnowflakeGenerator generator(0, 0));
     EXPECT_NO_THROW(SnowflakeGenerator generator(0, 31));
@@ -271,7 +286,7 @@ TEST(SnowflakeGeneratorTest, Constructor_BoundaryDatacenterIds)
  * @brief Test ID generation consistency across multiple calls
  * @details Verifies that the generator produces consistent, valid IDs over time
  */
-TEST(SnowflakeGeneratorTest, NextId_Consistency_MultipleCalls)
+TEST_F(SnowflakeGeneratorTest, NextId_Consistency_MultipleCalls)
 {
     SnowflakeGenerator generator(5, 10);
 
@@ -302,7 +317,7 @@ TEST(SnowflakeGeneratorTest, NextId_Consistency_MultipleCalls)
  * @brief Test SnowflakeOption constants are correctly defined
  * @details Verifies that configuration constants have expected values
  */
-TEST(SnowflakeGeneratorTest, SnowflakeOption_ConstantsCorrect)
+TEST_F(SnowflakeGeneratorTest, SnowflakeOption_ConstantsCorrect)
 {
     EXPECT_EQ(SnowflakeOption::machine_bits_, 10);
     EXPECT_EQ(SnowflakeOption::sequence_bits_, 12);

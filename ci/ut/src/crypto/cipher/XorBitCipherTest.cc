@@ -11,9 +11,24 @@
 using namespace common::crypto::cipher;
 
 /**
+ * @brief Test fixture for XorBitCipherTest tests
+ */
+class XorBitCipherTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test initialization with valid key
  */
-TEST(XorBitCipherTest, Initialize_ValidKey)
+TEST_F(XorBitCipherTest, Initialize_ValidKey)
 {
     XorBitCipher cipher;
 
@@ -28,7 +43,7 @@ TEST(XorBitCipherTest, Initialize_ValidKey)
 /**
  * @brief Test initialization with empty key throws exception
  */
-TEST(XorBitCipherTest, Initialize_EmptyKey)
+TEST_F(XorBitCipherTest, Initialize_EmptyKey)
 {
     XorBitCipher cipher;
 
@@ -42,7 +57,7 @@ TEST(XorBitCipherTest, Initialize_EmptyKey)
 /**
  * @brief Test encryption before initialization throws exception
  */
-TEST(XorBitCipherTest, Encrypt_BeforeInitialization)
+TEST_F(XorBitCipherTest, Encrypt_BeforeInitialization)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03};
@@ -53,7 +68,7 @@ TEST(XorBitCipherTest, Encrypt_BeforeInitialization)
 /**
  * @brief Test decryption before initialization throws exception
  */
-TEST(XorBitCipherTest, Decrypt_BeforeInitialization)
+TEST_F(XorBitCipherTest, Decrypt_BeforeInitialization)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> ciphertext = {0x01, 0x02, 0x03};
@@ -64,7 +79,7 @@ TEST(XorBitCipherTest, Decrypt_BeforeInitialization)
 /**
  * @brief Test encryption/decryption roundtrip
  */
-TEST(XorBitCipherTest, EncryptDecrypt_RoundTrip)
+TEST_F(XorBitCipherTest, EncryptDecrypt_RoundTrip)
 {
     const std::vector<uint8_t> key = {0xAB, 0xCD, 0xEF, 0x01};
     const std::vector<uint8_t> nonce;
@@ -94,7 +109,7 @@ TEST(XorBitCipherTest, EncryptDecrypt_RoundTrip)
 /**
  * @brief Test reset functionality
  */
-TEST(XorBitCipherTest, Reset)
+TEST_F(XorBitCipherTest, Reset)
 {
     const std::vector<uint8_t> key = {0x42, 0x42, 0x42, 0x42};
     const std::vector<uint8_t> nonce;
@@ -116,7 +131,7 @@ TEST(XorBitCipherTest, Reset)
 /**
  * @brief Test keystream generation
  */
-TEST(XorBitCipherTest, GenerateKeystream)
+TEST_F(XorBitCipherTest, GenerateKeystream)
 {
     XorBitCipher cipher;
 
@@ -140,7 +155,7 @@ TEST(XorBitCipherTest, GenerateKeystream)
 /**
  * @brief Test empty plaintext encryption
  */
-TEST(XorBitCipherTest, Encrypt_EmptyPlaintext)
+TEST_F(XorBitCipherTest, Encrypt_EmptyPlaintext)
 {
     XorBitCipher cipher;
 
@@ -158,7 +173,7 @@ TEST(XorBitCipherTest, Encrypt_EmptyPlaintext)
 /**
  * @brief Test algorithm name
  */
-TEST(XorBitCipherTest, GetAlgorithmName)
+TEST_F(XorBitCipherTest, GetAlgorithmName)
 {
     const XorBitCipher cipher;
     EXPECT_EQ(cipher.getAlgorithmName(), "XorBitCipher");
@@ -167,7 +182,7 @@ TEST(XorBitCipherTest, GetAlgorithmName)
 /**
  * @brief Test constructor with key
  */
-TEST(XorBitCipherTest, Constructor_WithKey)
+TEST_F(XorBitCipherTest, Constructor_WithKey)
 {
     const std::vector<uint8_t> key = {0xDE, 0xAD, 0xBE, 0xEF};
     XorBitCipher cipher(key);
@@ -186,7 +201,7 @@ TEST(XorBitCipherTest, Constructor_WithKey)
 /**
  * @brief Test with single-byte key (minimum valid key)
  */
-TEST(XorBitCipherTest, Initialize_SingleByteKey)
+TEST_F(XorBitCipherTest, Initialize_SingleByteKey)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> key = {0xFF};
@@ -203,7 +218,7 @@ TEST(XorBitCipherTest, Initialize_SingleByteKey)
 /**
  * @brief Test with very large key
  */
-TEST(XorBitCipherTest, Initialize_LargeKey)
+TEST_F(XorBitCipherTest, Initialize_LargeKey)
 {
     XorBitCipher cipher;
     std::vector<uint8_t> key(10000, 0x42); // 10KB key
@@ -216,7 +231,7 @@ TEST(XorBitCipherTest, Initialize_LargeKey)
 /**
  * @brief Test encryption of very large data
  */
-TEST(XorBitCipherTest, Encrypt_LargeData)
+TEST_F(XorBitCipherTest, Encrypt_LargeData)
 {
     const std::vector<uint8_t> key = {0xAB, 0xCD};
     const std::vector<uint8_t> nonce;
@@ -233,7 +248,7 @@ TEST(XorBitCipherTest, Encrypt_LargeData)
 /**
  * @brief Test keystream generation with zero length
  */
-TEST(XorBitCipherTest, GenerateKeystream_ZeroLength)
+TEST_F(XorBitCipherTest, GenerateKeystream_ZeroLength)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> key = {0x12, 0x34};
@@ -248,7 +263,7 @@ TEST(XorBitCipherTest, GenerateKeystream_ZeroLength)
 /**
  * @brief Test keystream generation with very large length
  */
-TEST(XorBitCipherTest, GenerateKeystream_LargeLength)
+TEST_F(XorBitCipherTest, GenerateKeystream_LargeLength)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> key = {0xAA, 0xBB, 0xCC, 0xDD};
@@ -263,7 +278,7 @@ TEST(XorBitCipherTest, GenerateKeystream_LargeLength)
 /**
  * @brief Test processBits functionality
  */
-TEST(XorBitCipherTest, ProcessBits_Basic)
+TEST_F(XorBitCipherTest, ProcessBits_Basic)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> key = {0xF0}; // 11110000 in binary
@@ -285,7 +300,7 @@ TEST(XorBitCipherTest, ProcessBits_Basic)
 /**
  * @brief Test processBits with empty input
  */
-TEST(XorBitCipherTest, ProcessBits_EmptyInput)
+TEST_F(XorBitCipherTest, ProcessBits_EmptyInput)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> key = {0x12};
@@ -301,7 +316,7 @@ TEST(XorBitCipherTest, ProcessBits_EmptyInput)
 /**
  * @brief Test processInPlace functionality
  */
-TEST(XorBitCipherTest, ProcessInPlace_Basic)
+TEST_F(XorBitCipherTest, ProcessInPlace_Basic)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> key = {0xFF}; // All bits set
@@ -321,7 +336,7 @@ TEST(XorBitCipherTest, ProcessInPlace_Basic)
 /**
  * @brief Test multiple reset operations
  */
-TEST(XorBitCipherTest, Reset_MultipleTimes)
+TEST_F(XorBitCipherTest, Reset_MultipleTimes)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> key = {0x42};
@@ -345,7 +360,7 @@ TEST(XorBitCipherTest, Reset_MultipleTimes)
 /**
  * @brief Test getCurrentPosition during encryption
  */
-TEST(XorBitCipherTest, GetCurrentPosition_DuringEncryption)
+TEST_F(XorBitCipherTest, GetCurrentPosition_DuringEncryption)
 {
     XorBitCipher cipher;
     const std::vector<uint8_t> key = {0x01, 0x02, 0x03, 0x04};
@@ -365,7 +380,7 @@ TEST(XorBitCipherTest, GetCurrentPosition_DuringEncryption)
 /**
  * @brief Test hasKey before and after initialization
  */
-TEST(XorBitCipherTest, HasKey_BeforeAndAfterInit)
+TEST_F(XorBitCipherTest, HasKey_BeforeAndAfterInit)
 {
     XorBitCipher cipher;
 

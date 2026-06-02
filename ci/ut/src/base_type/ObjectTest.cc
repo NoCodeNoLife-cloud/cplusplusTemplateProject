@@ -15,6 +15,21 @@
 using namespace common::base_type;
 
 /**
+ * @brief Test fixture for ObjectTest tests
+ */
+class ObjectTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test class that inherits from Object for testing purposes
  * @details Provides a concrete implementation to test Object's virtual methods
  */
@@ -76,7 +91,7 @@ private:
  * @brief Test getClass returns correct type information
  * @details Verifies that getClass returns typeid of the actual object
  */
-TEST(ObjectTest, GetClass_ReturnsCorrectTypeInfo)
+TEST_F(ObjectTest, GetClass_ReturnsCorrectTypeInfo)
 {
     const TestDerivedObject obj{42};
 
@@ -89,7 +104,7 @@ TEST(ObjectTest, GetClass_ReturnsCorrectTypeInfo)
  * @brief Test equals with same reference (default behavior)
  * @details Verifies that an object is equal to itself by default
  */
-TEST(ObjectTest, Equals_SameReference_ReturnsTrue)
+TEST_F(ObjectTest, Equals_SameReference_ReturnsTrue)
 {
     const TestDerivedObject obj{10};
 
@@ -100,7 +115,7 @@ TEST(ObjectTest, Equals_SameReference_ReturnsTrue)
  * @brief Test equals with different objects having same value
  * @details Verifies custom equals implementation compares values correctly
  */
-TEST(ObjectTest, Equals_DifferentObjectsSameValue_ReturnsTrue)
+TEST_F(ObjectTest, Equals_DifferentObjectsSameValue_ReturnsTrue)
 {
     const TestDerivedObject obj1{42};
     const TestDerivedObject obj2{42};
@@ -112,7 +127,7 @@ TEST(ObjectTest, Equals_DifferentObjectsSameValue_ReturnsTrue)
  * @brief Test equals with different objects having different values
  * @details Verifies custom equals implementation detects value differences
  */
-TEST(ObjectTest, Equals_DifferentObjectsDifferentValues_ReturnsFalse)
+TEST_F(ObjectTest, Equals_DifferentObjectsDifferentValues_ReturnsFalse)
 {
     const TestDerivedObject obj1{42};
     const TestDerivedObject obj2{43};
@@ -124,7 +139,7 @@ TEST(ObjectTest, Equals_DifferentObjectsDifferentValues_ReturnsFalse)
  * @brief Test equals with incompatible types
  * @details Verifies equals returns false when comparing with different types
  */
-TEST(ObjectTest, Equals_IncompatibleTypes_ReturnsFalse)
+TEST_F(ObjectTest, Equals_IncompatibleTypes_ReturnsFalse)
 {
     const TestDerivedObject obj1{42};
     const TestDerivedObject obj2{42};
@@ -156,7 +171,7 @@ TEST(ObjectTest, Equals_IncompatibleTypes_ReturnsFalse)
  * @brief Test hashCode consistency
  * @details Verifies that hashCode returns consistent values for same object state
  */
-TEST(ObjectTest, HashCode_ConsistentForSameState)
+TEST_F(ObjectTest, HashCode_ConsistentForSameState)
 {
     const TestDerivedObject obj{100};
 
@@ -170,7 +185,7 @@ TEST(ObjectTest, HashCode_ConsistentForSameState)
  * @brief Test hashCode for objects with equal values
  * @details Verifies that equal objects have equal hash codes
  */
-TEST(ObjectTest, HashCode_EqualObjectsHaveEqualHashCodes)
+TEST_F(ObjectTest, HashCode_EqualObjectsHaveEqualHashCodes)
 {
     const TestDerivedObject obj1{50};
     const TestDerivedObject obj2{50};
@@ -182,7 +197,7 @@ TEST(ObjectTest, HashCode_EqualObjectsHaveEqualHashCodes)
  * @brief Test hashCode for objects with different values
  * @details Verifies that different values typically produce different hash codes
  */
-TEST(ObjectTest, HashCode_DifferentValuesProduceDifferentHashCodes)
+TEST_F(ObjectTest, HashCode_DifferentValuesProduceDifferentHashCodes)
 {
     const TestDerivedObject obj1{1};
     const TestDerivedObject obj2{2};
@@ -194,7 +209,7 @@ TEST(ObjectTest, HashCode_DifferentValuesProduceDifferentHashCodes)
  * @brief Test toString provides meaningful representation
  * @details Verifies toString includes class name and value
  */
-TEST(ObjectTest, ToString_ProvidesMeaningfulRepresentation)
+TEST_F(ObjectTest, ToString_ProvidesMeaningfulRepresentation)
 {
     const TestDerivedObject obj{123};
 
@@ -208,7 +223,7 @@ TEST(ObjectTest, ToString_ProvidesMeaningfulRepresentation)
  * @brief Test toString for different objects produces different strings
  * @details Verifies toString reflects object state differences
  */
-TEST(ObjectTest, ToString_DifferentObjectsProduceDifferentStrings)
+TEST_F(ObjectTest, ToString_DifferentObjectsProduceDifferentStrings)
 {
     const TestDerivedObject obj1{10};
     const TestDerivedObject obj2{20};
@@ -223,7 +238,7 @@ TEST(ObjectTest, ToString_DifferentObjectsProduceDifferentStrings)
  * @brief Test clone creates independent copy
  * @details Verifies cloned object has same value but is a separate instance
  */
-TEST(ObjectTest, Clone_CreatesIndependentCopy)
+TEST_F(ObjectTest, Clone_CreatesIndependentCopy)
 {
     const TestDerivedObject original{99};
 
@@ -238,7 +253,7 @@ TEST(ObjectTest, Clone_CreatesIndependentCopy)
  * @brief Test clone preserves object state
  * @details Verifies cloned object maintains the same value as original
  */
-TEST(ObjectTest, Clone_PreservesObjectState)
+TEST_F(ObjectTest, Clone_PreservesObjectState)
 {
     const TestDerivedObject original{77};
 
@@ -253,7 +268,7 @@ TEST(ObjectTest, Clone_PreservesObjectState)
  * @brief Test base Object clone throws exception
  * @details Verifies that calling clone on base Object throws logic_error
  */
-TEST(ObjectTest, Clone_BaseObjectThrowsException)
+TEST_F(ObjectTest, Clone_BaseObjectThrowsException)
 {
     class SimpleObject : public Object
     {
@@ -270,7 +285,7 @@ TEST(ObjectTest, Clone_BaseObjectThrowsException)
  * @brief Test instanceOf with matching type
  * @details Verifies instanceOf returns true for correct type
  */
-TEST(ObjectTest, InstanceOf_MatchingType_ReturnsTrue)
+TEST_F(ObjectTest, InstanceOf_MatchingType_ReturnsTrue)
 {
     const TestDerivedObject obj{42};
 
@@ -281,7 +296,7 @@ TEST(ObjectTest, InstanceOf_MatchingType_ReturnsTrue)
  * @brief Test instanceOf with base type
  * @details Verifies instanceOf returns true for base class type
  */
-TEST(ObjectTest, InstanceOf_BaseType_ReturnsTrue)
+TEST_F(ObjectTest, InstanceOf_BaseType_ReturnsTrue)
 {
     const TestDerivedObject obj{42};
 
@@ -292,7 +307,7 @@ TEST(ObjectTest, InstanceOf_BaseType_ReturnsTrue)
  * @brief Test instanceOf with unrelated type
  * @details Verifies instanceOf returns false for incompatible types
  */
-TEST(ObjectTest, InstanceOf_UnrelatedType_ReturnsFalse)
+TEST_F(ObjectTest, InstanceOf_UnrelatedType_ReturnsFalse)
 {
     const TestDerivedObject obj{42};
 
@@ -312,7 +327,7 @@ TEST(ObjectTest, InstanceOf_UnrelatedType_ReturnsFalse)
  * @brief Test isInstance with matching type
  * @details Verifies isInstance returns true for correct type_info
  */
-TEST(ObjectTest, IsInstance_MatchingType_ReturnsTrue)
+TEST_F(ObjectTest, IsInstance_MatchingType_ReturnsTrue)
 {
     const TestDerivedObject obj{42};
 
@@ -323,7 +338,7 @@ TEST(ObjectTest, IsInstance_MatchingType_ReturnsTrue)
  * @brief Test isInstance with non-matching type
  * @details Verifies isInstance returns false for incorrect type_info
  */
-TEST(ObjectTest, IsInstance_NonMatchingType_ReturnsFalse)
+TEST_F(ObjectTest, IsInstance_NonMatchingType_ReturnsFalse)
 {
     const TestDerivedObject obj{42};
 
@@ -334,7 +349,7 @@ TEST(ObjectTest, IsInstance_NonMatchingType_ReturnsFalse)
  * @brief Test getClassName returns class name
  * @details Verifies getClassName returns the actual class name
  */
-TEST(ObjectTest, GetClassName_ReturnsClassName)
+TEST_F(ObjectTest, GetClassName_ReturnsClassName)
 {
     const TestDerivedObject obj{42};
 
@@ -347,7 +362,7 @@ TEST(ObjectTest, GetClassName_ReturnsClassName)
  * @brief Test is with same object reference
  * @details Verifies is returns true when comparing object with itself
  */
-TEST(ObjectTest, Is_SameReference_ReturnsTrue)
+TEST_F(ObjectTest, Is_SameReference_ReturnsTrue)
 {
     const TestDerivedObject obj{42};
 
@@ -358,7 +373,7 @@ TEST(ObjectTest, Is_SameReference_ReturnsTrue)
  * @brief Test is with different objects
  * @details Verifies is returns false for different object instances
  */
-TEST(ObjectTest, Is_DifferentObjects_ReturnsFalse)
+TEST_F(ObjectTest, Is_DifferentObjects_ReturnsFalse)
 {
     const TestDerivedObject obj1{42};
     const TestDerivedObject obj2{42};
@@ -370,7 +385,7 @@ TEST(ObjectTest, Is_DifferentObjects_ReturnsFalse)
  * @brief Test is with references to same object
  * @details Verifies is correctly identifies same object through different references
  */
-TEST(ObjectTest, Is_DifferentReferencesSameObject_ReturnsTrue)
+TEST_F(ObjectTest, Is_DifferentReferencesSameObject_ReturnsTrue)
 {
     const TestDerivedObject obj{42};
     const Object& ref1 = obj;
@@ -383,7 +398,7 @@ TEST(ObjectTest, Is_DifferentReferencesSameObject_ReturnsTrue)
  * @brief Test polymorphic behavior through base pointer
  * @details Verifies virtual methods work correctly through base class pointers
  */
-TEST(ObjectTest, PolymorphicBehavior_ThroughBasePointer)
+TEST_F(ObjectTest, PolymorphicBehavior_ThroughBasePointer)
 {
     const auto obj = std::make_unique<TestDerivedObject>(55);
     const Object* base_ptr = obj.get();
@@ -397,7 +412,7 @@ TEST(ObjectTest, PolymorphicBehavior_ThroughBasePointer)
  * @brief Test multiple clones are independent
  * @details Verifies that multiple clones don't share state
  */
-TEST(ObjectTest, MultipleClones_AreIndependent)
+TEST_F(ObjectTest, MultipleClones_AreIndependent)
 {
     const TestDerivedObject original{100};
 

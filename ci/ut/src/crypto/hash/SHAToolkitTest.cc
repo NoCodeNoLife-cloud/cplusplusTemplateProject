@@ -16,10 +16,25 @@
 using namespace common::crypto::hash;
 
 /**
+ * @brief Test fixture for SHAToolkitTest tests
+ */
+class SHAToolkitTest : public testing::Test
+{
+protected:
+    void SetUp() override
+    {
+    }
+
+    void TearDown() override
+    {
+    }
+};
+
+/**
  * @brief Test SHAToolkit with SHA-256 strategy - basic hashing
  * @details Verifies that SHAToolkit correctly delegates to SHA256Strategy
  */
-TEST(SHAToolkitTest, SHA256_BasicHashing)
+TEST_F(SHAToolkitTest, SHA256_BasicHashing)
 {
     auto toolkit = SHAToolkit::createSHA256();
 
@@ -37,7 +52,7 @@ TEST(SHAToolkitTest, SHA256_BasicHashing)
  * @brief Test SHAToolkit with SHA-1 strategy - basic hashing
  * @details Verifies that SHAToolkit correctly delegates to SHA1Strategy
  */
-TEST(SHAToolkitTest, SHA1_BasicHashing)
+TEST_F(SHAToolkitTest, SHA1_BasicHashing)
 {
     auto toolkit = SHAToolkit::createSHA1();
 
@@ -55,7 +70,7 @@ TEST(SHAToolkitTest, SHA1_BasicHashing)
  * @brief Test static SHA-256 hash methods
  * @details Verifies one-shot SHA-256 hashing produces correct results
  */
-TEST(SHAToolkitTest, SHA256_StaticMethods)
+TEST_F(SHAToolkitTest, SHA256_StaticMethods)
 {
     const auto hash = SHAToolkit::hashStringSHA256("hello");
     ASSERT_TRUE(hash.has_value());
@@ -70,7 +85,7 @@ TEST(SHAToolkitTest, SHA256_StaticMethods)
  * @brief Test static SHA-1 hash methods
  * @details Verifies one-shot SHA-1 hashing produces correct results
  */
-TEST(SHAToolkitTest, SHA1_StaticMethods)
+TEST_F(SHAToolkitTest, SHA1_StaticMethods)
 {
     const auto hash = SHAToolkit::hashStringSHA1("hello");
     ASSERT_TRUE(hash.has_value());
@@ -87,7 +102,7 @@ TEST(SHAToolkitTest, SHA1_StaticMethods)
  * @brief Test incremental hashing with SHA-256
  * @details Verifies multiple update calls work correctly
  */
-TEST(SHAToolkitTest, IncrementalHash_SHA256)
+TEST_F(SHAToolkitTest, IncrementalHash_SHA256)
 {
     auto toolkit = SHAToolkit::createSHA256();
 
@@ -107,7 +122,7 @@ TEST(SHAToolkitTest, IncrementalHash_SHA256)
  * @brief Test reset functionality
  * @details Verifies toolkit can be reused after reset
  */
-TEST(SHAToolkitTest, Reset_Functionality)
+TEST_F(SHAToolkitTest, Reset_Functionality)
 {
     auto toolkit = SHAToolkit::createSHA256();
 
@@ -127,7 +142,7 @@ TEST(SHAToolkitTest, Reset_Functionality)
  * @brief Test file hashing with SHA-256
  * @details Verifies file hashing works correctly
  */
-TEST(SHAToolkitTest, FileHash_SHA256)
+TEST_F(SHAToolkitTest, FileHash_SHA256)
 {
     const std::string temp_file = "test_sha_toolkit_temp.txt";
     const std::string content = "Test content for file hashing";
@@ -152,7 +167,7 @@ TEST(SHAToolkitTest, FileHash_SHA256)
  * @brief Test finalize prevents further updates
  * @details Verifies that update returns false after finalize
  */
-TEST(SHAToolkitTest, Finalize_PreventsUpdates)
+TEST_F(SHAToolkitTest, Finalize_PreventsUpdates)
 {
     auto toolkit = SHAToolkit::createSHA256();
 
@@ -170,7 +185,7 @@ TEST(SHAToolkitTest, Finalize_PreventsUpdates)
  * @brief Test move semantics
  * @details Verifies move constructor and assignment work correctly
  */
-TEST(SHAToolkitTest, MoveSemantics)
+TEST_F(SHAToolkitTest, MoveSemantics)
 {
     auto toolkit1 = SHAToolkit::createSHA256();
     EXPECT_TRUE(toolkit1.update("test data"));
@@ -188,7 +203,7 @@ TEST(SHAToolkitTest, MoveSemantics)
  * @brief Test copy operations are deleted
  * @details Verifies that copy constructor and assignment are disabled
  */
-TEST(SHAToolkitTest, CopyOperations_Deleted)
+TEST_F(SHAToolkitTest, CopyOperations_Deleted)
 {
     static_assert(!std::is_copy_constructible_v<SHAToolkit>,
                   "SHAToolkit should not be copy constructible");
@@ -201,7 +216,7 @@ TEST(SHAToolkitTest, CopyOperations_Deleted)
  * @brief Test SHA256Strategy constants
  * @details Verifies that strategy constants are properly defined
  */
-TEST(SHAToolkitTest, SHA256Strategy_Constants)
+TEST_F(SHAToolkitTest, SHA256Strategy_Constants)
 {
     EXPECT_EQ(SHA256Strategy::DIGEST_SIZE, 32);
     EXPECT_EQ(SHA256Strategy::HEX_DIGEST_SIZE, 64);
@@ -211,7 +226,7 @@ TEST(SHAToolkitTest, SHA256Strategy_Constants)
  * @brief Test SHA1Strategy constants
  * @details Verifies that strategy constants are properly defined
  */
-TEST(SHAToolkitTest, SHA1Strategy_Constants)
+TEST_F(SHAToolkitTest, SHA1Strategy_Constants)
 {
     EXPECT_EQ(SHA1Strategy::DIGEST_SIZE, 20);
     EXPECT_EQ(SHA1Strategy::HEX_DIGEST_SIZE, 40);
