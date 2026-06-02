@@ -18,6 +18,11 @@ target_include_directories(${CI_TEST_PROJECT} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/../common/src
         ${CMAKE_CURRENT_SOURCE_DIR}/../proto
         ${CMAKE_CURRENT_SOURCE_DIR}/../log/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/../client/src
+)
+
+target_sources(${CI_TEST_PROJECT} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../client/src/auth/AuthRpcParam.cc
 )
 
 # Link required libraries

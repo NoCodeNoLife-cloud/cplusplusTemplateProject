@@ -10,9 +10,15 @@
 #include <string_view>
 #include <unordered_map>
 #include <fmt/format.h>
+#include <glog/logging.h>
 
 namespace server_app::auth
 {
+    namespace
+    {
+        std::unique_ptr<AuthRpcService> s_instance = nullptr;
+    }
+
     /// @brief Map exception types to error codes using table-driven approach
     const std::unordered_map<std::string_view, int> AuthRpcService::error_map_ = {
         {"already exists", 409}, // Conflict
@@ -33,6 +39,88 @@ namespace server_app::auth
             return grpc::Status{grpc::StatusCode::INVALID_ARGUMENT, "Invalid request parameters"};
         }
         return std::nullopt; // No error, continue with normal processing
+    }
+
+    void AuthRpcService::init(const std::filesystem::path& config_path)
+    {
+        LOG_IF(FATAL, s_instance) << "AuthRpcService already initialized";
+
+        DLOG(INFO) << "Setting up gRPC server configuration";
+
+        AuthRpcParam rpc_options;
+        rpc_options.deserializedFromYamlFile(config_path);
+
+        DLOG(INFO) << fmt::format("gRPC configuration loaded successfully - Max Connection Idle: {}ms, Max Connection Age: {}ms, Keepalive Time: {}ms, Keepalive Timeout: {}ms, Permit Without Calls: {}, Server Address: {}",
+            rpc_options.maxConnectionIdleMs(), rpc_options.maxConnectionAgeMs(), rpc_options.keepaliveTimeMs(),
+            rpc_options.keepaliveTimeoutMs(), rpc_options.keepalivePermitWithoutCalls(), rpc_options.serverAddress());
+
+        s_instance = std::unique_ptr<AuthRpcService>(new AuthRpcService("./users.db"));
+        s_instance->options_ = std::move(rpc_options);
+    }
+
+    AuthRpcService& AuthRpcService::getInstance()
+    {
+        LOG_IF(FATAL, !s_instance) << "AuthRpcService not initialized. Call init() first.";
+        return *s_instance;
+    }
+
+    void AuthRpcService::start()
+    {
+        LOG_IF(FATAL, !s_instance) << "AuthRpcService not initialized. Call init() first.";
+
+        const std::string server_address = options_.serverAddress();
+        DLOG(INFO) << fmt::format("Configuring server to listen on: {}", server_address);
+
+        grpc::ServerBuilder builder;
+        builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+
+        DLOG(INFO) << "Setting gRPC server channel arguments";
+        builder.AddChannelArgument(GRPC_ARG_MAX_CONNECTION_IDLE_MS, options_.maxConnectionIdleMs());
+        builder.AddChannelArgument(GRPC_ARG_MAX_CONNECTION_AGE_MS, options_.maxConnectionAgeMs());
+        builder.AddChannelArgument(GRPC_ARG_MAX_CONNECTION_AGE_GRACE_MS, options_.maxConnectionAgeGraceMs());
+        builder.AddChannelArgument(GRPC_ARG_KEEPALIVE_TIME_MS, options_.keepaliveTimeMs());
+        builder.AddChannelArgument(GRPC_ARG_KEEPALIVE_TIMEOUT_MS, options_.keepaliveTimeoutMs());
+        builder.AddChannelArgument(GRPC_ARG_KEEPALIVE_PERMIT_WITHOUT_CALLS, options_.keepalivePermitWithoutCalls());
+
+        DLOG(INFO) << fmt::format("Channel arguments set - Max Connection Idle: {}ms, Max Connection Age: {}ms, Max Connection Age Grace: {}ms, Keepalive Time: {}ms, Keepalive Timeout: {}ms, Keepalive Permit Without Calls: {}",
+            options_.maxConnectionIdleMs(), options_.maxConnectionAgeMs(), options_.maxConnectionAgeGraceMs(),
+            options_.keepaliveTimeMs(), options_.keepaliveTimeoutMs(), options_.keepalivePermitWithoutCalls());
+
+        DLOG(INFO) << "Registering RPC service implementation";
+        builder.RegisterService(this);
+        DLOG(INFO) << "Service registered successfully";
+
+        DLOG(INFO) << "Building and starting gRPC server";
+        server_ = builder.BuildAndStart();
+        if (!server_)
+        {
+            const auto error_msg = fmt::format("Failed to build and start gRPC server. Check server configuration and port availability.");
+            LOG(ERROR) << error_msg;
+            throw std::runtime_error(error_msg);
+        }
+
+        DLOG(INFO) << fmt::format("Server listening on {}, gRPC server started and waiting for connections...", server_address);
+        server_->Wait();
+    }
+
+    void AuthRpcService::shutdown()
+    {
+        if (server_)
+        {
+            DLOG(INFO) << "Initiating gRPC server shutdown";
+            server_->Shutdown();
+            DLOG(INFO) << "gRPC server shutdown complete.";
+        }
+    }
+
+    const AuthRpcParam& AuthRpcService::getOptions() const
+    {
+        return options_;
+    }
+
+    AuthRpcService::~AuthRpcService()
+    {
+        shutdown();
     }
 
     AuthRpcService::AuthRpcService(const std::string& db_path) : authenticator_(db_path)

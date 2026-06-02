@@ -1,5 +1,5 @@
 /**
- * @file AuthRpcOptions.hpp
+ * @file AuthRpcParam.hpp
  * @brief Configuration options for the authentication RPC client
  * @details This header defines the AuthRpcClientOptions class that encapsulates
  *          gRPC configuration parameters including keepalive settings, server address,
@@ -24,12 +24,10 @@ namespace client_app::auth
     ///
     /// Example usage:
     /// @code
-    /// auto options = AuthRpcOptions{
-    ///     .keepalive_time_ms = 30000,
-    ///     .keepalive_timeout_ms = 5000,
-    ///     .keepalive_permit_without_calls = 1,
-    ///     .server_address = "localhost:50051"
-    /// };
+    /// auto options = AuthRpcParam::builder()
+    ///     .keepaliveTimeMs(30000)
+    ///     .serverAddress("localhost:50051")
+    ///     .build();
     /// @endcode
     class AuthRpcParam final : public common::interfaces::IYamlConfigurable
     {
@@ -40,9 +38,6 @@ namespace client_app::auth
         /// @param keepalive_permit_without_calls Flag to permit keepalive pings without active calls (1=true, 0=false) (default: 1)
         /// @param server_address The gRPC server address in format "host:port" (default: "localhost:50051")
         explicit AuthRpcParam(int32_t keepalive_time_ms = 30 * 1000, int32_t keepalive_timeout_ms = 5 * 1000, int32_t keepalive_permit_without_calls = 1, std::string server_address = "localhost:50051");
-
-        /// @brief Copy constructor deleted to prevent unintended resource duplication
-        AuthRpcParam(const AuthRpcParam&) = delete;
 
         /// @brief Copy assignment operator deleted to prevent unintended resource duplication
         auto operator=(const AuthRpcParam&) -> AuthRpcParam& = delete;
@@ -99,6 +94,47 @@ namespace client_app::auth
         /// in the format "host:port". IPv4, IPv6, and hostnames are supported.
         void serverAddress(const std::string& value);
 
+        /// @brief Builder class for constructing AuthRpcParam instances
+        /// @details Implements the Builder pattern to allow for flexible construction
+        /// of AuthRpcParam objects with default values and selective parameter setting.
+        class Builder
+        {
+        public:
+            /// @brief Set the keepalive time interval in milliseconds
+            /// @param value The keepalive time interval in milliseconds
+            /// @return Reference to this builder for method chaining
+            [[nodiscard]] Builder& keepaliveTimeMs(int32_t value);
+
+            /// @brief Set the keepalive timeout in milliseconds
+            /// @param value The keepalive timeout in milliseconds
+            /// @return Reference to this builder for method chaining
+            [[nodiscard]] Builder& keepaliveTimeoutMs(int32_t value);
+
+            /// @brief Set whether to permit keepalive pings without active calls
+            /// @param value 1 to permit, 0 to not permit
+            /// @return Reference to this builder for method chaining
+            [[nodiscard]] Builder& keepalivePermitWithoutCalls(int32_t value);
+
+            /// @brief Set the server address
+            /// @param value The server address as a string
+            /// @return Reference to this builder for method chaining
+            [[nodiscard]] Builder& serverAddress(const std::string& value);
+
+            /// @brief Build the AuthRpcParam instance with the configured parameters
+            /// @return A new AuthRpcParam instance with the configured values
+            [[nodiscard]] AuthRpcParam build() const;
+
+        private:
+            int32_t keepalive_time_ms_{30 * 1000};
+            int32_t keepalive_timeout_ms_{5 * 1000};
+            int32_t keepalive_permit_without_calls_{1};
+            std::string server_address_{"localhost:50051"};
+        };
+
+        /// @brief Create a new Builder instance for constructing AuthRpcParam
+        /// @return A new Builder instance with default values
+        static Builder builder();
+
         /// @brief Deserialize gRPC options from a YAML file
         /// @param path Path to the YAML file containing the configuration
         /// @return true if successful, false otherwise
@@ -114,12 +150,12 @@ namespace client_app::auth
         /// @endcode
         auto deserializedFromYamlFile(const std::filesystem::path& path) -> void override;
 
+    private:
         /// @brief Validate gRPC parameters for correctness
         /// @details This function checks that the gRPC parameters are within reasonable ranges
         /// and logs warnings for potentially problematic configurations
         void validate() const;
 
-    private:
         /// @brief Time interval between keepalive pings (in milliseconds)
         /// @details This parameter controls how often the client sends keepalive pings
         /// to the server to ensure the connection is still alive.
@@ -145,25 +181,25 @@ namespace client_app::auth
     };
 }
 
-/// @brief YAML serialization specialization for AuthRpcOptions.
-/// Provides methods to encode and decode AuthRpcOptions to/from YAML nodes.
+/// @brief YAML serialization specialization for AuthRpcParam.
+/// Provides methods to encode and decode AuthRpcParam to/from YAML nodes.
 /// @details This template specialization allows the YAML library to automatically
-/// serialize and deserialize AuthRpcOptions objects to and from YAML format.
+/// serialize and deserialize AuthRpcParam objects to and from YAML format.
 template <>
 struct YAML::convert<client_app::auth::AuthRpcParam>
 {
-    /// @brief Decode a YAML node into a AuthRpcOptions object.
+    /// @brief Decode a YAML node into a AuthRpcParam object.
     /// @param node The YAML node containing the configuration data.
-    /// @param rhs The AuthRpcOptions object to populate.
+    /// @param rhs The AuthRpcParam object to populate.
     /// @return True if decoding was successful.
     /// @details Extracts configuration values from the YAML node and sets them
-    /// in the AuthRpcOptions object. Missing values will retain their default values.
+    /// in the AuthRpcParam object. Missing values will retain their default values.
     static bool decode(const Node& node, client_app::auth::AuthRpcParam& rhs);
 
-    /// @brief Encode a AuthRpcOptions object into a YAML node.
-    /// @param rhs The AuthRpcOptions object to encode.
+    /// @brief Encode a AuthRpcParam object into a YAML node.
+    /// @param rhs The AuthRpcParam object to encode.
     /// @return A YAML node containing the configuration data.
-    /// @details Converts the AuthRpcOptions object's configuration values into
+    /// @details Converts the AuthRpcParam object's configuration values into
     /// a YAML node representation that can be serialized to a file or string.
     static Node encode(const client_app::auth::AuthRpcParam& rhs);
 };

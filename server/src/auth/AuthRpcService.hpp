@@ -7,12 +7,16 @@
  */
 
 #pragma once
+#include <filesystem>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <grpcpp/server_builder.h>
 #include <exception/AuthenticationException.hpp>
 #include <generated/RpcService.grpc.pb.h>
 
+#include "auth/AuthRpcParam.hpp"
 #include "auth/UserAuthenticator.hpp"
 
 
@@ -24,12 +28,29 @@ namespace server_app::auth
     class AuthRpcService final : public rpc::AuthService::Service
     {
     public:
-        /// @brief Constructor with database path
-        /// @param db_path Path to SQLite database file
-        explicit AuthRpcService(const std::string& db_path);
+        /// @brief Default constructor deleted (singleton — use init()/getInstance())
+        AuthRpcService() = delete;
 
-        /// @brief Default destructor
-        ~AuthRpcService() override = default;
+        /// @brief Singleton instance access
+        /// @return Reference to the singleton AuthRpcService instance
+        /// @note Must call init() before the first call to getInstance()
+        static AuthRpcService& getInstance();
+
+        /// @brief Initialize the singleton with application config path
+        /// @param config_path Path to the application YAML config file
+        /// @note Must be called once before any call to getInstance()
+        static void init(const std::filesystem::path& config_path);
+
+        /// @brief Build and start the gRPC server, then block on Wait()
+        /// @note init() must have been called before this
+        void start();
+
+        /// @brief Shutdown the gRPC server
+        void shutdown();
+
+        /// @brief Get the loaded RPC options
+        /// @return Reference to the loaded AuthRpcParam
+        [[nodiscard]] const AuthRpcParam& getOptions() const;
 
         /// @brief Copy constructor (deleted)
         AuthRpcService(const AuthRpcService&) = delete;
@@ -42,6 +63,9 @@ namespace server_app::auth
 
         /// @brief Move assignment operator (deleted)
         void operator=(AuthRpcService&&) = delete;
+
+        /// @brief Default destructor
+        ~AuthRpcService() override;
 
         /// @brief Register new user account
         [[nodiscard]] grpc::Status RegisterUser(grpc::ServerContext* context, const rpc::RegisterUserRequest* request, rpc::AuthResponse* response) override;
@@ -62,6 +86,10 @@ namespace server_app::auth
         [[nodiscard]] grpc::Status UserExists(grpc::ServerContext* context, const rpc::UserExistsRequest* request, rpc::AuthResponse* response) override;
 
     private:
+        /// @brief Private constructor
+        /// @param db_path Path to SQLite database file
+        explicit AuthRpcService(const std::string& db_path);
+
         /// @brief Authenticator instance for managing user accounts
         common::auth::UserAuthenticator authenticator_;
 
@@ -73,5 +101,11 @@ namespace server_app::auth
         /// @param response Response to populate with error details
         /// @return Appropriate gRPC status
         [[nodiscard]] static grpc::Status HandleAuthException(const common::exception::AuthenticationException& e, rpc::AuthResponse* response);
+
+        /// @brief Loaded RPC configuration options
+        AuthRpcParam options_;
+
+        /// @brief gRPC server instance
+        std::unique_ptr<grpc::Server> server_;
     };
 }

@@ -10,7 +10,6 @@
 
 #include <fmt/format.h>
 #include <glog/logging.h>
-#include <grpcpp/grpcpp.h>
 
 #include "auth/AuthRpcService.hpp"
 #include "config/ConfigParam.h"
@@ -23,17 +22,14 @@ namespace client_app::task
 {
     ClientTask::ClientTask(const std::string& project_name_) : timer_{project_name_}
     {
-        rpc_options_.deserializedFromYamlFile(config::ConfigParam::getInstance().applicationDevConfigPath());
-        DLOG(INFO) << fmt::format("gRPC configuration loaded successfully - Keepalive Time: {}ms, Keepalive Timeout: {}ms, Permit Without Calls: {}, Server Address: {}", rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls(), rpc_options_.serverAddress());
-
         timer_.recordStart();
     }
 
-    void ClientTask::init() const
+    void ClientTask::init()
     {
         const glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().applicationDevConfigPath()};
         log_configurator.execute();
-        DLOG(INFO) << fmt::format("Initializing GLog configuration from: {}, RPC Options - Keepalive Time: {}ms, Timeout: {}ms, Permit Without Calls: {}, configuration initialized successfully", config::ConfigParam::getInstance().applicationDevConfigPath(), rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls());
+        DLOG(INFO) << fmt::format("Initializing GLog configuration from: {}, configuration initialized successfully", config::ConfigParam::getInstance().applicationDevConfigPath());
 
         DLOG(INFO) << "Application starting...";
         logClientInfo();
@@ -44,7 +40,8 @@ namespace client_app::task
     {
         init();
 
-        const auto client = createRpcClient();
+        auth::AuthRpcService::init(config::ConfigParam::getInstance().applicationDevConfigPath());
+        const auto& client = auth::AuthRpcService::getInstance();
 
         // Log initial connection state
         DLOG(INFO) << "Initial connection state: " << common::rpc::RpcMetadata::grpcStateToString(client.getConnectivityState());
@@ -154,72 +151,6 @@ namespace client_app::task
     {
         DLOG(INFO) << "Current connection state: " << common::rpc::RpcMetadata::grpcStateToString(auth_rpc_client.getConnectivityState());
         // Implement actual task logic here
-    }
-
-    std::shared_ptr<grpc::Channel> ClientTask::createChannel() const
-    {
-        DLOG(INFO) << "Setting up gRPC channel with custom arguments";
-
-        // Setup channel
-        grpc::ChannelArguments channel_args;
-        channel_args.SetInt(GRPC_ARG_KEEPALIVE_TIME_MS, rpc_options_.keepaliveTimeMs());
-        channel_args.SetInt(GRPC_ARG_KEEPALIVE_TIMEOUT_MS, rpc_options_.keepaliveTimeoutMs());
-        channel_args.SetInt(GRPC_ARG_KEEPALIVE_PERMIT_WITHOUT_CALLS, rpc_options_.keepalivePermitWithoutCalls());
-
-        DLOG(INFO) << fmt::format("Channel arguments set - Time: {}ms, Timeout: {}ms, Permit without calls: {}", rpc_options_.keepaliveTimeMs(), rpc_options_.keepaliveTimeoutMs(), rpc_options_.keepalivePermitWithoutCalls());
-
-        // Create client
-        const std::string server_address = rpc_options_.serverAddress();
-        DLOG(INFO) << fmt::format("Creating channel to server at: {}", server_address);
-        const auto channel = grpc::CreateCustomChannel(server_address, grpc::InsecureChannelCredentials(), channel_args);
-
-        // Get state using the new GrpcConnectivityState enum
-        const auto state_enum = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(true));
-        const std::string state_str = common::rpc::RpcMetadata::grpcStateToString(state_enum);
-
-        DLOG(INFO) << fmt::format("Channel state after creation: {}", state_str);
-
-        // Give channel some time to connect
-        if (!channel->WaitForConnected(std::chrono::system_clock::now() + std::chrono::seconds(5)))
-        {
-            const auto error_msg = fmt::format("Failed to connect to gRPC server at {} within timeout period", server_address);
-            LOG(ERROR) << error_msg;
-
-            // Get final state using the new enum
-            const auto final_state_enum = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(false));
-            const std::string final_state_str = common::rpc::RpcMetadata::grpcStateToString(final_state_enum);
-
-            DLOG(INFO) << fmt::format("Connection attempt finished with state: {}", final_state_str);
-            throw std::runtime_error(error_msg);
-        }
-        DLOG(INFO) << fmt::format("Successfully connected to gRPC server at {}", server_address);
-
-        // Get final state using the new enum
-        const auto final_state_enum = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(false));
-        const std::string final_state_str = common::rpc::RpcMetadata::grpcStateToString(final_state_enum);
-
-        DLOG(INFO) << fmt::format("Final connection state: {}", final_state_str);
-
-        return channel;
-    }
-
-    auth::AuthRpcService ClientTask::createRpcClient() const
-    {
-        DLOG(INFO) << "Creating gRPC channel";
-        // Create channel using the existing createChannel method with custom arguments
-        const auto channel = createChannel();
-
-        // Get state using the new GrpcConnectivityState enum
-        const auto state_enum = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(true));
-        const std::string state_str = common::rpc::RpcMetadata::grpcStateToString(state_enum);
-
-        DLOG(INFO) << fmt::format("gRPC channel created with state: {}", state_str);
-        DLOG(INFO) << "Creating RPC client";
-        // Create client using the channel with custom arguments
-        auth::AuthRpcService client{channel};
-        DLOG(INFO) << "RPC client created successfully";
-
-        return client;
     }
 
     void ClientTask::logClientInfo()

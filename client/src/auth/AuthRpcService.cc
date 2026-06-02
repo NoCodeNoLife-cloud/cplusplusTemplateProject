@@ -8,18 +8,80 @@
 
 #include "AuthRpcService.hpp"
 
+#include <chrono>
+#include <fmt/format.h>
 #include <functional>
 #include <glog/logging.h>
 
+#include "auth/AuthRpcParam.hpp"
 #include "rpc/RpcMetadata.hpp"
 
 namespace client_app::auth
 {
+    namespace
+    {
+        std::unique_ptr<AuthRpcService> s_instance = nullptr;
+    }
+
+    /// @brief Initialize the singleton with application config path
+    void AuthRpcService::init(const std::filesystem::path& config_path)
+    {
+        LOG_IF(FATAL, s_instance) << "AuthRpcService already initialized";
+
+        DLOG(INFO) << "Setting up gRPC client configuration";
+
+        // Load RPC options from config
+        AuthRpcParam rpc_options;
+        rpc_options.deserializedFromYamlFile(config_path);
+
+        DLOG(INFO) << fmt::format("gRPC configuration loaded successfully - Keepalive Time: {}ms, Keepalive Timeout: {}ms, Permit Without Calls: {}, Server Address: {}", rpc_options.keepaliveTimeMs(), rpc_options.keepaliveTimeoutMs(), rpc_options.keepalivePermitWithoutCalls(), rpc_options.serverAddress());
+
+        // Setup gRPC channel with custom arguments
+        DLOG(INFO) << "Setting up gRPC channel with custom arguments";
+        grpc::ChannelArguments channel_args;
+        channel_args.SetInt(GRPC_ARG_KEEPALIVE_TIME_MS, rpc_options.keepaliveTimeMs());
+        channel_args.SetInt(GRPC_ARG_KEEPALIVE_TIMEOUT_MS, rpc_options.keepaliveTimeoutMs());
+        channel_args.SetInt(GRPC_ARG_KEEPALIVE_PERMIT_WITHOUT_CALLS, rpc_options.keepalivePermitWithoutCalls());
+
+        const std::string server_address = rpc_options.serverAddress();
+
+        DLOG(INFO) << fmt::format("Channel arguments set - Time: {}ms, Timeout: {}ms, Permit without calls: {}", rpc_options.keepaliveTimeMs(), rpc_options.keepaliveTimeoutMs(), rpc_options.keepalivePermitWithoutCalls());
+        DLOG(INFO) << fmt::format("Creating channel to server at: {}", server_address);
+
+        auto channel = grpc::CreateCustomChannel(server_address, grpc::InsecureChannelCredentials(), channel_args);
+
+        // Log initial channel state
+        const auto initial_state = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(true));
+        DLOG(INFO) << fmt::format("Channel state after creation: {}", common::rpc::RpcMetadata::grpcStateToString(initial_state));
+
+        // Wait for connection with timeout
+        if (!channel->WaitForConnected(std::chrono::system_clock::now() + std::chrono::seconds(5)))
+        {
+            const auto final_state = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(false));
+            const auto error_msg = fmt::format("Failed to connect to gRPC server at {} within timeout period. Final state: {}", server_address, common::rpc::RpcMetadata::grpcStateToString(final_state));
+            LOG(ERROR) << error_msg;
+            throw std::runtime_error(error_msg);
+        }
+
+        DLOG(INFO) << fmt::format("Successfully connected to gRPC server at {}", server_address);
+
+        const auto final_state = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(false));
+        DLOG(INFO) << fmt::format("Final connection state: {}", common::rpc::RpcMetadata::grpcStateToString(final_state));
+
+        s_instance = std::unique_ptr<AuthRpcService>(new AuthRpcService(channel));
+    }
+
+    /// @brief Get the singleton instance
+    AuthRpcService& AuthRpcService::getInstance()
+    {
+        LOG_IF(FATAL, !s_instance) << "AuthRpcService not initialized. Call init() first.";
+        return *s_instance;
+    }
+
     /// @brief Construct a new AuthRpcClient object
     /// @param channel The gRPC channel to use for communication
     AuthRpcService::AuthRpcService(const std::shared_ptr<grpc::Channel>& channel) : stub_(rpc::AuthService::NewStub(channel)), channel_(channel)
     {
-        LOG_IF(FATAL, !channel) << "RPC channel cannot be null";
     }
 
     /// @brief Register a new user with username and password

@@ -7,21 +7,24 @@
 
 #include <glog/logging.h>
 
+#include "exception/StackTraceExceptionHandler.hpp"
 #include "task/ServerTask.hpp"
 
-int32_t main(const int32_t, char*[])
+int32_t main(const int32_t argc, char* argv[])
 {
     try
     {
         server_app::task::ServerTask service_task;
         service_task.run();
+        return 0;
     }
     catch (const std::exception& ex)
     {
-        DLOG(ERROR) << ex.what();
+        common::exception::StackTraceExceptionHandler::logException(ex);
     }
     catch (...)
     {
-        DLOG(ERROR) << "Program terminated due to an unrecognized exception.";
+        common::exception::StackTraceExceptionHandler::logUnknownException();
     }
+    return 1;
 }

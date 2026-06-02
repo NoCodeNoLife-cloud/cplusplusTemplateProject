@@ -9,9 +9,7 @@
 #pragma once
 #include <memory>
 #include <string>
-#include <grpcpp/grpcpp.h>
 
-#include "auth/AuthRpcParam.hpp"
 #include "auth/AuthRpcService.hpp"
 #include "interface/ITask.hpp"
 #include "time/FunctionProfiler.hpp"
@@ -36,7 +34,7 @@ namespace client_app::task
 
         /// @brief Initialize the client task
         /// @details Sets up logging, loads configuration, and logs system information
-        void init() const ;
+        static void init();
 
         /// @brief Run the main task
         /// @details Initializes the client, creates a gRPC channel, sends a message to the server,
@@ -75,21 +73,10 @@ namespace client_app::task
         /// @param auth_rpc_client Reference to the RPC client for executing tasks
         void task(const auth::AuthRpcService& auth_rpc_client) ;
 
-        /// @brief Create a gRPC channel with custom arguments
-        /// @details This function sets up a gRPC channel with keepalive parameters and connects to the server
-        /// @return A shared pointer to the created gRPC channel
-        [[nodiscard]] std::shared_ptr<grpc::Channel> createChannel() const;
-
-        /// @brief Create RPC client with gRPC channel
-        /// @details This function creates an RPC client using a gRPC channel
-        /// @return An RPC client instance
-        [[nodiscard]] auth::AuthRpcService createRpcClient() const;
-
         /// @brief Logs client system information
         /// @details Logs OS version and CPU model to the application log
         static void logClientInfo() ;
 
-        auth::AuthRpcParam rpc_options_;
         common::time::FunctionProfiler timer_;
     };
 }

@@ -102,24 +102,60 @@ namespace client_app::auth
         validate(); // Validate after loading from YAML
     }
 
+    AuthRpcParam::Builder& AuthRpcParam::Builder::keepaliveTimeMs(const int32_t value)
+    {
+        keepalive_time_ms_ = value;
+        return *this;
+    }
+
+    AuthRpcParam::Builder& AuthRpcParam::Builder::keepaliveTimeoutMs(const int32_t value)
+    {
+        keepalive_timeout_ms_ = value;
+        return *this;
+    }
+
+    AuthRpcParam::Builder& AuthRpcParam::Builder::keepalivePermitWithoutCalls(const int32_t value)
+    {
+        keepalive_permit_without_calls_ = value;
+        return *this;
+    }
+
+    AuthRpcParam::Builder& AuthRpcParam::Builder::serverAddress(const std::string& value)
+    {
+        server_address_ = value;
+        return *this;
+    }
+
+    AuthRpcParam AuthRpcParam::Builder::build() const
+    {
+        AuthRpcParam options{keepalive_time_ms_, keepalive_timeout_ms_, keepalive_permit_without_calls_, server_address_};
+        options.validate();
+        return options;
+    }
+
+    AuthRpcParam::Builder AuthRpcParam::builder()
+    {
+        return Builder{};
+    }
+
     void AuthRpcParam::validate() const
     {
         // Validate keepalive time (should be positive)
-        LOG_IF(WARNING, keepalive_time_ms_ <= 0) << "Invalid keepalive time: " << keepalive_time_ms_ << "ms. Using default value of 30000ms.";
+        DLOG_IF(WARNING, keepalive_time_ms_ <= 0) << "Invalid keepalive time: " << keepalive_time_ms_ << "ms. Using default value of 30000ms.";
 
         // Validate keepalive timeout (should be positive)
-        LOG_IF(WARNING, keepalive_timeout_ms_ <= 0) << "Invalid keepalive timeout: " << keepalive_timeout_ms_ << "ms. Using default value of 5000ms.";
+        DLOG_IF(WARNING, keepalive_timeout_ms_ <= 0) << "Invalid keepalive timeout: " << keepalive_timeout_ms_ << "ms. Using default value of 5000ms.";
 
         // Validate keepalive permit without calls (should be 0 or 1)
-        LOG_IF(WARNING, keepalive_permit_without_calls_ != 0 && keepalive_permit_without_calls_ != 1) << "Invalid keepalive permit without calls: " << keepalive_permit_without_calls_ << ". Valid values are 0 or 1. Using default value of 1.";
+        DLOG_IF(WARNING, keepalive_permit_without_calls_ != 0 && keepalive_permit_without_calls_ != 1) << "Invalid keepalive permit without calls: " << keepalive_permit_without_calls_ << ". Valid values are 0 or 1. Using default value of 1.";
 
         // Check for potentially problematic combinations
-        LOG_IF(WARNING, keepalive_time_ms_ > 0 && keepalive_time_ms_ < 1000) << "Keepalive time is set to a very short interval (" << keepalive_time_ms_ << "ms). This may cause excessive network traffic.";
+        DLOG_IF(WARNING, keepalive_time_ms_ > 0 && keepalive_time_ms_ < 1000) << "Keepalive time is set to a very short interval (" << keepalive_time_ms_ << "ms). This may cause excessive network traffic.";
 
-        LOG_IF(WARNING, keepalive_timeout_ms_ > 0 && keepalive_timeout_ms_ > keepalive_time_ms_) << "Keepalive timeout (" << keepalive_timeout_ms_ << "ms) is greater than keepalive time (" << keepalive_time_ms_ << "ms). This may lead to unexpected connection issues.";
+        DLOG_IF(WARNING, keepalive_timeout_ms_ > 0 && keepalive_timeout_ms_ > keepalive_time_ms_) << "Keepalive timeout (" << keepalive_timeout_ms_ << "ms) is greater than keepalive time (" << keepalive_time_ms_ << "ms). This may lead to unexpected connection issues.";
 
         // Validate server address
-        LOG_IF(WARNING, server_address_.empty()) << "Server address is empty. Using default value localhost:50051.";
+        DLOG_IF(WARNING, server_address_.empty()) << "Server address is empty. Using default value localhost:50051.";
     }
 }
 

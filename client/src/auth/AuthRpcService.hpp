@@ -8,6 +8,7 @@
  */
 
 #pragma once
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <grpcpp/grpcpp.h>
@@ -22,27 +23,33 @@ namespace client_app::auth
     class AuthRpcService
     {
     public:
-        /// @brief Default constructor explicitly deleted to enforce parameterized construction
+        /// @brief Default constructor deleted (singleton — use init()/getInstance())
         AuthRpcService() = delete;
 
-        /// @brief Construct a new AuthRpcManager object
-        /// @param channel The gRPC channel to use for communication
-        explicit AuthRpcService(const std::shared_ptr<grpc::Channel>& channel) ;
+        /// @brief Singleton instance access
+        /// @return Reference to the singleton AuthRpcService instance
+        /// @note Must call init() before the first call to getInstance()
+        static AuthRpcService& getInstance();
 
-        /// @brief Copy constructor deleted to enforce unique ownership semantics
+        /// @brief Initialize the singleton with application config path
+        /// @param config_path Path to the application YAML config file
+        /// @note Must be called once before any call to getInstance()
+        static void init(const std::filesystem::path& config_path);
+
+        /// @brief Copy constructor deleted
         AuthRpcService(const AuthRpcService&) = delete;
 
-        /// @brief Move constructor with  guarantee for efficient resource transfer
-        AuthRpcService(AuthRpcService&&)  = default;
+        /// @brief Move constructor deleted
+        AuthRpcService(AuthRpcService&&) = delete;
 
-        /// @brief Copy assignment operator deleted to prevent unintended resource duplication
+        /// @brief Copy assignment operator deleted
         auto operator=(const AuthRpcService&) -> AuthRpcService& = delete;
 
-        /// @brief Move assignment operator with  guarantee
-        auto operator=(AuthRpcService&&)  -> AuthRpcService& = default;
+        /// @brief Move assignment operator deleted
+        auto operator=(AuthRpcService&&) -> AuthRpcService& = delete;
 
         /// @brief Virtual destructor with default implementation for proper polymorphic cleanup
-        virtual ~AuthRpcService()  = default;
+        virtual ~AuthRpcService() = default;
 
         /// @brief Register a new user with username and password
         /// @param[in] username The username to register
@@ -88,6 +95,10 @@ namespace client_app::auth
         [[nodiscard]] bool isReady() const ;
 
     private:
+        /// @brief Construct a new AuthRpcService object
+        /// @param channel The gRPC channel to use for communication
+        explicit AuthRpcService(const std::shared_ptr<grpc::Channel>& channel);
+
         /// @brief Execute RPC call with error handling and logging
         /// @tparam RequestType Type of the request message
         /// @tparam ResponseType Type of the response message

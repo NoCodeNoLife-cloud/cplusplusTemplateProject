@@ -16,6 +16,7 @@ namespace server_app::config
 
         /// @brief Get application development environment configuration file path
         /// @return Path string of the application development environment configuration file
+        /// @throws std::runtime_error If the configured path does not exist
         [[nodiscard]] const std::string& applicationDevConfigPath() const;
 
     private:

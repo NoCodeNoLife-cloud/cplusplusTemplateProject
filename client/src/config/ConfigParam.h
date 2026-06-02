@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <string>
 
 namespace client_app::config
@@ -15,6 +16,7 @@ namespace client_app::config
 
         /// @brief Get application development environment configuration file path
         /// @return Path string of the application development environment configuration file
+        /// @throws std::runtime_error if the configuration file does not exist
         [[nodiscard]] const std::string& applicationDevConfigPath() const;
 
     private:

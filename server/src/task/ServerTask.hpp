@@ -8,8 +8,6 @@
 
 #pragma once
 #include <memory>
-#include <auth/AuthRpcParam.hpp>
-#include <grpcpp/server_builder.h>
 
 #include "task/interface/ITask.h"
 
@@ -47,13 +45,5 @@ namespace server_app::task
         /// @brief Exit the service task and clean up resources
         /// @details Shuts down the gRPC server and performs cleanup operations
         void exit() const;
-
-    private:
-        auth::AuthRpcParam grpc_options_;
-        std::unique_ptr<grpc::Server> server_;
-
-        /// @brief Establish a gRPC connection to the specified service
-        /// @details Configures and starts the gRPC server with specified options
-        [[nodiscard]] bool establishGrpcConnection();
     };
 }

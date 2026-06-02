@@ -195,7 +195,7 @@ namespace server_app::auth
         {
             if (condition)
             {
-                LOG(ERROR) << error_message;
+                DLOG(ERROR) << error_message;
                 throw std::invalid_argument(error_message);
             }
         }
@@ -211,7 +211,7 @@ namespace server_app::auth
         {
             if (condition)
             {
-                LOG(WARNING) << warning_message;
+                DLOG(WARNING) << warning_message;
             }
         }
     }

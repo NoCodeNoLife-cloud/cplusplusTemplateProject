@@ -149,12 +149,6 @@ namespace server_app::auth
         /// @endcode
         void deserializedFromYamlFile(const std::filesystem::path& path) override;
 
-        /// @brief Validate gRPC parameters for correctness
-        /// @return true if all parameters are valid, false otherwise
-        /// @details This function checks that the gRPC parameters are within reasonable ranges
-        /// and logs warnings for potentially problematic configurations
-        void validateParameters() const;
-
         /// @brief Builder class for constructing AuthRpcServiceOptions instances
         /// @details Implements the Builder pattern to allow for flexible construction
         /// of AuthRpcServiceOptions objects with default values and selective parameter setting.
@@ -203,38 +197,38 @@ namespace server_app::auth
         private:
             /// @brief Maximum time a connection can remain idle before being closed (in milliseconds)
             /// @details Default value is 1 hour (60 * 60 * 1000 ms).
-            int32_t max_connection_idle_ms_{0};
+            int32_t max_connection_idle_ms_{60 * 60 * 1000};
 
             /// @brief Maximum age of a connection before it is gracefully closed (in milliseconds)
             /// @details Default value is 2 hours (2 * 60 * 60 * 1000 ms).
-            int32_t max_connection_age_ms_{0};
+            int32_t max_connection_age_ms_{2 * 60 * 60 * 1000};
 
             /// @brief Grace period after max connection age before force closing (in milliseconds)
             /// @details Default value is 5 minutes (5 * 60 * 1000 ms).
-            int32_t max_connection_age_grace_ms_{0};
+            int32_t max_connection_age_grace_ms_{5 * 60 * 1000};
 
             /// @brief Time interval between keepalive pings (in milliseconds)
             /// @details This parameter controls how often the server sends keepalive pings
             /// to the client to ensure the connection is still alive.
             /// Default value is 30 seconds (30000 ms).
-            int32_t keepalive_time_ms_{0};
+            int32_t keepalive_time_ms_{30 * 1000};
 
             /// @brief Timeout for keepalive ping acknowledgment (in milliseconds)
             /// @details This parameter controls how long the server waits for an acknowledgment
             /// of a keepalive ping from the client before considering the connection dead.
             /// Default value is 5 seconds (5000 ms).
-            int32_t keepalive_timeout_ms_{0};
+            int32_t keepalive_timeout_ms_{5 * 1000};
 
             /// @brief Whether to permit keepalive pings when there are no active calls (1 = true, 0 = false)
             /// @details When set to true, keepalive pings are allowed even when there are no active RPC calls.
             /// When set to false, keepalive pings are only sent when there are active calls.
             /// Default value is true (1).
-            int32_t keepalive_permit_without_calls_{0};
+            int32_t keepalive_permit_without_calls_{1};
 
             /// @brief The server address to listen on
             /// @details This parameter specifies the address and port of the gRPC server
             /// Default value is 0.0.0.0:50051
-            std::string server_address_;
+            std::string server_address_{"0.0.0.0:50051"};
         };
 
         /// @brief Create a new Builder instance for constructing AuthRpcServiceOptions
@@ -242,6 +236,11 @@ namespace server_app::auth
         static Builder builder();
 
     private:
+        /// @brief Validate gRPC parameters for correctness
+        /// @details This function checks that the gRPC parameters are within reasonable ranges
+        /// and logs warnings for potentially problematic configurations
+        void validateParameters() const;
+
         /// @brief Maximum time a connection can remain idle before being closed (in milliseconds)
         /// @details Default value is 1 hour (60 * 60 * 1000 ms).
         int32_t max_connection_idle_ms_{60 * 60 * 1000};
