@@ -35,7 +35,7 @@ TEST_F(BigIntegerTest, DefaultConstructor_InitializesToZero)
 {
     const BigInteger big_int;
 
-    EXPECT_EQ(big_int, BigInteger::fromInt(0));
+    EXPECT_EQ(big_int, BigInteger(0));
 }
 
 /**
@@ -46,7 +46,7 @@ TEST_F(BigIntegerTest, Constructor_FromPositiveInt64)
 {
     const BigInteger big_int{12345};
 
-    EXPECT_EQ(big_int, BigInteger::fromInt(12345));
+    EXPECT_EQ(big_int, BigInteger(12345));
 }
 
 /**
@@ -57,7 +57,7 @@ TEST_F(BigIntegerTest, Constructor_FromNegativeInt64)
 {
     const BigInteger big_int{-98765};
 
-    EXPECT_EQ(big_int, BigInteger::fromInt(-98765));
+    EXPECT_EQ(big_int, BigInteger(-98765));
 }
 
 /**
@@ -68,7 +68,7 @@ TEST_F(BigIntegerTest, Constructor_FromZero)
 {
     const BigInteger big_int{0};
 
-    EXPECT_EQ(big_int, BigInteger::fromInt(0));
+    EXPECT_EQ(big_int, BigInteger(0));
 }
 
 /**
@@ -79,7 +79,7 @@ TEST_F(BigIntegerTest, Constructor_FromPositiveString)
 {
     const BigInteger big_int{"12345678901234567890"};
 
-    EXPECT_EQ(big_int, BigInteger::fromString("12345678901234567890"));
+    EXPECT_EQ(big_int, BigInteger("12345678901234567890"));
 }
 
 /**
@@ -90,7 +90,7 @@ TEST_F(BigIntegerTest, Constructor_FromNegativeString)
 {
     const BigInteger big_int{"-98765432109876543210"};
 
-    EXPECT_EQ(big_int, BigInteger::fromString("-98765432109876543210"));
+    EXPECT_EQ(big_int, BigInteger("-98765432109876543210"));
 }
 
 /**
@@ -101,7 +101,7 @@ TEST_F(BigIntegerTest, Constructor_FromZeroString)
 {
     const BigInteger big_int{"0"};
 
-    EXPECT_EQ(big_int, BigInteger::fromInt(0));
+    EXPECT_EQ(big_int, BigInteger(0));
 }
 
 /**
@@ -115,7 +115,7 @@ TEST_F(BigIntegerTest, Addition_PositiveNumbers)
 
     const auto result = a + b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(300));
+    EXPECT_EQ(result, BigInteger(300));
 }
 
 /**
@@ -129,7 +129,7 @@ TEST_F(BigIntegerTest, Addition_NegativeNumbers)
 
     const auto result = a + b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(-80));
+    EXPECT_EQ(result, BigInteger(-80));
 }
 
 /**
@@ -143,7 +143,7 @@ TEST_F(BigIntegerTest, Addition_MixedSigns)
 
     const auto result = a + b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(70));
+    EXPECT_EQ(result, BigInteger(70));
 }
 
 /**
@@ -157,7 +157,7 @@ TEST_F(BigIntegerTest, Addition_VeryLargeNumbers)
 
     const auto result = a + b;
 
-    EXPECT_EQ(result, BigInteger::fromString("1000000000000000000000000000000"));
+    EXPECT_EQ(result, BigInteger("1000000000000000000000000000000"));
 }
 
 /**
@@ -171,7 +171,7 @@ TEST_F(BigIntegerTest, Subtraction_PositiveResult)
 
     const auto result = a - b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(150));
+    EXPECT_EQ(result, BigInteger(150));
 }
 
 /**
@@ -185,7 +185,7 @@ TEST_F(BigIntegerTest, Subtraction_NegativeResult)
 
     const auto result = a - b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(-150));
+    EXPECT_EQ(result, BigInteger(-150));
 }
 
 /**
@@ -199,7 +199,7 @@ TEST_F(BigIntegerTest, Subtraction_VeryLargeNumbers)
 
     const auto result = a - b;
 
-    EXPECT_EQ(result, BigInteger::fromString("999999999999999999999999999999"));
+    EXPECT_EQ(result, BigInteger("999999999999999999999999999999"));
 }
 
 /**
@@ -213,7 +213,7 @@ TEST_F(BigIntegerTest, Multiplication_PositiveNumbers)
 
     const auto result = a * b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(180));
+    EXPECT_EQ(result, BigInteger(180));
 }
 
 /**
@@ -227,7 +227,7 @@ TEST_F(BigIntegerTest, Multiplication_NegativeNumbers)
 
     const auto result = a * b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(-50));
+    EXPECT_EQ(result, BigInteger(-50));
 }
 
 /**
@@ -241,7 +241,7 @@ TEST_F(BigIntegerTest, Multiplication_ByZero)
 
     const auto result = a * b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(0));
+    EXPECT_EQ(result, BigInteger(0));
 }
 
 /**
@@ -256,7 +256,7 @@ TEST_F(BigIntegerTest, Multiplication_VeryLargeNumbers)
     const auto result = a * b;
 
     // Just verify it doesn't throw and produces some result
-    EXPECT_NE(result, BigInteger::fromInt(0));
+    EXPECT_NE(result, BigInteger(0));
 }
 
 /**
@@ -270,7 +270,7 @@ TEST_F(BigIntegerTest, Division_ExactDivision)
 
     const auto result = a / b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(10));
+    EXPECT_EQ(result, BigInteger(10));
 }
 
 /**
@@ -284,7 +284,7 @@ TEST_F(BigIntegerTest, Division_WithTruncation)
 
     const auto result = a / b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(3));
+    EXPECT_EQ(result, BigInteger(3));
 }
 
 /**
@@ -310,7 +310,7 @@ TEST_F(BigIntegerTest, Division_NegativeNumbers)
 
     const auto result = a / b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(-10));
+    EXPECT_EQ(result, BigInteger(-10));
 }
 
 /**
@@ -324,7 +324,7 @@ TEST_F(BigIntegerTest, Modulus_Basic)
 
     const auto result = a % b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(10));
+    EXPECT_EQ(result, BigInteger(10));
 }
 
 /**
@@ -350,7 +350,7 @@ TEST_F(BigIntegerTest, Modulus_ExactDivision)
 
     const auto result = a % b;
 
-    EXPECT_EQ(result, BigInteger::fromInt(0));
+    EXPECT_EQ(result, BigInteger(0));
 }
 
 /**
@@ -448,9 +448,9 @@ TEST_F(BigIntegerTest, Comparison_LargeNumbers)
  */
 TEST_F(BigIntegerTest, FromString_FactoryMethod)
 {
-    const auto big_int = BigInteger::fromString("12345");
+    const auto big_int = BigInteger("12345");
 
-    EXPECT_EQ(big_int, BigInteger::fromInt(12345));
+    EXPECT_EQ(big_int, BigInteger(12345));
 }
 
 /**
@@ -459,9 +459,9 @@ TEST_F(BigIntegerTest, FromString_FactoryMethod)
  */
 TEST_F(BigIntegerTest, FromString_NegativeNumber)
 {
-    const auto big_int = BigInteger::fromString("-67890");
+    const auto big_int = BigInteger("-67890");
 
-    EXPECT_EQ(big_int, BigInteger::fromInt(-67890));
+    EXPECT_EQ(big_int, BigInteger(-67890));
 }
 
 /**
@@ -470,9 +470,9 @@ TEST_F(BigIntegerTest, FromString_NegativeNumber)
  */
 TEST_F(BigIntegerTest, FromInt_FactoryMethod)
 {
-    const auto big_int = BigInteger::fromInt(54321);
+    const auto big_int = BigInteger(54321);
 
-    EXPECT_EQ(big_int, BigInteger::fromString("54321"));
+    EXPECT_EQ(big_int, BigInteger("54321"));
 }
 
 /**
@@ -481,9 +481,9 @@ TEST_F(BigIntegerTest, FromInt_FactoryMethod)
  */
 TEST_F(BigIntegerTest, FromInt_NegativeValue)
 {
-    const auto big_int = BigInteger::fromInt(-11111);
+    const auto big_int = BigInteger(-11111);
 
-    EXPECT_EQ(big_int, BigInteger::fromString("-11111"));
+    EXPECT_EQ(big_int, BigInteger("-11111"));
 }
 
 /**
@@ -492,9 +492,9 @@ TEST_F(BigIntegerTest, FromInt_NegativeValue)
  */
 TEST_F(BigIntegerTest, FromInt_Zero)
 {
-    const auto big_int = BigInteger::fromInt(0);
+    const auto big_int = BigInteger(0);
 
-    EXPECT_EQ(big_int, BigInteger::fromString("0"));
+    EXPECT_EQ(big_int, BigInteger("0"));
 }
 
 /**
@@ -508,10 +508,10 @@ TEST_F(BigIntegerTest, Arithmetic_VeryLargeNumbers)
 
     const auto sum = a + b;
     const auto diff = b - a;
-    const auto product = a * BigInteger::fromInt(2);
+    const auto product = a * BigInteger(2);
 
     EXPECT_TRUE(sum > a);
-    EXPECT_TRUE(diff > BigInteger::fromInt(0));
+    EXPECT_TRUE(diff > BigInteger(0));
     EXPECT_TRUE(product > a);
 }
 
@@ -527,7 +527,7 @@ TEST_F(BigIntegerTest, ChainedOperations)
 
     const auto result = (a + b) * c;
 
-    EXPECT_EQ(result, BigInteger::fromInt(150));
+    EXPECT_EQ(result, BigInteger(150));
 }
 
 /**
@@ -542,10 +542,10 @@ TEST_F(BigIntegerTest, Operations_PreserveImmutability)
     const auto sum = a + b;
     const auto diff = a - b;
 
-    EXPECT_EQ(a, BigInteger::fromInt(100));
-    EXPECT_EQ(b, BigInteger::fromInt(50));
-    EXPECT_EQ(sum, BigInteger::fromInt(150));
-    EXPECT_EQ(diff, BigInteger::fromInt(50));
+    EXPECT_EQ(a, BigInteger(100));
+    EXPECT_EQ(b, BigInteger(50));
+    EXPECT_EQ(sum, BigInteger(150));
+    EXPECT_EQ(diff, BigInteger(50));
 }
 
 /**
@@ -554,7 +554,7 @@ TEST_F(BigIntegerTest, Operations_PreserveImmutability)
  */
 TEST_F(BigIntegerTest, Constructor_EmptyString_ThrowsException)
 {
-    EXPECT_THROW(BigInteger::fromString(""), std::exception);
+    EXPECT_THROW(BigInteger(""), std::exception);
 }
 
 /**
@@ -563,9 +563,9 @@ TEST_F(BigIntegerTest, Constructor_EmptyString_ThrowsException)
  */
 TEST_F(BigIntegerTest, Constructor_InvalidString_ThrowsException)
 {
-    EXPECT_THROW(BigInteger::fromString("abc"), std::exception);
-    EXPECT_THROW(BigInteger::fromString("12.34"), std::exception); // Decimal point not allowed
-    EXPECT_THROW(BigInteger::fromString("--123"), std::exception);
+    EXPECT_THROW(BigInteger("abc"), std::exception);
+    EXPECT_THROW(BigInteger("12.34"), std::exception); // Decimal point not allowed
+    EXPECT_THROW(BigInteger("--123"), std::exception);
 }
 
 /**
@@ -574,7 +574,7 @@ TEST_F(BigIntegerTest, Constructor_InvalidString_ThrowsException)
  */
 TEST_F(BigIntegerTest, Constructor_WhitespaceString)
 {
-    EXPECT_THROW(BigInteger::fromString("   "), std::exception);
+    EXPECT_THROW(BigInteger("   "), std::exception);
 }
 
 /**
@@ -584,9 +584,9 @@ TEST_F(BigIntegerTest, Constructor_WhitespaceString)
 TEST_F(BigIntegerTest, Constructor_ExtremelyLargeNumber)
 {
     const std::string huge_num = std::string(500, '9'); // 500-digit number
-    EXPECT_NO_THROW(const BigInteger big_int = BigInteger::fromString(huge_num));
-    const BigInteger big_int = BigInteger::fromString(huge_num);
-    EXPECT_GT(big_int, BigInteger::fromInt(0));
+    EXPECT_NO_THROW(const BigInteger big_int = BigInteger(huge_num));
+    const BigInteger big_int = BigInteger(huge_num);
+    EXPECT_GT(big_int, BigInteger(0));
 }
 
 /**
@@ -619,7 +619,7 @@ TEST_F(BigIntegerTest, Power_RepeatedMultiplication)
     }
 
     // 2^100 should be a very large number
-    EXPECT_GT(result, BigInteger::fromInt(1000000));
+    EXPECT_GT(result, BigInteger(1000000));
 }
 
 /**
@@ -650,7 +650,7 @@ TEST_F(BigIntegerTest, Modulus_NegativeNumbers)
     const auto result = a % b;
 
     // Result sign follows dividend in C++
-    EXPECT_TRUE(result < BigInteger::fromInt(0));
+    EXPECT_TRUE(result < BigInteger(0));
 }
 
 /**

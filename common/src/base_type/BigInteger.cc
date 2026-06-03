@@ -86,13 +86,4 @@ namespace common::base_type
         return value_ == other.value_;
     }
 
-    BigInteger BigInteger::fromString(const std::string& str)
-    {
-        return BigInteger(str);
-    }
-
-    BigInteger BigInteger::fromInt(const int64_t num)
-    {
-        return BigInteger(num);
-    }
 }

@@ -63,16 +63,6 @@ namespace common::base_type
         /// @return true if the values are equal, false otherwise
         [[nodiscard]] bool operator==(const BigInteger& other) const ;
 
-        /// @brief Create a BigInteger from a string
-        /// @param str The string to convert
-        /// @return The resulting BigInteger
-        [[nodiscard]] static BigInteger fromString(const std::string& str);
-
-        /// @brief Create a BigInteger from an int64_t
-        /// @param num The int64_t to convert
-        /// @return The resulting BigInteger
-        [[nodiscard]] static BigInteger fromInt(int64_t num) ;
-
     private:
         /// @brief Internal constructor from cpp_int (avoids string conversion overhead)
         /// @param value The cpp_int value to wrap

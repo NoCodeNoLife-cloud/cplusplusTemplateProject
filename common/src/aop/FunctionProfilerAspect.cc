@@ -11,33 +11,31 @@
 
 namespace common::aop
 {
-    FunctionProfilerAspect::FunctionProfilerAspect(std::string function_name) : profiler_(function_name, true), function_name_(std::move(function_name))
+    FunctionProfilerAspect::FunctionProfilerAspect(std::string function_name) : profiler_(function_name), function_name_(std::move(function_name))
     {
         DLOG(INFO) << "FunctionProfilerAspect created for: " << function_name_;
     }
 
     void FunctionProfilerAspect::onEntry()
     {
-        // Removed frequent entry logging to avoid spam
-        // DLOG(INFO) << "Entering function: " << function_name_;
+        profiler_.recordStart();
     }
 
     void FunctionProfilerAspect::onExit()
     {
         profiler_.recordEnd();
-        const auto time_info = profiler_.getRunTime();
-        // Only log if execution time is significant (> 100ms) to reduce noise
-        if (const double elapsed_ms = profiler_.getRunTimeMs(); elapsed_ms > 100.0)
+        const auto& time_info = profiler_.getRunTime();
+        if (const double elapsed_ms = profiler_.getRunTimeMs(); elapsed_ms > kSlowThresholdMs)
         {
-            DLOG(INFO) << "Exiting function: " << function_name_ << ", " << time_info;
+            DLOG(INFO) << "Exiting function: " << function_name_ << ", " << time_info << " (" << elapsed_ms << " ms)";
         }
         onProfileComplete(time_info);
     }
 
-    void FunctionProfilerAspect::onException(std::exception_ptr e)
+    void FunctionProfilerAspect::onException(std::exception_ptr /*e*/)
     {
         profiler_.recordEnd();
-        const auto time_info = profiler_.getRunTime();
+        const auto& time_info = profiler_.getRunTime();
         DLOG(WARNING) << "Exception in function: " << function_name_ << ", " << time_info;
         onProfileComplete(time_info);
     }
@@ -45,6 +43,6 @@ namespace common::aop
     void FunctionProfilerAspect::onProfileComplete(const std::string& time_info)
     {
         // Default implementation does nothing
-        // Subclasses can override to log, send to metrics, etc.
+        // Subclass can override to log, send to metrics, etc.
     }
 }

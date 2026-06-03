@@ -83,8 +83,8 @@ TEST_F(FunctionProfilerAspectTest, OnExit_WithoutEntry)
 {
     FunctionProfilerAspect aspect{"testFunction"};
 
-    // Should not throw even if onEntry was not called
-    EXPECT_NO_THROW(aspect.onExit());
+    // Expect throw because getRunTime() requires onEntry() to have been called first
+    EXPECT_THROW(aspect.onExit(), std::runtime_error);
 }
 
 /**
@@ -113,7 +113,8 @@ TEST_F(FunctionProfilerAspectTest, OnException_WithoutEntry)
 
     const std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Test error"));
 
-    EXPECT_NO_THROW(aspect.onException(eptr));
+    // Expect throw because getRunTime() requires onEntry() to have been called first
+    EXPECT_THROW(aspect.onException(eptr), std::runtime_error);
 }
 
 /**

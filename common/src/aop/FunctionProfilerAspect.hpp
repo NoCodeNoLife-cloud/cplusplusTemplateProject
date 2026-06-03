@@ -44,6 +44,8 @@ namespace common::aop
         virtual void onProfileComplete(const std::string& time_info);
 
     private:
+        static constexpr double kSlowThresholdMs = 100.0;
+
         time::FunctionProfiler profiler_;
         std::string function_name_;
     };

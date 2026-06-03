@@ -22,23 +22,24 @@ namespace common::base_type
         explicit BigDecimal(const std::string& str);
 
         /// @brief Constructs a BigDecimal from a double value
-        /// @param num The double value to convert
+        /// @param num The double value to convert (precision may be lost; prefer string construction)
+        [[deprecated("Use string constructor to avoid double precision loss")]]
         explicit BigDecimal(double num);
 
         /// @brief Addition operator
         /// @param other The BigDecimal to add
         /// @return The sum of this BigDecimal and other
-        [[nodiscard]] BigDecimal operator+(const BigDecimal& other) const ;
+        [[nodiscard]] BigDecimal operator+(const BigDecimal& other) const;
 
         /// @brief Subtraction operator
         /// @param other The BigDecimal to subtract
         /// @return The difference of this BigDecimal and other
-        [[nodiscard]] BigDecimal operator-(const BigDecimal& other) const ;
+        [[nodiscard]] BigDecimal operator-(const BigDecimal& other) const;
 
         /// @brief Multiplication operator
         /// @param other The BigDecimal to multiply
         /// @return The product of this BigDecimal and other
-        [[nodiscard]] BigDecimal operator*(const BigDecimal& other) const ;
+        [[nodiscard]] BigDecimal operator*(const BigDecimal& other) const;
 
         /// @brief Division operator
         /// @param other The BigDecimal to divide by
@@ -49,17 +50,17 @@ namespace common::base_type
         /// @brief Three-way comparison operator
         /// @param other The BigDecimal to compare with
         /// @return std::strong_ordering result of the comparison
-        [[nodiscard]] std::strong_ordering operator<=>(const BigDecimal& other) const ;
+        [[nodiscard]] std::strong_ordering operator<=>(const BigDecimal& other) const;
 
         /// @brief Equality comparison operator
         /// @param other The BigDecimal to compare with
         /// @return true if the values are equal, false otherwise
-        [[nodiscard]] bool operator==(const BigDecimal& other) const ;
+        [[nodiscard]] bool operator==(const BigDecimal& other) const;
 
     private:
         /// @brief Internal constructor from cpp_dec_float_100 (avoids string conversion overhead)
         /// @param value The cpp_dec_float_100 value to wrap
-        explicit BigDecimal(boost::multiprecision::cpp_dec_float_100 value)  : value_(std::move(value))
+        explicit BigDecimal(boost::multiprecision::cpp_dec_float_100 value) : value_(std::move(value))
         {
         }
 

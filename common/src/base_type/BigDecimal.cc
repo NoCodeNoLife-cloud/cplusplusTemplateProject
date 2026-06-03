@@ -25,8 +25,9 @@ namespace common::base_type
         value_ = boost::multiprecision::cpp_dec_float_100(str);
     }
 
-    BigDecimal::BigDecimal(const double num) : value_(num)
+    BigDecimal::BigDecimal(double num) : value_(num)
     {
+        DLOG(WARNING) << "BigDecimal constructed from double; precision may be lost, use string constructor instead";
     }
 
     BigDecimal BigDecimal::operator+(const BigDecimal& other) const
@@ -48,8 +49,8 @@ namespace common::base_type
     {
         if (other.value_ == 0)
         {
-            DLOG(WARNING) << "Division by zero attempted in BigDecimal";
-            throw std::invalid_argument("Division by zero is not allowed.");
+            DLOG(ERROR) << "Cannot divide BigDecimal by zero";
+            throw std::invalid_argument("Cannot divide BigDecimal by zero");
         }
         return BigDecimal(value_ / other.value_);
     }
