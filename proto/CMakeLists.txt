@@ -1,8 +1,8 @@
 set(PROTOBUF_PROJECT generate_proto)
 
 # Protobuf configuration
-set(PROTO_SOURCE_DIR "${PROJECT_SOURCE_DIR}/proto" CACHE PATH "Root directory for .proto files")
-set(PROTO_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/proto/generated" CACHE PATH "Output directory for generated code")
+set(PROTO_SOURCE_DIR "${PROJECT_SOURCE_DIR}/proto/src" CACHE PATH "Root directory for .proto files")
+set(PROTO_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/proto/generated" CACHE PATH "Output directory for generated code")
 file(GLOB_RECURSE PROTO_FILES "${PROTO_SOURCE_DIR}/*.proto")  # Collect all .proto files recursively
 
 set(PROTO_SRCS "")
@@ -55,29 +55,19 @@ foreach (proto_file IN LISTS PROTO_FILES)
     list(APPEND PROTO_HDRS ${pb_h} ${grpc_pb_h})  # Append generated header files to the list
 endforeach ()
 
-# Define the target to clean and copy proto files
-set(COPY_DESTINATION_GENERATED_FOLDER "${PROJECT_SOURCE_DIR}/proto/generated")
+# Custom target to trigger proto generation
 add_custom_target(
         ${PROTOBUF_PROJECT}
         ALL
-        COMMAND ${CMAKE_COMMAND} -E remove_directory "${COPY_DESTINATION_GENERATED_FOLDER}"
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${COPY_DESTINATION_GENERATED_FOLDER}"
-        COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROTO_OUTPUT_DIR}" "${COPY_DESTINATION_GENERATED_FOLDER}"
         DEPENDS ${PROTO_SRCS} ${PROTO_HDRS}
-        COMMENT "Cleaning old proto files and copying new proto files"
-        VERBATIM
-)
-
-# Collecting public library source files
-file(GLOB_RECURSE GRPC_SOURCE_FILES
-        generated/*.hpp
-        generated/*.cc
+        COMMENT "Generating gRPC code from proto files"
 )
 
 set(GRPC_SERVICE grpc_service)
 
 # Creating a Common Library Target
-add_library(${GRPC_SERVICE} ${GRPC_SOURCE_FILES})
+add_library(${GRPC_SERVICE} ${PROTO_SRCS} ${PROTO_HDRS})
+add_dependencies(${GRPC_SERVICE} ${PROTOBUF_PROJECT})
 
 # Link required libraries
 target_link_libraries(${GRPC_SERVICE} PRIVATE
@@ -89,6 +79,5 @@ target_link_libraries(${GRPC_SERVICE} PRIVATE
 
 # Set the header file path
 target_include_directories(${GRPC_SERVICE} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/generated
+        ${PROJECT_SOURCE_DIR}/proto
 )
