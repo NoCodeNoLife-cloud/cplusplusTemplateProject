@@ -27,8 +27,7 @@ namespace common::aop
         profiler_.recordEnd();
         const auto time_info = profiler_.getRunTime();
         // Only log if execution time is significant (> 100ms) to reduce noise
-        const double elapsed_ms = profiler_.getRunTimeMs();
-        if (elapsed_ms > 100.0)
+        if (const double elapsed_ms = profiler_.getRunTimeMs(); elapsed_ms > 100.0)
         {
             DLOG(INFO) << "Exiting function: " << function_name_ << ", " << time_info;
         }

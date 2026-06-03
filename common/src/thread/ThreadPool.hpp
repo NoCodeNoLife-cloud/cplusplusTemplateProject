@@ -99,15 +99,7 @@ namespace common::thread
             }
             task_queue_.emplace([task]
             {
-                try
-                {
-                    (*task)();
-                }
-                catch (...)
-                {
-                    // If the task throws, propagate the exception through the future
-                    task->set_exception(std::current_exception());
-                }
+                (*task)();
             });
         }
         condition_.notify_one();

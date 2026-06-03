@@ -47,6 +47,7 @@ find_package(magic_enum CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(unofficial-mysql-connector-cpp CONFIG REQUIRED)
+find_package(benchmark CONFIG REQUIRED)
 
 # Subdirectories
 add_subdirectory(common)

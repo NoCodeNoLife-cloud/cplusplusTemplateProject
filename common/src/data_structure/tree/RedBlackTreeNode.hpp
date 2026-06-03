@@ -83,37 +83,37 @@ namespace common::data_structure::tree
     }
 
     template <typename T>
-    std::shared_ptr<RedBlackTreeNode> RedBlackTreeNode<T>::getLeft() const
+    std::shared_ptr<RedBlackTreeNode<T>> RedBlackTreeNode<T>::getLeft() const
     {
         return left_;
     }
 
     template <typename T>
-    void RedBlackTreeNode<T>::setLeft(std::shared_ptr<RedBlackTreeNode> node)
+    void RedBlackTreeNode<T>::setLeft(std::shared_ptr<RedBlackTreeNode<T>> node)
     {
         left_ = node;
     }
 
     template <typename T>
-    std::shared_ptr<RedBlackTreeNode> RedBlackTreeNode<T>::getRight() const
+    std::shared_ptr<RedBlackTreeNode<T>> RedBlackTreeNode<T>::getRight() const
     {
         return right_;
     }
 
     template <typename T>
-    void RedBlackTreeNode<T>::setRight(std::shared_ptr<RedBlackTreeNode> node)
+    void RedBlackTreeNode<T>::setRight(std::shared_ptr<RedBlackTreeNode<T>> node)
     {
         right_ = node;
     }
 
     template <typename T>
-    std::shared_ptr<RedBlackTreeNode> RedBlackTreeNode<T>::getParent() const
+    std::shared_ptr<RedBlackTreeNode<T>> RedBlackTreeNode<T>::getParent() const
     {
         return parent_;
     }
 
     template <typename T>
-    void RedBlackTreeNode<T>::setParent(std::shared_ptr<RedBlackTreeNode> node)
+    void RedBlackTreeNode<T>::setParent(std::shared_ptr<RedBlackTreeNode<T>> node)
     {
         parent_ = node;
     }

@@ -30,4 +30,6 @@ target_link_libraries(${SERVER_PROJECT} PRIVATE
         grpc_service
         fmt::fmt
         unofficial::sqlite3::sqlite3
+        benchmark::benchmark
+        benchmark::benchmark_main
 )
