@@ -1,7 +1,7 @@
 /**
-* @file CustomGlogPrefixFormatter.hpp
+* @file PrefixFormatter.hpp
  * @brief Custom log prefix formatter for glog
- * @details This header defines the CustomGlogPrefixFormatter class that provides
+ * @details This header defines the PrefixFormatter class that provides
  *          a customizable prefix format for glog logging messages, including
  *          severity level, timestamp, thread ID, and source location information.
  */
@@ -14,26 +14,26 @@ namespace glog::formatter
 {
     /// @brief Custom formatter for glog prefix
     /// Provides a customizable prefix format for glog logging messages
-    class CustomGlogPrefixFormatter final
+    class PrefixFormatter final
     {
     public:
         /// @brief Default constructor
-        constexpr CustomGlogPrefixFormatter() noexcept = default;
+        constexpr PrefixFormatter() noexcept = default;
 
         /// @brief Destructor
-        ~CustomGlogPrefixFormatter() noexcept = default;
+        ~PrefixFormatter() noexcept = default;
 
         /// @brief Copy constructor
-        constexpr CustomGlogPrefixFormatter(const CustomGlogPrefixFormatter&) noexcept = default;
+        constexpr PrefixFormatter(const PrefixFormatter&) noexcept = default;
 
         /// @brief Copy assignment operator
-        constexpr CustomGlogPrefixFormatter& operator=(const CustomGlogPrefixFormatter&) noexcept = default;
+        constexpr PrefixFormatter& operator=(const PrefixFormatter&) noexcept = default;
 
         /// @brief Move constructor
-        constexpr CustomGlogPrefixFormatter(CustomGlogPrefixFormatter&&) noexcept = default;
+        constexpr PrefixFormatter(PrefixFormatter&&) noexcept = default;
 
         /// @brief Move assignment operator
-        constexpr CustomGlogPrefixFormatter& operator=(CustomGlogPrefixFormatter&&) noexcept = default;
+        constexpr PrefixFormatter& operator=(PrefixFormatter&&) noexcept = default;
 
         /// @brief Formats log message prefix according to custom specification
         /// @param s Output stream to write formatted prefix to

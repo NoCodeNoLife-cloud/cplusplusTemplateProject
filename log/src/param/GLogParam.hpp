@@ -1,7 +1,7 @@
 /**
- * @file GLogParameters.hpp
+ * @file GLogParam.hpp
  * @brief Configuration parameters for Google Logging (glog)
- * @details This header defines the GLogParameters class that encapsulates all configuration
+ * @details This header defines the GLogParam class that encapsulates all configuration
  *          options for the glog logging system, including log level, log name, output settings,
  *          custom format options, and YAML-based configuration loading support.
  */
@@ -18,17 +18,17 @@ namespace glog::parameter
     /// @brief Configuration parameters for Google Logging (glog) library.
     /// @details This class encapsulates all the configuration options for the glog logging system.
     /// It provides getter and setter methods for each parameter and supports YAML serialization.
-    class GLogParameters final : public common::interfaces::IYamlConfigurable
+    class GLogParam final : public common::interfaces::IYamlConfigurable
     {
     public:
         /// @brief Default constructor.
-        GLogParameters() = default;
+        GLogParam() = default;
 
         /// @brief Constructor with parameters.
         /// @param min_log_level Minimum log level
         /// @param log_name Log name
         /// @param log_to_stderr Whether to log to stderr
-        GLogParameters(int32_t min_log_level, std::string log_name, bool log_to_stderr);
+        GLogParam(int32_t min_log_level, std::string log_name, bool log_to_stderr);
 
         /// @brief Get the minimum log level.
         /// @return The minimum log level as an integer.
@@ -68,14 +68,14 @@ namespace glog::parameter
         void deserializedFromYamlFile(const std::filesystem::path& path) override;
 
         /// @brief Equality operator.
-        /// @param other The other GLogParameters to compare with.
+        /// @param other The other GLogParam to compare with.
         /// @return True if both objects are equal, false otherwise.
-        [[nodiscard]] auto operator==(const GLogParameters& other) const noexcept -> bool;
+        [[nodiscard]] auto operator==(const GLogParam& other) const noexcept -> bool;
 
         /// @brief Inequality operator.
-        /// @param other The other GLogParameters to compare with.
+        /// @param other The other GLogParam to compare with.
         /// @return True if both objects are not equal, false otherwise.
-        [[nodiscard]] auto operator!=(const GLogParameters& other) const noexcept -> bool;
+        [[nodiscard]] auto operator!=(const GLogParam& other) const noexcept -> bool;
 
     private:
         int32_t min_log_level_{};
@@ -85,19 +85,19 @@ namespace glog::parameter
     };
 }
 
-/// @brief YAML serialization specialization for GLogParameters.
-/// Provides methods to encode and decode GLogParameters to/from YAML nodes.
+/// @brief YAML serialization specialization for GLogParam.
+/// Provides methods to encode and decode GLogParam to/from YAML nodes.
 template <>
-struct YAML::convert<glog::parameter::GLogParameters>
+struct YAML::convert<glog::parameter::GLogParam>
 {
-    /// @brief Decode a YAML node into a GLogParameters object.
+    /// @brief Decode a YAML node into a GLogParam object.
     /// @param node The YAML node containing the configuration data.
-    /// @param rhs The GLogParameters object to populate.
+    /// @param rhs The GLogParam object to populate.
     /// @return True if decoding was successful.
-    static bool decode(const Node& node, glog::parameter::GLogParameters& rhs);
+    static bool decode(const Node& node, glog::parameter::GLogParam& rhs);
 
-    /// @brief Encode a GLogParameters object into a YAML node.
-    /// @param rhs The GLogParameters object to encode.
+    /// @brief Encode a GLogParam object into a YAML node.
+    /// @param rhs The GLogParam object to encode.
     /// @return A YAML node containing the configuration data.
-    static Node encode(const glog::parameter::GLogParameters& rhs);
+    static Node encode(const glog::parameter::GLogParam& rhs);
 };

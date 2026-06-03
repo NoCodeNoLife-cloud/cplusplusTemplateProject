@@ -1,62 +1,62 @@
 /**
- * @file GLogParameters.cc
+ * @file GLogParam.cc
  * @brief Implementation of glog configuration parameters
- * @details This file contains the implementation of GLogParameters class methods,
+ * @details This file contains the implementation of GLogParam class methods,
  *          including parameter accessors, YAML deserialization, and equality comparison.
  */
 
-#include "GLogParameters.hpp"
+#include "GLogParam.hpp"
 
 #include <fmt/format.h>
 #include <yaml-cpp/yaml.h>
 
 namespace glog::parameter
 {
-    GLogParameters::GLogParameters(const int32_t min_log_level, std::string log_name, const bool log_to_stderr) : min_log_level_(min_log_level), log_name_(std::move(log_name)), log_to_stderr_(log_to_stderr)
+    GLogParam::GLogParam(const int32_t min_log_level, std::string log_name, const bool log_to_stderr) : min_log_level_(min_log_level), log_name_(std::move(log_name)), log_to_stderr_(log_to_stderr)
     {
     }
 
-    auto GLogParameters::minLogLevel() const noexcept -> int32_t
+    auto GLogParam::minLogLevel() const noexcept -> int32_t
     {
         return min_log_level_;
     }
 
-    void GLogParameters::minLogLevel(const int32_t min_log_level) noexcept
+    void GLogParam::minLogLevel(const int32_t min_log_level) noexcept
     {
         min_log_level_ = min_log_level;
     }
 
-    auto GLogParameters::logName() const noexcept -> std::string
+    auto GLogParam::logName() const noexcept -> std::string
     {
         return log_name_;
     }
 
-    void GLogParameters::logName(const std::string& log_name)
+    void GLogParam::logName(const std::string& log_name)
     {
         log_name_ = log_name;
     }
 
-    auto GLogParameters::logToStderr() const noexcept -> bool
+    auto GLogParam::logToStderr() const noexcept -> bool
     {
         return log_to_stderr_;
     }
 
-    void GLogParameters::logToStderr(const bool log_to_stderr) noexcept
+    void GLogParam::logToStderr(const bool log_to_stderr) noexcept
     {
         log_to_stderr_ = log_to_stderr;
     }
 
-    auto GLogParameters::customLogFormat() const noexcept -> bool
+    auto GLogParam::customLogFormat() const noexcept -> bool
     {
         return custom_log_format_;
     }
 
-    void GLogParameters::customLogFormat(const bool custom_log_format) noexcept
+    void GLogParam::customLogFormat(const bool custom_log_format) noexcept
     {
         custom_log_format_ = custom_log_format;
     }
 
-    void GLogParameters::deserializedFromYamlFile(const std::filesystem::path& path)
+    void GLogParam::deserializedFromYamlFile(const std::filesystem::path& path)
     {
         if (!std::filesystem::exists(path))
         {
@@ -105,18 +105,18 @@ namespace glog::parameter
         }
     }
 
-    auto GLogParameters::operator==(const GLogParameters& other) const noexcept -> bool
+    auto GLogParam::operator==(const GLogParam& other) const noexcept -> bool
     {
         return min_log_level_ == other.min_log_level_ && log_name_ == other.log_name_ && log_to_stderr_ == other.log_to_stderr_ && custom_log_format_ == other.custom_log_format_;
     }
 
-    auto GLogParameters::operator!=(const GLogParameters& other) const noexcept -> bool
+    auto GLogParam::operator!=(const GLogParam& other) const noexcept -> bool
     {
         return !(*this == other);
     }
 }
 
-bool YAML::convert<glog::parameter::GLogParameters>::decode(const Node& node, glog::parameter::GLogParameters& rhs)
+bool YAML::convert<glog::parameter::GLogParam>::decode(const Node& node, glog::parameter::GLogParam& rhs)
 {
     if (!node.IsMap())
     {
@@ -142,7 +142,7 @@ bool YAML::convert<glog::parameter::GLogParameters>::decode(const Node& node, gl
     return true;
 }
 
-YAML::Node YAML::convert<glog::parameter::GLogParameters>::encode(const glog::parameter::GLogParameters& rhs)
+YAML::Node YAML::convert<glog::parameter::GLogParam>::encode(const glog::parameter::GLogParam& rhs)
 {
     Node node;
     node["minLogLevel"] = rhs.minLogLevel();

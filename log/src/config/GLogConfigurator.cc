@@ -12,7 +12,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "formatter/CustomGlogPrefixFormatter.hpp"
+#include "formatter/PrefixFormatter.hpp"
 
 namespace glog::config
 {
@@ -34,17 +34,17 @@ namespace glog::config
         DLOG(INFO) << "glog configured...";
     }
 
-    auto GLogConfigurator::getConfig() const noexcept -> const parameter::GLogParameters&
+    auto GLogConfigurator::getConfig() const noexcept -> const parameter::GLogParam&
     {
         return config_;
     }
 
-    void GLogConfigurator::updateConfig(const parameter::GLogParameters& config) noexcept
+    void GLogConfigurator::updateConfig(const parameter::GLogParam& config) noexcept
     {
         config_ = config;
     }
 
-    void GLogConfigurator::doConfig(const parameter::GLogParameters& config) noexcept
+    void GLogConfigurator::doConfig(const parameter::GLogParam& config) noexcept
     {
         google::InitGoogleLogging(config.logName().c_str());
         FLAGS_minloglevel = config.minLogLevel();
@@ -55,7 +55,7 @@ namespace glog::config
         // Apply custom log format if enabled
         if (config.customLogFormat())
         {
-            google::InstallPrefixFormatter(&formatter::CustomGlogPrefixFormatter::MyPrefixFormatter);
+            google::InstallPrefixFormatter(&formatter::PrefixFormatter::MyPrefixFormatter);
             DLOG(INFO) << "Custom log format enabled...";
         }
     }

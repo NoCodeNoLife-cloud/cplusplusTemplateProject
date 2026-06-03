@@ -9,7 +9,7 @@
 #pragma once
 #include <string>
 
-#include "param/GLogParameters.hpp"
+#include "param/GLogParam.hpp"
 
 namespace glog::config
 {
@@ -46,21 +46,21 @@ namespace glog::config
         void execute() const;
 
         /// @brief Get the current configuration parameters
-        /// @return A const reference to the GLogParameters object
-        [[nodiscard]] auto getConfig() const noexcept -> const parameter::GLogParameters&;
+        /// @return A const reference to the GLogParam object
+        [[nodiscard]] auto getConfig() const noexcept -> const parameter::GLogParam&;
 
         /// @brief Update the configuration parameters
         /// @param config The new configuration parameters
-        void updateConfig(const parameter::GLogParameters& config) noexcept;
+        void updateConfig(const parameter::GLogParam& config) noexcept;
 
     private:
         /// @brief Perform the actual glog configuration
-        static void doConfig(const parameter::GLogParameters& config) noexcept;
+        static void doConfig(const parameter::GLogParam& config) noexcept;
 
         /// @brief Clean up glog resources
         static void clean() noexcept;
 
         std::string glog_yaml_path_;
-        parameter::GLogParameters config_;
+        parameter::GLogParam config_;
     };
 }

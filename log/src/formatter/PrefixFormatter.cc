@@ -1,11 +1,11 @@
 /**
- * @file CustomGlogPrefixFormatter.cc
+ * @file PrefixFormatter.cc
  * @brief Implementation of custom glog prefix formatter
  * @details This file contains the implementation of the MyPrefixFormatter method
  *          that formats log messages with severity, timestamp, thread ID, and source location.
  */
 
-#include "CustomGlogPrefixFormatter.hpp"
+#include "PrefixFormatter.hpp"
 
 #include <iomanip>
 
@@ -15,7 +15,7 @@ namespace glog::formatter
     /// @param s Output stream to write formatted prefix to
     /// @param m Log message containing metadata for the prefix
     /// @param data User data pointer (unused)
-    auto CustomGlogPrefixFormatter::MyPrefixFormatter(std::ostream& s, const google::LogMessage& m, [[maybe_unused]] void* data) noexcept -> void
+    auto PrefixFormatter::MyPrefixFormatter(std::ostream& s, const google::LogMessage& m, [[maybe_unused]] void* data) noexcept -> void
     {
         // Use the original stream-based approach to avoid fmt compatibility issues
         s << '[' << google::GetLogSeverityName(m.severity()) << "] "
