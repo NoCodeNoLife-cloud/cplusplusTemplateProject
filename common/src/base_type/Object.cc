@@ -1,16 +1,14 @@
 /**
-* @file Object.cc
+ * @file Object.cc
  * @brief Object class implementation
  * @details This file contains the implementation of the Object class methods for Base type classes providing fundamental object functionality.
  */
 
 #include "base_type/Object.hpp"
 
-#include <format>
 #include <memory>
 #include <string>
 #include <typeinfo>
-#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::base_type
@@ -41,11 +39,6 @@ namespace common::base_type
         // we throw an exception to indicate that derived classes should implement this.
         DLOG(WARNING) << "clone() called on base Object class - must be implemented by derived classes";
         throw std::logic_error("clone() must be implemented by derived classes");
-    }
-
-    bool Object::isInstance(const std::type_info& target_type) const
-    {
-        return target_type == typeid(*this);
     }
 
     std::string Object::getClassName() const

@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <algorithm>
 #include <list>
 #include <optional>
 #include <stdexcept>
@@ -350,10 +351,16 @@ namespace common::cache
     template <typename Key, typename Value, typename Map>
     void LFUCache<Key, Value, Map>::remove_empty_freq_list(size_t freq)
     {
-        auto& freq_list = freq_list_map_[freq];
+        auto it = freq_list_map_.find(freq);
+        if (it == freq_list_map_.end())
+        {
+            return;
+        }
+
+        auto& freq_list = it->second;
         if (freq_list.empty())
         {
-            freq_list_map_.erase(freq);
+            freq_list_map_.erase(it);
 
             // If we removed the minimum frequency, update min_freq_
             if (freq == min_freq_)
@@ -361,7 +368,9 @@ namespace common::cache
                 // Find the next minimum frequency
                 if (!freq_list_map_.empty())
                 {
-                    min_freq_ = freq_list_map_.begin()->first;
+                    auto min_it = std::min_element(freq_list_map_.begin(), freq_list_map_.end(),
+                        [](const auto& a, const auto& b) { return a.first < b.first; });
+                    min_freq_ = min_it->first;
                 }
                 else
                 {

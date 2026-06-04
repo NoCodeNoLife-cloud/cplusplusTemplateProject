@@ -324,28 +324,6 @@ TEST_F(ObjectTest, InstanceOf_UnrelatedType_ReturnsFalse)
 }
 
 /**
- * @brief Test isInstance with matching type
- * @details Verifies isInstance returns true for correct type_info
- */
-TEST_F(ObjectTest, IsInstance_MatchingType_ReturnsTrue)
-{
-    const TestDerivedObject obj{42};
-
-    EXPECT_TRUE(obj.isInstance(typeid(TestDerivedObject)));
-}
-
-/**
- * @brief Test isInstance with non-matching type
- * @details Verifies isInstance returns false for incorrect type_info
- */
-TEST_F(ObjectTest, IsInstance_NonMatchingType_ReturnsFalse)
-{
-    const TestDerivedObject obj{42};
-
-    EXPECT_FALSE(obj.isInstance(typeid(int)));
-}
-
-/**
  * @brief Test getClassName returns class name
  * @details Verifies getClassName returns the actual class name
  */
