@@ -5,7 +5,13 @@
  */
 
 #pragma once
+
 #include <array>
+#include <cstddef>
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include <openssl/evp.h>
 
 #include "StreamCipher.hpp"
@@ -52,7 +58,7 @@ namespace common::crypto::cipher
         ChaCha20Cipher() ;
 
         /// @brief Destructor - cleans up OpenSSL resources
-        ~ChaCha20Cipher()  override;
+        ~ChaCha20Cipher() override;
 
         // Delete copy operations to prevent resource management issues
         ChaCha20Cipher(const ChaCha20Cipher&) = delete;
@@ -60,9 +66,9 @@ namespace common::crypto::cipher
         ChaCha20Cipher& operator=(const ChaCha20Cipher&) = delete;
 
         // Enable move operations
-        ChaCha20Cipher(ChaCha20Cipher&& other) ;
+        ChaCha20Cipher(ChaCha20Cipher&& other) noexcept;
 
-        ChaCha20Cipher& operator=(ChaCha20Cipher&& other) ;
+        ChaCha20Cipher& operator=(ChaCha20Cipher&& other) noexcept;
 
         /**
          * @brief Initialize the cipher with key and nonce.
@@ -145,11 +151,11 @@ namespace common::crypto::cipher
          * @return Processed output data.
          * @throws std::runtime_error if operation fails.
          */
-        [[nodiscard]] std::vector<uint8_t> process(const std::vector<uint8_t>& input) const;
+        [[nodiscard]] std::vector<uint8_t> process(const std::vector<uint8_t>& input);
 
         /**
          * @brief Cleanup OpenSSL resources.
          */
-        void cleanup() ;
+        void cleanup() noexcept;
     };
 }

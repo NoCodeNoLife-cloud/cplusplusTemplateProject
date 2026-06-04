@@ -5,9 +5,11 @@
  */
 
 #pragma once
+#include <cstdint>
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace common::crypto::hash
@@ -89,7 +91,7 @@ namespace common::crypto::hash
          * @param input String to hash.
          * @return Optional containing the binary digest, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::vector<uint8_t>> hashString(std::unique_ptr<HashStrategy> strategy, std::string_view input) ;
+        [[nodiscard]] static std::optional<std::vector<uint8_t>> hashString(std::unique_ptr<HashStrategy> strategy, std::string_view input);
 
         /**
          * @brief Computes hash of a file in one operation.
@@ -106,7 +108,7 @@ namespace common::crypto::hash
          * @param input String to hash.
          * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::string> hashStringToHex(std::unique_ptr<HashStrategy> strategy, std::string_view input) ;
+        [[nodiscard]] static std::optional<std::string> hashStringToHex(std::unique_ptr<HashStrategy> strategy, std::string_view input);
 
         /**
          * @brief Computes hash of a file and returns hex representation.
@@ -114,6 +116,6 @@ namespace common::crypto::hash
          * @param filePath Path to the file to hash.
          * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::string> hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string& filePath);
+        [[nodiscard]] static std::optional<std::string> hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string& filePath, size_t chunkSize = 8192);
     };
 }

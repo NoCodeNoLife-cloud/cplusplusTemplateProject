@@ -134,13 +134,13 @@ namespace common::crypto::hash
         return HashStrategy::hashStringToHex(std::make_unique<SHA1Strategy>(), input);
     }
 
-    std::optional<std::string> SHAToolkit::hashFileToHexSHA256(const std::string& filePath)
+    std::optional<std::string> SHAToolkit::hashFileToHexSHA256(const std::string& filePath, const size_t chunkSize)
     {
-        return HashStrategy::hashFileToHex(std::make_unique<SHA256Strategy>(), filePath);
+        return HashStrategy::hashFileToHex(std::make_unique<SHA256Strategy>(), filePath, chunkSize);
     }
 
-    std::optional<std::string> SHAToolkit::hashFileToHexSHA1(const std::string& filePath)
+    std::optional<std::string> SHAToolkit::hashFileToHexSHA1(const std::string& filePath, const size_t chunkSize)
     {
-        return HashStrategy::hashFileToHex(std::make_unique<SHA1Strategy>(), filePath);
+        return HashStrategy::hashFileToHex(std::make_unique<SHA1Strategy>(), filePath, chunkSize);
     }
 }

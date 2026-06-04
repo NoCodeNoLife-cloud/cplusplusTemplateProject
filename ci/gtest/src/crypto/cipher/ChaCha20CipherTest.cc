@@ -196,6 +196,101 @@ TEST_F(ChaCha20CipherTest, Reset)
 }
 
 /**
+ * @brief Test GenerateKeystream before initialization throws exception
+ */
+TEST_F(ChaCha20CipherTest, GenerateKeystream_BeforeInitialization)
+{
+    ChaCha20Cipher cipher;
+
+    EXPECT_THROW([[maybe_unused]] auto result = cipher.generateKeystream(64), std::runtime_error);
+}
+
+/**
+ * @brief Test reset on uninitialized cipher doesn't throw
+ */
+TEST_F(ChaCha20CipherTest, Reset_Uninitialized)
+{
+    ChaCha20Cipher cipher;
+
+    EXPECT_NO_THROW(cipher.reset());
+}
+
+/**
+ * @brief Test re-initialization with new key/nonce
+ */
+TEST_F(ChaCha20CipherTest, Reinitialize)
+{
+    ChaCha20Cipher cipher;
+
+    const std::vector<uint8_t> key1(ChaCha20Cipher::KEY_SIZE, 0x42);
+    const std::vector<uint8_t> nonce1(ChaCha20Cipher::NONCE_SIZE, 0x24);
+    cipher.initialize(key1, nonce1);
+    EXPECT_TRUE(cipher.isInitialized());
+
+    const std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03};
+    const auto ciphertext1 = cipher.encrypt(plaintext);
+
+    // Re-initialize with different key/nonce
+    const std::vector<uint8_t> key2(ChaCha20Cipher::KEY_SIZE, 0x13);
+    const std::vector<uint8_t> nonce2(ChaCha20Cipher::NONCE_SIZE, 0x37);
+    cipher.initialize(key2, nonce2);
+
+    // Encrypt again - should produce different result
+    const auto ciphertext2 = cipher.encrypt(plaintext);
+    EXPECT_NE(ciphertext1, ciphertext2);
+}
+
+/**
+ * @brief Test encryption/decryption with large data
+ */
+TEST_F(ChaCha20CipherTest, EncryptDecrypt_LargeData)
+{
+    const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0xAB);
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0xCD);
+
+    // 1MB plaintext
+    const std::vector<uint8_t> plaintext(1024 * 1024, 0x42);
+
+    ChaCha20Cipher encrypt_cipher;
+    encrypt_cipher.initialize(key, nonce);
+    const auto ciphertext = encrypt_cipher.encrypt(plaintext);
+
+    EXPECT_EQ(ciphertext.size(), plaintext.size());
+
+    ChaCha20Cipher decrypt_cipher;
+    decrypt_cipher.initialize(key, nonce);
+    const auto decrypted = decrypt_cipher.decrypt(ciphertext);
+
+    EXPECT_EQ(decrypted, plaintext);
+}
+
+/**
+ * @brief Test moved-from source state
+ */
+TEST_F(ChaCha20CipherTest, Move_SourceState)
+{
+    ChaCha20Cipher cipher1;
+
+    const std::vector<uint8_t> key(ChaCha20Cipher::KEY_SIZE, 0x42);
+    const std::vector<uint8_t> nonce(ChaCha20Cipher::NONCE_SIZE, 0x24);
+
+    cipher1.initialize(key, nonce);
+    EXPECT_TRUE(cipher1.isInitialized());
+
+    // Move construct
+    ChaCha20Cipher cipher2(std::move(cipher1));
+
+    // Source should indicate not initialized
+    EXPECT_FALSE(cipher1.isInitialized());
+    // Destination should be initialized
+    EXPECT_TRUE(cipher2.isInitialized());
+
+    // cipher2 should function correctly
+    const std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03};
+    EXPECT_NO_THROW(cipher2.encrypt(plaintext));
+}
+
+/**
  * @brief Test constants
  */
 TEST_F(ChaCha20CipherTest, Constants)

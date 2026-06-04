@@ -6,10 +6,8 @@
 
 #include "HashStrategy.hpp"
 
+#include <array>
 #include <fstream>
-#include <iomanip>
-#include <sstream>
-#include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::crypto::hash
@@ -21,13 +19,15 @@ namespace common::crypto::hash
             return std::nullopt;
         }
 
-        std::ostringstream oss;
-        oss << std::hex << std::setfill('0');
-        for (const auto byte : digest)
+        static constexpr std::array<char, 16> hex_chars{'0', '1', '2', '3', '4', '5', '6', '7',
+                                                        '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        std::string result(expected_size * 2, '\0');
+        for (size_t i = 0; i < expected_size; ++i)
         {
-            oss << std::setw(2) << static_cast<int>(byte);
+            result[i * 2]     = hex_chars[digest[i] >> 4];
+            result[i * 2 + 1] = hex_chars[digest[i] & 0x0F];
         }
-        return oss.str();
+        return result;
     }
 
     std::optional<std::vector<uint8_t>> HashStrategy::hashString(std::unique_ptr<HashStrategy> strategy, const std::string_view input)
@@ -44,27 +44,25 @@ namespace common::crypto::hash
         std::ifstream file(filePath, std::ios::binary);
         if (!file.is_open())
         {
-            DLOG(WARNING) << fmt::format("Failed to open file for hashing: {}", filePath);
+            LOG(WARNING) << "Failed to open file for hashing: " << filePath;
             return std::nullopt;
         }
 
-        std::vector<char> buffer(chunkSize);
+        std::vector<char> buffer;
+        buffer.resize(chunkSize);
 
-        while (file.good())
+        while (file.read(buffer.data(), static_cast<std::streamsize>(buffer.size())) || file.gcount() > 0)
         {
-            file.read(buffer.data(), static_cast<std::streamsize>(buffer.size()));
-            const std::streamsize bytesRead = file.gcount();
-            if (bytesRead > 0)
+            const auto bytesRead = file.gcount();
+            if (!strategy->update(buffer.data(), static_cast<size_t>(bytesRead)))
             {
-                if (!strategy->update(buffer.data(), static_cast<size_t>(bytesRead)))
-                {
-                    return std::nullopt;
-                }
+                return std::nullopt;
             }
         }
 
         if (file.bad())
         {
+            LOG(WARNING) << "I/O error while reading file: " << filePath;
             return std::nullopt;
         }
 
@@ -82,10 +80,10 @@ namespace common::crypto::hash
         return toHexString(*digest, digest_size);
     }
 
-    std::optional<std::string> HashStrategy::hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string& filePath)
+    std::optional<std::string> HashStrategy::hashFileToHex(std::unique_ptr<HashStrategy> strategy, const std::string& filePath, const size_t chunkSize)
     {
         const auto digest_size = strategy->getDigestSize();
-        const auto digest = hashFile(std::move(strategy), filePath);
+        const auto digest = hashFile(std::move(strategy), filePath, chunkSize);
         if (!digest)
         {
             return std::nullopt;

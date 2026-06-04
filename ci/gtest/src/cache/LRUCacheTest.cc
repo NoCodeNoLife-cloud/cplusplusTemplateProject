@@ -46,12 +46,23 @@ TEST_F(LRUCacheTest, Constructor_ZeroCapacity)
 }
 
 /**
- * @brief Test LRUCache constructor with negative capacity
- * @details Verifies exception is thrown when capacity is negative
+ * @brief Test noexcept guarantees for query methods
+ * @details Compile-time checks that query methods are noexcept
  */
-TEST_F(LRUCacheTest, Constructor_NegativeCapacity)
+TEST_F(LRUCacheTest, NoExcept_Guarantees)
 {
-    EXPECT_THROW((LRUCache<int, std::string>(-5)), std::invalid_argument);
+    LRUCache<int, std::string> cache(3);
+    const LRUCache<int, std::string>& const_cache = cache;
+
+    EXPECT_TRUE(noexcept(cache.size()));
+    EXPECT_TRUE(noexcept(cache.capacity()));
+    EXPECT_TRUE(noexcept(cache.empty()));
+    EXPECT_TRUE(noexcept(const_cache.size()));
+    EXPECT_TRUE(noexcept(const_cache.capacity()));
+    EXPECT_TRUE(noexcept(const_cache.empty()));
+    EXPECT_TRUE(noexcept(const_cache.contains(1)));
+    EXPECT_TRUE(noexcept(cache.clear()));
+    EXPECT_TRUE(noexcept(cache.remove(1)));
 }
 
 /**

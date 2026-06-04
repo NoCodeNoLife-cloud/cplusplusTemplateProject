@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <iterator>
 #include <list>
 #include <optional>
 #include <stdexcept>
@@ -25,7 +26,7 @@ namespace common::cache
         /// @brief Constructs an LRU cache with the specified capacity
         /// @param capacity The maximum number of entries the cache can hold
         /// @throw std::invalid_argument if capacity is 0 or less
-        explicit LRUCache(int capacity);
+        explicit LRUCache(size_t capacity);
 
         /// @brief Retrieves a value from the cache (const version)
         /// @param key The key to look up in the cache
@@ -54,27 +55,27 @@ namespace common::cache
         /// @brief Removes an entry from the cache
         /// @param key The key to remove
         /// @return true if the key was found and removed, false otherwise
-        [[nodiscard]] bool remove(const Key& key) override;
+        [[nodiscard]] bool remove(const Key& key) noexcept override;
 
         /// @brief Clears all entries from the cache
-        void clear()  override;
+        void clear()  noexcept override;
 
         /// @brief Returns the current number of entries in the cache
         /// @return Number of entries currently in the cache
-        [[nodiscard]] size_t size() const  override;
+        [[nodiscard]] size_t size() const noexcept override;
 
         /// @brief Returns the maximum capacity of the cache
         /// @return Maximum number of entries the cache can hold
-        [[nodiscard]] size_t capacity() const  override;
+        [[nodiscard]] size_t capacity() const noexcept override;
 
         /// @brief Checks if the cache is empty
         /// @return true if the cache is empty, false otherwise
-        [[nodiscard]] bool empty() const  override;
+        [[nodiscard]] bool empty() const noexcept override;
 
         /// @brief Checks if a key exists in the cache
         /// @param key The key to check for
         /// @return true if the key exists in the cache, false otherwise
-        [[nodiscard]] bool contains(const Key& key) const  override;
+        [[nodiscard]] bool contains(const Key& key) const noexcept override;
 
     private:
         mutable std::list<std::pair<Key, Value>> cache_list_;
@@ -83,7 +84,7 @@ namespace common::cache
 
         /// @brief Moves the specified iterator to the front of the list (most recently used)
         /// @param it Iterator to the element to move to the front
-        void move_to_front(typename std::list<std::pair<Key, Value>>::const_iterator it) const;
+        void move_to_front(std::list<std::pair<Key, Value>>::const_iterator it) const noexcept;
 
         /// @brief Helper method to handle both const and non-const get operations
         /// @tparam CacheType Type of the cache instance (const or non-const)
@@ -103,9 +104,9 @@ namespace common::cache
     };
 
     template <typename Key, typename Value, typename Map>
-    LRUCache<Key, Value, Map>::LRUCache(const int capacity) : capacity_(static_cast<size_t>(capacity))
+    LRUCache<Key, Value, Map>::LRUCache(size_t capacity) : capacity_(capacity)
     {
-        if (capacity <= 0)
+        if (capacity == 0)
         {
             throw std::invalid_argument(fmt::format("Cache capacity must be greater than 0, got {}", capacity));
         }
@@ -136,7 +137,7 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] bool LRUCache<Key, Value, Map>::remove(const Key& key)
+    bool LRUCache<Key, Value, Map>::remove(const Key& key) noexcept
     {
         auto it = cache_map_.find(key);
         if (it == cache_map_.end())
@@ -150,39 +151,38 @@ namespace common::cache
     }
 
     template <typename Key, typename Value, typename Map>
-    void LRUCache<Key, Value, Map>::clear()
+    void LRUCache<Key, Value, Map>::clear() noexcept
     {
-        const size_t previous_size = cache_list_.size();
         cache_list_.clear();
         cache_map_.clear();
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] size_t LRUCache<Key, Value, Map>::size() const
+    size_t LRUCache<Key, Value, Map>::size() const noexcept
     {
         return cache_list_.size();
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] size_t LRUCache<Key, Value, Map>::capacity() const
+    size_t LRUCache<Key, Value, Map>::capacity() const noexcept
     {
         return capacity_;
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] bool LRUCache<Key, Value, Map>::empty() const
+    bool LRUCache<Key, Value, Map>::empty() const noexcept
     {
         return cache_list_.empty();
     }
 
     template <typename Key, typename Value, typename Map>
-    [[nodiscard]] bool LRUCache<Key, Value, Map>::contains(const Key& key) const
+    bool LRUCache<Key, Value, Map>::contains(const Key& key) const noexcept
     {
         return cache_map_.find(key) != cache_map_.end();
     }
 
     template <typename Key, typename Value, typename Map>
-    void LRUCache<Key, Value, Map>::move_to_front(typename std::list<std::pair<Key, Value>>::const_iterator it) const
+    void LRUCache<Key, Value, Map>::move_to_front(typename std::list<std::pair<Key, Value>>::const_iterator it) const noexcept
     {
         if (it == cache_list_.begin())
         {
@@ -221,13 +221,7 @@ namespace common::cache
 
         if (cache_list_.size() >= capacity_)
         {
-            if (capacity_ == 0)
-            {
-                return false;
-            }
-
-            auto last_it = cache_list_.end();
-            --last_it;
+            auto last_it = std::prev(cache_list_.end());
             cache_map_.erase(last_it->first);
             cache_list_.pop_back();
         }

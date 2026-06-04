@@ -9,7 +9,6 @@
 #include <memory>
 #include <stdexcept>
 #include <utility>
-#include <fmt/format.h>
 
 namespace common::container
 {
@@ -20,7 +19,7 @@ namespace common::container
     {
     public:
         /// @brief Default constructor creates an empty queue
-        Queue();
+        Queue() = default;
 
         /// @brief Copy constructor creates a deep copy of another queue
         /// @param other The queue to copy from
@@ -28,7 +27,7 @@ namespace common::container
 
         /// @brief Move constructor transfers ownership from another queue
         /// @param other The queue to move from
-        Queue(Queue&& other) ;
+        Queue(Queue&& other) noexcept;
 
         /// @brief Copy assignment operator
         /// @param other The queue to copy from
@@ -38,12 +37,21 @@ namespace common::container
         /// @brief Move assignment operator
         /// @param other The queue to move from
         /// @return Reference to this queue
-        Queue& operator=(Queue&& other) ;
+        Queue& operator=(Queue&& other) noexcept;
 
         /// @brief Add an element to the back of the queue
         /// @param value The value to add
-        /// @throws std::invalid_argument If the operation fails due to invalid state
         void push(const T& value);
+
+        /// @brief Add an element to the back of the queue using move semantics
+        /// @param value The value to move into the queue
+        void push(T&& value);
+
+        /// @brief Construct an element in-place at the back of the queue
+        /// @tparam Args The types of the arguments to forward to T's constructor
+        /// @param args The arguments to forward to T's constructor
+        template <typename... Args>
+        void emplace(Args&&... args);
 
         /// @brief Remove the element from the front of the queue
         /// @throws std::out_of_range If the queue is empty
@@ -71,26 +79,31 @@ namespace common::container
 
         /// @brief Check if the queue is empty
         /// @return True if the queue is empty, false otherwise
-        [[nodiscard]] bool empty() const ;
+        [[nodiscard]] bool empty() const noexcept;
 
         /// @brief Get the number of elements in the queue
         /// @return The number of elements in the queue
-        [[nodiscard]] size_t size() const ;
+        [[nodiscard]] size_t size() const noexcept;
+
+        /// @brief Remove all elements from the queue
+        void clear() noexcept;
 
         /// @brief Swap the contents of this queue with another
         /// @param other The queue to swap with
-        void swap(Queue& other) ;
+        void swap(Queue& other) noexcept;
 
     private:
         /// @brief Internal node structure for the queue
         struct Node
         {
-            T data_{};
-            std::unique_ptr<Node> next_{};
+            T data_;
+            std::unique_ptr<Node> next_;
 
-            /// @brief Constructor for a node
-            /// @param value The value to store in the node
-            explicit Node(T value);
+            template <typename... Args>
+            explicit Node(Args&&... args)
+                : data_(std::forward<Args>(args)...), next_(nullptr)
+            {
+            }
         };
 
         std::unique_ptr<Node> head_{};
@@ -99,10 +112,7 @@ namespace common::container
     };
 
     template <std::movable T>
-    Queue<T>::Queue() = default;
-
-    template <std::movable T>
-    Queue<T>::Queue(const Queue& other) : head_(nullptr), tail_(nullptr)
+    Queue<T>::Queue(const Queue& other)
     {
         if (!other.empty())
         {
@@ -121,7 +131,8 @@ namespace common::container
     }
 
     template <std::movable T>
-    Queue<T>::Queue(Queue&& other)  : head_(std::move(other.head_)), tail_(other.tail_), queue_size_(other.queue_size_)
+    Queue<T>::Queue(Queue&& other) noexcept
+        : head_(std::move(other.head_)), tail_(other.tail_), queue_size_(other.queue_size_)
     {
         other.tail_ = nullptr;
         other.queue_size_ = 0;
@@ -139,16 +150,9 @@ namespace common::container
     }
 
     template <std::movable T>
-    Queue<T>& Queue<T>::operator=(Queue&& other)
+    Queue<T>& Queue<T>::operator=(Queue&& other) noexcept
     {
-        if (this != &other)
-        {
-            head_ = std::move(other.head_);
-            tail_ = other.tail_;
-            queue_size_ = other.queue_size_;
-            other.tail_ = nullptr;
-            other.queue_size_ = 0;
-        }
+        Queue(std::move(other)).swap(*this);
         return *this;
     }
 
@@ -156,10 +160,41 @@ namespace common::container
     void Queue<T>::push(const T& value)
     {
         auto new_node = std::make_unique<Node>(value);
-        if (!new_node)
+        if (tail_)
         {
-            throw std::runtime_error("Queue::push: Failed to allocate memory for new node");
+            tail_->next_ = std::move(new_node);
+            tail_ = tail_->next_.get();
         }
+        else
+        {
+            head_ = std::move(new_node);
+            tail_ = head_.get();
+        }
+        ++queue_size_;
+    }
+
+    template <std::movable T>
+    void Queue<T>::push(T&& value)
+    {
+        auto new_node = std::make_unique<Node>(std::move(value));
+        if (tail_)
+        {
+            tail_->next_ = std::move(new_node);
+            tail_ = tail_->next_.get();
+        }
+        else
+        {
+            head_ = std::move(new_node);
+            tail_ = head_.get();
+        }
+        ++queue_size_;
+    }
+
+    template <std::movable T>
+    template <typename... Args>
+    void Queue<T>::emplace(Args&&... args)
+    {
+        auto new_node = std::make_unique<Node>(std::forward<Args>(args)...);
         if (tail_)
         {
             tail_->next_ = std::move(new_node);
@@ -229,28 +264,31 @@ namespace common::container
     }
 
     template <std::movable T>
-    bool Queue<T>::empty() const
+    bool Queue<T>::empty() const noexcept
     {
         return queue_size_ == 0;
     }
 
     template <std::movable T>
-    size_t Queue<T>::size() const
+    size_t Queue<T>::size() const noexcept
     {
         return queue_size_;
     }
 
     template <std::movable T>
-    void Queue<T>::swap(Queue& other)
+    void Queue<T>::clear() noexcept
+    {
+        head_.reset();
+        tail_ = nullptr;
+        queue_size_ = 0;
+    }
+
+    template <std::movable T>
+    void Queue<T>::swap(Queue& other) noexcept
     {
         using std::swap;
         head_.swap(other.head_);
         swap(tail_, other.tail_);
         swap(queue_size_, other.queue_size_);
-    }
-
-    template <std::movable T>
-    Queue<T>::Node::Node(T value) : data_(std::move(value)), next_(nullptr)
-    {
     }
 }

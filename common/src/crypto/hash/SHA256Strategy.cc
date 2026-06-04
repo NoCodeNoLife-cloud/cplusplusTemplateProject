@@ -26,12 +26,12 @@ namespace common::crypto::hash
         }
     }
 
-    SHA256Strategy::SHA256Strategy(SHA256Strategy&& other)  : ctx_(std::move(other.ctx_)), finalized_(other.finalized_)
+    SHA256Strategy::SHA256Strategy(SHA256Strategy&& other) noexcept : ctx_(std::move(other.ctx_)), finalized_(other.finalized_)
     {
         other.finalized_ = true; // Prevent other from being used after move
     }
 
-    SHA256Strategy& SHA256Strategy::operator=(SHA256Strategy&& other)
+    SHA256Strategy& SHA256Strategy::operator=(SHA256Strategy&& other) noexcept
     {
         if (this != &other)
         {
@@ -54,7 +54,7 @@ namespace common::crypto::hash
         return HEX_DIGEST_SIZE;
     }
 
-    bool SHA256Strategy::update(const void* data, const size_t length)
+    bool SHA256Strategy::update(const void* data, size_t length)
     {
         if (finalized_)
         {
@@ -89,23 +89,16 @@ namespace common::crypto::hash
 
     bool SHA256Strategy::reset()
     {
+        if (!ctx_)
+        {
+            return false;
+        }
         finalized_ = false;
         return EVP_DigestInit_ex(ctx_.get(), EVP_sha256(), nullptr) == 1;
     }
 
     void SHA256Strategy::EvpDeleter::operator()(EVP_MD_CTX* ctx) const
     {
-        if (ctx != nullptr)
-        {
-            EVP_MD_CTX_free(ctx);
-        }
-    }
-
-    void SHA256Strategy::validateContext() const
-    {
-        if (!ctx_)
-        {
-            throw std::runtime_error("Failed to allocate EVP_MD_CTX");
-        }
+        EVP_MD_CTX_free(ctx);
     }
 }

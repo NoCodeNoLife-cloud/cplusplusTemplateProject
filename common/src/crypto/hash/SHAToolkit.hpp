@@ -191,15 +191,16 @@ namespace common::crypto::hash
          * @param filePath Path to the file to hash.
          * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::string> hashFileToHexSHA256(const std::string& filePath);
+        [[nodiscard]] static std::optional<std::string> hashFileToHexSHA256(const std::string& filePath, size_t chunkSize = 8192);
 
         /**
          * @brief Computes SHA-1 hash of a file and returns hex representation.
          *
          * @param filePath Path to the file to hash.
+         * @param chunkSize Buffer size for reading file (default 8192 bytes).
          * @return Optional containing hexadecimal hash string, or nullopt on failure.
          */
-        [[nodiscard]] static std::optional<std::string> hashFileToHexSHA1(const std::string& filePath);
+        [[nodiscard]] static std::optional<std::string> hashFileToHexSHA1(const std::string& filePath, size_t chunkSize = 8192);
 
     private:
         std::unique_ptr<HashStrategy> strategy_;

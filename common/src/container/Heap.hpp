@@ -10,10 +10,8 @@
 #include <functional>
 #include <iterator>
 #include <stdexcept>
-#include <type_traits>
 #include <utility>
 #include <vector>
-#include <fmt/format.h>
 
 namespace common::container
 {
@@ -25,7 +23,7 @@ namespace common::container
     {
     public:
         /// @brief Default constructor
-        Heap();
+        Heap() noexcept;
 
         /// @brief Constructor from iterator range
         /// @tparam Iterator Type of the iterators
@@ -38,16 +36,16 @@ namespace common::container
         Heap(const Heap& other);
 
         /// @brief Move constructor
-        Heap(Heap&& other) ;
+        Heap(Heap&& other) noexcept;
 
         /// @brief Assignment operator
         Heap& operator=(const Heap& other);
 
         /// @brief Move assignment operator
-        Heap& operator=(Heap&& other) ;
+        Heap& operator=(Heap&& other) noexcept;
 
         /// @brief Destructor
-        ~Heap();
+        ~Heap() noexcept;
 
         /// @brief Pushes a value to the heap.
         /// @param value The value to push.
@@ -71,7 +69,7 @@ namespace common::container
         /// @brief Accesses the top element of the heap.
         /// @return Const reference to the top element.
         /// @throws std::out_of_range If the heap is empty.
-        [[nodiscard]] const T& top() const;
+        [[nodiscard]] constexpr const T& top() const;
 
         /// @brief Accesses the top element of the heap.
         /// @return Reference to the top element.
@@ -80,22 +78,22 @@ namespace common::container
 
         /// @brief Returns the number of elements in the heap.
         /// @return The number of elements.
-        [[nodiscard]] std::size_t size() const ;
+        [[nodiscard]] constexpr std::size_t size() const noexcept;
 
         /// @brief Checks if the heap is empty.
         /// @return True if the heap is empty, false otherwise.
-        [[nodiscard]] bool empty() const ;
+        [[nodiscard]] constexpr bool empty() const noexcept;
 
         /// @brief Clears the heap contents
-        void clear() ;
+        void clear() noexcept;
 
         /// @brief Checks if the heap is valid (maintains heap property)
         /// @return True if heap property is maintained
-        [[nodiscard]] bool is_valid() const;
+        [[nodiscard]] constexpr bool is_valid() const noexcept;
 
         /// @brief Swaps the contents of this heap with another heap.
         /// @param other The heap to swap with.
-        void swap(Heap& other) ;
+        void swap(Heap& other) noexcept;
 
     private:
         std::vector<T> data_{};
@@ -114,11 +112,11 @@ namespace common::container
 
         /// @brief Validates the heap property for the entire structure
         /// @return True if heap property is maintained throughout the structure
-        [[nodiscard]] bool validate_heap_property() const;
+        [[nodiscard]] constexpr bool validate_heap_property() const noexcept;
     };
 
     template <std::copyable T, typename Compare>
-    Heap<T, Compare>::Heap() = default;
+    Heap<T, Compare>::Heap() noexcept = default;
 
     template <std::copyable T, typename Compare>
     template <std::input_iterator Iterator>
@@ -131,43 +129,29 @@ namespace common::container
     Heap<T, Compare>::Heap(const Heap& other) = default;
 
     template <std::copyable T, typename Compare>
-    Heap<T, Compare>::Heap(Heap&& other)  = default;
+    Heap<T, Compare>::Heap(Heap&& other) noexcept = default;
 
     template <std::copyable T, typename Compare>
     Heap<T, Compare>& Heap<T, Compare>::operator=(const Heap& other) = default;
 
     template <std::copyable T, typename Compare>
-    Heap<T, Compare>& Heap<T, Compare>::operator=(Heap&& other)  = default;
+    Heap<T, Compare>& Heap<T, Compare>::operator=(Heap&& other) noexcept = default;
 
     template <std::copyable T, typename Compare>
-    Heap<T, Compare>::~Heap() = default;
+    Heap<T, Compare>::~Heap() noexcept = default;
 
     template <std::copyable T, typename Compare>
     void Heap<T, Compare>::push(const T& value)
     {
-        try
-        {
-            data_.push_back(value);
-            heapify_up(data_.size() - 1);
-        }
-        catch (const std::bad_alloc&)
-        {
-            throw std::runtime_error("Heap::push: Failed to allocate memory for new element");
-        }
+        data_.push_back(value);
+        heapify_up(data_.size() - 1);
     }
 
     template <std::copyable T, typename Compare>
     void Heap<T, Compare>::push(T&& value)
     {
-        try
-        {
-            data_.push_back(std::move(value));
-            heapify_up(data_.size() - 1);
-        }
-        catch (const std::bad_alloc&)
-        {
-            throw std::runtime_error("Heap::push: Failed to allocate memory for new element");
-        }
+        data_.push_back(std::move(value));
+        heapify_up(data_.size() - 1);
     }
 
     template <std::copyable T, typename Compare>
@@ -194,7 +178,7 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    const T& Heap<T, Compare>::top() const
+    constexpr const T& Heap<T, Compare>::top() const
     {
         if (empty())
         {
@@ -214,31 +198,31 @@ namespace common::container
     }
 
     template <std::copyable T, typename Compare>
-    std::size_t Heap<T, Compare>::size() const
+    constexpr std::size_t Heap<T, Compare>::size() const noexcept
     {
         return data_.size();
     }
 
     template <std::copyable T, typename Compare>
-    bool Heap<T, Compare>::empty() const
+    constexpr bool Heap<T, Compare>::empty() const noexcept
     {
         return data_.empty();
     }
 
     template <std::copyable T, typename Compare>
-    void Heap<T, Compare>::clear()
+    void Heap<T, Compare>::clear() noexcept
     {
         data_.clear();
     }
 
     template <std::copyable T, typename Compare>
-    bool Heap<T, Compare>::is_valid() const
+    constexpr bool Heap<T, Compare>::is_valid() const noexcept
     {
         return validate_heap_property();
     }
 
     template <std::copyable T, typename Compare>
-    void Heap<T, Compare>::swap(Heap& other)
+    void Heap<T, Compare>::swap(Heap& other) noexcept
     {
         using std::swap;
         swap(data_, other.data_);
@@ -251,10 +235,9 @@ namespace common::container
         const auto size = data_.size();
         if (size <= 1) return;
 
-        // Start from the last non-leaf node and heapify down
-        for (std::int32_t i = static_cast<std::int32_t>(size) / 2 - 1; i >= 0; --i)
+        for (auto i = size / 2; i > 0; --i)
         {
-            heapify_down(static_cast<std::size_t>(i));
+            heapify_down(i - 1);
         }
     }
 
@@ -281,34 +264,30 @@ namespace common::container
         {
             const std::size_t left = 2 * index + 1;
             const std::size_t right = 2 * index + 2;
-            std::size_t largest = index;
+            std::size_t target = index;
 
-            // Check left child
-            if (left < size && compare_(data_[largest], data_[left]))
+            if (left < size && compare_(data_[target], data_[left]))
             {
-                largest = left;
+                target = left;
             }
 
-            // Check right child - Fixed the logic error here
-            if (right < size && compare_(data_[largest], data_[right]))
+            if (right < size && compare_(data_[target], data_[right]))
             {
-                largest = right;
+                target = right;
             }
 
-            // If largest is still the current node, we're done
-            if (largest == index)
+            if (target == index)
             {
                 break;
             }
 
-            // Swap and continue heapifying down
-            std::swap(data_[index], data_[largest]);
-            index = largest;
+            std::swap(data_[index], data_[target]);
+            index = target;
         }
     }
 
     template <std::copyable T, typename Compare>
-    bool Heap<T, Compare>::validate_heap_property() const
+    constexpr bool Heap<T, Compare>::validate_heap_property() const noexcept
     {
         const auto size = data_.size();
         for (std::size_t i = 0; i < size; ++i)

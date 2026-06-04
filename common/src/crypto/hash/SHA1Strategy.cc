@@ -26,12 +26,12 @@ namespace common::crypto::hash
         }
     }
 
-    SHA1Strategy::SHA1Strategy(SHA1Strategy&& other)  : ctx_(std::move(other.ctx_)), finalized_(other.finalized_)
+    SHA1Strategy::SHA1Strategy(SHA1Strategy&& other) noexcept : ctx_(std::move(other.ctx_)), finalized_(other.finalized_)
     {
         other.finalized_ = true; // Prevent other from being used after move
     }
 
-    SHA1Strategy& SHA1Strategy::operator=(SHA1Strategy&& other)
+    SHA1Strategy& SHA1Strategy::operator=(SHA1Strategy&& other) noexcept
     {
         if (this != &other)
         {
@@ -54,7 +54,7 @@ namespace common::crypto::hash
         return HEX_DIGEST_SIZE;
     }
 
-    bool SHA1Strategy::update(const void* data, const size_t length)
+    bool SHA1Strategy::update(const void* data, size_t length)
     {
         if (finalized_)
         {
@@ -89,6 +89,10 @@ namespace common::crypto::hash
 
     bool SHA1Strategy::reset()
     {
+        if (!ctx_)
+        {
+            return false;
+        }
         finalized_ = false;
         return EVP_DigestInit_ex(ctx_.get(), EVP_sha1(), nullptr) == 1;
     }
@@ -101,11 +105,4 @@ namespace common::crypto::hash
         }
     }
 
-    void SHA1Strategy::validateContext() const
-    {
-        if (!ctx_)
-        {
-            throw std::runtime_error("Failed to allocate EVP_MD_CTX");
-        }
-    }
 }

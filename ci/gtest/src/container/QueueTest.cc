@@ -5,13 +5,24 @@
  *          size management, copy/move semantics, and edge cases.
  */
 
+#include <memory>
 #include <string>
+#include <type_traits>
+#include <utility>
 #include <vector>
 #include <gtest/gtest.h>
 
 #include "container/Queue.hpp"
 
 using namespace common::container;
+
+// Compile-time noexcept guarantees
+static_assert(std::is_nothrow_move_constructible_v<Queue<int>>);
+static_assert(std::is_nothrow_move_assignable_v<Queue<int>>);
+static_assert(noexcept(std::declval<Queue<int>&>().swap(std::declval<Queue<int>&>())));
+static_assert(noexcept(std::declval<Queue<int>&>().clear()));
+static_assert(noexcept(std::declval<const Queue<int>&>().empty()));
+static_assert(noexcept(std::declval<const Queue<int>&>().size()));
 
 /**
  * @brief Test fixture for QueueTest tests
@@ -604,6 +615,70 @@ TEST_F(QueueTest, SingleElementCycle_Correctness)
         queue.pop();
         EXPECT_TRUE(queue.empty());
     }
+}
+
+/**
+ * @brief Test push with rvalue reference moves element
+ * @details Verifies that push(T&&) correctly moves the element into the queue
+ */
+TEST_F(QueueTest, PushRValue_MovesElement)
+{
+    Queue<std::unique_ptr<int>> queue;
+    auto ptr = std::make_unique<int>(42);
+    queue.push(std::move(ptr));
+    EXPECT_EQ(queue.size(), 1);
+    EXPECT_EQ(*queue.front(), 42);
+    EXPECT_EQ(ptr, nullptr);
+}
+
+/**
+ * @brief Test emplace constructs element in-place
+ * @details Verifies that emplace forwards arguments to T's constructor
+ */
+TEST_F(QueueTest, Emplace_ConstructsInPlace)
+{
+    Queue<std::pair<int, int>> queue;
+    queue.emplace(1, 2);
+    EXPECT_EQ(queue.size(), 1);
+    EXPECT_EQ(queue.front().first, 1);
+    EXPECT_EQ(queue.front().second, 2);
+
+    queue.emplace(3, 4);
+    EXPECT_EQ(queue.size(), 2);
+    EXPECT_EQ(queue.front().first, 1);
+    EXPECT_EQ(queue.back().first, 3);
+}
+
+/**
+ * @brief Test clear removes all elements
+ * @details Verifies clear empties the queue and resets state correctly
+ */
+TEST_F(QueueTest, Clear_EmptiesQueue)
+{
+    Queue<int> queue;
+    queue.push(10);
+    queue.push(20);
+    queue.push(30);
+    EXPECT_EQ(queue.size(), 3);
+
+    queue.clear();
+    EXPECT_TRUE(queue.empty());
+    EXPECT_EQ(queue.size(), 0);
+    EXPECT_THROW(queue.front(), std::out_of_range);
+    EXPECT_THROW(queue.back(), std::out_of_range);
+    EXPECT_THROW(queue.pop(), std::out_of_range);
+}
+
+/**
+ * @brief Test clear on already empty queue
+ * @details Verifies clear is safe to call on an empty queue
+ */
+TEST_F(QueueTest, Clear_EmptyQueue_NoOp)
+{
+    Queue<int> queue;
+    queue.clear();
+    EXPECT_TRUE(queue.empty());
+    EXPECT_EQ(queue.size(), 0);
 }
 
 /**

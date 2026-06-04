@@ -355,3 +355,39 @@ TEST_F(UnionSetTest, EquivalenceClasses_CorrectProperties)
     EXPECT_TRUE(unionSet.connected(2, 3));
     EXPECT_TRUE(unionSet.connected(1, 3));
 }
+
+/**
+ * @brief Test find with const reference
+ * @details Verifies that find() can be called through const reference (const-correctness)
+ */
+TEST_F(UnionSetTest, Find_ConstReference_ReturnsCorrectRoot)
+{
+    UnionSet<int> unionSet;
+
+    unionSet.unionSets(1, 2);
+    unionSet.unionSets(2, 3);
+
+    const UnionSet<int>& constUnionSet = unionSet;
+
+    EXPECT_EQ(constUnionSet.find(1), constUnionSet.find(3));
+    EXPECT_EQ(constUnionSet.find(2), constUnionSet.find(1));
+}
+
+/**
+ * @brief Test iterative find with deep chain
+ * @details Verifies that iterative find handles deep chains without stack overflow
+ */
+TEST_F(UnionSetTest, IterativeFind_DeepChain_CorrectRoot)
+{
+    UnionSet<int> unionSet;
+    constexpr int kChainLength = 1000;
+
+    for (int i = 0; i < kChainLength; ++i)
+    {
+        unionSet.unionSets(i, i + 1);
+    }
+
+    const int root = unionSet.find(0);
+    EXPECT_EQ(root, unionSet.find(kChainLength));
+    EXPECT_EQ(root, unionSet.find(kChainLength / 2));
+}

@@ -163,12 +163,11 @@ namespace common::crypto::cipher
          */
         [[nodiscard]] static char ShiftChar(char c, int shift) ;
 
-        /**
-         * @brief Normalizes any integer to valid shift range
-         * @param[in] shift Raw shift value
-         * @return Value in [0, 25]
-         * @throws std::invalid_argument On arithmetic overflow
-         */
+         /**
+          * @brief Normalizes any integer to valid shift range
+          * @param[in] shift Raw shift value
+          * @return Value in [0, 25]
+          */
         [[nodiscard]] static int NormalizeShift(int shift);
     };
 }

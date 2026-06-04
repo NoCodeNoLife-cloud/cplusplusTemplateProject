@@ -5,9 +5,7 @@
  */
 
 #pragma once
-#include <algorithm>
 #include <cstdint>
-#include <memory>
 #include <vector>
 
 #include "StreamCipher.hpp"
@@ -29,12 +27,6 @@ namespace common::crypto::cipher
     class XorBitCipher final : public StreamCipher
     {
     public:
-        /// @brief Number of bits in a byte
-        static constexpr uint8_t BITS_PER_BYTE = 8;
-
-        /// @brief Most significant bit position (0-indexed from left)
-        static constexpr uint8_t MSB_POSITION = 7;
-
         /**
          * @brief Default constructor. Initializes cipher with empty key.
          * @note Must call initialize() before encrypt/decrypt operations.
@@ -122,14 +114,14 @@ namespace common::crypto::cipher
          *
          * @note This method processes full bytes. Use processBits() for arbitrary bit lengths.
          */
-        [[nodiscard]] std::vector<uint8_t> process(const std::vector<uint8_t>& data) const;
+        [[nodiscard]] std::vector<uint8_t> process(const std::vector<uint8_t>& data);
 
         /**
          * @brief Process data in-place for memory efficiency.
          * @param data Reference to data buffer to be processed.
          * @throw std::invalid_argument if key is empty.
          */
-        void processInPlace(std::vector<uint8_t>& data) const;
+        void processInPlace(std::vector<uint8_t>& data);
 
         /**
          * @brief Process arbitrary bit sequence.
@@ -139,21 +131,19 @@ namespace common::crypto::cipher
          *
          * @note Bit-level processing is slower than byte-level but supports arbitrary lengths.
          */
-        [[nodiscard]] std::vector<bool> processBits(const std::vector<bool>& bits) const;
-
-        /**
-         * @brief Generate keystream segment using internal state.
-         * @param length Number of bytes to generate.
-         * @return Generated keystream segment.
-         * @throw std::invalid_argument if key is empty.
-         */
-        [[nodiscard]] std::vector<uint8_t> generateKeyStream(size_t length) const;
+        [[nodiscard]] std::vector<bool> processBits(const std::vector<bool>& bits);
 
         /**
          * @brief Get current key stream position.
          * @return Current byte position in key stream.
          */
-        [[nodiscard]] size_t getCurrentPosition() const ;
+        [[nodiscard]] size_t getCurrentPosition() const;
+
+        /**
+         * @brief Get current bit position within current byte.
+         * @return Current bit position (0-7).
+         */
+        [[nodiscard]] uint8_t getCurrentBitPosition() const;
 
         /**
          * @brief Check if key is set.
@@ -162,23 +152,30 @@ namespace common::crypto::cipher
         [[nodiscard]] bool hasKey() const ;
 
         /**
-         * @brief Create a new cipher instance with auto-generated random key.
+         * @brief Create a new cipher instance with auto-generated pseudo-random key.
          * @param key_length Length of the key in bytes.
          * @return New XorBitCipher instance with generated key.
          * @note This is a factory method for convenience testing only.
          *       Not cryptographically secure without proper entropy source.
+         *       The generated key is deterministic (pseudo-random), not truly random.
          */
-        [[nodiscard]] static XorBitCipher createWithRandomKey(size_t key_length);
+        [[nodiscard]] static XorBitCipher createWithPseudoRandomKey(size_t key_length);
 
     private:
+        /// @brief Number of bits in a byte
+        static constexpr uint8_t BITS_PER_BYTE = 8;
+
+        /// @brief Most significant bit position (0-indexed from left)
+        static constexpr uint8_t MSB_POSITION = 7;
+
         /** @brief The key stream (keystream) for XOR operations */
         std::vector<uint8_t> key_stream_;
 
         /** @brief Current position in key stream (byte index) */
-        mutable size_t key_pos_{0};
+        size_t key_pos_{0};
 
         /** @brief Current bit position within current byte (0-7) */
-        mutable uint8_t bit_pos_{0};
+        uint8_t bit_pos_{0};
 
         /**
          * @brief Validate that cipher is initialized.
@@ -191,13 +188,13 @@ namespace common::crypto::cipher
          * @return Next key byte for XOR operation.
          * @throw std::invalid_argument if key is empty.
          */
-        [[nodiscard]] uint8_t nextKeyByte() const;
+        [[nodiscard]] uint8_t nextKeyByte();
 
         /**
          * @brief Get next key bit and advance position.
          * @return Next key bit (0 or 1) for XOR operation.
          * @throw std::invalid_argument if key is empty.
          */
-        [[nodiscard]] bool nextKeyBit() const;
+        [[nodiscard]] bool nextKeyBit();
     };
 }

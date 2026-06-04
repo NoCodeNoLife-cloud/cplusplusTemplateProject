@@ -392,3 +392,46 @@ TEST_F(XorBitCipherTest, HasKey_BeforeAndAfterInit)
 
     EXPECT_TRUE(cipher.hasKey());
 }
+
+/**
+ * @brief Test getCurrentBitPosition during encryption
+ */
+TEST_F(XorBitCipherTest, GetCurrentBitPosition_DuringEncryption)
+{
+    XorBitCipher cipher;
+    const std::vector<uint8_t> key = {0xFF, 0x00};
+    const std::vector<uint8_t> nonce;
+
+    cipher.initialize(key, nonce);
+
+    EXPECT_EQ(cipher.getCurrentBitPosition(), 0);
+
+    // Process 1 byte -> nextKeyByte resets bit_pos_ to 0
+    const std::vector<uint8_t> plaintext(1, 0x00);
+    cipher.encrypt(plaintext);
+
+    EXPECT_EQ(cipher.getCurrentBitPosition(), 0);
+    EXPECT_EQ(cipher.getCurrentPosition(), 1);
+}
+
+/**
+ * @brief Test createWithPseudoRandomKey factory method
+ */
+TEST_F(XorBitCipherTest, CreateWithPseudoRandomKey)
+{
+    constexpr size_t key_length = 16;
+    auto cipher = XorBitCipher::createWithPseudoRandomKey(key_length);
+
+    EXPECT_TRUE(cipher.hasKey());
+    EXPECT_TRUE(cipher.isInitialized());
+
+    const std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03, 0x04};
+    const auto ciphertext = cipher.encrypt(plaintext);
+
+    EXPECT_EQ(ciphertext.size(), plaintext.size());
+
+    // Verify that same key_length produces deterministic result
+    auto cipher2 = XorBitCipher::createWithPseudoRandomKey(key_length);
+    const auto ciphertext2 = cipher2.encrypt(plaintext);
+    EXPECT_EQ(ciphertext, ciphertext2);
+}

@@ -5,7 +5,7 @@
  */
 
 #pragma once
-#include <random>
+#include <array>
 #include <string>
 #include <unordered_map>
 
@@ -151,12 +151,12 @@ namespace common::crypto::cipher
         /**
          * @brief Retrieve current encryption mapping table (for debugging)
          *
-         * @return const std::unordered_map<char, char>& Read-only reference to internal encoding map
+         * @return const std::array<char, 26>& Read-only reference to internal encoding array
          *
          * @warning Use only for debugging or serialization scenarios; production code should not
          *          rely on this method for key retrieval
          */
-        [[nodiscard]] const std::unordered_map<char, char>& GetMapping() const
+        [[nodiscard]] const std::array<char, 26>& GetMapping() const
         {
             return encode_map_;
         }
@@ -178,13 +178,13 @@ namespace common::crypto::cipher
          * @brief Character-level transformation helper
          *
          * @param[in] c Character to transform
-         * @param[in] map Lookup table (encoding or decoding)
+         * @param[in] map Lookup table (encoding or decoding), indexed by 0-25 (A-Z)
          *
          * @return char Transformed character; returns original if input is non-alphabetic
          */
-        static char TransformChar(char c, const std::unordered_map<char, char>& map);
+        static char TransformChar(char c, const std::array<char, 26>& map);
 
-        std::unordered_map<char, char> encode_map_; ///< Forward encryption mapping (plaintext → ciphertext)
-        std::unordered_map<char, char> decode_map_; ///< Reverse decryption mapping (ciphertext → plaintext)
+        std::array<char, ALPHABET_SIZE> encode_map_{}; ///< Forward encryption mapping, index 0='A' → 25='Z'
+        std::array<char, ALPHABET_SIZE> decode_map_{}; ///< Reverse decryption mapping, index 0='A' → 25='Z'
     };
 }

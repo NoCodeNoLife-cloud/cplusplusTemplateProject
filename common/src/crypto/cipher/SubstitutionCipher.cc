@@ -6,14 +6,36 @@
 
 #include "SubstitutionCipher.hpp"
 
+#include <algorithm>
+#include <array>
 #include <cctype>
+#include <random>
 #include <fmt/format.h>
 #include <glog/logging.h>
 
 namespace common::crypto::cipher
 {
-    SubstitutionCipher::SubstitutionCipher(const std::unordered_map<char, char>& mapping) : encode_map_(mapping)
+    namespace
     {
+        constexpr std::array<char, 26> kAlphabet = {
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        };
+    }
+
+    SubstitutionCipher::SubstitutionCipher(const std::unordered_map<char, char>& mapping)
+    {
+        // Initialize with identity mapping
+        for (size_t i = 0; i < ALPHABET_SIZE; ++i)
+        {
+            encode_map_[i] = kAlphabet[i];
+        }
+        // Apply user's mapping overrides
+        for (const auto& [from, to] : mapping)
+        {
+            const size_t idx = static_cast<size_t>(std::toupper(from) - 'A');
+            encode_map_[idx] = static_cast<char>(std::toupper(to));
+        }
         ValidateAndBuildReverseMap();
     }
 
@@ -22,27 +44,22 @@ namespace common::crypto::cipher
         auto normalized_shift = shift % ALPHABET_SIZE;
         if (normalized_shift < 0) normalized_shift += ALPHABET_SIZE;
 
-        for (char c = 'A'; c <= 'Z'; ++c)
+        for (size_t i = 0; i < ALPHABET_SIZE; ++i)
         {
-            const char encoded = static_cast<char>('A' + (c - 'A' + normalized_shift) % ALPHABET_SIZE);
-            encode_map_[c] = encoded;
-            encode_map_[static_cast<char>(std::tolower(c))] = static_cast<char>(std::tolower(encoded));
+            encode_map_[i] = kAlphabet[(i + normalized_shift) % ALPHABET_SIZE];
         }
         ValidateAndBuildReverseMap();
     }
 
     SubstitutionCipher::SubstitutionCipher(const unsigned int seed)
     {
-        const std::string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        std::string shuffled = upper;
-
+        std::string shuffled(kAlphabet.begin(), kAlphabet.end());
         std::mt19937 gen(seed);
         std::ranges::shuffle(shuffled, gen);
 
         for (size_t i = 0; i < ALPHABET_SIZE; ++i)
         {
-            encode_map_[upper[i]] = shuffled[i];
-            encode_map_[static_cast<char>(std::tolower(upper[i]))] = static_cast<char>(std::tolower(shuffled[i]));
+            encode_map_[i] = shuffled[i];
         }
         ValidateAndBuildReverseMap();
     }
@@ -71,30 +88,38 @@ namespace common::crypto::cipher
 
     void SubstitutionCipher::ValidateAndBuildReverseMap()
     {
-        // Verify bijectivity: encoded values must be unique and alphabetic
-        std::unordered_map<char, char> reverse_check;
-        for (const auto& [from, to] : encode_map_)
+        bool seen[ALPHABET_SIZE] = {false};
+
+        for (size_t i = 0; i < ALPHABET_SIZE; ++i)
         {
-            if (!std::isalpha(from) || !std::isalpha(to))
+            const char encoded = encode_map_[i];
+            if (!std::isalpha(static_cast<unsigned char>(encoded)))
             {
                 DLOG(WARNING) << "Substitution cipher mapping contains non-alphabetic characters";
                 throw std::invalid_argument("Mapping must contain only alphabetic characters");
             }
-            if (reverse_check.contains(to))
+            const size_t idx = static_cast<size_t>(std::toupper(static_cast<unsigned char>(encoded)) - 'A');
+            if (seen[idx])
             {
                 DLOG(WARNING) << "Substitution cipher mapping is not bijective (not one-to-one)";
                 throw std::invalid_argument("Mapping must be bijective (one-to-one)");
             }
-            reverse_check[to] = from; ///< Build reverse lookup table
-            decode_map_[to] = from;
+            seen[idx] = true;
+            decode_map_[idx] = kAlphabet[i];
         }
     }
 
-    char SubstitutionCipher::TransformChar(const char c, const std::unordered_map<char, char>& map)
+    char SubstitutionCipher::TransformChar(const char c, const std::array<char, 26>& map)
     {
-        if (!std::isalpha(c)) return c;
+        if (!std::isalpha(static_cast<unsigned char>(c))) return c;
 
-        const auto it = map.find(c);
-        return it != map.end() ? it->second : c;
+        if (std::isupper(static_cast<unsigned char>(c)))
+        {
+            return map[static_cast<size_t>(c - 'A')];
+        }
+        else
+        {
+            return static_cast<char>(std::tolower(map[static_cast<size_t>(c - 'a')]));
+        }
     }
 }

@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 #include <glog/logging.h>
+#include <openssl/crypto.h>
 #include <openssl/err.h>
 
 namespace common::crypto::cipher
@@ -23,17 +24,20 @@ namespace common::crypto::cipher
         cleanup();
     }
 
-    ChaCha20Cipher::ChaCha20Cipher(ChaCha20Cipher&& other)  : ctx_(other.ctx_),
-                                                                      key_(other.key_),
-                                                                      nonce_(other.nonce_),
-                                                                      initialized_(other.initialized_)
+    ChaCha20Cipher::ChaCha20Cipher(ChaCha20Cipher&& other) noexcept : ctx_(other.ctx_),
+                                                                       key_(other.key_),
+                                                                       nonce_(other.nonce_),
+                                                                       initialized_(other.initialized_)
     {
         // Transfer ownership - other no longer owns the context
         other.ctx_ = nullptr;
         other.initialized_ = false;
+        // Clear secrets from source
+        OPENSSL_cleanse(other.key_.data(), other.key_.size());
+        OPENSSL_cleanse(other.nonce_.data(), other.nonce_.size());
     }
 
-    ChaCha20Cipher& ChaCha20Cipher::operator=(ChaCha20Cipher&& other)
+    ChaCha20Cipher& ChaCha20Cipher::operator=(ChaCha20Cipher&& other) noexcept
     {
         if (this != &other)
         {
@@ -46,6 +50,9 @@ namespace common::crypto::cipher
             // Transfer ownership
             other.ctx_ = nullptr;
             other.initialized_ = false;
+            // Clear secrets from source
+            OPENSSL_cleanse(other.key_.data(), other.key_.size());
+            OPENSSL_cleanse(other.nonce_.data(), other.nonce_.size());
         }
         return *this;
     }
@@ -81,9 +88,12 @@ namespace common::crypto::cipher
         if (!ctx_)
         {
             DLOG(WARNING) << "Failed to create OpenSSL cipher context for ChaCha20";
+            const auto err = ERR_get_error();
+            char err_buf[256];
+            ERR_error_string_n(err, err_buf, sizeof(err_buf));
             throw std::runtime_error(
                 "Failed to create OpenSSL cipher context: " +
-                std::string(ERR_error_string(ERR_get_error(), nullptr))
+                std::string(err_buf)
             );
         }
 
@@ -97,9 +107,12 @@ namespace common::crypto::cipher
         if (EVP_EncryptInit_ex(ctx_, EVP_chacha20(), nullptr, key_.data(), nonce_.data()) != 1)
         {
             cleanup();
+            const auto err = ERR_get_error();
+            char err_buf[256];
+            ERR_error_string_n(err, err_buf, sizeof(err_buf));
             throw std::runtime_error(
                 "Failed to initialize ChaCha20 cipher with key and nonce: " +
-                std::string(ERR_error_string(ERR_get_error(), nullptr))
+                std::string(err_buf)
             );
         }
 
@@ -150,9 +163,12 @@ namespace common::crypto::cipher
         // This resets the counter to INITIAL_COUNTER
         if (EVP_EncryptInit_ex(ctx_, nullptr, nullptr, key_.data(), nonce_.data()) != 1)
         {
+            const auto err = ERR_get_error();
+            char err_buf[256];
+            ERR_error_string_n(err, err_buf, sizeof(err_buf));
             throw std::runtime_error(
                 "Failed to reset ChaCha20 cipher: " +
-                std::string(ERR_error_string(ERR_get_error(), nullptr))
+                std::string(err_buf)
             );
         }
     }
@@ -167,7 +183,7 @@ namespace common::crypto::cipher
         return initialized_;
     }
 
-    std::vector<uint8_t> ChaCha20Cipher::process(const std::vector<uint8_t>& input) const
+    std::vector<uint8_t> ChaCha20Cipher::process(const std::vector<uint8_t>& input)
     {
         if (!ctx_)
         {
@@ -181,20 +197,26 @@ namespace common::crypto::cipher
 
         // Encrypt/decrypt the data
         if (EVP_EncryptUpdate(ctx_, output.data(), &output_len,
-                              input.data(), static_cast<int>(input.size())) != 1)
+                               input.data(), static_cast<int>(input.size())) != 1)
         {
+            const auto err = ERR_get_error();
+            char err_buf[256];
+            ERR_error_string_n(err, err_buf, sizeof(err_buf));
             throw std::runtime_error(
                 "ChaCha20 encryption/decryption failed: " +
-                std::string(ERR_error_string(ERR_get_error(), nullptr))
+                std::string(err_buf)
             );
         }
 
         // Finalize (for stream ciphers, this typically doesn't add padding)
         if (EVP_EncryptFinal_ex(ctx_, output.data() + output_len, &final_len) != 1)
         {
+            const auto err = ERR_get_error();
+            char err_buf[256];
+            ERR_error_string_n(err, err_buf, sizeof(err_buf));
             throw std::runtime_error(
                 "ChaCha20 finalization failed: " +
-                std::string(ERR_error_string(ERR_get_error(), nullptr))
+                std::string(err_buf)
             );
         }
 
@@ -203,13 +225,15 @@ namespace common::crypto::cipher
         return output;
     }
 
-    void ChaCha20Cipher::cleanup()
+    void ChaCha20Cipher::cleanup() noexcept
     {
         if (ctx_)
         {
             EVP_CIPHER_CTX_free(ctx_);
             ctx_ = nullptr;
         }
+        OPENSSL_cleanse(key_.data(), key_.size());
+        OPENSSL_cleanse(nonce_.data(), nonce_.size());
         initialized_ = false;
     }
 }

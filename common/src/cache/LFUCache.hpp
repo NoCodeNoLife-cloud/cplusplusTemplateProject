@@ -6,6 +6,7 @@
 
 #pragma once
 #include <algorithm>
+#include <iterator>
 #include <list>
 #include <optional>
 #include <stdexcept>
@@ -107,7 +108,7 @@ namespace common::cache
 
         /// @brief Updates the frequency of a key after access
         /// @param it Iterator to the element in the cache
-        void update_frequency(typename std::list<std::pair<Key, std::pair<Value, size_t>>>::iterator it);
+        void update_frequency(std::list<std::pair<Key, std::pair<Value, size_t>>>::iterator it);
 
         /// @brief Evicts the least frequently used item when cache is at capacity
         /// @return true if eviction was successful, false otherwise
@@ -252,14 +253,9 @@ namespace common::cache
         // Key doesn't exist, need to insert new key
         if (key_map_.size() >= capacity_)
         {
-            if (capacity_ == 0)
-            {
-                return false;
-            }
-
             if (!evict_lfu_item())
             {
-                return false; // Failed to evict an item
+                return false;
             }
         }
 
@@ -279,8 +275,8 @@ namespace common::cache
     template <typename Key, typename Value, typename Map>
     void LFUCache<Key, Value, Map>::update_frequency(typename std::list<std::pair<Key, std::pair<Value, size_t>>>::iterator it)
     {
-        Key key = it->first;
-        Value value = it->second.first;
+        Key key = std::move(it->first);
+        Value value = std::move(it->second.first);
         size_t old_freq = it->second.second;
         size_t new_freq = old_freq + 1;
 
@@ -318,11 +314,7 @@ namespace common::cache
         auto& min_freq_list = min_freq_it->second;
 
         // Remove the last item in the min frequency list (least recently used among those with same frequency)
-        auto lfu_it = min_freq_list.end();
-        if (lfu_it != min_freq_list.begin())
-        {
-            --lfu_it; // Move to the last element (LRU within this frequency)
-        }
+        auto lfu_it = std::prev(min_freq_list.end());
 
         Key key_to_remove = lfu_it->first;
 
@@ -341,10 +333,6 @@ namespace common::cache
     template <typename Key, typename Value, typename Map>
     std::list<std::pair<Key, std::pair<Value, size_t>>>& LFUCache<Key, Value, Map>::get_or_create_freq_list(size_t freq)
     {
-        if (!freq_list_map_.contains(freq))
-        {
-            freq_list_map_[freq] = std::list<std::pair<Key, std::pair<Value, size_t>>>();
-        }
         return freq_list_map_[freq];
     }
 

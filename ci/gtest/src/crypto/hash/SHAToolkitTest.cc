@@ -223,6 +223,90 @@ TEST_F(SHAToolkitTest, SHA256Strategy_Constants)
 }
 
 /**
+ * @brief Test toHexString with incorrect expected_size returns nullopt
+ * @details Verifies that toHexString returns nullopt when digest size doesn't match
+ */
+TEST_F(SHAToolkitTest, ToHexString_MismatchedSize)
+{
+    std::vector<uint8_t> digest(32, 0xAB);
+    const auto hex = SHAToolkit::toHexString(digest, 64);
+    EXPECT_FALSE(hex.has_value());
+}
+
+/**
+ * @brief Test toHexString correct usage
+ * @details Verifies that toHexString produces correct hex output
+ */
+TEST_F(SHAToolkitTest, ToHexString_CorrectOutput)
+{
+    std::vector<uint8_t> digest = {0xAB, 0xCD, 0xEF};
+    const auto hex = SHAToolkit::toHexString(digest, 3);
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(*hex, "abcdef");
+}
+
+/**
+ * @brief Test file hashing with custom chunk size
+ * @details Verifies that file hashing works with different chunk sizes
+ */
+TEST_F(SHAToolkitTest, FileHash_CustomChunkSize)
+{
+    const std::string temp_file = "test_sha_chunk_temp.txt";
+    const std::string content = "Custom chunk size test content";
+
+    std::ofstream ofs(temp_file, std::ios::binary);
+    ASSERT_TRUE(ofs.is_open());
+    ofs.write(content.c_str(), static_cast<std::streamsize>(content.size()));
+    ofs.close();
+
+    const auto hex_default = SHAToolkit::hashFileToHexSHA256(temp_file);
+    ASSERT_TRUE(hex_default.has_value());
+
+    const auto hex_small = SHAToolkit::hashFileToHexSHA256(temp_file, 4);
+    ASSERT_TRUE(hex_small.has_value());
+    EXPECT_EQ(*hex_default, *hex_small);
+
+    const auto hex_large = SHAToolkit::hashFileToHexSHA256(temp_file, 4096);
+    ASSERT_TRUE(hex_large.has_value());
+    EXPECT_EQ(*hex_default, *hex_large);
+
+    std::filesystem::remove(temp_file);
+}
+
+/**
+ * @brief Test empty file hashing
+ * @details Verifies that hashing an empty file returns correct hash
+ */
+TEST_F(SHAToolkitTest, EmptyFileHash_SHA256)
+{
+    const std::string temp_file = "test_sha_empty_temp.txt";
+
+    std::ofstream ofs(temp_file, std::ios::binary);
+    ASSERT_TRUE(ofs.is_open());
+    ofs.close();
+
+    const auto hex = SHAToolkit::hashFileToHexSHA256(temp_file);
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(hex->length(), 64);
+
+    const auto expected = SHAToolkit::hashStringToHexSHA256("");
+    ASSERT_TRUE(expected.has_value());
+    EXPECT_EQ(*hex, *expected);
+
+    std::filesystem::remove(temp_file);
+}
+
+/**
+ * @brief Test file not found returns nullopt
+ * @details Verifies that hashFileToHex returns nullopt for non-existent file
+ */
+TEST_F(SHAToolkitTest, FileHash_NotFound)
+{
+    const auto hex = SHAToolkit::hashFileToHexSHA256("nonexistent_file_xyz.txt");
+    EXPECT_FALSE(hex.has_value());
+}
+
+/**
  * @brief Test SHA1Strategy constants
  * @details Verifies that strategy constants are properly defined
  */
@@ -230,4 +314,84 @@ TEST_F(SHAToolkitTest, SHA1Strategy_Constants)
 {
     EXPECT_EQ(SHA1Strategy::DIGEST_SIZE, 20);
     EXPECT_EQ(SHA1Strategy::HEX_DIGEST_SIZE, 40);
+}
+
+TEST_F(SHAToolkitTest, SHA1Strategy_MoveNoexcept)
+{
+    static_assert(std::is_nothrow_move_constructible_v<SHA1Strategy>,
+                  "SHA1Strategy move constructor must be noexcept");
+    static_assert(std::is_nothrow_move_assignable_v<SHA1Strategy>,
+                  "SHA1Strategy move assignment must be noexcept");
+    SUCCEED() << "SHA1Strategy move operations are properly noexcept";
+}
+
+TEST_F(SHAToolkitTest, SHA1Strategy_MoveSemantics)
+{
+    SHA1Strategy s1;
+    EXPECT_TRUE(s1.update("data"));
+
+    SHA1Strategy s2(std::move(s1));
+    const auto hash = s2.finalize();
+    ASSERT_TRUE(hash.has_value());
+    EXPECT_EQ(hash->size(), 20);
+}
+
+TEST_F(SHAToolkitTest, SHA1Strategy_ResetAfterMove)
+{
+    SHA1Strategy s1;
+    EXPECT_TRUE(s1.update("first"));
+
+    SHA1Strategy s2(std::move(s1));
+    EXPECT_FALSE(s1.reset());
+    EXPECT_FALSE(s1.update("should fail"));
+    EXPECT_FALSE(s1.finalize().has_value());
+}
+
+TEST_F(SHAToolkitTest, SHA1Strategy_CopyDeleted)
+{
+    static_assert(!std::is_copy_constructible_v<SHA1Strategy>,
+                  "SHA1Strategy should not be copy constructible");
+    static_assert(!std::is_copy_assignable_v<SHA1Strategy>,
+                  "SHA1Strategy should not be copy assignable");
+    SUCCEED() << "SHA1Strategy copy operations are properly deleted";
+}
+
+TEST_F(SHAToolkitTest, SHA256Strategy_MoveNoexcept)
+{
+    static_assert(std::is_nothrow_move_constructible_v<SHA256Strategy>,
+                  "SHA256Strategy move constructor must be noexcept");
+    static_assert(std::is_nothrow_move_assignable_v<SHA256Strategy>,
+                  "SHA256Strategy move assignment must be noexcept");
+    SUCCEED() << "SHA256Strategy move operations are properly noexcept";
+}
+
+TEST_F(SHAToolkitTest, SHA256Strategy_MoveSemantics)
+{
+    SHA256Strategy s1;
+    EXPECT_TRUE(s1.update("data"));
+
+    SHA256Strategy s2(std::move(s1));
+    const auto hash = s2.finalize();
+    ASSERT_TRUE(hash.has_value());
+    EXPECT_EQ(hash->size(), 32);
+}
+
+TEST_F(SHAToolkitTest, SHA256Strategy_ResetAfterMove)
+{
+    SHA256Strategy s1;
+    EXPECT_TRUE(s1.update("first"));
+
+    SHA256Strategy s2(std::move(s1));
+    EXPECT_FALSE(s1.reset());
+    EXPECT_FALSE(s1.update("should fail"));
+    EXPECT_FALSE(s1.finalize().has_value());
+}
+
+TEST_F(SHAToolkitTest, SHA256Strategy_CopyDeleted)
+{
+    static_assert(!std::is_copy_constructible_v<SHA256Strategy>,
+                  "SHA256Strategy should not be copy constructible");
+    static_assert(!std::is_copy_assignable_v<SHA256Strategy>,
+                  "SHA256Strategy should not be copy assignable");
+    SUCCEED() << "SHA256Strategy copy operations are properly deleted";
 }
