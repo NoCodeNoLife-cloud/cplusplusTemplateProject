@@ -6,6 +6,7 @@
 
 #pragma once
 #include <algorithm>
+#include <span>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -108,6 +109,11 @@ namespace common::filesystem
         /// @param count Number of times to append the character.
         /// @return A reference to this CharArrayWriter instance.
         CharArrayWriter& append(char c, size_t count) override;
+
+        /// @brief Appends a span of characters to the buffer.
+        /// @param chars The span of characters to append.
+        /// @return A reference to this CharArrayWriter instance.
+        CharArrayWriter& append(std::span<const char> chars) override;
 
         // Utility functions
         /// @brief Resets the buffer to empty.

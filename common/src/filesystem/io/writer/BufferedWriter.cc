@@ -160,6 +160,13 @@ namespace common::filesystem
         return *this;
     }
 
+    BufferedWriter& BufferedWriter::append(const std::span<const char> chars)
+    {
+        buffer_.insert(buffer_.end(), chars.begin(), chars.end());
+        checkAndFlush();
+        return *this;
+    }
+
     BufferedWriter& BufferedWriter::newLine()
     {
         return append('\n');

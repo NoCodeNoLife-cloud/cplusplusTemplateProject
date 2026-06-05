@@ -8,7 +8,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "filesystem/io/interface/IAppendable.hpp"
+#include "interface/IAppendable.hpp"
 
 using namespace common::interfaces;
 

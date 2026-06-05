@@ -59,5 +59,10 @@ namespace common::filesystem
 
     protected:
         std::shared_ptr<AbstractOutputStream> output_stream_;
+
+    private:
+        /// @brief Ensures the underlying output stream is available.
+        /// @throws std::runtime_error If the output stream is null.
+        void ensureStream() const;
     };
 }

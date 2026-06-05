@@ -6,6 +6,7 @@
 
 #pragma once
 #include <fstream>
+#include <span>
 #include <vector>
 
 #include "AbstractWriter.hpp"
@@ -90,6 +91,11 @@ namespace common::filesystem
         /// @return A reference to this BufferedWriter instance.
         BufferedWriter& append(char c, size_t count) override;
 
+        /// @brief Appends a span of characters to the buffer.
+        /// @param chars The span of characters to append.
+        /// @return A reference to this BufferedWriter instance.
+        BufferedWriter& append(std::span<const char> chars) override;
+
         /// @brief Writes a newline character to the buffer.
         /// @return A reference to this BufferedWriter instance.
         BufferedWriter& newLine();
@@ -100,7 +106,7 @@ namespace common::filesystem
 
         /// @brief Checks if the writer is closed.
         /// @return True if the writer is closed, false otherwise.
-        [[nodiscard]] bool isClosed() const  override;
+        [[nodiscard]] bool isClosed() const override;
 
     private:
         static constexpr size_t DEFAULT_BUFFER_SIZE = 1024;

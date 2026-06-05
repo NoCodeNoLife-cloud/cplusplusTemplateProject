@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <span>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -68,6 +69,11 @@ namespace common::filesystem
         /// @param count Number of times to append the character.
         /// @return A reference to this AbstractWriter instance.
         AbstractWriter& append(char c, size_t count) override;
+
+        /// @brief Appends a span of characters to the writer.
+        /// @param chars The span of characters to append.
+        /// @return A reference to this AbstractWriter instance.
+        AbstractWriter& append(std::span<const char> chars) override;
 
         /// @brief Writes a single character to the writer.
         /// @param c The character to write.
@@ -170,6 +176,16 @@ namespace common::filesystem
         if (count > 0)
         {
             const std::vector<char> buf(count, c);
+            write(buf);
+        }
+        return *this;
+    }
+
+    inline AbstractWriter& AbstractWriter::append(const std::span<const char> chars)
+    {
+        if (!chars.empty())
+        {
+            const std::vector<char> buf(chars.begin(), chars.end());
             write(buf);
         }
         return *this;

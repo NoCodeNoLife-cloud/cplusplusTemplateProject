@@ -7,7 +7,6 @@
 #include "filesystem/io/writer/CharArrayWriter.hpp"
 
 #include <stdexcept>
-#include <fmt/format.h>
 
 namespace common::filesystem
 {
@@ -34,7 +33,7 @@ namespace common::filesystem
             return;
         }
 
-        if (off + len > cBuf.size())
+        if (off > cBuf.size() || len > cBuf.size() - off)
         {
             throw std::out_of_range("Invalid offset or length");
         }
@@ -56,7 +55,7 @@ namespace common::filesystem
             return;
         }
 
-        if (off + len > str.size())
+        if (off > str.size() || len > str.size() - off)
         {
             throw std::out_of_range("Invalid offset or length");
         }
@@ -105,7 +104,9 @@ namespace common::filesystem
     {
         if (!str.empty())
         {
-            write(std::string(str));
+            ensureCapacity(count_ + str.size());
+            std::copy_n(str.data(), str.size(), buf_.begin() + static_cast<std::ptrdiff_t>(count_));
+            count_ += str.size();
         }
         return *this;
     }
@@ -114,17 +115,21 @@ namespace common::filesystem
     {
         if (str)
         {
-            write(std::string(str));
+            const size_t len = std::char_traits<char>::length(str);
+            ensureCapacity(count_ + len);
+            std::copy_n(str, len, buf_.begin() + static_cast<std::ptrdiff_t>(count_));
+            count_ += len;
         }
         return *this;
     }
 
     CharArrayWriter& CharArrayWriter::append(const std::initializer_list<char> chars)
     {
-        if (chars.begin() != chars.end()) // Check if initializer_list is not empty
+        if (chars.size() > 0)
         {
-            const auto vec = std::vector(chars);
-            write(vec, 0, vec.size());
+            ensureCapacity(count_ + chars.size());
+            std::copy_n(chars.begin(), chars.size(), buf_.begin() + static_cast<std::ptrdiff_t>(count_));
+            count_ += chars.size();
         }
         return *this;
     }
@@ -133,8 +138,9 @@ namespace common::filesystem
     {
         if (chars && count > 0)
         {
-            const std::vector vec(chars, chars + count);
-            write(vec);
+            ensureCapacity(count_ + count);
+            std::copy_n(chars, count, buf_.begin() + static_cast<std::ptrdiff_t>(count_));
+            count_ += count;
         }
         return *this;
     }
@@ -143,8 +149,20 @@ namespace common::filesystem
     {
         if (count > 0)
         {
-            const std::vector buf(count, c);
-            write(buf);
+            ensureCapacity(count_ + count);
+            std::fill_n(buf_.begin() + static_cast<std::ptrdiff_t>(count_), count, c);
+            count_ += count;
+        }
+        return *this;
+    }
+
+    CharArrayWriter& CharArrayWriter::append(const std::span<const char> chars)
+    {
+        if (!chars.empty())
+        {
+            ensureCapacity(count_ + chars.size());
+            std::copy_n(chars.data(), chars.size(), buf_.begin() + static_cast<std::ptrdiff_t>(count_));
+            count_ += chars.size();
         }
         return *this;
     }
@@ -171,17 +189,14 @@ namespace common::filesystem
 
     void CharArrayWriter::flush()
     {
-        // No operation for CharArrayWriter.
     }
 
     void CharArrayWriter::close()
     {
-        // No operation for CharArrayWriter.
     }
 
     bool CharArrayWriter::isClosed() const
     {
-        // CharArrayWriter is never considered closed.
         return false;
     }
 
@@ -189,7 +204,7 @@ namespace common::filesystem
     {
         if (minCapacity > buf_.capacity())
         {
-            buf_.resize(minCapacity);
+            buf_.reserve(minCapacity);
         }
     }
 }

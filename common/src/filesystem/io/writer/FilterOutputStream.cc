@@ -4,9 +4,9 @@
  * @details This file contains the implementation of the FilterOutputStream class methods for Common library utilities.
  */
 
-#include "filesystem/io/writer/FilterOutputStream.hpp"
+#include <stdexcept>
 
-#include <fmt/format.h>
+#include "filesystem/io/writer/FilterOutputStream.hpp"
 
 namespace common::filesystem
 {
@@ -14,31 +14,30 @@ namespace common::filesystem
     {
     }
 
-    void FilterOutputStream::write(const std::byte b)
+    void FilterOutputStream::ensureStream() const
     {
         if (!output_stream_)
         {
             throw std::runtime_error("Output stream is not available");
         }
+    }
+
+    void FilterOutputStream::write(const std::byte b)
+    {
+        ensureStream();
         output_stream_->write(b);
     }
 
     void FilterOutputStream::write(const std::vector<std::byte>& buffer)
     {
-        if (!output_stream_)
-        {
-            throw std::runtime_error("Output stream is not available");
-        }
+        ensureStream();
         output_stream_->write(buffer);
     }
 
     void FilterOutputStream::write(const std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
-        if (!output_stream_)
-        {
-            throw std::runtime_error("Output stream is not available");
-        }
-        if (offset + len > buffer.size())
+        ensureStream();
+        if (offset > buffer.size() || len > buffer.size() - offset)
         {
             throw std::out_of_range("Buffer overflow");
         }
@@ -47,10 +46,7 @@ namespace common::filesystem
 
     void FilterOutputStream::write(const std::byte* buffer, const size_t length)
     {
-        if (!output_stream_)
-        {
-            throw std::runtime_error("Output stream is not available");
-        }
+        ensureStream();
         if (!buffer)
         {
             throw std::invalid_argument("Buffer cannot be null");
@@ -60,27 +56,26 @@ namespace common::filesystem
 
     void FilterOutputStream::flush()
     {
-        if (!output_stream_)
-        {
-            throw std::runtime_error("Output stream is not available");
-        }
+        ensureStream();
         output_stream_->flush();
     }
 
     void FilterOutputStream::close()
     {
-        if (!output_stream_)
+        ensureStream();
+        try
         {
-            throw std::runtime_error("Output stream is not available");
+            flush();
         }
-        flush();
+        catch (...)
+        {
+            // Ignore flush error during close, proceed with closing
+        }
         output_stream_->close();
     }
 
     bool FilterOutputStream::isClosed() const
     {
-        // A filter stream is considered closed if the underlying stream is not available
-        // or if the underlying stream reports being closed
         return !output_stream_ || output_stream_->isClosed();
     }
 }
