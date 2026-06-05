@@ -59,5 +59,18 @@ namespace common::filesystem
 
         /// @brief Closes this input stream and releases any system resources associated with the stream.
         void close() override = 0;
+
+        /// @brief Checks if the end of the stream has been reached.
+        /// @return true if the end of the stream has been reached, false otherwise.
+        [[nodiscard]] bool isEof() const { return eof_; }
+
+    protected:
+        bool eof_{false};
+
+        /// @brief Marks the stream as having reached the end.
+        void setEof() { eof_ = true; }
+
+        /// @brief Resets the EOF flag.
+        void clearEof() { eof_ = false; }
     };
 }

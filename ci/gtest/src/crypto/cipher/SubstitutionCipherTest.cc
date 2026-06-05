@@ -79,7 +79,9 @@ TEST_F(SubstitutionCipherTest, MappingConstructor)
 {
     const std::unordered_map<char, char> mapping = {
         {'A', 'Q'}, {'B', 'W'}, {'C', 'E'},
-        {'a', 'q'}, {'b', 'w'}, {'c', 'e'}
+        {'Q', 'A'}, {'W', 'B'}, {'E', 'C'},
+        {'a', 'q'}, {'b', 'w'}, {'c', 'e'},
+        {'q', 'a'}, {'w', 'b'}, {'e', 'c'}
     };
     const SubstitutionCipher cipher(mapping);
 
@@ -90,7 +92,8 @@ TEST_F(SubstitutionCipherTest, MappingConstructor)
 TEST_F(SubstitutionCipherTest, PartialMapping)
 {
     const std::unordered_map<char, char> mapping = {
-        {'A', 'Z'}, {'a', 'z'}
+        {'A', 'Z'}, {'Z', 'A'},
+        {'a', 'z'}, {'z', 'a'}
     };
     const SubstitutionCipher cipher(mapping);
 

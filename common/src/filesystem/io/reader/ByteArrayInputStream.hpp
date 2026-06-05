@@ -5,7 +5,6 @@
  */
 
 #pragma once
-#include <algorithm>
 #include <cstddef>
 #include <vector>
 
@@ -23,6 +22,11 @@ namespace common::filesystem
         /// @brief Reads the next byte of data from the input stream.
         /// @return the next byte of data, or -1 if the end of the stream is reached.
         [[nodiscard]] std::byte read() override;
+
+        /// @brief Reads bytes from the input stream into the given buffer, filling it completely or until no more data is available.
+        /// @param cBuf the buffer into which the data is read.
+        /// @return the total number of bytes read into the buffer, or 0 if there is no more data because the end of the stream has been reached.
+        [[nodiscard]] size_t read(std::vector<std::byte>& cBuf) override;
 
         /// @brief Reads up to len bytes of data from the input stream into an array of bytes.
         /// @param cBuf the buffer into which the data is read.

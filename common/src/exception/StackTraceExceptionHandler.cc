@@ -9,27 +9,25 @@
 
 namespace common::exception
 {
-    void StackTraceExceptionHandler::logException(const std::exception& ex, const std::string& prefix)
+    void StackTraceExceptionHandler::logMessage(const std::string_view message, const std::string_view prefix)
     {
         if (prefix.empty())
         {
-            LOG(ERROR) << ex.what() << "\nStack trace:\n" << std::to_string(std::stacktrace::current());
+            LOG(ERROR) << message << "\nStack trace:\n" << std::stacktrace::current();
         }
         else
         {
-            LOG(ERROR) << prefix << ": " << ex.what() << "\nStack trace:\n" << std::to_string(std::stacktrace::current());
+            LOG(ERROR) << prefix << ": " << message << "\nStack trace:\n" << std::stacktrace::current();
         }
     }
 
-    void StackTraceExceptionHandler::logUnknownException(const std::string& prefix)
+    void StackTraceExceptionHandler::logException(const std::exception& ex, const std::string_view prefix)
     {
-        if (prefix.empty())
-        {
-            LOG(ERROR) << "Program terminated due to an unrecognized exception.\nStack trace:\n" << std::to_string(std::stacktrace::current());
-        }
-        else
-        {
-            LOG(ERROR) << prefix << ": Program terminated due to an unrecognized exception.\nStack trace:\n" << std::to_string(std::stacktrace::current());
-        }
+        logMessage(ex.what(), prefix);
+    }
+
+    void StackTraceExceptionHandler::logUnknownException(const std::string_view prefix)
+    {
+        logMessage("Program terminated due to an unrecognized exception.", prefix);
     }
 }

@@ -39,16 +39,15 @@ namespace common::filesystem
             throw std::out_of_range("Buffer offset/length out of range");
         }
 
+        eof_ = false;
         std::size_t bytesRead = 0;
         for (std::size_t i = 0; i < len; ++i)
         {
-            const std::byte byte = read();
-            // Check for end of stream
-            if (static_cast<int>(byte) == -1)
+            if (eof_)
             {
                 break;
             }
-            buffer[offset + i] = byte;
+            buffer[offset + i] = read();
             ++bytesRead;
         }
         return bytesRead;
@@ -61,16 +60,11 @@ namespace common::filesystem
 
     size_t AbstractInputStream::skip(const std::size_t n)
     {
+        eof_ = false;
         std::size_t skipped = 0;
-        // Prevent potential overflow
-        const std::size_t maxSkip = std::min(n, static_cast<std::size_t>(std::numeric_limits<int>::max()));
-
-        for (std::size_t i = 0; i < maxSkip; ++i)
+        for (std::size_t i = 0; i < n && !eof_; ++i)
         {
-            if (static_cast<int>(read()) == -1)
-            {
-                break;
-            }
+            read();
             ++skipped;
         }
         return skipped;

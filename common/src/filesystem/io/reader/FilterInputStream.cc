@@ -40,19 +40,34 @@ namespace common::filesystem
     std::byte FilterInputStream::read()
     {
         validateInputStream();
-        return input_stream_->read();
+        const auto byte = input_stream_->read();
+        if (input_stream_->isEof())
+        {
+            setEof();
+        }
+        return byte;
     }
 
     size_t FilterInputStream::read(std::vector<std::byte>& buffer)
     {
         validateInputStream();
-        return input_stream_->read(buffer);
+        const auto n = input_stream_->read(buffer);
+        if (input_stream_->isEof())
+        {
+            setEof();
+        }
+        return n;
     }
 
     size_t FilterInputStream::read(std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
         validateInputStream();
-        return input_stream_->read(buffer, offset, len);
+        const auto n = input_stream_->read(buffer, offset, len);
+        if (input_stream_->isEof())
+        {
+            setEof();
+        }
+        return n;
     }
 
     void FilterInputStream::reset()
@@ -64,7 +79,12 @@ namespace common::filesystem
     size_t FilterInputStream::skip(const size_t n)
     {
         validateInputStream();
-        return input_stream_->skip(n);
+        const auto skipped = input_stream_->skip(n);
+        if (input_stream_->isEof())
+        {
+            setEof();
+        }
+        return skipped;
     }
 
     void FilterInputStream::close()

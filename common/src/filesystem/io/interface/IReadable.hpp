@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <optional>
 
 namespace common::interfaces
 {
@@ -19,7 +20,7 @@ namespace common::interfaces
 
         /// @brief Read one byte from the input source.
         /// This method reads and returns the next byte of data from the input source.
-        /// @return The byte value read as an unsigned integer, or -1 if the end of the stream has been reached
-        [[nodiscard]] virtual int read() = 0;
+        /// @return The byte value read, or std::nullopt if the end of the stream has been reached
+        [[nodiscard]] virtual std::optional<char> read() = 0;
     };
 }

@@ -16,15 +16,44 @@ namespace common::filesystem
 {
     ByteArrayInputStream::ByteArrayInputStream(const std::vector<std::byte>& buf) : buffer_(buf)
     {
+        if (buffer_.empty())
+        {
+            setEof();
+        }
     }
 
     std::byte ByteArrayInputStream::read()
     {
         if (closed_ || pos_ >= buffer_.size())
         {
+            setEof();
             return static_cast<std::byte>(-1);
         }
-        return buffer_[pos_++];
+        const auto result = buffer_[pos_++];
+        if (pos_ >= buffer_.size())
+        {
+            setEof();
+        }
+        return result;
+    }
+
+    size_t ByteArrayInputStream::read(std::vector<std::byte>& cBuf)
+    {
+        if (closed_ || pos_ >= buffer_.size())
+        {
+            return 0;
+        }
+
+        const size_t remaining = buffer_.size() - pos_;
+        const size_t bytesToRead = std::min(cBuf.size(), remaining);
+
+        std::copy_n(buffer_.begin() + static_cast<std::ptrdiff_t>(pos_), bytesToRead, cBuf.begin());
+        pos_ += bytesToRead;
+        if (pos_ >= buffer_.size())
+        {
+            setEof();
+        }
+        return bytesToRead;
     }
 
     size_t ByteArrayInputStream::read(std::vector<std::byte>& cBuf, const size_t off, const size_t len)
@@ -44,6 +73,10 @@ namespace common::filesystem
 
         std::copy_n(buffer_.begin() + static_cast<std::ptrdiff_t>(pos_), bytesToRead, cBuf.begin() + static_cast<std::ptrdiff_t>(off));
         pos_ += bytesToRead;
+        if (pos_ >= buffer_.size())
+        {
+            setEof();
+        }
         return bytesToRead;
     }
 
@@ -57,6 +90,10 @@ namespace common::filesystem
         const size_t available = buffer_.size() - pos_;
         const size_t bytesToSkip = std::min(n, available);
         pos_ += bytesToSkip;
+        if (pos_ >= buffer_.size())
+        {
+            setEof();
+        }
         return bytesToSkip;
     }
 
@@ -75,6 +112,7 @@ namespace common::filesystem
         {
             throw std::runtime_error("ByteArrayInputStream::reset: Stream is closed");
         }
+        clearEof();
         pos_ = mark_position_;
     }
 
@@ -95,6 +133,7 @@ namespace common::filesystem
     void ByteArrayInputStream::close()
     {
         closed_ = true;
+        setEof();
     }
 
     bool ByteArrayInputStream::isClosed() const

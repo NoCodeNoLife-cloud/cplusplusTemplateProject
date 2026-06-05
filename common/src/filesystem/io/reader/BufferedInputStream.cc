@@ -12,10 +12,6 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-#include "filesystem/io/reader/AbstractInputStream.hpp"
-#include "filesystem/io/reader/BufferedReader.hpp"
-#include "filesystem/io/reader/FilterInputStream.hpp"
-
 namespace common::filesystem
 {
     BufferedInputStream::BufferedInputStream(std::unique_ptr<AbstractInputStream> in)  : BufferedInputStream(std::move(in), DEFAULT_BUFFER_SIZE)
@@ -64,6 +60,7 @@ namespace common::filesystem
             fillBuffer();
             if (pos_ >= count_)
             {
+                setEof();
                 return static_cast<std::byte>(-1);
             }
         }
@@ -155,12 +152,6 @@ namespace common::filesystem
     {
         count_ = input_stream_->read(buf_, 0, buf_.size());
         pos_ = 0;
-        if (count_ > 0)
-        {
-        }
-        else
-        {
-        }
     }
 
     template <typename Operation>

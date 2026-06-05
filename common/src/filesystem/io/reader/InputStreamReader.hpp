@@ -5,9 +5,7 @@
  */
 
 #pragma once
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING // NOLINT(*-reserved-identifier)
 #include <algorithm>
-#include <codecvt>
 #include <memory>
 #include <string>
 #include <vector>
@@ -64,7 +62,6 @@ namespace common::filesystem
 
     private:
         std::shared_ptr<AbstractReader> reader_;
-        std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> converter_;
         bool closed_{false};
     };
 }

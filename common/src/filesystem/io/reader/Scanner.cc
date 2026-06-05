@@ -8,6 +8,7 @@
 
 #include <istream>
 #include <limits>
+#include <sstream>
 #include <stdexcept>
 #include <fmt/format.h>
 
@@ -17,7 +18,7 @@ namespace common::filesystem
     {
     }
 
-    int32_t Scanner::nextInt() const
+    int32_t Scanner::nextInt()
     {
         std::string token;
         if (!getNextToken(token))
@@ -52,7 +53,7 @@ namespace common::filesystem
         }
     }
 
-    double Scanner::nextDouble() const
+    double Scanner::nextDouble()
     {
         std::string token;
         if (!getNextToken(token))
@@ -81,14 +82,14 @@ namespace common::filesystem
         }
     }
 
-    std::string Scanner::nextLine() const
+    std::string Scanner::nextLine()
     {
         std::string line;
         std::getline(input_, line);
         return line;
     }
 
-    bool Scanner::getNextToken(std::string& token) const
+    bool Scanner::getNextToken(std::string& token)
     {
         // Skip leading whitespace
         while (input_.peek() != EOF && std::isspace(input_.peek()))
@@ -110,18 +111,20 @@ namespace common::filesystem
         return true;
     }
 
-    std::vector<std::string> Scanner::nextTokens(const char delimiter) const
+    std::vector<std::string> Scanner::nextTokens(const char delimiter)
     {
         std::string line;
         std::getline(input_, line);
         std::vector<std::string> tokens;
-        boost::split(tokens, line, boost::is_any_of(std::string(1, delimiter)));
-
-        // Remove empty tokens
-        std::erase_if(tokens, [](const std::string& s)
+        std::istringstream iss(line);
+        std::string token;
+        while (std::getline(iss, token, delimiter))
         {
-            return s.empty();
-        });
+            if (!token.empty())
+            {
+                tokens.push_back(std::move(token));
+            }
+        }
         return tokens;
     }
 }

@@ -34,7 +34,7 @@ set(MAIN_PROJECT cpp_project)
 project(${MAIN_PROJECT})
 
 # Vcpkg dependencies
-find_package(Boost CONFIG REQUIRED)
+find_package(Boost CONFIG REQUIRED COMPONENTS serialization)
 find_package(glog CONFIG REQUIRED)
 find_package(gtest CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)

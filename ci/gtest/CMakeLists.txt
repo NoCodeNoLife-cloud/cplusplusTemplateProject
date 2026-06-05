@@ -32,6 +32,7 @@ target_link_libraries(${CI_GTEST_PROJECT} PRIVATE
         OpenSSL::SSL OpenSSL::Crypto
         Microsoft::DirectXMath
         magic_enum::magic_enum
+        Boost::serialization
         common_pkg
         glog_service
         grpc_service

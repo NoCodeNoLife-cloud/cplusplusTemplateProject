@@ -6,8 +6,9 @@
  */
 
 #pragma once
+#include <exception>
 #include <stacktrace>
-#include <string>
+#include <string_view>
 
 namespace common::exception
 {
@@ -20,10 +21,14 @@ namespace common::exception
         /// @brief Log a caught std::exception with its stack trace
         /// @param ex The caught exception
         /// @param prefix Optional prefix message
-        static void logException(const std::exception& ex, const std::string& prefix = "");
+        static void logException(const std::exception& ex, std::string_view prefix = {});
 
         /// @brief Log a caught unknown exception with stack trace
         /// @param prefix Optional prefix message
-        static void logUnknownException(const std::string& prefix = "");
+        static void logUnknownException(std::string_view prefix = {});
+
+    private:
+        /// @brief Internal helper to output a message with stack trace
+        static void logMessage(std::string_view message, std::string_view prefix);
     };
 }

@@ -7,11 +7,12 @@
 #pragma once
 #include <stdexcept>
 #include <string>
+#include <string_view>
 
 namespace common::exception
 {
     /// @brief Custom exception class for authentication-related errors
-    class [[nodiscard]] AuthenticationException : public std::runtime_error
+    class AuthenticationException : public std::runtime_error
     {
     public:
         /// @brief Constructor with error message
@@ -25,7 +26,7 @@ namespace common::exception
 
         /// @brief Move constructor for efficient transfer of exception objects
         /// @param other Exception object to move from
-        AuthenticationException(AuthenticationException&& other) ;
+        AuthenticationException(AuthenticationException&& other) noexcept ;
 
         /// @brief Copy constructor
         /// @param other Exception object to copy from
@@ -37,9 +38,9 @@ namespace common::exception
 
         /// @brief Move assignment operator
         /// @param other Exception object to move from
-        AuthenticationException& operator=(AuthenticationException&& other)  = default;
+        AuthenticationException& operator=(AuthenticationException&& other) = default;
 
         /// @brief Virtual destructor for proper cleanup in inheritance hierarchy
-        ~AuthenticationException()  override;
+        ~AuthenticationException() override;
     };
 }

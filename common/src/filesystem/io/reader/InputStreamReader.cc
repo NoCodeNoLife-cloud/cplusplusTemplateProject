@@ -81,10 +81,8 @@ namespace common::filesystem
             throw std::runtime_error("InputStreamReader::read: Invalid UTF-8 sequence");
         }
 
-        // Read additional bytes if needed
-        std::vector<char> fullByteBuffer(1 + additionalBytes);
-        fullByteBuffer[0] = static_cast<char>(firstByte);
-
+        // Decode UTF-8 codepoint from the validated bytes
+        unsigned char bytes[4] = {firstByteUnsigned, 0, 0, 0};
         for (int i = 0; i < additionalBytes; ++i)
         {
             const int nextByte = reader_->read();
@@ -92,27 +90,39 @@ namespace common::filesystem
             {
                 throw std::runtime_error("InputStreamReader::read: Incomplete UTF-8 sequence");
             }
-            if (const auto nextByteUnsigned = static_cast<unsigned char>(nextByte); (nextByteUnsigned & 0xC0) != 0x80)
+            const auto nextByteUnsigned = static_cast<unsigned char>(nextByte);
+            if ((nextByteUnsigned & 0xC0) != 0x80)
             {
                 throw std::runtime_error("InputStreamReader::read: Invalid UTF-8 sequence");
             }
-            fullByteBuffer[1 + i] = static_cast<char>(nextByte);
+            bytes[1 + i] = nextByteUnsigned;
         }
 
-        try
+        char32_t codepoint;
+        switch (additionalBytes)
         {
-            const std::string byteStr(fullByteBuffer.data(), fullByteBuffer.size());
-            const std::u32string chars = converter_.from_bytes(byteStr);
-            if (chars.empty())
-            {
-                return -1;
-            }
-            return static_cast<unsigned char>(chars[0]);
+            case 0:
+                codepoint = bytes[0];
+                break;
+            case 1:
+                codepoint = (static_cast<char32_t>(bytes[0] & 0x1F) << 6) |
+                            (static_cast<char32_t>(bytes[1] & 0x3F));
+                break;
+            case 2:
+                codepoint = (static_cast<char32_t>(bytes[0] & 0x0F) << 12) |
+                            (static_cast<char32_t>(bytes[1] & 0x3F) << 6) |
+                            (static_cast<char32_t>(bytes[2] & 0x3F));
+                break;
+            case 3:
+                codepoint = (static_cast<char32_t>(bytes[0] & 0x07) << 18) |
+                            (static_cast<char32_t>(bytes[1] & 0x3F) << 12) |
+                            (static_cast<char32_t>(bytes[2] & 0x3F) << 6) |
+                            (static_cast<char32_t>(bytes[3] & 0x3F));
+                break;
+            default:
+                throw std::runtime_error("InputStreamReader::read: Invalid UTF-8 sequence length");
         }
-        catch (const std::exception& ex)
-        {
-            throw std::runtime_error("InputStreamReader::read: Failed to decode byte to character - " + std::string(ex.what()));
-        }
+        return static_cast<int>(codepoint);
     }
 
     int InputStreamReader::read(std::vector<char>& cBuf, const size_t off, const size_t len)

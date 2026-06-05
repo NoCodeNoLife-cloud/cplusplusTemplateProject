@@ -53,6 +53,7 @@ namespace common::filesystem
     {
         if (!isValid())
         {
+            setEof();
             return static_cast<std::byte>(-1);
         }
 
@@ -61,6 +62,7 @@ namespace common::filesystem
         {
             return byte;
         }
+        setEof();
         return static_cast<std::byte>(-1);
     }
 

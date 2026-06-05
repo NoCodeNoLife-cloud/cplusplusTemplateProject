@@ -37,7 +37,12 @@ namespace common::filesystem
         {
             return pushback_buffer_[buffer_pos_++];
         }
-        return input_stream_->read();
+        const auto byte = input_stream_->read();
+        if (input_stream_->isEof())
+        {
+            setEof();
+        }
+        return byte;
     }
 
     size_t PushbackInputStream::read(std::vector<std::byte>& buffer)
@@ -69,6 +74,10 @@ namespace common::filesystem
         if (bytesRead < len)
         {
             bytesRead += input_stream_->read(buffer, offset + bytesRead, len - bytesRead);
+            if (input_stream_->isEof())
+            {
+                setEof();
+            }
         }
         return bytesRead;
     }

@@ -67,20 +67,10 @@ namespace common::filesystem
             return -1; // EOF
         }
 
-        const size_t maxRead = std::min(len, source_.size() - position_);
-        const size_t actualRead = std::min(maxRead, cBuf.size() - off);
-
-        for (size_t i = 0; i < actualRead; ++i)
-        {
-            if (position_ < source_.size())
-            {
-                cBuf[off + i] = source_[position_++];
-            }
-            else
-            {
-                break;
-            }
-        }
+        const size_t available = source_.size() - position_;
+        const size_t actualRead = std::min({len, available, cBuf.size() - off});
+        std::copy_n(source_.begin() + static_cast<std::ptrdiff_t>(position_), actualRead, cBuf.begin() + static_cast<std::ptrdiff_t>(off));
+        position_ += actualRead;
         return static_cast<int>(actualRead > 0 ? actualRead : -1);
     }
 

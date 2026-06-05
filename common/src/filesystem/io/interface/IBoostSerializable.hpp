@@ -10,7 +10,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/access.hpp>
 
-namespace fox::interfaces
+namespace common::interfaces
 {
     /// @brief Interface for Boost serialization
     /// This interface provides a common base for objects that can be serialized using Boost.Serialization.
@@ -54,17 +54,31 @@ namespace fox::interfaces
     template <typename T>
     bool IBoostSerializable<T>::serializeTo(std::ostream& stream) const
     {
-        boost::archive::text_oarchive oa(stream);
-        oa << static_cast<const T&>(*this);
-        return true;
+        try
+        {
+            boost::archive::text_oarchive oa(stream);
+            oa << static_cast<const T&>(*this);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
     }
 
     template <typename T>
     bool IBoostSerializable<T>::deserializeFrom(std::istream& stream)
     {
-        boost::archive::text_iarchive ia(stream);
-        ia >> static_cast<T&>(*this);
-        return true;
+        try
+        {
+            boost::archive::text_iarchive ia(stream);
+            ia >> static_cast<T&>(*this);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
     }
 
     template <typename T>

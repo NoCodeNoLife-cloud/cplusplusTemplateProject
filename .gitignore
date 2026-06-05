@@ -33,3 +33,4 @@ cmake-build*
 *.exe
 *.out
 *.app
+/.agentbridge/

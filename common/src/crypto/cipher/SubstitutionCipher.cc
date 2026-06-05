@@ -33,7 +33,7 @@ namespace common::crypto::cipher
         // Apply user's mapping overrides
         for (const auto& [from, to] : mapping)
         {
-            const size_t idx = static_cast<size_t>(std::toupper(from) - 'A');
+            const auto idx = static_cast<size_t>(std::toupper(from) - 'A');
             encode_map_[idx] = static_cast<char>(std::toupper(to));
         }
         ValidateAndBuildReverseMap();
@@ -41,12 +41,12 @@ namespace common::crypto::cipher
 
     SubstitutionCipher::SubstitutionCipher(const int shift)
     {
-        auto normalized_shift = shift % ALPHABET_SIZE;
-        if (normalized_shift < 0) normalized_shift += ALPHABET_SIZE;
+        int normalized_shift = shift % static_cast<int>(ALPHABET_SIZE);
+        if (normalized_shift < 0) normalized_shift += static_cast<int>(ALPHABET_SIZE);
 
         for (size_t i = 0; i < ALPHABET_SIZE; ++i)
         {
-            encode_map_[i] = kAlphabet[(i + normalized_shift) % ALPHABET_SIZE];
+            encode_map_[i] = kAlphabet[(i + static_cast<size_t>(normalized_shift)) % ALPHABET_SIZE];
         }
         ValidateAndBuildReverseMap();
     }
@@ -98,7 +98,7 @@ namespace common::crypto::cipher
                 DLOG(WARNING) << "Substitution cipher mapping contains non-alphabetic characters";
                 throw std::invalid_argument("Mapping must contain only alphabetic characters");
             }
-            const size_t idx = static_cast<size_t>(std::toupper(static_cast<unsigned char>(encoded)) - 'A');
+            const auto idx = static_cast<size_t>(std::toupper(static_cast<unsigned char>(encoded)) - 'A');
             if (seen[idx])
             {
                 DLOG(WARNING) << "Substitution cipher mapping is not bijective (not one-to-one)";

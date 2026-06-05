@@ -1,5 +1,5 @@
 /**
-* @file ICloseable.hpp
+ * @file ICloseable.hpp
  * @brief ICloseable class declaration
  * @details This header defines the ICloseable class that provides functionality for Common library utilities.
  */

@@ -7,7 +7,6 @@
 #include "AuthenticationException.hpp"
 
 #include <string_view>
-#include <fmt/format.h>
 
 namespace common::exception
 {
@@ -19,13 +18,11 @@ namespace common::exception
     {
     }
 
-    AuthenticationException::AuthenticationException(AuthenticationException&& other)  : std::runtime_error(other.what())
+    AuthenticationException::AuthenticationException(AuthenticationException&& other) noexcept : std::runtime_error(std::move(other))
     {
     }
 
-    AuthenticationException::AuthenticationException(const AuthenticationException& other) : std::runtime_error(other.what())
-    {
-    }
+    AuthenticationException::AuthenticationException(const AuthenticationException& other) = default;
 
-    AuthenticationException::~AuthenticationException()  = default;
+    AuthenticationException::~AuthenticationException() = default;
 } // common
