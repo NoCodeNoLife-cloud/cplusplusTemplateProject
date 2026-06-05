@@ -1,18 +1,18 @@
 /**
  * @file TopK.cc
  * @brief TopK class implementation
- * @details This file contains the implementation of the TopK class methods for Advanced data structures including trees and skip lists.
+ * @details This file contains the implementation of the TopK class for tracking the top K largest numbers.
  */
 
 #include "TopK.hpp"
 
 #include <algorithm>
-#include <fmt/format.h>
-#include <glog/logging.h>
+#include <stdexcept>
+#include <string>
 
 namespace common::data_structure
 {
-    TopK::TopK()  : max_capacity_(0)
+    TopK::TopK() : max_capacity_(0)
     {
     }
 
@@ -20,17 +20,14 @@ namespace common::data_structure
     {
         if (max_capacity < 0)
         {
-            DLOG(WARNING) << fmt::format("TopK constructed with invalid max_capacity: {}", max_capacity);
             throw std::invalid_argument("max_capacity must be non-negative");
         }
     }
 
     void TopK::add(const int32_t num)
     {
-        // If capacity is bounded and heap is full
         if (max_capacity_ > 0 && static_cast<int32_t>(minHeap_.size()) >= max_capacity_)
         {
-            // Only add if the new number is larger than the smallest in heap
             if (num > minHeap_.top())
             {
                 minHeap_.pop();
@@ -39,7 +36,6 @@ namespace common::data_structure
         }
         else
         {
-            // Heap is not full or unbounded
             minHeap_.push(num);
         }
     }
@@ -48,36 +44,31 @@ namespace common::data_structure
     {
         if (count < 0)
         {
-            DLOG(WARNING) << fmt::format("TopK::getTopK called with negative count: {}", count);
             throw std::invalid_argument(
                 "TopK::getTopK: count must be non-negative, got " + std::to_string(count)
             );
         }
 
-        // Create a copy of the heap to avoid modifying the original
-        auto temp_heap = minHeap_;
+        auto temp = minHeap_;
+        const auto heap_size = static_cast<int32_t>(temp.size());
+        const auto n = (count <= 0 || count > heap_size) ? heap_size : count;
 
-        // Extract all elements from the heap (min-heap gives ascending order)
-        std::vector<int32_t> all_elements;
-        all_elements.reserve(temp_heap.size());
+        std::vector<int32_t> result;
+        result.reserve(n);
 
-        while (!temp_heap.empty())
+        // Pop the smallest (heap_size - n) elements to waste, keeping the top n
+        for (int32_t i = heap_size - n; i > 0; --i)
         {
-            all_elements.push_back(temp_heap.top());
-            temp_heap.pop();
+            temp.pop();
         }
 
-        // Determine how many elements to return
-        const auto heap_size = static_cast<int32_t>(all_elements.size());
-        const auto elements_to_return = count <= 0 || count > heap_size ? heap_size : count;
+        // Extract remaining n elements (they come out in ascending order)
+        while (!temp.empty())
+        {
+            result.push_back(temp.top());
+            temp.pop();
+        }
 
-        // Get the largest 'elements_to_return' elements (last N elements from ascending list)
-        std::vector result(
-            all_elements.end() - elements_to_return,
-            all_elements.end()
-        );
-
-        // If descending order is requested, reverse the result
         if (!ascending)
         {
             std::reverse(result.begin(), result.end());

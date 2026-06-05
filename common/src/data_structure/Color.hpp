@@ -1,7 +1,7 @@
 /**
  * @file Color.hpp
- * @brief Color class declaration
- * @details This header defines the Color class that provides functionality for Advanced data structures including trees and skip lists.
+ * @brief Color enum class
+ * @details This header defines the Color enum class used for representing various colors (e.g., Red-Black tree node colors).
  */
 
 #pragma once

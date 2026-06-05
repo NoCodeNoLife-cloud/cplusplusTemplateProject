@@ -7,6 +7,7 @@
 #pragma once
 #include <cstdint>
 #include <memory>
+#include <utility>
 
 namespace common::data_structure::tree
 {
@@ -21,13 +22,13 @@ namespace common::data_structure::tree
         explicit TreeNode(T value) ;
 
         T data{};
-        std::shared_ptr<TreeNode> left_{};
-        std::shared_ptr<TreeNode> right_{};
+        std::unique_ptr<TreeNode> left_{};
+        std::unique_ptr<TreeNode> right_{};
         int32_t height_{1};
     };
 
     template <typename T>
-    TreeNode<T>::TreeNode(T value)  : data(value), left_(nullptr), right_(nullptr)
+    TreeNode<T>::TreeNode(T value)  : data(std::move(value))
     {
     }
 }

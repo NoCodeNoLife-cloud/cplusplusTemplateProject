@@ -1,12 +1,13 @@
 /**
  * @file TopK.hpp
  * @brief TopK class declaration
- * @details This header defines the TopK class that provides functionality for Advanced data structures including trees and skip lists.
+ * @details This header defines the TopK class that tracks the top K largest numbers from a stream using a min-heap.
  */
 
 #pragma once
 #include <cstdint>
 #include <queue>
+#include <stdexcept>
 #include <vector>
 
 namespace common::data_structure
