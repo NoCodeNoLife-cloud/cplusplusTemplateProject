@@ -6,6 +6,7 @@
 
 #pragma once
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "interface/IAppendable.hpp"
@@ -15,7 +16,9 @@
 namespace common::filesystem
 {
     /// @brief Abstract base class for writers that provides basic functionality for writing characters and strings.
-    class AbstractWriter : public interfaces::ICloseable, public interfaces::IFlushable, interfaces::IAppendable<AbstractWriter>
+    class AbstractWriter : public interfaces::ICloseable,
+                           public interfaces::IFlushable,
+                           public interfaces::IAppendable<AbstractWriter>
     {
     public:
         AbstractWriter();
@@ -128,8 +131,7 @@ namespace common::filesystem
     {
         if (!str.empty())
         {
-            const std::vector buf(str.begin(), str.end());
-            write(buf);
+            write(std::string(str));
         }
         return *this;
     }
@@ -138,17 +140,16 @@ namespace common::filesystem
     {
         if (str)
         {
-            const std::string s(str);
-            write(s);
+            write(std::string(str));
         }
         return *this;
     }
 
     inline AbstractWriter& AbstractWriter::append(const std::initializer_list<char> chars)
     {
-        if (!empty(chars))
+        if (chars.size() > 0)
         {
-            const std::vector buf(chars);
+            const std::vector<char> buf(chars);
             write(buf);
         }
         return *this;
@@ -158,7 +159,7 @@ namespace common::filesystem
     {
         if (chars && count > 0)
         {
-            const std::vector buf(chars, chars + count);
+            const std::vector<char> buf(chars, chars + count);
             write(buf);
         }
         return *this;
@@ -168,7 +169,7 @@ namespace common::filesystem
     {
         if (count > 0)
         {
-            const std::vector buf(count, c);
+            const std::vector<char> buf(count, c);
             write(buf);
         }
         return *this;
@@ -176,7 +177,7 @@ namespace common::filesystem
 
     inline void AbstractWriter::write(const char c)
     {
-        const std::vector buf(1, c);
+        const std::vector<char> buf(1, c);
         write(buf, 0, 1);
     }
 
@@ -201,7 +202,9 @@ namespace common::filesystem
         if (off < str.size() && len > 0)
         {
             const size_t end = std::min(off + len, str.size());
-            const std::vector buf(str.begin() + static_cast<std::string::difference_type>(off), str.begin() + static_cast<std::string::difference_type>(end));
+            const std::vector<char> buf(
+                str.begin() + static_cast<std::string::difference_type>(off),
+                str.begin() + static_cast<std::string::difference_type>(end));
             write(buf, 0, buf.size());
         }
     }

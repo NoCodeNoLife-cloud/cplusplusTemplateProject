@@ -6,7 +6,7 @@
 
 #include "filesystem/io/writer/BufferedOutputStream.hpp"
 
-#include <fmt/format.h>
+#include <stdexcept>
 
 namespace common::filesystem
 {
@@ -109,6 +109,11 @@ namespace common::filesystem
 
     void BufferedOutputStream::close()
     {
+        if (closed_)
+        {
+            return;
+        }
+        closed_ = true;
         flush();
         if (output_stream_)
         {
@@ -128,7 +133,7 @@ namespace common::filesystem
 
     [[nodiscard]] bool BufferedOutputStream::isClosed() const
     {
-        return output_stream_ == nullptr;
+        return closed_;
     }
 
     void BufferedOutputStream::flushBuffer()

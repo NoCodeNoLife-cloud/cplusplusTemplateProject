@@ -66,9 +66,13 @@ namespace common::filesystem
 
     void AbstractFilterWriter::close()
     {
-        checkOutputStream();
+        if (!output_writer_)
+        {
+            return;
+        }
         flush();
         output_writer_->close();
+        output_writer_.reset();
     }
 
     void AbstractFilterWriter::checkOutputStream() const

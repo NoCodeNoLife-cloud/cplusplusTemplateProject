@@ -7,6 +7,7 @@
 #pragma once
 #include <algorithm>
 #include <cstddef>
+#include <string>
 #include <vector>
 
 #include "filesystem/io/writer/AbstractOutputStream.hpp"

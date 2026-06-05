@@ -7,7 +7,6 @@
 #include "filesystem/io/writer/BufferedWriter.hpp"
 
 #include <stdexcept>
-#include <fmt/format.h>
 
 namespace common::filesystem
 {
@@ -45,10 +44,7 @@ namespace common::filesystem
         }
         else
         {
-            for (const char c : str)
-            {
-                buffer_.push_back(c);
-            }
+            buffer_.insert(buffer_.end(), str.begin(), str.end());
             checkAndFlush();
         }
     }
@@ -72,11 +68,9 @@ namespace common::filesystem
         }
         else
         {
-            for (size_t i = 0; i < len; ++i)
-            {
-                buffer_.push_back(cBuf[off + i]);
-                checkAndFlush();
-            }
+            buffer_.insert(buffer_.end(), cBuf.begin() + static_cast<std::ptrdiff_t>(off),
+                           cBuf.begin() + static_cast<std::ptrdiff_t>(off + len));
+            checkAndFlush();
         }
     }
 
@@ -92,10 +86,7 @@ namespace common::filesystem
 
     void BufferedWriter::close()
     {
-        if (output_stream_&& output_stream_
-        ->
-        is_open()
-        )
+        if (output_stream_ && output_stream_->is_open())
         {
             flush();
             output_stream_->close();
@@ -111,11 +102,8 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const std::string& str)
     {
-        for (const char c : str)
-        {
-            buffer_.push_back(c);
-            checkAndFlush();
-        }
+        buffer_.insert(buffer_.end(), str.begin(), str.end());
+        checkAndFlush();
         return *this;
     }
 
@@ -123,22 +111,17 @@ namespace common::filesystem
     {
         if (start < str.length() && end <= str.length() && start < end)
         {
-            for (size_t i = start; i < end; ++i)
-            {
-                buffer_.push_back(str[i]);
-                checkAndFlush();
-            }
+            buffer_.insert(buffer_.end(), str.begin() + static_cast<std::ptrdiff_t>(start),
+                           str.begin() + static_cast<std::ptrdiff_t>(end));
+            checkAndFlush();
         }
         return *this;
     }
 
     BufferedWriter& BufferedWriter::append(const std::string_view str)
     {
-        for (const char c : str)
-        {
-            buffer_.push_back(c);
-            checkAndFlush();
-        }
+        buffer_.insert(buffer_.end(), str.begin(), str.end());
+        checkAndFlush();
         return *this;
     }
 
@@ -146,22 +129,17 @@ namespace common::filesystem
     {
         if (str)
         {
-            for (size_t i = 0; str[i] != '\0'; ++i)
-            {
-                buffer_.push_back(str[i]);
-                checkAndFlush();
-            }
+            const std::string_view sv(str);
+            buffer_.insert(buffer_.end(), sv.begin(), sv.end());
+            checkAndFlush();
         }
         return *this;
     }
 
     BufferedWriter& BufferedWriter::append(const std::initializer_list<char> chars)
     {
-        for (const char c : chars)
-        {
-            buffer_.push_back(c);
-            checkAndFlush();
-        }
+        buffer_.insert(buffer_.end(), chars.begin(), chars.end());
+        checkAndFlush();
         return *this;
     }
 
@@ -169,22 +147,16 @@ namespace common::filesystem
     {
         if (chars)
         {
-            for (size_t i = 0; i < count; ++i)
-            {
-                buffer_.push_back(chars[i]);
-                checkAndFlush();
-            }
+            buffer_.insert(buffer_.end(), chars, chars + count);
+            checkAndFlush();
         }
         return *this;
     }
 
     BufferedWriter& BufferedWriter::append(const char c, const size_t count)
     {
-        for (size_t i = 0; i < count; ++i)
-        {
-            buffer_.push_back(c);
-            checkAndFlush();
-        }
+        buffer_.insert(buffer_.end(), count, c);
+        checkAndFlush();
         return *this;
     }
 

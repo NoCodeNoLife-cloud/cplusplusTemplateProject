@@ -5,7 +5,7 @@
  */
 
 #pragma once
-#include <format>
+#include <cstddef>
 #include <vector>
 
 #include "interface/ICloseable.hpp"
