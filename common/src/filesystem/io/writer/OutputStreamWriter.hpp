@@ -5,9 +5,8 @@
  */
 
 #pragma once
-#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
-#include <codecvt>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -25,7 +24,7 @@ namespace common::filesystem
         /// @brief Constructs an OutputStreamWriter that uses the specified charset.
         /// @param outputStream The underlying output stream.
         /// @param charsetName The name of the charset to be used.
-        /// @throws std::invalid_argument If the charset is not supported.
+        /// @throws std::invalid_argument If the charset is not supported or outputStream is null.
         OutputStreamWriter(std::unique_ptr<AbstractWriter> outputStream, const std::string& charsetName);
 
         /// @brief Constructs an OutputStreamWriter that uses the default charset.
@@ -100,25 +99,20 @@ namespace common::filesystem
         /// @param end The ending index of the subsequence.
         /// @return A reference to this writer.
         /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
+        /// @throws std::out_of_range If start or end is out of bounds.
         AbstractWriter& append(const std::string& csq, size_t start, size_t end) override;
 
         /// @brief Convert the writer to a string representation.
         /// @return A string representation of the writer.
-        /// @throws std::ios_base::failure If the stream is closed or output stream is not available.
         [[nodiscard]] std::string toString() const override;
 
     private:
         std::unique_ptr<AbstractWriter> output_writer_;
-        std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> converter_;
         std::string charset_;
         bool closed_;
 
         /// @brief Checks if the stream is closed.
         /// @throws std::ios_base::failure if the stream is closed.
         void checkIfClosed() const;
-
-        /// @brief Checks if the output stream is available.
-        /// @throws std::ios_base::failure if the output stream is not available.
-        void checkOutputStream() const;
     };
 }

@@ -6,12 +6,18 @@
 
 #include "filesystem/io/writer/OutputStreamWriter.hpp"
 
-#include <fmt/format.h>
+#include <algorithm>
+#include <ios>
+#include <stdexcept>
 
 namespace common::filesystem
 {
     OutputStreamWriter::OutputStreamWriter(std::unique_ptr<AbstractWriter> outputStream, const std::string& charsetName) : output_writer_(std::move(outputStream)), charset_(charsetName), closed_(false)
     {
+        if (!output_writer_)
+        {
+            throw std::invalid_argument("OutputStreamWriter: outputStream must not be null");
+        }
         if (charsetName != "UTF-8")
         {
             throw std::invalid_argument("Unsupported encoding: " + charsetName);
@@ -26,13 +32,14 @@ namespace common::filesystem
 
     std::string OutputStreamWriter::getEncoding() const
     {
-        return closed_ ? "" : charset_;
+        return charset_;
     }
 
     void OutputStreamWriter::write(const char c)
     {
         checkIfClosed();
-        write(std::string(1, c));
+        const std::vector<char> buf(1, c);
+        output_writer_->write(buf, 0, 1);
     }
 
     void OutputStreamWriter::write(const std::vector<char>& cBuf)
@@ -56,7 +63,6 @@ namespace common::filesystem
             throw std::out_of_range("Offset and length exceed buffer size");
         }
         output_writer_->write(cBuf, off, len);
-        checkOutputStream();
     }
 
     void OutputStreamWriter::write(const std::string& str)
@@ -85,7 +91,6 @@ namespace common::filesystem
     {
         checkIfClosed();
         output_writer_->flush();
-        checkOutputStream();
     }
 
     void OutputStreamWriter::close()
@@ -117,17 +122,25 @@ namespace common::filesystem
 
     AbstractWriter& OutputStreamWriter::append(const std::string& csq, const size_t start, const size_t end)
     {
-        if (start <= end && start <= csq.length())
+        if (start > end)
         {
-            const size_t safe_end = std::min(end, csq.length());
-            write(csq, start, safe_end - start);
+            throw std::out_of_range("start > end");
         }
+        if (start > csq.length())
+        {
+            throw std::out_of_range("start out of bounds");
+        }
+        const size_t safe_end = std::min(end, csq.length());
+        write(csq, start, safe_end - start);
         return *this;
     }
 
     std::string OutputStreamWriter::toString() const
     {
-        checkIfClosed();
+        if (closed_)
+        {
+            return {};
+        }
         return output_writer_->toString();
     }
 
@@ -136,14 +149,6 @@ namespace common::filesystem
         if (closed_)
         {
             throw std::ios_base::failure("Stream is closed");
-        }
-    }
-
-    void OutputStreamWriter::checkOutputStream() const
-    {
-        if (!output_writer_)
-        {
-            throw std::ios_base::failure("Failed to write to stream");
         }
     }
 }
