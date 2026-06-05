@@ -6,8 +6,6 @@
 
 #include "filesystem/io/Console.hpp"
 
-#include <fmt/format.h>
-
 namespace common::filesystem
 {
     void Console::flush()
