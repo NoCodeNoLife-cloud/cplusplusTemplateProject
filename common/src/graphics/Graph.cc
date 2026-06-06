@@ -7,8 +7,6 @@
 #include "graphics/Graph.hpp"
 
 #include <stdexcept>
-#include <string>
-#include <vector>
 #include <fmt/format.h>
 #include <glog/logging.h>
 
@@ -31,7 +29,7 @@ namespace common::graphics
         if (from < 0 || from >= num_nodes_ || to < 0 || to >= num_nodes_)
         {
             DLOG(WARNING) << fmt::format("Graph addEdge: Node index out of range. from={}, to={}, num_nodes={}", from, to, num_nodes_);
-            throw std::out_of_range("Graph::addEdge: Node index out of range. Requested: from=" + std::to_string(from) + ", to=" + std::to_string(to) + ", but graph has " + std::to_string(num_nodes_) + " nodes");
+            throw std::out_of_range(fmt::format("Graph::addEdge: Node index out of range. Requested: from={}, to={}, but graph has {} nodes", from, to, num_nodes_));
         }
         Edge edge(to, weight);
         adj_list_[static_cast<size_t>(from)].emplace_back(edge);
@@ -42,7 +40,7 @@ namespace common::graphics
         if (node < 0 || node >= num_nodes_)
         {
             DLOG(WARNING) << fmt::format("Graph getAdjList: Node index out of range. node={}, num_nodes={}", node, num_nodes_);
-            throw std::out_of_range("Graph::getAdjList: Node index out of range. Requested: " + std::to_string(node) + ", but graph has " + std::to_string(num_nodes_) + " nodes");
+            throw std::out_of_range(fmt::format("Graph::getAdjList: Node index out of range. Requested: {}, but graph has {} nodes", node, num_nodes_));
         }
         return adj_list_[static_cast<size_t>(node)];
     }

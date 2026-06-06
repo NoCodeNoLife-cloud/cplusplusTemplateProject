@@ -6,6 +6,8 @@
 
 #include "graphics/Point3D.hpp"
 
+#include <cmath>
+#include <iomanip>
 #include <iostream>
 
 namespace common::graphics
@@ -105,7 +107,11 @@ namespace common::graphics
 
     std::ostream& operator<<(std::ostream& os, const Point3D& point)
     {
-        os << "(" << point.getX() << ", " << point.getY() << ", " << point.getZ() << ")";
+        const auto saved_flags = os.flags();
+        const auto saved_precision = os.precision();
+        os << "(" << std::fixed << std::setprecision(1) << point.getX() << ", " << point.getY() << ", " << point.getZ() << ")";
+        os.flags(saved_flags);
+        os.precision(saved_precision);
         return os;
     }
 }

@@ -6,6 +6,7 @@
 
 #include "graphics/Point2D.hpp"
 
+#include <cmath>
 #include <iostream>
 
 namespace common::graphics

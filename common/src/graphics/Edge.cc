@@ -6,8 +6,6 @@
 
 #include "graphics/Edge.hpp"
 
-#include <cstdint>
-
 namespace common::graphics
 {
     Edge::Edge(const int32_t to, const int32_t weight)  : to_(to), weight_(weight)
