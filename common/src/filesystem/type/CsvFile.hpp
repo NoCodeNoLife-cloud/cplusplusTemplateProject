@@ -1,54 +1,58 @@
 /**
  * @file CsvFile.hpp
  * @brief CsvFile class declaration
- * @details This header defines the CsvFile class that provides functionality for Common library utilities.
+ * @details This header defines the CsvFile class that provides functionality for reading,
+ *          modifying, and saving CSV files.
  */
 
 #pragma once
-#include <rapidcsv.h>
+
+#include <cstdint>
 #include <string>
 #include <vector>
 
 namespace common::filesystem
 {
-    /// @brief A class to handle CSV file operations using rapidcsv library
+    /// @brief A class to handle CSV file operations
     /// @details This class provides functionalities to read, modify and save CSV files.
-    /// It encapsulates the rapidcsv::Document object and provides a simplified interface
-    /// for common CSV operations.
+    ///          It supports quoted fields, custom delimiters, and proper CSV escaping.
     class CsvFile
     {
     public:
         /// @brief Constructs a CsvFile object from a file path
-        /// @param file_path The path to the CSV file to load
-        explicit CsvFile(const std::string& file_path) ;
+        explicit CsvFile(const std::string& file_path);
 
         /// @brief Get the number of rows in the CSV file
-        /// @return The number of rows as uint64_t
-        [[nodiscard]] uint64_t getRowCount() const ;
+        [[nodiscard]] uint64_t getRowCount() const;
 
         /// @brief Get the number of columns in the CSV file
-        /// @return The number of columns as uint64_t
-        [[nodiscard]] uint64_t getColumnCount() const ;
+        [[nodiscard]] uint64_t getColumnCount() const;
 
         /// @brief Insert a row at the specified index
         /// @param insertIndex The index where the row should be inserted
         /// @param item The vector of strings representing the row data
         /// @return True if successful, false otherwise
-        bool insertRow(uint64_t insertIndex, const std::vector<std::string>& item) ;
+        bool insertRow(uint64_t insertIndex, const std::vector<std::string>& item);
 
         /// @brief Add a row to the end of the CSV file
-        /// @param item The vector of strings representing the row data
-        /// @return True if successful, false otherwise
-        bool pushBack(const std::vector<std::string>& item) ;
+        bool pushBack(const std::vector<std::string>& item);
 
         /// @brief Save the CSV file to disk
         /// @param path The path where to save the file (uses original path if empty)
         /// @return True if successful, false otherwise
-        bool save(const std::string& path = {}) ;
+        bool save(const std::string& path = {});
 
     private:
         std::string file_path_{};
-        rapidcsv::Document csv_doc_{};
+        std::vector<std::string> header_{};
+        std::vector<std::vector<std::string>> rows_{};
+        uint64_t column_count_{0};
         bool is_valid_{false};
+
+        /// @brief Parse a single CSV line into fields, handling quoted values
+        static std::vector<std::string> parseLine(const std::string& line);
+
+        /// @brief Escape a single field for CSV output
+        static std::string escapeField(const std::string& field);
     };
 }

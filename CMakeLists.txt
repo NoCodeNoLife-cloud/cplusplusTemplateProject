@@ -6,7 +6,7 @@ if (MSVC)
     add_compile_options("/source-charset:utf-8")
     add_compile_options("/execution-charset:utf-8")
     add_compile_options("/utf-8")
-endif()
+endif ()
 
 set(default_build_type "Debug")
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
