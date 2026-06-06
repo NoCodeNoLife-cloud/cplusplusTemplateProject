@@ -48,16 +48,16 @@ namespace common::filesystem
         pos_ = mark_limit_;
     }
 
-    int BufferedReader::read()
+    std::optional<char> BufferedReader::read()
     {
         if (pos_ >= count_)
         {
             if (!fillBuffer())
             {
-                return -1;
+                return std::nullopt;
             }
         }
-        return static_cast<unsigned char>(buffer_[pos_++]);
+        return buffer_[pos_++];
     }
 
     int BufferedReader::read(std::vector<char>& cBuf, const size_t off, const size_t len)

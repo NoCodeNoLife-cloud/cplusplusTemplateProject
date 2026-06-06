@@ -27,7 +27,7 @@ namespace common::interfaces
         /// using the provided RapidJSON writer. The implementation should handle
         /// all necessary object properties and nested objects.
         /// @param writer Reference to a RapidJSON writer that will be used to build the JSON output
-        [[nodiscard]] virtual void serialize(rapidjson::Writer<rapidjson::StringBuffer>& writer) const = 0;
+        virtual void serialize(rapidjson::Writer<rapidjson::StringBuffer>& writer) const = 0;
 
         /// @brief Deserializes the object from JSON format.
         /// This method populates the object's data from a JSON representation

@@ -53,11 +53,10 @@ namespace common::interfaces
         /// @return The processed result
         /// @details This method is called to process the result of the function execution.
         /// Derived classes can override this to implement result processing logic.
-        /// @note Default implementation simply forwards the result
+        /// @note Default implementation returns by value to avoid dangling references
         template <typename T>
-        decltype(auto) handleResult(T&& result)
+        auto handleResult(T&& result) -> std::decay_t<T>
         {
-            // Default implementation: simply forward the result without modification
             return std::forward<T>(result);
         }
     };
@@ -85,15 +84,8 @@ namespace common::interfaces
                 return static_cast<Derived*>(this)->handleResult(std::move(result));
             }
         }
-        catch (const std::exception& e)
-        {
-            // Handle standard exceptions with context
-            static_cast<Derived*>(this)->onException(std::current_exception());
-            throw;
-        }
         catch (...)
         {
-            // Handle any other exceptions
             static_cast<Derived*>(this)->onException(std::current_exception());
             throw;
         }

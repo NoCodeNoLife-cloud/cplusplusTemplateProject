@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <type_traits>
 #include <yaml-cpp/node/convert.h>
 
 namespace common::interfaces
@@ -36,13 +37,13 @@ namespace common::interfaces
     };
 }
 
-/// @brief YAML convert template specialization for IYamlSerializable objects.
-/// This template specialization enables automatic conversion of IYamlSerializable
-/// objects to and from YAML nodes using the YAML-CPP library's conversion mechanism.
-/// It delegates the actual encoding/decoding to the object's encode() and decode() methods.
-/// @tparam T Type of the object that implements IYamlSerializable
+/// @brief Constrained partial specialization of YAML::convert for IYamlSerializable subtypes.
+/// This specialization enables automatic conversion of any IYamlSerializable object
+/// to and from YAML nodes by delegating to the object's encode() and decode() methods.
+/// @tparam T Type that derives from IYamlSerializable
 template <typename T>
-struct YAML::convert
+    requires std::is_base_of_v<common::interfaces::IYamlSerializable, T>
+struct YAML::convert<T>
 {
     /// @brief Encode an object to a YAML node.
     /// Delegates the encoding to the object's encode() method.

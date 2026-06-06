@@ -6,6 +6,7 @@
 
 #pragma once
 #include <algorithm>
+#include <optional>
 #include <vector>
 
 #include "interface/ICloseable.hpp"
@@ -25,9 +26,8 @@ namespace common::filesystem
 
         /// @brief Read a single character.
         /// This method reads the next character from the input stream.
-        /// @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff),
-        ///         or -1 if the end of the stream has been reached
-        int read() override;
+        /// @return The character read, or std::nullopt if the end of the stream has been reached
+        std::optional<char> read() override;
 
         /// @brief Read characters into an array.
         /// This method reads up to 'len' characters from the input stream into the buffer 'cBuf'

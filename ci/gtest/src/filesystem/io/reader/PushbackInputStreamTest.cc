@@ -30,7 +30,7 @@ TEST_F(PushbackInputStreamTest, ReadNormal)
 
 TEST_F(PushbackInputStreamTest, UnreadSingleAndReRead)
 {
-    auto byte = stream_->read();
+    const auto byte = stream_->read();
     EXPECT_EQ(byte, std::byte{0x41});
     stream_->unread(byte);
     EXPECT_EQ(stream_->read(), std::byte{0x41});
@@ -38,7 +38,7 @@ TEST_F(PushbackInputStreamTest, UnreadSingleAndReRead)
 
 TEST_F(PushbackInputStreamTest, UnreadBufferAndReRead)
 {
-    stream_->read();
+    (void)stream_->read();
     stream_->unread(std::vector{std::byte{0xFF}, std::byte{0xFE}});
     EXPECT_EQ(stream_->read(), std::byte{0xFF});
     EXPECT_EQ(stream_->read(), std::byte{0xFE});
@@ -47,13 +47,13 @@ TEST_F(PushbackInputStreamTest, UnreadBufferAndReRead)
 
 TEST_F(PushbackInputStreamTest, UnreadOverflow)
 {
-    std::vector<std::byte> large(5);
+    const std::vector<std::byte> large(5);
     EXPECT_THROW(stream_->unread(large), std::overflow_error);
 }
 
 TEST_F(PushbackInputStreamTest, Available)
 {
-    auto avail = stream_->available();
+    const auto avail = stream_->available();
     EXPECT_GE(avail, 3);
 }
 

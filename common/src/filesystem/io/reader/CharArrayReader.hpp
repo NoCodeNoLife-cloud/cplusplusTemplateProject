@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <optional>
 #include <vector>
 
 #include "AbstractReader.hpp"
@@ -31,9 +32,8 @@ namespace common::filesystem
         ~CharArrayReader() override;
 
         /// @brief Reads a single character.
-        /// @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff), or -1 if the end of the stream
-        /// has been reached
-        [[nodiscard]] int read() override;
+        /// @return The character read, or std::nullopt if the end of the stream has been reached
+        [[nodiscard]] std::optional<char> read() override;
 
         /// @brief Reads characters into an array.
         /// @param b The buffer into which the read characters are stored

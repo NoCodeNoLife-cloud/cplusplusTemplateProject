@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <cstddef>
 #include <initializer_list>
 #include <span>
 #include <string>

@@ -6,6 +6,7 @@
 
 #pragma once
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include "AbstractReader.hpp"
@@ -33,8 +34,8 @@ namespace common::filesystem
         [[nodiscard]] bool markSupported() const override;
 
         /// @brief Reads the next character from this input stream.
-        /// @return The next character from this input stream, or -1 if the end of the stream has been reached.
-        int read() override;
+        /// @return The next character from this input stream, or std::nullopt if the end of the stream has been reached.
+        std::optional<char> read() override;
 
         /// @brief Reads characters into an array of characters.
         /// @param cBuf The buffer into which characters are to be read.

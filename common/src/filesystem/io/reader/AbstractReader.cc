@@ -13,12 +13,12 @@
 
 namespace common::filesystem
 {
-    int AbstractReader::read()
+    std::optional<char> AbstractReader::read()
     {
         std::vector<char> buffer(1);
         if (const int bytesRead = read(buffer, 0, 1); bytesRead <= 0)
         {
-            return -1;
+            return std::nullopt;
         }
         return static_cast<unsigned char>(buffer[0]);
     }

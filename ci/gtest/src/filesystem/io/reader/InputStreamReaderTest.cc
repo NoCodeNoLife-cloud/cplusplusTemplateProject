@@ -22,44 +22,26 @@ protected:
     }
 };
 
-TEST_F(InputStreamReaderTest, ReadAsciiChar)
+TEST_F(InputStreamReaderTest, ReadByteByByte)
 {
     EXPECT_EQ(reader_->read(), 'h');
-}
-
-TEST_F(InputStreamReaderTest, ReadMultiByteChar)
-{
-    reader_->read();
-    auto codepoint = reader_->read();
-    EXPECT_EQ(codepoint, 0x20AC);
-}
-
-TEST_F(InputStreamReaderTest, ReadMixedContent)
-{
-    EXPECT_EQ(reader_->read(), 'h');
-    EXPECT_EQ(reader_->read(), 0x20AC);
+    EXPECT_EQ(reader_->read(), static_cast<char>(0xE2));
+    EXPECT_EQ(reader_->read(), static_cast<char>(0x82));
+    EXPECT_EQ(reader_->read(), static_cast<char>(0xAC));
     EXPECT_EQ(reader_->read(), 'l');
     EXPECT_EQ(reader_->read(), 'l');
     EXPECT_EQ(reader_->read(), 'o');
-    EXPECT_EQ(reader_->read(), -1);
-}
-
-TEST_F(InputStreamReaderTest, Read4ByteUtf8)
-{
-    // U+1F600 (😀) is 4 bytes in UTF-8: F0 9F 98 80
-    auto inner = std::make_shared<StringReader>(std::string("\xF0\x9F\x98\x80"));
-    InputStreamReader isr(inner);
-    EXPECT_EQ(isr.read(), 0x1F600);
+    EXPECT_FALSE(reader_->read().has_value());
 }
 
 TEST_F(InputStreamReaderTest, ReadIntoBuffer)
 {
     std::vector<char> buf(3);
-    auto n = reader_->read(buf, 0, 3);
+    const auto n = reader_->read(buf, 0, 3);
     EXPECT_EQ(n, 3);
     EXPECT_EQ(buf[0], 'h');
-    EXPECT_EQ(buf[1], static_cast<char>(0x20AC));
-    EXPECT_EQ(buf[2], 'l');
+    EXPECT_EQ(buf[1], static_cast<char>(0xE2));
+    EXPECT_EQ(buf[2], static_cast<char>(0x82));
 }
 
 TEST_F(InputStreamReaderTest, CharsetValidation)
@@ -81,7 +63,19 @@ TEST_F(InputStreamReaderTest, Close)
 
 TEST_F(InputStreamReaderTest, ReadEmptyStream)
 {
-    auto inner = std::make_shared<StringReader>("");
+    const auto inner = std::make_shared<StringReader>("");
     InputStreamReader empty(inner);
-    EXPECT_EQ(empty.read(), -1);
+    EXPECT_FALSE(empty.read().has_value());
+}
+
+TEST_F(InputStreamReaderTest, Read4ByteSequence)
+{
+    // U+1F600 (😀) is 4 bytes in UTF-8: F0 9F 98 80
+    const auto inner = std::make_shared<StringReader>(std::string("\xF0\x9F\x98\x80"));
+    InputStreamReader isr(inner);
+    EXPECT_EQ(isr.read(), static_cast<char>(0xF0));
+    EXPECT_EQ(isr.read(), static_cast<char>(0x9F));
+    EXPECT_EQ(isr.read(), static_cast<char>(0x98));
+    EXPECT_EQ(isr.read(), static_cast<char>(0x80));
+    EXPECT_FALSE(isr.read().has_value());
 }

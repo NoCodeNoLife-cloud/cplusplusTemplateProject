@@ -26,13 +26,13 @@ namespace common::filesystem
 
     CharArrayReader::~CharArrayReader() = default;
 
-    int CharArrayReader::read()
+    std::optional<char> CharArrayReader::read()
     {
         if (closed_ || pos_ >= count_)
         {
-            return -1;
+            return std::nullopt;
         }
-        return static_cast<unsigned char>(buf_[pos_++]);
+        return buf_[pos_++];
     }
 
     int CharArrayReader::read(std::vector<char>& b, const size_t off, const size_t len)

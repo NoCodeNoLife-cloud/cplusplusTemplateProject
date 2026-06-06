@@ -49,22 +49,36 @@ namespace common::interfaces
     template <typename T>
     bool IBoostSerializable<T>::serializeTo(std::ostream& stream) const
     {
-        boost::archive::text_oarchive oa(stream);
-        oa << static_cast<const T&>(*this);
-        return true;
+        try
+        {
+            boost::archive::text_oarchive oa(stream);
+            oa << static_cast<const T&>(*this);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
     }
 
     template <typename T>
     bool IBoostSerializable<T>::deserializeFrom(std::istream& stream)
     {
-        boost::archive::text_iarchive ia(stream);
-        ia >> static_cast<T&>(*this);
-        return true;
+        try
+        {
+            boost::archive::text_iarchive ia(stream);
+            ia >> static_cast<T&>(*this);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
     }
 
     template <typename T>
     template <class Archive>
-    void IBoostSerializable<T>::serialize(Archive& archive, const uint32_t version)
+    void IBoostSerializable<T>::serialize(Archive& archive, uint32_t version)
     {
         static_cast<T*>(this)->serializeImpl(archive, version);
     }

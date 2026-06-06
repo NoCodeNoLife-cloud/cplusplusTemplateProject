@@ -29,7 +29,7 @@ TEST_F(BufferedInputStreamTest, ReadSingleByte)
 TEST_F(BufferedInputStreamTest, ReadMultipleBytes)
 {
     std::vector<std::byte> buf(3);
-    auto n = stream_->read(buf, 0, 3);
+    const auto n = stream_->read(buf, 0, 3);
     EXPECT_EQ(n, 3);
     EXPECT_EQ(buf[0], std::byte{0x10});
     EXPECT_EQ(buf[1], std::byte{0x20});
@@ -52,13 +52,13 @@ TEST_F(BufferedInputStreamTest, ReadAllWithSmallBuffer)
 
 TEST_F(BufferedInputStreamTest, Available)
 {
-    auto avail = stream_->available();
+    const auto avail = stream_->available();
     EXPECT_EQ(avail, 5);
 }
 
 TEST_F(BufferedInputStreamTest, Skip)
 {
-    auto skipped = stream_->skip(3);
+    const auto skipped = stream_->skip(3);
     EXPECT_EQ(skipped, 3);
     EXPECT_EQ(stream_->read(), std::byte{0x40});
 }
@@ -67,8 +67,8 @@ TEST_F(BufferedInputStreamTest, MarkAndReset)
 {
     EXPECT_TRUE(stream_->markSupported());
     stream_->mark(10);
-    stream_->read();
-    stream_->read();
+    (void)stream_->read();
+    (void)stream_->read();
     stream_->reset();
     EXPECT_EQ(stream_->read(), std::byte{0x10});
 }
@@ -82,7 +82,7 @@ TEST_F(BufferedInputStreamTest, Close)
 TEST_F(BufferedInputStreamTest, ReadAfterClose)
 {
     stream_->close();
-    auto byte = stream_->read();
+    const auto byte = stream_->read();
     EXPECT_EQ(byte, static_cast<std::byte>(-1));
     EXPECT_TRUE(stream_->isEof());
 }

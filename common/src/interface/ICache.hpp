@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <cstddef>
 #include <optional>
 
 namespace common::interfaces

@@ -41,7 +41,7 @@ namespace common::filesystem
         return in_->markSupported();
     }
 
-    int FilterReader::read()
+    std::optional<char> FilterReader::read()
     {
         if (!in_)
         {

@@ -26,21 +26,22 @@ TEST_F(PushbackReaderTest, ReadNormal)
     EXPECT_EQ(reader_->read(), 'l');
     EXPECT_EQ(reader_->read(), 'l');
     EXPECT_EQ(reader_->read(), 'o');
-    EXPECT_EQ(reader_->read(), -1);
+    EXPECT_FALSE(reader_->read().has_value());
 }
 
 TEST_F(PushbackReaderTest, UnreadSingleAndReRead)
 {
-    auto c = reader_->read();
-    EXPECT_EQ(c, 'h');
-    reader_->unread(c);
+    const auto c = reader_->read();
+    ASSERT_TRUE(c.has_value());
+    EXPECT_EQ(c.value(), 'h');
+    reader_->unread(c.value());
     EXPECT_EQ(reader_->read(), 'h');
 }
 
 TEST_F(PushbackReaderTest, UnreadBufferAndReRead)
 {
-    reader_->read();
-    reader_->unread(std::vector<char>{'X', 'Y'});
+    (void)reader_->read();
+    reader_->unread(std::vector{'X', 'Y'});
     EXPECT_EQ(reader_->read(), 'X');
     EXPECT_EQ(reader_->read(), 'Y');
     EXPECT_EQ(reader_->read(), 'e');
@@ -48,7 +49,7 @@ TEST_F(PushbackReaderTest, UnreadBufferAndReRead)
 
 TEST_F(PushbackReaderTest, UnreadOverflow)
 {
-    std::vector<char> large(2000);
+    const std::vector<char> large(2000);
     EXPECT_THROW(reader_->unread(large), std::overflow_error);
 }
 
@@ -61,9 +62,9 @@ TEST_F(PushbackReaderTest, MarkNotSupported)
 
 TEST_F(PushbackReaderTest, Skip)
 {
-    reader_->read();
-    reader_->read();
-    auto skipped = reader_->skip(2);
+    (void)reader_->read();
+    (void)reader_->read();
+    const auto skipped = reader_->skip(2);
     EXPECT_EQ(skipped, 2);
     EXPECT_EQ(reader_->read(), 'o');
 }
@@ -72,12 +73,12 @@ TEST_F(PushbackReaderTest, Close)
 {
     reader_->close();
     EXPECT_TRUE(reader_->isClosed());
-    EXPECT_THROW(reader_->read(), std::runtime_error);
+    EXPECT_THROW((void)reader_->read(), std::runtime_error);
 }
 
 TEST_F(PushbackReaderTest, Ready)
 {
     EXPECT_TRUE(reader_->ready());
-    for (int i = 0; i < 5; ++i) reader_->read();
+    for (int i = 0; i < 5; ++i) (void)reader_->read();
     EXPECT_FALSE(reader_->ready());
 }

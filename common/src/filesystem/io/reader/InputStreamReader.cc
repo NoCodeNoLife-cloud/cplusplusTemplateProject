@@ -30,99 +30,14 @@ namespace common::filesystem
         }
     }
 
-    int InputStreamReader::read()
+    std::optional<char> InputStreamReader::read()
     {
         if (closed_ || !reader_)
         {
             throw std::runtime_error("InputStreamReader::read: Input stream is not available");
         }
 
-        // UTF-8 character can be 1-4 bytes, read one byte at a time to determine character boundaries
-        const int firstByte = reader_->read();
-        if (firstByte == -1)
-        {
-            return -1;
-        }
-
-        // Table-driven approach to determine UTF-8 character length
-        // UTF-8 byte patterns:
-        // 0xxxxxxx -> 1 byte (ASCII)
-        // 110xxxxx -> 2 bytes
-        // 1110xxxx -> 3 bytes
-        // 11110xxx -> 4 bytes
-        // Others are invalid as start bytes
-        constexpr struct
-        {
-            unsigned char mask;
-            unsigned char pattern;
-            int additional_bytes;
-        } utf8_length_table[] = {
-            {0x80, 0x00, 0}, // ASCII (0xxxxxxx)
-            {0xE0, 0xC0, 1}, // 2-byte (110xxxxx)
-            {0xF0, 0xE0, 2}, // 3-byte (1110xxxx)
-            {0xF8, 0xF0, 3}, // 4-byte (11110xxx)
-        };
-
-        const auto firstByteUnsigned = static_cast<unsigned char>(firstByte);
-        int additionalBytes = -1;
-
-        for (const auto& [mask, pattern, additional_bytes] : utf8_length_table)
-        {
-            if ((firstByteUnsigned & mask) == pattern)
-            {
-                additionalBytes = additional_bytes;
-                break;
-            }
-        }
-
-        if (additionalBytes == -1)
-        {
-            // Invalid UTF-8 first byte
-            throw std::runtime_error("InputStreamReader::read: Invalid UTF-8 sequence");
-        }
-
-        // Decode UTF-8 codepoint from the validated bytes
-        unsigned char bytes[4] = {firstByteUnsigned, 0, 0, 0};
-        for (int i = 0; i < additionalBytes; ++i)
-        {
-            const int nextByte = reader_->read();
-            if (nextByte == -1)
-            {
-                throw std::runtime_error("InputStreamReader::read: Incomplete UTF-8 sequence");
-            }
-            const auto nextByteUnsigned = static_cast<unsigned char>(nextByte);
-            if ((nextByteUnsigned & 0xC0) != 0x80)
-            {
-                throw std::runtime_error("InputStreamReader::read: Invalid UTF-8 sequence");
-            }
-            bytes[1 + i] = nextByteUnsigned;
-        }
-
-        char32_t codepoint;
-        switch (additionalBytes)
-        {
-            case 0:
-                codepoint = bytes[0];
-                break;
-            case 1:
-                codepoint = (static_cast<char32_t>(bytes[0] & 0x1F) << 6) |
-                            (static_cast<char32_t>(bytes[1] & 0x3F));
-                break;
-            case 2:
-                codepoint = (static_cast<char32_t>(bytes[0] & 0x0F) << 12) |
-                            (static_cast<char32_t>(bytes[1] & 0x3F) << 6) |
-                            (static_cast<char32_t>(bytes[2] & 0x3F));
-                break;
-            case 3:
-                codepoint = (static_cast<char32_t>(bytes[0] & 0x07) << 18) |
-                            (static_cast<char32_t>(bytes[1] & 0x3F) << 12) |
-                            (static_cast<char32_t>(bytes[2] & 0x3F) << 6) |
-                            (static_cast<char32_t>(bytes[3] & 0x3F));
-                break;
-            default:
-                throw std::runtime_error("InputStreamReader::read: Invalid UTF-8 sequence length");
-        }
-        return static_cast<int>(codepoint);
+        return reader_->read();
     }
 
     int InputStreamReader::read(std::vector<char>& cBuf, const size_t off, const size_t len)
@@ -147,12 +62,12 @@ namespace common::filesystem
         size_t totalCharsRead = 0;
         for (size_t i = 0; i < len; ++i)
         {
-            const int ch = read();
-            if (ch == -1)
+            const auto ch = read();
+            if (!ch.has_value())
             {
                 return totalCharsRead > 0 ? static_cast<int>(totalCharsRead) : -1;
             }
-            cBuf[off + i] = static_cast<char>(ch);
+            cBuf[off + i] = ch.value();
             ++totalCharsRead;
         }
 

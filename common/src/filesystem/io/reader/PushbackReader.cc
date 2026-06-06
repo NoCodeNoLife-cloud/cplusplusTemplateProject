@@ -42,13 +42,13 @@ namespace common::filesystem
         return false;
     }
 
-    int PushbackReader::read()
+    std::optional<char> PushbackReader::read()
     {
         validateOpen();
 
         if (buffer_pos_ < buffer_.size())
         {
-            return static_cast<unsigned char>(buffer_[buffer_pos_++]);
+            return buffer_[buffer_pos_++];
         }
         return FilterReader::read();
     }

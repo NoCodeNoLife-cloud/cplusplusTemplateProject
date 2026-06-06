@@ -41,13 +41,13 @@ namespace common::filesystem
         return true;
     }
 
-    int StringReader::read()
+    std::optional<char> StringReader::read()
     {
         if (closed_ || position_ >= source_.size())
         {
-            return -1; // EOF
+            return std::nullopt;
         }
-        return static_cast<unsigned char>(source_[position_++]);
+        return source_[position_++];
     }
 
     int StringReader::read(std::vector<char>& cBuf, const size_t off, const size_t len)

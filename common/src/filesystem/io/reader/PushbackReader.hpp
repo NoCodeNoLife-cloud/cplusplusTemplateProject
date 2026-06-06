@@ -6,6 +6,7 @@
 
 #pragma once
 #include <algorithm>
+#include <optional>
 #include <vector>
 
 #include "FilterReader.hpp"
@@ -47,8 +48,8 @@ namespace common::filesystem
         /// @details This method will block until a character is available, an I/O error occurs, or the end of the stream is
         /// reached. If the pushback buffer is not empty, a character from the pushback buffer is returned. Otherwise, a
         /// character from the underlying input stream is returned.
-        /// @return The character read, or -1 if the end of the stream has been reached
-        [[nodiscard]] int read() override;
+        /// @return The character read, or std::nullopt if the end of the stream has been reached
+        [[nodiscard]] std::optional<char> read() override;
 
         /// @brief Reads up to len characters of data from this stream into an array of characters.
         /// @details This method will block until some input is available, an I/O error occurs, or the end of the stream is

@@ -6,6 +6,7 @@
 
 #pragma once
 #include <algorithm>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -37,9 +38,8 @@ namespace common::filesystem
         [[nodiscard]] bool markSupported() const  override;
 
         /// @brief Reads a single character from the string.
-        /// @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff),
-        ///         or -1 if the end of the string has been reached.
-        [[nodiscard]] int read() override;
+        /// @return The character read, or std::nullopt if the end of the string has been reached.
+        [[nodiscard]] std::optional<char> read() override;
 
         /// @brief Reads up to len characters from the string into the buffer cBuf starting at offset off.
         /// @param cBuf The buffer into which the data is read.

@@ -35,16 +35,16 @@ TEST_F(BufferedReaderTest, ReadLine)
 
 TEST_F(BufferedReaderTest, ReadLineAtEnd)
 {
-    reader_->readLine();
-    reader_->readLine();
-    reader_->readLine();
+    (void)reader_->readLine();
+    (void)reader_->readLine();
+    (void)reader_->readLine();
     EXPECT_TRUE(reader_->readLine().empty());
 }
 
 TEST_F(BufferedReaderTest, ReadIntoBuffer)
 {
     std::vector<char> buf(5);
-    auto n = reader_->read(buf, 0, 5);
+    const auto n = reader_->read(buf, 0, 5);
     EXPECT_EQ(n, 5);
     EXPECT_EQ(buf[0], 'h');
     EXPECT_EQ(buf[1], 'e');
@@ -65,7 +65,7 @@ TEST_F(BufferedReaderTest, MarkAndReset)
 
 TEST_F(BufferedReaderTest, Skip)
 {
-    auto skipped = reader_->skip(3);
+    const auto skipped = reader_->skip(3);
     EXPECT_EQ(skipped, 3);
     EXPECT_EQ(reader_->read(), 'l');
 }

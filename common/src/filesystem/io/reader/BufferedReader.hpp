@@ -7,6 +7,7 @@
 #pragma once
 #include <fstream>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -37,9 +38,8 @@ namespace common::filesystem
         void reset() override;
 
         /// @brief Read a single character.
-        /// @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff),
-        ///         or -1 if the end of the stream has been reached.
-        int read() override;
+        /// @return The character read, or std::nullopt if the end of the stream has been reached.
+        std::optional<char> read() override;
 
         /// @brief Read characters into an array.
         /// @param cBuf The buffer into which characters are read.
