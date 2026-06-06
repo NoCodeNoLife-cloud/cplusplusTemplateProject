@@ -14,12 +14,29 @@
 
 namespace common::gen
 {
-    RandomGenerator::RandomGenerator()  : engine_(std::random_device{}())
+    RandomGenerator::RandomGenerator() : engine_(std::random_device{}())
     {
     }
 
-    RandomGenerator::RandomGenerator(const unsigned int seed)  : engine_(seed)
+    RandomGenerator::RandomGenerator(const unsigned int seed) : engine_(seed)
     {
+    }
+
+    RandomGenerator::RandomGenerator(RandomGenerator&& other) noexcept
+        : engine_(other.engine_)
+    {
+        std::lock_guard lock(other.mutex_);
+    }
+
+    RandomGenerator& RandomGenerator::operator=(RandomGenerator&& other) noexcept
+    {
+        if (this != &other)
+        {
+            std::lock_guard lock1(mutex_);
+            std::lock_guard lock2(other.mutex_);
+            engine_ = other.engine_;
+        }
+        return *this;
     }
 
     int RandomGenerator::nextInt(const int min, const int max)
@@ -31,13 +48,14 @@ namespace common::gen
         }
         std::lock_guard lock(mutex_);
         std::uniform_int_distribution dist(min, max);
-        const auto result = dist(engine_);
-        return result;
+        return dist(engine_);
     }
 
     bool RandomGenerator::nextBool()
     {
-        return nextBool(0.5);
+        std::lock_guard lock(mutex_);
+        std::uniform_int_distribution<int> dist(0, 1);
+        return dist(engine_) == 1;
     }
 
     bool RandomGenerator::nextBool(const double trueProbability)
@@ -48,9 +66,16 @@ namespace common::gen
             throw std::invalid_argument("common::RandomGenerator::nextBool: probability must be in [0, 1]");
         }
         std::lock_guard lock(mutex_);
+        if (trueProbability == 0.0)
+        {
+            return false;
+        }
+        if (trueProbability == 1.0)
+        {
+            return true;
+        }
         std::bernoulli_distribution dist(trueProbability);
-        const auto result = dist(engine_);
-        return result;
+        return dist(engine_);
     }
 
     double RandomGenerator::nextDouble(const double min, const double max)
@@ -62,8 +87,7 @@ namespace common::gen
         }
         std::lock_guard lock(mutex_);
         std::uniform_real_distribution dist(min, max);
-        const auto result = dist(engine_);
-        return result;
+        return dist(engine_);
     }
 
     std::string RandomGenerator::nextString(const size_t length, const std::string& charset)
@@ -80,15 +104,14 @@ namespace common::gen
 
         std::lock_guard lock(mutex_);
         std::string result;
-        result.reserve(length);
+        result.resize(length);
 
-        // Pre-calculate charset size to avoid repeated size() calls
         const size_t charSetSize = charset.size();
         std::uniform_int_distribution<size_t> dist(0, charSetSize - 1);
 
         for (size_t i = 0; i < length; ++i)
         {
-            result += charset[dist(engine_)];
+            result[i] = charset[dist(engine_)];
         }
         return result;
     }
@@ -102,8 +125,7 @@ namespace common::gen
         }
         std::lock_guard lock(mutex_);
         std::normal_distribution dist(mean, stddev);
-        const auto result = dist(engine_);
-        return result;
+        return dist(engine_);
     }
 
     void RandomGenerator::setSeed(const unsigned int seed)

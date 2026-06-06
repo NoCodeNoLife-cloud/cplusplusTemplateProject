@@ -5,9 +5,12 @@
  *          uniqueness verification, and consistency checks.
  */
 
+#include <mutex>
 #include <regex>
 #include <set>
 #include <string>
+#include <thread>
+#include <vector>
 #include <gtest/gtest.h>
 
 #include "gen/UuidGenerator.hpp"

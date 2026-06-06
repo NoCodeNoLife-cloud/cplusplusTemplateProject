@@ -20,12 +20,32 @@ namespace common::gen
     class RandomGenerator
     {
     public:
+        /// @brief Default character set for string generation
+        static constexpr const char* kDefaultCharset = "abcdefghijklmnopqrstuvwxyz"
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "0123456789";
+
         /// @brief Default constructor: initializes seed using random device
-        RandomGenerator() ;
+        RandomGenerator();
 
         /// @brief Constructor with specified seed
         /// @param seed The seed value for the random number generator
-        explicit RandomGenerator(unsigned int seed) ;
+        explicit RandomGenerator(unsigned int seed);
+
+        /// @brief Deleted copy constructor (mutex is non-copyable)
+        RandomGenerator(const RandomGenerator&) = delete;
+
+        /// @brief Deleted copy assignment operator (mutex is non-copyable)
+        RandomGenerator& operator=(const RandomGenerator&) = delete;
+
+        /// @brief Move constructor
+        /// @param other The generator to move from
+        RandomGenerator(RandomGenerator&& other) noexcept;
+
+        /// @brief Move assignment operator
+        /// @param other The generator to move from
+        /// @return Reference to this generator
+        RandomGenerator& operator=(RandomGenerator&& other) noexcept;
 
         /// @brief Generates a random integer in the range [min, max]
         /// @param min The minimum value (inclusive)
@@ -53,14 +73,14 @@ namespace common::gen
 
         /// @brief Generates a random string of specified length
         /// @param length The length of the string to generate
-        /// @param charset The character set to use for generation
+        /// @param charset The character set to use for generation (default: alphanumeric)
         /// @return A random string of specified length
         /// @throws std::invalid_argument if charset is empty
-        [[nodiscard]] std::string nextString(size_t length, const std::string& charset = "abcdefghijklmnopqrstuvwxyz" "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "0123456789");
+        [[nodiscard]] std::string nextString(size_t length, const std::string& charset = kDefaultCharset);
 
         /// @brief Generates a Gaussian distributed random number
-        /// @param mean The mean of the distribution
-        /// @param stddev The standard deviation of the distribution (must be positive)
+        /// @param mean The mean of the distribution (default: 0.0)
+        /// @param stddev The standard deviation of the distribution (must be positive, default: 1.0)
         /// @return A Gaussian distributed random number
         /// @throws std::invalid_argument if stddev is not positive
         [[nodiscard]] double nextGaussian(double mean = 0.0, double stddev = 1.0);

@@ -6,19 +6,14 @@
 
 #include "gen/UuidGenerator.hpp"
 
-#include <string>
-#include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
 namespace common::gen
 {
-    // ReSharper disable once CppDFAConstantFunctionResult
-    std::string UuidGenerator::GenerateRandomUuid()
+    std::string UuidGenerator::GenerateRandomUuid() noexcept
     {
-        static auto generator = boost::uuids::random_generator();
-        const auto uuid = generator();
-        const auto uuid_str = boost::uuids::to_string(uuid);
-        return uuid_str;
+        thread_local auto generator = boost::uuids::random_generator();
+        return boost::uuids::to_string(generator());
     }
 }

@@ -8,20 +8,20 @@
 
 #include <fmt/format.h>
 #include <chrono>
-#include <mutex>
 #include <stdexcept>
+#include <thread>
 #include <glog/logging.h>
 
 namespace common::gen
 {
-    SnowflakeGenerator::SnowflakeGenerator(const int16_t machine_id, const int16_t datacenter_id)
+    SnowflakeGenerator::SnowflakeGenerator(int16_t machine_id, int16_t datacenter_id)
     {
-        if (machine_id < 0 || machine_id > static_cast<int64_t>(SnowflakeOption::max_machine_id_))
+        if (machine_id < 0 || machine_id > SnowflakeOption::max_machine_id_)
         {
             DLOG(WARNING) << fmt::format("SnowflakeGenerator: Machine ID {} out of range (0-31)", machine_id);
             throw std::invalid_argument("common::SnowflakeGenerator::SnowflakeGenerator: Machine ID out of range (0-31)");
         }
-        if (datacenter_id < 0 || datacenter_id > static_cast<int64_t>(SnowflakeOption::max_datacenter_id_))
+        if (datacenter_id < 0 || datacenter_id > SnowflakeOption::max_datacenter_id_)
         {
             DLOG(WARNING) << fmt::format("SnowflakeGenerator: Datacenter ID {} out of range (0-31)", datacenter_id);
             throw std::invalid_argument("common::SnowflakeGenerator::SnowflakeGenerator: Datacenter ID out of range (0-31)");
@@ -39,12 +39,24 @@ namespace common::gen
         {
             do
             {
+                std::this_thread::yield();
                 timestamp = GetCurrentTimestamp();
             }
             while (timestamp < last_timestamp_);
         }
 
-        UpdateSequenceAndTimestamp(timestamp, last_timestamp_);
+        if (timestamp == last_timestamp_)
+        {
+            sequence_ = (sequence_ + 1) & SnowflakeOption::max_sequence_;
+            if (sequence_ == 0)
+            {
+                timestamp = TilNextMillis(last_timestamp_);
+            }
+        }
+        else
+        {
+            sequence_ = 0;
+        }
 
         last_timestamp_ = timestamp;
 
@@ -52,25 +64,11 @@ namespace common::gen
         return uniqueId;
     }
 
-    void SnowflakeGenerator::UpdateSequenceAndTimestamp(int64_t& timestamp, const int64_t last_timestamp)
-    {
-        if (timestamp == last_timestamp)
-        {
-            sequence_ = sequence_ + 1 & static_cast<int64_t>(SnowflakeOption::max_sequence_);
-            if (sequence_ == 0)
-            {
-                timestamp = TilNextMillis(last_timestamp);
-            }
-        }
-        else
-        {
-            sequence_ = 0;
-        }
-    }
-
     int64_t SnowflakeGenerator::GenerateUniqueId(const int64_t timestamp, const int16_t datacenter_id, const int16_t machine_id, const int64_t sequence)
     {
-        return timestamp << (static_cast<int64_t>(SnowflakeOption::machine_bits_) + static_cast<int64_t>(SnowflakeOption::sequence_bits_)) | static_cast<int64_t>(datacenter_id << 5 | machine_id) << static_cast<int64_t>(SnowflakeOption::sequence_bits_) | sequence;
+        constexpr int64_t kShift = SnowflakeOption::machine_bits_ + SnowflakeOption::sequence_bits_;
+        const int64_t nodeId = (static_cast<int64_t>(datacenter_id) << 5) | static_cast<int64_t>(machine_id);
+        return (timestamp << kShift) | (nodeId << SnowflakeOption::sequence_bits_) | sequence;
     }
 
     int64_t SnowflakeGenerator::GetCurrentTimestamp()
@@ -86,6 +84,7 @@ namespace common::gen
         int64_t timestamp = GetCurrentTimestamp();
         while (timestamp <= last_timestamp)
         {
+            std::this_thread::yield();
             timestamp = GetCurrentTimestamp();
         }
         return timestamp;

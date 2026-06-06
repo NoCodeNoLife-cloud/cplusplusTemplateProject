@@ -51,11 +51,6 @@ namespace common::gen
         [[nodiscard]] int64_t NextId();
 
     private:
-        /// @brief Updates the sequence number and timestamp for ID generation
-        /// @param timestamp Reference to current timestamp
-        /// @param last_timestamp Last timestamp used
-        void UpdateSequenceAndTimestamp(int64_t& timestamp, int64_t last_timestamp);
-
         /// @brief Generates the unique ID from timestamp, datacenter, machine, and sequence
         /// @param timestamp The timestamp component
         /// @param datacenter_id The datacenter ID component

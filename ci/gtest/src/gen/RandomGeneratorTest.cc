@@ -9,6 +9,8 @@
 #include <cmath>
 #include <set>
 #include <stdexcept>
+#include <thread>
+#include <vector>
 #include <gtest/gtest.h>
 
 #include "gen/RandomGenerator.hpp"
