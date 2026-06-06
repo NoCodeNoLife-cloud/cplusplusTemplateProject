@@ -156,8 +156,8 @@ TEST_F(UserCredentialsTest, IsLocked_CustomParameters)
 {
     UserCredentials creds("user", "hash", "salt");
 
-    const auto lockout_duration = std::chrono::minutes{10};
-    const size_t max_attempts = 3;
+    constexpr auto lockout_duration = std::chrono::minutes{10};
+    constexpr size_t max_attempts = 3;
 
     // Not locked initially
     EXPECT_FALSE(creds.is_locked(lockout_duration, max_attempts));
@@ -275,8 +275,8 @@ TEST_F(UserCredentialsTest, LockoutBoundary)
 {
     UserCredentials creds("user", "hash", "salt");
 
-    const size_t max_attempts = 5;
-    const auto lockout_duration = std::chrono::minutes{5};
+    constexpr size_t max_attempts = 5;
+    constexpr auto lockout_duration = std::chrono::minutes{5};
 
     // Try up to boundary
     for (size_t i = 0; i < max_attempts - 1; ++i)

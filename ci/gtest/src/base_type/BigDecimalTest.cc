@@ -509,7 +509,7 @@ TEST_F(BigDecimalTest, ComplexExpression)
 
     const auto subtotal = price * quantity;
     const auto tax = subtotal * tax_rate;
-    const auto total = subtotal + tax;
+    const auto _ = tax + subtotal;
 
     // Verify intermediate results
     EXPECT_EQ(subtotal, BigDecimal{"59.97"});
@@ -541,7 +541,7 @@ TEST_F(BigDecimalTest, Comparison_ConsistencyWithArithmetic)
  */
 TEST_F(BigDecimalTest, Constructor_EmptyString_ThrowsException)
 {
-    EXPECT_THROW(BigDecimal big_decimal{""}, std::exception);
+    EXPECT_THROW(BigDecimal _{""}, std::exception);
 }
 
 /**
@@ -550,9 +550,9 @@ TEST_F(BigDecimalTest, Constructor_EmptyString_ThrowsException)
  */
 TEST_F(BigDecimalTest, Constructor_InvalidString_ThrowsException)
 {
-    EXPECT_THROW(BigDecimal big_decimal{"abc"}, std::exception);
-    EXPECT_THROW(BigDecimal big_decimal{"12.34.56"}, std::exception);
-    EXPECT_THROW(BigDecimal big_decimal{"--123"}, std::exception);
+    EXPECT_THROW(BigDecimal _{"abc"}, std::exception);
+    EXPECT_THROW(BigDecimal _{"12.34.56"}, std::exception);
+    EXPECT_THROW(BigDecimal _{"--123"}, std::exception);
 }
 
 /**
@@ -561,7 +561,7 @@ TEST_F(BigDecimalTest, Constructor_InvalidString_ThrowsException)
  */
 TEST_F(BigDecimalTest, Constructor_WhitespaceString)
 {
-    EXPECT_THROW(BigDecimal big_decimal{"   "}, std::exception);
+    EXPECT_THROW(BigDecimal _{"   "}, std::exception);
 }
 
 /**
@@ -571,7 +571,7 @@ TEST_F(BigDecimalTest, Constructor_WhitespaceString)
 TEST_F(BigDecimalTest, Constructor_VeryLargeNumber)
 {
     const std::string large_num = "9" + std::string(100, '9') + "." + std::string(100, '9');
-    EXPECT_NO_THROW(BigDecimal big_decimal{large_num});
+    EXPECT_NO_THROW(BigDecimal _{large_num});
 }
 
 /**
@@ -581,7 +581,7 @@ TEST_F(BigDecimalTest, Constructor_VeryLargeNumber)
 TEST_F(BigDecimalTest, Constructor_VerySmallNumber)
 {
     const std::string small_num = "0." + std::string(99, '0') + "1";
-    EXPECT_NO_THROW(BigDecimal big_decimal{small_num});
+    EXPECT_NO_THROW(BigDecimal _{small_num});
 }
 
 /**
@@ -594,7 +594,7 @@ TEST_F(BigDecimalTest, Division_ByVerySmallNumber)
     const BigDecimal b{"0.00000000000000000001"}; // 1e-20
 
     // Should not throw, but result will be very large (1e20)
-    EXPECT_NO_THROW(const auto result = a / b);
+    EXPECT_NO_THROW(const auto _ = a / b);
     const auto result = a / b;
 
     // 1.0 / 1e-20 = 1e20, verify it's a large positive number
@@ -612,7 +612,7 @@ TEST_F(BigDecimalTest, Multiplication_LargeResult)
     const BigDecimal b{"999999999999999999999999999999"};
 
     // Should handle large results without throwing
-    EXPECT_NO_THROW(const auto result = a * b);
+    EXPECT_NO_THROW(const auto _ = a * b);
     const auto result = a * b;
     EXPECT_TRUE(result > a);
 }

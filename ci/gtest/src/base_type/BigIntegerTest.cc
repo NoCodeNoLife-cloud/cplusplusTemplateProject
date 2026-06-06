@@ -583,9 +583,9 @@ TEST_F(BigIntegerTest, Constructor_WhitespaceString)
  */
 TEST_F(BigIntegerTest, Constructor_ExtremelyLargeNumber)
 {
-    const std::string huge_num = std::string(500, '9'); // 500-digit number
-    EXPECT_NO_THROW(const BigInteger big_int = BigInteger(huge_num));
-    const BigInteger big_int = BigInteger(huge_num);
+    const auto huge_num = std::string(500, '9'); // 500-digit number
+    EXPECT_NO_THROW(const auto  _ = BigInteger(huge_num));
+    const auto big_int = BigInteger(huge_num);
     EXPECT_GT(big_int, BigInteger(0));
 }
 
@@ -598,7 +598,7 @@ TEST_F(BigIntegerTest, Multiplication_HugeNumbers)
     const BigInteger a{std::string(100, '9')}; // 100-digit number
     const BigInteger b{std::string(100, '9')};
 
-    EXPECT_NO_THROW(const auto result = a * b);
+    EXPECT_NO_THROW(const auto _ = a * b);
     const auto result = a * b;
     EXPECT_GT(result, a);
     EXPECT_GT(result, b);

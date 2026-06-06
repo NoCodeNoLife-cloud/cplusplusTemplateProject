@@ -159,7 +159,7 @@ TEST_F(FunctionProfilerAspectTest, Exec_VoidFunction)
     bool executed = false;
 
     EXPECT_NO_THROW({
-        aspect.exec([&executed]() {
+        aspect.exec([&executed]{
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
             executed = true;
             });
@@ -193,7 +193,7 @@ TEST_F(FunctionProfilerAspectTest, Exec_FunctionWithArguments)
 {
     FunctionProfilerAspect aspect{"argsFunctionTest"};
 
-    const auto result = aspect.exec([](int a, int b) -> int
+    const auto result = aspect.exec([](const int a, const int b) -> int
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
         return a + b;
@@ -211,7 +211,7 @@ TEST_F(FunctionProfilerAspectTest, Exec_FunctionThrowsException)
     FunctionProfilerAspect aspect{"throwingFunctionTest"};
 
     EXPECT_THROW({
-                 aspect.exec([]() {
+                 aspect.exec([]{
                      std::this_thread::sleep_for(std::chrono::milliseconds(5));
                      throw std::runtime_error("Test exception");
                      });
@@ -228,7 +228,7 @@ TEST_F(FunctionProfilerAspectTest, Exec_PreservesExceptionType)
 
     try
     {
-        aspect.exec([]()
+        aspect.exec([]
         {
             throw std::invalid_argument("Invalid argument");
         });
@@ -275,7 +275,7 @@ TEST_F(FunctionProfilerAspectTest, Exec_DifferentCallableTypes)
     FunctionProfilerAspect aspect{"callableTest"};
 
     // Lambda
-    const auto result1 = aspect.exec([]()
+    const auto result1 = aspect.exec([]
     {
         return 1;
     });
@@ -303,7 +303,7 @@ TEST_F(FunctionProfilerAspectTest, Timing_Accuracy)
 
     const auto start = std::chrono::high_resolution_clock::now();
 
-    aspect.exec([]()
+    aspect.exec([]
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     });
@@ -345,7 +345,7 @@ TEST_F(FunctionProfilerAspectTest, LongRunningFunction)
     FunctionProfilerAspect aspect{"longRunningTest"};
 
     EXPECT_NO_THROW({
-        aspect.exec([]() {
+        aspect.exec([]{
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             });
         });
