@@ -6,8 +6,10 @@
 
 #include "filesystem/type/File.hpp"
 
+#include <algorithm>
 #include <array>
 #include <chrono>
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -15,10 +17,14 @@
 #include <memory>
 #include <sstream>
 #include <string>
-#include <windows.h>
+
 #include <fmt/format.h>
 #include <glog/logging.h>
 #include <openssl/evp.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace common::filesystem
 {
@@ -38,20 +44,54 @@ namespace common::filesystem
 
     bool File::canExecute() const
     {
+#ifdef _WIN32
         const DWORD attributes = GetFileAttributesW(file_path_.c_str());
-        return attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+        if (attributes == INVALID_FILE_ATTRIBUTES)
+        {
+            return false;
+        }
+        return (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+#else
+        try
+        {
+            const auto perms = std::filesystem::status(file_path_).permissions();
+            return (perms & std::filesystem::perms::owner_exec) != std::filesystem::perms::none;
+        }
+        catch (...)
+        {
+            return false;
+        }
+#endif
     }
 
     bool File::canRead() const
     {
-        const std::ifstream file(file_path_);
-        return file.good();
+        try
+        {
+            const std::ifstream file(file_path_);
+            return file.good();
+        }
+        catch (...)
+        {
+            return false;
+        }
     }
 
     bool File::canWrite() const
     {
-        const std::ofstream file(file_path_, std::ios::app);
-        return file.good();
+        try
+        {
+            if (!std::filesystem::exists(file_path_))
+            {
+                return false;
+            }
+            const std::ofstream file(file_path_, std::ios::app);
+            return file.good();
+        }
+        catch (...)
+        {
+            return false;
+        }
     }
 
     bool File::exists() const
@@ -80,8 +120,17 @@ namespace common::filesystem
 
     bool File::isHidden() const
     {
+        const auto filename = file_path_.filename().string();
+        if (!filename.empty() && filename.front() == '.')
+        {
+            return true;
+        }
+#ifdef _WIN32
         const DWORD attributes = GetFileAttributesW(file_path_.c_str());
-        return attributes != INVALID_FILE_ATTRIBUTES && attributes & FILE_ATTRIBUTE_HIDDEN;
+        return attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_HIDDEN);
+#else
+        return false;
+#endif
     }
 
     bool File::isAbsolute() const
@@ -91,12 +140,24 @@ namespace common::filesystem
 
     bool File::createNewFile() const
     {
-        if (std::filesystem::exists(file_path_))
+        try
+        {
+            if (std::filesystem::exists(file_path_))
+            {
+                return false;
+            }
+            const auto parent = file_path_.parent_path();
+            if (!parent.empty())
+            {
+                std::filesystem::create_directories(parent);
+            }
+            const std::ofstream file(file_path_);
+            return file.good();
+        }
+        catch (...)
         {
             return false;
         }
-        const std::ofstream file(file_path_);
-        return file.good();
     }
 
     bool File::deleteFile() const
@@ -118,7 +179,7 @@ namespace common::filesystem
             std::filesystem::rename(file_path_, dest.file_path_);
             return true;
         }
-        catch (const std::filesystem::filesystem_error&)
+        catch (...)
         {
             return false;
         }
@@ -128,10 +189,13 @@ namespace common::filesystem
     {
         try
         {
-            std::filesystem::copy_file(file_path_, dest.file_path_, std::filesystem::copy_options::overwrite_existing);
+            std::filesystem::copy_file(
+                file_path_,
+                dest.file_path_,
+                std::filesystem::copy_options::overwrite_existing);
             return true;
         }
-        catch (const std::filesystem::filesystem_error&)
+        catch (...)
         {
             return false;
         }
@@ -158,7 +222,8 @@ namespace common::filesystem
         try
         {
             const auto lastWriteTime = std::filesystem::last_write_time(file_path_);
-            const auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(lastWriteTime - std::filesystem::file_time_type::clock::now() + std::chrono::system_clock::now());
+            const auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+                lastWriteTime - std::filesystem::file_time_type::clock::now() + std::chrono::system_clock::now());
             return std::chrono::system_clock::to_time_t(sctp);
         }
         catch (...)
@@ -172,7 +237,8 @@ namespace common::filesystem
         try
         {
             const auto timePoint = std::chrono::system_clock::from_time_t(time);
-            const auto fileTime = std::chrono::time_point_cast<std::filesystem::file_time_type::duration>(timePoint - std::chrono::system_clock::now() + std::filesystem::file_time_type::clock::now());
+            const auto fileTime = std::chrono::time_point_cast<std::filesystem::file_time_type::duration>(
+                timePoint - std::chrono::system_clock::now() + std::filesystem::file_time_type::clock::now());
             std::filesystem::last_write_time(file_path_, fileTime);
             return true;
         }
@@ -186,17 +252,21 @@ namespace common::filesystem
     {
         try
         {
+#ifdef _WIN32
             const DWORD attributes = GetFileAttributesW(file_path_.c_str());
             if (attributes == INVALID_FILE_ATTRIBUTES)
             {
                 return false;
             }
-
-            if (SetFileAttributesW(file_path_.c_str(), attributes | FILE_ATTRIBUTE_READONLY))
-            {
-                return true;
-            }
-            return false;
+            return SetFileAttributesW(file_path_.c_str(), attributes | FILE_ATTRIBUTE_READONLY) != 0;
+#else
+            auto perms = std::filesystem::status(file_path_).permissions();
+            perms &= ~(std::filesystem::perms::owner_write |
+                std::filesystem::perms::group_write |
+                std::filesystem::perms::others_write);
+            std::filesystem::permissions(file_path_, perms);
+            return true;
+#endif
         }
         catch (...)
         {
@@ -237,12 +307,11 @@ namespace common::filesystem
     {
         try
         {
-            const auto extension = file_path_.extension();
-            return extension.string();
+            return file_path_.extension().string();
         }
         catch (...)
         {
-            return std::string{};
+            return {};
         }
     }
 
@@ -253,7 +322,9 @@ namespace common::filesystem
 
     File File::getParentFile() const
     {
-        return file_path_.has_parent_path() ? File(file_path_.parent_path()) : File(std::string(""));
+        return file_path_.has_parent_path()
+                   ? File(file_path_.parent_path())
+                   : File(std::string{});
     }
 
     std::string File::getPath() const
@@ -329,7 +400,11 @@ namespace common::filesystem
 
     std::string File::toURI() const
     {
-        return "file://" + file_path_.string();
+        auto path = file_path_.string();
+#ifdef _WIN32
+        std::replace(path.begin(), path.end(), '\\', '/');
+#endif
+        return "file://" + path;
     }
 
     void File::printFilesWithDepth(const std::filesystem::path& file_path)
@@ -340,7 +415,9 @@ namespace common::filesystem
             throw std::runtime_error("Invalid directory path: " + file_path.string());
         }
 
-        for (auto it_entry = std::filesystem::recursive_directory_iterator(file_path); it_entry != std::filesystem::recursive_directory_iterator{}; ++it_entry)
+        for (auto it_entry = std::filesystem::recursive_directory_iterator(file_path);
+             it_entry != std::filesystem::recursive_directory_iterator{};
+             ++it_entry)
         {
             const auto& entry = *it_entry;
             const auto depth = it_entry.depth();
@@ -367,7 +444,8 @@ namespace common::filesystem
             throw std::runtime_error("Failed to open file: " + filePath.string());
         }
 
-        const auto mdContext = std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)>(EVP_MD_CTX_new(), EVP_MD_CTX_free);
+        const auto mdContext = std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)>(
+            EVP_MD_CTX_new(), EVP_MD_CTX_free);
         if (!mdContext)
         {
             DLOG(WARNING) << "Failed to create MD5 context";
@@ -381,16 +459,10 @@ namespace common::filesystem
         }
 
         constexpr size_t bufferSize = 4096;
-        std::array < char, bufferSize > buffer{};
-        while (file.read(buffer.data(), bufferSize))
+        std::array<char, bufferSize> buffer{};
+        while (file.read(buffer.data(), bufferSize) || file.gcount() > 0)
         {
-            if (const auto bytesRead = static_cast<size_t>(file.gcount()); EVP_DigestUpdate(mdContext.get(), buffer.data(), bytesRead) != 1)
-            {
-                throw std::runtime_error("MD5 update failed");
-            }
-        }
-        if (const auto bytesRead = static_cast<size_t>(file.gcount()); bytesRead > 0)
-        {
+            const auto bytesRead = static_cast<size_t>(file.gcount());
             if (EVP_DigestUpdate(mdContext.get(), buffer.data(), bytesRead) != 1)
             {
                 throw std::runtime_error("MD5 update failed");
