@@ -9,16 +9,20 @@
 #include <chrono>
 #include <filesystem>
 #include <optional>
-#include <queue>
-#include <utility>
 #include <vector>
-#include <fmt/format.h>
+
 #include <glog/logging.h>
 
 namespace common::filesystem
 {
-    Directory::Directory(std::filesystem::path filePath)  : dir_path_(std::move(filePath))
+    Directory::Directory(std::filesystem::path filePath)
+        : dir_path_(std::move(filePath))
     {
+    }
+
+    const std::filesystem::path& Directory::getPath() const
+    {
+        return dir_path_;
     }
 
     bool Directory::mkdir() const
@@ -27,8 +31,9 @@ namespace common::filesystem
         {
             return std::filesystem::create_directory(dir_path_);
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "mkdir failed: " << e.what();
             return false;
         }
     }
@@ -37,29 +42,15 @@ namespace common::filesystem
     {
         try
         {
-            if (exist_ok)
-            {
-                return std::filesystem::create_directories(dir_path_);
-            }
-            // Check if any part of the path already exists
             if (std::filesystem::exists(dir_path_))
             {
-                return false;
-            }
-            // For parent directories, we need to check recursively
-            auto parent = dir_path_.parent_path();
-            while (!parent.empty() && parent != dir_path_.root_path())
-            {
-                if (std::filesystem::exists(parent) && !std::filesystem::is_directory(parent))
-                {
-                    return false;
-                }
-                parent = parent.parent_path();
+                return exist_ok;
             }
             return std::filesystem::create_directories(dir_path_);
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "mkdirs failed: " << e.what();
             return false;
         }
     }
@@ -80,8 +71,9 @@ namespace common::filesystem
         {
             return std::filesystem::is_empty(dir_path_);
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "isEmpty failed: " << e.what();
             return false;
         }
     }
@@ -92,8 +84,9 @@ namespace common::filesystem
         {
             return std::filesystem::remove(dir_path_);
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "remove failed: " << e.what();
             return false;
         }
     }
@@ -104,8 +97,9 @@ namespace common::filesystem
         {
             return std::filesystem::remove_all(dir_path_);
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "removeAll failed: " << e.what();
             return 0;
         }
     }
@@ -117,8 +111,9 @@ namespace common::filesystem
             std::filesystem::rename(dir_path_, destination);
             return true;
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "move failed: " << e.what();
             return false;
         }
     }
@@ -127,13 +122,13 @@ namespace common::filesystem
     {
         try
         {
-            auto newPath = dir_path_;
-            newPath.replace_filename(newName);
+            const auto newPath = dir_path_.parent_path() / newName;
             std::filesystem::rename(dir_path_, newPath);
             return true;
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "rename failed: " << e.what();
             return false;
         }
     }
@@ -142,47 +137,31 @@ namespace common::filesystem
     {
         try
         {
-            if (!exists() || !isDirectory())
+            if (!isDirectory())
             {
                 return false;
             }
-            if (!std::filesystem::create_directories(destination))
+            std::filesystem::create_directories(destination);
+            for (const auto& entry : std::filesystem::recursive_directory_iterator(dir_path_))
             {
-                return false;
-            }
-
-            std::queue<std::pair<std::filesystem::path, std::filesystem::path>> dirQueue;
-            dirQueue.emplace(dir_path_, destination);
-
-            while (!dirQueue.empty())
-            {
-                const auto [srcPath, dstPath] = dirQueue.front();
-                dirQueue.pop();
-
-                for (const auto& entry : std::filesystem::directory_iterator(srcPath))
+                const auto& entryPath = entry.path();
+                const auto relativePath = entryPath.lexically_relative(dir_path_);
+                const auto targetPath = destination / relativePath;
+                if (entry.is_directory())
                 {
-                    const auto& entryPath = entry.path();
-                    const auto relativePath = entryPath.lexically_relative(srcPath);
-                    const auto targetPath = dstPath / relativePath;
-
-                    if (entry.is_directory())
-                    {
-                        if (!std::filesystem::create_directory(targetPath))
-                        {
-                            return false;
-                        }
-                        dirQueue.emplace(entryPath, targetPath);
-                    }
-                    else if (entry.is_regular_file())
-                    {
-                        std::filesystem::copy_file(entryPath, targetPath, std::filesystem::copy_options::overwrite_existing);
-                    }
+                    std::filesystem::create_directory(targetPath);
+                }
+                else if (entry.is_regular_file())
+                {
+                    std::filesystem::copy_file(entryPath, targetPath,
+                        std::filesystem::copy_options::overwrite_existing);
                 }
             }
             return true;
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "copy failed: " << e.what();
             return false;
         }
     }
@@ -200,8 +179,9 @@ namespace common::filesystem
                 }
             }
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "size calculation failed: " << e.what();
         }
         return total;
     }
@@ -213,8 +193,9 @@ namespace common::filesystem
             const auto ftime = std::filesystem::last_write_time(dir_path_);
             return std::chrono::clock_cast<std::chrono::system_clock>(ftime);
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "lastModifiedTime failed: " << e.what();
             return std::nullopt;
         }
     }
@@ -244,8 +225,9 @@ namespace common::filesystem
                 }
             }
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "listDir failed: " << e.what();
         }
         return entries;
     }
@@ -269,8 +251,9 @@ namespace common::filesystem
             }
             return true;
         }
-        catch (...)
+        catch (const std::exception& e)
         {
+            LOG(WARNING) << "clearAll failed: " << e.what();
             return false;
         }
     }
