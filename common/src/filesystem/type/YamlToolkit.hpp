@@ -53,13 +53,15 @@ namespace common::filesystem
 
         /// @brief Get a nested value from a YAML file using a path.
         /// @param filepath The path to the YAML file.
-        /// @param path The path to the value (e.g., "parent.child.grandchild").
+        /// @param path The dot-separated path to the value (e.g., "parent.child.grandchild").
+        ///        An empty path returns the entire root node.
         /// @return A YAML node containing the value at the specified path.
         [[nodiscard]] static YAML::Node getNestedValue(const std::string& filepath, const std::string& path);
 
         /// @brief Set a nested value in a YAML file using a path.
         /// @param filepath The path to the YAML file.
-        /// @param path The path to the value (e.g., "parent.child.grandchild").
+        /// @param path The dot-separated path to the value (e.g., "parent.child.grandchild").
+        ///        An empty path sets the value at the root level.
         /// @param value The YAML node value to set.
         /// @return true if the value was set successfully, false otherwise.
         static bool setNestedValue(const std::string& filepath, const std::string& path, const YAML::Node& value);
@@ -86,10 +88,12 @@ namespace common::filesystem
         /// @return YAML node parsed from the string.
         [[nodiscard]] static YAML::Node fromString(const std::string& str);
 
-        /// @brief Get a node from a YAML node by path, with fallback to root if path doesn't exist
-        /// @param root The root YAML node
-        /// @param path The path to try (e.g., "grpc")
-        /// @return The node at path if it exists, otherwise the root node
+        /// @brief Traverse a dot-separated path within a YAML node and return the sub-node,
+        ///        or fall back to the entire root node if the path does not exist.
+        /// @param root The root YAML node.
+        /// @param path The dot-separated path to traverse (e.g., "grpc.server").
+        /// @return The sub-node at the path if it exists and is defined,
+        ///         otherwise the original root node.
         [[nodiscard]] static YAML::Node getNodeOrRoot(const YAML::Node& root, const std::string& path);
     };
 }

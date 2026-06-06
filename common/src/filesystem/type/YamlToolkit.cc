@@ -8,8 +8,7 @@
 
 #include <filesystem>
 #include <fstream>
-#include <string>
-#include <fmt/format.h>
+#include <vector>
 #include <yaml-cpp/yaml.h>
 
 namespace common::filesystem
@@ -18,20 +17,17 @@ namespace common::filesystem
     {
         try
         {
-            // Create directory if it doesn't exist
             if (const std::filesystem::path path(filepath); !path.parent_path().empty())
             {
                 std::filesystem::create_directories(path.parent_path());
             }
 
-            // Write data to file
             YAML::Emitter emitter;
             emitter << data;
 
             if (std::ofstream file(filepath); file.is_open())
             {
                 file << emitter.c_str();
-                file.close();
                 return true;
             }
             return false;
@@ -50,36 +46,24 @@ namespace common::filesystem
             {
                 return YAML::LoadFile(filepath);
             }
-            return {};
+            return YAML::Node(YAML::NodeType::Undefined);
         }
         catch (const std::exception&)
         {
-            return {};
+            return YAML::Node(YAML::NodeType::Undefined);
         }
     }
 
     bool YamlToolkit::update(const std::string& filepath, const YAML::Node& data)
     {
-        try
-        {
-            // Update is essentially the same as create - overwrite the file with new data
-            return create(filepath, data);
-        }
-        catch (const std::exception&)
-        {
-            return false;
-        }
+        return create(filepath, data);
     }
 
     bool YamlToolkit::remove(const std::string& filepath)
     {
         try
         {
-            if (std::filesystem::exists(filepath))
-            {
-                return std::filesystem::remove(filepath);
-            }
-            return false;
+            return std::filesystem::exists(filepath) && std::filesystem::remove(filepath);
         }
         catch (const std::exception&)
         {
@@ -93,13 +77,16 @@ namespace common::filesystem
         {
             if (const YAML::Node root = read(filepath); root.IsMap())
             {
-                return root[key];
+                if (root[key].IsDefined())
+                {
+                    return root[key];
+                }
             }
-            return {};
+            return YAML::Node(YAML::NodeType::Undefined);
         }
         catch (const std::exception&)
         {
-            return {};
+            return YAML::Node(YAML::NodeType::Undefined);
         }
     }
 
@@ -122,36 +109,61 @@ namespace common::filesystem
         }
     }
 
-    YAML::Node YamlToolkit::getNestedValue(const std::string& filepath, const std::string& path)
+    namespace
     {
-        try
+        void splitPath(const std::string& path, std::vector<std::string>& keys)
         {
-            const YAML::Node root = read(filepath);
-            if (!root.IsMap())
-            {
-                return {};
-            }
-
-            YAML::Node current = root;
+            keys.clear();
             std::string::size_type prev = 0;
             std::string::size_type pos = 0;
 
             while ((pos = path.find('.', prev)) != std::string::npos)
             {
-                if (const std::string key = path.substr(prev, pos - prev); current[key])
+                if (pos > prev)
                 {
-                    current = current[key];
-                    prev = pos + 1;
+                    keys.push_back(path.substr(prev, pos - prev));
                 }
-                else
-                {
-                    return {};
-                }
+                prev = pos + 1;
             }
 
-            // Handle the last key
-            const std::string key = path.substr(prev);
-            return current[key];
+            if (prev < path.size())
+            {
+                keys.push_back(path.substr(prev));
+            }
+        }
+
+        YAML::Node navigate(const YAML::Node& root, const std::vector<std::string>& keys)
+        {
+            YAML::Node current = root;
+            for (const auto& key : keys)
+            {
+                if (!current.IsMap() || !current[key].IsDefined())
+                {
+                    return YAML::Node(YAML::NodeType::Undefined);
+                }
+                current = current[key];
+            }
+            return current;
+        }
+    }
+
+    YAML::Node YamlToolkit::getNestedValue(const std::string& filepath, const std::string& path)
+    {
+        try
+        {
+            const YAML::Node root = read(filepath);
+            if (path.empty())
+            {
+                return root;
+            }
+            if (!root.IsMap())
+            {
+                return {};
+            }
+
+            std::vector<std::string> keys;
+            splitPath(path, keys);
+            return navigate(root, keys);
         }
         catch (const std::exception&)
         {
@@ -164,29 +176,35 @@ namespace common::filesystem
         try
         {
             YAML::Node root = read(filepath);
-            if (!root.IsMap())
+            if (!root.IsDefined() || !root.IsMap())
             {
                 root = YAML::Node(YAML::NodeType::Map);
             }
 
-            YAML::Node current = root;
-            std::string::size_type prev = 0;
-            std::string::size_type pos = 0;
-
-            while ((pos = path.find('.', prev)) != std::string::npos)
+            if (path.empty())
             {
-                const std::string key = path.substr(prev, pos - prev);
-                if (!current[key])
-                {
-                    current[key] = YAML::Node(YAML::NodeType::Map);
-                }
-                current = current[key];
-                prev = pos + 1;
+                root = value;
             }
+            else
+            {
+                std::vector<std::string> keys;
+                splitPath(path, keys);
 
-            // Set the value at the final key
-            const std::string key = path.substr(prev);
-            current[key] = value;
+                YAML::Node current = root;
+                for (std::size_t i = 0; i + 1 < keys.size(); ++i)
+                {
+                    if (!current[keys[i]].IsDefined())
+                    {
+                        current[keys[i]] = YAML::Node(YAML::NodeType::Map);
+                    }
+                    else if (!current[keys[i]].IsMap())
+                    {
+                        current[keys[i]] = YAML::Node(YAML::NodeType::Map);
+                    }
+                    current = current[keys[i]];
+                }
+                current[keys.back()] = value;
+            }
 
             return create(filepath, root);
         }
@@ -217,27 +235,23 @@ namespace common::filesystem
         try
         {
             YAML::Node root = read(filepath);
-            if (!root.IsMap() && !root.IsNull())
+
+            if (!data.IsMap())
             {
-                return false; // Can only merge with a map or null node
+                return false;
             }
 
-            if (data.IsMap())
+            if (!root.IsMap())
             {
-                if (!root.IsMap())
-                {
-                    root = YAML::Node(YAML::NodeType::Map);
-                }
-
-                for (const auto& it : data)
-                {
-                    root[it.first.as<std::string>()] = it.second;
-                }
-
-                return create(filepath, root);
+                root = YAML::Node(YAML::NodeType::Map);
             }
 
-            return false;
+            for (const auto& it : data)
+            {
+                root[it.first.as<std::string>()] = it.second;
+            }
+
+            return create(filepath, root);
         }
         catch (const std::exception&)
         {
@@ -251,7 +265,7 @@ namespace common::filesystem
         {
             YAML::Emitter emitter;
             emitter << node;
-            return {emitter.c_str()};
+            return emitter.c_str();
         }
         catch (const std::exception&)
         {
@@ -263,11 +277,16 @@ namespace common::filesystem
     {
         try
         {
-            return YAML::Load(str);
+            YAML::Node result = YAML::Load(str);
+            if (!result.IsDefined())
+            {
+                return YAML::Node(YAML::NodeType::Undefined);
+            }
+            return result;
         }
         catch (const std::exception&)
         {
-            return {};
+            return YAML::Node(YAML::NodeType::Undefined);
         }
     }
 
@@ -275,11 +294,25 @@ namespace common::filesystem
     {
         try
         {
-            if (root[path] && root[path].IsDefined())
+            if (path.empty())
             {
-                return root[path];
+                return root;
             }
-            return root;
+
+            std::vector<std::string> keys;
+            splitPath(path, keys);
+            YAML::Node current = root;
+
+            for (const auto& key : keys)
+            {
+                if (!current.IsMap() || !current[key].IsDefined())
+                {
+                    return root;
+                }
+                current = current[key];
+            }
+
+            return current;
         }
         catch (const std::exception&)
         {
