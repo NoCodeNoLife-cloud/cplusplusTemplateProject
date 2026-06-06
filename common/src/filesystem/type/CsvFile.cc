@@ -184,15 +184,15 @@ namespace common::filesystem
         }
         file << '\n';
 
-        for (size_t i = 0; i < rows_.size(); ++i)
+        for (auto & row : rows_)
         {
-            for (size_t j = 0; j < rows_[i].size(); ++j)
+            for (size_t j = 0; j < row.size(); ++j)
             {
                 if (j > 0)
                 {
                     file << ',';
                 }
-                file << escapeField(rows_[i][j]);
+                file << escapeField(row[j]);
             }
             file << '\n';
         }
