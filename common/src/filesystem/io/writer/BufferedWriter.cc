@@ -37,7 +37,7 @@ namespace common::filesystem
 
     void BufferedWriter::write(const std::string& str)
     {
-        if (!output_stream_)
+        if (closed_ || !output_stream_)
         {
             return;
         }
@@ -55,12 +55,12 @@ namespace common::filesystem
 
     void BufferedWriter::write(const std::vector<char>& cBuf, const size_t off, const size_t len)
     {
-        if (len == 0 || !output_stream_)
+        if (closed_ || len == 0 || !output_stream_)
         {
             return;
         }
 
-        if (off + len > cBuf.size())
+        if (off > cBuf.size() || len > cBuf.size() - off)
         {
             throw std::out_of_range("Offset and length are out of the bounds of the buffer.");
         }
@@ -94,6 +94,11 @@ namespace common::filesystem
 
     void BufferedWriter::close()
     {
+        if (closed_)
+        {
+            return;
+        }
+        closed_ = true;
         if (output_stream_ && output_stream_->is_open())
         {
             flush();
@@ -104,6 +109,10 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const char c)
     {
+        if (closed_)
+        {
+            return *this;
+        }
         buffer_.push_back(c);
         checkAndFlush();
         return *this;
@@ -111,6 +120,10 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const std::string& str)
     {
+        if (closed_)
+        {
+            return *this;
+        }
         buffer_.insert(buffer_.end(), str.begin(), str.end());
         checkAndFlush();
         return *this;
@@ -118,6 +131,10 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const std::string& str, const size_t start, const size_t end)
     {
+        if (closed_)
+        {
+            return *this;
+        }
         if (start < str.length() && end <= str.length() && start < end)
         {
             buffer_.insert(buffer_.end(), str.begin() + static_cast<std::ptrdiff_t>(start),
@@ -129,6 +146,10 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const std::string_view str)
     {
+        if (closed_)
+        {
+            return *this;
+        }
         buffer_.insert(buffer_.end(), str.begin(), str.end());
         checkAndFlush();
         return *this;
@@ -136,6 +157,10 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const char* str)
     {
+        if (closed_)
+        {
+            return *this;
+        }
         if (str)
         {
             const std::string_view sv(str);
@@ -147,6 +172,10 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const std::initializer_list<char> chars)
     {
+        if (closed_)
+        {
+            return *this;
+        }
         buffer_.insert(buffer_.end(), chars.begin(), chars.end());
         checkAndFlush();
         return *this;
@@ -154,6 +183,10 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const char* chars, const size_t count)
     {
+        if (closed_)
+        {
+            return *this;
+        }
         if (chars)
         {
             buffer_.insert(buffer_.end(), chars, chars + count);
@@ -164,6 +197,10 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const char c, const size_t count)
     {
+        if (closed_)
+        {
+            return *this;
+        }
         buffer_.insert(buffer_.end(), count, c);
         checkAndFlush();
         return *this;
@@ -171,6 +208,10 @@ namespace common::filesystem
 
     BufferedWriter& BufferedWriter::append(const std::span<const char> chars)
     {
+        if (closed_)
+        {
+            return *this;
+        }
         buffer_.insert(buffer_.end(), chars.begin(), chars.end());
         checkAndFlush();
         return *this;
@@ -188,7 +229,7 @@ namespace common::filesystem
 
     bool BufferedWriter::isClosed() const
     {
-        return output_stream_ == nullptr || !output_stream_->is_open();
+        return closed_ || output_stream_ == nullptr || !output_stream_->is_open();
     }
 
     void BufferedWriter::checkAndFlush()

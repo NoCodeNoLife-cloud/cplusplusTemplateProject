@@ -15,12 +15,13 @@ namespace common::filesystem
     {
     }
 
-    ByteArrayOutputStream::ByteArrayOutputStream(const size_t size) : buf_(size)
+    ByteArrayOutputStream::ByteArrayOutputStream(const size_t size)
     {
         if (size == 0)
         {
             throw std::invalid_argument("Size must be greater than zero");
         }
+        buf_.resize(size);
     }
 
     void ByteArrayOutputStream::write(const std::byte b)

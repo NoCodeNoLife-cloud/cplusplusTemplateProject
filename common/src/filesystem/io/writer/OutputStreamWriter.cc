@@ -69,7 +69,8 @@ namespace common::filesystem
     {
         if (!str.empty())
         {
-            write(std::vector(str.begin(), str.end()));
+            checkIfClosed();
+            output_writer_->write(str);
         }
     }
 
@@ -80,11 +81,12 @@ namespace common::filesystem
             return;
         }
 
+        checkIfClosed();
         if (off + len > str.size())
         {
             throw std::out_of_range("Offset and length exceed string size");
         }
-        write(std::vector(str.begin() + static_cast<std::string::difference_type>(off), str.begin() + static_cast<std::string::difference_type>(off + len)));
+        output_writer_->write(str, off, len);
     }
 
     void OutputStreamWriter::flush()
@@ -101,6 +103,7 @@ namespace common::filesystem
         }
         flush();
         closed_ = true;
+        output_writer_->close();
     }
 
     bool OutputStreamWriter::isClosed() const

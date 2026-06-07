@@ -63,6 +63,14 @@ namespace common::filesystem
         {
             throw std::out_of_range("Data offset/length out of range");
         }
+
+        if (len >= bufferSize_)
+        {
+            flushBuffer();
+            output_stream_->write(data, offset, len);
+            return;
+        }
+
         size_t bytesWritten = 0;
         while (bytesWritten < len)
         {
@@ -87,6 +95,13 @@ namespace common::filesystem
         if (!buffer)
         {
             throw std::invalid_argument("Buffer cannot be null");
+        }
+
+        if (length >= bufferSize_)
+        {
+            flushBuffer();
+            output_stream_->write(buffer, length);
+            return;
         }
 
         size_t bytesWritten = 0;

@@ -113,6 +113,7 @@ namespace common::filesystem
         std::unique_ptr<std::ofstream> output_stream_;
         std::vector<char> buffer_;
         size_t buffer_size_;
+        bool closed_{false};
 
         /// @brief Flushes the internal buffer if it reaches the buffer size threshold.
         void checkAndFlush();

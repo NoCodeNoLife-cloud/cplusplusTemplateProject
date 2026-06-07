@@ -93,7 +93,17 @@ namespace common::filesystem
 
     void FileOutputStream::close()
     {
-        checkStreamWritable("Cannot close closed or unwritable stream.");
+        if (!file_stream_.is_open())
+        {
+            return;
+        }
+        try
+        {
+            file_stream_.flush();
+        }
+        catch (...)
+        {
+        }
         file_stream_.close();
     }
 
