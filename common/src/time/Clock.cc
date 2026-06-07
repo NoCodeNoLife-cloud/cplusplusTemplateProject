@@ -11,7 +11,6 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-#include <fmt/format.h>
 
 namespace common::time
 {

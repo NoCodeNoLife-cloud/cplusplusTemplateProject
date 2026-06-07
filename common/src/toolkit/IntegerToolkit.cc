@@ -70,7 +70,7 @@ namespace common::toolkit
         std::string upperRoman = roman;
         for (char& c : upperRoman)
         {
-            c = std::toupper(c);
+            c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
         }
 
         int32_t result = 0;
@@ -78,7 +78,8 @@ namespace common::toolkit
 
         for (const auto& [value, symbol] : valueSymbols)
         {
-            while (i + symbol.length() <= upperRoman.length() && upperRoman.substr(i, symbol.length()) == symbol)
+            while (i + symbol.length() <= upperRoman.length() &&
+                   upperRoman.compare(i, symbol.length(), symbol) == 0)
             {
                 result += value;
                 i += symbol.length();
@@ -105,14 +106,8 @@ namespace common::toolkit
         return num > 0 && (num & num - 1) == 0;
     }
 
-    int32_t IntegerToolkit::countSetBits(int32_t num)
+    int32_t IntegerToolkit::countSetBits(const int32_t num)
     {
-        int32_t count = 0;
-        while (num)
-        {
-            count += num & 1;
-            num >>= 1;
-        }
-        return count;
+        return static_cast<int32_t>(std::popcount(static_cast<uint32_t>(num)));
     }
 }

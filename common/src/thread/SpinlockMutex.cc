@@ -8,23 +8,15 @@
 
 #include <atomic>
 #include <chrono>
-#include <sstream>
 #include <thread>
-#include <fmt/format.h>
+#if defined(_MSC_VER)
+#include <intrin.h>
+#elif defined(__GNUC__)
+#include <immintrin.h>
+#endif
 
 namespace common::thread
 {
-    namespace
-    {
-        // Helper function to convert thread::id to string
-        std::string getThreadIdString()
-        {
-            std::ostringstream oss;
-            oss << std::this_thread::get_id();
-            return oss.str();
-        }
-    }
-
     void SpinlockMutex::lock()
     {
         // Use exponential backoff to reduce contention
@@ -56,8 +48,7 @@ namespace common::thread
     template <typename Rep, typename Period>
     bool SpinlockMutex::try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration)
     {
-        auto start_time = std::chrono::high_resolution_clock::now();
-        auto end_time = start_time + timeout_duration;
+        const auto end_time = std::chrono::steady_clock::now() + timeout_duration;
 
         // First attempt without waiting
         if (try_lock())
@@ -66,7 +57,7 @@ namespace common::thread
         }
 
         // Loop until timeout attempting to acquire the lock
-        while (std::chrono::high_resolution_clock::now() < end_time)
+        while (std::chrono::steady_clock::now() < end_time)
         {
             if (try_lock())
             {

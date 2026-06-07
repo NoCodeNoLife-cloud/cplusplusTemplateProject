@@ -774,6 +774,27 @@ TEST_F(BloomFilterTest, BinaryData_WithNullBytes)
 }
 
 /**
+ * @brief Test with unaligned binary data
+ * @details Verifies that data not aligned to 4-byte boundary is handled correctly
+ */
+TEST_F(BloomFilterTest, BinaryData_Unaligned)
+{
+    BloomParameters params;
+    params.projected_element_count = 50;
+    params.false_positive_probability = 0.01;
+    params.compute_optimal_parameters();
+
+    BloomFilter filter(params);
+
+    // Create buffer where data starts at odd offset (potential unaligned access)
+    const unsigned char buffer[] = {0xAA, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0xBB};
+    const unsigned char* unaligned = buffer + 1; // starts at odd address
+    filter.insert(unaligned, 8);
+
+    EXPECT_TRUE(filter.contains(unaligned, 8));
+}
+
+/**
  * @brief Test large number of insertions
  * @details Verifies filter handles many insertions without errors
  */

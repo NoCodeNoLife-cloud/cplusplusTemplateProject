@@ -39,7 +39,7 @@ namespace glog::formatter
         /// @param s Output stream to write formatted prefix to
         /// @param m Log message containing metadata for the prefix
         /// @param data User data pointer (unused)
-        static auto MyPrefixFormatter(std::ostream& s, const google::LogMessage& m, void* data) noexcept -> void;
+        static auto MyPrefixFormatter(std::ostream& s, const google::LogMessage& m, [[maybe_unused]] void* data) noexcept -> void;
 
     private:
         /// @brief Date format helper constant for year offset

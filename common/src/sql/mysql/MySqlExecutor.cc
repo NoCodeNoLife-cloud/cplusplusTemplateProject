@@ -36,28 +36,25 @@ namespace common::sql::mysql
         disconnect();
     }
 
-    MySqlExecutor::MySqlExecutor(MySqlExecutor&& other)  : session_(std::move(other.session_)),
-                                                                   connected_(other.connected_),
-                                                                   last_error_(std::move(other.last_error_)),
-                                                                   host_(std::move(other.host_)),
-                                                                   port_(other.port_),
-                                                                   user_(std::move(other.user_)),
-                                                                   password_(std::move(other.password_)),
-                                                                   database_(std::move(other.database_))
+    MySqlExecutor::MySqlExecutor(MySqlExecutor&& other) noexcept : session_(std::move(other.session_)),
+                                                                  connected_(other.connected_),
+                                                                  last_error_(std::move(other.last_error_)),
+                                                                  host_(std::move(other.host_)),
+                                                                  port_(other.port_),
+                                                                  user_(std::move(other.user_)),
+                                                                  password_(std::move(other.password_)),
+                                                                  database_(std::move(other.database_))
     {
-        // Reset other's state since it's been moved
         other.connected_ = false;
-        other.port_ = 33060; // X Protocol default port
+        other.port_ = 33060;
     }
 
-    auto MySqlExecutor::operator=(MySqlExecutor&& other)  -> MySqlExecutor&
+    auto MySqlExecutor::operator=(MySqlExecutor&& other) noexcept -> MySqlExecutor&
     {
         if (this != &other)
         {
-            // Close current connection if exists
             disconnect();
 
-            // Move all members
             session_ = std::move(other.session_);
             connected_ = other.connected_;
             last_error_ = std::move(other.last_error_);
@@ -67,9 +64,8 @@ namespace common::sql::mysql
             password_ = std::move(other.password_);
             database_ = std::move(other.database_);
 
-            // Reset other's state since it's been moved
             other.connected_ = false;
-            other.port_ = 33060; // X Protocol default port
+            other.port_ = 33060;
         }
         return *this;
     }
@@ -80,7 +76,6 @@ namespace common::sql::mysql
                                 const std::string& password,
                                 const std::string& database)
     {
-        // Store connection parameters
         host_ = host;
         port_ = port;
         user_ = user;
@@ -94,7 +89,6 @@ namespace common::sql::mysql
 
         try
         {
-            // Create session using X DevAPI
             session_ = std::make_unique<mysqlx::Session>(
                 mysqlx::SessionOption::HOST, host,
                 mysqlx::SessionOption::PORT, port,
@@ -103,7 +97,6 @@ namespace common::sql::mysql
                 mysqlx::SessionOption::DB, database
             );
 
-            // Mark as connected after successful connection
             connected_ = true;
         }
         catch (const mysqlx::Error& e)
@@ -129,11 +122,10 @@ namespace common::sql::mysql
             }
             session_.reset(nullptr);
         }
-        // Mark as disconnected
         connected_ = false;
     }
 
-    int MySqlExecutor::execute(const std::string& sql) const
+    int MySqlExecutor::execute(const std::string& sql)
     {
         if (!session_)
         {
@@ -151,12 +143,8 @@ namespace common::sql::mysql
 
         try
         {
-            // Execute SQL statement
             const auto result = session_->sql(sql).execute();
-
-            // Get number of affected rows
             const auto affected_rows = result.getAffectedItemsCount();
-
             return static_cast<int>(affected_rows);
         }
         catch (const mysqlx::Error& e)
@@ -166,7 +154,7 @@ namespace common::sql::mysql
         }
     }
 
-    std::vector<std::vector<std::string>> MySqlExecutor::query(const std::string& sql) const
+    std::vector<std::vector<std::string>> MySqlExecutor::query(const std::string& sql)
     {
         if (!session_)
         {
@@ -182,10 +170,7 @@ namespace common::sql::mysql
 
         try
         {
-            // Execute SQL query
             auto result = session_->sql(sql).execute();
-
-            // Process results using common method
             return processQueryResult(result);
         }
         catch (const mysqlx::Error& e)
@@ -196,7 +181,7 @@ namespace common::sql::mysql
     }
 
     std::vector<std::vector<std::string>> MySqlExecutor::queryWithParams(const std::string& sql,
-                                                                         const std::vector<std::string>& params) const
+                                                                         const std::vector<std::string>& params)
     {
         if (!session_)
         {
@@ -212,55 +197,12 @@ namespace common::sql::mysql
 
         try
         {
-            // MySQL X DevAPI doesn't support parameterized queries for raw SQL statements
-            // We need to manually escape and substitute parameters safely
-            std::string processed_sql = sql;
-
+            auto stmt = session_->sql(sql);
             for (const auto& param : params)
             {
-                // Escape special characters to prevent SQL injection
-                std::string escaped_param;
-                escaped_param.reserve(param.size() * 2 + 10);
-                for (const char c : param)
-                {
-                    switch (c)
-                    {
-                    case '\'':
-                        escaped_param += "\\'"; // Escape single quote
-                        break;
-                    case '"':
-                        escaped_param += "\\\""; // Escape double quote
-                        break;
-                    case '\\':
-                        escaped_param += "\\\\"; // Escape backslash
-                        break;
-                    case '\n':
-                        escaped_param += "\\n"; // Escape newline
-                        break;
-                    case '\r':
-                        escaped_param += "\\r"; // Escape carriage return
-                        break;
-                    case '\x1a':
-                        escaped_param += "\\Z"; // Escape Ctrl+Z (EOF)
-                        break;
-                    default:
-                        escaped_param += c;
-                        break;
-                    }
-                }
-
-                // Find and replace the first ? placeholder
-                const auto qmark_pos = processed_sql.find('?');
-                if (qmark_pos != std::string::npos)
-                {
-                    processed_sql.replace(qmark_pos, 1, "'" + escaped_param + "'");
-                }
+                stmt.bind(mysqlx::Value(param));
             }
-
-            // Execute the processed query
-            auto result = session_->sql(processed_sql).execute();
-
-            // Process results using common method
+            auto result = stmt.execute();
             return processQueryResult(result);
         }
         catch (const mysqlx::Error& e)
@@ -270,7 +212,7 @@ namespace common::sql::mysql
         }
     }
 
-    QueryResult MySqlExecutor::queryStructured(const std::string& sql) const
+    QueryResult MySqlExecutor::queryStructured(const std::string& sql)
     {
         if (!session_)
         {
@@ -286,10 +228,7 @@ namespace common::sql::mysql
 
         try
         {
-            // Execute SQL query
             auto result = session_->sql(sql).execute();
-
-            // Process results into structured format
             return processQueryResultStructured(result);
         }
         catch (const mysqlx::Error& e)
@@ -300,7 +239,7 @@ namespace common::sql::mysql
     }
 
     QueryResult MySqlExecutor::queryWithParamsStructured(const std::string& sql,
-                                                         const std::vector<std::string>& params) const
+                                                          const std::vector<std::string>& params)
     {
         if (!session_)
         {
@@ -316,55 +255,12 @@ namespace common::sql::mysql
 
         try
         {
-            // MySQL X DevAPI doesn't support parameterized queries for raw SQL statements
-            // We need to manually escape and substitute parameters safely
-            std::string processed_sql = sql;
-
+            auto stmt = session_->sql(sql);
             for (const auto& param : params)
             {
-                // Escape special characters to prevent SQL injection
-                std::string escaped_param;
-                escaped_param.reserve(param.size() * 2 + 10);
-                for (const char c : param)
-                {
-                    switch (c)
-                    {
-                    case '\'':
-                        escaped_param += "\\'"; // Escape single quote
-                        break;
-                    case '"':
-                        escaped_param += "\\\""; // Escape double quote
-                        break;
-                    case '\\':
-                        escaped_param += "\\\\"; // Escape backslash
-                        break;
-                    case '\n':
-                        escaped_param += "\\n"; // Escape newline
-                        break;
-                    case '\r':
-                        escaped_param += "\\r"; // Escape carriage return
-                        break;
-                    case '\x1a':
-                        escaped_param += "\\Z"; // Escape Ctrl+Z (EOF)
-                        break;
-                    default:
-                        escaped_param += c;
-                        break;
-                    }
-                }
-
-                // Find and replace the first ? placeholder
-                const auto qmark_pos = processed_sql.find('?');
-                if (qmark_pos != std::string::npos)
-                {
-                    processed_sql.replace(qmark_pos, 1, "'" + escaped_param + "'");
-                }
+                stmt.bind(mysqlx::Value(param));
             }
-
-            // Execute the processed query
-            auto result = session_->sql(processed_sql).execute();
-
-            // Process results into structured format
+            auto result = stmt.execute();
             return processQueryResultStructured(result);
         }
         catch (const mysqlx::Error& e)
@@ -376,8 +272,7 @@ namespace common::sql::mysql
 
     bool MySqlExecutor::isConnected() const
     {
-        // Fast check using flag - no database query needed
-        return connected_ && session_;
+        return connected_ && (session_ != nullptr);
     }
 
     std::string MySqlExecutor::getLastError() const
@@ -385,11 +280,46 @@ namespace common::sql::mysql
         return last_error_;
     }
 
+    QueryValue MySqlExecutor::toQueryValue(const mysqlx::Value& value)
+    {
+        if (value.isNull())
+        {
+            return std::monostate{};
+        }
+
+        // Try integer first
+        try
+        {
+            return value.get<int64_t>();
+        }
+        catch (const mysqlx::Error&)
+        {
+        }
+
+        // Try double
+        try
+        {
+            return value.get<double>();
+        }
+        catch (const mysqlx::Error&)
+        {
+        }
+
+        // Fallback to string (will throw if incompatible, which is correct)
+        try
+        {
+            return value.get<std::string>();
+        }
+        catch (const mysqlx::Error&)
+        {
+            return std::monostate{};
+        }
+    }
+
     std::vector<std::vector<std::string>> MySqlExecutor::processQueryResult(mysqlx::SqlResult& result)
     {
         std::vector<std::vector<std::string>> results;
 
-        // Iterate through rows
         mysqlx::Row row;
         while ((row = result.fetchOne()))
         {
@@ -399,41 +329,22 @@ namespace common::sql::mysql
 
             for (size_t i = 0; i < num_columns; ++i)
             {
-                // Check if value is NULL
-                if (row[i].isNull())
+                const auto value = toQueryValue(row[i]);
+                if (std::holds_alternative<std::monostate>(value))
                 {
                     row_data.emplace_back(QUERY_RESULT_NULL);
                 }
+                else if (std::holds_alternative<int64_t>(value))
+                {
+                    row_data.emplace_back(std::to_string(std::get<int64_t>(value)));
+                }
+                else if (std::holds_alternative<double>(value))
+                {
+                    row_data.emplace_back(std::to_string(std::get<double>(value)));
+                }
                 else
                 {
-                    // Convert value to string based on its type
-                    try
-                    {
-                        // Try to get as string first (works for text types)
-                        row_data.emplace_back(row[i].get<std::string>());
-                    }
-                    catch (const mysqlx::Error&)
-                    {
-                        // If not a string, try numeric types and convert to string
-                        try
-                        {
-                            const auto int_val = row[i].get<int64_t>();
-                            row_data.emplace_back(std::to_string(int_val));
-                        }
-                        catch (const mysqlx::Error&)
-                        {
-                            try
-                            {
-                                const auto double_val = row[i].get<double>();
-                                row_data.emplace_back(std::to_string(double_val));
-                            }
-                            catch (const mysqlx::Error&)
-                            {
-                                // Fallback: use generic conversion
-                                row_data.emplace_back("UNKNOWN_TYPE");
-                            }
-                        }
-                    }
+                    row_data.emplace_back(std::get<std::string>(value));
                 }
             }
             results.push_back(std::move(row_data));
@@ -446,131 +357,52 @@ namespace common::sql::mysql
     {
         QueryResult query_result;
 
-        // Get column names from the first row's column labels
-        // Note: We need to fetch one row to get column information, then prepend it
-
-        if (mysqlx::Row first_row = result.fetchOne())
+        // Derive column metadata from the first row
+        if (const auto first_row = result.fetchOne())
         {
-            // Extract column names from the first row
             const auto num_columns = first_row.colCount();
             for (size_t i = 0; i < num_columns; ++i)
             {
-                // MySQL X DevAPI doesn't provide direct column name access in SqlResult
-                // We'll use generic column names or extract from SQL if needed
-                // For now, use index-based names (can be improved with SQL parsing)
                 query_result.column_names.push_back("column_" + std::to_string(i));
             }
 
             // Process the first row
-            QueryRow query_row;
-            for (size_t i = 0; i < num_columns; ++i)
             {
-                const std::string& column_name = query_result.column_names[i];
-
-                try
+                QueryRow query_row;
+                for (size_t i = 0; i < num_columns; ++i)
                 {
-                    if (first_row[i].isNull())
+                    const auto& column_name = query_result.column_names[i];
+                    try
+                    {
+                        query_row.columns[column_name] = toQueryValue(first_row[i]);
+                    }
+                    catch (const mysqlx::Error&)
                     {
                         query_row.columns[column_name] = std::monostate{};
                     }
-                    else
-                    {
-                        const auto& value = first_row[i];
-
-                        // Try integer first
-                        try
-                        {
-                            const auto int_val = value.get<int64_t>();
-                            query_row.columns[column_name] = int_val;
-                            continue;
-                        }
-                        catch (const mysqlx::Error&)
-                        {
-                            // Not an integer, try next type
-                        }
-
-                        // Try double
-                        try
-                        {
-                            const auto double_val = value.get<double>();
-                            query_row.columns[column_name] = double_val;
-                            continue;
-                        }
-                        catch (const mysqlx::Error&)
-                        {
-                            // Not a double, try string
-                        }
-
-                        // Default to string
-                        query_row.columns[column_name] = value.get<std::string>();
-                    }
                 }
-                catch (const mysqlx::Error&)
-                {
-                    query_row.columns[column_name] = std::monostate{};
-                }
+                query_result.rows.push_back(std::move(query_row));
             }
-            query_result.rows.push_back(std::move(query_row));
-        }
 
-        // Process remaining rows
-        mysqlx::Row row;
-        while ((row = result.fetchOne()))
-        {
-            QueryRow query_row;
-            const auto num_columns = row.colCount();
-
-            for (size_t i = 0; i < num_columns; ++i)
+            // Process remaining rows
+            mysqlx::Row row;
+            while ((row = result.fetchOne()))
             {
-                const std::string& column_name = i < query_result.column_names.size()
-                                                     ? query_result.column_names[i]
-                                                     : "column_" + std::to_string(i);
-
-                try
+                QueryRow query_row;
+                for (size_t i = 0; i < num_columns; ++i)
                 {
-                    if (row[i].isNull())
+                    const auto& column_name = query_result.column_names[i];
+                    try
+                    {
+                        query_row.columns[column_name] = toQueryValue(row[i]);
+                    }
+                    catch (const mysqlx::Error&)
                     {
                         query_row.columns[column_name] = std::monostate{};
                     }
-                    else
-                    {
-                        const auto& value = row[i];
-
-                        // Try integer first
-                        try
-                        {
-                            const auto int_val = value.get<int64_t>();
-                            query_row.columns[column_name] = int_val;
-                            continue;
-                        }
-                        catch (const mysqlx::Error&)
-                        {
-                            // Not an integer, try next type
-                        }
-
-                        // Try double
-                        try
-                        {
-                            const auto double_val = value.get<double>();
-                            query_row.columns[column_name] = double_val;
-                            continue;
-                        }
-                        catch (const mysqlx::Error&)
-                        {
-                            // Not a double, try string
-                        }
-
-                        // Default to string
-                        query_row.columns[column_name] = value.get<std::string>();
-                    }
                 }
-                catch (const mysqlx::Error&)
-                {
-                    query_row.columns[column_name] = std::monostate{};
-                }
+                query_result.rows.push_back(std::move(query_row));
             }
-
-            query_result.rows.push_back(std::move(query_row));
         }
 
         return query_result;

@@ -8,6 +8,7 @@
 #include <memory>
 #include <sqlite3.h>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace common::sql::sqlite
@@ -26,6 +27,18 @@ namespace common::sql::sqlite
 
         /// @brief Destructor that automatically closes the database connection
         ~SQLiteManager();
+
+        /// @brief Move constructor
+        SQLiteManager(SQLiteManager&& other) noexcept = default;
+
+        /// @brief Move assignment operator
+        auto operator=(SQLiteManager&& other) noexcept -> SQLiteManager& = default;
+
+        /// @brief Copy constructor (deleted)
+        SQLiteManager(const SQLiteManager&) = delete;
+
+        /// @brief Copy assignment (deleted)
+        auto operator=(const SQLiteManager&) -> SQLiteManager& = delete;
 
         /// @brief Creates/open database connection
         /// @param db_path Path to the SQLite database file
@@ -59,7 +72,7 @@ namespace common::sql::sqlite
         /// @param params Vector of parameter values to bind
         /// @param method_name Name of the calling method for error reporting
         /// @throws std::runtime_error if parameter binding fails
-        static void bindParameters(sqlite3_stmt* stmt, const std::vector<std::string>& params, const std::string& method_name);
+        static void bindParameters(sqlite3_stmt* stmt, const std::vector<std::string>& params, std::string_view method_name);
 
         std::unique_ptr<sqlite3, decltype(&sqlite3_close)> db_;
     };

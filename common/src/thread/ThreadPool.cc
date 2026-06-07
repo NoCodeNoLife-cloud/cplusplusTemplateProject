@@ -12,7 +12,6 @@
 #include <functional>
 #include <future>
 #include <queue>
-#include <sstream>
 #include <stdexcept>
 #include <thread>
 #include <type_traits>
@@ -22,17 +21,6 @@
 
 namespace common::thread
 {
-    namespace
-    {
-        // Helper function to convert thread::id to string
-        std::string getThreadIdString()
-        {
-            std::ostringstream oss;
-            oss << std::this_thread::get_id();
-            return oss.str();
-        }
-    }
-
     ThreadPool::ThreadPool(const size_t core_threads, const size_t max_threads, const size_t queue_size, const std::chrono::milliseconds idle_time) : core_thread_count_(core_threads), max_thread_count_(max_threads), max_queue_size_(queue_size), thread_idle_time_(idle_time)
     {
         if (core_threads == 0)
@@ -113,7 +101,7 @@ namespace common::thread
     {
         while (true)
         {
-            std::function < void() > task;
+            std::function<void()> task;
             {
                 std::unique_lock lock(queue_mutex_);
                 // Wait for a task or until timeout occurs for non-core threads
@@ -123,15 +111,12 @@ namespace common::thread
                 });
 
                 // Exit if shutting down and no more tasks
-                if (stop_&& task_queue_
-                .
-                empty()
-                )
+                if (stop_ && task_queue_.empty())
                 {
                     return;
                 }
 
-                // For non-core threads, exit if queue is empty and we have more than core count
+                // For non-core threads, exit if queue is empty, and we have more than core count
                 if (task_queue_.empty() && active_thread_count_ > core_thread_count_)
                 {
                     --active_thread_count_;

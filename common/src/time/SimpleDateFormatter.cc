@@ -37,17 +37,10 @@ namespace common::time
     std::string SimpleDateFormatter::format(const std::tm& date) const
     {
         std::ostringstream oss;
-        try
+        oss << std::put_time(&date, pattern_.c_str());
+        if (oss.fail())
         {
-            oss << std::put_time(&date, pattern_.c_str());
-            if (oss.fail())
-            {
-                throw std::runtime_error("SimpleDateFormatter::format: Failed to format date with pattern '" + pattern_ + "'");
-            }
-        }
-        catch (const std::exception& e)
-        {
-            throw std::runtime_error("SimpleDateFormatter::format: Error formatting date - " + std::string(e.what()));
+            throw std::runtime_error("SimpleDateFormatter::format: Failed to format date with pattern '" + pattern_ + "'");
         }
         const auto result = oss.str();
         return result;

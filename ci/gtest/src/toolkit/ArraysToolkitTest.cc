@@ -960,3 +960,44 @@ TEST_F(ArraysToolkitTest, TopK_InvalidK_ThrowsException)
     EXPECT_THROW(ArraysToolkit::topK(arr, 5, 0), std::invalid_argument);
     EXPECT_THROW(ArraysToolkit::topK(arr, 5, 6), std::invalid_argument);
 }
+
+/**
+ * @brief Test rotate with single element
+ * @details Verifies single-element array rotation is a no-op
+ */
+TEST_F(ArraysToolkitTest, Rotate_SingleElement)
+{
+    int arr[] = {42};
+    ArraysToolkit::rotate(arr, 1, 5);
+    EXPECT_EQ(arr[0], 42);
+    ArraysToolkit::rotate(arr, 1, -3);
+    EXPECT_EQ(arr[0], 42);
+}
+
+/**
+ * @brief Test rotate with full-cycle rotation
+ * @details Verifies rotating by size returns to original
+ */
+TEST_F(ArraysToolkitTest, Rotate_FullCycle)
+{
+    int arr[] = {1, 2, 3, 4, 5};
+    ArraysToolkit::rotate(arr, 5, 5);
+    EXPECT_EQ(arr[0], 1);
+    EXPECT_EQ(arr[4], 5);
+}
+
+/**
+ * @brief Test rotate with positions larger than size
+ * @details Verifies modulo normalization works
+ */
+TEST_F(ArraysToolkitTest, Rotate_LargePositions)
+{
+    int arr[] = {1, 2, 3, 4, 5};
+    ArraysToolkit::rotate(arr, 5, 12);
+    // 12 % 5 = 2, right rotation by 2
+    EXPECT_EQ(arr[0], 4);
+    EXPECT_EQ(arr[1], 5);
+    EXPECT_EQ(arr[2], 1);
+    EXPECT_EQ(arr[3], 2);
+    EXPECT_EQ(arr[4], 3);
+}

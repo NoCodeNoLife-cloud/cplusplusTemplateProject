@@ -8,6 +8,7 @@
 
 #include <fmt/format.h>
 #include <glog/logging.h>
+#include <stdexcept>
 
 namespace common::sql::sqlite
 {
@@ -118,7 +119,8 @@ namespace common::sql::sqlite
         bindParameters(stmt, params, "query");
 
         // Process results
-        while (sqlite3_step(stmt) == SQLITE_ROW)
+        int step_rc;
+        while ((step_rc = sqlite3_step(stmt)) == SQLITE_ROW)
         {
             std::vector<std::string> row;
             const int cols = sqlite3_column_count(stmt);
@@ -132,6 +134,12 @@ namespace common::sql::sqlite
         }
 
         sqlite3_finalize(stmt);
+
+        if (step_rc != SQLITE_DONE)
+        {
+            throw std::runtime_error("SQLiteManager::query: Query execution failed: " + std::string(sqlite3_errmsg(db_.get())));
+        }
+
         return results;
     }
 
@@ -140,14 +148,14 @@ namespace common::sql::sqlite
         return db_ != nullptr;
     }
 
-    void SQLiteManager::bindParameters(sqlite3_stmt* stmt, const std::vector<std::string>& params, const std::string& method_name)
+    void SQLiteManager::bindParameters(sqlite3_stmt* stmt, const std::vector<std::string>& params, const std::string_view method_name)
     {
         for (size_t i = 0; i < params.size(); ++i)
         {
             if (sqlite3_bind_text(stmt, static_cast<int>(i + 1), params[i].c_str(), -1, SQLITE_STATIC) != SQLITE_OK)
             {
                 sqlite3_finalize(stmt);
-                throw std::runtime_error("SQLiteManager::" + method_name + ": Parameter binding failed at index " + std::to_string(i));
+                throw std::runtime_error(fmt::format("SQLiteManager::{}: Parameter binding failed at index {}", method_name, i));
             }
         }
     }

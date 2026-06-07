@@ -7,6 +7,8 @@
  */
 
 #pragma once
+#include <atomic>
+#include <mutex>
 #include <string>
 
 #include "param/GLogParam.hpp"
@@ -19,48 +21,39 @@ namespace glog::config
     class GLogConfigurator final
     {
     public:
-        /// @brief Default constructor is deleted to enforce path initialization
         GLogConfigurator() = delete;
 
-        /// @brief Constructor with YAML configuration file path
         /// @param glog_yaml_path Path to the YAML configuration file
         explicit GLogConfigurator(std::string glog_yaml_path);
 
-        /// @brief Destructor
         ~GLogConfigurator() noexcept = default;
 
-        /// @brief Copy constructor is deleted to prevent copying
         GLogConfigurator(const GLogConfigurator&) = delete;
-
-        /// @brief Copy assignment operator is deleted to prevent copying
         GLogConfigurator& operator=(const GLogConfigurator&) = delete;
-
-        /// @brief Move constructor
         GLogConfigurator(GLogConfigurator&&) noexcept = default;
-
-        /// @brief Move assignment operator
         GLogConfigurator& operator=(GLogConfigurator&&) noexcept = default;
 
-        /// @brief Execute the configuration process
-        /// @return True if configuration was successful
+        /// @brief Execute the configuration process (idempotent, thread-safe)
         void execute() const;
 
         /// @brief Get the current configuration parameters
-        /// @return A const reference to the GLogParam object
         [[nodiscard]] auto getConfig() const noexcept -> const parameter::GLogParam&;
 
         /// @brief Update the configuration parameters
-        /// @param config The new configuration parameters
         void updateConfig(const parameter::GLogParam& config) noexcept;
 
-    private:
-        /// @brief Perform the actual glog configuration
-        static void doConfig(const parameter::GLogParam& config) noexcept;
+        /// @brief Check whether glog has been initialized by this configurator
+        [[nodiscard]] static auto isInitialized() noexcept -> bool;
 
-        /// @brief Clean up glog resources
+        /// @brief Clean up glog resources (also registered via atexit)
         static void clean() noexcept;
+
+    private:
+        static void doConfig(const parameter::GLogParam& config) noexcept;
 
         std::string glog_yaml_path_;
         parameter::GLogParam config_;
+        static std::once_flag glog_init_flag_;
+        static std::atomic<bool> glog_initialized_;
     };
 }

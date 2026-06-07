@@ -268,6 +268,13 @@ TEST_F(MySqlExecutorTest, Execute_InsertStatement_ReturnsAffectedRows)
     );
 
     EXPECT_EQ(affected, 1);
+
+    // Cleanup: remove the inserted row so it does not affect other tests
+    ASSERT_NO_THROW(
+        [[maybe_unused]] const auto removed = executor_->execute(
+            "DELETE FROM users WHERE name = 'TestUser'"
+        )
+    );
 }
 
 /**
@@ -321,7 +328,7 @@ TEST_F(MySqlExecutorTest, Execute_InvalidSQL_ThrowsException)
  */
 TEST_F(MySqlExecutorTest, Execute_Disconnected_ThrowsException)
 {
-    const MySqlExecutor exec;
+    MySqlExecutor exec;
     EXPECT_THROW((void)exec.execute("SELECT 1"), std::runtime_error);
 }
 
@@ -438,9 +445,8 @@ TEST_F(MySqlExecutorTest, QueryWithParams_EmptySQL_ThrowsException)
 
 /**
  * @brief Test that SQL injection attempts via parameters are safely handled
- * @details This test verifies that malicious input in parameters cannot alter the SQL query structure.
- *          Note: MySQL X DevAPI doesn't support true parameterized queries for raw SQL, so we use
- *          comprehensive character escaping to prevent SQL injection.
+ * @details Verifies that malicious input in parameters cannot alter SQL structure.
+ *          Uses X DevAPI bind() for server-side parameterization (immune to injection).
  */
 TEST_F(MySqlExecutorTest, QueryWithParams_SQLInjectionAttempt_SafelyHandled)
 {
@@ -477,8 +483,8 @@ TEST_F(MySqlExecutorTest, QueryWithParams_SQLInjectionAttempt_SafelyHandled)
 }
 
 /**
- * @brief Test that special characters in parameters are properly escaped
- * @details Verifies that quotes, backslashes, and other special chars don't break queries
+ * @brief Test that special characters in parameters are handled correctly
+ * @details Verifies that quotes and other special chars work via bind() parameterization
  */
 TEST_F(MySqlExecutorTest, QueryWithParams_SpecialCharacters_ProperlyEscaped)
 {
@@ -505,14 +511,12 @@ TEST_F(MySqlExecutorTest, QueryWithParams_SpecialCharacters_ProperlyEscaped)
 }
 
 /**
- * @brief Test that NULL bytes in parameters are handled safely
+ * @brief Test that NULL bytes in parameters are handled safely via bind()
  */
 TEST_F(MySqlExecutorTest, QueryWithParams_NullByteInParameter_HandledSafely)
 {
-    // String with embedded null byte (should be treated as regular character or rejected)
     const std::string param_with_null = "test\x00value";
 
-    // Should not crash or cause undefined behavior
     EXPECT_NO_THROW({
         const auto results = executor_->queryWithParams(
             "SELECT name FROM users WHERE name = ?",
@@ -524,7 +528,7 @@ TEST_F(MySqlExecutorTest, QueryWithParams_NullByteInParameter_HandledSafely)
 }
 
 /**
- * @brief Test structured query with params also prevents SQL injection
+ * @brief Test structured query with params also prevents SQL injection via bind()
  */
 TEST_F(MySqlExecutorTest, QueryWithParamsStructured_SQLInjectionAttempt_SafelyHandled)
 {
@@ -633,23 +637,20 @@ TEST_F(MySqlExecutorTest, QueryStructured_NULLValue_IsMonostate)
  */
 TEST_F(MySqlExecutorTest, QueryRow_GetString_ConvertsValues)
 {
-    // Use a fresh query to avoid data modification from other tests
     const auto result = executor_->queryStructured(
         "SELECT name, age, score FROM users WHERE name = 'Alice' AND age = 25"
     );
 
-    // If Alice's age was modified by another test, skip or use default values
-    if (result.isEmpty())
-    {
-        GTEST_SKIP() << "Test data was modified by previous tests";
-    }
+    ASSERT_FALSE(result.isEmpty()) << "Expected Alice with age=25 but row not found";
+    ASSERT_EQ(result.rowCount(), 1);
 
     const auto& row = result.rows[0];
 
     EXPECT_EQ(row.getString("column_0"), "Alice");
     EXPECT_EQ(row.getString("column_1"), "25");
-    // Double might have precision issues, just check it's not empty
-    EXPECT_FALSE(row.getString("column_2").empty());
+    const auto score_str = row.getString("column_2");
+    ASSERT_FALSE(score_str.empty());
+    EXPECT_NE(score_str, "NULL");
 }
 
 /**

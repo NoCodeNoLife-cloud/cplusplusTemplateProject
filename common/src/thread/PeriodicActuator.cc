@@ -17,7 +17,7 @@
 
 namespace common::thread
 {
-    PeriodicActuator::PeriodicActuator(std::shared_ptr<interfaces::task::ITimerTask> task, const std::chrono::milliseconds interval) : task_(std::move(task)), timer_(ioContext_), interval_(interval)
+    PeriodicActuator::PeriodicActuator(std::shared_ptr<interfaces::task::ITimerTask> task, const std::chrono::milliseconds interval) : task_(std::move(task)), interval_(interval)
     {
         if (!task_)
         {
@@ -47,6 +47,7 @@ namespace common::thread
             DLOG(WARNING) << "PeriodicActuator start: Actuator is already running";
             throw std::runtime_error("PeriodicActuator::start: Actuator is already running");
         }
+        ioContext_.restart();
         isRunning_ = true;
         scheduleNext();
 
@@ -73,7 +74,10 @@ namespace common::thread
         }
         isRunning_ = false;
 
-        // Stop the io_context gracefully
+        // Cancel the timer to unblock the io_context
+        timer_.cancel();
+
+        // Stop the io_context to make run() return
         ioContext_.stop();
 
         // Wait for the worker thread to finish

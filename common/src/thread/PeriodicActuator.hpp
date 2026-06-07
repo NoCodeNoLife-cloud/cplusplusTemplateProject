@@ -47,7 +47,7 @@ namespace common::thread
     private:
         boost::asio::io_context ioContext_{};
         std::shared_ptr<interfaces::task::ITimerTask> task_{};
-        boost::asio::steady_timer timer_;
+        boost::asio::steady_timer timer_{ioContext_};
         std::chrono::milliseconds interval_{};
         std::thread workerThread_{};
         std::atomic<bool> isRunning_{false};

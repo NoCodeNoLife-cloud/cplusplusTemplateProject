@@ -16,8 +16,8 @@
 
 namespace glog::config
 {
-    // Static variable to hold the custom log sink for cleanup
-    static std::unique_ptr<google::LogSink> static_custom_log_sink_;
+    std::once_flag GLogConfigurator::glog_init_flag_;
+    std::atomic<bool> GLogConfigurator::glog_initialized_{false};
 
     GLogConfigurator::GLogConfigurator(std::string glog_yaml_path) : glog_yaml_path_(std::move(glog_yaml_path))
     {
@@ -26,12 +26,16 @@ namespace glog::config
 
     void GLogConfigurator::execute() const
     {
-        doConfig(config_);
-        if (const auto result = std::atexit(clean); result != 0)
-        {
-            throw std::runtime_error(fmt::format("Failed to register cleanup function! Error code: {}", result));
-        }
-        DLOG(INFO) << "glog configured...";
+        std::call_once(glog_init_flag_, [this]() {
+            doConfig(config_);
+            if (const auto result = std::atexit(clean); result != 0)
+            {
+                google::ShutdownGoogleLogging();
+                throw std::runtime_error(fmt::format("Failed to register cleanup function! Error code: {}", result));
+            }
+            glog_initialized_.store(true, std::memory_order_release);
+        });
+        LOG(INFO) << "glog configured...";
     }
 
     auto GLogConfigurator::getConfig() const noexcept -> const parameter::GLogParam&
@@ -52,21 +56,20 @@ namespace glog::config
         FLAGS_alsologtostderr = false;
         FLAGS_log_dir = "";
 
-        // Apply custom log format if enabled
         if (config.customLogFormat())
         {
             google::InstallPrefixFormatter(&formatter::PrefixFormatter::MyPrefixFormatter);
-            DLOG(INFO) << "Custom log format enabled...";
         }
     }
 
     void GLogConfigurator::clean() noexcept
     {
-        if (static_custom_log_sink_)
-        {
-            google::RemoveLogSink(static_custom_log_sink_.get());
-            static_custom_log_sink_.reset();
-        }
         google::ShutdownGoogleLogging();
+        glog_initialized_.store(false, std::memory_order_release);
+    }
+
+    auto GLogConfigurator::isInitialized() noexcept -> bool
+    {
+        return glog_initialized_.load(std::memory_order_acquire);
     }
 }

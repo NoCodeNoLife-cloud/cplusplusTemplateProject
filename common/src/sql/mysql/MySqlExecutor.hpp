@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <cstdint>
 #include <memory>
 #include <optional>
 #include <string>
@@ -138,12 +139,12 @@ namespace common::sql::mysql
 
         /// @brief Move constructor
         /// @param other Another MySqlExecutor instance to move from
-        MySqlExecutor(MySqlExecutor&& other) ;
+        MySqlExecutor(MySqlExecutor&& other) noexcept;
 
         /// @brief Move assignment operator
         /// @param other Another MySqlExecutor instance to move from
         /// @return Reference to this instance
-        MySqlExecutor& operator=(MySqlExecutor&& other) ;
+        MySqlExecutor& operator=(MySqlExecutor&& other) noexcept;
 
         /// @brief Connect to MySQL database
         /// @param host MySQL server host
@@ -165,41 +166,39 @@ namespace common::sql::mysql
         /// @param sql SQL statement to execute
         /// @return Number of affected rows
         /// @throws std::runtime_error if execution fails
-        [[nodiscard]] int execute(const std::string& sql) const;
+        [[nodiscard]] int execute(const std::string& sql);
 
         /// @brief Executes a query and returns results as a 2D string vector (legacy API)
         /// @param sql SQL query to execute
         /// @return Query results in format [rows][columns]
         /// @throws std::runtime_error if query fails
         /// @deprecated Use queryStructured() for better type safety and column name support
-        [[nodiscard]] std::vector<std::vector<std::string>> query(const std::string& sql) const;
+        [[nodiscard]] std::vector<std::vector<std::string>> query(const std::string& sql);
 
         /// @brief Executes a parameterized query and returns results as a 2D string vector (legacy API)
         /// @param sql SQL query with placeholders (?)
-        /// @param params Parameter values (safely escaped to prevent SQL injection)
+        /// @param params Parameter values (bound via X DevAPI prepared statement)
         /// @return Query results in format [rows][columns]
         /// @throws std::runtime_error if query fails
-        /// @note MySQL X DevAPI doesn't support true parameterized queries for raw SQL.
-        ///       Parameters are safely escaped using comprehensive character escaping.
+        /// @note Uses X DevAPI bind() for true server-side parameterization, immune to SQL injection.
         /// @deprecated Use queryWithParamsStructured() for better type safety and column name support
         [[nodiscard]] std::vector<std::vector<std::string>> queryWithParams(const std::string& sql,
-                                                                            const std::vector<std::string>& params) const;
+                                                                             const std::vector<std::string>& params);
 
         /// @brief Executes a query and returns structured results with column names and typed values
         /// @param sql SQL query to execute
         /// @return Structured query result with metadata
         /// @throws std::runtime_error if query fails
-        [[nodiscard]] QueryResult queryStructured(const std::string& sql) const;
+        [[nodiscard]] QueryResult queryStructured(const std::string& sql);
 
         /// @brief Executes a parameterized query and returns structured results with column names and typed values
         /// @param sql SQL query with placeholders (?)
-        /// @param params Parameter values (safely escaped to prevent SQL injection)
+        /// @param params Parameter values (bound via X DevAPI prepared statement)
         /// @return Structured query result with metadata
         /// @throws std::runtime_error if query fails
-        /// @note MySQL X DevAPI doesn't support true parameterized queries for raw SQL.
-        ///       Parameters are safely escaped using comprehensive character escaping.
+        /// @note Uses X DevAPI bind() for true server-side parameterization, immune to SQL injection.
         [[nodiscard]] QueryResult queryWithParamsStructured(const std::string& sql,
-                                                            const std::vector<std::string>& params) const;
+                                                             const std::vector<std::string>& params);
 
         /// @brief Check if database session is valid
         /// @return true if connected, false otherwise
@@ -217,7 +216,7 @@ namespace common::sql::mysql
         bool connected_ = false;
 
         /// @brief Last error message
-        mutable std::string last_error_;
+        std::string last_error_;
 
         /// @brief Connection parameters
         std::string host_;
@@ -231,6 +230,11 @@ namespace common::sql::mysql
 
         // Note: QUERY_RESULT_ERROR constant removed as exceptions now propagate to caller
         // If needed in future, can be re-added for specific error handling scenarios
+
+        /// @brief Extract a QueryValue from a mysqlx::Value by trying int64_t, double, then string
+        /// @param value MySQL X DevAPI value
+        /// @return Typed variant value
+        [[nodiscard]] static QueryValue toQueryValue(const mysqlx::Value& value);
 
         /// @brief Process query result and convert to 2D string vector (legacy)
         /// @param result MySQL query result

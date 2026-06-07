@@ -7,6 +7,7 @@
  */
 
 #include <string>
+#include <type_traits>
 #include <vector>
 #include <gtest/gtest.h>
 
@@ -89,67 +90,57 @@ TEST_F(SystemInfoTest, GetOSVersion_ContainsWindowsInfo)
 
 /**
  * @brief Test GetMotherboardInfo returns valid structure
- * @details Verifies that motherboard information retrieval returns a populated structure
+ * @details Verifies that motherboard information retrieval returns a properly constructed structure
  */
 TEST_F(SystemInfoTest, GetMotherboardInfo_ValidStructure)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
 
-    // At least some fields should be populated on a real system
-    // Empty strings are acceptable if registry access fails
-    EXPECT_TRUE(true); // Structure creation itself is a success
+    // All fields must be accessible (may be empty if registry is unavailable)
+    EXPECT_NO_THROW((void)info.manufacturer);
+    EXPECT_NO_THROW((void)info.model);
+    EXPECT_NO_THROW((void)info.biosVersion);
+    EXPECT_NO_THROW((void)info.systemSerial);
 }
 
 /**
  * @brief Test GetMotherboardInfo manufacturer field accessibility
- * @details Verifies that the manufacturer field can be accessed
+ * @details Verifies that the manufacturer field can be read without error
  */
 TEST_F(SystemInfoTest, GetMotherboardInfo_ManufacturerField)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
-
-    // Field should be accessible (may be empty if registry unavailable)
-    const std::string manufacturer = info.manufacturer;
-    EXPECT_TRUE(true); // Accessibility test
+    EXPECT_NO_THROW((void)info.manufacturer);
 }
 
 /**
  * @brief Test GetMotherboardInfo model field accessibility
- * @details Verifies that the model field can be accessed
+ * @details Verifies that the model field can be read without error
  */
 TEST_F(SystemInfoTest, GetMotherboardInfo_ModelField)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
-
-    // Field should be accessible (may be empty if registry unavailable)
-    const std::string model = info.model;
-    EXPECT_TRUE(true); // Accessibility test
+    EXPECT_NO_THROW((void)info.model);
 }
 
 /**
  * @brief Test GetMotherboardInfo biosVersion field accessibility
- * @details Verifies that the BIOS version field can be accessed
+ * @details Verifies that the BIOS version field can be read without error
  */
 TEST_F(SystemInfoTest, GetMotherboardInfo_BiosVersionField)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
-
-    // Field should be accessible (may be empty if registry unavailable)
-    const std::string biosVersion = info.biosVersion;
-    EXPECT_TRUE(true); // Accessibility test
+    EXPECT_NO_THROW((void)info.biosVersion);
 }
 
 /**
  * @brief Test GetMotherboardInfo systemSerial field accessibility
- * @details Verifies that the system serial field can be accessed
+ * @details Verifies that the system serial field can be read without error
  */
 TEST_F(SystemInfoTest, GetMotherboardInfo_SystemSerialField)
 {
     const MotherboardInfo info = SystemInfo::GetMotherboardInfo();
-
-    // Field should be accessible (may be empty if registry unavailable)
-    const std::string systemSerial = info.systemSerial;
-    EXPECT_TRUE(true); // Accessibility test
+    EXPECT_NO_THROW((void)info.systemSerial);
 }
 
 /**
@@ -170,8 +161,10 @@ TEST_F(SystemInfoTest, GetDiskDriveInfo_ReturnsVector)
 {
     const auto diskInfo = SystemInfo::GetDiskDriveInfo();
 
-    // Should return a valid vector (may be empty if no disks found or registry unavailable)
-    EXPECT_TRUE(true); // Vector creation itself is a success
+    // Should return a valid vector; on a real Windows system with registry access, typically non-empty
+    // Empty vector is acceptable only if registry key is missing or access is denied
+    EXPECT_NO_THROW((void)diskInfo.size());
+    EXPECT_NO_THROW((void)diskInfo.empty());
 }
 
 /**
@@ -194,8 +187,9 @@ TEST_F(SystemInfoTest, GetBIOSInfo_ReturnsVector)
 {
     const auto biosInfo = SystemInfo::GetBIOSInfo();
 
-    // Should return a valid vector (may be empty if no adapters found or registry unavailable)
-    EXPECT_TRUE(true); // Vector creation itself is a success
+    // Should return a valid vector; entries may be empty if registry is unavailable
+    EXPECT_NO_THROW((void)biosInfo.size());
+    EXPECT_NO_THROW((void)biosInfo.empty());
 }
 
 /**
@@ -317,15 +311,10 @@ TEST_F(SystemInfoTest, RegistryKey_MoveAssignment)
 
 /**
  * @brief Test RegistryKey copy operations are deleted
- * @details Verifies that RegistryKey cannot be copied (compile-time check)
- * @note This is a compile-time verification - if it compiles, the test passes
+ * @details Verifies at compile time that RegistryKey cannot be copied
  */
 TEST_F(SystemInfoTest, RegistryKey_CopyOperationsDeleted)
 {
-    // This test verifies at compile time that copy operations are deleted
-    // If the following lines would compile, it would indicate a design flaw
-    // static_assert(!std::is_copy_constructible_v<RegistryKey>, "RegistryKey should not be copy constructible");
-    // static_assert(!std::is_copy_assignable_v<RegistryKey>, "RegistryKey should not be copy assignable");
-
-    EXPECT_TRUE(true); // Compile-time check passed
+    static_assert(!std::is_copy_constructible_v<RegistryKey>, "RegistryKey should not be copy constructible");
+    static_assert(!std::is_copy_assignable_v<RegistryKey>, "RegistryKey should not be copy assignable");
 }

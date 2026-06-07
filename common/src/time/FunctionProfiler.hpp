@@ -54,5 +54,9 @@ namespace common::time
         std::string function_name_{};
         bool started_{false};
         bool ended_{false};
+
+        /// @brief Asserts that timing data is complete (started and ended).
+        /// @throws std::runtime_error If timing data is incomplete.
+        void assertTimingComplete() const;
     };
 }

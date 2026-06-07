@@ -24,6 +24,27 @@ namespace common::thread
     class DelayedTaskActuator
     {
     public:
+        DelayedTaskActuator() : state_(std::make_shared<State>())
+        {
+        }
+
+        /// @brief Destructor marks the actuator as stopped; detached threads
+        ///        hold a shared_ptr to the internal state and will not access
+        ///        freed memory.
+        ~DelayedTaskActuator()
+        {
+            std::lock_guard lock(state_->mutex);
+            state_->alive = false;
+            state_->pendingTasks.clear();
+            state_->results.clear();
+            state_->cv.notify_all();
+        }
+
+        DelayedTaskActuator(const DelayedTaskActuator&) = delete;
+        DelayedTaskActuator& operator=(const DelayedTaskActuator&) = delete;
+        DelayedTaskActuator(DelayedTaskActuator&&) = delete;
+        DelayedTaskActuator& operator=(DelayedTaskActuator&&) = delete;
+
         /// @brief Schedules a task to be executed after a specified delay.
         /// @param delayMs The delay in milliseconds before the task is executed.
         /// @param task The task to be executed.
@@ -46,11 +67,20 @@ namespace common::thread
         [[nodiscard]] bool cancelTask(int32_t taskId);
 
     private:
-        mutable std::mutex mutex_{};
-        std::condition_variable cv_{};
-        std::unordered_map<int32_t, std::future<ResultType>> results_{};
-        std::unordered_map<int32_t, std::shared_ptr<bool>> pendingTasks_{}; // Track active tasks (true=pending, false=completed)
-        int32_t nextTaskId_{0};
+        struct State
+        {
+            std::mutex mutex{};
+            std::condition_variable cv{};
+            std::unordered_map<int32_t, std::future<ResultType>> results{};
+            std::unordered_map<int32_t, std::shared_ptr<bool>> pendingTasks{};
+            int32_t nextTaskId{0};
+            bool alive{true};
+        };
+
+        /// @brief Checks if a task is pending without acquiring the lock (caller must hold mutex).
+        static bool isTaskPendingLocked(const std::unordered_map<int32_t, std::shared_ptr<bool>>& pendingTasks, int32_t taskId);
+
+        std::shared_ptr<State> state_;
     };
 
     template <typename ResultType>
@@ -66,121 +96,113 @@ namespace common::thread
             throw std::invalid_argument("DelayedTaskActuator::scheduleTask: task function cannot be null");
         }
 
-        std::lock_guard lock(mutex_);
-        const int32_t taskId = nextTaskId_++;
+        // Capture state by shared_ptr so the detached thread keeps it alive
+        auto state = state_;
+        std::lock_guard lock(state->mutex);
+        const int32_t taskId = state->nextTaskId++;
 
         auto packagedTask = std::make_shared<std::packaged_task<ResultType()>>(std::move(task));
         std::future<ResultType> result = packagedTask->get_future();
 
-        // Store pending task before starting thread to track execution state
-        pendingTasks_[taskId] = std::make_shared<bool>(true);
+        state->pendingTasks[taskId] = std::make_shared<bool>(true);
 
-        // Create a copyable lambda that captures the packaged task by shared_ptr
-        std::thread([this, delayMs, packagedTask, taskId]() mutable
+        std::thread([state, delayMs, packagedTask, taskId]() mutable
         {
             try
             {
                 std::this_thread::sleep_for(std::chrono::milliseconds(delayMs));
 
-                // Execute the task inside a try-catch to handle exceptions
-                try
-                {
-                    (*packagedTask)();
-                }
-                // ReSharper disable once CppDFAUnreachableCode
-                catch (...)
-                {
-                    // If task throws, set exception in packaged task
-                    try
-                    {
-                        throw;
-                    }
-                    catch (...)
-                    {
-                        packagedTask->set_exception(std::current_exception());
-                    }
-                }
+                std::lock_guard lock(state->mutex);
+                if (!state->alive) return;
 
-                // Mark that execution is complete
-                std::lock_guard lock1(mutex_);
-                const auto it = pendingTasks_.find(taskId);
-                if (it != pendingTasks_.end())
+                (*packagedTask)();
+
+                const auto it = state->pendingTasks.find(taskId);
+                if (it != state->pendingTasks.end())
                 {
-                    *it->second = false; // Mark as completed
-                    pendingTasks_.erase(it);
+                    *it->second = false;
+                    state->pendingTasks.erase(it);
                 }
-                cv_.notify_all(); // Notify waiting threads that task state changed
+                state->cv.notify_all();
             }
             catch (...)
             {
-                // Handle any unexpected exceptions during execution
-                std::lock_guard lock1(mutex_);
-                const auto it = pendingTasks_.find(taskId);
-                if (it != pendingTasks_.end())
+                std::lock_guard lock(state->mutex);
+                if (!state->alive) return;
+
+                const auto it = state->pendingTasks.find(taskId);
+                if (it != state->pendingTasks.end())
                 {
-                    pendingTasks_.erase(it);
+                    state->pendingTasks.erase(it);
                 }
-                cv_.notify_all();
+                state->cv.notify_all();
             }
         }).detach();
 
-        results_[taskId] = std::move(result);
+        state->results[taskId] = std::move(result);
         return taskId;
     }
 
     template <typename ResultType>
     std::future<ResultType> DelayedTaskActuator<ResultType>::getTaskResult(int32_t taskId)
     {
-        std::unique_lock lock(mutex_);
+        auto state = state_;
+        std::unique_lock lock(state->mutex);
 
         // Wait until the task result is available or task has completed execution
-        cv_.wait(lock, [this, taskId]
+        state->cv.wait(lock, [state, taskId]
         {
-            // Return true if result exists OR task was already executed (not pending anymore)
-            return results_.contains(taskId) || !isTaskPending(taskId);
+            return state->results.contains(taskId) || !isTaskPendingLocked(state->pendingTasks, taskId);
         });
 
-        auto it = results_.find(taskId);
-        if (it != results_.end())
+        if (!state->alive)
+        {
+            throw std::runtime_error("DelayedTaskActuator::getTaskResult: Actuator is destroyed");
+        }
+
+        auto it = state->results.find(taskId);
+        if (it != state->results.end())
         {
             std::future<ResultType> result = std::move(it->second);
-            results_.erase(it);
+            state->results.erase(it);
             return result;
         }
-        // Task completed but result was already retrieved
         throw std::runtime_error("DelayedTaskActuator::getTaskResult: Task result not available, possibly already retrieved");
+    }
+
+    template <typename ResultType>
+    bool DelayedTaskActuator<ResultType>::isTaskPendingLocked(const std::unordered_map<int32_t, std::shared_ptr<bool>>& pendingTasks, const int32_t taskId)
+    {
+        const auto it = pendingTasks.find(taskId);
+        if (it != pendingTasks.end())
+        {
+            return *it->second;
+        }
+        return false;
     }
 
     template <typename ResultType>
     bool DelayedTaskActuator<ResultType>::isTaskPending(const int32_t taskId) const
     {
-        std::lock_guard lock(mutex_);
-        const auto it = pendingTasks_.find(taskId);
-        if (it != pendingTasks_.end())
-        {
-            return *it->second; // Return the boolean value indicating pending status
-        }
-        // If not in pendingTasks_, it's either completed or doesn't exist
-        return false;
+        std::lock_guard lock(state_->mutex);
+        return isTaskPendingLocked(state_->pendingTasks, taskId);
     }
 
     template <typename ResultType>
     bool DelayedTaskActuator<ResultType>::cancelTask(int32_t taskId)
     {
-        std::lock_guard lock(mutex_);
-        auto it = results_.find(taskId);
-        if (it != results_.end())
+        std::lock_guard lock(state_->mutex);
+        const auto pendingIt = state_->pendingTasks.find(taskId);
+        if (pendingIt == state_->pendingTasks.end())
         {
-            // We can't actually cancel the running thread, but we can remove the result
-            results_.erase(it);
+            return false;
+        }
 
-            // Also remove from pending tasks if it's still there
-            const auto pendingIt = pendingTasks_.find(taskId);
-            if (pendingIt != pendingTasks_.end())
-            {
-                pendingTasks_.erase(pendingIt);
-            }
-
+        auto it = state_->results.find(taskId);
+        if (it != state_->results.end())
+        {
+            state_->results.erase(it);
+            state_->pendingTasks.erase(pendingIt);
             return true;
         }
         return false;

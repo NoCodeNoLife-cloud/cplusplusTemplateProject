@@ -7,8 +7,6 @@
 #include "time/FunctionProfiler.hpp"
 
 #include <chrono>
-#include <iomanip>
-#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -38,29 +36,32 @@ namespace common::time
         ended_ = true;
     }
 
+    void FunctionProfiler::assertTimingComplete() const
+    {
+        if (started_ && ended_)
+        {
+            return;
+        }
+
+        DLOG(WARNING) << fmt::format("FunctionProfiler: {} timing incomplete. started={}, ended={}", function_name_, started_, ended_);
+        throw std::runtime_error(
+            fmt::format("FunctionProfiler:: timing data is incomplete for '{}'. started={}, ended={}",
+                        function_name_, started_, ended_));
+    }
+
     std::string FunctionProfiler::getRunTime() const
     {
-        if (!started_ || !ended_)
-        {
-            DLOG(WARNING) << fmt::format("FunctionProfiler getRunTime: {} timing incomplete. Started={}, Ended={}", function_name_, started_, ended_);
-            throw std::runtime_error("FunctionProfiler::getRunTime: " + function_name_ + " timing data is incomplete. Started: " + (started_ ? "true" : "false") + ", Ended: " + (ended_ ? "true" : "false"));
-        }
+        assertTimingComplete();
 
         const auto duration_ms = std::chrono::duration<double, std::milli>(end_ - start_);
         const auto duration_sec = duration_ms.count() / 1000.0;
 
-        std::ostringstream oss;
-        oss << function_name_ << " finished in " << std::fixed << std::setprecision(3) << duration_sec << " s (" << duration_ms.count() << " ms)";
-        return oss.str();
+        return fmt::format("{} finished in {:.3f} s ({:.3f} ms)", function_name_, duration_sec, duration_ms.count());
     }
 
     double FunctionProfiler::getRunTimeMs() const
     {
-        if (!started_ || !ended_)
-        {
-            DLOG(WARNING) << fmt::format("FunctionProfiler getRunTimeMs: {} timing incomplete. Started={}, Ended={}", function_name_, started_, ended_);
-            throw std::runtime_error("FunctionProfiler::getRunTimeMs: " + function_name_ + " timing data is incomplete. Started: " + (started_ ? "true" : "false") + ", Ended: " + (ended_ ? "true" : "false"));
-        }
+        assertTimingComplete();
 
         const auto duration_ms = std::chrono::duration<double, std::milli>(end_ - start_);
         return duration_ms.count();
@@ -68,11 +69,7 @@ namespace common::time
 
     double FunctionProfiler::getRunTimeSec() const
     {
-        if (!started_ || !ended_)
-        {
-            DLOG(WARNING) << fmt::format("FunctionProfiler getRunTimeSec: {} timing incomplete. Started={}, Ended={}", function_name_, started_, ended_);
-            throw std::runtime_error("FunctionProfiler::getRunTimeSec: " + function_name_ + " timing data is incomplete. Started: " + (started_ ? "true" : "false") + ", Ended: " + (ended_ ? "true" : "false"));
-        }
+        assertTimingComplete();
 
         const auto duration_sec = std::chrono::duration<double>(end_ - start_);
         return duration_sec.count();

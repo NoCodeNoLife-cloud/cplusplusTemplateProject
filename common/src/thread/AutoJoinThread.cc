@@ -5,10 +5,8 @@
  */
 
 #include "thread/AutoJoinThread.hpp"
-#include <fmt/format.h>
 #include <thread>
 #include <utility>
-#include <sstream>
 
 namespace common::thread
 {
@@ -33,8 +31,6 @@ namespace common::thread
     {
         if (thread_.joinable())
         {
-            std::ostringstream oss;
-            oss << std::this_thread::get_id();
             thread_.join();
         }
     }

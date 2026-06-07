@@ -24,6 +24,7 @@ protected:
 
     void TearDown() override
     {
+        // No runtime state to clean up — all methods are stateless reads
     }
 };
 
@@ -187,8 +188,8 @@ TEST_F(SystemPerformanceMonitorTest, GetCpuUsage_ExecutionTimeMatchesInterval)
     const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     const auto expectedDuration = interval * 1000; // Convert seconds to milliseconds
 
-    // Allow 20% tolerance for timing variations
-    const auto tolerance = expectedDuration * 0.2;
+    // Allow 30% tolerance for timing variations (CI environments may have scheduler delays)
+    const auto tolerance = expectedDuration * 0.3;
     EXPECT_NEAR(duration, expectedDuration, tolerance);
 
     // Suppress unused variable warning

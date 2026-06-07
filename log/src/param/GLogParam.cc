@@ -12,7 +12,10 @@
 
 namespace glog::parameter
 {
-    GLogParam::GLogParam(const int32_t min_log_level, std::string log_name, const bool log_to_stderr) : min_log_level_(min_log_level), log_name_(std::move(log_name)), log_to_stderr_(log_to_stderr)
+    GLogParam::GLogParam(const int32_t min_log_level, std::string log_name, const bool log_to_stderr,
+                         const bool custom_log_format)
+        : min_log_level_(min_log_level), log_name_(std::move(log_name)), log_to_stderr_(log_to_stderr),
+          custom_log_format_(custom_log_format)
     {
     }
 
@@ -26,12 +29,12 @@ namespace glog::parameter
         min_log_level_ = min_log_level;
     }
 
-    auto GLogParam::logName() const noexcept -> std::string
+    auto GLogParam::logName() const noexcept -> const std::string&
     {
         return log_name_;
     }
 
-    void GLogParam::logName(const std::string& log_name)
+    void GLogParam::logName(const std::string& log_name) noexcept
     {
         log_name_ = log_name;
     }
@@ -56,6 +59,18 @@ namespace glog::parameter
         custom_log_format_ = custom_log_format;
     }
 
+    void GLogParam::parseFromNode(const YAML::Node& node) noexcept
+    {
+        if (node["minLogLevel"])
+            min_log_level_ = node["minLogLevel"].as<int32_t>();
+        if (node["logName"])
+            log_name_ = node["logName"].as<std::string>();
+        if (node["logToStderr"])
+            log_to_stderr_ = node["logToStderr"].as<bool>();
+        if (node["customLogFormat"])
+            custom_log_format_ = node["customLogFormat"].as<bool>();
+    }
+
     void GLogParam::deserializeFromYamlFile(const std::filesystem::path& path)
     {
         if (!std::filesystem::exists(path))
@@ -63,51 +78,23 @@ namespace glog::parameter
             throw std::runtime_error(fmt::format("Configuration file does not exist: {}", path.string()));
         }
 
-        if (const YAML::Node node = YAML::LoadFile(path.string()); node["glog"])
+        const YAML::Node node = YAML::LoadFile(path.string());
+        if (node["glog"])
         {
-            const YAML::Node& glog_node = node["glog"];
-            if (glog_node["minLogLevel"])
-            {
-                min_log_level_ = glog_node["minLogLevel"].as<int32_t>();
-            }
-            if (glog_node["logName"])
-            {
-                log_name_ = glog_node["logName"].as<std::string>();
-            }
-            if (glog_node["logToStderr"])
-            {
-                log_to_stderr_ = glog_node["logToStderr"].as<bool>();
-            }
-            if (glog_node["customLogFormat"])
-            {
-                custom_log_format_ = glog_node["customLogFormat"].as<bool>();
-            }
+            parseFromNode(node["glog"]);
         }
         else
         {
-            // If there's no "glog" section, try to parse the fields directly from root
-            if (node["minLogLevel"])
-            {
-                min_log_level_ = node["minLogLevel"].as<int32_t>();
-            }
-            if (node["logName"])
-            {
-                log_name_ = node["logName"].as<std::string>();
-            }
-            if (node["logToStderr"])
-            {
-                log_to_stderr_ = node["logToStderr"].as<bool>();
-            }
-            if (node["customLogFormat"])
-            {
-                custom_log_format_ = node["customLogFormat"].as<bool>();
-            }
+            parseFromNode(node);
         }
     }
 
     auto GLogParam::operator==(const GLogParam& other) const noexcept -> bool
     {
-        return min_log_level_ == other.min_log_level_ && log_name_ == other.log_name_ && log_to_stderr_ == other.log_to_stderr_ && custom_log_format_ == other.custom_log_format_;
+        return min_log_level_ == other.min_log_level_
+            && log_name_ == other.log_name_
+            && log_to_stderr_ == other.log_to_stderr_
+            && custom_log_format_ == other.custom_log_format_;
     }
 
     auto GLogParam::operator!=(const GLogParam& other) const noexcept -> bool

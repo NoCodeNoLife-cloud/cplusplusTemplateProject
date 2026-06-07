@@ -402,6 +402,24 @@ TEST_F(StringToolkitTest, TrimRight_EmptyString)
     EXPECT_EQ(result, "");
 }
 
+TEST_F(StringToolkitTest, TrimRight_SingleNonSpace)
+{
+    const auto result = StringToolkit::trimRight("a");
+    EXPECT_EQ(result, "a");
+}
+
+TEST_F(StringToolkitTest, TrimRight_SingleSpace)
+{
+    const auto result = StringToolkit::trimRight(" ");
+    EXPECT_EQ(result, "");
+}
+
+TEST_F(StringToolkitTest, TrimRight_MixedContent)
+{
+    const auto result = StringToolkit::trimRight("a b c   ");
+    EXPECT_EQ(result, "a b c");
+}
+
 /**
  * @brief Test contains functionality
  * @details Verifies substring detection works correctly

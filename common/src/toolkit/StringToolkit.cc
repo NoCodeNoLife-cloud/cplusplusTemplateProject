@@ -208,19 +208,13 @@ namespace common::toolkit
             return str;
         }
 
-        size_t end = str.length() - 1;
-        while (end > 0 && std::isspace(static_cast<unsigned char>(str[end])))
+        auto it = str.end();
+        while (it != str.begin() && std::isspace(static_cast<unsigned char>(*(it - 1))))
         {
-            --end;
+            --it;
         }
 
-        // Check if the first character is also whitespace
-        if (std::isspace(static_cast<unsigned char>(str[end])))
-        {
-            return "";
-        }
-
-        return str.substr(0, end + 1);
+        return std::string(str.begin(), it);
     }
 
     std::string StringToolkit::replaceAll(const std::string& str, const std::string& from, const std::string& to)

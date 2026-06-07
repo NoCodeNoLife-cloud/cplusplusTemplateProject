@@ -12,8 +12,8 @@
 #include <optional>
 #include <random>
 #include <ranges>
-#include <set>
 #include <span>
+#include <unordered_set>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -290,13 +290,13 @@ namespace common::toolkit
         template <typename T>
         [[nodiscard]] static std::vector<T> unionSet(const T* a, size_t sizeA, const T* b, size_t sizeB);
 
-        /// @brief Computes the difference of two arrays (elements in a but not in b).
+        /// @brief Computes the difference of two arrays (elements in first array but not in second).
         /// @tparam T The type of elements in the arrays.
         /// @param a Pointer to the first array.
         /// @param sizeA Size of the first array.
         /// @param b Pointer to the second array.
         /// @param sizeB Size of the second array.
-        /// @return A vector containing elements in a but not in b (sorted, unique).
+        /// @return A vector containing elements in first but not in second array (sorted, unique).
         template <typename T>
         [[nodiscard]] static std::vector<T> difference(const T* a, size_t sizeA, const T* b, size_t sizeB);
 
@@ -323,7 +323,7 @@ namespace common::toolkit
         template <typename T>
         static void rotate(T* array, size_t size, int32_t positions);
 
-        /// @brief Gets the top K largest elements from the array.
+        /// @brief Gets the top-K largest elements from the array.
         /// @tparam T The type of elements in the array.
         /// @param array Pointer to the array.
         /// @param size Size of the array.
@@ -337,9 +337,13 @@ namespace common::toolkit
     template <typename T>
     std::vector<T> ArraysToolkit::asList(const T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::asList: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::asList: Array cannot be null when size > 0");
+            }
+            return {};
         }
         return std::vector<T>(array, array + size);
     }
@@ -347,9 +351,13 @@ namespace common::toolkit
     template <typename T>
     std::optional<size_t> ArraysToolkit::binarySearch(const T* array, size_t size, const T& key)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::binarySearch: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::binarySearch: Array cannot be null when size > 0");
+            }
+            return std::nullopt;
         }
         auto it = std::lower_bound(array, array + size, key);
         if (it != array + size && *it == key)
@@ -383,13 +391,16 @@ namespace common::toolkit
     template <typename T>
     std::vector<T> ArraysToolkit::copyOf(const T* original, const size_t originalSize, size_t newLength)
     {
-        if (!original && originalSize > 0)
+        if (!original)
         {
-            throw std::invalid_argument("ArraysToolkit::copyOf: Original array cannot be null when originalSize > 0");
+            if (originalSize > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::copyOf: Original array cannot be null when originalSize > 0");
+            }
+            return std::vector<T>(newLength);
         }
         std::vector<T> result(newLength);
-        const size_t copyLength = std::min(originalSize, newLength);
-        if (copyLength > 0 && original)
+        if (const size_t copyLength = std::min(originalSize, newLength); copyLength > 0)
         {
             std::ranges::copy(std::span<const T>(original, copyLength), result.begin());
         }
@@ -413,27 +424,39 @@ namespace common::toolkit
     template <typename T>
     bool ArraysToolkit::equals(const T* a, size_t sizeA, const T* b, const size_t sizeB)
     {
-        if (!a && sizeA > 0)
+        if (!a)
         {
-            throw std::invalid_argument("ArraysToolkit::equals: First array cannot be null when sizeA > 0");
+            if (sizeA > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::equals: First array cannot be null when sizeA > 0");
+            }
+            return !b || sizeB == 0;
         }
-        if (!b && sizeB > 0)
+        if (!b)
         {
-            throw std::invalid_argument("ArraysToolkit::equals: Second array cannot be null when sizeB > 0");
+            if (sizeB > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::equals: Second array cannot be null when sizeB > 0");
+            }
+            return sizeA == 0;
         }
         if (sizeA != sizeB) return false;
-        if (sizeA == 0) return true; // Both arrays are empty, so they're equal
+        if (sizeA == 0) return true;
         return std::equal(a, a + sizeA, b);
     }
 
     template <typename T>
     void ArraysToolkit::fill(T* array, size_t size, const T& value)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::fill: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::fill: Array cannot be null when size > 0");
+            }
+            return;
         }
-        if (size > 0 && array)
+        if (size > 0)
         {
             std::ranges::fill(std::span<T>(array, size), value);
         }
@@ -442,11 +465,15 @@ namespace common::toolkit
     template <typename T>
     void ArraysToolkit::sort(T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::sort: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::sort: Array cannot be null when size > 0");
+            }
+            return;
         }
-        if (size > 0 && array)
+        if (size > 0)
         {
             std::sort(array, array + size);
         }
@@ -469,9 +496,13 @@ namespace common::toolkit
     template <typename T>
     std::string ArraysToolkit::toString(const T* array, const size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::toString: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::toString: Array cannot be null when size > 0");
+            }
+            return "[]";
         }
 
         if (size == 0)
@@ -507,9 +538,13 @@ namespace common::toolkit
     template <typename T>
     bool ArraysToolkit::contains(const T* array, size_t size, const T& value)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::contains: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::contains: Array cannot be null when size > 0");
+            }
+            return false;
         }
         return std::ranges::find(std::span<const T>(array, size), value) != std::span<const T>(array, size).end();
     }
@@ -517,9 +552,13 @@ namespace common::toolkit
     template <typename T>
     std::optional<size_t> ArraysToolkit::linearSearch(const T* array, size_t size, const T& key)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::linearSearch: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::linearSearch: Array cannot be null when size > 0");
+            }
+            return std::nullopt;
         }
         for (size_t i = 0; i < size; ++i)
         {
@@ -534,9 +573,13 @@ namespace common::toolkit
     template <typename T>
     std::optional<size_t> ArraysToolkit::maxElement(const T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::maxElement: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::maxElement: Array cannot be null when size > 0");
+            }
+            return std::nullopt;
         }
         if (size == 0)
         {
@@ -549,9 +592,13 @@ namespace common::toolkit
     template <typename T>
     std::optional<size_t> ArraysToolkit::minElement(const T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::minElement: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::minElement: Array cannot be null when size > 0");
+            }
+            return std::nullopt;
         }
         if (size == 0)
         {
@@ -564,9 +611,13 @@ namespace common::toolkit
     template <typename T>
     size_t ArraysToolkit::count(const T* array, size_t size, const T& value)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::count: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::count: Array cannot be null when size > 0");
+            }
+            return 0;
         }
         return std::ranges::count(std::span<const T>(array, size), value);
     }
@@ -574,11 +625,15 @@ namespace common::toolkit
     template <typename T>
     void ArraysToolkit::reverse(T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::reverse: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::reverse: Array cannot be null when size > 0");
+            }
+            return;
         }
-        if (size > 0 && array)
+        if (size > 0)
         {
             std::reverse(array, array + size);
         }
@@ -601,20 +656,32 @@ namespace common::toolkit
     template <typename T>
     std::vector<T> ArraysToolkit::distinct(const T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::distinct: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::distinct: Array cannot be null when size > 0");
+            }
+            return {};
         }
-        std::set<T> uniqueElements(array, array + size);
-        return std::vector<T>(uniqueElements.begin(), uniqueElements.end());
+        std::unordered_set<T> uniqueElements;
+        uniqueElements.reserve(size);
+        uniqueElements.insert(array, array + size);
+        std::vector<T> result(uniqueElements.begin(), uniqueElements.end());
+        std::ranges::sort(result);
+        return result;
     }
 
     template <typename T, typename U, typename Func>
     std::vector<U> ArraysToolkit::map(const T* array, size_t size, Func func)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::map: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::map: Array cannot be null when size > 0");
+            }
+            return {};
         }
 
         auto view = std::span<const T>(array, size) | std::ranges::views::transform(func);
@@ -624,9 +691,13 @@ namespace common::toolkit
     template <typename T, typename Predicate>
     std::vector<T> ArraysToolkit::filter(const T* array, size_t size, Predicate predicate)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::filter: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::filter: Array cannot be null when size > 0");
+            }
+            return {};
         }
 
         auto view = std::span<const T>(array, size) | std::ranges::views::filter(predicate);
@@ -636,9 +707,13 @@ namespace common::toolkit
     template <typename T>
     T ArraysToolkit::sum(const T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::sum: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::sum: Array cannot be null when size > 0");
+            }
+            return T{};
         }
         if (size == 0)
         {
@@ -650,9 +725,13 @@ namespace common::toolkit
     template <typename T>
     double ArraysToolkit::average(const T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::average: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::average: Array cannot be null when size > 0");
+            }
+            throw std::invalid_argument("ArraysToolkit::average: Cannot calculate average of empty array");
         }
         if (size == 0)
         {
@@ -664,9 +743,13 @@ namespace common::toolkit
     template <typename T, typename Predicate>
     bool ArraysToolkit::allMatch(const T* array, size_t size, Predicate predicate)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::allMatch: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::allMatch: Array cannot be null when size > 0");
+            }
+            return true;
         }
         return std::all_of(array, array + size, predicate);
     }
@@ -674,9 +757,13 @@ namespace common::toolkit
     template <typename T, typename Predicate>
     bool ArraysToolkit::anyMatch(const T* array, size_t size, Predicate predicate)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::anyMatch: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::anyMatch: Array cannot be null when size > 0");
+            }
+            return false;
         }
         return std::any_of(array, array + size, predicate);
     }
@@ -684,9 +771,13 @@ namespace common::toolkit
     template <typename T, typename Predicate>
     bool ArraysToolkit::noneMatch(const T* array, size_t size, Predicate predicate)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::noneMatch: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::noneMatch: Array cannot be null when size > 0");
+            }
+            return true;
         }
         return std::none_of(array, array + size, predicate);
     }
@@ -694,87 +785,149 @@ namespace common::toolkit
     template <typename T>
     std::vector<T> ArraysToolkit::concat(const T* a, size_t sizeA, const T* b, size_t sizeB)
     {
-        if (!a && sizeA > 0)
+        if (!a)
         {
-            throw std::invalid_argument("ArraysToolkit::concat: First array cannot be null when sizeA > 0");
+            if (sizeA > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::concat: First array cannot be null when sizeA > 0");
+            }
+            if (!b && sizeB == 0)
+            {
+                return {};
+            }
+            std::vector<T> result(b, b + sizeB);
+            return result;
         }
-        if (!b && sizeB > 0)
+        if (!b)
         {
-            throw std::invalid_argument("ArraysToolkit::concat: Second array cannot be null when sizeB > 0");
+            if (sizeB > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::concat: Second array cannot be null when sizeB > 0");
+            }
+            if (sizeA == 0)
+            {
+                return {};
+            }
+            std::vector<T> result(a, a + sizeA);
+            return result;
+        }
+        if (sizeA == 0 && sizeB == 0)
+        {
+            return {};
         }
         std::vector<T> result;
         result.reserve(sizeA + sizeB);
-        if (sizeA > 0 && a)
-        {
-            result.insert(result.end(), a, a + sizeA);
-        }
-        if (sizeB > 0 && b)
-        {
-            result.insert(result.end(), b, b + sizeB);
-        }
+        result.insert(result.end(), a, a + sizeA);
+        result.insert(result.end(), b, b + sizeB);
         return result;
     }
 
     template <typename T>
     std::vector<T> ArraysToolkit::intersection(const T* a, size_t sizeA, const T* b, size_t sizeB)
     {
-        if (!a && sizeA > 0)
+        if (!a)
         {
-            throw std::invalid_argument("ArraysToolkit::intersection: First array cannot be null when sizeA > 0");
+            if (sizeA > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::intersection: First array cannot be null when sizeA > 0");
+            }
+            return {};
         }
-        if (!b && sizeB > 0)
+        if (!b)
         {
-            throw std::invalid_argument("ArraysToolkit::intersection: Second array cannot be null when sizeB > 0");
+            if (sizeB > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::intersection: Second array cannot be null when sizeB > 0");
+            }
+            return {};
         }
-        std::set<T> setA(a, a + sizeA);
-        std::set<T> setB(b, b + sizeB);
+        if (sizeA == 0 || sizeB == 0)
+        {
+            return {};
+        }
+        std::vector<T> sortedA(a, a + sizeA);
+        std::vector<T> sortedB(b, b + sizeB);
+        std::ranges::sort(sortedA);
+        std::ranges::sort(sortedB);
         std::vector<T> result;
-        std::set_intersection(setA.begin(), setA.end(), setB.begin(), setB.end(), std::back_inserter(result));
+        std::set_intersection(sortedA.begin(), sortedA.end(), sortedB.begin(), sortedB.end(), std::back_inserter(result));
         return result;
     }
 
     template <typename T>
     std::vector<T> ArraysToolkit::unionSet(const T* a, size_t sizeA, const T* b, size_t sizeB)
     {
-        if (!a && sizeA > 0)
+        if (!a)
         {
-            throw std::invalid_argument("ArraysToolkit::unionSet: First array cannot be null when sizeA > 0");
+            if (sizeA > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::unionSet: First array cannot be null when sizeA > 0");
+            }
+            return {};
         }
-        if (!b && sizeB > 0)
+        if (!b)
         {
-            throw std::invalid_argument("ArraysToolkit::unionSet: Second array cannot be null when sizeB > 0");
+            if (sizeB > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::unionSet: Second array cannot be null when sizeB > 0");
+            }
+            return {};
         }
-        std::set<T> setA(a, a + sizeA);
-        std::set<T> setB(b, b + sizeB);
+        if (sizeA == 0 && sizeB == 0)
+        {
+            return {};
+        }
+        std::vector<T> sortedA(a, a + sizeA);
+        std::vector<T> sortedB(b, b + sizeB);
+        std::ranges::sort(sortedA);
+        std::ranges::sort(sortedB);
         std::vector<T> result;
-        std::set_union(setA.begin(), setA.end(), setB.begin(), setB.end(), std::back_inserter(result));
+        std::set_union(sortedA.begin(), sortedA.end(), sortedB.begin(), sortedB.end(), std::back_inserter(result));
         return result;
     }
 
     template <typename T>
     std::vector<T> ArraysToolkit::difference(const T* a, size_t sizeA, const T* b, size_t sizeB)
     {
-        if (!a && sizeA > 0)
+        if (!a)
         {
-            throw std::invalid_argument("ArraysToolkit::difference: First array cannot be null when sizeA > 0");
+            if (sizeA > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::difference: First array cannot be null when sizeA > 0");
+            }
+            return {};
         }
-        if (!b && sizeB > 0)
+        if (!b)
         {
-            throw std::invalid_argument("ArraysToolkit::difference: Second array cannot be null when sizeB > 0");
+            if (sizeB > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::difference: Second array cannot be null when sizeB > 0");
+            }
+            return {};
         }
-        std::set<T> setA(a, a + sizeA);
-        std::set<T> setB(b, b + sizeB);
+        if (sizeA == 0)
+        {
+            return {};
+        }
+        std::vector<T> sortedA(a, a + sizeA);
+        std::vector<T> sortedB(b, b + sizeB);
+        std::ranges::sort(sortedA);
+        std::ranges::sort(sortedB);
         std::vector<T> result;
-        std::set_difference(setA.begin(), setA.end(), setB.begin(), setB.end(), std::back_inserter(result));
+        std::set_difference(sortedA.begin(), sortedA.end(), sortedB.begin(), sortedB.end(), std::back_inserter(result));
         return result;
     }
 
     template <typename T>
     bool ArraysToolkit::isSorted(const T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::isSorted: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::isSorted: Array cannot be null when size > 0");
+            }
+            return true;
         }
         if (size <= 1)
         {
@@ -786,11 +939,15 @@ namespace common::toolkit
     template <typename T>
     void ArraysToolkit::shuffle(T* array, size_t size)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::shuffle: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::shuffle: Array cannot be null when size > 0");
+            }
+            return;
         }
-        if (size > 0 && array)
+        if (size > 0)
         {
             std::random_device rd;
             std::mt19937 g(rd());
@@ -801,29 +958,39 @@ namespace common::toolkit
     template <typename T>
     void ArraysToolkit::rotate(T* array, size_t size, int32_t positions)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::rotate: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::rotate: Array cannot be null when size > 0");
+            }
+            return;
         }
         if (size == 0 || positions == 0)
         {
             return;
         }
         // Normalize positions to be within [0, size)
-        int32_t normalizedPos = positions % static_cast<int32_t>(size);
+        const auto signedSize = static_cast<int64_t>(size);
+        auto normalizedPos = static_cast<int64_t>(positions) % signedSize;
         if (normalizedPos < 0)
         {
-            normalizedPos += static_cast<int32_t>(size);
+            normalizedPos += signedSize;
         }
-        std::rotate(array, array + (size - normalizedPos), array + size);
+        const auto mid = array + (size - static_cast<size_t>(normalizedPos));
+        std::rotate(array, mid, array + size);
     }
 
     template <typename T>
     std::vector<T> ArraysToolkit::topK(const T* array, size_t size, size_t k)
     {
-        if (!array && size > 0)
+        if (!array)
         {
-            throw std::invalid_argument("ArraysToolkit::topK: Array cannot be null when size > 0");
+            if (size > 0)
+            {
+                throw std::invalid_argument("ArraysToolkit::topK: Array cannot be null when size > 0");
+            }
+            throw std::invalid_argument("ArraysToolkit::topK: k must be between 1 and size");
         }
         if (k == 0 || k > size)
         {

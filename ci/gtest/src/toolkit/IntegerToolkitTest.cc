@@ -252,6 +252,29 @@ TEST_F(IntegerToolkitTest, CountSetBits_AllBitsSet)
 }
 
 /**
+ * @brief Test countSetBits with negative numbers (bug fix regression)
+ * @details Verifies negative numbers don't cause infinite loop
+ */
+TEST_F(IntegerToolkitTest, CountSetBits_NegativeNumbers)
+{
+    EXPECT_EQ(IntegerToolkit::countSetBits(-1), 32); // All 32 bits set in two's complement
+    EXPECT_EQ(IntegerToolkit::countSetBits(-2), 31);
+    EXPECT_EQ(IntegerToolkit::countSetBits(-3), 31);
+    EXPECT_EQ(IntegerToolkit::countSetBits(static_cast<int32_t>(0x80000000)), 1); // INT_MIN
+}
+
+/**
+ * @brief Test countSetBits with other common values
+ * @details Verifies correctness for various inputs
+ */
+TEST_F(IntegerToolkitTest, CountSetBits_AdditionalValues)
+{
+    EXPECT_EQ(IntegerToolkit::countSetBits(0xFFFFFFFF), 32);
+    EXPECT_EQ(IntegerToolkit::countSetBits(0xF0F0F0F0), 16);
+    EXPECT_EQ(IntegerToolkit::countSetBits(0x11111111), 8);
+}
+
+/**
  * @brief Test that constructor is deleted (compile-time check)
  * @details Verifies IntegerToolkit cannot be instantiated as it's a utility class
  */
