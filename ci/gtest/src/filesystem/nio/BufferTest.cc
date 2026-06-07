@@ -10,7 +10,7 @@
 #include "filesystem/nio/LongBuffer.hpp"
 #include "filesystem/nio/ShortBuffer.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::nio;
 
 // ============================================================
 // IBuffer interface common behavior tests

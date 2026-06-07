@@ -10,7 +10,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace common::interfaces::aop
+namespace common::interface::aop
 {
     /// @brief Interface class for Aspect-Oriented Programming (AOP) functionalities.
     /// This class provides a template-based interface for implementing AOP concepts

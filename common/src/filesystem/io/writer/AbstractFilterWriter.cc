@@ -8,7 +8,7 @@
 
 #include <stdexcept>
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     AbstractFilterWriter::AbstractFilterWriter(std::unique_ptr<AbstractWriter> outputWriter) : output_writer_(std::move(outputWriter))
     {

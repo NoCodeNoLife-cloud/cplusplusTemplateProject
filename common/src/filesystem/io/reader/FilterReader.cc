@@ -8,7 +8,7 @@
 
 #include <stdexcept>
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     FilterReader::FilterReader(std::shared_ptr<AbstractReader> reader) : in_(std::move(reader))
     {

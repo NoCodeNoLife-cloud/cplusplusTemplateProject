@@ -4,7 +4,7 @@
 
 #include "filesystem/io/reader/StringReader.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::reader;
 
 class StringReaderTest : public testing::Test
 {

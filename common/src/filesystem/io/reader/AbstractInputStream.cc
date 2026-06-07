@@ -14,7 +14,7 @@
 #include <vector>
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     void AbstractInputStream::mark(std::int32_t readLimit)
     {

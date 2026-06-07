@@ -12,7 +12,7 @@
 #include "filesystem/io/writer/FilterOutputStream.hpp"
 #include "filesystem/io/writer/ByteArrayOutputStream.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::writer;
 
 class FilterOutputStreamTest : public testing::Test
 {

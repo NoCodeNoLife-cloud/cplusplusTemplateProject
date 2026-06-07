@@ -11,14 +11,14 @@
 #include "interface/io/ICloseable.hpp"
 #include "interface/io/IFlushable.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     /// @brief Abstract base class for all output stream implementations.
     /// @details This class provides the basic contract for writing data to an output stream.
     /// It defines pure virtual methods that must be implemented by concrete subclasses.
     /// The class also implements the ICloseable and IFlushable interfaces to provide
     /// standard close and flush functionality.
-    class AbstractOutputStream : public interfaces::io::ICloseable, public interfaces::io::IFlushable
+    class AbstractOutputStream : public interface::io::ICloseable, public interface::io::IFlushable
     {
     public:
         ~AbstractOutputStream() override = default;

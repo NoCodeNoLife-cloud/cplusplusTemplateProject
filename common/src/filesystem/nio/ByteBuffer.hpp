@@ -9,12 +9,12 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     /// @brief A byte buffer implementation that manages a fixed-size buffer of bytes.
     /// This class provides methods for putting and getting bytes, supporting both
     /// single-byte operations and bulk operations with vectors of bytes.
-    class ByteBuffer final : public interfaces::io::IBuffer
+    class ByteBuffer final : public interface::io::IBuffer
     {
     public:
         explicit ByteBuffer(size_t capacity);

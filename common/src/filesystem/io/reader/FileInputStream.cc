@@ -13,7 +13,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     FileInputStream::FileInputStream(const std::string& name)
     {

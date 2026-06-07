@@ -6,7 +6,7 @@
 
 #include "filesystem/io/Console.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io
 {
     std::mutex Console::s_mutex_;
 

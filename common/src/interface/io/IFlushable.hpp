@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace common::interfaces::io
+namespace common::interface::io
 {
     /// @brief Interface for flushable objects.
     /// This interface defines a contract for objects that can be flushed,

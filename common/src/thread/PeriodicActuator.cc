@@ -17,7 +17,7 @@
 
 namespace common::thread
 {
-    PeriodicActuator::PeriodicActuator(std::shared_ptr<interfaces::task::ITimerTask> task, const std::chrono::milliseconds interval) : task_(std::move(task)), interval_(interval)
+    PeriodicActuator::PeriodicActuator(std::shared_ptr<interface::task::ITimerTask> task, const std::chrono::milliseconds interval) : task_(std::move(task)), interval_(interval)
     {
         if (!task_)
         {

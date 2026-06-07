@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace common::interfaces::task
+namespace common::interface::task
 {
     /// @brief Interface for startup tasks that need to be executed when the service starts.
     /// Startup tasks are used to perform initialization operations that are required

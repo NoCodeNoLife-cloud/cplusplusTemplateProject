@@ -13,9 +13,9 @@
 
 #include "interface/serialize/IYamlConfigurable.hpp"
 
-namespace glog::parameter
+namespace glog::param
 {
-    class GLogParam final : public common::interfaces::serialize::IYamlConfigurable
+    class GLogParam final : public common::interface::serialize::IYamlConfigurable
     {
     public:
         GLogParam() = default;
@@ -53,16 +53,16 @@ namespace glog::parameter
 /// @brief YAML serialization specialization for GLogParam.
 /// Provides methods to encode and decode GLogParam to/from YAML nodes.
 template <>
-struct YAML::convert<glog::parameter::GLogParam>
+struct YAML::convert<glog::param::GLogParam>
 {
     /// @brief Decode a YAML node into a GLogParam object.
     /// @param node The YAML node containing the configuration data.
     /// @param rhs The GLogParam object to populate.
     /// @return True if decoding was successful.
-    static bool decode(const Node& node, glog::parameter::GLogParam& rhs);
+    static bool decode(const Node& node, glog::param::GLogParam& rhs);
 
     /// @brief Encode a GLogParam object into a YAML node.
     /// @param rhs The GLogParam object to encode.
     /// @return A YAML node containing the configuration data.
-    static Node encode(const glog::parameter::GLogParam& rhs);
+    static Node encode(const glog::param::GLogParam& rhs);
 };

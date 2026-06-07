@@ -14,7 +14,7 @@
 
 #include "filesystem/io/writer/FileOutputStream.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::writer;
 
 namespace fs = std::filesystem;
 

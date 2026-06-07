@@ -12,7 +12,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::filesystem
+namespace common::filesystem::type
 {
     std::vector<std::string> CsvFile::parseLine(const std::string& line)
     {

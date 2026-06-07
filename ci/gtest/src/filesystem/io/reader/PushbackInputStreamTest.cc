@@ -5,7 +5,7 @@
 #include "filesystem/io/reader/PushbackInputStream.hpp"
 #include "filesystem/io/reader/ByteArrayInputStream.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::reader;
 
 class PushbackInputStreamTest : public testing::Test
 {

@@ -19,7 +19,7 @@ namespace common::toolkit
     /// @brief A factory class for creating objects of type T.
     /// @tparam T The base type of objects that this factory can create.
     template <typename T>
-    class ObjectFactory : public interfaces::task::IStartupTask
+    class ObjectFactory : public interface::task::IStartupTask
     {
     public:
         /// @brief Registers a type with the factory.

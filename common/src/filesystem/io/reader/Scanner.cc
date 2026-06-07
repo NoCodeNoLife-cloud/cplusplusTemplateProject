@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     Scanner::Scanner(std::istream& input_stream) : input_(input_stream)
     {

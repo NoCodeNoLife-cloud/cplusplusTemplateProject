@@ -18,7 +18,7 @@ namespace common::aop
     /// for measuring the duration of function calls. This aspect can be used
     /// with the AOP framework to automatically profile function execution.
     /// Subclasses can override onProfileComplete() to customize how timing info is handled.
-    class FunctionProfilerAspect : public interfaces::aop::IAopAspect<FunctionProfilerAspect>
+    class FunctionProfilerAspect : public interface::aop::IAopAspect<FunctionProfilerAspect>
     {
     public:
         /// @brief Construct a FunctionProfilerAspect with the given function name

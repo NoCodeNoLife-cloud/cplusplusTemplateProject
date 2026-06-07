@@ -13,7 +13,7 @@
 
 #include "filesystem/type/CsvFile.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::type;
 
 class CsvFileTest : public testing::Test
 {

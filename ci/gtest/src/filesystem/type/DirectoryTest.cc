@@ -14,7 +14,7 @@
 
 #include "filesystem/type/Directory.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::type;
 namespace fs = std::filesystem;
 
 class DirectoryTest : public testing::Test

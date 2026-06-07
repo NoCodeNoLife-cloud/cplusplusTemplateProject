@@ -9,12 +9,12 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     /// @brief A buffer that stores float values.
     /// @details This class provides methods to put and get float values from a buffer.
     /// It is designed to be used in a network I/O context.
-    class FloatBuffer final : public interfaces::io::IBuffer
+    class FloatBuffer final : public interface::io::IBuffer
     {
     public:
         /// @brief Constructs a FloatBuffer with the specified capacity.

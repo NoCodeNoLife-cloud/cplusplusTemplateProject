@@ -12,7 +12,7 @@
 #include "filesystem/io/writer/OutputStreamWriter.hpp"
 #include "filesystem/io/writer/CharArrayWriter.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::writer;
 
 class OutputStreamWriterTest : public testing::Test
 {

@@ -10,7 +10,7 @@
 
 #include "interface/aop/IAopAspect.hpp"
 
-using namespace common::interfaces::aop;
+using namespace common::interface::aop;
 
 namespace
 {

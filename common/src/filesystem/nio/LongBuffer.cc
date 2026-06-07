@@ -8,7 +8,7 @@
 
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     LongBuffer::LongBuffer(const std::size_t capacity)
     {

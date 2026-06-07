@@ -108,8 +108,8 @@ namespace server_app::auth
 
         try
         {
-            const YAML::Node root = common::filesystem::YamlToolkit::read(path.string());
-            const YAML::Node grpcNode = common::filesystem::YamlToolkit::getNodeOrRoot(root, "grpc");
+            const YAML::Node root = common::filesystem::type::YamlToolkit::read(path.string());
+            const YAML::Node grpcNode = common::filesystem::type::YamlToolkit::getNodeOrRoot(root, "grpc");
 
             // Table-driven configuration loading for gRPC parameters
             const std::vector<std::pair<std::string, std::function<void()>>> config_handlers = {

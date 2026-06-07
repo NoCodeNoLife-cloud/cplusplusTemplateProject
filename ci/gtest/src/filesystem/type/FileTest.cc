@@ -14,7 +14,7 @@
 
 #include "filesystem/type/File.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::type;
 namespace fs = std::filesystem;
 
 class FileTest : public testing::Test

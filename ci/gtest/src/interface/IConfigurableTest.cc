@@ -8,7 +8,7 @@
 
 #include "interface/config/IConfigurable.hpp"
 
-using namespace common::interfaces::config;
+using namespace common::interface::config;
 
 namespace
 {

@@ -6,7 +6,7 @@
 #include "filesystem/io/reader/BufferedReader.hpp"
 #include "filesystem/io/reader/StringReader.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::reader;
 
 class BufferedReaderTest : public testing::Test
 {

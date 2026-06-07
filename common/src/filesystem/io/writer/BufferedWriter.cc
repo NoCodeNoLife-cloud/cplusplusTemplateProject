@@ -8,7 +8,7 @@
 
 #include <stdexcept>
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     BufferedWriter::BufferedWriter(std::unique_ptr<std::ofstream> os, const size_t size) : output_stream_(std::move(os)), buffer_size_(size)
     {

@@ -13,7 +13,7 @@
 
 #include <glog/logging.h>
 
-namespace common::filesystem
+namespace common::filesystem::type
 {
     Directory::Directory(std::filesystem::path filePath)
         : dir_path_(std::move(filePath))

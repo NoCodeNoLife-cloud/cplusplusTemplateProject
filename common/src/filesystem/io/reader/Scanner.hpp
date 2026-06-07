@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     /// @brief A utility class for scanning and parsing input streams.
     /// The Scanner class provides methods for reading various data types from an input stream,

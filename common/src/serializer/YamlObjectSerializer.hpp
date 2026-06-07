@@ -18,7 +18,7 @@ namespace common::serializer
     /// @brief Concrete implementation of ISerializer for serializing and deserializing objects to and from YAML format.
     /// @tparam T The type of object to be serialized/deserialized.
     template <typename T>
-    class YamlObjectSerializer : public interfaces::serialize::ISerializer<T>
+    class YamlObjectSerializer : public interface::serialize::ISerializer<T>
     {
     public:
         /// @brief Serializes an object to a YAML file.

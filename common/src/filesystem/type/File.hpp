@@ -10,7 +10,7 @@
 #include <filesystem>
 #include <string>
 
-namespace common::filesystem
+namespace common::filesystem::type
 {
     class File final
     {

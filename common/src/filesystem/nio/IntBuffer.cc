@@ -8,7 +8,7 @@
 
 #include <algorithm>
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     IntBuffer::IntBuffer(const size_t capacity)
     {

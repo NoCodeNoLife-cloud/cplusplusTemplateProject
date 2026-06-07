@@ -13,7 +13,7 @@
 
 #include "AbstractReader.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     /// @brief Buffered character-input stream.
     class BufferedReader final : public AbstractReader

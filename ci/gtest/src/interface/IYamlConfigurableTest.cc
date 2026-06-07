@@ -10,7 +10,7 @@
 
 #include "interface/serialize/IYamlConfigurable.hpp"
 
-using namespace common::interfaces::serialize;
+using namespace common::interface::serialize;
 
 namespace
 {

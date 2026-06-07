@@ -11,7 +11,7 @@
 
 #include "FilterReader.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     /// @brief Provides a buffering wrapper around another reader, allowing characters to be "pushed back" into the stream.
     /// @details The PushbackReader class allows characters to be pushed back into the stream after they have been read.

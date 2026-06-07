@@ -12,13 +12,13 @@
 #include "interface/io/ICloseable.hpp"
 #include "interface/io/IReadable.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     /// @brief Abstract base class for reading character streams.
     /// This class provides a standard interface for reading character data from various sources.
     /// It implements the ICloseable and IReadable interfaces and provides standard implementations
     /// for some common reading operations.
-    class AbstractReader : public interfaces::io::ICloseable, public interfaces::io::IReadable
+    class AbstractReader : public interface::io::ICloseable, public interface::io::IReadable
     {
     public:
         /// @brief Virtual destructor for proper cleanup of derived classes

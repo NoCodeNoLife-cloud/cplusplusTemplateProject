@@ -26,7 +26,8 @@ namespace glog::config
 
     void GLogConfigurator::execute() const
     {
-        std::call_once(glog_init_flag_, [this]() {
+        std::call_once(glog_init_flag_, [this]
+        {
             doConfig(config_);
             if (const auto result = std::atexit(clean); result != 0)
             {
@@ -38,17 +39,17 @@ namespace glog::config
         LOG(INFO) << "glog configured...";
     }
 
-    auto GLogConfigurator::getConfig() const noexcept -> const parameter::GLogParam&
+    auto GLogConfigurator::getConfig() const noexcept -> const param::GLogParam&
     {
         return config_;
     }
 
-    void GLogConfigurator::updateConfig(const parameter::GLogParam& config) noexcept
+    void GLogConfigurator::updateConfig(const param::GLogParam& config) noexcept
     {
         config_ = config;
     }
 
-    void GLogConfigurator::doConfig(const parameter::GLogParam& config) noexcept
+    void GLogConfigurator::doConfig(const param::GLogParam& config) noexcept
     {
         google::InitGoogleLogging(config.logName().c_str());
         FLAGS_minloglevel = config.minLogLevel();

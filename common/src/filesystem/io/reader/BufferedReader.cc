@@ -11,7 +11,7 @@
 #include <utility>
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     BufferedReader::BufferedReader(std::unique_ptr<AbstractReader> reader, const size_t size) : reader_(std::move(reader)), buffer_size_(size)
     {

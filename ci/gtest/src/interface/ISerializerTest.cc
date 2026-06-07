@@ -11,7 +11,7 @@
 
 #include "interface/serialize/ISerializer.hpp"
 
-using namespace common::interfaces::serialize;
+using namespace common::interface::serialize;
 
 namespace
 {

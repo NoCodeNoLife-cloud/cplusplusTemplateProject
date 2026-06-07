@@ -11,7 +11,7 @@
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-namespace common::filesystem
+namespace common::filesystem::type
 {
     bool YamlToolkit::create(const std::string& filepath, const YAML::Node& data)
     {

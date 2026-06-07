@@ -10,12 +10,12 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     /// @brief A buffer that stores 32-bit integers.
     /// @details This class provides a way to store and manipulate a sequence of 32-bit integers in a buffer.
     /// It implements the IBuffer interface and provides methods to get and put integers in the buffer.
-    class IntBuffer final : public interfaces::io::IBuffer
+    class IntBuffer final : public interface::io::IBuffer
     {
     public:
         /// @brief Constructs an IntBuffer with the specified capacity.

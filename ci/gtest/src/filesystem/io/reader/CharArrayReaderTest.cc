@@ -3,7 +3,7 @@
 
 #include "filesystem/io/reader/CharArrayReader.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::reader;
 
 class CharArrayReaderTest : public testing::Test
 {

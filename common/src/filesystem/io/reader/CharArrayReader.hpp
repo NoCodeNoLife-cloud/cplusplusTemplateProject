@@ -10,7 +10,7 @@
 
 #include "AbstractReader.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     /// @brief A reader class that reads from a character array.
     /// This class provides methods to read characters from an internal buffer,

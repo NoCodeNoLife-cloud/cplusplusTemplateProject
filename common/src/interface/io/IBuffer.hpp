@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <stdexcept>
 
-namespace common::interfaces::io
+namespace common::interface::io
 {
     /// @brief Interface for a buffer that manages a sequence of elements
     /// This interface provides methods for managing a buffer's position, limit, and capacity.

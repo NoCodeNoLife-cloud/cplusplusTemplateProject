@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     BufferedInputStream::BufferedInputStream(std::unique_ptr<AbstractInputStream> in)  : BufferedInputStream(std::move(in), DEFAULT_BUFFER_SIZE)
     {

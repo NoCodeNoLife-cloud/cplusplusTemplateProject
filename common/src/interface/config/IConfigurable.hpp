@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace common::interfaces::config
+namespace common::interface::config
 {
     /// @brief Interface for configurable services.
     /// @details This interface provides a contract for services that require configuration.

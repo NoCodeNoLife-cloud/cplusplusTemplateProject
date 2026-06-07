@@ -8,7 +8,7 @@
 
 #include <glog/logging.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     FileOutputStream::FileOutputStream(const std::string& name, const bool append)
     {

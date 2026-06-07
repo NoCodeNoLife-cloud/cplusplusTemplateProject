@@ -10,7 +10,7 @@
 #include <ios>
 #include <stdexcept>
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     OutputStreamWriter::OutputStreamWriter(std::unique_ptr<AbstractWriter> outputStream, const std::string& charsetName) : output_writer_(std::move(outputStream)), charset_(charsetName), closed_(false)
     {

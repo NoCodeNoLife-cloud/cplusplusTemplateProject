@@ -11,7 +11,7 @@
 #include <vector>
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::type
 {
     BmpImage::BmpImage(const int32_t width, const int32_t height) : width_(width), height_(height)
     {

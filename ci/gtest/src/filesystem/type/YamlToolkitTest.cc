@@ -13,7 +13,7 @@
 
 #include "filesystem/type/YamlToolkit.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::type;
 namespace fs = std::filesystem;
 
 class YamlToolkitTest : public testing::Test

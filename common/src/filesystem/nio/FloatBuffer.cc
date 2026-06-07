@@ -8,7 +8,7 @@
 
 #include <algorithm>
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     FloatBuffer::FloatBuffer(const size_t capacity)
     {

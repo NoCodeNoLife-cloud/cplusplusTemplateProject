@@ -10,7 +10,7 @@
 
 #include "AbstractOutputStream.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     /// @brief A filter output stream that wraps another output stream.
     /// @details This class provides a base for output stream filters that modify or enhance

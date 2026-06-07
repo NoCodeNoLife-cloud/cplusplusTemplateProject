@@ -13,7 +13,7 @@
 
 #include "filesystem/io/writer/BufferedWriter.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::writer;
 
 class BufferedWriterTest : public testing::Test
 {

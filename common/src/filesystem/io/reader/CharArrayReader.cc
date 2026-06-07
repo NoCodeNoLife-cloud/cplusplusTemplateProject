@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     CharArrayReader::CharArrayReader(const std::vector<char>& buffer) : buf_(buffer), count_(buffer.size())
     {

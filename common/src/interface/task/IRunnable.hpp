@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace common::interfaces::task
+namespace common::interface::task
 {
     /// @brief Interface for a runnable task that can be executed with arguments and return a result.
     /// @tparam ReturnType The type of the value returned by the task.

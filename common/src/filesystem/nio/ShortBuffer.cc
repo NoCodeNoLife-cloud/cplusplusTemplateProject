@@ -8,7 +8,7 @@
 
 #include <algorithm>
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     ShortBuffer::ShortBuffer(const size_t capacity) : buffer_(capacity)
     {

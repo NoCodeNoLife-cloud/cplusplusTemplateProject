@@ -12,7 +12,7 @@
 
 #include "filesystem/io/writer/AbstractFilterWriter.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::writer;
 
 namespace
 {

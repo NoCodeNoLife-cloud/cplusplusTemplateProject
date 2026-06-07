@@ -10,13 +10,13 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     /// @brief A buffer for short integer (int16_t) data.
     /// ShortBuffer provides a way to store, read, and write short integer data in a
     /// sequential manner. It implements the IBuffer interface and supports operations
     /// like get, put, and rewind.
-    class ShortBuffer final : public interfaces::io::IBuffer
+    class ShortBuffer final : public interface::io::IBuffer
     {
     public:
         /// @brief Construct a ShortBuffer with the specified capacity

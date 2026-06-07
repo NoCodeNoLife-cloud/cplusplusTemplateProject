@@ -10,10 +10,10 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     /// @brief A buffer that stores 64-bit signed integers
-    class LongBuffer final : public interfaces::io::IBuffer
+    class LongBuffer final : public interface::io::IBuffer
     {
     public:
         /// @brief Construct a LongBuffer with the specified capacity

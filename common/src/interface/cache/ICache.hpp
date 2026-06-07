@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <optional>
 
-namespace common::interfaces::cache
+namespace common::interface::cache
 {
     /// @brief Abstract interface for cache implementations
     /// @tparam Key Type of the key used to identify cache entries

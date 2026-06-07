@@ -13,7 +13,7 @@
 
 #include "AbstractReader.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     /// @brief InputStreamReader is a class for reading characters from a byte stream.
     /// This class inherits from AbstractReader and provides functionality to read characters

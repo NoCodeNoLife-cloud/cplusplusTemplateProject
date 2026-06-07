@@ -9,7 +9,7 @@
 
 #include "AbstractInputStream.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     /// @brief A filter stream is a stream that filters another input stream.
     /// This class is the basis for all input streams that filter another input stream.

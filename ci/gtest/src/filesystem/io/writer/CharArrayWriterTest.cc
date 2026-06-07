@@ -13,7 +13,7 @@
 
 #include "filesystem/io/writer/CharArrayWriter.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::writer;
 
 class CharArrayWriterTest : public testing::Test
 {

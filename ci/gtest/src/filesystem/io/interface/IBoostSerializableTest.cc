@@ -9,7 +9,7 @@
 
 #include "interface/serialize/IBoostSerializable.hpp"
 
-using namespace common::interfaces::serialize;
+using namespace common::interface::serialize;
 
 namespace
 {

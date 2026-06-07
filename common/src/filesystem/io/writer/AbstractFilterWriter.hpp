@@ -11,7 +11,7 @@
 
 #include "AbstractWriter.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     /// @brief Abstract base class for filter writers.
     /// This class provides a common interface for writers that filter or transform data before writing it to an underlying

@@ -5,7 +5,7 @@
 
 #include "filesystem/io/reader/Scanner.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::reader;
 
 class ScannerTest : public testing::Test
 {

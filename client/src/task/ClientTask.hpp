@@ -16,7 +16,7 @@
 
 namespace client_app::task
 {
-    class ClientTask final : public common::interfaces::task::ITask
+    class ClientTask final : public common::interface::task::ITask
     {
     public:
         /// @brief Default constructor explicitly deleted to enforce parameterized construction
@@ -71,7 +71,7 @@ namespace client_app::task
 
         /// @brief Main task
         /// @param auth_rpc_client Reference to the RPC client for executing tasks
-        static static static void task(const auth::AuthRpcService& auth_rpc_client) ;
+        static void task(const auth::AuthRpcService& auth_rpc_client) ;
 
         /// @brief Logs client system information
         /// @details Logs OS version and CPU model to the application log

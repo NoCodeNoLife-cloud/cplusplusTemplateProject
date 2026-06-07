@@ -32,7 +32,7 @@ namespace server_app::auth
     ///     .serverAddress("0.0.0.0:50051")
     ///     .build();
     /// @endcode
-    class AuthRpcParam final : public common::interfaces::serialize::IYamlConfigurable
+    class AuthRpcParam final : public common::interface::serialize::IYamlConfigurable
     {
     public:
         AuthRpcParam();

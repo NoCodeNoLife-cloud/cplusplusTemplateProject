@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     BufferedOutputStream::BufferedOutputStream(std::unique_ptr<AbstractOutputStream> out) : BufferedOutputStream(std::move(out), DEFAULT_BUFFER_SIZE)
     {

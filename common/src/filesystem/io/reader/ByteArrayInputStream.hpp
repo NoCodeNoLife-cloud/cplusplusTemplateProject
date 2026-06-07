@@ -10,7 +10,7 @@
 
 #include "AbstractInputStream.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     /// @brief A ByteArrayInputStream contains an internal buffer that contains bytes that may be read from the stream.
     /// ByteArrayInputStream uses a std::vector<std::byte> as the internal buffer.

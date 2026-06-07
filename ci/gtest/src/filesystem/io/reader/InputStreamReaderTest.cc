@@ -5,7 +5,7 @@
 #include "filesystem/io/reader/InputStreamReader.hpp"
 #include "filesystem/io/reader/StringReader.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::reader;
 
 class InputStreamReaderTest : public testing::Test
 {
@@ -15,7 +15,7 @@ protected:
 
     void SetUp() override
     {
-        // "h€llo" — € (U+20AC) is 3 bytes in UTF-8: E2 82 AC
+        // "h€llo" �?�?(U+20AC) is 3 bytes in UTF-8: E2 82 AC
         inner_ = std::make_shared<StringReader>(std::string("h\xE2\x82\xAC"
                                                              "llo"));
         reader_ = std::make_unique<InputStreamReader>(inner_);

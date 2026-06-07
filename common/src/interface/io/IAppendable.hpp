@@ -11,7 +11,7 @@
 #include <string>
 #include <string_view>
 
-namespace common::interfaces::io
+namespace common::interface::io
 {
     /// @brief Interface for appendable objects.
     /// This interface provides methods for appending characters and strings to objects.

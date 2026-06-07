@@ -75,9 +75,9 @@ namespace client_app::task
 
         // Authenticate user
         DLOG(INFO) << "Please enter your username: ";
-        const std::string username = common::filesystem::Console::readLine();
+        const std::string username = common::filesystem::io::Console::readLine();
         DLOG(INFO) << "Please enter your password: ";
-        const std::string password = common::filesystem::Console::readLine();
+        const std::string password = common::filesystem::io::Console::readLine();
         DLOG(INFO) << fmt::format("Login attempt for user: {}", username);
 
         // Try to authenticate user
@@ -116,7 +116,7 @@ namespace client_app::task
     bool ClientTask::shouldCreateNewAccount()
     {
         DLOG(INFO) << "User does not exist, do you want to create a new account? [y/n] ";
-        const std::string createNewAccount = common::filesystem::Console::readLine();
+        const std::string createNewAccount = common::filesystem::io::Console::readLine();
         return createNewAccount == "y" || createNewAccount == "Y";
     }
 

@@ -12,7 +12,7 @@
 
 #include "filesystem/io/writer/AbstractOutputStream.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     /// @brief A ByteArrayOutputStream is an output stream that writes data into a byte array.
     /// The buffer automatically grows as data is written to it.

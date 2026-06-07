@@ -70,8 +70,8 @@ namespace client_app::auth
 
         try
         {
-            const YAML::Node root = common::filesystem::YamlToolkit::read(path.string());
-            const YAML::Node grpcNode = common::filesystem::YamlToolkit::getNodeOrRoot(root, "grpc");
+            const YAML::Node root = common::filesystem::type::YamlToolkit::read(path.string());
+            const YAML::Node grpcNode = common::filesystem::type::YamlToolkit::getNodeOrRoot(root, "grpc");
 
             if (const auto keepaliveTimeMsNode = grpcNode["keepaliveTimeMs"]; keepaliveTimeMsNode)
             {

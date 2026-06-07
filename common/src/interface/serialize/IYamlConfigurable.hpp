@@ -7,7 +7,7 @@
 #pragma once
 #include <filesystem>
 
-namespace common::interfaces::serialize
+namespace common::interface::serialize
 {
     /// @brief Interface for classes that can be configured from YAML files
     /// @details This interface defines a contract for objects that can deserialize

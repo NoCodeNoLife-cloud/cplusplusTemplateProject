@@ -3,7 +3,7 @@
 
 #include "filesystem/io/reader/ByteArrayInputStream.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::reader;
 
 class ByteArrayInputStreamTest : public testing::Test
 {

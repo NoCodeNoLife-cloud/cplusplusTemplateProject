@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace common::filesystem
+namespace common::filesystem::type
 {
     /// @brief A class to handle CSV file operations
     /// @details This class provides functionalities to read, modify and save CSV files.

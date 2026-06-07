@@ -11,7 +11,7 @@
 #include <vector>
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     std::optional<char> AbstractReader::read()
     {

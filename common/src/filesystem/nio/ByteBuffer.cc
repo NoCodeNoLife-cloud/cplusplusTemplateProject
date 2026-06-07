@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     ByteBuffer::ByteBuffer(const size_t capacity) : buffer_(capacity)
     {

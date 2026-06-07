@@ -10,7 +10,7 @@
 
 #include "interface/io/IAppendable.hpp"
 
-using namespace common::interfaces::io;
+using namespace common::interface::io;
 
 namespace
 {

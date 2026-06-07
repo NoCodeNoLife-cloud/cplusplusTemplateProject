@@ -37,10 +37,10 @@ namespace glog::config
         void execute() const;
 
         /// @brief Get the current configuration parameters
-        [[nodiscard]] auto getConfig() const noexcept -> const parameter::GLogParam&;
+        [[nodiscard]] auto getConfig() const noexcept -> const param::GLogParam&;
 
         /// @brief Update the configuration parameters
-        void updateConfig(const parameter::GLogParam& config) noexcept;
+        void updateConfig(const param::GLogParam& config) noexcept;
 
         /// @brief Check whether glog has been initialized by this configurator
         [[nodiscard]] static auto isInitialized() noexcept -> bool;
@@ -49,10 +49,10 @@ namespace glog::config
         static void clean() noexcept;
 
     private:
-        static void doConfig(const parameter::GLogParam& config) noexcept;
+        static void doConfig(const param::GLogParam& config) noexcept;
 
         std::string glog_yaml_path_;
-        parameter::GLogParam config_;
+        param::GLogParam config_;
         static std::once_flag glog_init_flag_;
         static std::atomic<bool> glog_initialized_;
     };

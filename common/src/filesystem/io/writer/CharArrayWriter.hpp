@@ -14,14 +14,14 @@
 #include "AbstractWriter.hpp"
 #include "interface/io/IAppendable.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     /// @brief A class for writing character data to a buffer in memory.
     /// CharArrayWriter is a utility class that allows you to write character data
     /// to an internal buffer. The buffer automatically expands as needed to hold
     /// more data. You can retrieve the contents of the buffer as either a string
     /// or a character array.
-    class CharArrayWriter final : public AbstractWriter, public interfaces::io::IAppendable<CharArrayWriter>
+    class CharArrayWriter final : public AbstractWriter, public interface::io::IAppendable<CharArrayWriter>
     {
     public:
         /// @brief Constructs a new character array writer with default buffer size.

@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace common::filesystem
+namespace common::filesystem::type
 {
 #pragma pack(push, 1)
     /// @brief BMP file header structure

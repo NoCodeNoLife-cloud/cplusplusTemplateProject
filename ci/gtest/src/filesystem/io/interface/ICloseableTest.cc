@@ -8,7 +8,7 @@
 
 #include "interface/io/ICloseable.hpp"
 
-using namespace common::interfaces::io;
+using namespace common::interface::io;
 
 namespace
 {

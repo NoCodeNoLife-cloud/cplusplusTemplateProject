@@ -12,11 +12,11 @@
 
 #include "interface/io/ICloseable.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::reader
 {
     /// @brief Abstract base class for all input streams.
     /// Provides standard input stream functionality that can be extended by concrete implementations.
-    class AbstractInputStream : public interfaces::io::ICloseable
+    class AbstractInputStream : public interface::io::ICloseable
     {
     public:
         ~AbstractInputStream() override = default;

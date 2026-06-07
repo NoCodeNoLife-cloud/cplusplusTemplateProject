@@ -8,7 +8,7 @@
 
 #include <stdexcept>
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     CharArrayWriter::CharArrayWriter(const int32_t initialSize)
     {

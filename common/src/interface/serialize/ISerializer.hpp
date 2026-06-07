@@ -7,7 +7,7 @@
 #pragma once
 #include <string>
 
-namespace common::interfaces::serialize
+namespace common::interface::serialize
 {
     /// @brief Abstract base class defining the interface for object serialization/deserialization
     /// @tparam T The type of object to be serialized/deserialized

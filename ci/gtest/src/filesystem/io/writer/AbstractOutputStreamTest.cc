@@ -11,7 +11,7 @@
 
 #include "filesystem/io/writer/AbstractOutputStream.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::writer;
 
 namespace
 {

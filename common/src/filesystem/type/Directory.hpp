@@ -11,7 +11,7 @@
 #include <optional>
 #include <vector>
 
-namespace common::filesystem
+namespace common::filesystem::type
 {
     class Directory
     {

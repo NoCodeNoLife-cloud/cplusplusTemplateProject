@@ -9,7 +9,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     ByteArrayOutputStream::ByteArrayOutputStream() : buf_(32)
     {

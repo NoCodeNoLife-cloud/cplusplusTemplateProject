@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace common::interfaces::task
+namespace common::interface::task
 {
     /// @brief Interface for application execution functionality.
     /// This interface defines the contract for classes that execute applications

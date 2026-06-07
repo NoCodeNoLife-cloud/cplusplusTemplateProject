@@ -8,7 +8,7 @@
 
 #include <fmt/format.h>
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     void AbstractOutputStream::write(const std::vector<std::byte>& buffer)
     {

@@ -9,7 +9,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-namespace common::interfaces::serialize
+namespace common::interface::serialize
 {
     /// @brief Interface for JSON serializable objects.
     /// This interface defines the contract for objects that can be serialized to

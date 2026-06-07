@@ -11,7 +11,7 @@
 #include "filesystem/io/writer/BufferedOutputStream.hpp"
 #include "filesystem/io/writer/ByteArrayOutputStream.hpp"
 
-using namespace common::filesystem;
+using namespace common::filesystem::io::writer;
 
 class BufferedOutputStreamTest : public testing::Test
 {

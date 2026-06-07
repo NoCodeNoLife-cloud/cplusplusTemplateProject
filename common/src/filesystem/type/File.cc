@@ -27,7 +27,7 @@
 #include <windows.h>
 #endif
 
-namespace common::filesystem
+namespace common::filesystem::type
 {
     File::File(const std::string& path) : file_path_(path)
     {

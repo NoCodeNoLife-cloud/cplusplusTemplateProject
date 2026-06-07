@@ -8,7 +8,7 @@
 
 #include "filesystem/io/writer/FilterOutputStream.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     FilterOutputStream::FilterOutputStream(std::shared_ptr<AbstractOutputStream> outputStream) : output_stream_(std::move(outputStream))
     {

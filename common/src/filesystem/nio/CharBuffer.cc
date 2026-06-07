@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace common::filesystem
+namespace common::filesystem::nio
 {
     CharBuffer::CharBuffer(const size_t cap) : buffer_(cap, '\0')
     {

@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <yaml-cpp/node/convert.h>
 
-namespace common::interfaces::serialize
+namespace common::interface::serialize
 {
     /// @brief Interface for YAML serializable objects.
     /// This interface provides methods to encode and decode objects to and from YAML nodes.
@@ -42,7 +42,7 @@ namespace common::interfaces::serialize
 /// to and from YAML nodes by delegating to the object's encode() and decode() methods.
 /// @tparam T Type that derives from IYamlSerializable
 template <typename T>
-    requires std::is_base_of_v<common::interfaces::serialize::IYamlSerializable, T>
+    requires std::is_base_of_v<common::interface::serialize::IYamlSerializable, T>
 struct YAML::convert<T>
 {
     /// @brief Encode an object to a YAML node.

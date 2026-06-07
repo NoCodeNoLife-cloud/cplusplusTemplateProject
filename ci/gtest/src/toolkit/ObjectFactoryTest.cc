@@ -422,12 +422,12 @@ TEST_F(ObjectFactoryTest, Inheritance_FromIStartupTask)
 {
     ObjectFactory<IShape>::clearRegistry();
     static_assert(
-        std::is_base_of_v<common::interfaces::task::IStartupTask, ObjectFactory<IShape>>,
+        std::is_base_of_v<common::interface::task::IStartupTask, ObjectFactory<IShape>>,
         "ObjectFactory should inherit from IStartupTask"
     );
 
     ShapeFactory factory;
-    common::interfaces::task::IStartupTask* task = &factory;
+    common::interface::task::IStartupTask* task = &factory;
 
     EXPECT_TRUE(task->execute());
 }

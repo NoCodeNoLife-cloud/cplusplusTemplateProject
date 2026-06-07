@@ -8,7 +8,7 @@
 
 #include "interface/task/ITimerTask.hpp"
 
-using namespace common::interfaces::task;
+using namespace common::interface::task;
 
 namespace
 {

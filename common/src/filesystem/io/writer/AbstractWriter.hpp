@@ -14,12 +14,12 @@
 #include "interface/io/ICloseable.hpp"
 #include "interface/io/IFlushable.hpp"
 
-namespace common::filesystem
+namespace common::filesystem::io::writer
 {
     /// @brief Abstract base class for writers that provides basic functionality for writing characters and strings.
-    class AbstractWriter : public interfaces::io::ICloseable,
-                           public interfaces::io::IFlushable,
-                           public interfaces::io::IAppendable<AbstractWriter>
+    class AbstractWriter : public interface::io::ICloseable,
+                           public interface::io::IFlushable,
+                           public interface::io::IAppendable<AbstractWriter>
     {
     public:
         AbstractWriter();
