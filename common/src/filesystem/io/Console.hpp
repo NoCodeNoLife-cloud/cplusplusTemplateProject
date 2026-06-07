@@ -7,7 +7,9 @@
 #pragma once
 #include <format>
 #include <iostream>
+#include <mutex>
 #include <string>
+#include <string_view>
 
 #include "interface/IFlushable.hpp"
 
@@ -24,10 +26,18 @@ namespace common::filesystem
         /// @param fmt The format string.
         /// @param args Arguments to be formatted.
         template <typename... Args>
-        static void format(const std::string& fmt, Args&&... args);
+        static void format(std::string_view fmt, Args&&... args);
 
         /// @brief Flushes the console output.
         void flush() override;
+
+        /// @brief Flushes the console output with exception safety.
+        /// @return true if flush was successful, false otherwise.
+        [[nodiscard]] bool flushSafe() override;
+
+        /// @brief Checks if the console output needs to be flushed.
+        /// @return true always.
+        [[nodiscard]] bool isFlushNeeded() const override;
 
         /// @brief Reads a line from the console.
         /// @return The read line as a string.
@@ -39,7 +49,7 @@ namespace common::filesystem
         /// @param args Arguments to be formatted in the prompt.
         /// @return The read line as a string.
         template <typename... Args>
-        [[nodiscard]] static std::string readLine(const std::string& fmt, Args&&... args);
+        [[nodiscard]] static std::string readLine(std::string_view fmt, Args&&... args);
 
         /// @brief Gets the writer stream for the console.
         /// @return Reference to the output stream.
@@ -48,18 +58,29 @@ namespace common::filesystem
         /// @brief Gets the reader stream for the console.
         /// @return Reference to the input stream.
         [[nodiscard]] static std::istream& reader();
+
+    private:
+        static std::mutex s_mutex_;
     };
 
     template <typename... Args>
-    void Console::format(const std::string& fmt, Args&&... args)
+    void Console::format(std::string_view fmt, Args&&... args)
     {
+        std::lock_guard<std::mutex> lock(s_mutex_);
         std::cout << std::vformat(fmt, std::make_format_args(args...));
     }
 
     template <typename... Args>
-    std::string Console::readLine(const std::string& fmt, Args&&... args)
+    std::string Console::readLine(std::string_view fmt, Args&&... args)
     {
-        format(fmt, std::forward<Args>(args)...);
-        return readLine();
+        std::lock_guard<std::mutex> lock(s_mutex_);
+        std::cout << std::vformat(fmt, std::make_format_args(args...));
+        std::string input;
+        std::getline(std::cin, input);
+        if (std::cin.fail() && !std::cin.eof())
+        {
+            std::cin.clear();
+        }
+        return input;
     }
 }

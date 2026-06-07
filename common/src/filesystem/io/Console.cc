@@ -1,5 +1,5 @@
 /**
-* @file Console.cc
+ * @file Console.cc
  * @brief Console class implementation
  * @details This file contains the implementation of the Console class methods for Common library utilities.
  */
@@ -8,15 +8,41 @@
 
 namespace common::filesystem
 {
+    std::mutex Console::s_mutex_;
+
     void Console::flush()
     {
+        std::lock_guard<std::mutex> lock(s_mutex_);
         std::cout.flush();
+    }
+
+    bool Console::flushSafe()
+    {
+        try
+        {
+            flush();
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+
+    bool Console::isFlushNeeded() const
+    {
+        return true;
     }
 
     std::string Console::readLine()
     {
+        std::lock_guard<std::mutex> lock(s_mutex_);
         std::string input;
         std::getline(std::cin, input);
+        if (std::cin.fail() && !std::cin.eof())
+        {
+            std::cin.clear();
+        }
         return input;
     }
 

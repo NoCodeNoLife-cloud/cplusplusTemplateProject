@@ -5,7 +5,6 @@
  */
 
 #pragma once
-#include <span>
 #include <vector>
 
 #include "interface/IBuffer.hpp"
@@ -58,6 +57,13 @@ namespace common::filesystem
         /// @brief Check if there are remaining elements in the buffer
         /// @return True if there are remaining elements, false otherwise
         [[nodiscard]] bool hasRemaining() const  override;
+
+        /// @brief Compacts the buffer by removing processed elements
+        void compact();
+
+        /// @brief Gets the remaining unprocessed elements as a vector
+        /// @return The remaining elements in the buffer as a vector
+        [[nodiscard]] std::vector<std::byte> getRemaining() const;
 
         /// @brief Puts a single byte into the buffer
         /// @param value The byte value to put into the buffer

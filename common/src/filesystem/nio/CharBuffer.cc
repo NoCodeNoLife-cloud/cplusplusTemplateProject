@@ -8,7 +8,6 @@
 
 #include <algorithm>
 #include <stdexcept>
-#include <fmt/format.h>
 
 namespace common::filesystem
 {

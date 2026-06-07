@@ -6,6 +6,8 @@
 
 #include "filesystem/nio/ByteBuffer.hpp"
 
+#include <algorithm>
+#include <cstring>
 #include <fmt/format.h>
 #include <glog/logging.h>
 
@@ -81,6 +83,28 @@ namespace common::filesystem
     bool ByteBuffer::hasRemaining() const
     {
         return position_ < limit_;
+    }
+
+    void ByteBuffer::compact()
+    {
+        if (position_ > 0)
+        {
+            std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_),
+                      buffer_.begin() + static_cast<std::ptrdiff_t>(limit_),
+                      buffer_.begin());
+            limit_ -= position_;
+            position_ = 0;
+        }
+    }
+
+    std::vector<std::byte> ByteBuffer::getRemaining() const
+    {
+        if (position_ >= limit_)
+        {
+            return {};
+        }
+        return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_),
+                buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
     }
 
     void ByteBuffer::put(const std::byte value)

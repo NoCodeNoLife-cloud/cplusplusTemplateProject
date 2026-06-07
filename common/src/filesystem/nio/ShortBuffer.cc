@@ -6,12 +6,14 @@
 
 #include "filesystem/nio/ShortBuffer.hpp"
 
-#include <fmt/format.h>
+#include <algorithm>
 
 namespace common::filesystem
 {
-    ShortBuffer::ShortBuffer(const size_t capacity) : buffer_(capacity), capacity_(capacity), limit_(capacity)
+    ShortBuffer::ShortBuffer(const size_t capacity) : buffer_(capacity)
     {
+        capacity_ = capacity;
+        limit_ = capacity;
     }
 
     ShortBuffer ShortBuffer::wrap(const int16_t* data, const size_t size)
@@ -28,7 +30,7 @@ namespace common::filesystem
     {
         if (!hasRemaining())
         {
-            throw std::out_of_range("ShortBuffer::get: No remaining elements to get");
+            throw std::underflow_error("ShortBuffer::get: No remaining elements to get");
         }
         return buffer_[position_++];
     }
@@ -46,7 +48,7 @@ namespace common::filesystem
     {
         if (!hasRemaining())
         {
-            throw std::out_of_range("ShortBuffer::put: No remaining space to put");
+            throw std::overflow_error("ShortBuffer::put: No remaining space to put");
         }
         buffer_[position_++] = value;
     }
@@ -58,6 +60,28 @@ namespace common::filesystem
             throw std::out_of_range("ShortBuffer::put: Index out of bounds");
         }
         buffer_[index] = value;
+    }
+
+    void ShortBuffer::compact()
+    {
+        if (position_ > 0)
+        {
+            std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_),
+                      buffer_.begin() + static_cast<std::ptrdiff_t>(limit_),
+                      buffer_.begin());
+            limit_ -= position_;
+            position_ = 0;
+        }
+    }
+
+    std::vector<int16_t> ShortBuffer::getRemaining() const
+    {
+        if (position_ >= limit_)
+        {
+            return {};
+        }
+        return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_),
+                buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
     }
 
     bool ShortBuffer::hasRemaining() const

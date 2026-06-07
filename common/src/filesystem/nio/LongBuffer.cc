@@ -10,8 +10,10 @@
 
 namespace common::filesystem
 {
-    LongBuffer::LongBuffer(const std::size_t capacity) : capacity_(capacity), limit_(capacity)
+    LongBuffer::LongBuffer(const std::size_t capacity)
     {
+        capacity_ = capacity;
+        limit_ = capacity;
         buffer_.resize(capacity);
     }
 
@@ -19,7 +21,7 @@ namespace common::filesystem
     {
         if (!hasRemaining())
         {
-            throw std::out_of_range("LongBuffer::get: No remaining elements to get");
+            throw std::underflow_error("LongBuffer::get: No remaining elements to get");
         }
         return buffer_[position_++];
     }
@@ -28,9 +30,31 @@ namespace common::filesystem
     {
         if (!hasRemaining())
         {
-            throw std::out_of_range("LongBuffer::put: No remaining space to put");
+            throw std::overflow_error("LongBuffer::put: No remaining space to put");
         }
         buffer_[position_++] = value;
+    }
+
+    void LongBuffer::compact()
+    {
+        if (position_ > 0)
+        {
+            std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_),
+                      buffer_.begin() + static_cast<std::ptrdiff_t>(limit_),
+                      buffer_.begin());
+            limit_ -= position_;
+            position_ = 0;
+        }
+    }
+
+    std::vector<int64_t> LongBuffer::getRemaining() const
+    {
+        if (position_ >= limit_)
+        {
+            return {};
+        }
+        return {buffer_.begin() + static_cast<std::ptrdiff_t>(position_),
+                buffer_.begin() + static_cast<std::ptrdiff_t>(limit_)};
     }
 
     bool LongBuffer::hasRemaining() const

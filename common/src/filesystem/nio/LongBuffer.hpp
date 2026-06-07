@@ -22,13 +22,20 @@ namespace common::filesystem
 
         /// @brief Get the current value from the buffer and advance the position
         /// @return The current value
-        /// @throws std::out_of_range If no remaining elements to get
+        /// @throws std::underflow_error If no remaining elements to get
         [[nodiscard]] int64_t get();
 
         /// @brief Put a value into the buffer and advance the position
         /// @param value The value to put
-        /// @throws std::out_of_range If no remaining space to put
+        /// @throws std::overflow_error If no remaining space to put
         void put(int64_t value);
+
+        /// @brief Compacts the buffer by removing processed elements
+        void compact();
+
+        /// @brief Gets the remaining unprocessed elements as a vector
+        /// @return The remaining elements in the buffer as a vector
+        [[nodiscard]] std::vector<int64_t> getRemaining() const;
 
         /// @brief Check if there are remaining elements in the buffer
         /// @return True if there are remaining elements, false otherwise
@@ -71,8 +78,5 @@ namespace common::filesystem
 
     private:
         std::vector<int64_t> buffer_{};
-        std::size_t capacity_{};
-        std::size_t limit_{};
-        std::size_t position_{};
     };
 }

@@ -7,7 +7,6 @@
 #include "filesystem/nio/FloatBuffer.hpp"
 
 #include <algorithm>
-#include <fmt/format.h>
 
 namespace common::filesystem
 {
@@ -67,7 +66,7 @@ namespace common::filesystem
             return;
         }
 
-        if (position_ + values.size() > limit_)
+        if (values.size() > remaining())
         {
             throw std::overflow_error("FloatBuffer::put: Buffer overflow");
         }

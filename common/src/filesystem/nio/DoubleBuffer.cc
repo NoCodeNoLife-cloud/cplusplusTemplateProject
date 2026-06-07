@@ -7,7 +7,6 @@
 #include "filesystem/nio/DoubleBuffer.hpp"
 
 #include <algorithm>
-#include <fmt/format.h>
 
 namespace common::filesystem
 {
@@ -68,10 +67,8 @@ namespace common::filesystem
             throw std::overflow_error("DoubleBuffer::put: Buffer overflow: Not enough space for all values.");
         }
 
-        for (const double value : values)
-        {
-            buffer_[position_++] = value;
-        }
+        std::ranges::copy(values, buffer_.begin() + static_cast<std::ptrdiff_t>(position_));
+        position_ += values.size();
         return *this;
     }
 
