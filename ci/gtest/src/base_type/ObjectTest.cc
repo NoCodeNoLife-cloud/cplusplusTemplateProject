@@ -10,9 +10,9 @@
 #include <typeinfo>
 #include <gtest/gtest.h>
 
-#include "base_type/Object.hpp"
+#include "data_structure/base_type/Object.hpp"
 
-using namespace common::base_type;
+using namespace common::data_structure::base_type;
 
 /**
  * @brief Test fixture for ObjectTest tests

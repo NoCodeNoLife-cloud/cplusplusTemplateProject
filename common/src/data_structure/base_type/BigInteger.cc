@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the BigInteger class methods for Base type classes providing fundamental object functionality.
  */
 
-#include "base_type/BigInteger.hpp"
+#include "BigInteger.hpp"
 
 #include <compare>
 #include <stdexcept>
@@ -13,7 +13,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::base_type
+namespace common::data_structure::base_type
 {
     BigInteger::BigInteger()  : value_(0)
     {

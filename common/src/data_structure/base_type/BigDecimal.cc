@@ -4,7 +4,7 @@
  * @details This file contains the implementation of the BigDecimal class methods for Base type classes providing fundamental object functionality.
  */
 
-#include "base_type/BigDecimal.hpp"
+#include "BigDecimal.hpp"
 
 #include <compare>
 #include <stdexcept>
@@ -13,7 +13,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::base_type
+namespace common::data_structure::base_type
 {
     BigDecimal::BigDecimal(const std::string& str) : value_(0)
     {

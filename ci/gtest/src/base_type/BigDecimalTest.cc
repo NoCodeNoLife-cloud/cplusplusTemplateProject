@@ -9,9 +9,9 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "base_type/BigDecimal.hpp"
+#include "data_structure/base_type/BigDecimal.hpp"
 
-using namespace common::base_type;
+using namespace common::data_structure::base_type;
 
 /**
  * @brief Test fixture for BigDecimalTest tests

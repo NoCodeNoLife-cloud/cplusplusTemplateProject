@@ -41,6 +41,7 @@ namespace common::data_structure::tree
         /// @return bool True if the value is found, false otherwise
         [[nodiscard]] bool find(const T& value) const;
 
+
         /// @brief Find a value in the AVL tree and return it
         /// @param value The value to find
         /// @return std::optional<T> The value if found, std::nullopt otherwise

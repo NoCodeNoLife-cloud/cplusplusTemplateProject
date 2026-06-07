@@ -9,7 +9,7 @@
 #include <string>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
-namespace common::base_type
+namespace common::data_structure::base_type
 {
     /// @brief A class for high-precision decimal arithmetic
     /// @details This class uses boost::multiprecision::cpp_dec_float_100 for underlying storage

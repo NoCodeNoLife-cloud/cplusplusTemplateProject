@@ -4,14 +4,14 @@
  * @details This file contains the implementation of the Object class methods for Base type classes providing fundamental object functionality.
  */
 
-#include "base_type/Object.hpp"
+#include "Object.hpp"
 
 #include <memory>
 #include <string>
 #include <typeinfo>
 #include <glog/logging.h>
 
-namespace common::base_type
+namespace common::data_structure::base_type
 {
     const std::type_info& Object::getClass() const
     {
