@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cctype>
 #include <chrono>
 #include <cstdint>
 #include <filesystem>
@@ -68,8 +69,12 @@ namespace common::filesystem
     {
         try
         {
-            const std::ifstream file(file_path_);
-            return file.good();
+            if (!std::filesystem::exists(file_path_))
+            {
+                return false;
+            }
+            const auto perms = std::filesystem::status(file_path_).permissions();
+            return (perms & std::filesystem::perms::owner_read) != std::filesystem::perms::none;
         }
         catch (...)
         {
@@ -85,8 +90,8 @@ namespace common::filesystem
             {
                 return false;
             }
-            const std::ofstream file(file_path_, std::ios::app);
-            return file.good();
+            const auto perms = std::filesystem::status(file_path_).permissions();
+            return (perms & std::filesystem::perms::owner_write) != std::filesystem::perms::none;
         }
         catch (...)
         {
@@ -404,7 +409,27 @@ namespace common::filesystem
 #ifdef _WIN32
         std::replace(path.begin(), path.end(), '\\', '/');
 #endif
-        return "file://" + path;
+        std::ostringstream oss;
+        oss << "file://";
+        for (const char c : path)
+        {
+            if (std::isalnum(static_cast<unsigned char>(c)) || c == '/' || c == '.' ||
+                c == '-' || c == '_' || c == '~')
+            {
+                oss << c;
+            }
+            else if (c == ':')
+            {
+                oss << c;
+            }
+            else
+            {
+                oss << '%' << std::hex << std::uppercase << std::setw(2)
+                    << static_cast<unsigned>(static_cast<unsigned char>(c))
+                    << std::nouppercase << std::dec;
+            }
+        }
+        return oss.str();
     }
 
     void File::printFilesWithDepth(const std::filesystem::path& file_path)

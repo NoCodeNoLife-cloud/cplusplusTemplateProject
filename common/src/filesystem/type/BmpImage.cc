@@ -54,42 +54,51 @@ namespace common::filesystem
         return true;
     }
 
-    void BmpImage::save(const std::string& filename) const
+    bool BmpImage::save(const std::string& filename) const
     {
-        const int32_t rowSize = (width_ * 3 + 3) & ~3;
-        const int32_t pixelDataSize = rowSize * height_;
-        const uint64_t fileSize = sizeof(BitMapFileHeader) + sizeof(BitmapInfoHeader) +
-            static_cast<uint64_t>(pixelDataSize);
-
-        BitMapFileHeader fileHeader{};
-        fileHeader.bf_type_ = 0x4D42;
-        fileHeader.bf_size_ = static_cast<uint32_t>(fileSize);
-        fileHeader.bf_off_bits_ = sizeof(BitMapFileHeader) + sizeof(BitmapInfoHeader);
-
-        BitmapInfoHeader infoHeader{};
-        infoHeader.bi_size_ = sizeof(BitmapInfoHeader);
-        infoHeader.bi_width_ = width_;
-        infoHeader.bi_height_ = height_;
-        infoHeader.bi_planes_ = 1;
-        infoHeader.bi_bit_count_ = 24;
-        infoHeader.bi_size_image_ = pixelDataSize;
-
-        std::ofstream file(filename, std::ios::binary | std::ios::trunc);
-        if (!file)
+        try
         {
-            throw std::runtime_error("can't create file: " + filename);
+            const int32_t rowSize = (width_ * 3 + 3) & ~3;
+            const int32_t pixelDataSize = rowSize * height_;
+            const uint64_t fileSize = sizeof(BitMapFileHeader) + sizeof(BitmapInfoHeader) +
+                static_cast<uint64_t>(pixelDataSize);
+
+            BitMapFileHeader fileHeader{};
+            fileHeader.bf_type_ = 0x4D42;
+            fileHeader.bf_size_ = static_cast<uint32_t>(fileSize);
+            fileHeader.bf_off_bits_ = sizeof(BitMapFileHeader) + sizeof(BitmapInfoHeader);
+
+            BitmapInfoHeader infoHeader{};
+            infoHeader.bi_size_ = sizeof(BitmapInfoHeader);
+            infoHeader.bi_width_ = width_;
+            infoHeader.bi_height_ = height_;
+            infoHeader.bi_planes_ = 1;
+            infoHeader.bi_bit_count_ = 24;
+            infoHeader.bi_size_image_ = pixelDataSize;
+
+            std::ofstream file(filename, std::ios::binary | std::ios::trunc);
+            if (!file)
+            {
+                return false;
+            }
+
+            file.write(reinterpret_cast<const char*>(&fileHeader), sizeof(fileHeader));
+            file.write(reinterpret_cast<const char*>(&infoHeader), sizeof(infoHeader));
+
+            constexpr char padding[3] = {};
+            const auto rowStride = static_cast<size_t>(width_) * 3;
+            for (int32_t y = height_ - 1; y >= 0; --y)
+            {
+                const auto rowStart = static_cast<size_t>(y) * rowStride;
+                file.write(reinterpret_cast<const char*>(&pixels_[rowStart]),
+                           static_cast<std::streamsize>(rowStride));
+                file.write(padding, rowSize - static_cast<int32_t>(rowStride));
+            }
+            return true;
         }
-
-        file.write(reinterpret_cast<const char*>(&fileHeader), sizeof(fileHeader));
-        file.write(reinterpret_cast<const char*>(&infoHeader), sizeof(infoHeader));
-
-        constexpr char padding[3] = {};
-        for (int32_t y = height_ - 1; y >= 0; --y)
+        catch (const std::exception&)
         {
-            const auto rowStart = static_cast<size_t>(y) * static_cast<size_t>(width_) * 3;
-            file.write(reinterpret_cast<const char*>(&pixels_[rowStart]),
-                       static_cast<std::streamsize>(width_) * 3);
-            file.write(padding, rowSize - width_ * 3);
+            return false;
         }
     }
 
@@ -134,32 +143,21 @@ namespace common::filesystem
             throw std::runtime_error("Invalid BMP dimensions: " + filename);
         }
 
-        pixels_.resize(static_cast<size_t>(width_) * static_cast<size_t>(height_) * 3);
+        const auto rowStride = static_cast<size_t>(width_) * 3;
+        pixels_.resize(rowStride * static_cast<size_t>(height_));
 
         const int32_t rowSize = (width_ * 3 + 3) & ~3;
         const auto padding = static_cast<size_t>(rowSize - width_ * 3);
 
         file.seekg(fileHeader.bf_off_bits_);
 
-        std::vector<char> rowBuffer(static_cast<size_t>(width_ * 3));
         for (int32_t y = height_ - 1; y >= 0; --y)
         {
-            file.read(rowBuffer.data(), static_cast<std::streamsize>(rowBuffer.size()));
-            if (file.gcount() != static_cast<std::streamsize>(rowBuffer.size()))
+            auto* rowPtr = &pixels_[y * rowStride];
+            file.read(reinterpret_cast<char*>(rowPtr), static_cast<std::streamsize>(rowStride));
+            if (file.gcount() != static_cast<std::streamsize>(rowStride))
             {
                 throw std::runtime_error("Error reading pixel data from file: " + filename);
-            }
-
-            const auto rowIndex = static_cast<size_t>(y) * static_cast<size_t>(width_) * 3;
-
-            // BMP stores pixels in BGR order; store in buffer as BGR (consistent with setPixel/save)
-            for (int32_t x = 0; x < width_; ++x)
-            {
-                const auto srcIndex = static_cast<size_t>(x) * 3;
-                const size_t dstIndex = rowIndex + srcIndex;
-                pixels_[dstIndex] = static_cast<uint8_t>(rowBuffer[srcIndex]); // B
-                pixels_[dstIndex + 1] = static_cast<uint8_t>(rowBuffer[srcIndex + 1]); // G
-                pixels_[dstIndex + 2] = static_cast<uint8_t>(rowBuffer[srcIndex + 2]); // R
             }
 
             if (padding > 0)

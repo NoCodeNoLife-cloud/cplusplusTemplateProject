@@ -4,7 +4,7 @@
  * @details Tests cover CSV loading, row/column counts, row insertion, and save round-trip.
  */
 
-#include <cstdio>
+#include <filesystem>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -22,13 +22,19 @@ protected:
 
     void SetUp() override
     {
-        tmpPath_ = std::tmpnam(nullptr);
+        const auto tmpDir = std::filesystem::temp_directory_path() / "CsvFileTest";
+        std::filesystem::create_directories(tmpDir);
+        tmpPath_ = (tmpDir / "test.csv").string();
+        std::filesystem::remove(tmpPath_);
         createTestCsv();
     }
 
     void TearDown() override
     {
-        std::remove(tmpPath_.c_str());
+        std::error_code ec;
+        std::filesystem::remove(tmpPath_, ec);
+        // Clean up any additional files created during tests
+        std::filesystem::remove(tmpPath_ + ".out", ec);
     }
 
     void createTestCsv()
@@ -99,7 +105,6 @@ TEST_F(CsvFileTest, SaveToNewPath)
         EXPECT_EQ(csv.getRowCount(), 4);
         EXPECT_EQ(csv.getColumnCount(), 3);
     }
-    std::remove(destPath.c_str());
 }
 
 TEST_F(CsvFileTest, SaveToOriginalPath)

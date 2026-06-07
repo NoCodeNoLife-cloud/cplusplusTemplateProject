@@ -19,6 +19,8 @@ namespace common::filesystem
     class BufferedOutputStream final : public FilterOutputStream
     {
     public:
+        using FilterOutputStream::write;
+
         /// @brief Constructs a buffered output stream with default buffer size.
         /// @param out The underlying output stream.
         /// @throws std::invalid_argument if out is null.

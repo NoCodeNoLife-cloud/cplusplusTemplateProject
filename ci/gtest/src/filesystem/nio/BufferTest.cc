@@ -155,11 +155,11 @@ TEST_F(ByteBufferTest, PutAndGetSingle)
 TEST_F(ByteBufferTest, PutAndGetVector)
 {
     ByteBuffer buf(5);
-    std::vector<std::byte> src = {std::byte{1}, std::byte{2}, std::byte{3}};
+    const std::vector src = {std::byte{1}, std::byte{2}, std::byte{3}};
     buf.put(src);
     EXPECT_EQ(buf.position(), 3);
     buf.flip();
-    auto result = buf.get(3);
+    const auto result = buf.get(3);
     ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], std::byte{1});
     EXPECT_EQ(result[1], std::byte{2});
@@ -177,13 +177,16 @@ TEST_F(ByteBufferTest, PutOverflowThrows)
 TEST_F(ByteBufferTest, GetUnderflowThrows)
 {
     ByteBuffer buf(2);
+    buf.put(std::byte{1});
+    buf.flip();
+    (void)buf.get();
     EXPECT_THROW(buf.get(), std::underflow_error);
 }
 
 TEST_F(ByteBufferTest, PutVectorOverflowThrows)
 {
     ByteBuffer buf(2);
-    std::vector<std::byte> src = {std::byte{1}, std::byte{2}, std::byte{3}};
+    const std::vector src = {std::byte{1}, std::byte{2}, std::byte{3}};
     EXPECT_THROW(buf.put(src), std::overflow_error);
 }
 
@@ -198,14 +201,14 @@ TEST_F(ByteBufferTest, GetVectorUnderflowThrows)
 TEST_F(ByteBufferTest, GetZeroLength)
 {
     ByteBuffer buf(5);
-    auto result = buf.get(0);
+    const auto result = buf.get(0);
     EXPECT_TRUE(result.empty());
 }
 
 TEST_F(ByteBufferTest, PutEmptyVector)
 {
     ByteBuffer buf(5);
-    std::vector<std::byte> empty;
+    const std::vector<std::byte> empty;
     buf.put(empty);
     EXPECT_EQ(buf.position(), 0);
 }
@@ -245,8 +248,8 @@ TEST_F(ByteBufferTest, GetRemaining)
     buf.put(std::byte{2});
     buf.put(std::byte{3});
     buf.flip();
-    buf.get();
-    auto remaining = buf.getRemaining();
+    (void)buf.get();
+    const auto remaining = buf.getRemaining();
     ASSERT_EQ(remaining.size(), 2);
     EXPECT_EQ(remaining[0], std::byte{2});
     EXPECT_EQ(remaining[1], std::byte{3});
@@ -257,7 +260,7 @@ TEST_F(ByteBufferTest, GetRemainingEmpty)
     ByteBuffer buf(5);
     buf.put(std::byte{1});
     buf.flip();
-    buf.get();
+    (void)buf.get();
     EXPECT_TRUE(buf.getRemaining().empty());
 }
 
@@ -305,6 +308,9 @@ TEST_F(CharBufferTest, PutOverflowThrows)
 TEST_F(CharBufferTest, GetUnderflowThrows)
 {
     CharBuffer buf(5);
+    buf.put('x');
+    buf.flip();
+    (void)buf.get();
     EXPECT_THROW(buf.get(), std::underflow_error);
 }
 
@@ -327,11 +333,11 @@ TEST_F(CharBufferTest, Compact)
 
 TEST_F(CharBufferTest, GetRemaining)
 {
-    CharBuffer buf(10);
+    CharBuffer buf(11);
     buf.put("hello world");
     buf.flip();
-    buf.get();
-    auto remaining = buf.getRemaining();
+    (void)buf.get();
+    const auto remaining = buf.getRemaining();
     EXPECT_EQ(remaining, "ello world");
 }
 
@@ -340,11 +346,11 @@ TEST_F(CharBufferTest, GetRemainingEmptyAtLimit)
     CharBuffer buf(5);
     buf.put("abcde");
     buf.flip();
-    buf.get();
-    buf.get();
-    buf.get();
-    buf.get();
-    buf.get();
+    (void)buf.get();
+    (void)buf.get();
+    (void)buf.get();
+    (void)buf.get();
+    (void)buf.get();
     EXPECT_TRUE(buf.getRemaining().empty());
 }
 
@@ -370,7 +376,7 @@ TEST_F(DoubleBufferTest, PutAndGetSingle)
 TEST_F(DoubleBufferTest, PutAndGetVector)
 {
     DoubleBuffer buf(5);
-    std::vector<double> src = {1.0, 2.0, 3.0};
+    const std::vector src = {1.0, 2.0, 3.0};
     buf.put(src);
     EXPECT_EQ(buf.position(), 3);
     buf.flip();
@@ -398,13 +404,16 @@ TEST_F(DoubleBufferTest, PutOverflowThrows)
 TEST_F(DoubleBufferTest, GetUnderflowThrows)
 {
     DoubleBuffer buf(2);
+    buf.put(1.0);
+    buf.flip();
+    (void)buf.get();
     EXPECT_THROW(buf.get(), std::underflow_error);
 }
 
 TEST_F(DoubleBufferTest, PutVectorOverflowThrows)
 {
     DoubleBuffer buf(2);
-    std::vector<double> src = {1.0, 2.0, 3.0};
+    const std::vector src = {1.0, 2.0, 3.0};
     EXPECT_THROW(buf.put(src), std::overflow_error);
 }
 
@@ -415,7 +424,7 @@ TEST_F(DoubleBufferTest, Compact)
     buf.put(2.0);
     buf.put(3.0);
     buf.flip();
-    buf.get();
+    (void)buf.get();
     buf.compact();
     EXPECT_EQ(buf.position(), 2);
     EXPECT_EQ(buf.limit(), 5);
@@ -433,8 +442,8 @@ TEST_F(DoubleBufferTest, GetRemaining)
     buf.put(2.0);
     buf.put(3.0);
     buf.flip();
-    buf.get();
-    auto remaining = buf.getRemaining();
+    (void)buf.get();
+    const auto remaining = buf.getRemaining();
     ASSERT_EQ(remaining.size(), 2);
     EXPECT_DOUBLE_EQ(remaining[0], 2.0);
     EXPECT_DOUBLE_EQ(remaining[1], 3.0);
@@ -450,7 +459,7 @@ class FloatBufferTest : public testing::Test
 
 TEST_F(FloatBufferTest, Allocate)
 {
-    FloatBuffer buf = FloatBuffer::allocate(10);
+    const FloatBuffer buf = FloatBuffer::allocate(10);
     EXPECT_EQ(buf.capacity(), 10);
     EXPECT_EQ(buf.position(), 0);
     EXPECT_EQ(buf.limit(), 10);
@@ -470,11 +479,11 @@ TEST_F(FloatBufferTest, PutAndGetSingle)
 TEST_F(FloatBufferTest, PutAndGetVector)
 {
     FloatBuffer buf(5);
-    std::vector<float> src = {1.0f, 2.0f, 3.0f};
+    const std::vector src = {1.0f, 2.0f, 3.0f};
     buf.put(src);
     EXPECT_EQ(buf.position(), 3);
     buf.flip();
-    auto result = buf.get(3);
+    const auto result = buf.get(3);
     ASSERT_EQ(result.size(), 3);
     EXPECT_FLOAT_EQ(result[0], 1.0f);
     EXPECT_FLOAT_EQ(result[1], 2.0f);
@@ -488,7 +497,7 @@ TEST_F(FloatBufferTest, GetWithLength)
     buf.put(2.0f);
     buf.put(3.0f);
     buf.flip();
-    auto result = buf.get(2);
+    const auto result = buf.get(2);
     ASSERT_EQ(result.size(), 2);
     EXPECT_FLOAT_EQ(result[0], 1.0f);
     EXPECT_FLOAT_EQ(result[1], 2.0f);
@@ -498,7 +507,7 @@ TEST_F(FloatBufferTest, GetWithLength)
 TEST_F(FloatBufferTest, GetZeroLength)
 {
     FloatBuffer buf(5);
-    auto result = buf.get(0);
+    const auto result = buf.get(0);
     EXPECT_TRUE(result.empty());
 }
 
@@ -513,6 +522,9 @@ TEST_F(FloatBufferTest, PutOverflowThrows)
 TEST_F(FloatBufferTest, GetUnderflowThrows)
 {
     FloatBuffer buf(2);
+    buf.put(1.0f);
+    buf.flip();
+    (void)buf.get();
     EXPECT_THROW(buf.get(), std::underflow_error);
 }
 
@@ -527,14 +539,14 @@ TEST_F(FloatBufferTest, GetVectorUnderflowThrows)
 TEST_F(FloatBufferTest, PutVectorOverflowThrows)
 {
     FloatBuffer buf(2);
-    std::vector<float> src = {1.0f, 2.0f, 3.0f};
+    const std::vector src = {1.0f, 2.0f, 3.0f};
     EXPECT_THROW(buf.put(src), std::overflow_error);
 }
 
 TEST_F(FloatBufferTest, PutEmptyVector)
 {
     FloatBuffer buf(5);
-    std::vector<float> empty;
+    const std::vector<float> empty;
     buf.put(empty);
     EXPECT_EQ(buf.position(), 0);
 }
@@ -546,7 +558,7 @@ TEST_F(FloatBufferTest, Compact)
     buf.put(2.0f);
     buf.put(3.0f);
     buf.flip();
-    buf.get();
+    (void)buf.get();
     buf.compact();
     EXPECT_EQ(buf.position(), 2);
     EXPECT_EQ(buf.limit(), 5);
@@ -563,8 +575,8 @@ TEST_F(FloatBufferTest, GetRemaining)
     buf.put(1.0f);
     buf.put(2.0f);
     buf.flip();
-    buf.get();
-    auto remaining = buf.getRemaining();
+    (void)buf.get();
+    const auto remaining = buf.getRemaining();
     ASSERT_EQ(remaining.size(), 1);
     EXPECT_FLOAT_EQ(remaining[0], 2.0f);
 }
@@ -621,6 +633,9 @@ TEST_F(IntBufferTest, PutOverflowThrows)
 TEST_F(IntBufferTest, GetUnderflowThrows)
 {
     IntBuffer buf(2);
+    buf.put(1);
+    buf.flip();
+    (void)buf.get();
     EXPECT_THROW(buf.get(), std::underflow_error);
 }
 
@@ -631,7 +646,7 @@ TEST_F(IntBufferTest, Compact)
     buf.put(2);
     buf.put(3);
     buf.flip();
-    buf.get();
+    (void)buf.get();
     buf.compact();
     EXPECT_EQ(buf.position(), 2);
     EXPECT_EQ(buf.limit(), 5);
@@ -649,8 +664,8 @@ TEST_F(IntBufferTest, GetRemaining)
     buf.put(20);
     buf.put(30);
     buf.flip();
-    buf.get();
-    auto remaining = buf.getRemaining();
+    (void)buf.get();
+    const auto remaining = buf.getRemaining();
     ASSERT_EQ(remaining.size(), 2);
     EXPECT_EQ(remaining[0], 20);
     EXPECT_EQ(remaining[1], 30);
@@ -686,6 +701,9 @@ TEST_F(LongBufferTest, PutOverflowThrows)
 TEST_F(LongBufferTest, GetUnderflowThrows)
 {
     LongBuffer buf(2);
+    buf.put(1);
+    buf.flip();
+    (void)buf.get();
     EXPECT_THROW(buf.get(), std::underflow_error);
 }
 
@@ -696,7 +714,7 @@ TEST_F(LongBufferTest, Compact)
     buf.put(20);
     buf.put(30);
     buf.flip();
-    buf.get();
+    (void)buf.get();
     buf.compact();
     EXPECT_EQ(buf.position(), 2);
     EXPECT_EQ(buf.limit(), 5);
@@ -713,8 +731,8 @@ TEST_F(LongBufferTest, GetRemaining)
     buf.put(100);
     buf.put(200);
     buf.flip();
-    buf.get();
-    auto remaining = buf.getRemaining();
+    (void)buf.get();
+    const auto remaining = buf.getRemaining();
     ASSERT_EQ(remaining.size(), 1);
     EXPECT_EQ(remaining[0], 200);
 }
@@ -729,8 +747,8 @@ class ShortBufferTest : public testing::Test
 
 TEST_F(ShortBufferTest, Wrap)
 {
-    int16_t arr[] = {10, 20, 30};
-    ShortBuffer buf = ShortBuffer::wrap(arr, 3);
+    const int16_t arr[] = {10, 20, 30};
+    const ShortBuffer buf = ShortBuffer::wrap(arr, 3);
     EXPECT_EQ(buf.capacity(), 3);
     EXPECT_EQ(buf.position(), 0);
     EXPECT_EQ(buf.limit(), 3);
@@ -738,7 +756,7 @@ TEST_F(ShortBufferTest, Wrap)
 
 TEST_F(ShortBufferTest, WrapCopiesData)
 {
-    int16_t arr[] = {100, 200, 300};
+    const int16_t arr[] = {100, 200, 300};
     ShortBuffer buf = ShortBuffer::wrap(arr, 3);
     EXPECT_EQ(buf.get(), 100);
     EXPECT_EQ(buf.get(), 200);
@@ -747,7 +765,7 @@ TEST_F(ShortBufferTest, WrapCopiesData)
 
 TEST_F(ShortBufferTest, WrapNullptr)
 {
-    ShortBuffer buf = ShortBuffer::wrap(nullptr, 0);
+    const ShortBuffer buf = ShortBuffer::wrap(nullptr, 0);
     EXPECT_EQ(buf.capacity(), 0);
 }
 
@@ -794,6 +812,9 @@ TEST_F(ShortBufferTest, PutOverflowThrows)
 TEST_F(ShortBufferTest, GetUnderflowThrows)
 {
     ShortBuffer buf(2);
+    buf.put(1);
+    buf.flip();
+    (void)buf.get();
     EXPECT_THROW(buf.get(), std::underflow_error);
 }
 
@@ -802,7 +823,7 @@ TEST_F(ShortBufferTest, Data)
     ShortBuffer buf(3);
     buf.put(10);
     buf.put(20);
-    int16_t* raw = buf.data();
+    const int16_t* raw = buf.data();
     EXPECT_EQ(raw[0], 10);
     EXPECT_EQ(raw[1], 20);
 }
@@ -825,7 +846,7 @@ TEST_F(ShortBufferTest, Compact)
     buf.put(2);
     buf.put(3);
     buf.flip();
-    buf.get();
+    (void)buf.get();
     buf.compact();
     EXPECT_EQ(buf.position(), 2);
     EXPECT_EQ(buf.limit(), 5);
@@ -843,8 +864,8 @@ TEST_F(ShortBufferTest, GetRemaining)
     buf.put(20);
     buf.put(30);
     buf.flip();
-    buf.get();
-    auto remaining = buf.getRemaining();
+    (void)buf.get();
+    const auto remaining = buf.getRemaining();
     ASSERT_EQ(remaining.size(), 2);
     EXPECT_EQ(remaining[0], 20);
     EXPECT_EQ(remaining[1], 30);

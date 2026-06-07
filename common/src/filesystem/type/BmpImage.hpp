@@ -63,7 +63,7 @@ namespace common::filesystem
         [[nodiscard]] bool getPixel(int32_t x, int32_t y, uint8_t& r, uint8_t& g, uint8_t& b) const;
 
         /// @brief Saves the BMP image to a file
-        void save(const std::string& filename) const;
+        [[nodiscard]] bool save(const std::string& filename) const;
 
         /// @brief Gets the width of the image
         [[nodiscard]] int32_t getWidth() const;

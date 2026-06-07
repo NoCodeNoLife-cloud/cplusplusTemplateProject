@@ -5,7 +5,7 @@
  */
 
 #include <cstdint>
-#include <cstdio>
+#include <filesystem>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -23,12 +23,16 @@ protected:
 
     void SetUp() override
     {
-        tmpPath_ = std::tmpnam(nullptr);
+        const auto tmpDir = std::filesystem::temp_directory_path() / "BmpImageTest";
+        std::filesystem::create_directories(tmpDir);
+        tmpPath_ = (tmpDir / "test.bmp").string();
+        std::filesystem::remove(tmpPath_);
     }
 
     void TearDown() override
     {
-        std::remove(tmpPath_.c_str());
+        std::error_code ec;
+        std::filesystem::remove(tmpPath_, ec);
     }
 };
 
@@ -102,7 +106,7 @@ TEST_F(BmpImageTest, SaveAndLoadRoundTrip)
         img.setPixel(1, 0, 0, 255, 0);
         img.setPixel(0, 1, 0, 0, 255);
         img.setPixel(1, 1, 128, 128, 128);
-        img.save(tmpPath_);
+        EXPECT_TRUE(img.save(tmpPath_));
     }
 
     BmpImage loaded(tmpPath_);

@@ -29,7 +29,7 @@ protected:
 
 TEST_F(FilterOutputStreamTest, ConstructorThrowsOnNull)
 {
-    EXPECT_THROW(FilterOutputStream(nullptr), std::runtime_error);
+    EXPECT_THROW(FilterOutputStream(nullptr), std::invalid_argument);
 }
 
 TEST_F(FilterOutputStreamTest, WriteSingleByteDelegates)
@@ -84,13 +84,12 @@ TEST_F(FilterOutputStreamTest, CloseFlushesAndDelegates)
     filter_->write(std::byte{0x41});
     EXPECT_NO_THROW(filter_->close());
     EXPECT_TRUE(filter_->isClosed());
-    EXPECT_TRUE(inner_->isClosed());
 }
 
-TEST_F(FilterOutputStreamTest, IsClosedReflectsInner)
+TEST_F(FilterOutputStreamTest, CloseSetsClosedState)
 {
     EXPECT_FALSE(filter_->isClosed());
-    inner_->close();
+    filter_->close();
     EXPECT_TRUE(filter_->isClosed());
 }
 

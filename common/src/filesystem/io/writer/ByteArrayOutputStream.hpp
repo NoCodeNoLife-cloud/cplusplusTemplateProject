@@ -19,6 +19,8 @@ namespace common::filesystem
     class ByteArrayOutputStream final : public AbstractOutputStream
     {
     public:
+        using AbstractOutputStream::write;
+
         /// @brief Constructs a new byte array output stream with default buffer size.
         ByteArrayOutputStream();
 

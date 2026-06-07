@@ -64,14 +64,15 @@ namespace common::filesystem
 
     void ShortBuffer::compact()
     {
-        if (position_ > 0)
+        const auto count = limit_ - position_;
+        if (count > 0 && position_ > 0)
         {
             std::move(buffer_.begin() + static_cast<std::ptrdiff_t>(position_),
                       buffer_.begin() + static_cast<std::ptrdiff_t>(limit_),
                       buffer_.begin());
-            limit_ -= position_;
-            position_ = 0;
         }
+        position_ = count;
+        limit_ = capacity_;
     }
 
     std::vector<int16_t> ShortBuffer::getRemaining() const

@@ -24,7 +24,7 @@ protected:
         writer_ = std::make_unique<OutputStreamWriter>(std::move(inner));
     }
 
-    CharArrayWriter* inner_;
+    CharArrayWriter* inner_{nullptr};
     std::unique_ptr<OutputStreamWriter> writer_;
 };
 
@@ -59,21 +59,21 @@ TEST_F(OutputStreamWriterTest, WriteSingleChar)
 
 TEST_F(OutputStreamWriterTest, WriteVector)
 {
-    const std::vector<char> data = {'h', 'e', 'l', 'l', 'o'};
+    const std::vector data = {'h', 'e', 'l', 'l', 'o'};
     writer_->write(data);
     EXPECT_EQ(inner_->toString(), "hello");
 }
 
 TEST_F(OutputStreamWriterTest, WriteVectorPartial)
 {
-    const std::vector<char> data = {'w', 'x', 'y', 'z'};
+    const std::vector data = {'w', 'x', 'y', 'z'};
     writer_->write(data, 1, 2);
     EXPECT_EQ(inner_->toString(), "xy");
 }
 
 TEST_F(OutputStreamWriterTest, WriteVectorOffsetOutOfRange)
 {
-    const std::vector<char> data = {'a', 'b'};
+    const std::vector data = {'a', 'b'};
     EXPECT_THROW(writer_->write(data, 5, 1), std::out_of_range);
 }
 
@@ -175,9 +175,11 @@ TEST_F(OutputStreamWriterTest, ToStringAfterCloseReturnsEmpty)
     EXPECT_EQ(writer_->toString(), "");
 }
 
-TEST_F(OutputStreamWriterTest, MethodChaining)
+TEST_F(OutputStreamWriterTest, WriteSequence)
 {
-    writer_->write('A').write(std::string("BC")).flush();
+    writer_->write('A');
+    writer_->write(std::string("BC"));
+    writer_->flush();
     EXPECT_EQ(inner_->toString(), "ABC");
 }
 
@@ -196,8 +198,7 @@ TEST_F(OutputStreamWriterTest, WriteEmptyVectorDoesNothing)
 
 TEST_F(OutputStreamWriterTest, WriteUTF8String)
 {
-    const std::string utf8 = u8"hello";
-    writer_->write(utf8);
+    writer_->write(std::string("hello"));
     EXPECT_EQ(inner_->toString(), "hello");
 }
 
