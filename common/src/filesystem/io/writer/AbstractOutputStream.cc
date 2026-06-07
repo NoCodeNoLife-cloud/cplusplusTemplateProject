@@ -20,7 +20,7 @@ namespace common::filesystem
 
     void AbstractOutputStream::write(const std::vector<std::byte>& buffer, const size_t offset, const size_t len)
     {
-        if (offset + len > buffer.size())
+        if (offset > buffer.size() || len > buffer.size() - offset)
         {
             throw std::out_of_range("Buffer offset/length out of range");
         }

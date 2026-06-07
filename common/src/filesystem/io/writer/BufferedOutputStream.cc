@@ -6,6 +6,7 @@
 
 #include "filesystem/io/writer/BufferedOutputStream.hpp"
 
+#include <algorithm>
 #include <stdexcept>
 
 namespace common::filesystem
@@ -40,6 +41,10 @@ namespace common::filesystem
 
     void BufferedOutputStream::write(const std::byte b)
     {
+        if (closed_)
+        {
+            return;
+        }
         if (buffer_position_ >= bufferSize_)
         {
             flushBuffer();
@@ -49,12 +54,12 @@ namespace common::filesystem
 
     void BufferedOutputStream::write(const std::vector<std::byte>& data, const size_t offset, const size_t len)
     {
-        if (len == 0)
+        if (len == 0 || closed_)
         {
             return;
         }
 
-        if (offset + len > data.size())
+        if (offset > data.size() || len > data.size() - offset)
         {
             throw std::out_of_range("Data offset/length out of range");
         }
@@ -74,7 +79,7 @@ namespace common::filesystem
 
     void BufferedOutputStream::write(const std::byte* buffer, const size_t length)
     {
-        if (length == 0)
+        if (length == 0 || closed_)
         {
             return;
         }
@@ -114,7 +119,14 @@ namespace common::filesystem
             return;
         }
         closed_ = true;
-        flush();
+        try
+        {
+            flush();
+        }
+        catch (...)
+        {
+            // Ignore flush error during close, proceed with closing
+        }
         if (output_stream_)
         {
             output_stream_->close();

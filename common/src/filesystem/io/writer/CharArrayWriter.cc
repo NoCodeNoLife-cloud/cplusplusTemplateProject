@@ -16,7 +16,7 @@ namespace common::filesystem
         {
             throw std::invalid_argument("initialSize must be non-negative");
         }
-        buf_.reserve(static_cast<size_t>(initialSize));
+        buf_.resize(static_cast<size_t>(initialSize));
     }
 
     void CharArrayWriter::write(const char c)
@@ -202,9 +202,9 @@ namespace common::filesystem
 
     void CharArrayWriter::ensureCapacity(const size_t minCapacity)
     {
-        if (minCapacity > buf_.capacity())
+        if (minCapacity > buf_.size())
         {
-            buf_.reserve(minCapacity);
+            buf_.resize(minCapacity);
         }
     }
 }

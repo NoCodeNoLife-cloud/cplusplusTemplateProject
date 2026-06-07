@@ -36,7 +36,7 @@ namespace common::filesystem
             return;
         }
 
-        if (offset + len > buffer.size())
+        if (offset > buffer.size() || len > buffer.size() - offset)
         {
             throw std::out_of_range("Buffer offset/length out of range");
         }

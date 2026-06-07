@@ -37,6 +37,10 @@ namespace common::filesystem
 
     void BufferedWriter::write(const std::string& str)
     {
+        if (!output_stream_)
+        {
+            return;
+        }
         if (str.size() > buffer_size_)
         {
             flush();
@@ -51,7 +55,7 @@ namespace common::filesystem
 
     void BufferedWriter::write(const std::vector<char>& cBuf, const size_t off, const size_t len)
     {
-        if (len == 0)
+        if (len == 0 || !output_stream_)
         {
             return;
         }
@@ -76,6 +80,10 @@ namespace common::filesystem
 
     void BufferedWriter::flush()
     {
+        if (!output_stream_)
+        {
+            return;
+        }
         if (!buffer_.empty())
         {
             output_stream_->write(buffer_.data(), static_cast<std::streamsize>(buffer_.size()));
@@ -91,6 +99,7 @@ namespace common::filesystem
             flush();
             output_stream_->close();
         }
+        output_stream_.reset();
     }
 
     BufferedWriter& BufferedWriter::append(const char c)
