@@ -6,9 +6,9 @@
 
 #include <gtest/gtest.h>
 
-#include "filesystem/io/interface/IReadable.hpp"
+#include "interface/io/IReadable.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::io;
 
 namespace
 {

@@ -9,8 +9,8 @@
 #include <optional>
 #include <vector>
 
-#include "interface/ICloseable.hpp"
-#include "interface/IReadable.hpp"
+#include "interface/io/ICloseable.hpp"
+#include "interface/io/IReadable.hpp"
 
 namespace common::filesystem
 {
@@ -18,7 +18,7 @@ namespace common::filesystem
     /// This class provides a standard interface for reading character data from various sources.
     /// It implements the ICloseable and IReadable interfaces and provides standard implementations
     /// for some common reading operations.
-    class AbstractReader : public interfaces::ICloseable, public interfaces::IReadable
+    class AbstractReader : public interfaces::io::ICloseable, public interfaces::io::IReadable
     {
     public:
         /// @brief Virtual destructor for proper cleanup of derived classes

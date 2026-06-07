@@ -10,16 +10,16 @@
 #include <string_view>
 #include <vector>
 
-#include "interface/IAppendable.hpp"
-#include "interface/ICloseable.hpp"
-#include "interface/IFlushable.hpp"
+#include "interface/io/IAppendable.hpp"
+#include "interface/io/ICloseable.hpp"
+#include "interface/io/IFlushable.hpp"
 
 namespace common::filesystem
 {
     /// @brief Abstract base class for writers that provides basic functionality for writing characters and strings.
-    class AbstractWriter : public interfaces::ICloseable,
-                           public interfaces::IFlushable,
-                           public interfaces::IAppendable<AbstractWriter>
+    class AbstractWriter : public interfaces::io::ICloseable,
+                           public interfaces::io::IFlushable,
+                           public interfaces::io::IAppendable<AbstractWriter>
     {
     public:
         AbstractWriter();

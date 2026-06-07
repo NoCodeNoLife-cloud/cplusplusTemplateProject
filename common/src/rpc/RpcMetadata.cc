@@ -18,8 +18,7 @@ namespace common::rpc
         static const std::unordered_map<grpc_connectivity_state, std::string> stateToStringMap = {{GRPC_CHANNEL_IDLE, "IDLE"}, {GRPC_CHANNEL_CONNECTING, "CONNECTING"}, {GRPC_CHANNEL_READY, "READY"}, {GRPC_CHANNEL_TRANSIENT_FAILURE, "TRANSIENT_FAILURE"}, {GRPC_CHANNEL_SHUTDOWN, "SHUTDOWN"}};
 
         // Look up the state in our map
-        const auto it = stateToStringMap.find(state);
-        if (it != stateToStringMap.end())
+        if (const auto it = stateToStringMap.find(state); it != stateToStringMap.end())
         {
             return it->second;
         }

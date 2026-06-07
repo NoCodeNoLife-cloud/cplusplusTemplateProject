@@ -8,12 +8,12 @@
 #include <stdexcept>
 #include <vector>
 
-#include "interface/IBuffer.hpp"
+#include "interface/io/IBuffer.hpp"
 
 namespace common::filesystem
 {
     /// @brief A buffer that stores 64-bit signed integers
-    class LongBuffer final : public interfaces::IBuffer
+    class LongBuffer final : public interfaces::io::IBuffer
     {
     public:
         /// @brief Construct a LongBuffer with the specified capacity

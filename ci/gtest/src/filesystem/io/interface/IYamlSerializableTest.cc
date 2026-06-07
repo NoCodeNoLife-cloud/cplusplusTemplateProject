@@ -7,9 +7,9 @@
 #include <gtest/gtest.h>
 #include <yaml-cpp/yaml.h>
 
-#include "filesystem/io/interface/IYamlSerializable.hpp"
+#include "interface/serialize/IYamlSerializable.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::serialize;
 
 namespace
 {

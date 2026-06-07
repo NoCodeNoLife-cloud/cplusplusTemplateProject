@@ -6,9 +6,9 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/ITask.hpp"
+#include "interface/task/ITask.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::task;
 
 namespace
 {

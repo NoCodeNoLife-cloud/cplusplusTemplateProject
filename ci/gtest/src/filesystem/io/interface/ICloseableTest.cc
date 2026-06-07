@@ -6,9 +6,9 @@
 
 #include <gtest/gtest.h>
 
-#include "filesystem/io/interface/ICloseable.hpp"
+#include "interface/io/ICloseable.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::io;
 
 namespace
 {

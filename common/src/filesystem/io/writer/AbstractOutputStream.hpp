@@ -8,8 +8,8 @@
 #include <cstddef>
 #include <vector>
 
-#include "interface/ICloseable.hpp"
-#include "interface/IFlushable.hpp"
+#include "interface/io/ICloseable.hpp"
+#include "interface/io/IFlushable.hpp"
 
 namespace common::filesystem
 {
@@ -18,7 +18,7 @@ namespace common::filesystem
     /// It defines pure virtual methods that must be implemented by concrete subclasses.
     /// The class also implements the ICloseable and IFlushable interfaces to provide
     /// standard close and flush functionality.
-    class AbstractOutputStream : public interfaces::ICloseable, public interfaces::IFlushable
+    class AbstractOutputStream : public interfaces::io::ICloseable, public interfaces::io::IFlushable
     {
     public:
         ~AbstractOutputStream() override = default;

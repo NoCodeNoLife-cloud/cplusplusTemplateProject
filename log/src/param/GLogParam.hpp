@@ -11,14 +11,14 @@
 #include <string>
 #include <yaml-cpp/node/node.h>
 
-#include "interface/IYamlConfigurable.hpp"
+#include "interface/serialize/IYamlConfigurable.hpp"
 
 namespace glog::parameter
 {
     /// @brief Configuration parameters for Google Logging (glog) library.
     /// @details This class encapsulates all the configuration options for the glog logging system.
     /// It provides getter and setter methods for each parameter and supports YAML serialization.
-    class GLogParam final : public common::interfaces::IYamlConfigurable
+    class GLogParam final : public common::interfaces::serialize::IYamlConfigurable
     {
     public:
         /// @brief Default constructor.

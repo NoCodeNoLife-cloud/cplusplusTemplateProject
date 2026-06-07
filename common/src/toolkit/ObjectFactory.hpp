@@ -12,14 +12,14 @@
 #include <string>
 #include <unordered_map>
 
-#include "interface/IStartupTask.hpp"
+#include "interface/task/IStartupTask.hpp"
 
 namespace common::toolkit
 {
     /// @brief A factory class for creating objects of type T.
     /// @tparam T The base type of objects that this factory can create.
     template <typename T>
-    class ObjectFactory : public interfaces::IStartupTask
+    class ObjectFactory : public interfaces::task::IStartupTask
     {
     public:
         /// @brief Registers a type with the factory.

@@ -8,13 +8,13 @@
 #include <stdexcept>
 #include <vector>
 
-#include "interface/IBuffer.hpp"
+#include "interface/io/IBuffer.hpp"
 
 namespace common::filesystem
 {
     /// @brief A DoubleBuffer class that implements the IBuffer interface for handling double precision floating point
     /// numbers. This class provides functionality to put and get double values from a buffer with a specified capacity.
-    class DoubleBuffer final : public interfaces::IBuffer
+    class DoubleBuffer final : public interfaces::io::IBuffer
     {
     public:
         /// @brief Constructs a DoubleBuffer with the specified capacity.

@@ -11,7 +11,7 @@
 #include <thread>
 #include <boost/asio.hpp>
 
-#include "interface/ITimerTask.hpp"
+#include "interface/task/ITimerTask.hpp"
 
 namespace common::thread
 {
@@ -25,7 +25,7 @@ namespace common::thread
         /// @param task The task to execute periodically
         /// @param interval The interval between executions
         // ReSharper disable once CppDFATimeOver
-        explicit PeriodicActuator(std::shared_ptr<interfaces::ITimerTask> task, std::chrono::milliseconds interval);
+        explicit PeriodicActuator(std::shared_ptr<interfaces::task::ITimerTask> task, std::chrono::milliseconds interval);
 
         /// @brief Destructor that stops the actuator if running
         ~PeriodicActuator();
@@ -46,7 +46,7 @@ namespace common::thread
 
     private:
         boost::asio::io_context ioContext_{};
-        std::shared_ptr<interfaces::ITimerTask> task_{};
+        std::shared_ptr<interfaces::task::ITimerTask> task_{};
         boost::asio::steady_timer timer_;
         std::chrono::milliseconds interval_{};
         std::thread workerThread_{};

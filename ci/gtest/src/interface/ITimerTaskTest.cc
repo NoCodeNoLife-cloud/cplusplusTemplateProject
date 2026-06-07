@@ -6,9 +6,9 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/ITimerTask.hpp"
+#include "interface/task/ITimerTask.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::task;
 
 namespace
 {

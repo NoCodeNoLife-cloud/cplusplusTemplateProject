@@ -10,13 +10,13 @@
 #include <cstdint>
 #include <vector>
 
-#include "interface/ICloseable.hpp"
+#include "interface/io/ICloseable.hpp"
 
 namespace common::filesystem
 {
     /// @brief Abstract base class for all input streams.
     /// Provides standard input stream functionality that can be extended by concrete implementations.
-    class AbstractInputStream : public interfaces::ICloseable
+    class AbstractInputStream : public interfaces::io::ICloseable
     {
     public:
         ~AbstractInputStream() override = default;

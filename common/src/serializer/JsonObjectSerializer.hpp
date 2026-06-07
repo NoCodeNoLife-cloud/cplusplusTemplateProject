@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include <cstdint>
 #include <string>
 
 #include "rapidjson/document.h"
@@ -27,7 +28,43 @@ namespace common::serializer
         /// @param defaultValue The default value to return if key is not found or not of expected type
         /// @return The extracted value or the default value
         template <typename T>
-        [[nodiscard]] static auto getValueOrDefault(const rapidjson::Value& json, const std::string& key, T defaultValue)  -> T;
+        [[nodiscard]] static auto getValueOrDefault(const rapidjson::Value& json, const std::string& key, const T& defaultValue)  -> T
+        {
+            const auto it = json.FindMember(key.c_str());
+            if (it != json.MemberEnd())
+            {
+                const auto& member = it->value;
+                if constexpr (std::is_same_v<T, std::string>)
+                {
+                    if (member.IsString())
+                    {
+                        return std::string(member.GetString());
+                    }
+                }
+                else if constexpr (std::is_same_v<T, int32_t>)
+                {
+                    if (member.IsInt())
+                    {
+                        return member.GetInt();
+                    }
+                }
+                else if constexpr (std::is_same_v<T, double>)
+                {
+                    if (member.IsDouble())
+                    {
+                        return member.GetDouble();
+                    }
+                }
+                else if constexpr (std::is_same_v<T, bool>)
+                {
+                    if (member.IsBool())
+                    {
+                        return member.GetBool();
+                    }
+                }
+            }
+            return defaultValue;
+        }
 
     public:
         /// @brief Gets a string value from JSON or returns a default value.
@@ -63,6 +100,12 @@ namespace common::serializer
         /// @param key The key for the field.
         /// @param value The string value to serialize.
         static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const std::string& value) ;
+
+        /// @brief Serializes a string field from a C-string to JSON.
+        /// @param writer The JSON writer to use for serialization.
+        /// @param key The key for the field.
+        /// @param value The C-string value to serialize.
+        static void serializeField(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::string& key, const char* value) ;
 
         /// @brief Serializes an integer field to JSON.
         /// @param writer The JSON writer to use for serialization.

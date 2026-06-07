@@ -8,9 +8,9 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "interface/IAopAspect.hpp"
+#include "interface/aop/IAopAspect.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::aop;
 
 namespace
 {

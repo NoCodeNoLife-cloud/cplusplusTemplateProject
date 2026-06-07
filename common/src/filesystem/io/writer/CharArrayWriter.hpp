@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "AbstractWriter.hpp"
+#include "interface/io/IAppendable.hpp"
 
 namespace common::filesystem
 {
@@ -20,7 +21,7 @@ namespace common::filesystem
     /// to an internal buffer. The buffer automatically expands as needed to hold
     /// more data. You can retrieve the contents of the buffer as either a string
     /// or a character array.
-    class CharArrayWriter final : public AbstractWriter, interfaces::IAppendable<CharArrayWriter>
+    class CharArrayWriter final : public AbstractWriter, public interfaces::io::IAppendable<CharArrayWriter>
     {
     public:
         /// @brief Constructs a new character array writer with default buffer size.

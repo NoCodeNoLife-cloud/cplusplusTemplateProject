@@ -7,9 +7,9 @@
 #include <sstream>
 #include <gtest/gtest.h>
 
-#include "filesystem/io/interface/IBoostSerializable.hpp"
+#include "interface/serialize/IBoostSerializable.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::serialize;
 
 namespace
 {

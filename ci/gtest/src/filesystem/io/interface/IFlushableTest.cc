@@ -6,9 +6,9 @@
 
 #include <gtest/gtest.h>
 
-#include "filesystem/io/interface/IFlushable.hpp"
+#include "interface/io/IFlushable.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::io;
 
 namespace
 {

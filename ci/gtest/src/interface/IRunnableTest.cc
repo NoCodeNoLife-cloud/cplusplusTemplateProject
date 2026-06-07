@@ -7,9 +7,9 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "interface/IRunnable.hpp"
+#include "interface/task/IRunnable.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::task;
 
 namespace
 {

@@ -13,7 +13,7 @@
 #include <yaml-cpp/node/node.h>
 
 #include "filesystem/type/YamlToolkit.hpp"
-#include "interface/IYamlConfigurable.hpp"
+#include "interface/serialize/IYamlConfigurable.hpp"
 
 namespace client_app::auth
 {
@@ -29,7 +29,7 @@ namespace client_app::auth
     ///     .serverAddress("localhost:50051")
     ///     .build();
     /// @endcode
-    class AuthRpcParam final : public common::interfaces::IYamlConfigurable
+    class AuthRpcParam final : public common::interfaces::serialize::IYamlConfigurable
     {
     public:
         /// @brief Constructor with explicit parameter initialization

@@ -7,14 +7,14 @@
 #pragma once
 #include <vector>
 
-#include "interface/IBuffer.hpp"
+#include "interface/io/IBuffer.hpp"
 
 namespace common::filesystem
 {
     /// @brief A buffer that stores float values.
     /// @details This class provides methods to put and get float values from a buffer.
     /// It is designed to be used in a network I/O context.
-    class FloatBuffer final : public interfaces::IBuffer
+    class FloatBuffer final : public interfaces::io::IBuffer
     {
     public:
         /// @brief Constructs a FloatBuffer with the specified capacity.

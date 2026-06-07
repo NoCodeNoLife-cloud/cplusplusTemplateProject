@@ -13,11 +13,11 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "interface/ITimerTask.hpp"
+#include "interface/task/ITimerTask.hpp"
 
 namespace common::thread
 {
-    PeriodicActuator::PeriodicActuator(std::shared_ptr<interfaces::ITimerTask> task, const std::chrono::milliseconds interval) : task_(std::move(task)), timer_(ioContext_), interval_(interval)
+    PeriodicActuator::PeriodicActuator(std::shared_ptr<interfaces::task::ITimerTask> task, const std::chrono::milliseconds interval) : task_(std::move(task)), timer_(ioContext_), interval_(interval)
     {
         if (!task_)
         {

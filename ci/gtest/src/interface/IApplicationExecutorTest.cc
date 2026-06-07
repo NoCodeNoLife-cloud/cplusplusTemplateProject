@@ -6,9 +6,9 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/IApplicationExecutor.hpp"
+#include "interface/task/IApplicationExecutor.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::task;
 
 namespace
 {

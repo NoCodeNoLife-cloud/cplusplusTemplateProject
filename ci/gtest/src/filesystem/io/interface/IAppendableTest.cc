@@ -8,9 +8,9 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "interface/IAppendable.hpp"
+#include "interface/io/IAppendable.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::io;
 
 namespace
 {

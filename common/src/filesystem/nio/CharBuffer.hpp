@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <string>
 
-#include "interface/IBuffer.hpp"
+#include "interface/io/IBuffer.hpp"
 
 namespace common::filesystem
 {
@@ -16,7 +16,7 @@ namespace common::filesystem
     /// @details This class provides functionality for managing a buffer of characters,
     ///          including operations such as putting and getting characters, compacting
     ///          the buffer, and retrieving remaining unprocessed characters.
-    class CharBuffer final : public interfaces::IBuffer
+    class CharBuffer final : public interfaces::io::IBuffer
     {
     public:
         /// @brief Constructs a CharBuffer with the specified capacity.

@@ -11,12 +11,12 @@
 #include <string>
 
 #include "auth/AuthRpcService.hpp"
-#include "interface/ITask.hpp"
+#include "interface/task/ITask.hpp"
 #include "time/FunctionProfiler.hpp"
 
 namespace client_app::task
 {
-    class ClientTask final : public common::interfaces::ITask
+    class ClientTask final : public common::interfaces::task::ITask
     {
     public:
         /// @brief Default constructor explicitly deleted to enforce parameterized construction
@@ -71,7 +71,7 @@ namespace client_app::task
 
         /// @brief Main task
         /// @param auth_rpc_client Reference to the RPC client for executing tasks
-        void task(const auth::AuthRpcService& auth_rpc_client) ;
+        static static static void task(const auth::AuthRpcService& auth_rpc_client) ;
 
         /// @brief Logs client system information
         /// @details Logs OS version and CPU model to the application log

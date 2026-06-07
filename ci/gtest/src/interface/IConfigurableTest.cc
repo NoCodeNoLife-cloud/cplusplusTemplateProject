@@ -6,9 +6,9 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/IConfigurable.hpp"
+#include "interface/config/IConfigurable.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::config;
 
 namespace
 {

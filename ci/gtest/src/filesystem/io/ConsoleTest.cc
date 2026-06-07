@@ -107,7 +107,7 @@ TEST_F(ConsoleTest, Reader_ReturnsCin)
 TEST_F(ConsoleTest, ImplementsIFlushable)
 {
     Console console;
-    EXPECT_TRUE(dynamic_cast<common::interfaces::IFlushable*>(&console) != nullptr);
+    EXPECT_TRUE(dynamic_cast<common::interfaces::io::IFlushable*>(&console) != nullptr);
 }
 
 TEST_F(ConsoleTest, FlushSafe_Success)

@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include <fmt/format.h>
-#include "interface/ICache.hpp"
+#include "interface/cache/ICache.hpp"
 
 namespace common::cache
 {
@@ -20,7 +20,7 @@ namespace common::cache
     /// @tparam Value Type of the value stored in the cache
     /// @tparam Map Type of the map used internally to store key-iterator mappings
     template <typename Key, typename Value, typename Map = std::unordered_map<Key, typename std::list<std::pair<Key, Value>>::iterator>>
-    class LRUCache : public interfaces::ICache<Key, Value>
+    class LRUCache : public interfaces::cache::ICache<Key, Value>
     {
     public:
         /// @brief Constructs an LRU cache with the specified capacity

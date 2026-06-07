@@ -9,9 +9,9 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-#include "filesystem/io/interface/IJsonSerializable.hpp"
+#include "interface/serialize/IJsonSerializable.hpp"
 
-using namespace common::interfaces;
+using namespace common::interfaces::serialize;
 
 namespace
 {

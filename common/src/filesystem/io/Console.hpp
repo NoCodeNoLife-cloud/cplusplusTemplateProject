@@ -11,14 +11,14 @@
 #include <string>
 #include <string_view>
 
-#include "interface/IFlushable.hpp"
+#include "interface/io/IFlushable.hpp"
 
 namespace common::filesystem
 {
     /// @brief Provides console input/output operations with formatting capabilities.
     /// This class implements the IFlushable interface and offers methods for formatted
     /// output, input reading, and stream management.
-    class Console final : public interfaces::IFlushable
+    class Console final : public interfaces::io::IFlushable
     {
     public:
         /// @brief Formats and prints a string to the console.

@@ -9,14 +9,14 @@
 #pragma once
 #include <memory>
 
-#include "task/interface/ITask.h"
+#include "interface/task/ITask.hpp"
 
 namespace server_app::task
 {
     /// @brief ServerTask is responsible for managing the main service loop
     /// @details This class coordinates various subsystems within the application server,
     /// initializes the gRPC server, loads configurations, and manages the server lifecycle.
-    class ServerTask final : public common::interfaces::ITask
+    class ServerTask final : public common::interfaces::task::ITask
     {
     public:
         /// @brief Construct a ServerTask with the specified name
