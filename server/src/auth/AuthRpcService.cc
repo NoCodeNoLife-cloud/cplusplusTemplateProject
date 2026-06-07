@@ -48,7 +48,7 @@ namespace server_app::auth
         DLOG(INFO) << "Setting up gRPC server configuration";
 
         AuthRpcParam rpc_options;
-        rpc_options.deserializedFromYamlFile(config_path);
+        rpc_options.deserializeFromYamlFile(config_path);
 
         DLOG(INFO) << fmt::format("gRPC configuration loaded successfully - Max Connection Idle: {}ms, Max Connection Age: {}ms, Keepalive Time: {}ms, Keepalive Timeout: {}ms, Permit Without Calls: {}, Server Address: {}",
             rpc_options.maxConnectionIdleMs(), rpc_options.maxConnectionAgeMs(), rpc_options.keepaliveTimeMs(),

@@ -31,8 +31,7 @@ namespace common::graphics
             DLOG(WARNING) << fmt::format("Graph addEdge: Node index out of range. from={}, to={}, num_nodes={}", from, to, num_nodes_);
             throw std::out_of_range(fmt::format("Graph::addEdge: Node index out of range. Requested: from={}, to={}, but graph has {} nodes", from, to, num_nodes_));
         }
-        Edge edge(to, weight);
-        adj_list_[static_cast<size_t>(from)].emplace_back(edge);
+        adj_list_[static_cast<size_t>(from)].emplace_back(to, weight);
     }
 
     const std::vector<Edge>& Graph::getAdjList(const int32_t node) const

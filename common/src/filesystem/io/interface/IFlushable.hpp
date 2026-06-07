@@ -27,7 +27,7 @@ namespace common::interfaces
         /// This method ensures that any buffered data is written out to the underlying destination
         /// and handles any exceptions that may occur during the flush operation.
         /// @return true if flush was successful, false otherwise
-        [[nodiscard]] virtual bool flushSafe() ;
+        [[nodiscard]] bool flushSafe();
 
         /// @brief Check if the object needs to be flushed.
         /// This method checks if there is buffered data that needs to be flushed.

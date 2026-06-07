@@ -16,19 +16,6 @@ namespace common::filesystem
         std::cout.flush();
     }
 
-    bool Console::flushSafe()
-    {
-        try
-        {
-            flush();
-            return true;
-        }
-        catch (...)
-        {
-            return false;
-        }
-    }
-
     bool Console::isFlushNeeded() const
     {
         return true;

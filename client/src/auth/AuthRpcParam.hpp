@@ -148,7 +148,7 @@ namespace client_app::auth
         ///   keepalive-permit-without-calls: 1
         ///   server-address: "localhost:50051"
         /// @endcode
-        auto deserializedFromYamlFile(const std::filesystem::path& path) -> void override;
+        auto deserializeFromYamlFile(const std::filesystem::path& path) -> void override;
 
     private:
         /// @brief Validate gRPC parameters for correctness

@@ -97,7 +97,7 @@ namespace common::graphics
     bool operator==(const Point3D& lhs, const Point3D& rhs)
     {
         constexpr double epsilon = 1e-9;
-        return std::abs(lhs.getX() - rhs.getX()) < epsilon && std::abs(lhs.getY() - rhs.getY()) < epsilon && std::abs(lhs.getZ() - rhs.getZ()) < epsilon;
+        return std::abs(lhs.x_ - rhs.x_) < epsilon && std::abs(lhs.y_ - rhs.y_) < epsilon && std::abs(lhs.z_ - rhs.z_) < epsilon;
     }
 
     bool operator!=(const Point3D& lhs, const Point3D& rhs)
@@ -109,7 +109,7 @@ namespace common::graphics
     {
         const auto saved_flags = os.flags();
         const auto saved_precision = os.precision();
-        os << "(" << std::fixed << std::setprecision(1) << point.getX() << ", " << point.getY() << ", " << point.getZ() << ")";
+        os << "(" << std::fixed << std::setprecision(1) << point.x_ << ", " << point.y_ << ", " << point.z_ << ")";
         os.flags(saved_flags);
         os.precision(saved_precision);
         return os;

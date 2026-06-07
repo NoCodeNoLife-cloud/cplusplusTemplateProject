@@ -21,7 +21,7 @@ namespace glog::config
 
     GLogConfigurator::GLogConfigurator(std::string glog_yaml_path) : glog_yaml_path_(std::move(glog_yaml_path))
     {
-        config_.deserializedFromYamlFile(glog_yaml_path_);
+        config_.deserializeFromYamlFile(glog_yaml_path_);
     }
 
     void GLogConfigurator::execute() const

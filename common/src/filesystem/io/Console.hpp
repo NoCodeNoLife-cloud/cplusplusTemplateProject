@@ -31,10 +31,6 @@ namespace common::filesystem
         /// @brief Flushes the console output.
         void flush() override;
 
-        /// @brief Flushes the console output with exception safety.
-        /// @return true if flush was successful, false otherwise.
-        [[nodiscard]] bool flushSafe() override;
-
         /// @brief Checks if the console output needs to be flushed.
         /// @return true always.
         [[nodiscard]] bool isFlushNeeded() const override;

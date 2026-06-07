@@ -61,7 +61,7 @@ namespace client_app::auth
         validate(); // Validate after setting new value
     }
 
-    void AuthRpcParam::deserializedFromYamlFile(const std::filesystem::path& path)
+    void AuthRpcParam::deserializeFromYamlFile(const std::filesystem::path& path)
     {
         if (!std::filesystem::exists(path))
         {

@@ -7,6 +7,7 @@
 #include "graphics/Point2D.hpp"
 
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 
 namespace common::graphics
@@ -83,7 +84,7 @@ namespace common::graphics
     bool operator==(const Point2D& lhs, const Point2D& rhs)
     {
         constexpr double epsilon = 1e-9;
-        return std::abs(lhs.getX() - rhs.getX()) < epsilon && std::abs(lhs.getY() - rhs.getY()) < epsilon;
+        return std::abs(lhs.x_ - rhs.x_) < epsilon && std::abs(lhs.y_ - rhs.y_) < epsilon;
     }
 
     bool operator!=(const Point2D& lhs, const Point2D& rhs)
@@ -93,7 +94,11 @@ namespace common::graphics
 
     std::ostream& operator<<(std::ostream& os, const Point2D& point)
     {
-        os << "(" << point.getX() << ", " << point.getY() << ")";
+        const auto saved_flags = os.flags();
+        const auto saved_precision = os.precision();
+        os << "(" << std::fixed << std::setprecision(1) << point.x_ << ", " << point.y_ << ")";
+        os.flags(saved_flags);
+        os.precision(saved_precision);
         return os;
     }
 }

@@ -97,7 +97,7 @@ namespace server_app::auth
         server_address_ = value;
     }
 
-    void AuthRpcParam::deserializedFromYamlFile(const std::filesystem::path& path)
+    void AuthRpcParam::deserializeFromYamlFile(const std::filesystem::path& path)
     {
         if (!std::filesystem::exists(path))
         {

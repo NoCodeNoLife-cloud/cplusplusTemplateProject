@@ -43,7 +43,7 @@ namespace common::interfaces
         /// @param archive Archive object used for serialization
         /// @param version Version number for serialization
         template <class Archive>
-        void serialize(Archive& archive, uint32_t version);
+        void serialize(Archive& archive, const unsigned int version);
     };
 
     template <typename T>
@@ -78,7 +78,7 @@ namespace common::interfaces
 
     template <typename T>
     template <class Archive>
-    void IBoostSerializable<T>::serialize(Archive& archive, uint32_t version)
+    void IBoostSerializable<T>::serialize(Archive& archive, const unsigned int version)
     {
         static_cast<T*>(this)->serializeImpl(archive, version);
     }

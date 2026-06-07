@@ -147,7 +147,7 @@ namespace server_app::auth
         ///   keepalive-permit-without-calls: 1
         ///   server-address: "0.0.0.0:50051"
         /// @endcode
-        void deserializedFromYamlFile(const std::filesystem::path& path) override;
+        void deserializeFromYamlFile(const std::filesystem::path& path) override;
 
         /// @brief Builder class for constructing AuthRpcServiceOptions instances
         /// @details Implements the Builder pattern to allow for flexible construction

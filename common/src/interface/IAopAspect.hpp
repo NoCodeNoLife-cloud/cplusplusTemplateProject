@@ -26,6 +26,7 @@ namespace common::interfaces
         /// @param args Arguments to be passed to the function
         /// @return The result of the function
         template <typename Func, typename... Args>
+            requires std::invocable<Func, Args...>
         [[nodiscard]] decltype(auto) exec(Func&& func, Args&&... args);
 
         virtual ~IAopAspect() = default;
@@ -63,6 +64,7 @@ namespace common::interfaces
 
     template <typename Derived>
     template <typename Func, typename... Args>
+        requires std::invocable<Func, Args...>
     decltype(auto) IAopAspect<Derived>::exec(Func&& func, Args&&... args)
     {
         // Execute the pre-execution logic

@@ -35,7 +35,7 @@ namespace common::interfaces
         /// This method attempts to close the resource and handles any exceptions that may occur.
         /// If an exception occurs during closing, it will be caught and the method will return false.
         /// @return true if the resource was successfully closed, false otherwise
-        [[nodiscard]] virtual bool closeSafe() ;
+        [[nodiscard]] bool closeSafe();
     };
 
     inline bool ICloseable::closeSafe()

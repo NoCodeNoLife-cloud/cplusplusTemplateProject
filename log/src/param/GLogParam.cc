@@ -56,7 +56,7 @@ namespace glog::parameter
         custom_log_format_ = custom_log_format;
     }
 
-    void GLogParam::deserializedFromYamlFile(const std::filesystem::path& path)
+    void GLogParam::deserializeFromYamlFile(const std::filesystem::path& path)
     {
         if (!std::filesystem::exists(path))
         {

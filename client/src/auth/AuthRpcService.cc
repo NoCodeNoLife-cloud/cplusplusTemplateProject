@@ -32,7 +32,7 @@ namespace client_app::auth
 
         // Load RPC options from config
         AuthRpcParam rpc_options;
-        rpc_options.deserializedFromYamlFile(config_path);
+        rpc_options.deserializeFromYamlFile(config_path);
 
         DLOG(INFO) << fmt::format("gRPC configuration loaded successfully - Keepalive Time: {}ms, Keepalive Timeout: {}ms, Permit Without Calls: {}, Server Address: {}", rpc_options.keepaliveTimeMs(), rpc_options.keepaliveTimeoutMs(), rpc_options.keepalivePermitWithoutCalls(), rpc_options.serverAddress());
 

@@ -31,7 +31,7 @@ namespace
         }
 
         template <class Archive>
-        void serializeImpl(Archive& archive, [[maybe_unused]] uint32_t version)
+        void serializeImpl(Archive& archive, [[maybe_unused]] const unsigned int version)
         {
             archive& boost::serialization::make_nvp("name", name_);
             archive& boost::serialization::make_nvp("value", value_);

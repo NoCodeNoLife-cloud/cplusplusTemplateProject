@@ -65,7 +65,7 @@ namespace glog::parameter
         /// @brief Deserialize object configuration from a YAML file
         /// @param path The file path to the YAML configuration file
         /// @throws std::runtime_error If the file cannot be read or parsed
-        void deserializedFromYamlFile(const std::filesystem::path& path) override;
+        void deserializeFromYamlFile(const std::filesystem::path& path) override;
 
         /// @brief Equality operator.
         /// @param other The other GLogParam to compare with.
