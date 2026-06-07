@@ -319,9 +319,30 @@ TEST_F(SnowflakeGeneratorTest, NextId_Consistency_MultipleCalls)
  */
 TEST_F(SnowflakeGeneratorTest, SnowflakeOption_ConstantsCorrect)
 {
-    EXPECT_EQ(SnowflakeOption::machine_bits_, 10);
+    EXPECT_EQ(SnowflakeOption::machine_id_bits_, 5);
+    EXPECT_EQ(SnowflakeOption::datacenter_id_bits_, 5);
+    EXPECT_EQ(SnowflakeOption::worker_bits_, 10);
     EXPECT_EQ(SnowflakeOption::sequence_bits_, 12);
     EXPECT_EQ(SnowflakeOption::max_sequence_, 4095); // 2^12 - 1
     EXPECT_EQ(SnowflakeOption::max_machine_id_, 31); // 2^5 - 1
     EXPECT_EQ(SnowflakeOption::max_datacenter_id_, 31); // 2^5 - 1
+}
+
+TEST_F(SnowflakeGeneratorTest, NextId_BitLayout_ComponentsExtractable)
+{
+    SnowflakeGenerator generator(3, 7);
+
+    const int64_t id = generator.NextId();
+
+    constexpr int64_t kSequenceMask = (1LL << SnowflakeOption::sequence_bits_) - 1;
+    constexpr int64_t kMachineMask = (1LL << SnowflakeOption::machine_id_bits_) - 1;
+    constexpr int64_t kDatacenterMask = (1LL << SnowflakeOption::datacenter_id_bits_) - 1;
+
+    const int64_t sequence = id & kSequenceMask;
+    const int64_t machineId = (id >> SnowflakeOption::sequence_bits_) & kMachineMask;
+    const int64_t datacenterId = (id >> (SnowflakeOption::sequence_bits_ + SnowflakeOption::machine_id_bits_)) & kDatacenterMask;
+
+    EXPECT_EQ(machineId, 3);
+    EXPECT_EQ(datacenterId, 7);
+    EXPECT_EQ(sequence, 0);
 }

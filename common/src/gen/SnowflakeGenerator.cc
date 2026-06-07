@@ -39,7 +39,7 @@ namespace common::gen
         {
             do
             {
-                std::this_thread::yield();
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
                 timestamp = GetCurrentTimestamp();
             }
             while (timestamp < last_timestamp_);
@@ -66,7 +66,7 @@ namespace common::gen
 
     int64_t SnowflakeGenerator::GenerateUniqueId(const int64_t timestamp, const int16_t datacenter_id, const int16_t machine_id, const int64_t sequence)
     {
-        constexpr int64_t kShift = SnowflakeOption::machine_bits_ + SnowflakeOption::sequence_bits_;
+        constexpr int64_t kShift = SnowflakeOption::worker_bits_ + SnowflakeOption::sequence_bits_;
         const int64_t nodeId = (static_cast<int64_t>(datacenter_id) << 5) | static_cast<int64_t>(machine_id);
         return (timestamp << kShift) | (nodeId << SnowflakeOption::sequence_bits_) | sequence;
     }
@@ -84,7 +84,7 @@ namespace common::gen
         int64_t timestamp = GetCurrentTimestamp();
         while (timestamp <= last_timestamp)
         {
-            std::this_thread::yield();
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
             timestamp = GetCurrentTimestamp();
         }
         return timestamp;

@@ -23,18 +23,16 @@ namespace common::gen
     }
 
     RandomGenerator::RandomGenerator(RandomGenerator&& other) noexcept
-        : engine_(other.engine_)
+        : engine_(std::move(other.engine_))
     {
-        std::lock_guard lock(other.mutex_);
     }
 
     RandomGenerator& RandomGenerator::operator=(RandomGenerator&& other) noexcept
     {
         if (this != &other)
         {
-            std::lock_guard lock1(mutex_);
-            std::lock_guard lock2(other.mutex_);
-            engine_ = other.engine_;
+            std::lock_guard lock(mutex_);
+            engine_ = std::move(other.engine_);
         }
         return *this;
     }

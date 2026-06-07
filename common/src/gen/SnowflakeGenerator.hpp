@@ -13,11 +13,13 @@ namespace common::gen
     /// @brief Configuration options for Snowflake ID generation
     struct SnowflakeOption
     {
-        static constexpr int64_t machine_bits_ = 10;
+        static constexpr int64_t machine_id_bits_ = 5;
+        static constexpr int64_t datacenter_id_bits_ = 5;
+        static constexpr int64_t worker_bits_ = machine_id_bits_ + datacenter_id_bits_;
         static constexpr int64_t sequence_bits_ = 12;
         static constexpr int64_t max_sequence_ = ~(-1LL << sequence_bits_);
-        static constexpr int64_t max_machine_id_ = ~(-1LL << 5);
-        static constexpr int64_t max_datacenter_id_ = ~(-1LL << 5);
+        static constexpr int64_t max_machine_id_ = ~(-1LL << machine_id_bits_);
+        static constexpr int64_t max_datacenter_id_ = ~(-1LL << datacenter_id_bits_);
 
         /// @brief Twitter Snowflake epoch (2010-11-04 09:42:54.657 UTC)
         /// This is the starting timestamp from which all generated IDs are relative
