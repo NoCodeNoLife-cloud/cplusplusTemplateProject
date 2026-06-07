@@ -7,6 +7,8 @@
 #pragma once
 #include <memory>
 
+#include "data_structure/Color.hpp"
+
 namespace common::data_structure::tree
 {
     /// @brief A node in a Red-Black Tree

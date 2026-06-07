@@ -5,6 +5,7 @@
  *          type variations, copy behavior, and edge cases.
  */
 
+#include <algorithm>
 #include <string>
 #include <gtest/gtest.h>
 
@@ -241,6 +242,41 @@ TEST_F(QuadtreeTest, Insert_DoublePrecision_StoresCorrectly)
     EXPECT_DOUBLE_EQ(results[0].first.x_, 3.14159);
     EXPECT_DOUBLE_EQ(results[0].first.y_, 2.71828);
     EXPECT_EQ(results[0].second, 42);
+}
+
+/**
+ * @brief Test query with zero-width range
+ * @details Verifies that a zero-width range query returns only exact match
+ */
+TEST_F(QuadtreeTest, QueryRange_ZeroWidth_FindsExactMatch)
+{
+    Quadtree<int> tree(0, 0, 100);
+    tree.insert(Point(10, 20), 1);
+    tree.insert(Point(11, 21), 2);
+
+    const auto results = tree.queryRange(Point(10, 20), 0);
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0].second, 1);
+}
+
+/**
+ * @brief Test deep subdivision through many insertions
+ * @details Inserts many points in the same small area to force deep recursion
+ */
+TEST_F(QuadtreeTest, DeepSubdivision_ManyPoints_SameRegion)
+{
+    Quadtree<int> tree(0, 0, 100);
+    constexpr int kCount = 50;
+
+    for (int i = 1; i <= kCount; ++i)
+    {
+        tree.insert(Point(static_cast<double>(i), static_cast<double>(i)), i);
+    }
+
+    EXPECT_EQ(tree.size(), kCount);
+
+    const auto results = tree.queryRange(Point(25, 25), 30);
+    EXPECT_EQ(results.size(), kCount);
 }
 
 // ==================== Edge Cases ====================
