@@ -8,7 +8,7 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "data_structure/UnionSet.hpp"
+#include "data_structure/union_find/UnionSet.hpp"
 
 using namespace common::data_structure;
 

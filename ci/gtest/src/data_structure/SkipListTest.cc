@@ -9,7 +9,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/SkipList.hpp"
+#include "data_structure/list/SkipList.hpp"
 
 using namespace common::data_structure;
 

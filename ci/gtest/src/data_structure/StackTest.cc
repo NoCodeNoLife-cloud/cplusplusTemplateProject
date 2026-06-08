@@ -9,7 +9,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/Stack.hpp"
+#include "data_structure/stack/Stack.hpp"
 
 using namespace common::data_structure;
 

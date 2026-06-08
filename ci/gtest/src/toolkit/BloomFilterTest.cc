@@ -10,7 +10,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/BloomFilter.hpp"
+#include "data_structure/filter/BloomFilter.hpp"
 
 using namespace common::data_structure;
 

@@ -10,7 +10,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/Heap.hpp"
+#include "data_structure/heap/Heap.hpp"
 
 using namespace common::data_structure;
 

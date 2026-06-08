@@ -12,7 +12,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/Queue.hpp"
+#include "data_structure/queue/Queue.hpp"
 
 using namespace common::data_structure;
 

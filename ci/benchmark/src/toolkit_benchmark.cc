@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "data_structure/BloomFilter.hpp"
+#include "data_structure/filter/BloomFilter.hpp"
 #include "toolkit/StringToolkit.hpp"
 #include "toolkit/RegexToolkit.hpp"
 #include "toolkit/RadixToolkit.hpp"

@@ -4,12 +4,12 @@
 #include <random>
 #include <algorithm>
 
-#include "data_structure/Heap.hpp"
-#include "data_structure/UnionSet.hpp"
-#include "data_structure/SkipList.hpp"
+#include "data_structure/heap/Heap.hpp"
+#include "data_structure/union_find/UnionSet.hpp"
+#include "data_structure/list/SkipList.hpp"
 #include "data_structure/tree/RedBlackTree.hpp"
 #include "data_structure/tree/BinarySearchTree.hpp"
-#include "data_structure/TopK.hpp"
+#include "data_structure/top_k/TopK.hpp"
 
 // ============================================================
 // Helper: generate shuffled data
