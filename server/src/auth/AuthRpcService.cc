@@ -149,7 +149,7 @@ namespace server_app::auth
             response->set_message(success ? "User registered successfully" : "Registration failed");
             return grpc::Status::OK;
         }
-        catch (const common::exception::AuthenticationException& e)
+        catch (const common::auth::AuthenticationException& e)
         {
             return HandleAuthException(e, response);
         }
@@ -185,7 +185,7 @@ namespace server_app::auth
             response->set_message(auth_result.error_message.empty() ? "Authentication successful" : auth_result.error_message);
             return grpc::Status::OK;
         }
-        catch (const common::exception::AuthenticationException& e)
+        catch (const common::auth::AuthenticationException& e)
         {
             return HandleAuthException(e, response);
         }
@@ -222,7 +222,7 @@ namespace server_app::auth
             response->set_message(success ? "Password changed successfully" : "Password change failed");
             return grpc::Status::OK;
         }
-        catch (const common::exception::AuthenticationException& e)
+        catch (const common::auth::AuthenticationException& e)
         {
             return HandleAuthException(e, response);
         }
@@ -258,7 +258,7 @@ namespace server_app::auth
             response->set_message(success ? "Password reset successfully" : "Password reset failed");
             return grpc::Status::OK;
         }
-        catch (const common::exception::AuthenticationException& e)
+        catch (const common::auth::AuthenticationException& e)
         {
             return HandleAuthException(e, response);
         }
@@ -331,7 +331,7 @@ namespace server_app::auth
         }
     }
 
-    [[nodiscard]] grpc::Status AuthRpcService::HandleAuthException(const common::exception::AuthenticationException& e, rpc::AuthResponse* const response)
+    [[nodiscard]] grpc::Status AuthRpcService::HandleAuthException(const common::auth::AuthenticationException& e, rpc::AuthResponse* const response)
     {
         response->set_success(false);
         response->set_message(e.what());

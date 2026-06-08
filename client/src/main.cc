@@ -7,7 +7,7 @@
 
 #include <glog/logging.h>
 
-#include "exception/StackTraceExceptionHandler.hpp"
+#include "toolkit/StackTraceExceptionHandler.hpp"
 #include "task/ClientTask.hpp"
 
 int32_t main(const int32_t argc, char* argv[])
@@ -20,11 +20,11 @@ int32_t main(const int32_t argc, char* argv[])
     }
     catch (const std::exception& ex)
     {
-        common::exception::StackTraceExceptionHandler::logException(ex);
+        common::toolkit::StackTraceExceptionHandler::logException(ex);
     }
     catch (...)
     {
-        common::exception::StackTraceExceptionHandler::logUnknownException();
+        common::toolkit::StackTraceExceptionHandler::logUnknownException();
     }
     return 1;
 }

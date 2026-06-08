@@ -8,9 +8,9 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
-#include "interface/serialize/IYamlConfigurable.hpp"
+#include "interface/serialization/IYamlConfigurable.hpp"
 
-using namespace common::interface::serialize;
+using namespace common::interface::serialization;
 
 namespace
 {

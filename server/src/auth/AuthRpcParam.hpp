@@ -11,7 +11,7 @@
 #include <string>
 #include <yaml-cpp/node/node.h>
 
-#include "interface/serialize/IYamlConfigurable.hpp"
+#include "interface/serialization/IYamlConfigurable.hpp"
 
 namespace server_app::auth
 {
@@ -32,7 +32,7 @@ namespace server_app::auth
     ///     .serverAddress("0.0.0.0:50051")
     ///     .build();
     /// @endcode
-    class AuthRpcParam final : public common::interface::serialize::IYamlConfigurable
+    class AuthRpcParam final : public common::interface::serialization::IYamlConfigurable
     {
     public:
         AuthRpcParam();

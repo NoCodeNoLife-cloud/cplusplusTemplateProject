@@ -7,7 +7,7 @@
 #pragma once
 #include <string>
 
-#include "exception/AuthenticationException.hpp"
+#include "auth/AuthenticationException.hpp"
 
 namespace common::crypto
 {

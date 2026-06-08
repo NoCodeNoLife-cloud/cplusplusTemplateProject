@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include <fmt/format.h>
 
-#include "interface/cache/ICache.hpp"
+#include "interface/ICache.hpp"
 
 namespace common::cache
 {

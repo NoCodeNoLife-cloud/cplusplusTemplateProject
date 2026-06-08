@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/config/IConfigurable.hpp"
+#include "interface/IConfigurable.hpp"
 
 using namespace common::interface::config;
 

@@ -12,7 +12,7 @@
 
 #include "auth/AuthRpcService.hpp"
 #include "interface/task/ITask.hpp"
-#include "time/FunctionProfiler.hpp"
+#include "system/FunctionProfiler.hpp"
 
 namespace client_app::task
 {
@@ -77,6 +77,6 @@ namespace client_app::task
         /// @details Logs OS version and CPU model to the application log
         static void logClientInfo() ;
 
-        common::time::FunctionProfiler timer_;
+        common::system::FunctionProfiler timer_;
     };
 }

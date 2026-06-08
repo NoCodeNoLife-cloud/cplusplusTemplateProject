@@ -11,11 +11,11 @@
 #include <string>
 #include <yaml-cpp/node/node.h>
 
-#include "interface/serialize/IYamlConfigurable.hpp"
+#include "interface/serialization/IYamlConfigurable.hpp"
 
 namespace glog::param
 {
-    class GLogParam final : public common::interface::serialize::IYamlConfigurable
+    class GLogParam final : public common::interface::serialization::IYamlConfigurable
     {
     public:
         GLogParam() = default;

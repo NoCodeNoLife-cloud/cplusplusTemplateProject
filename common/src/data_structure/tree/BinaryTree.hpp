@@ -13,7 +13,7 @@
 #include <utility>
 #include <vector>
 
-#include "toolkit/TreeToolkit.hpp"
+#include "data_structure/tree/TreeToolkit.hpp"
 
 namespace common::data_structure::tree
 {
@@ -27,7 +27,7 @@ namespace common::data_structure::tree
     class BinaryTree
     {
         // Grant access for generic tree algorithm helpers
-        friend class ::common::toolkit::TreeToolkit;
+        friend class TreeToolkit;
 
     public:
         BinaryTree() = default;
@@ -231,13 +231,13 @@ namespace common::data_structure::tree
     template <typename T>
     int32_t BinaryTree<T>::height() const
     {
-        return ::common::toolkit::TreeToolkit::height(this);
+        return TreeToolkit::height(this);
     }
 
     template <typename T>
     size_t BinaryTree<T>::size() const
     {
-        return ::common::toolkit::TreeToolkit::size(this);
+        return TreeToolkit::size(this);
     }
 
     template <typename T>

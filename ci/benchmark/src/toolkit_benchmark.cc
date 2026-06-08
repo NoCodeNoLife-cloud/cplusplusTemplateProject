@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "toolkit/BloomFilter.hpp"
+#include "data_structure/BloomFilter.hpp"
 #include "toolkit/StringToolkit.hpp"
 #include "toolkit/RegexToolkit.hpp"
 #include "toolkit/RadixToolkit.hpp"
@@ -11,9 +11,9 @@
 // ============================================================
 // BloomFilter
 // ============================================================
-static common::toolkit::BloomFilter create_bloom(const size_t expected_elements)
+static common::data_structure::BloomFilter create_bloom(const size_t expected_elements)
 {
-    common::toolkit::BloomParameters params;
+    common::data_structure::BloomParameters params;
     params.projected_element_count = expected_elements;
     params.false_positive_probability = 0.01;
     params.minimum_size = 1;
@@ -21,7 +21,7 @@ static common::toolkit::BloomFilter create_bloom(const size_t expected_elements)
     params.minimum_number_of_hashes = 1;
     params.maximum_number_of_hashes = 20;
     (void)params.compute_optimal_parameters();
-    return common::toolkit::BloomFilter(params);
+    return common::data_structure::BloomFilter(params);
 }
 
 static void BM_BloomFilter_Insert(benchmark::State& state)

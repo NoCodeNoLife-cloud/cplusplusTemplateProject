@@ -10,9 +10,9 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "toolkit/BloomFilter.hpp"
+#include "data_structure/BloomFilter.hpp"
 
-using namespace common::toolkit;
+using namespace common::data_structure;
 
 /**
  * @brief Test fixture for BloomFilterTest tests

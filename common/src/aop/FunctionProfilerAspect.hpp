@@ -8,8 +8,8 @@
 #include <exception>
 #include <string>
 
-#include "interface/aop/IAopAspect.hpp"
-#include "time/FunctionProfiler.hpp"
+#include "interface/IAopAspect.hpp"
+#include "system/FunctionProfiler.hpp"
 
 namespace common::aop
 {
@@ -46,7 +46,7 @@ namespace common::aop
     private:
         static constexpr double kSlowThresholdMs = 100.0;
 
-        time::FunctionProfiler profiler_;
+        system::FunctionProfiler profiler_;
         std::string function_name_;
     };
 }

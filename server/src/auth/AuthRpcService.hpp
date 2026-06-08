@@ -13,7 +13,7 @@
 #include <string_view>
 #include <unordered_map>
 #include <grpcpp/server_builder.h>
-#include <exception/AuthenticationException.hpp>
+#include <auth/AuthenticationException.hpp>
 #include <generated/RpcService.grpc.pb.h>
 
 #include "auth/AuthRpcParam.hpp"
@@ -100,7 +100,7 @@ namespace server_app::auth
         /// @param e AuthenticationException to handle
         /// @param response Response to populate with error details
         /// @return Appropriate gRPC status
-        [[nodiscard]] static grpc::Status HandleAuthException(const common::exception::AuthenticationException& e, rpc::AuthResponse* response);
+        [[nodiscard]] static grpc::Status HandleAuthException(const common::auth::AuthenticationException& e, rpc::AuthResponse* response);
 
         /// @brief Loaded RPC configuration options
         AuthRpcParam options_;

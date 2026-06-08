@@ -9,9 +9,9 @@
 #include <unordered_map>
 #include <gtest/gtest.h>
 
-#include "interface/serialize/ISerializer.hpp"
+#include "interface/serialization/ISerializer.hpp"
 
-using namespace common::interface::serialize;
+using namespace common::interface::serialization;
 
 namespace
 {

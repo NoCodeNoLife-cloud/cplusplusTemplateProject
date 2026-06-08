@@ -8,7 +8,7 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "interface/aop/IAopAspect.hpp"
+#include "interface/IAopAspect.hpp"
 
 using namespace common::interface::aop;
 
