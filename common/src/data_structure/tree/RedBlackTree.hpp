@@ -8,10 +8,11 @@
 #include <memory>
 
 #include "data_structure/Color.hpp"
-#include "RedBlackTreeNode.hpp"
+#include "node/RedBlackTreeNode.hpp"
 
 namespace common::data_structure::tree
 {
+    using node::RedBlackTreeNode;
     /// @brief A red-black tree implementation
     /// @tparam T The type of data stored in the tree
     template <typename T>

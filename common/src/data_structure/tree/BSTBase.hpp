@@ -11,10 +11,11 @@
 #include <optional>
 #include <utility>
 
-#include "TreeNode.hpp"
+#include "node/TreeNode.hpp"
 
 namespace common::data_structure::tree
 {
+    using node::TreeNode;
     /// @brief CRTP base for binary search tree implementations
     /// @tparam T The type of data stored in the tree
     /// @tparam Derived The derived tree class (CRTP)

@@ -8,9 +8,10 @@
 #include <memory>
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/TreeNode.hpp"
+#include "data_structure/tree/node/TreeNode.hpp"
 
 using namespace common::data_structure::tree;
+using namespace common::data_structure::tree::node;
 
 /**
  * @brief Test fixture for TreeNode tests
