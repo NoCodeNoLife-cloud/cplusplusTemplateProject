@@ -1,7 +1,7 @@
 /**
  * @file TopKTest.cc
  * @brief Unit tests for the TopK class
- * @details Tests cover core top-K largest numbers tracking functionality including
+ * @details Tests cover the core top-K largest numbers tracking functionality including
  *          adding numbers, retrieving top-K results, size management, and edge cases.
  */
 
@@ -61,7 +61,7 @@ TEST_F(TopKTest, Constructor_InvalidMaxCapacity_ThrowsException)
 }
 
 /**
- * @brief Test add maintains top K largest numbers
+ * @brief Test add maintains the top K largest numbers
  * @details Verifies that only the K largest numbers are kept
  */
 TEST_F(TopKTest, Add_MaintainsTopKLargest)
@@ -82,7 +82,7 @@ TEST_F(TopKTest, Add_MaintainsTopKLargest)
 
     // Sort to verify correct values
     std::vector sorted(result.begin(), result.end());
-    std::sort(sorted.begin(), sorted.end());
+    std::ranges::sort(sorted);
 
     EXPECT_EQ(sorted[0], 3);
     EXPECT_EQ(sorted[1], 4);
@@ -107,7 +107,7 @@ TEST_F(TopKTest, Add_FewerThanKElements)
     EXPECT_EQ(result.size(), 3);
 
     std::vector sorted(result.begin(), result.end());
-    std::sort(sorted.begin(), sorted.end());
+    std::ranges::sort(sorted);
 
     EXPECT_EQ(sorted[0], 10);
     EXPECT_EQ(sorted[1], 20);
@@ -159,7 +159,7 @@ TEST_F(TopKTest, Add_NegativeNumbers)
     EXPECT_EQ(result.size(), 3);
 
     std::vector sorted(result.begin(), result.end());
-    std::sort(sorted.begin(), sorted.end());
+    std::ranges::sort(sorted);
 
     EXPECT_EQ(sorted[0], -10);
     EXPECT_EQ(sorted[1], -5);
@@ -187,7 +187,7 @@ TEST_F(TopKTest, Add_MixedSignNumbers)
     EXPECT_EQ(result.size(), 4);
 
     std::vector sorted(result.begin(), result.end());
-    std::sort(sorted.begin(), sorted.end());
+    std::ranges::sort(sorted);
 
     EXPECT_EQ(sorted[0], 0);
     EXPECT_EQ(sorted[1], 25);
@@ -270,7 +270,7 @@ TEST_F(TopKTest, GetTopK_AfterAddingMoreElements)
     EXPECT_EQ(result2.size(), 3);
 
     std::vector sorted(result2.begin(), result2.end());
-    std::sort(sorted.begin(), sorted.end());
+    std::ranges::sort(sorted);
 
     EXPECT_EQ(sorted[0], 30);
     EXPECT_EQ(sorted[1], 40);
@@ -491,7 +491,7 @@ TEST_F(TopKTest, GetTopK_NonDestructive_HeapUsableAfterRetrieval)
 
     // Verify second result contains the largest 3 numbers
     std::vector sorted(result2.begin(), result2.end());
-    std::sort(sorted.begin(), sorted.end());
+    std::ranges::sort(sorted);
     EXPECT_EQ(sorted[0], 30);
     EXPECT_EQ(sorted[1], 40);
     EXPECT_EQ(sorted[2], 50);
@@ -697,10 +697,10 @@ TEST_F(TopKTest, GetTopK_NegativeCount_ThrowsException)
     }
 
     // Negative count should throw std::invalid_argument
-    EXPECT_THROW(topK.getTopK(-1), std::invalid_argument);
-    EXPECT_THROW(topK.getTopK(-100), std::invalid_argument);
-    EXPECT_THROW(topK.getTopK(-1, true), std::invalid_argument);
-    EXPECT_THROW(topK.getTopK(-1, false), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(topK.getTopK(-1)), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(topK.getTopK(-100)), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(topK.getTopK(-1, true)), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(topK.getTopK(-1, false)), std::invalid_argument);
 }
 
 /**
