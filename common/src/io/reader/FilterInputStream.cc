@@ -76,7 +76,7 @@ namespace common::io::reader
         input_stream_->reset();
     }
 
-    size_t FilterInputStream::skip(const size_t n)
+    int64_t FilterInputStream::skip(const int64_t n)
     {
         validateInputStream();
         const auto skipped = input_stream_->skip(n);

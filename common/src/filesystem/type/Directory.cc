@@ -108,6 +108,10 @@ namespace common::filesystem::type
     {
         try
         {
+            if (std::filesystem::exists(destination))
+            {
+                std::filesystem::remove_all(destination);
+            }
             std::filesystem::rename(dir_path_, destination);
             return true;
         }
@@ -135,6 +139,16 @@ namespace common::filesystem::type
 
     bool Directory::copy(const std::filesystem::path& destination) const
     {
+        // Prevent recursive copy into self
+        {
+            const auto src_canon = std::filesystem::weakly_canonical(dir_path_);
+            const auto dst_canon = std::filesystem::weakly_canonical(destination);
+            if (dst_canon.string().starts_with(src_canon.string()))
+            {
+                throw std::runtime_error(
+                    "copy failed: destination is inside source directory");
+            }
+        }
         try
         {
             if (!isDirectory())

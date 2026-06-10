@@ -85,9 +85,9 @@ namespace common::io::reader
         return static_cast<size_t>(bytes_read);
     }
 
-    size_t FileInputStream::skip(const size_t n)
+    int64_t FileInputStream::skip(const int64_t n)
     {
-        if (!isValid())
+        if (!isValid() || n <= 0)
         {
             return 0;
         }

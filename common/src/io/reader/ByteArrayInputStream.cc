@@ -80,15 +80,15 @@ namespace common::io::reader
         return bytesToRead;
     }
 
-    size_t ByteArrayInputStream::skip(const size_t n)
+    int64_t ByteArrayInputStream::skip(const int64_t n)
     {
-        if (closed_)
+        if (closed_ || n <= 0)
         {
             return 0;
         }
 
         const size_t available = buffer_.size() - pos_;
-        const size_t bytesToSkip = std::min(n, available);
+        const size_t bytesToSkip = std::min(static_cast<size_t>(n), available);
         pos_ += bytesToSkip;
         if (pos_ >= buffer_.size())
         {

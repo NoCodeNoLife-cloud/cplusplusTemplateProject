@@ -173,3 +173,44 @@ TEST_F(BufferedInputStreamTest, ReadBufAfterExhaustion)
     n = stream_->read(buf, 0, 3);
     EXPECT_EQ(n, 0);
 }
+
+TEST_F(BufferedInputStreamTest, SkipZero)
+{
+    EXPECT_EQ(stream_->skip(0), 0);
+    EXPECT_EQ(stream_->read(), std::byte{0x10});
+}
+
+TEST_F(BufferedInputStreamTest, SkipNegative)
+{
+    EXPECT_EQ(stream_->skip(-1), 0);
+    EXPECT_EQ(stream_->read(), std::byte{0x10});
+}
+
+TEST_F(BufferedInputStreamTest, ResetWithoutMark)
+{
+    stream_->read();
+    EXPECT_NO_THROW(stream_->reset());
+}
+
+TEST_F(BufferedInputStreamTest, MarkWithNegativeReadlimit)
+{
+    EXPECT_NO_THROW(stream_->mark(-1));
+    stream_->read();
+    stream_->reset();
+    EXPECT_EQ(stream_->read(), std::byte{0x10});
+}
+
+TEST_F(BufferedInputStreamTest, AvailableOnEmptyStream)
+{
+    auto inner = std::make_unique<ByteArrayInputStream>(std::vector<std::byte>{});
+    auto stream = std::make_unique<BufferedInputStream>(std::move(inner));
+    EXPECT_EQ(stream->available(), 0);
+}
+
+TEST_F(BufferedInputStreamTest, MarkExceededResetFails)
+{
+    stream_->mark(1);
+    stream_->read();
+    stream_->read();
+    EXPECT_NO_THROW(stream_->reset());
+}

@@ -49,7 +49,7 @@ namespace common::io::reader
         /// @brief Skip bytes in the stream.
         /// @param n The number of bytes to skip.
         /// @return The number of bytes skipped.
-        [[nodiscard]] size_t skip(size_t n) override;
+        [[nodiscard]] int64_t skip(int64_t n) override;
 
         /// @brief Get the number of bytes available to read.
         /// @return The number of bytes available to read.

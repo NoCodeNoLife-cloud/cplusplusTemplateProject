@@ -208,3 +208,84 @@ TEST_F(StreamCipherFactoryTest, CipherLargeData)
     const auto decrypted = dec->decrypt(encrypted);
     EXPECT_EQ(plaintext, decrypted);
 }
+
+TEST_F(StreamCipherFactoryTest, CreateWithInvalidAlgorithm)
+{
+    const auto invalid = static_cast<StreamCipherFactory::Algorithm>(999);
+    EXPECT_THROW(StreamCipherFactory::create(invalid), std::invalid_argument);
+}
+
+TEST_F(StreamCipherFactoryTest, ReinitializeCipher)
+{
+    auto cipher = StreamCipherFactory::createChaCha20();
+    ASSERT_NE(cipher, nullptr);
+
+    std::vector<uint8_t> key(32, 0x42);
+    std::vector<uint8_t> nonce(12, 0x24);
+    cipher->initialize(key, nonce);
+    EXPECT_TRUE(cipher->isInitialized());
+
+    // Re-initialize with different key/nonce
+    std::vector<uint8_t> new_key(32, 0x99);
+    std::vector<uint8_t> new_nonce(12, 0x88);
+    EXPECT_NO_THROW(cipher->initialize(new_key, new_nonce));
+    EXPECT_TRUE(cipher->isInitialized());
+}
+
+TEST_F(StreamCipherFactoryTest, CipherIndependence)
+{
+    auto cipher1 = StreamCipherFactory::createChaCha20();
+    auto cipher2 = StreamCipherFactory::createChaCha20();
+    ASSERT_NE(cipher1, nullptr);
+    ASSERT_NE(cipher2, nullptr);
+
+    std::vector<uint8_t> key(32, 0x42);
+    std::vector<uint8_t> nonce(12, 0x24);
+
+    cipher1->initialize(key, nonce);
+    cipher2->initialize(key, nonce);
+
+    const std::vector<uint8_t> plaintext = {0x01, 0x02, 0x03};
+    const auto enc1 = cipher1->encrypt(plaintext);
+    const auto enc2 = cipher2->encrypt(plaintext);
+
+    // Two independent cipher instances should produce identical encryption
+    // when using the same key/nonce for the same plaintext
+    EXPECT_EQ(enc1, enc2);
+}
+
+TEST_F(StreamCipherFactoryTest, AllZeroDataRoundtrip)
+{
+    auto enc = StreamCipherFactory::createChaCha20();
+    ASSERT_NE(enc, nullptr);
+
+    std::vector<uint8_t> key(32, 0x42);
+    std::vector<uint8_t> nonce(12, 0x24);
+    enc->initialize(key, nonce);
+
+    std::vector<uint8_t> plaintext(64, 0x00);
+    const auto encrypted = enc->encrypt(plaintext);
+
+    auto dec = StreamCipherFactory::createChaCha20();
+    dec->initialize(key, nonce);
+    const auto decrypted = dec->decrypt(encrypted);
+    EXPECT_EQ(plaintext, decrypted);
+}
+
+TEST_F(StreamCipherFactoryTest, SingleByteData)
+{
+    auto enc = StreamCipherFactory::createChaCha20();
+    ASSERT_NE(enc, nullptr);
+
+    std::vector<uint8_t> key(32, 0x42);
+    std::vector<uint8_t> nonce(12, 0x24);
+    enc->initialize(key, nonce);
+
+    const std::vector<uint8_t> plaintext = {0xAB};
+    const auto encrypted = enc->encrypt(plaintext);
+    EXPECT_EQ(encrypted.size(), 1);
+
+    auto dec = StreamCipherFactory::createChaCha20();
+    dec->initialize(key, nonce);
+    EXPECT_EQ(dec->decrypt(encrypted), plaintext);
+}

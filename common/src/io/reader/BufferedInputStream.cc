@@ -112,23 +112,23 @@ namespace common::io::reader
         input_stream_->reset();
     }
 
-    size_t BufferedInputStream::skip(const size_t n)
+    int64_t BufferedInputStream::skip(const int64_t n)
     {
-        if (n == 0)
+        if (n <= 0)
         {
             return 0;
         }
 
-        size_t skipped = 0;
-        size_t remaining = n;
+        int64_t skipped = 0;
+        int64_t remaining = n;
 
         while (remaining > 0)
         {
             const size_t bytesProcessed = processWithBuffer([&](const size_t available) -> size_t
             {
-                const size_t bytesToSkip = std::min(remaining, available);
+                const size_t bytesToSkip = std::min(static_cast<size_t>(remaining), available);
                 pos_ += bytesToSkip;
-                remaining -= bytesToSkip;
+                remaining -= static_cast<int64_t>(bytesToSkip);
                 return bytesToSkip;
             });
 

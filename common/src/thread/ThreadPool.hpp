@@ -88,6 +88,14 @@ namespace common::thread
             throw std::runtime_error("ThreadPool::submit: Pool is stopped");
         }
 
+        if constexpr (requires { !f; })
+        {
+            if (!f)
+            {
+                throw std::invalid_argument("ThreadPool::submit: Function is null");
+            }
+        }
+
         auto task = std::make_shared<std::packaged_task<return_type()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
 
         std::future<return_type> res = task->get_future();

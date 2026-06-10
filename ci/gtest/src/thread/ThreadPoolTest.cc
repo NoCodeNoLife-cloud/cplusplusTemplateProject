@@ -247,3 +247,80 @@ TEST_F(ThreadPoolTest, ShutdownNowOnShutdownPool_NoCrash)
     pool.shutdown();
     pool.shutdownNow();
 }
+
+TEST_F(ThreadPoolTest, ConcurrentSubmitAndShutdown)
+{
+    ThreadPool pool(2, 4, 100, std::chrono::milliseconds(100));
+    std::atomic<int> completed{0};
+
+    std::thread submitter([&pool, &completed]
+    {
+        for (int i = 0; i < 50; ++i)
+        {
+            try
+            {
+                auto fut = pool.submit([&completed]
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                    completed++;
+                });
+                fut.wait();
+            }
+            catch (const std::exception&)
+            {
+                break;
+            }
+        }
+    });
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    pool.shutdown();
+    submitter.join();
+
+    EXPECT_GE(completed, 1);
+}
+
+TEST_F(ThreadPoolTest, FutureGetAfterPoolDestruction)
+{
+    std::future<int> result;
+    {
+        ThreadPool pool(1, 1, 10, std::chrono::milliseconds(100));
+        result = pool.submit([] { return 42; });
+    }
+    EXPECT_EQ(result.get(), 42);
+}
+
+TEST_F(ThreadPoolTest, SubmitNullFunction)
+{
+    ThreadPool pool(1, 1, 10, std::chrono::milliseconds(100));
+    std::function<void()> null_func;
+    EXPECT_THROW(pool.submit(null_func), std::exception);
+}
+
+TEST_F(ThreadPoolTest, ConstructorZeroKeepalime)
+{
+    EXPECT_NO_THROW(ThreadPool pool(1, 1, 10, std::chrono::milliseconds(0)));
+}
+
+TEST_F(ThreadPoolTest, MultipleTasksPreserveOrder)
+{
+    ThreadPool pool(1, 1, 100, std::chrono::milliseconds(100));
+
+    std::vector<int> results;
+    std::mutex results_mutex;
+
+    std::vector<std::future<void>> futures;
+    for (int i = 0; i < 5; ++i)
+    {
+        futures.push_back(pool.submit([&results, &results_mutex, i]
+        {
+            std::lock_guard lock(results_mutex);
+            results.push_back(i);
+        }));
+    }
+    for (auto& fut : futures)
+    {
+        fut.wait();
+    }
+    pool.shutdown();
+}

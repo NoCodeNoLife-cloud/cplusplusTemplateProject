@@ -56,7 +56,7 @@ namespace common::io::reader
         /// @brief Skips over and discards n bytes of data from this input stream.
         /// @param n the number of bytes to skip.
         /// @return the actual number of bytes skipped.
-        size_t skip(size_t n) override;
+        int64_t skip(int64_t n) override;
 
         /// @brief Checks if this input stream has been closed.
         /// @return true if this input stream has been closed, false otherwise.

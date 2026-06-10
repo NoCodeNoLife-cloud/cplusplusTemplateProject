@@ -55,7 +55,7 @@ namespace common::io::reader
         /// @brief Skips over and discards n bytes of data from this input stream.
         /// @param n The number of bytes to skip.
         /// @return The actual number of bytes skipped.
-        virtual size_t skip(std::size_t n);
+        virtual int64_t skip(int64_t n);
 
         /// @brief Closes this input stream and releases any system resources associated with the stream.
         void close() override = 0;

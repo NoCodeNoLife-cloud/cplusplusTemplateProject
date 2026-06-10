@@ -179,3 +179,27 @@ TEST_F(FilterOutputStreamTest, WriteAfterFlush)
     filter_->flush();
     EXPECT_EQ(inner_->size(), 2);
 }
+
+TEST_F(FilterOutputStreamTest, WriteVectorNegativeOffset)
+{
+    std::vector<std::byte> data = {std::byte{0x01}, std::byte{0x02}};
+    EXPECT_THROW(filter_->write(data, -1, 1), std::out_of_range);
+}
+
+TEST_F(FilterOutputStreamTest, WriteVectorNegativeLength)
+{
+    std::vector<std::byte> data = {std::byte{0x01}, std::byte{0x02}};
+    EXPECT_THROW(filter_->write(data, 0, -1), std::out_of_range);
+}
+
+TEST_F(FilterOutputStreamTest, WriteVectorOffsetAtSize)
+{
+    std::vector<std::byte> data = {std::byte{0x01}, std::byte{0x02}};
+    EXPECT_THROW(filter_->write(data, 2, 1), std::out_of_range);
+}
+
+TEST_F(FilterOutputStreamTest, WriteVectorOffsetExceedsSize)
+{
+    std::vector<std::byte> data = {std::byte{0x01}, std::byte{0x02}};
+    EXPECT_THROW(filter_->write(data, 5, 1), std::out_of_range);
+}

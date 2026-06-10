@@ -58,11 +58,12 @@ namespace common::io::reader
         throw std::runtime_error("Reset operation not supported by this input stream implementation");
     }
 
-    size_t AbstractInputStream::skip(const std::size_t n)
+    int64_t AbstractInputStream::skip(const int64_t n)
     {
+        if (n <= 0) return 0;
         eof_ = false;
-        std::size_t skipped = 0;
-        for (std::size_t i = 0; i < n && !eof_; ++i)
+        int64_t skipped = 0;
+        for (int64_t i = 0; i < n && !eof_; ++i)
         {
             read();
             ++skipped;
