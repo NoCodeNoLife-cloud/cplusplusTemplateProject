@@ -96,3 +96,87 @@ TEST_F(CharArrayReaderTest, ReadEmptyBufferReturnsNullopt)
     CharArrayReader empty(std::vector<char>{});
     EXPECT_FALSE(empty.read().has_value());
 }
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+TEST_F(CharArrayReaderTest, ReadAfterClose_Buffer)
+{
+    reader_->close();
+    std::vector<char> buf(3);
+    const int n = reader_->read(buf, 0, 3);
+    EXPECT_EQ(n, -1);
+}
+
+TEST_F(CharArrayReaderTest, SkipBeyondEnd)
+{
+    const auto skipped = reader_->skip(100);
+    EXPECT_EQ(skipped, 5);
+    EXPECT_FALSE(reader_->read().has_value());
+}
+
+TEST_F(CharArrayReaderTest, SkipZero)
+{
+    const auto skipped = reader_->skip(0);
+    EXPECT_EQ(skipped, 0);
+}
+
+TEST_F(CharArrayReaderTest, MarkAndResetAfterClose)
+{
+    reader_->close();
+    EXPECT_THROW(reader_->mark(10), std::runtime_error);
+    EXPECT_THROW(reader_->reset(), std::runtime_error);
+}
+
+TEST_F(CharArrayReaderTest, ReadInvalidOffsetThrows)
+{
+    std::vector<char> buf(3);
+    EXPECT_THROW(reader_->read(buf, 5, 1), std::out_of_range);
+}
+
+TEST_F(CharArrayReaderTest, ReadOverflowLengthThrows)
+{
+    std::vector<char> buf(3);
+    EXPECT_THROW(reader_->read(buf, 0, 10), std::out_of_range);
+}
+
+TEST_F(CharArrayReaderTest, ConstructorInvalidOffset)
+{
+    EXPECT_THROW(CharArrayReader(data_, 10, 3), std::invalid_argument);
+}
+
+TEST_F(CharArrayReaderTest, LargeSkip)
+{
+    CharArrayReader large(data_, 0, 5);
+    const auto skipped = large.skip(5);
+    EXPECT_EQ(skipped, 5);
+    EXPECT_FALSE(large.read().has_value());
+}
+
+TEST_F(CharArrayReaderTest, ReadyAfterClose)
+{
+    reader_->close();
+    EXPECT_FALSE(reader_->ready());
+}
+
+TEST_F(CharArrayReaderTest, MultipleMarkResetCycles)
+{
+    reader_->mark(10);
+    (void)reader_->read();
+    (void)reader_->read();
+    reader_->reset();
+    EXPECT_EQ(reader_->read(), 'h');
+    (void)reader_->read();
+    reader_->mark(10);
+    (void)reader_->read();
+    reader_->reset();
+    EXPECT_EQ(reader_->read(), 'l');
+}
+
+TEST_F(CharArrayReaderTest, ReadZeroLength)
+{
+    std::vector<char> buf(3);
+    const int n = reader_->read(buf, 0, 0);
+    EXPECT_EQ(n, 0);
+}

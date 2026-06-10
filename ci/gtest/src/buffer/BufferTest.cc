@@ -131,6 +131,104 @@ TYPED_TEST(BufferCommonTest, HasRemaining)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+// ============================================================================
+// Buffer Common: Boundary Condition Tests
+// ============================================================================
+
+TYPED_TEST(BufferCommonTest, ZeroCapacity)
+{
+    TypeParam buf(0);
+    EXPECT_EQ(buf.capacity(), 0);
+    EXPECT_EQ(buf.position(), 0);
+    EXPECT_EQ(buf.limit(), 0);
+    EXPECT_EQ(buf.remaining(), 0);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TYPED_TEST(BufferCommonTest, SingleElementCapacity)
+{
+    TypeParam buf(1);
+    EXPECT_EQ(buf.capacity(), 1);
+    EXPECT_EQ(buf.position(), 0);
+    EXPECT_EQ(buf.limit(), 1);
+    EXPECT_TRUE(buf.hasRemaining());
+    buf.position(1);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TYPED_TEST(BufferCommonTest, FlipOnEmptyBuffer)
+{
+    TypeParam buf(10);
+    // position is 0, flip sets limit = position = 0
+    buf.flip();
+    EXPECT_EQ(buf.limit(), 0);
+    EXPECT_EQ(buf.position(), 0);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TYPED_TEST(BufferCommonTest, FlipTwice)
+{
+    TypeParam buf(10);
+    buf.position(3);
+    buf.flip(); // limit=3, pos=0
+    buf.flip(); // limit=0, pos=0
+    EXPECT_EQ(buf.limit(), 0);
+    EXPECT_EQ(buf.position(), 0);
+}
+
+TYPED_TEST(BufferCommonTest, ClearTwice)
+{
+    TypeParam buf(10);
+    buf.position(3);
+    buf.limit(7);
+    buf.clear();
+    buf.clear(); // second clear should be idempotent
+    EXPECT_EQ(buf.position(), 0);
+    EXPECT_EQ(buf.limit(), 10);
+}
+
+TYPED_TEST(BufferCommonTest, RewindTwice)
+{
+    TypeParam buf(10);
+    buf.position(5);
+    buf.rewind();
+    buf.rewind(); // second rewind should be idempotent
+    EXPECT_EQ(buf.position(), 0);
+}
+
+TYPED_TEST(BufferCommonTest, PositionAtLimitHasNoRemaining)
+{
+    TypeParam buf(10);
+    buf.position(10);
+    EXPECT_EQ(buf.remaining(), 0);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TYPED_TEST(BufferCommonTest, FullCycleClearFlipRewind)
+{
+    TypeParam buf(10);
+    buf.position(4);
+    buf.limit(8);
+    buf.flip();     // limit=4, pos=0
+    buf.rewind();   // pos=0 (no change)
+    EXPECT_EQ(buf.position(), 0);
+    EXPECT_EQ(buf.limit(), 4);
+    buf.clear();    // limit=10, pos=0
+    EXPECT_EQ(buf.limit(), 10);
+    EXPECT_EQ(buf.position(), 0);
+}
+
+TYPED_TEST(BufferCommonTest, ZeroRemainingOnFullCapacity)
+{
+    TypeParam buf(5);
+    buf.position(5);
+    EXPECT_EQ(buf.remaining(), 0);
+    EXPECT_FALSE(buf.hasRemaining());
+    buf.position(0);
+    EXPECT_EQ(buf.remaining(), 5);
+    EXPECT_TRUE(buf.hasRemaining());
+}
+
 // ============================================================
 // ByteBuffer specific tests
 // ============================================================
@@ -180,7 +278,7 @@ TEST_F(ByteBufferTest, GetUnderflowThrows)
     buf.put(std::byte{1});
     buf.flip();
     (void)buf.get();
-    EXPECT_THROW(buf.get(), std::underflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
 TEST_F(ByteBufferTest, PutVectorOverflowThrows)
@@ -195,7 +293,7 @@ TEST_F(ByteBufferTest, GetVectorUnderflowThrows)
     ByteBuffer buf(3);
     buf.put(std::byte{1});
     buf.flip();
-    EXPECT_THROW(buf.get(5), std::underflow_error);
+    EXPECT_THROW({ (void)buf.get(5); }, std::underflow_error);
 }
 
 TEST_F(ByteBufferTest, GetZeroLength)
@@ -264,6 +362,104 @@ TEST_F(ByteBufferTest, GetRemainingEmpty)
     EXPECT_TRUE(buf.getRemaining().empty());
 }
 
+// ============================================================================
+// ByteBuffer: Boundary Condition Tests
+// ============================================================================
+
+TEST_F(ByteBufferTest, ZeroCapacity)
+{
+    ByteBuffer buf(0);
+    EXPECT_EQ(buf.capacity(), 0);
+    EXPECT_THROW(buf.put(std::byte{1}), std::overflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
+}
+
+TEST_F(ByteBufferTest, FillToExactCapacity)
+{
+    ByteBuffer buf(3);
+    buf.put(std::byte{1});
+    buf.put(std::byte{2});
+    buf.put(std::byte{3});
+    EXPECT_FALSE(buf.hasRemaining());
+    EXPECT_THROW(buf.put(std::byte{4}), std::overflow_error);
+}
+
+TEST_F(ByteBufferTest, PutThenGetThenPutAgain)
+{
+    ByteBuffer buf(5);
+    buf.put(std::byte{1});
+    buf.put(std::byte{2});
+    buf.flip();
+    (void)buf.get();
+    (void)buf.get();
+    EXPECT_FALSE(buf.hasRemaining());
+    // After consuming all data, re-fill via compact+put or clear+put
+    buf.clear();
+    buf.put(std::byte{3});
+    buf.put(std::byte{4});
+    buf.flip();
+    EXPECT_EQ(buf.get(), std::byte{3});
+    EXPECT_EQ(buf.get(), std::byte{4});
+}
+
+TEST_F(ByteBufferTest, CompactOnEmptyBuffer)
+{
+    ByteBuffer buf(5);
+    buf.compact();
+    // compact moves remaining (limit-pos = 5) bytes and sets pos=5
+    EXPECT_EQ(buf.position(), 5);
+    EXPECT_EQ(buf.limit(), 5);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(ByteBufferTest, GetExactRemaining)
+{
+    ByteBuffer buf(10);
+    buf.put(std::byte{1});
+    buf.put(std::byte{2});
+    buf.put(std::byte{3});
+    buf.flip();
+    const auto result = buf.get(3);
+    ASSERT_EQ(result.size(), 3);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(ByteBufferTest, PutVectorExactFit)
+{
+    ByteBuffer buf(3);
+    const std::vector src = {std::byte{1}, std::byte{2}, std::byte{3}};
+    EXPECT_NO_THROW(buf.put(src));
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(ByteBufferTest, PutSingleAfterVector)
+{
+    ByteBuffer buf(5);
+    const std::vector src = {std::byte{1}, std::byte{2}};
+    buf.put(src);
+    buf.put(std::byte{3});
+    buf.flip();
+    EXPECT_EQ(buf.get(), std::byte{1});
+    EXPECT_EQ(buf.get(), std::byte{2});
+    EXPECT_EQ(buf.get(), std::byte{3});
+}
+
+TEST_F(ByteBufferTest, MultipleCompactCycles)
+{
+    ByteBuffer buf(3);
+    buf.put(std::byte{1});
+    buf.put(std::byte{2});
+    buf.put(std::byte{3});
+    buf.flip();
+    (void)buf.get(); // pos=1
+    buf.compact();   // pos=2, limit=3
+    buf.put(std::byte{4});
+    buf.flip();
+    EXPECT_EQ(buf.get(), std::byte{2});
+    EXPECT_EQ(buf.get(), std::byte{3});
+    EXPECT_EQ(buf.get(), std::byte{4});
+}
+
 // ============================================================
 // CharBuffer specific tests
 // ============================================================
@@ -311,7 +507,7 @@ TEST_F(CharBufferTest, GetUnderflowThrows)
     buf.put('x');
     buf.flip();
     (void)buf.get();
-    EXPECT_THROW(buf.get(), std::underflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
 TEST_F(CharBufferTest, Compact)
@@ -352,6 +548,73 @@ TEST_F(CharBufferTest, GetRemainingEmptyAtLimit)
     (void)buf.get();
     (void)buf.get();
     EXPECT_TRUE(buf.getRemaining().empty());
+}
+
+// ============================================================================
+// CharBuffer: Boundary Condition Tests
+// ============================================================================
+
+TEST_F(CharBufferTest, ZeroCapacity)
+{
+    CharBuffer buf(0);
+    EXPECT_EQ(buf.capacity(), 0);
+    EXPECT_THROW(buf.put('x'), std::overflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
+}
+
+TEST_F(CharBufferTest, FillToExactCapacity)
+{
+    CharBuffer buf(3);
+    buf.put('a');
+    buf.put('b');
+    buf.put('c');
+    EXPECT_FALSE(buf.hasRemaining());
+    EXPECT_THROW(buf.put('d'), std::overflow_error);
+}
+
+TEST_F(CharBufferTest, PutEmptyString)
+{
+    CharBuffer buf(5);
+    EXPECT_NO_THROW(buf.put(""));
+    EXPECT_EQ(buf.position(), 0);
+}
+
+TEST_F(CharBufferTest, PutStringExactFit)
+{
+    CharBuffer buf(5);
+    EXPECT_NO_THROW(buf.put("hello"));
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(CharBufferTest, CompactOnEmptyBuffer)
+{
+    CharBuffer buf(5);
+    buf.compact();
+    EXPECT_EQ(buf.position(), 5);
+    EXPECT_EQ(buf.limit(), 5);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(CharBufferTest, PutAfterFlipWithoutRead)
+{
+    CharBuffer buf(5);
+    buf.put('a');
+    buf.flip(); // limit=1, pos=0
+    // Overwrite without reading
+    buf.put('b');
+    buf.flip();
+    EXPECT_EQ(buf.get(), 'b');
+}
+
+TEST_F(CharBufferTest, GetRemainingAfterClear)
+{
+    CharBuffer buf(5);
+    buf.put("hello");
+    buf.clear();
+    // clear() resets position and limit but does not erase internal buffer,
+    // so getRemaining returns all content between position and limit
+    EXPECT_EQ(buf.getRemaining(), "hello");
+    EXPECT_FALSE(buf.getRemaining().empty());
 }
 
 // ============================================================
@@ -407,7 +670,7 @@ TEST_F(DoubleBufferTest, GetUnderflowThrows)
     buf.put(1.0);
     buf.flip();
     (void)buf.get();
-    EXPECT_THROW(buf.get(), std::underflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
 TEST_F(DoubleBufferTest, PutVectorOverflowThrows)
@@ -447,6 +710,53 @@ TEST_F(DoubleBufferTest, GetRemaining)
     ASSERT_EQ(remaining.size(), 2);
     EXPECT_DOUBLE_EQ(remaining[0], 2.0);
     EXPECT_DOUBLE_EQ(remaining[1], 3.0);
+}
+
+// ============================================================================
+// DoubleBuffer: Boundary Condition Tests
+// ============================================================================
+
+TEST_F(DoubleBufferTest, ZeroCapacity)
+{
+    DoubleBuffer buf(0);
+    EXPECT_EQ(buf.capacity(), 0);
+    EXPECT_THROW(buf.put(1.0), std::overflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
+}
+
+TEST_F(DoubleBufferTest, FillToExactCapacity)
+{
+    DoubleBuffer buf(3);
+    buf.put(1.0);
+    buf.put(2.0);
+    buf.put(3.0);
+    EXPECT_FALSE(buf.hasRemaining());
+    EXPECT_THROW(buf.put(4.0), std::overflow_error);
+}
+
+TEST_F(DoubleBufferTest, PutVectorExactFit)
+{
+    DoubleBuffer buf(3);
+    const std::vector src = {1.0, 2.0, 3.0};
+    EXPECT_NO_THROW(buf.put(src));
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(DoubleBufferTest, PutEmptyVector)
+{
+    DoubleBuffer buf(5);
+    const std::vector<double> empty;
+    EXPECT_NO_THROW(buf.put(empty));
+    EXPECT_EQ(buf.position(), 0);
+}
+
+TEST_F(DoubleBufferTest, CompactOnEmptyBuffer)
+{
+    DoubleBuffer buf(5);
+    buf.compact();
+    EXPECT_EQ(buf.position(), 5);
+    EXPECT_EQ(buf.limit(), 5);
+    EXPECT_FALSE(buf.hasRemaining());
 }
 
 // ============================================================
@@ -525,7 +835,7 @@ TEST_F(FloatBufferTest, GetUnderflowThrows)
     buf.put(1.0f);
     buf.flip();
     (void)buf.get();
-    EXPECT_THROW(buf.get(), std::underflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
 TEST_F(FloatBufferTest, GetVectorUnderflowThrows)
@@ -533,7 +843,7 @@ TEST_F(FloatBufferTest, GetVectorUnderflowThrows)
     FloatBuffer buf(3);
     buf.put(1.0f);
     buf.flip();
-    EXPECT_THROW(buf.get(5), std::underflow_error);
+    EXPECT_THROW({ (void)buf.get(5); }, std::underflow_error);
 }
 
 TEST_F(FloatBufferTest, PutVectorOverflowThrows)
@@ -581,6 +891,51 @@ TEST_F(FloatBufferTest, GetRemaining)
     EXPECT_FLOAT_EQ(remaining[0], 2.0f);
 }
 
+// ============================================================================
+// FloatBuffer: Boundary Condition Tests
+// ============================================================================
+
+TEST_F(FloatBufferTest, CompactOnEmptyBuffer)
+{
+    FloatBuffer buf(5);
+    buf.compact();
+    EXPECT_EQ(buf.position(), 5);
+    EXPECT_EQ(buf.limit(), 5);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(FloatBufferTest, PutAfterFlip)
+{
+    FloatBuffer buf(5);
+    buf.put(1.0f);
+    buf.put(2.0f);
+    buf.flip();       // limit=2, pos=0
+    (void)buf.get();  // pos=1
+    buf.compact();    // pos=1, limit=5
+    buf.put(3.0f);
+    buf.flip();
+    EXPECT_FLOAT_EQ(buf.get(), 2.0f);
+    EXPECT_FLOAT_EQ(buf.get(), 3.0f);
+}
+
+TEST_F(FloatBufferTest, PutVectorExactFit)
+{
+    FloatBuffer buf(3);
+    const std::vector src = {1.0f, 2.0f, 3.0f};
+    EXPECT_NO_THROW(buf.put(src));
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(FloatBufferTest, FillToExactCapacity)
+{
+    FloatBuffer buf(3);
+    buf.put(1.0f);
+    buf.put(2.0f);
+    buf.put(3.0f);
+    EXPECT_FALSE(buf.hasRemaining());
+    EXPECT_THROW(buf.put(4.0f), std::overflow_error);
+}
+
 // ============================================================
 // IntBuffer specific tests
 // ============================================================
@@ -619,7 +974,7 @@ TEST_F(IntBufferTest, PutIndexOutOfRangeThrows)
 TEST_F(IntBufferTest, GetIndexOutOfRangeThrows)
 {
     const IntBuffer buf(5);
-    EXPECT_THROW(buf.get(5), std::out_of_range);
+    EXPECT_THROW({ (void)buf.get(5); }, std::out_of_range);
 }
 
 TEST_F(IntBufferTest, PutOverflowThrows)
@@ -636,7 +991,7 @@ TEST_F(IntBufferTest, GetUnderflowThrows)
     buf.put(1);
     buf.flip();
     (void)buf.get();
-    EXPECT_THROW(buf.get(), std::underflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
 TEST_F(IntBufferTest, Compact)
@@ -669,6 +1024,50 @@ TEST_F(IntBufferTest, GetRemaining)
     ASSERT_EQ(remaining.size(), 2);
     EXPECT_EQ(remaining[0], 20);
     EXPECT_EQ(remaining[1], 30);
+}
+
+// ============================================================================
+// IntBuffer: Boundary Condition Tests
+// ============================================================================
+
+TEST_F(IntBufferTest, CompactOnEmptyBuffer)
+{
+    IntBuffer buf(5);
+    buf.compact();
+    EXPECT_EQ(buf.position(), 5);
+    EXPECT_EQ(buf.limit(), 5);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(IntBufferTest, FillToExactCapacity)
+{
+    IntBuffer buf(3);
+    buf.put(1);
+    buf.put(2);
+    buf.put(3);
+    EXPECT_FALSE(buf.hasRemaining());
+    EXPECT_THROW(buf.put(4), std::overflow_error);
+}
+
+TEST_F(IntBufferTest, PutNegativeValues)
+{
+    IntBuffer buf(5);
+    buf.put(-1);
+    buf.put(0);
+    buf.put(INT_MIN);
+    buf.put(INT_MAX);
+    buf.flip();
+    EXPECT_EQ(buf.get(), -1);
+    EXPECT_EQ(buf.get(), 0);
+    EXPECT_EQ(buf.get(), INT_MIN);
+    EXPECT_EQ(buf.get(), INT_MAX);
+}
+
+TEST_F(IntBufferTest, PutAndGetByIndexOutOfBounds)
+{
+    IntBuffer buf(5);
+    EXPECT_THROW({ (void)buf.get(5); }, std::out_of_range);
+    EXPECT_THROW(buf.put(5, 100), std::out_of_range);
 }
 
 // ============================================================
@@ -704,7 +1103,7 @@ TEST_F(LongBufferTest, GetUnderflowThrows)
     buf.put(1);
     buf.flip();
     (void)buf.get();
-    EXPECT_THROW(buf.get(), std::underflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
 TEST_F(LongBufferTest, Compact)
@@ -737,6 +1136,41 @@ TEST_F(LongBufferTest, GetRemaining)
     EXPECT_EQ(remaining[0], 200);
 }
 
+// ============================================================================
+// LongBuffer: Boundary Condition Tests
+// ============================================================================
+
+TEST_F(LongBufferTest, CompactOnEmptyBuffer)
+{
+    LongBuffer buf(5);
+    buf.compact();
+    EXPECT_EQ(buf.position(), 5);
+    EXPECT_EQ(buf.limit(), 5);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(LongBufferTest, FillToExactCapacity)
+{
+    LongBuffer buf(3);
+    buf.put(1LL);
+    buf.put(2LL);
+    buf.put(3LL);
+    EXPECT_FALSE(buf.hasRemaining());
+    EXPECT_THROW(buf.put(4LL), std::overflow_error);
+}
+
+TEST_F(LongBufferTest, PutNegativeValues)
+{
+    LongBuffer buf(5);
+    buf.put(-1LL);
+    buf.put(LLONG_MIN);
+    buf.put(LLONG_MAX);
+    buf.flip();
+    EXPECT_EQ(buf.get(), -1);
+    EXPECT_EQ(buf.get(), LLONG_MIN);
+    EXPECT_EQ(buf.get(), LLONG_MAX);
+}
+
 // ============================================================
 // ShortBuffer specific tests
 // ============================================================
@@ -747,7 +1181,7 @@ class ShortBufferTest : public testing::Test
 
 TEST_F(ShortBufferTest, Wrap)
 {
-    const int16_t arr[] = {10, 20, 30};
+    constexpr int16_t arr[] = {10, 20, 30};
     const ShortBuffer buf = ShortBuffer::wrap(arr, 3);
     EXPECT_EQ(buf.capacity(), 3);
     EXPECT_EQ(buf.position(), 0);
@@ -756,7 +1190,7 @@ TEST_F(ShortBufferTest, Wrap)
 
 TEST_F(ShortBufferTest, WrapCopiesData)
 {
-    const int16_t arr[] = {100, 200, 300};
+    constexpr int16_t arr[] = {100, 200, 300};
     ShortBuffer buf = ShortBuffer::wrap(arr, 3);
     EXPECT_EQ(buf.get(), 100);
     EXPECT_EQ(buf.get(), 200);
@@ -798,7 +1232,7 @@ TEST_F(ShortBufferTest, PutIndexOutOfRangeThrows)
 TEST_F(ShortBufferTest, GetIndexOutOfRangeThrows)
 {
     const ShortBuffer buf(5);
-    EXPECT_THROW(buf.get(5), std::out_of_range);
+    EXPECT_THROW({ (void)buf.get(5); }, std::out_of_range);
 }
 
 TEST_F(ShortBufferTest, PutOverflowThrows)
@@ -815,7 +1249,7 @@ TEST_F(ShortBufferTest, GetUnderflowThrows)
     buf.put(1);
     buf.flip();
     (void)buf.get();
-    EXPECT_THROW(buf.get(), std::underflow_error);
+    EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
 TEST_F(ShortBufferTest, Data)
@@ -869,4 +1303,317 @@ TEST_F(ShortBufferTest, GetRemaining)
     ASSERT_EQ(remaining.size(), 2);
     EXPECT_EQ(remaining[0], 20);
     EXPECT_EQ(remaining[1], 30);
+}
+
+// ============================================================================
+// ShortBuffer: Boundary Condition Tests
+// ============================================================================
+
+TEST_F(ShortBufferTest, WrapZeroLength)
+{
+    constexpr int16_t arr[1] = {0};
+    const ShortBuffer buf = ShortBuffer::wrap(arr, 0);
+    EXPECT_EQ(buf.capacity(), 0);
+    EXPECT_EQ(buf.position(), 0);
+    EXPECT_EQ(buf.limit(), 0);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(ShortBufferTest, WrapLargeArray)
+{
+    const std::vector<int16_t> vec(1000, 42);
+    ShortBuffer buf = ShortBuffer::wrap(vec.data(), vec.size());
+    EXPECT_EQ(buf.capacity(), 1000);
+    for (int i = 0; i < 1000; ++i)
+    {
+        EXPECT_EQ(buf.get(), 42);
+    }
+}
+
+TEST_F(ShortBufferTest, CompactOnEmptyBuffer)
+{
+    ShortBuffer buf(5);
+    buf.compact();
+    EXPECT_EQ(buf.position(), 5);
+    EXPECT_EQ(buf.limit(), 5);
+    EXPECT_FALSE(buf.hasRemaining());
+}
+
+TEST_F(ShortBufferTest, FillToExactCapacity)
+{
+    ShortBuffer buf(3);
+    buf.put(1);
+    buf.put(2);
+    buf.put(3);
+    EXPECT_FALSE(buf.hasRemaining());
+    EXPECT_THROW(buf.put(4), std::overflow_error);
+}
+
+TEST_F(ShortBufferTest, PutNegativeValues)
+{
+    ShortBuffer buf(5);
+    buf.put(-1);
+    buf.put(SHRT_MIN);
+    buf.put(SHRT_MAX);
+    buf.flip();
+    EXPECT_EQ(buf.get(), -1);
+    EXPECT_EQ(buf.get(), SHRT_MIN);
+    EXPECT_EQ(buf.get(), SHRT_MAX);
+}
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+TEST_F(ByteBufferTest, MultipleCompactCycles_Repeated)
+{
+    for (int cycle = 0; cycle < 5; ++cycle)
+    {
+        ByteBuffer buf(3);
+        buf.put(std::byte{1});
+        buf.put(std::byte{2});
+        buf.put(std::byte{3});
+        buf.flip();
+        (void)buf.get();
+        buf.compact();
+        buf.put(std::byte{static_cast<std::byte>(4 + cycle)});
+        buf.flip();
+        EXPECT_EQ(buf.get(), std::byte{2});
+        EXPECT_EQ(buf.get(), std::byte{3});
+        EXPECT_EQ(buf.get(), std::byte{static_cast<std::byte>(4 + cycle)});
+    }
+}
+
+TEST_F(ByteBufferTest, ReadWriteCycle)
+{
+    ByteBuffer buf(5);
+    buf.put(std::byte{1});
+    buf.put(std::byte{2});
+    buf.flip();
+    EXPECT_EQ(buf.get(), std::byte{1});
+    EXPECT_EQ(buf.get(), std::byte{2});
+    buf.clear();
+    buf.put(std::byte{3});
+    buf.put(std::byte{4});
+    buf.flip();
+    EXPECT_EQ(buf.get(), std::byte{3});
+    EXPECT_EQ(buf.get(), std::byte{4});
+}
+
+TEST_F(CharBufferTest, MultipleCompactCycles)
+{
+    for (int cycle = 0; cycle < 3; ++cycle)
+    {
+        CharBuffer buf(3);
+        buf.put('a');
+        buf.put('b');
+        buf.put('c');
+        buf.flip();
+        (void)buf.get();
+        buf.compact();
+        buf.put(static_cast<char>('d' + cycle));
+        buf.flip();
+        EXPECT_EQ(buf.getRemaining().size(), 3);
+    }
+}
+
+TEST_F(CharBufferTest, ReadWriteCycle)
+{
+    CharBuffer buf(5);
+    buf.put("ab");
+    buf.flip();
+    EXPECT_EQ(buf.getRemaining(), "ab");
+    buf.clear();
+    buf.put("cd");
+    buf.flip();
+    EXPECT_EQ(buf.getRemaining(), "cd");
+}
+
+TEST_F(DoubleBufferTest, MultipleCompactCycles)
+{
+    for (int cycle = 0; cycle < 3; ++cycle)
+    {
+        DoubleBuffer buf(3);
+        buf.put(1.0);
+        buf.put(2.0);
+        buf.put(3.0);
+        buf.flip();
+        (void)buf.get();
+        buf.compact();
+        buf.put(static_cast<double>(4.0 + cycle));
+        buf.flip();
+        EXPECT_DOUBLE_EQ(buf.get(), 2.0);
+        EXPECT_DOUBLE_EQ(buf.get(), 3.0);
+        EXPECT_DOUBLE_EQ(buf.get(), static_cast<double>(4.0 + cycle));
+    }
+}
+
+TEST_F(DoubleBufferTest, ReadWriteCycle)
+{
+    DoubleBuffer buf(5);
+    buf.put(1.0);
+    buf.put(2.0);
+    buf.flip();
+    (void)buf.get();
+    (void)buf.get();
+    buf.clear();
+    buf.put(3.0);
+    buf.put(4.0);
+    buf.flip();
+    EXPECT_DOUBLE_EQ(buf.get(), 3.0);
+    EXPECT_DOUBLE_EQ(buf.get(), 4.0);
+}
+
+TEST_F(FloatBufferTest, MultipleCompactCycles)
+{
+    for (int cycle = 0; cycle < 3; ++cycle)
+    {
+        FloatBuffer buf(3);
+        buf.put(1.0f);
+        buf.put(2.0f);
+        buf.put(3.0f);
+        buf.flip();
+        (void)buf.get();
+        buf.compact();
+        buf.put(static_cast<float>(4.0f + cycle));
+        buf.flip();
+        EXPECT_FLOAT_EQ(buf.get(), 2.0f);
+        EXPECT_FLOAT_EQ(buf.get(), 3.0f);
+        EXPECT_FLOAT_EQ(buf.get(), static_cast<float>(4.0f + cycle));
+    }
+}
+
+TEST_F(FloatBufferTest, ReadWriteCycle)
+{
+    FloatBuffer buf(5);
+    buf.put(1.0f);
+    buf.put(2.0f);
+    buf.flip();
+    (void)buf.get();
+    (void)buf.get();
+    buf.clear();
+    buf.put(3.0f);
+    buf.put(4.0f);
+    buf.flip();
+    EXPECT_FLOAT_EQ(buf.get(), 3.0f);
+    EXPECT_FLOAT_EQ(buf.get(), 4.0f);
+}
+
+TEST_F(IntBufferTest, MultipleCompactCycles)
+{
+    for (int cycle = 0; cycle < 3; ++cycle)
+    {
+        IntBuffer buf(3);
+        buf.put(1);
+        buf.put(2);
+        buf.put(3);
+        buf.flip();
+        (void)buf.get();
+        buf.compact();
+        buf.put(4 + cycle);
+        buf.flip();
+        EXPECT_EQ(buf.get(), 2);
+        EXPECT_EQ(buf.get(), 3);
+        EXPECT_EQ(buf.get(), 4 + cycle);
+    }
+}
+
+TEST_F(IntBufferTest, ReadWriteCycle)
+{
+    IntBuffer buf(5);
+    buf.put(1);
+    buf.put(2);
+    buf.flip();
+    EXPECT_EQ(buf.get(), 1);
+    EXPECT_EQ(buf.get(), 2);
+    buf.clear();
+    buf.put(3);
+    buf.put(4);
+    buf.flip();
+    EXPECT_EQ(buf.get(), 3);
+    EXPECT_EQ(buf.get(), 4);
+}
+
+TEST_F(LongBufferTest, MultipleCompactCycles)
+{
+    for (int cycle = 0; cycle < 3; ++cycle)
+    {
+        LongBuffer buf(3);
+        buf.put(10);
+        buf.put(20);
+        buf.put(30);
+        buf.flip();
+        (void)buf.get();
+        buf.compact();
+        buf.put(40 + cycle);
+        buf.flip();
+        EXPECT_EQ(buf.get(), 20);
+        EXPECT_EQ(buf.get(), 30);
+        EXPECT_EQ(buf.get(), 40 + cycle);
+    }
+}
+
+TEST_F(LongBufferTest, ReadWriteCycle)
+{
+    LongBuffer buf(5);
+    buf.put(100);
+    buf.put(200);
+    buf.flip();
+    EXPECT_EQ(buf.get(), 100);
+    EXPECT_EQ(buf.get(), 200);
+    buf.clear();
+    buf.put(300);
+    buf.put(400);
+    buf.flip();
+    EXPECT_EQ(buf.get(), 300);
+    EXPECT_EQ(buf.get(), 400);
+}
+
+TEST_F(ShortBufferTest, PutAfterFlip)
+{
+    ShortBuffer buf(5);
+    buf.put(1);
+    buf.put(2);
+    buf.flip();
+    (void)buf.get();
+    buf.compact();
+    buf.put(3);
+    buf.flip();
+    EXPECT_EQ(buf.get(), 2);
+    EXPECT_EQ(buf.get(), 3);
+}
+
+TEST_F(ShortBufferTest, MultipleCompactCycles)
+{
+    for (int cycle = 0; cycle < 3; ++cycle)
+    {
+        ShortBuffer buf(3);
+        buf.put(1);
+        buf.put(2);
+        buf.put(3);
+        buf.flip();
+        (void)buf.get();
+        buf.compact();
+        buf.put(static_cast<int16_t>(4 + cycle));
+        buf.flip();
+        EXPECT_EQ(buf.get(), 2);
+        EXPECT_EQ(buf.get(), 3);
+        EXPECT_EQ(buf.get(), static_cast<int16_t>(4 + cycle));
+    }
+}
+
+TEST_F(ShortBufferTest, ReadWriteCycle)
+{
+    ShortBuffer buf(5);
+    buf.put(10);
+    buf.put(20);
+    buf.flip();
+    EXPECT_EQ(buf.get(), 10);
+    EXPECT_EQ(buf.get(), 20);
+    buf.clear();
+    buf.put(30);
+    buf.put(40);
+    buf.flip();
+    EXPECT_EQ(buf.get(), 30);
+    EXPECT_EQ(buf.get(), 40);
 }

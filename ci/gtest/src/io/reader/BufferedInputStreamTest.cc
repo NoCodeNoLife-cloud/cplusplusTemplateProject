@@ -93,3 +93,83 @@ TEST_F(BufferedInputStreamTest, CustomBufferSize)
     BufferedInputStream custom(std::move(inner), 4);
     EXPECT_EQ(custom.read(), std::byte{0x01});
 }
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+TEST_F(BufferedInputStreamTest, ReadBufAfterClose)
+{
+    stream_->close();
+    std::vector<std::byte> buf(3);
+    const auto n = stream_->read(buf, 0, 3);
+    EXPECT_EQ(n, 0);
+}
+
+TEST_F(BufferedInputStreamTest, SkipBeyondEnd)
+{
+    const auto skipped = stream_->skip(100);
+    EXPECT_EQ(skipped, 5);
+}
+
+TEST_F(BufferedInputStreamTest, SkipAfterClose)
+{
+    stream_->close();
+    const auto skipped = stream_->skip(5);
+    EXPECT_EQ(skipped, 0);
+}
+
+TEST_F(BufferedInputStreamTest, AvailableAfterRead)
+{
+    (void)stream_->read();
+    EXPECT_EQ(stream_->available(), 4);
+}
+
+TEST_F(BufferedInputStreamTest, AvailableAfterClose)
+{
+    stream_->close();
+    EXPECT_EQ(stream_->available(), 0);
+}
+
+TEST_F(BufferedInputStreamTest, CloseIsIdempotent)
+{
+    stream_->close();
+    EXPECT_NO_THROW(stream_->close());
+}
+
+TEST_F(BufferedInputStreamTest, ReadSingleAfterExhaustion)
+{
+    for (int i = 0; i < 5; ++i) (void)stream_->read();
+    const auto byte = stream_->read();
+    EXPECT_EQ(byte, static_cast<std::byte>(-1));
+}
+
+TEST_F(BufferedInputStreamTest, ResetAfterMark)
+{
+    stream_->mark(10);
+    (void)stream_->read();
+    (void)stream_->read();
+    stream_->reset();
+    EXPECT_EQ(stream_->read(), std::byte{0x10});
+}
+
+TEST_F(BufferedInputStreamTest, MultipleMarkReset)
+{
+    stream_->mark(10);
+    (void)stream_->read();
+    stream_->reset();
+    (void)stream_->read();
+    stream_->mark(10);
+    (void)stream_->read();
+    stream_->reset();
+    EXPECT_EQ(stream_->read(), std::byte{0x20});
+}
+
+TEST_F(BufferedInputStreamTest, ReadBufAfterExhaustion)
+{
+    std::vector<std::byte> buf(5);
+    auto n = stream_->read(buf, 0, 5);
+    EXPECT_EQ(n, 5);
+    n = stream_->read(buf, 0, 3);
+    EXPECT_EQ(n, 0);
+}

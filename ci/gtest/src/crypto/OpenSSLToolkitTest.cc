@@ -116,3 +116,141 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException)
 
     EXPECT_THROW(OpenSSLToolkit::decryptAES256CBC(emptyCiphertext, password), std::runtime_error);
 }
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test encryption/decryption with large plaintext
+ * @details Verifies that large data can be encrypted and decrypted
+ */
+TEST(OpenSSLToolkitTest, EncryptDecrypt_LargePlaintext)
+{
+    const std::string large(100000, 'L');
+    const std::string password = "password";
+
+    const auto ciphertext = OpenSSLToolkit::encryptAES256CBC(large, password);
+    EXPECT_GE(ciphertext.size(), OpenSSLToolkit::kSaltSize + OpenSSLToolkit::kIvSize);
+
+    const auto decrypted = OpenSSLToolkit::decryptAES256CBC(ciphertext, password);
+    EXPECT_EQ(large, decrypted);
+}
+
+/**
+ * @brief Test encryption/decryption with binary data (null bytes)
+ * @details Verifies that binary data with null bytes can be encrypted/decrypted
+ */
+TEST(OpenSSLToolkitTest, EncryptDecrypt_BinaryData)
+{
+    std::vector<unsigned char> binary(256);
+    for (int i = 0; i < 256; ++i)
+    {
+        binary[i] = static_cast<unsigned char>(i);
+    }
+    const std::string plaintext(reinterpret_cast<const char*>(binary.data()), binary.size());
+    const std::string password = "password";
+
+    const auto ciphertext = OpenSSLToolkit::encryptAES256CBC(plaintext, password);
+    EXPECT_GE(ciphertext.size(), OpenSSLToolkit::kSaltSize + OpenSSLToolkit::kIvSize);
+
+    const auto decrypted = OpenSSLToolkit::decryptAES256CBC(ciphertext, password);
+    EXPECT_EQ(plaintext, decrypted);
+}
+
+/**
+ * @brief Test encryption/decryption with Unicode plaintext
+ * @details Verifies that Unicode strings can be encrypted and decrypted
+ */
+TEST(OpenSSLToolkitTest, EncryptDecrypt_UnicodePlaintext)
+{
+    const std::string plaintext = "Hello, 世界! 🌍🔐 密码测试";
+    const std::string password = "password";
+
+    const auto ciphertext = OpenSSLToolkit::encryptAES256CBC(plaintext, password);
+    EXPECT_GE(ciphertext.size(), OpenSSLToolkit::kSaltSize + OpenSSLToolkit::kIvSize);
+
+    const auto decrypted = OpenSSLToolkit::decryptAES256CBC(ciphertext, password);
+    EXPECT_EQ(plaintext, decrypted);
+}
+
+/**
+ * @brief Test derivKey with empty password
+ * @details Verifies that key derivation works with empty password
+ */
+TEST(OpenSSLToolkitTest, DeriveKey_EmptyPassword)
+{
+    std::array<unsigned char, OpenSSLToolkit::kSaltSize> salt{};
+    salt.fill(0x42);
+    std::array<unsigned char, OpenSSLToolkit::kKeySize> key{};
+
+    EXPECT_NO_THROW(OpenSSLToolkit::deriveKey("", key, salt));
+}
+
+/**
+ * @brief Test deriveKey with empty salt
+ * @details Verifies that key derivation works with empty salt (zero-filled)
+ */
+TEST(OpenSSLToolkitTest, DeriveKey_EmptySalt)
+{
+    const std::string password = "password";
+    std::array<unsigned char, OpenSSLToolkit::kSaltSize> salt{};
+    salt.fill(0x00);
+    std::array<unsigned char, OpenSSLToolkit::kKeySize> key{};
+
+    EXPECT_NO_THROW(OpenSSLToolkit::deriveKey(password, key, salt));
+}
+
+/**
+ * @brief Test multiple round-trips with same password
+ * @details Verifies that multiple encrypt/decrypt cycles work consistently
+ */
+TEST(OpenSSLToolkitTest, EncryptDecrypt_MultipleRoundTrips)
+{
+    const std::vector<std::string> plaintexts = {
+        "First message",
+        "Second message with different content",
+        "Third: 12345!@#$%"
+    };
+    const std::string password = "password";
+
+    for (const auto& pt : plaintexts)
+    {
+        const auto ciphertext = OpenSSLToolkit::encryptAES256CBC(pt, password);
+        EXPECT_GE(ciphertext.size(), OpenSSLToolkit::kSaltSize + OpenSSLToolkit::kIvSize);
+
+        const auto decrypted = OpenSSLToolkit::decryptAES256CBC(ciphertext, password);
+        EXPECT_EQ(pt, decrypted);
+    }
+}
+
+/**
+ * @brief Test encryption with empty password
+ * @details Verifies that encryption works with empty password
+ */
+TEST(OpenSSLToolkitTest, EncryptDecrypt_EmptyPassword)
+{
+    const std::string plaintext = "test message";
+    const std::string empty_password;
+
+    const auto ciphertext = OpenSSLToolkit::encryptAES256CBC(plaintext, empty_password);
+    EXPECT_GE(ciphertext.size(), OpenSSLToolkit::kSaltSize + OpenSSLToolkit::kIvSize);
+
+    const auto decrypted = OpenSSLToolkit::decryptAES256CBC(ciphertext, empty_password);
+    EXPECT_EQ(plaintext, decrypted);
+}
+
+/**
+ * @brief Test encryption produces unique ciphertexts each time
+ * @details Same plaintext+password should produce different ciphertexts due to random salt/IV
+ */
+TEST(OpenSSLToolkitTest, Encrypt_UniqueCiphertexts)
+{
+    const std::string plaintext = "same message";
+    const std::string password = "password";
+
+    const auto c1 = OpenSSLToolkit::encryptAES256CBC(plaintext, password);
+    const auto c2 = OpenSSLToolkit::encryptAES256CBC(plaintext, password);
+
+    EXPECT_NE(c1, c2);
+}

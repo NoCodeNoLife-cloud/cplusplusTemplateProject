@@ -468,3 +468,35 @@ TEST_F(RedBlackTreeTest, Insert_LargeDataset_AllNodesReachable)
         EXPECT_EQ(values[i], i);
     }
 }
+
+// ============================================================================
+// Move Semantics Tests
+// ============================================================================
+
+TEST_F(RedBlackTreeTest, MoveConstructor)
+{
+    RedBlackTree<int> tree;
+    tree.insert(10);
+    tree.insert(20);
+    tree.insert(5);
+    auto root = tree.getRoot();
+    ASSERT_NE(root, nullptr);
+
+    RedBlackTree<int> other(std::move(tree));
+    ASSERT_NE(other.getRoot(), nullptr);
+    EXPECT_EQ(tree.getRoot(), nullptr);
+}
+
+TEST_F(RedBlackTreeTest, MoveAssignment)
+{
+    RedBlackTree<int> tree;
+    tree.insert(1);
+    tree.insert(2);
+    ASSERT_NE(tree.getRoot(), nullptr);
+
+    RedBlackTree<int> other;
+    other.insert(99);
+    other = std::move(tree);
+    ASSERT_NE(other.getRoot(), nullptr);
+    EXPECT_EQ(tree.getRoot(), nullptr);
+}

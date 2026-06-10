@@ -332,3 +332,177 @@ TEST_F(PasswordPolicyTest, Validate_StrictPolicy)
 
     EXPECT_TRUE(policy.validate("Complex@Pass123")); // Meets all
 }
+
+// ============================================================================
+// Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test password validation when min_length > max_length
+ * @details No password can satisfy this invalid configuration
+ */
+TEST_F(PasswordPolicyTest, Validate_MinGreaterThanMax)
+{
+    const PasswordPolicy policy(10, 5);
+
+    EXPECT_FALSE(policy.validate("Abc@1xyz"));
+    EXPECT_FALSE(policy.validate("Ab1!"));
+    EXPECT_FALSE(policy.validate("AAAAAAAAAA"));
+}
+
+/**
+ * @brief Test password with zero minimum length
+ * @details Empty password should pass when min=0 and all requirements disabled
+ */
+TEST_F(PasswordPolicyTest, Validate_ZeroMinLength)
+{
+    PasswordPolicy policy(0, 64);
+    policy.set_require_uppercase(false);
+    policy.set_require_lowercase(false);
+    policy.set_require_digits(false);
+    policy.set_require_special(false);
+
+    EXPECT_TRUE(policy.validate(""));
+    EXPECT_TRUE(policy.validate("a"));
+}
+
+/**
+ * @brief Test password with equal min and max length
+ * @details Only passwords of exactly this length are accepted
+ */
+TEST_F(PasswordPolicyTest, Validate_MinEqualsMax)
+{
+    PasswordPolicy policy(5, 5);
+    policy.set_require_uppercase(false);
+    policy.set_require_lowercase(false);
+    policy.set_require_digits(false);
+    policy.set_require_special(false);
+
+    EXPECT_TRUE(policy.validate("abcde"));  // exactly 5
+    EXPECT_FALSE(policy.validate("abcd"));  // 4 - too short
+    EXPECT_FALSE(policy.validate("abcdef")); // 6 - too long
+}
+
+/**
+ * @brief Test that spaces count as special characters
+ * @details is_special_char includes std::isspace, so a space meets the
+ *          special character requirement
+ */
+TEST_F(PasswordPolicyTest, Validate_SpaceAsSpecial)
+{
+    PasswordPolicy policy(8, 64);
+    policy.set_require_uppercase(true);
+    policy.set_require_lowercase(true);
+    policy.set_require_digits(true);
+    policy.set_require_special(true);
+
+    EXPECT_TRUE(policy.validate("Ab1 xyz!"));   // space as special, 8 chars
+    EXPECT_TRUE(policy.validate("Ab1\txyz!"));   // tab as special, 8 chars
+    EXPECT_TRUE(policy.validate("A b 1 x z!"));  // multiple spaces, 10 chars
+}
+
+/**
+ * @brief Test password with only uppercase characters
+ * @details Validates else-if chain: a single uppercase char is classified
+ *          as uppercase only, not as special even if std::ispunct is false.
+ */
+TEST_F(PasswordPolicyTest, Validate_OnlyUppercase)
+{
+    PasswordPolicy policy(4, 64);
+    policy.set_require_uppercase(true);
+    policy.set_require_lowercase(false);
+    policy.set_require_digits(false);
+    policy.set_require_special(false);
+
+    EXPECT_TRUE(policy.validate("ABCDEFGH"));
+    EXPECT_FALSE(policy.validate("abcdefgh")); // no uppercase
+}
+
+/**
+ * @brief Test password with only special characters
+ * @details Verifies that a password composed entirely of punctuation
+ *          satisfies the special character requirement
+ */
+TEST_F(PasswordPolicyTest, Validate_OnlySpecial)
+{
+    PasswordPolicy policy(4, 64);
+    policy.set_require_uppercase(false);
+    policy.set_require_lowercase(false);
+    policy.set_require_digits(false);
+    policy.set_require_special(true);
+
+    EXPECT_TRUE(policy.validate("!@#$%^"));
+    EXPECT_TRUE(policy.validate("...?!!"));
+    EXPECT_FALSE(policy.validate("abcd")); // no special
+}
+
+/**
+ * @brief Test the else-if chain detects multiple categories in one password
+ * @details A single character like 'A' should be classified as uppercase,
+ *          not as a special character (even though it's also std::ispunct=false).
+ *          Verifies that all requirements are independently checked.
+ */
+TEST_F(PasswordPolicyTest, Validate_ElseIfChainMultiChar)
+{
+    PasswordPolicy policy(4, 64);
+    policy.set_require_uppercase(true);
+    policy.set_require_lowercase(true);
+    policy.set_require_digits(true);
+    policy.set_require_special(true);
+
+    // Each char satisfies exactly one category in the else-if chain
+    EXPECT_TRUE(policy.validate("Ab1!"));
+    EXPECT_TRUE(policy.validate("A!1b"));
+    EXPECT_TRUE(policy.validate("1bA!"));
+}
+
+/**
+ * @brief Test validate with a password at exactly min_length boundary
+ *        when min_length is a large value
+ * @details Verifies allocation boundary for long passwords at limit
+ */
+TEST_F(PasswordPolicyTest, Validate_LargeMinLength)
+{
+    PasswordPolicy policy(1000, 2000);
+    policy.set_require_uppercase(false);
+    policy.set_require_lowercase(false);
+    policy.set_require_digits(false);
+    policy.set_require_special(false);
+
+    const std::string exactMin(1000, 'x');
+    const std::string oneShort(999, 'x');
+    EXPECT_TRUE(policy.validate(exactMin));
+    EXPECT_FALSE(policy.validate(oneShort));
+}
+
+/**
+ * @brief Test setter for max_login_attempts and its getter
+ * @details The max_login_attempts parameter is configured via constructor
+ *          but not via individual setter
+ */
+TEST_F(PasswordPolicyTest, MaxLoginAttemptsBoundary)
+{
+    const PasswordPolicy policy(8, 64, true, true, true, true, 0);
+    EXPECT_EQ(policy.max_login_attempts(), 0);
+
+    const PasswordPolicy policyLarge(8, 64, true, true, true, true, SIZE_MAX);
+    EXPECT_EQ(policyLarge.max_login_attempts(), SIZE_MAX);
+}
+
+/**
+ * @brief Test password containing non-ASCII bytes (char > 127)
+ * @details The implementation casts to unsigned char before passing to
+ *          std::isupper etc. Verifies no undefined behavior for negative char values.
+ */
+TEST_F(PasswordPolicyTest, Validate_NonAsciiBytes)
+{
+    PasswordPolicy policy(2, 64);
+    policy.set_require_uppercase(false);
+    policy.set_require_lowercase(false);
+    policy.set_require_digits(false);
+    policy.set_require_special(false);
+
+    // Bytes with high bit set (negative char values)
+    EXPECT_TRUE(policy.validate("\x80\xff"));
+    EXPECT_TRUE(policy.validate("\xa0\xc0"));
+}

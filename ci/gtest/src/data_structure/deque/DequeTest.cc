@@ -810,3 +810,38 @@ TEST_F(DequeTest, PopFrontBack_AllElements)
     deque.pop_back();
     EXPECT_TRUE(deque.empty());
 }
+
+// ============================================================================
+// Move Semantics Tests
+// ============================================================================
+
+TEST_F(DequeTest, MoveConstructor)
+{
+    Deque<int> deque;
+    deque.push_back(1);
+    deque.push_back(2);
+    deque.push_back(3);
+    EXPECT_EQ(deque.size(), 3);
+
+    Deque<int> other(std::move(deque));
+    EXPECT_EQ(other.size(), 3);
+    EXPECT_EQ(other.front(), 1);
+    EXPECT_EQ(other.back(), 3);
+    EXPECT_TRUE(deque.empty());
+}
+
+TEST_F(DequeTest, MoveAssignment)
+{
+    Deque<int> deque;
+    deque.push_back(10);
+    deque.push_back(20);
+    EXPECT_EQ(deque.size(), 2);
+
+    Deque<int> other;
+    other.push_back(99);
+    other = std::move(deque);
+    EXPECT_EQ(other.size(), 2);
+    EXPECT_EQ(other.front(), 10);
+    EXPECT_EQ(other.back(), 20);
+    EXPECT_TRUE(deque.empty());
+}

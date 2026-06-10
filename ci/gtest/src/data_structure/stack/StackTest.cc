@@ -535,3 +535,36 @@ TEST_F(StackTest, ZeroValues_CorrectHandling)
     stack.pop();
     EXPECT_EQ(stack.top(), 0);
 }
+
+// ============================================================================
+// Move Semantics Tests
+// ============================================================================
+
+TEST_F(StackTest, MoveConstructor)
+{
+    Stack<int> stack;
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+    EXPECT_EQ(stack.size(), 3);
+
+    Stack<int> other(std::move(stack));
+    EXPECT_EQ(other.size(), 3);
+    EXPECT_EQ(other.top(), 3);
+    EXPECT_TRUE(stack.empty());
+}
+
+TEST_F(StackTest, MoveAssignment)
+{
+    Stack<int> stack;
+    stack.push(10);
+    stack.push(20);
+    EXPECT_EQ(stack.size(), 2);
+
+    Stack<int> other;
+    other.push(99);
+    other = std::move(stack);
+    EXPECT_EQ(other.size(), 2);
+    EXPECT_EQ(other.top(), 20);
+    EXPECT_TRUE(stack.empty());
+}

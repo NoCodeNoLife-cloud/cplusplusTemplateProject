@@ -16,10 +16,14 @@ target_include_directories(${CI_GTEST_PROJECT} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/../../proto
         ${CMAKE_CURRENT_SOURCE_DIR}/../../log/src
         ${CMAKE_CURRENT_SOURCE_DIR}/../../client/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../server/src
 )
 
 target_sources(${CI_GTEST_PROJECT} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/../../client/src/auth/AuthRpcParam.cc
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../server/src/auth/AuthRpcParam.cc
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../server/src/config/ConfigParam.cc
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../client/src/config/ConfigParam.cc
 )
 
 # Link required libraries

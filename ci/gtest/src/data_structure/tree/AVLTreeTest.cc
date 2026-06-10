@@ -404,3 +404,37 @@ TEST_F(AVLTreeTest, InsertAndRemove_LargeDataset_Consistent)
         }
     }
 }
+
+// ============================================================================
+// Move Semantics Tests
+// ============================================================================
+
+TEST_F(AVLTreeTest, MoveConstructor)
+{
+    AVLTree<int> tree;
+    tree.insert(10);
+    tree.insert(20);
+    tree.insert(5);
+    EXPECT_TRUE(tree.find(10));
+
+    AVLTree<int> other(std::move(tree));
+    EXPECT_TRUE(other.find(10));
+    EXPECT_TRUE(other.find(20));
+    EXPECT_TRUE(other.find(5));
+    EXPECT_FALSE(tree.find(10));
+}
+
+TEST_F(AVLTreeTest, MoveAssignment)
+{
+    AVLTree<int> tree;
+    tree.insert(100);
+    tree.insert(200);
+    EXPECT_TRUE(tree.find(100));
+
+    AVLTree<int> other;
+    other.insert(999);
+    other = std::move(tree);
+    EXPECT_TRUE(other.find(100));
+    EXPECT_TRUE(other.find(200));
+    EXPECT_FALSE(tree.find(100));
+}

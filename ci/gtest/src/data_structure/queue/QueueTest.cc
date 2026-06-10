@@ -613,8 +613,43 @@ TEST_F(QueueTest, SingleElementCycle_Correctness)
         EXPECT_EQ(queue.front(), i);
         EXPECT_EQ(queue.back(), i);
         queue.pop();
-        EXPECT_TRUE(queue.empty());
     }
+    EXPECT_TRUE(queue.empty());
+}
+
+// ============================================================================
+// Move Semantics Tests
+// ============================================================================
+
+TEST_F(QueueTest, MoveConstructor)
+{
+    Queue<int> queue;
+    queue.push(1);
+    queue.push(2);
+    queue.push(3);
+    EXPECT_EQ(queue.size(), 3);
+
+    Queue<int> other(std::move(queue));
+    EXPECT_EQ(other.size(), 3);
+    EXPECT_EQ(other.front(), 1);
+    EXPECT_EQ(other.back(), 3);
+    EXPECT_TRUE(queue.empty());
+}
+
+TEST_F(QueueTest, MoveAssignment)
+{
+    Queue<int> queue;
+    queue.push(10);
+    queue.push(20);
+    EXPECT_EQ(queue.size(), 2);
+
+    Queue<int> other;
+    other.push(99);
+    other = std::move(queue);
+    EXPECT_EQ(other.size(), 2);
+    EXPECT_EQ(other.front(), 10);
+    EXPECT_EQ(other.back(), 20);
+    EXPECT_TRUE(queue.empty());
 }
 
 /**

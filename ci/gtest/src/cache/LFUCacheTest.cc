@@ -390,3 +390,238 @@ TEST_F(LFUCacheTest, Get_ConstVersion)
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), "one");
 }
+
+// ============================================================================
+// Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test eviction chain with multiple insertions at capacity
+ * @details Each new insertion beyond capacity triggers exactly one eviction
+ */
+TEST_F(LFUCacheTest, Eviction_MultipleEvictions)
+{
+    LFUCache<int, std::string> cache(2);
+
+    EXPECT_TRUE(cache.put(1, "one"));
+    EXPECT_TRUE(cache.put(2, "two"));
+    EXPECT_TRUE(cache.put(3, "three")); // evicts 1 (LRU among freq=1)
+    EXPECT_FALSE(cache.contains(1));
+    EXPECT_TRUE(cache.contains(2));
+    EXPECT_TRUE(cache.contains(3));
+
+    EXPECT_TRUE(cache.put(4, "four")); // evicts 2 (LRU among freq=1)
+    EXPECT_FALSE(cache.contains(2));
+    EXPECT_TRUE(cache.contains(3));
+    EXPECT_TRUE(cache.contains(4));
+}
+
+/**
+ * @brief Test frequency distribution with mixed access patterns
+ * @details Items with different frequencies are evicted correctly:
+ *          lowest frequency first, then LRU within same frequency
+ */
+TEST_F(LFUCacheTest, Eviction_ComplexFrequencyDistribution)
+{
+    LFUCache<int, std::string> cache(4);
+
+    EXPECT_TRUE(cache.put(1, "one"));   // freq=1
+    EXPECT_TRUE(cache.put(2, "two"));   // freq=1
+    EXPECT_TRUE(cache.put(3, "three")); // freq=1
+    EXPECT_TRUE(cache.put(4, "four"));  // freq=1
+
+    // Increase frequencies: 1→3, 2→2, 3→1, 4→1
+    (void)cache.get(1);
+    (void)cache.get(1);
+    (void)cache.get(2);
+
+    // Freq: 1→3, 2→2, 3→1 (LRU: 3→4), 4→1 (LRU: 4→3)
+    // Add 5: should evict 3 (lowest freq=1, LRU among 3,4 is 3)
+    EXPECT_TRUE(cache.put(5, "five"));
+    EXPECT_FALSE(cache.contains(3));
+    EXPECT_TRUE(cache.contains(1));
+    EXPECT_TRUE(cache.contains(2));
+    EXPECT_TRUE(cache.contains(4));
+    EXPECT_TRUE(cache.contains(5));
+}
+
+/**
+ * @brief Test string keys and values with LFU cache
+ * @details Verifies cache works with non-integer key and value types
+ */
+TEST_F(LFUCacheTest, PutAndGet_StringKeys)
+{
+    LFUCache<std::string, int> cache(3);
+
+    EXPECT_TRUE(cache.put("alpha", 1));
+    EXPECT_TRUE(cache.put("beta", 2));
+    EXPECT_TRUE(cache.put("gamma", 3));
+
+    EXPECT_EQ(cache.get("alpha").value_or(-1), 1);
+    EXPECT_EQ(cache.get("beta").value_or(-1), 2);
+    EXPECT_EQ(cache.get("gamma").value_or(-1), 3);
+    EXPECT_FALSE(cache.get("delta").has_value());
+
+    // Increase freq of alpha
+    (void)cache.get("alpha");
+    (void)cache.get("alpha");
+
+    // Add delta beyond capacity: should evict beta (freq=1, LRU)
+    EXPECT_TRUE(cache.put("delta", 4));
+    EXPECT_FALSE(cache.contains("beta"));
+    EXPECT_TRUE(cache.contains("alpha"));
+    EXPECT_TRUE(cache.contains("gamma"));
+    EXPECT_TRUE(cache.contains("delta"));
+}
+
+/**
+ * @brief Test remove operation that creates empty frequency list
+ * @details Removing the only item at a frequency level should clean up
+ *          the empty frequency list and update min_freq_
+ */
+TEST_F(LFUCacheTest, Remove_EmptiesFrequencyList)
+{
+    LFUCache<int, std::string> cache(2);
+
+    EXPECT_TRUE(cache.put(1, "one"));
+    EXPECT_TRUE(cache.put(2, "two"));
+    // Increase freq of key 1
+    (void)cache.get(1);
+    (void)cache.get(1);
+
+    // Remove key 1 (freq=3). The freq=3 list becomes empty.
+    EXPECT_TRUE(cache.remove(1));
+    EXPECT_FALSE(cache.contains(1));
+
+    // Add items: only key2 remains, capacity=2
+    EXPECT_TRUE(cache.put(3, "three")); // key3:freq1 (size=1)
+    EXPECT_TRUE(cache.put(4, "four"));  // size=2, reaches capacity, both freq=1
+    // Both key2 and key3 are at freq=1; key2 was added first (LRU in freq=1)
+    EXPECT_FALSE(cache.contains(2));
+    EXPECT_TRUE(cache.contains(3));
+    EXPECT_TRUE(cache.contains(4));
+}
+
+/**
+ * @brief Test clear followed by reuse
+ * @details After clearing, the cache should accept new entries
+ */
+TEST_F(LFUCacheTest, ClearThenReuse)
+{
+    LFUCache<int, std::string> cache(2);
+
+    EXPECT_TRUE(cache.put(1, "one"));
+    EXPECT_TRUE(cache.put(2, "two"));
+    cache.clear();
+    EXPECT_TRUE(cache.empty());
+
+    // Reuse after clear
+    EXPECT_TRUE(cache.put(3, "three"));
+    EXPECT_TRUE(cache.put(4, "four"));
+    EXPECT_EQ(cache.size(), 2);
+    EXPECT_EQ(cache.get(3).value_or(""), "three");
+    EXPECT_EQ(cache.get(4).value_or(""), "four");
+
+    // Verify old keys are gone
+    EXPECT_FALSE(cache.contains(1));
+    EXPECT_FALSE(cache.contains(2));
+}
+
+/**
+ * @brief Test get after eviction and reinsertion of same key
+ * @details After a key is evicted, it should be insertable again as new
+ */
+TEST_F(LFUCacheTest, Eviction_ReinsertEvictedKey)
+{
+    LFUCache<int, std::string> cache(2);
+
+    EXPECT_TRUE(cache.put(1, "one"));
+    EXPECT_TRUE(cache.put(2, "two"));
+    EXPECT_TRUE(cache.put(3, "three")); // evicts 1
+    EXPECT_FALSE(cache.contains(1));
+
+    // Reinsert key 1 - should work as a new entry
+    EXPECT_TRUE(cache.put(1, "ONE"));
+    EXPECT_TRUE(cache.contains(1));
+    EXPECT_EQ(cache.get(1).value_or(""), "ONE");
+}
+
+/**
+ * @brief Test put with large number of items
+ * @stress Verifies cache handles many items without errors
+ */
+TEST_F(LFUCacheTest, LargeScalePutAndGet)
+{
+    LFUCache<int, int> cache(100);
+
+    for (int i = 0; i < 100; ++i)
+    {
+        EXPECT_TRUE(cache.put(i, i * 10));
+    }
+    EXPECT_EQ(cache.size(), 100);
+
+    // Access all items
+    for (int i = 0; i < 100; ++i)
+    {
+        auto val = cache.get(i);
+        ASSERT_TRUE(val.has_value());
+        EXPECT_EQ(val.value(), i * 10);
+    }
+
+    // Add more items to trigger evictions
+    for (int i = 100; i < 150; ++i)
+    {
+        EXPECT_TRUE(cache.put(i, i * 10));
+    }
+    // Size should still be at capacity
+    EXPECT_EQ(cache.size(), 100);
+}
+
+/**
+ * @brief Test get on non-const cache updates frequency, const does not
+ * @details Verifies the const/non-const get distinction for frequency tracking
+ */
+TEST_F(LFUCacheTest, Get_ConstDoesNotUpdateFrequency)
+{
+    LFUCache<int, std::string> cache(2);
+
+    EXPECT_TRUE(cache.put(1, "one"));
+    EXPECT_TRUE(cache.put(2, "two"));
+
+    // Const get should NOT increase frequency
+    const auto& constCache = cache;
+    (void)constCache.get(1);
+    (void)constCache.get(1);
+
+    // Add third item: if freq of key1 is still 1, it gets evicted (LRU)
+    EXPECT_TRUE(cache.put(3, "three"));
+
+    // key1 should be evicted because const get didn't update frequency
+    EXPECT_FALSE(cache.contains(1));
+    EXPECT_TRUE(cache.contains(2));
+    EXPECT_TRUE(cache.contains(3));
+}
+
+/**
+ * @brief Test capacity 2 edge case with various frequencies
+ * @details Smallest multi-element cache boundary
+ */
+TEST_F(LFUCacheTest, EdgeCase_CapacityTwo)
+{
+    LFUCache<int, std::string> cache(2);
+
+    EXPECT_TRUE(cache.put(1, "one"));
+    EXPECT_TRUE(cache.put(2, "two"));
+    (void)cache.get(1); // key1→freq2, key2→freq1
+    EXPECT_TRUE(cache.put(3, "three")); // evicts key2
+    EXPECT_FALSE(cache.contains(2));
+    EXPECT_TRUE(cache.contains(1));
+    EXPECT_TRUE(cache.contains(3));
+
+    // Now key1→freq2, key3→freq1
+    (void)cache.get(3); // key3→freq2, key1→freq2
+    EXPECT_TRUE(cache.put(4, "four")); // both freq2, LRU among them is key1
+    EXPECT_FALSE(cache.contains(1));
+    EXPECT_TRUE(cache.contains(3));
+    EXPECT_TRUE(cache.contains(4));
+}

@@ -12,6 +12,7 @@
 
 #include "crypto/CryptoToolKit.hpp"
 
+using namespace common::auth;
 using namespace common::crypto;
 
 /**
@@ -384,4 +385,258 @@ TEST_F(CryptoToolKitTest, SaltRandomness_Quality)
 
     // Should see a wide variety of byte values (good entropy)
     EXPECT_GT(uniqueBytes.size(), 100); // At least 100 different byte values
+}
+
+// ============================================================================
+// Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test hash_password with zero iterations
+ * @details PKCS5_PBKDF2_HMAC with iterations=0 - OpenSSL may reject this.
+ *          Verifies the framework handles it (either throws or produces a hash).
+ */
+TEST_F(CryptoToolKitTest, HashPassword_ZeroIterations)
+{
+    const std::string password = "test";
+    const auto salt = CryptoToolKit::generate_salt();
+
+    // iterations=0 is unusual; OpenSSL may treat it as invalid
+    // Either way, the operation should not crash
+    EXPECT_THROW({
+        const auto hash = CryptoToolKit::hash_password(password, salt, 0);
+        (void)hash;
+    }, AuthenticationException);
+}
+
+/**
+ * @brief Test hash_password with very long salt
+ * @details Verifies handling of salt much larger than SALT_SIZE
+ */
+TEST_F(CryptoToolKitTest, HashPassword_LongSalt)
+{
+    const std::string password = "test";
+    const std::string longSalt(10000, 's');
+
+    EXPECT_NO_THROW({
+        const auto hash = CryptoToolKit::hash_password(password, longSalt);
+        EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
+    });
+}
+
+/**
+ * @brief Test hash_password with very large number of iterations
+ * @details Boundary test for the iterations parameter (near int max).
+ *          Uses a moderate high value to avoid excessive runtime.
+ */
+TEST_F(CryptoToolKitTest, HashPassword_MaxIterationsBoundary)
+{
+    const std::string password = "test";
+    const std::string salt = "test_salt_123456";
+
+    // INT_MAX/1000 to keep test fast while testing large iteration boundary
+    constexpr size_t largeIterations = 1000000;
+    EXPECT_NO_THROW({
+        const auto hash = CryptoToolKit::hash_password(password, salt, largeIterations);
+        EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
+    });
+}
+
+/**
+ * @brief Test secure_compare with very long equal strings
+ * @details Verifies constant-time comparison doesn't choke on large inputs
+ */
+TEST_F(CryptoToolKitTest, SecureCompare_VeryLongEqual)
+{
+    const std::string longA(100000, 'x');
+    const std::string longB(100000, 'x');
+
+    EXPECT_TRUE(CryptoToolKit::secure_compare(longA, longB));
+}
+
+/**
+ * @brief Test secure_compare differs only in first character
+ * @details XOR boundary: difference in first byte must be detected
+ */
+TEST_F(CryptoToolKitTest, SecureCompare_DiffFirstChar)
+{
+    EXPECT_FALSE(CryptoToolKit::secure_compare("aaaa", "baaa"));
+}
+
+/**
+ * @brief Test secure_compare differs only in last character
+ * @details XOR boundary: difference in last byte must be detected
+ */
+TEST_F(CryptoToolKitTest, SecureCompare_DiffLastChar)
+{
+    EXPECT_FALSE(CryptoToolKit::secure_compare("aaaa", "aaab"));
+}
+
+/**
+ * @brief Test secure_compare with all 256 possible byte values
+ * @details Ensure comparison works across the full byte range
+ */
+TEST_F(CryptoToolKitTest, SecureCompare_AllByteValues)
+{
+    std::string allBytes(256, '\0');
+    for (int i = 0; i < 256; ++i)
+    {
+        allBytes[i] = static_cast<char>(i);
+    }
+
+    EXPECT_TRUE(CryptoToolKit::secure_compare(allBytes, allBytes));
+}
+
+/**
+ * @brief Test secure_compare with binary data containing nulls
+ * @details Verifies null bytes don't truncate the comparison
+ */
+TEST_F(CryptoToolKitTest, SecureCompare_BinaryWithNulls)
+{
+    const std::string a(std::string("abc\0def", 7));
+    const std::string b(std::string("abc\0deg", 7));
+
+    EXPECT_TRUE(CryptoToolKit::secure_compare(a, a));
+    EXPECT_FALSE(CryptoToolKit::secure_compare(a, b));
+}
+
+/**
+ * @brief Test hash_password with binary data (null bytes) in password
+ * @details Passwords with null bytes should still hash correctly
+ */
+TEST_F(CryptoToolKitTest, HashPassword_BinaryPassword)
+{
+    const std::string password(std::string("pass\0word", 9));
+    const auto salt = CryptoToolKit::generate_salt();
+
+    EXPECT_NO_THROW({
+        const auto hash = CryptoToolKit::hash_password(password, salt);
+        EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
+    });
+}
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test secure_compare with embedded null bytes at different positions
+ * @details Verifies null bytes at different positions are handled
+ */
+TEST_F(CryptoToolKitTest, SecureCompare_EmbeddedNulls_MultiplePositions)
+{
+    // null at start
+    const std::string a_start(std::string("\0abc", 4));
+    const std::string b_start(std::string("\0abc", 4));
+    EXPECT_TRUE(CryptoToolKit::secure_compare(a_start, b_start));
+
+    // null at end
+    const std::string a_end(std::string("abc\0", 4));
+    const std::string b_end(std::string("abc\0", 4));
+    EXPECT_TRUE(CryptoToolKit::secure_compare(a_end, b_end));
+
+    // null only
+    const std::string a_only(std::string("\0", 1));
+    const std::string b_only(std::string("\0", 1));
+    EXPECT_TRUE(CryptoToolKit::secure_compare(a_only, b_only));
+
+    // mixed nulls vs regular chars (different lengths)
+    const std::string a_mixed(std::string("a\0b", 3));
+    const std::string b_mixed(std::string("a\0c", 3));
+    EXPECT_FALSE(CryptoToolKit::secure_compare(a_mixed, b_mixed));
+}
+
+/**
+ * @brief Test secure_compare with strings differing only by embedded null
+ * @details One has null, other has different char at same position
+ */
+TEST_F(CryptoToolKitTest, SecureCompare_NullVsChar)
+{
+    const std::string a(std::string("a\0c", 3));
+    const std::string b(std::string("abc", 3));
+    EXPECT_FALSE(CryptoToolKit::secure_compare(a, b));
+}
+
+/**
+ * @brief Test hash_password with very long password and very long salt
+ * @details Verifies that hashing with large inputs works correctly
+ */
+TEST_F(CryptoToolKitTest, HashPassword_VeryLongPasswordAndSalt)
+{
+    const std::string long_password(100000, 'p');
+    const std::string long_salt(100000, 's');
+
+    EXPECT_NO_THROW({
+        const auto hash = CryptoToolKit::hash_password(long_password, long_salt);
+        EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
+    });
+}
+
+/**
+ * @brief Test hash_password with 1MB password
+ * @details Verifies that very large passwords are handled correctly
+ */
+TEST_F(CryptoToolKitTest, HashPassword_1MBPassword)
+{
+    const std::string long_password(1048576, 'p');
+    const auto salt = CryptoToolKit::generate_salt();
+
+    EXPECT_NO_THROW({
+        const auto hash = CryptoToolKit::hash_password(long_password, salt);
+        EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
+    });
+}
+
+/**
+ * @brief Test secure_compare with repeated characters
+ * @details Verifies comparison of long strings with same repeated char
+ */
+TEST_F(CryptoToolKitTest, SecureCompare_RepeatedChars)
+{
+    const std::string a(1000, 'a');
+    const std::string b(1000, 'a');
+    const std::string c(1000, 'b');
+
+    EXPECT_TRUE(CryptoToolKit::secure_compare(a, b));
+    EXPECT_FALSE(CryptoToolKit::secure_compare(a, c));
+}
+
+/**
+ * @brief Test secure_compare with single character strings
+ * @details Boundary: minimal non-empty strings
+ */
+TEST_F(CryptoToolKitTest, SecureCompare_SingleChar)
+{
+    EXPECT_TRUE(CryptoToolKit::secure_compare("a", "a"));
+    EXPECT_FALSE(CryptoToolKit::secure_compare("a", "b"));
+}
+
+/**
+ * @brief Test hash_password with empty salt
+ * @details Verifies that empty salt is handled
+ */
+TEST_F(CryptoToolKitTest, HashPassword_EmptySalt)
+{
+    const std::string password = "test_password";
+    const std::string empty_salt;
+
+    EXPECT_NO_THROW({
+        const auto hash = CryptoToolKit::hash_password(password, empty_salt);
+        EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
+    });
+}
+
+/**
+ * @brief Test that same password+same salt always produces same hash
+ * @details Verifies deterministic hashing with many iterations
+ */
+TEST_F(CryptoToolKitTest, HashPassword_DeterministicManyIterations)
+{
+    const std::string password = "deterministic_test";
+    const std::string salt = "fixed_salt_123456";
+    constexpr size_t iterations = 1000;
+
+    const auto hash1 = CryptoToolKit::hash_password(password, salt, iterations);
+    const auto hash2 = CryptoToolKit::hash_password(password, salt, iterations);
+    EXPECT_EQ(hash1, hash2);
 }

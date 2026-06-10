@@ -395,3 +395,154 @@ TEST_F(SHAToolkitTest, SHA256Strategy_CopyDeleted)
                   "SHA256Strategy should not be copy assignable");
     SUCCEED() << "SHA256Strategy copy operations are properly deleted";
 }
+
+// ============================================================================
+// Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test hashing of very large input (100KB+)
+ * @details Verifies toolkit handles large data correctly
+ */
+TEST_F(SHAToolkitTest, LargeInput_100KB)
+{
+    const std::string large(100000, 'X');
+    const auto hex = SHAToolkit::hashStringToHexSHA256(large);
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(hex->length(), 64);
+}
+
+/**
+ * @brief Test hashing of 1MB input
+ * @details Verifies toolkit handles very large data correctly
+ */
+TEST_F(SHAToolkitTest, LargeInput_1MB)
+{
+    const std::string large(1048576, 'Y');
+    const auto hex = SHAToolkit::hashStringToHexSHA256(large);
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(hex->length(), 64);
+}
+
+/**
+ * @brief Test hashing with Unicode/Chinese input
+ * @details Verifies that Unicode strings are hashed correctly
+ */
+TEST_F(SHAToolkitTest, UnicodeInput_SHA256)
+{
+    const std::string unicode = "Hello, 世界! 🌍🔐 密码测试";
+    const auto hex = SHAToolkit::hashStringToHexSHA256(unicode);
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(hex->length(), 64);
+}
+
+/**
+ * @brief Test Unicode input with SHA-1
+ * @details Verifies that Unicode strings are hashed with SHA-1
+ */
+TEST_F(SHAToolkitTest, UnicodeInput_SHA1)
+{
+    const std::string unicode = "Hello, 世界! 🌍🔐 密码测试";
+    const auto hex = SHAToolkit::hashStringToHexSHA1(unicode);
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(hex->length(), 40);
+}
+
+/**
+ * @brief Test complete lifecycle: update, finalize, reset, update, finalize
+ * @details Verifies that toolkit can be fully reused after reset
+ */
+TEST_F(SHAToolkitTest, FullLifecycle)
+{
+    auto toolkit = SHAToolkit::createSHA256();
+
+    EXPECT_TRUE(toolkit.update("first cycle"));
+    const auto hash1 = toolkit.finalize();
+    ASSERT_TRUE(hash1.has_value());
+    EXPECT_EQ(hash1->size(), 32);
+
+    EXPECT_TRUE(toolkit.reset());
+    EXPECT_TRUE(toolkit.update("second cycle"));
+    const auto hash2 = toolkit.finalize();
+    ASSERT_TRUE(hash2.has_value());
+    EXPECT_EQ(hash2->size(), 32);
+
+    EXPECT_NE(*hash1, *hash2);
+}
+
+/**
+ * @brief Test getDigestSize and getHexDigestSize after finalize
+ * @details Verifies that size queries work even after finalize
+ */
+TEST_F(SHAToolkitTest, DigestSizesAfterFinalize)
+{
+    auto toolkit = SHAToolkit::createSHA256();
+    EXPECT_TRUE(toolkit.update("data"));
+    (void)toolkit.finalize();
+
+    // Size queries should still work after finalize
+    EXPECT_EQ(toolkit.getDigestSize(), 32);
+    EXPECT_EQ(toolkit.getHexDigestSize(), 64);
+}
+
+/**
+ * @brief Test getDigestSize and getHexDigestSize after finalize (SHA-1)
+ * @details Verifies that size queries work after finalize for SHA-1
+ */
+TEST_F(SHAToolkitTest, DigestSizesAfterFinalize_SHA1)
+{
+    auto toolkit = SHAToolkit::createSHA1();
+    EXPECT_TRUE(toolkit.update("data"));
+    (void)toolkit.finalize();
+
+    EXPECT_EQ(toolkit.getDigestSize(), 20);
+    EXPECT_EQ(toolkit.getHexDigestSize(), 40);
+}
+
+/**
+ * @brief Test newline and whitespace characters
+ * @details Verifies that special whitespace is handled correctly
+ */
+TEST_F(SHAToolkitTest, WhitespaceInput)
+{
+    const std::string input = "line1\nline2\t\0embedded\0nulls";
+    const auto hex = SHAToolkit::hashStringToHexSHA256(std::string_view(input));
+    ASSERT_TRUE(hex.has_value());
+    EXPECT_EQ(hex->length(), 64);
+}
+
+/**
+ * @brief Test binary data (non-printable bytes)
+ * @details Verifies that binary data is hashed correctly
+ */
+TEST_F(SHAToolkitTest, BinaryInput_SHA256)
+{
+    std::vector<uint8_t> binary(256);
+    for (int i = 0; i < 256; ++i)
+    {
+        binary[i] = static_cast<uint8_t>(i);
+    }
+    auto toolkit = SHAToolkit::createSHA256();
+    EXPECT_TRUE(toolkit.update(reinterpret_cast<const char*>(binary.data()), binary.size()));
+    const auto hash = toolkit.finalize();
+    ASSERT_TRUE(hash.has_value());
+    EXPECT_EQ(hash->size(), 32);
+}
+
+/**
+ * @brief Test digest size consistency between toolkit and strategy
+ * @details Verifies that digest size is consistent across both methods
+ */
+TEST_F(SHAToolkitTest, DigestSizeConsistency)
+{
+    {
+        auto toolkit = SHAToolkit::createSHA256();
+        EXPECT_EQ(toolkit.getDigestSize(), SHA256Strategy::DIGEST_SIZE);
+        EXPECT_EQ(toolkit.getHexDigestSize(), SHA256Strategy::HEX_DIGEST_SIZE);
+    }
+    {
+        auto toolkit = SHAToolkit::createSHA1();
+        EXPECT_EQ(toolkit.getDigestSize(), SHA1Strategy::DIGEST_SIZE);
+        EXPECT_EQ(toolkit.getHexDigestSize(), SHA1Strategy::HEX_DIGEST_SIZE);
+    }
+}

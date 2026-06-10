@@ -83,3 +83,76 @@ TEST_F(BufferedReaderTest, ReadLineWithCarriageReturn)
     EXPECT_EQ(br.readLine(), "ab");
     EXPECT_EQ(br.readLine(), "cd");
 }
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+TEST_F(BufferedReaderTest, ReadAfterClose)
+{
+    reader_->close();
+    EXPECT_THROW(reader_->read(), std::runtime_error);
+}
+
+TEST_F(BufferedReaderTest, ReadBufAfterClose)
+{
+    reader_->close();
+    std::vector<char> buf(3);
+    EXPECT_THROW(reader_->read(buf, 0, 3), std::runtime_error);
+}
+
+TEST_F(BufferedReaderTest, SkipBeyondEnd)
+{
+    const auto skipped = reader_->skip(100);
+    EXPECT_EQ(skipped, 13);
+    EXPECT_TRUE(reader_->readLine().empty());
+}
+
+TEST_F(BufferedReaderTest, Ready)
+{
+    EXPECT_TRUE(reader_->ready());
+}
+
+TEST_F(BufferedReaderTest, ReadLineEmptyLines)
+{
+    auto inner = std::make_unique<StringReader>("\n\n\n");
+    BufferedReader br(std::move(inner));
+    EXPECT_EQ(br.readLine(), "");
+    EXPECT_EQ(br.readLine(), "");
+    EXPECT_EQ(br.readLine(), "");
+    EXPECT_TRUE(br.readLine().empty());
+}
+
+TEST_F(BufferedReaderTest, ReadBufWithOffset)
+{
+    std::vector<char> buf(10);
+    const auto n = reader_->read(buf, 2, 5);
+    EXPECT_EQ(n, 5);
+    EXPECT_EQ(buf[2], 'h');
+    EXPECT_EQ(buf[6], 'o');
+}
+
+TEST_F(BufferedReaderTest, LargeInput)
+{
+    const std::string large(10000, 'x');
+    auto inner = std::make_unique<StringReader>(large);
+    BufferedReader br(std::move(inner));
+    EXPECT_EQ(br.readLine(), large);
+}
+
+TEST_F(BufferedReaderTest, ReadLineAllNewlines)
+{
+    auto inner = std::make_unique<StringReader>("\r\n\r\n\r\n");
+    BufferedReader br(std::move(inner));
+    EXPECT_TRUE(br.readLine().empty());
+    EXPECT_TRUE(br.readLine().empty());
+    EXPECT_TRUE(br.readLine().empty());
+    EXPECT_TRUE(br.readLine().empty());
+}
+
+TEST_F(BufferedReaderTest, ReadZeroLength)
+{
+    std::vector<char> buf(3);
+    const int n = reader_->read(buf, 0, 0);
+    EXPECT_EQ(n, 0);
+}

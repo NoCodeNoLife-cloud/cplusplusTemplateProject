@@ -298,3 +298,142 @@ TEST_F(AuthenticationExceptionTest, CommonAuthErrorMessages)
         EXPECT_STREQ(ex.what(), msg.c_str());
     }
 }
+
+// ============================================================================
+// Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test self-assignment of exception
+ * @details Verifies that self-assignment via default operator= does not corrupt state
+ */
+TEST_F(AuthenticationExceptionTest, SelfAssignment)
+{
+    AuthenticationException ex(std::string("Self-assign test"));
+    // Self-assignment should be safe (standard default operator=)
+    ex = ex;
+
+    EXPECT_STREQ(ex.what(), "Self-assign test");
+}
+
+/**
+ * @brief Test move-assignment from a moved-from object
+ * @details Verifies that the default move-assignment leaves a valid state
+ */
+TEST_F(AuthenticationExceptionTest, MoveAssignmentFromMoved)
+{
+    AuthenticationException ex1(std::string("Original"));
+    AuthenticationException ex2(std::string("Temp"));
+
+    AuthenticationException ex3(std::move(ex1));
+    // ex1 is now moved-from; assign ex2 into it
+    ex1 = ex2;
+
+    EXPECT_STREQ(ex1.what(), "Temp");
+}
+
+/**
+ * @brief Test exception message containing binary null bytes
+ * @details Verifies handling of embedded null characters in message string
+ */
+TEST_F(AuthenticationExceptionTest, BinaryDataInMessage)
+{
+    // String with internal null bytes (length 8, contains \0 at position 3)
+    const std::string message(std::string("abc\0defgh", 8));
+    const AuthenticationException ex(message);
+
+    // what() returns a C-string, so it will truncate at the first null
+    // but the underlying std::string stores the full data
+    EXPECT_EQ(std::string(ex.what()), std::string("abc"));
+}
+
+/**
+ * @brief Test exception_ptr round-trip through std::make_exception_ptr
+ * @details Verifies that the exception can be packaged and re-thrown
+ */
+TEST_F(AuthenticationExceptionTest, ExceptionPtrRoundtrip)
+{
+    const std::exception_ptr eptr = std::make_exception_ptr(
+        AuthenticationException(std::string("Wrapped exception")));
+
+    try
+    {
+        std::rethrow_exception(eptr);
+    }
+    catch (const AuthenticationException& e)
+    {
+        EXPECT_STREQ(e.what(), "Wrapped exception");
+    }
+}
+
+/**
+ * @brief Test exception with whitespace-only message
+ * @details Verifies handling of messages consisting only of whitespace characters
+ */
+TEST_F(AuthenticationExceptionTest, WhitespaceOnlyMessage)
+{
+    const std::string message = "   \t\n  ";
+    const AuthenticationException ex(message);
+
+    EXPECT_STREQ(ex.what(), message.c_str());
+}
+
+/**
+ * @brief Test exception with very long message (1 MB)
+ * @details Verifies memory allocation boundary for extremely large messages
+ */
+TEST_F(AuthenticationExceptionTest, VeryLongMessage)
+{
+    const std::string message(1024 * 1024, 'x'); // 1 MB
+    const AuthenticationException ex(message);
+
+    EXPECT_STREQ(ex.what(), message.c_str());
+    EXPECT_EQ(std::string(ex.what()).length(), 1024 * 1024);
+}
+
+/**
+ * @brief Test exception with single character message
+ * @details Verifies minimal-size message boundary
+ */
+TEST_F(AuthenticationExceptionTest, SingleCharacterMessage)
+{
+    const AuthenticationException ex(std::string("A"));
+
+    EXPECT_STREQ(ex.what(), "A");
+}
+
+/**
+ * @brief Test exception with numeric-only message
+ * @details Verifies handling of messages composed entirely of digits
+ */
+TEST_F(AuthenticationExceptionTest, NumericMessage)
+{
+    const std::string message = "1234567890";
+    const AuthenticationException ex(message);
+
+    EXPECT_STREQ(ex.what(), message.c_str());
+}
+
+/**
+ * @brief Test exception in nested catch-rethrow pattern
+ * @details Verifies that AuthenticationException remains valid through
+ *          nested exception handling
+ */
+TEST_F(AuthenticationExceptionTest, NestedCatchRethrow)
+{
+    try
+    {
+        try
+        {
+            throw AuthenticationException(std::string("Inner error"));
+        }
+        catch (const AuthenticationException&)
+        {
+            throw; // re-throw
+        }
+    }
+    catch (const AuthenticationException& e)
+    {
+        EXPECT_STREQ(e.what(), "Inner error");
+    }
+}

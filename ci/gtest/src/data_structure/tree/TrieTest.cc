@@ -415,3 +415,40 @@ TEST_F(TrieTest, LargeDataset_Correctness)
         }
     }
 }
+
+// ============================================================================
+// Move Semantics Tests
+// ============================================================================
+
+TEST_F(TrieTest, MoveConstructor)
+{
+    Trie<int> trie;
+    trie.insert("hello", 1);
+    trie.insert("world", 2);
+    trie.insert("hi", 3);
+    EXPECT_TRUE(trie.contains("hello"));
+    EXPECT_EQ(trie.size(), 3);
+
+    Trie<int> other(std::move(trie));
+    EXPECT_TRUE(other.contains("hello"));
+    EXPECT_TRUE(other.contains("world"));
+    EXPECT_TRUE(other.contains("hi"));
+    EXPECT_EQ(other.size(), 3);
+    EXPECT_EQ(trie.size(), 0);
+}
+
+TEST_F(TrieTest, MoveAssignment)
+{
+    Trie<int> trie;
+    trie.insert("move", 10);
+    trie.insert("assignment", 20);
+    EXPECT_EQ(trie.size(), 2);
+
+    Trie<int> other;
+    other.insert("dummy", 99);
+    other = std::move(trie);
+    EXPECT_TRUE(other.contains("move"));
+    EXPECT_TRUE(other.contains("assignment"));
+    EXPECT_EQ(other.size(), 2);
+    EXPECT_EQ(trie.size(), 0);
+}

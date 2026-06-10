@@ -113,3 +113,189 @@ TEST_F(YamlObjectSerializerTest, OverwriteExistingFile)
     TestConfig result = serializer_->deserialize(test_file_.string());
     EXPECT_EQ(result, updated);
 }
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test serialization of empty/default values
+ * @details Verifies empty string and default values survive round-trip
+ */
+TEST_F(YamlObjectSerializerTest, EmptyValues)
+{
+    TestConfig original{"", 0, false};
+    serializer_->serialize(original, test_file_.string());
+    TestConfig result = serializer_->deserialize(test_file_.string());
+    EXPECT_EQ(result, original);
+}
+
+/**
+ * @brief Test serialization with special characters
+ * @details Verifies Unicode and special characters survive round-trip
+ */
+TEST_F(YamlObjectSerializerTest, SpecialCharacters)
+{
+    TestConfig original{
+        "server-1.domain.com:8080/path?query=value&flag=true",
+        -1,
+        true
+    };
+    serializer_->serialize(original, test_file_.string());
+    TestConfig result = serializer_->deserialize(test_file_.string());
+    EXPECT_EQ(result, original);
+}
+
+/**
+ * @brief Test serialization with Unicode strings
+ * @details Verifies that Unicode characters survive YAML round-trip
+ */
+TEST_F(YamlObjectSerializerTest, UnicodeValues)
+{
+    TestConfig original{"服务器-中文", 8080, true};
+    serializer_->serialize(original, test_file_.string());
+    TestConfig result = serializer_->deserialize(test_file_.string());
+    EXPECT_EQ(result, original);
+}
+
+/**
+ * @brief Test serialization with long strings
+ * @details Verifies that long string values survive round-trip
+ */
+TEST_F(YamlObjectSerializerTest, LongStrings)
+{
+    const std::string longHost(10000, 'a');
+    TestConfig original{longHost, 65535, false};
+    serializer_->serialize(original, test_file_.string());
+    TestConfig result = serializer_->deserialize(test_file_.string());
+    EXPECT_EQ(result, original);
+}
+
+/**
+ * @brief Test multiple serialize/deserialize cycles
+ * @details Verifies that repeated round-trips preserve data
+ */
+TEST_F(YamlObjectSerializerTest, MultipleCycles)
+{
+    TestConfig config{"cycle", 999, true};
+    for (int i = 0; i < 10; ++i)
+    {
+        serializer_->serialize(config, test_file_.string());
+        config = serializer_->deserialize(test_file_.string());
+    }
+    EXPECT_EQ(config.host, "cycle");
+    EXPECT_EQ(config.port, 999);
+    EXPECT_TRUE(config.debug);
+}
+
+/**
+ * @brief Test deserialize from malformed YAML file
+ * @details Verifies that malformed YAML throws an exception
+ */
+TEST_F(YamlObjectSerializerTest, MalformedYaml)
+{
+    {
+        std::ofstream f(test_file_);
+        f << "host: localhost\nport: not_an_int\ndebug: maybe\n";
+    }
+    EXPECT_THROW(serializer_->deserialize(test_file_.string()), std::exception);
+}
+
+/**
+ * @brief Test deserialize from empty YAML file
+ * @details Verifies that an empty file throws
+ */
+TEST_F(YamlObjectSerializerTest, EmptyFile)
+{
+    {
+        std::ofstream f(test_file_);
+        f << "";
+    }
+    EXPECT_THROW(serializer_->deserialize(test_file_.string()), std::exception);
+}
+
+/**
+ * @brief Test deserialize from YAML with extra fields
+ * @details Extra fields should not prevent deserialization
+ */
+TEST_F(YamlObjectSerializerTest, ExtraFields)
+{
+    {
+        std::ofstream f(test_file_);
+        f << "host: localhost\nport: 8080\ndebug: true\nextra_field: ignored\n";
+    }
+    TestConfig result = serializer_->deserialize(test_file_.string());
+    EXPECT_EQ(result.host, "localhost");
+    EXPECT_EQ(result.port, 8080);
+    EXPECT_TRUE(result.debug);
+}
+
+/**
+ * @brief Test deserialize with partial data
+ * @details Missing required fields should throw
+ */
+TEST_F(YamlObjectSerializerTest, PartialData)
+{
+    {
+        std::ofstream f(test_file_);
+        f << "host: localhost\n";
+    }
+    EXPECT_THROW(serializer_->deserialize(test_file_.string()), std::exception);
+}
+
+/**
+ * @brief Test serialization preserves YAML structure
+ * @details Check that serialized YAML can be loaded by yaml-cpp directly
+ */
+TEST_F(YamlObjectSerializerTest, VerifyYamlStructure)
+{
+    TestConfig original{"verify_host", 443, true};
+    serializer_->serialize(original, test_file_.string());
+
+    YAML::Node root = YAML::LoadFile(test_file_.string());
+    EXPECT_EQ(root["host"].as<std::string>(), "verify_host");
+    EXPECT_EQ(root["port"].as<int>(), 443);
+    EXPECT_EQ(root["debug"].as<bool>(), true);
+}
+
+/**
+ * @brief Test serialization with extreme port values
+ * @details Boundary values for numeric fields
+ */
+TEST_F(YamlObjectSerializerTest, ExtremeValues)
+{
+    TestConfig original{"extreme", 0, true};
+    serializer_->serialize(original, test_file_.string());
+    TestConfig result = serializer_->deserialize(test_file_.string());
+    EXPECT_EQ(result.port, 0);
+
+    original.port = 65535;
+    serializer_->serialize(original, test_file_.string());
+    result = serializer_->deserialize(test_file_.string());
+    EXPECT_EQ(result.port, 65535);
+}
+
+/**
+ * @brief Test concurrent serialization to different files
+ * @details Multiple serializer instances working independently
+ */
+TEST_F(YamlObjectSerializerTest, MultipleFiles)
+{
+    auto path2 = std::filesystem::temp_directory_path() / "yaml_test_config_2.yaml";
+    YamlObjectSerializer<TestConfig> ser2;
+
+    TestConfig cfg1{"first", 100, false};
+    TestConfig cfg2{"second", 200, true};
+
+    serializer_->serialize(cfg1, test_file_.string());
+    ser2.serialize(cfg2, path2.string());
+
+    auto result1 = serializer_->deserialize(test_file_.string());
+    auto result2 = ser2.deserialize(path2.string());
+
+    EXPECT_EQ(result1.host, "first");
+    EXPECT_EQ(result2.host, "second");
+
+    std::error_code ec;
+    std::filesystem::remove(path2, ec);
+}

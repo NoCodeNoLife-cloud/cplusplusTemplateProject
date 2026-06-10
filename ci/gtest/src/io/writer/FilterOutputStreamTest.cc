@@ -128,3 +128,54 @@ TEST_F(FilterOutputStreamTest, MultipleWritesAccumulate)
 
     EXPECT_EQ(inner_->size(), 4);
 }
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+TEST_F(FilterOutputStreamTest, WriteVectorAfterCloseThrows)
+{
+    filter_->close();
+    const std::vector<std::byte> data = {std::byte{0x01}};
+    EXPECT_THROW(filter_->write(data), std::runtime_error);
+}
+
+TEST_F(FilterOutputStreamTest, WriteVectorPartialAfterCloseThrows)
+{
+    filter_->close();
+    const std::vector<std::byte> data = {std::byte{0x01}, std::byte{0x02}};
+    EXPECT_THROW(filter_->write(data, 0, 1), std::runtime_error);
+}
+
+TEST_F(FilterOutputStreamTest, WriteRawAfterCloseThrows)
+{
+    filter_->close();
+    constexpr std::byte buf[] = {std::byte{0x01}};
+    EXPECT_THROW(filter_->write(buf, 1), std::runtime_error);
+}
+
+TEST_F(FilterOutputStreamTest, CloseIsIdempotent)
+{
+    filter_->close();
+    EXPECT_NO_THROW(filter_->close());
+}
+
+TEST_F(FilterOutputStreamTest, DestructionDoesNotCloseInner)
+{
+    {
+        FilterOutputStream temp(inner_);
+        temp.write(std::byte{0xFF});
+    }
+    // Inner stream should still be usable after filter destruction
+    EXPECT_EQ(inner_->size(), 1);
+    EXPECT_FALSE(inner_->isClosed());
+}
+
+TEST_F(FilterOutputStreamTest, WriteAfterFlush)
+{
+    filter_->write(std::byte{0x10});
+    filter_->flush();
+    filter_->write(std::byte{0x20});
+    filter_->flush();
+    EXPECT_EQ(inner_->size(), 2);
+}

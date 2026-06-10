@@ -181,3 +181,31 @@ TEST_F(AutoJoinThreadTest, NativeHandle_ValidAfterConstruction)
     EXPECT_NE(t.native_handle(), std::thread::native_handle_type());
     t.join();
 }
+
+TEST_F(AutoJoinThreadTest, ConstructWithArgs)
+{
+    AutoJoinThread t([](int a, int b) { EXPECT_EQ(a + b, 5); }, 2, 3);
+    t.join();
+}
+
+TEST_F(AutoJoinThreadTest, DetachMovedFrom_NoOp)
+{
+    AutoJoinThread t([] {});
+    AutoJoinThread moved(std::move(t));
+    EXPECT_FALSE(t.joinable());
+    EXPECT_NO_THROW(t.detach());
+    EXPECT_FALSE(t.joinable());
+    moved.join();
+}
+
+TEST_F(AutoJoinThreadTest, MultipleMoveAssignments)
+{
+    AutoJoinThread t1([] {});
+    AutoJoinThread t2([] { std::this_thread::sleep_for(std::chrono::milliseconds(5)); });
+    AutoJoinThread t3([] { std::this_thread::sleep_for(std::chrono::milliseconds(5)); });
+    t1 = std::move(t2);
+    t1 = std::move(t3);
+    EXPECT_TRUE(t1.joinable());
+    EXPECT_FALSE(t3.joinable());
+    t1.join();
+}

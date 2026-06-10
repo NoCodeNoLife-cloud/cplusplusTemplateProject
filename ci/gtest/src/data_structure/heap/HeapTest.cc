@@ -682,3 +682,34 @@ TEST_F(HeapTest, MinHeap_ExtractionOrder)
     std::vector expected = {1, 3, 5, 8, 9};
     EXPECT_EQ(extracted, expected);
 }
+
+// ============================================================================
+// Move Semantics Tests
+// ============================================================================
+
+TEST_F(HeapTest, MoveConstructor)
+{
+    Heap<int> heap;
+    heap.push(5);
+    heap.push(3);
+    heap.push(8);
+    EXPECT_EQ(heap.size(), 3);
+
+    Heap<int> other(std::move(heap));
+    EXPECT_EQ(other.size(), 3);
+    EXPECT_TRUE(heap.empty());
+}
+
+TEST_F(HeapTest, MoveAssignment)
+{
+    Heap<int> heap;
+    heap.push(10);
+    heap.push(20);
+    EXPECT_EQ(heap.size(), 2);
+
+    Heap<int> other;
+    other.push(99);
+    other = std::move(heap);
+    EXPECT_EQ(other.size(), 2);
+    EXPECT_TRUE(heap.empty());
+}

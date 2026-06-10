@@ -574,3 +574,31 @@ TEST_F(SegmentTreeTest, LongLongType_Correctness)
     st.update(2, 30000000000LL);
     EXPECT_EQ(st.query(0, 3), 60000000000LL);
 }
+
+// ============================================================================
+// Move Semantics Tests
+// ============================================================================
+
+TEST_F(SegmentTreeTest, MoveConstructor)
+{
+    SegmentTree<int> st(4);
+    st.update(0, 1);
+    st.update(1, 2);
+    st.update(2, 3);
+    EXPECT_EQ(st.query(0, 4), 6);
+
+    SegmentTree<int> other(std::move(st));
+    EXPECT_EQ(other.query(0, 4), 6);
+}
+
+TEST_F(SegmentTreeTest, MoveAssignment)
+{
+    SegmentTree<int> st(3);
+    st.update(0, 10);
+    st.update(1, 20);
+    EXPECT_EQ(st.query(0, 2), 30);
+
+    SegmentTree<int> other(10);
+    other = std::move(st);
+    EXPECT_EQ(other.query(0, 2), 30);
+}

@@ -155,3 +155,24 @@ TEST_F(AbstractOutputStreamTest, CloseCalled)
     mock_->close();
     EXPECT_TRUE(mock_->isClosed());
 }
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+TEST_F(AbstractOutputStreamTest, CloseIsIdempotent)
+{
+    mock_->close();
+    EXPECT_NO_THROW(mock_->close());
+    EXPECT_TRUE(mock_->isClosed());
+}
+
+TEST_F(AbstractOutputStreamTest, MultipleFlushCycles)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        mock_->flush();
+    }
+    EXPECT_EQ(mock_->flush_count_, 5);
+}
+

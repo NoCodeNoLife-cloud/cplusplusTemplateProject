@@ -82,3 +82,68 @@ TEST_F(PushbackReaderTest, Ready)
     for (int i = 0; i < 5; ++i) (void)reader_->read();
     EXPECT_FALSE(reader_->ready());
 }
+
+// ============================================================================
+// Additional Boundary Condition Tests
+// ============================================================================
+
+TEST_F(PushbackReaderTest, MultipleUnreadSingle)
+{
+    reader_->unread('X');
+    reader_->unread('Y');
+    EXPECT_EQ(reader_->read(), 'Y');
+    EXPECT_EQ(reader_->read(), 'X');
+    EXPECT_EQ(reader_->read(), 'h');
+}
+
+TEST_F(PushbackReaderTest, UnreadAfterExhaustion)
+{
+    for (int i = 0; i < 5; ++i) (void)reader_->read();
+    EXPECT_FALSE(reader_->read().has_value());
+    reader_->unread('Z');
+    EXPECT_EQ(reader_->read(), 'Z');
+    EXPECT_FALSE(reader_->read().has_value());
+}
+
+TEST_F(PushbackReaderTest, UnreadAfterClose)
+{
+    reader_->close();
+    EXPECT_THROW(reader_->unread('X'), std::runtime_error);
+}
+
+TEST_F(PushbackReaderTest, ReadBufWithOffset)
+{
+    std::vector<char> buf(10);
+    const int n = reader_->read(buf, 2, 3);
+    EXPECT_EQ(n, 3);
+    EXPECT_EQ(buf[2], 'h');
+    EXPECT_EQ(buf[3], 'e');
+    EXPECT_EQ(buf[4], 'l');
+}
+
+TEST_F(PushbackReaderTest, UnreadBufferExactCapacity)
+{
+    const std::vector<char> exact(100, 'X');
+    EXPECT_NO_THROW(reader_->unread(exact));
+}
+
+TEST_F(PushbackReaderTest, SkipAfterUnread)
+{
+    reader_->unread('X');
+    reader_->unread('Y');
+    const auto skipped = reader_->skip(1);
+    EXPECT_EQ(skipped, 1);
+    EXPECT_EQ(reader_->read(), 'X');
+}
+
+TEST_F(PushbackReaderTest, ReadZeroLength)
+{
+    std::vector<char> buf(3);
+    const int n = reader_->read(buf, 0, 0);
+    EXPECT_EQ(n, 0);
+}
+
+TEST_F(PushbackReaderTest, UnreadInvalidBufferThrows)
+{
+    EXPECT_THROW(reader_->unread(std::vector<char>(2000)), std::overflow_error);
+}

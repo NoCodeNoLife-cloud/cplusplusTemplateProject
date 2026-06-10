@@ -182,3 +182,68 @@ TEST_F(ThreadPoolTest, Constructor_QueueSizeZero_Throws)
         std::invalid_argument
     );
 }
+
+TEST_F(ThreadPoolTest, SubmitAfterShutdown_Throws)
+{
+    ThreadPool pool(1, 1, 10, std::chrono::milliseconds(100));
+    pool.shutdown();
+    EXPECT_THROW(
+        (void)pool.submit([] { return 42; }),
+        std::runtime_error
+    );
+}
+
+TEST_F(ThreadPoolTest, ExceptionIsolation)
+{
+    ThreadPool pool(2, 2, 10, std::chrono::milliseconds(100));
+    auto f1 = pool.submit([] { throw std::runtime_error("task error"); return 1; });
+    auto f2 = pool.submit([] { return 42; });
+    EXPECT_THROW(f1.get(), std::runtime_error);
+    EXPECT_EQ(f2.get(), 42);
+    pool.shutdown();
+}
+
+TEST_F(ThreadPoolTest, ActiveThreadCount_AfterTasksComplete)
+{
+    ThreadPool pool(2, 4, 100, std::chrono::milliseconds(500));
+    {
+        std::vector<std::future<void>> futs;
+        for (int i = 0; i < 10; ++i)
+        {
+            futs.push_back(pool.submit([] { std::this_thread::sleep_for(std::chrono::milliseconds(5)); }));
+        }
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    EXPECT_GE(pool.getActiveThreadCount(), 1);
+    pool.shutdown();
+}
+
+TEST_F(ThreadPoolTest, QueueSize_ReturnsZeroAfterConsumption)
+{
+    ThreadPool pool(4, 4, 100, std::chrono::milliseconds(100));
+    {
+        std::vector<std::future<void>> futs;
+        for (int i = 0; i < 10; ++i)
+        {
+            futs.push_back(pool.submit([] { std::this_thread::sleep_for(std::chrono::milliseconds(5)); }));
+        }
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    EXPECT_EQ(pool.getQueueSize(), 0);
+    pool.shutdown();
+}
+
+TEST_F(ThreadPoolTest, MultipleShutdownNow_NoCrash)
+{
+    ThreadPool pool(1, 1, 10, std::chrono::milliseconds(100));
+    pool.shutdownNow();
+    pool.shutdownNow();
+    pool.shutdownNow();
+}
+
+TEST_F(ThreadPoolTest, ShutdownNowOnShutdownPool_NoCrash)
+{
+    ThreadPool pool(1, 1, 10, std::chrono::milliseconds(100));
+    pool.shutdown();
+    pool.shutdownNow();
+}

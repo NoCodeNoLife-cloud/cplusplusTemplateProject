@@ -338,3 +338,30 @@ TEST_F(BinaryTreeTest, DoubleType_StoresCorrectly)
     EXPECT_DOUBLE_EQ(root->left()->data(), 2.71);
     EXPECT_EQ(root->size(), 2);
 }
+
+// ============================================================================
+// Move Semantics Tests
+// ============================================================================
+
+TEST_F(BinaryTreeTest, MoveConstructor)
+{
+    auto root = std::make_unique<BinaryTree<int>>(10);
+    root->setLeft(std::make_unique<BinaryTree<int>>(20));
+
+    BinaryTree<int> other(std::move(*root));
+    EXPECT_EQ(other.data(), 10);
+    EXPECT_EQ(other.left()->data(), 20);
+    EXPECT_EQ(other.size(), 2);
+}
+
+TEST_F(BinaryTreeTest, MoveAssignment)
+{
+    auto root = std::make_unique<BinaryTree<int>>(10);
+    root->setLeft(std::make_unique<BinaryTree<int>>(20));
+
+    auto other = std::make_unique<BinaryTree<int>>(0);
+    *other = std::move(*root);
+    EXPECT_EQ(other->data(), 10);
+    EXPECT_EQ(other->left()->data(), 20);
+    EXPECT_EQ(other->size(), 2);
+}

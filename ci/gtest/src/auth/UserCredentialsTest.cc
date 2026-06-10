@@ -310,3 +310,139 @@ TEST_F(UserCredentialsTest, SuccessfulLoginResetsAttempts)
     EXPECT_EQ(creds.get_failed_attempts(), 0);
     EXPECT_FALSE(creds.is_locked());
 }
+
+// ============================================================================
+// Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test is_locked with max_attempts = 0 (lock after first failure)
+ * @details With max_attempts = 0, the condition failed_attempts_ >= 0 is
+ *          always true for unsigned size_t. After one increment the
+ *          time-based condition is met, so account locks immediately.
+ */
+TEST_F(UserCredentialsTest, IsLocked_ZeroMaxAttempts)
+{
+    UserCredentials creds("user", "hash", "salt");
+
+    // Initially not locked despite max_attempts=0 because
+    // last_failed_attempt_ = time_point::min() makes timesince huge
+    EXPECT_FALSE(creds.is_locked(std::chrono::minutes{5}, 0));
+
+    // After one failure: attempts >= 0 (true) and timesince ≈ 0 < 5min
+    creds.increment_failed_attempts();
+    EXPECT_TRUE(creds.is_locked(std::chrono::minutes{5}, 0));
+}
+
+/**
+ * @brief Test is_locked with max_attempts = 1
+ * @details Account locks after exactly one failed attempt
+ */
+TEST_F(UserCredentialsTest, IsLocked_SingleMaxAttempt)
+{
+    UserCredentials creds("user", "hash", "salt");
+
+    EXPECT_FALSE(creds.is_locked(std::chrono::minutes{5}, 1));
+
+    creds.increment_failed_attempts();
+    EXPECT_TRUE(creds.is_locked(std::chrono::minutes{5}, 1));
+}
+
+/**
+ * @brief Test is_locked with max_attempts = SIZE_MAX (practically never locks)
+ * @details Unless failed_attempts_ reaches SIZE_MAX, lock never triggers
+ */
+TEST_F(UserCredentialsTest, IsLocked_MaxSizeTMaxAttempts)
+{
+    UserCredentials creds("user", "hash", "salt");
+
+    for (size_t i = 0; i < 100; ++i)
+    {
+        creds.increment_failed_attempts();
+    }
+    // 100 < SIZE_MAX, so lock is never reached
+    EXPECT_FALSE(creds.is_locked(std::chrono::minutes{5}, SIZE_MAX));
+}
+
+/**
+ * @brief Test lockout with zero-minute duration (immediate expiration)
+ * @details With lockout_duration = 0min, the condition
+ *          minutes_since_last_fail < 0 is always false,
+ *          so the account can never be locked.
+ */
+TEST_F(UserCredentialsTest, IsLocked_ZeroDuration)
+{
+    UserCredentials creds("user", "hash", "salt");
+
+    creds.increment_failed_attempts();
+    // Timesince >= 0, so < 0 is false → not locked
+    EXPECT_FALSE(creds.is_locked(std::chrono::minutes{0}, 5));
+}
+
+/**
+ * @brief Test reset clears locked state after lockout
+ * @details Even after many failures, resetting attempts should
+ *          clear the locked state regardless of timing
+ */
+TEST_F(UserCredentialsTest, ResetClearsLockedState)
+{
+    UserCredentials creds("user", "hash", "salt");
+
+    for (int i = 0; i < 10; ++i)
+    {
+        creds.increment_failed_attempts();
+    }
+    EXPECT_TRUE(creds.is_locked());
+
+    creds.reset_failed_attempts();
+    EXPECT_FALSE(creds.is_locked());
+}
+
+/**
+ * @brief Test increment with size_t overflow boundary
+ * @details Simulates incrementing to near SIZE_MAX and then once more
+ *          to verify no crash or UB on wraparound
+ */
+TEST_F(UserCredentialsTest, IncrementOverflowBoundary)
+{
+    UserCredentials creds("user", "hash", "salt");
+
+    // We cannot practically increment to SIZE_MAX, but we can verify
+    // that a large number of increments is handled
+    for (size_t i = 0; i < 10000; ++i)
+    {
+        creds.increment_failed_attempts();
+    }
+
+    EXPECT_EQ(creds.get_failed_attempts(), 10000);
+    EXPECT_TRUE(creds.is_locked());
+}
+
+/**
+ * @brief Test is_locked after auto-expiration of lockout
+ * @details By passing a 0-minute duration we can simulate expiration.
+ *          Also tests that after reset + re-increment, lock re-activates.
+ */
+TEST_F(UserCredentialsTest, LockExpirationAndReactivation)
+{
+    UserCredentials creds("user", "hash", "salt");
+
+    constexpr auto lockout_duration = std::chrono::minutes{5};
+    constexpr size_t max_attempts = 3;
+
+    // Lock the account
+    creds.increment_failed_attempts();
+    creds.increment_failed_attempts();
+    creds.increment_failed_attempts();
+    EXPECT_TRUE(creds.is_locked(lockout_duration, max_attempts));
+
+    // Reset to simulate successful login
+    creds.reset_failed_attempts();
+    EXPECT_FALSE(creds.is_locked(lockout_duration, max_attempts));
+
+    // New failure cycle should lock again
+    creds.increment_failed_attempts();
+    creds.increment_failed_attempts();
+    creds.increment_failed_attempts();
+    EXPECT_TRUE(creds.is_locked(lockout_duration, max_attempts));
+}

@@ -6,6 +6,7 @@
  */
 
 #include <chrono>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <thread>
@@ -365,4 +366,207 @@ TEST_F(FunctionProfilerAspectTest, ImmediateFunction)
     });
 
     EXPECT_EQ(result, 999);
+}
+
+// ============================================================================
+// Boundary Condition Tests
+// ============================================================================
+
+/**
+ * @brief Test constructor with extremely long function name
+ * @details Verifies heap allocation boundary for function names of large size
+ */
+TEST_F(FunctionProfilerAspectTest, Constructor_LongFunctionName)
+{
+    const std::string longName(10000, 'x');
+    EXPECT_NO_THROW(FunctionProfilerAspect aspect{longName});
+}
+
+/**
+ * @brief Test constructor with special characters in function name
+ * @details Verifies handling of whitespace-only, symbol, and punctuation names
+ */
+TEST_F(FunctionProfilerAspectTest, Constructor_SpecialCharacters)
+{
+    EXPECT_NO_THROW(FunctionProfilerAspect aspect{" \t\n"});
+    EXPECT_NO_THROW(FunctionProfilerAspect aspect{"!@#$%^&*()_+=-`~[]{}|;':\",./<>?"});
+}
+
+/**
+ * @brief Test constructor with unicode characters in function name
+ * @details Verifies handling of multi-byte UTF-8 function names
+ */
+TEST_F(FunctionProfilerAspectTest, Constructor_UnicodeCharacters)
+{
+    EXPECT_NO_THROW(FunctionProfilerAspect aspect{"\u00e9\u00e0\u00fc\u00f1"});
+    EXPECT_NO_THROW(FunctionProfilerAspect aspect{"\u4e2d\u6587\u540d\u79f0"});
+}
+
+/**
+ * @brief Test onEntry called twice consecutively
+ * @details The second onEntry resets the timer. Verifies no crash
+ *          and that the profiler correctly restarts timing.
+ */
+TEST_F(FunctionProfilerAspectTest, OnEntry_DoubleEntry)
+{
+    FunctionProfilerAspect aspect{"doubleEntryTest"};
+
+    EXPECT_NO_THROW(aspect.onEntry());
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    // Second entry should reset the start time and clear ended flag
+    EXPECT_NO_THROW(aspect.onEntry());
+    EXPECT_NO_THROW(aspect.onExit());
+}
+
+/**
+ * @brief Test onExit called twice after single onEntry
+ * @details The second onExit updates the end timestamp without throwing,
+ *          because ended_ remains true from the first call.
+ */
+TEST_F(FunctionProfilerAspectTest, OnExit_DoubleExit)
+{
+    FunctionProfilerAspect aspect{"doubleExitTest"};
+
+    aspect.onEntry();
+    EXPECT_NO_THROW(aspect.onExit());
+    // recordEnd() is idempotent: it just updates end_ and leaves ended_=true
+    EXPECT_NO_THROW(aspect.onExit());
+}
+
+/**
+ * @brief Test onException after a successful onExit
+ * @details Verifies that calling onException after the normal exit path
+ *          does not throw (recordEnd is idempotent).
+ */
+TEST_F(FunctionProfilerAspectTest, OnException_AfterOnExit)
+{
+    FunctionProfilerAspect aspect{"exceptionAfterExitTest"};
+
+    aspect.onEntry();
+    EXPECT_NO_THROW(aspect.onExit());
+    const std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("Late error"));
+    EXPECT_NO_THROW(aspect.onException(eptr));
+}
+
+/**
+ * @brief Test onExit after onException
+ * @details Verifies that calling onExit after an exception path updates
+ *          the end time and does not throw.
+ */
+TEST_F(FunctionProfilerAspectTest, OnExit_AfterOnException)
+{
+    FunctionProfilerAspect aspect{"exitAfterExceptionTest"};
+
+    aspect.onEntry();
+    const std::exception_ptr eptr = std::make_exception_ptr(std::runtime_error("error"));
+    EXPECT_NO_THROW(aspect.onException(eptr));
+    EXPECT_NO_THROW(aspect.onExit());
+}
+
+/**
+ * @brief Test onException with null (default-constructed) exception_ptr
+ * @details The onException implementation ignores the parameter and
+ *          just records end time, so a null pointer is safe.
+ */
+TEST_F(FunctionProfilerAspectTest, OnException_NullExceptionPtr)
+{
+    FunctionProfilerAspect aspect{"nullExceptionTest"};
+
+    aspect.onEntry();
+    const std::exception_ptr null_eptr;
+    EXPECT_NO_THROW(aspect.onException(null_eptr));
+}
+
+/**
+ * @brief Test exec with a no-op function (zero execution time)
+ * @details Verifies that the aspect handles instantaneous execution correctly
+ */
+TEST_F(FunctionProfilerAspectTest, Exec_NoOpFunction)
+{
+    FunctionProfilerAspect aspect{"noOpTest"};
+
+    EXPECT_NO_THROW(aspect.exec([]{}));
+}
+
+/**
+ * @brief Test exec with move-only callable arguments
+ * @details Verifies perfect forwarding of move-only types like unique_ptr
+ */
+TEST_F(FunctionProfilerAspectTest, Exec_MoveOnlyArgs)
+{
+    FunctionProfilerAspect aspect{"moveOnlyTest"};
+
+    const auto result = aspect.exec([](std::unique_ptr<int> p) -> int
+    {
+        return *p;
+    }, std::make_unique<int>(42));
+
+    EXPECT_EQ(result, 42);
+}
+
+/**
+ * @brief Test many rapid exec cycles verifying independent timing
+ * @details Each cycle should independently record start/end without
+ *          leaking state between invocations
+ */
+TEST_F(FunctionProfilerAspectTest, MultipleExecutions_IndependentCycles)
+{
+    FunctionProfilerAspect aspect{"cycleTest"};
+
+    for (int i = 0; i < 50; ++i)
+    {
+        EXPECT_NO_THROW(aspect.exec([i]() -> int
+        {
+            return i * i;
+        }));
+    }
+}
+
+/**
+ * @brief Test exec with noexcept function
+ * @details Verifies compatibility with noexcept lambdas and functions
+ */
+TEST_F(FunctionProfilerAspectTest, Exec_NoexceptFunction)
+{
+    FunctionProfilerAspect aspect{"noexceptTest"};
+
+    const auto result = aspect.exec([]() noexcept -> int
+    {
+        return 7;
+    });
+
+    EXPECT_EQ(result, 7);
+}
+
+/**
+ * @brief Test exec with function returning a reference
+ * @details Ensures no dangling reference or incorrect copy behavior
+ */
+TEST_F(FunctionProfilerAspectTest, Exec_ReturnsReference)
+{
+    FunctionProfilerAspect aspect{"refReturnTest"};
+
+    static int value = 42;
+    const auto result = aspect.exec([]() -> const int&
+    {
+        return value;
+    });
+
+    EXPECT_EQ(result, 42);
+}
+
+/**
+ * @brief Test exec with void function that throws
+ * @details Verifies that exceptions from void functions are properly
+ *          propagated through the aspect
+ */
+TEST_F(FunctionProfilerAspectTest, Exec_VoidFunctionThrows)
+{
+    FunctionProfilerAspect aspect{"voidThrowTest"};
+
+    EXPECT_THROW({
+        aspect.exec([]{
+            throw std::runtime_error("void error");
+        });
+    }, std::runtime_error);
 }
