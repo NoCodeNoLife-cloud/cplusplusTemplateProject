@@ -44,7 +44,7 @@ TEST_F(SHA1StrategyTest, Constants)
  */
 TEST_F(SHA1StrategyTest, DigestSizes)
 {
-    SHA1Strategy strategy;
+    const SHA1Strategy strategy;
     EXPECT_EQ(strategy.getDigestSize(), 20);
     EXPECT_EQ(strategy.getHexDigestSize(), 40);
 }
@@ -115,7 +115,7 @@ TEST_F(SHA1StrategyTest, IncrementalHashing)
 TEST_F(SHA1StrategyTest, StringViewUpdate)
 {
     SHA1Strategy strategy;
-    const std::string_view data = "test data";
+    constexpr std::string_view data = "test data";
     EXPECT_TRUE(strategy.update(data));
     const auto hash = strategy.finalize();
     ASSERT_TRUE(hash.has_value());
@@ -233,8 +233,7 @@ TEST_F(SHA1StrategyTest, MoveAssignment)
     SHA1Strategy strategy1;
     EXPECT_TRUE(strategy1.update("test data"));
 
-    SHA1Strategy strategy2;
-    strategy2 = std::move(strategy1);
+    SHA1Strategy strategy2 = std::move(strategy1);
     const auto hash = strategy2.finalize();
     ASSERT_TRUE(hash.has_value());
     EXPECT_EQ(hash->size(), 20);

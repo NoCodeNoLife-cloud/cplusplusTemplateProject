@@ -221,7 +221,7 @@ TEST_F(XorBitCipherTest, Initialize_SingleByteKey)
 TEST_F(XorBitCipherTest, Initialize_LargeKey)
 {
     XorBitCipher cipher;
-    std::vector<uint8_t> key(10000, 0x42); // 10KB key
+    const std::vector<uint8_t> key(10000, 0x42); // 10KB key
     const std::vector<uint8_t> nonce;
 
     EXPECT_NO_THROW(cipher.initialize(key, nonce));
@@ -239,7 +239,7 @@ TEST_F(XorBitCipherTest, Encrypt_LargeData)
     XorBitCipher cipher;
     cipher.initialize(key, nonce);
 
-    std::vector<uint8_t> plaintext(100000, 0x55); // 100KB data
+    const std::vector<uint8_t> plaintext(100000, 0x55); // 100KB data
     EXPECT_NO_THROW(const auto ciphertext = cipher.encrypt(plaintext));
     const auto ciphertext = cipher.encrypt(plaintext);
     EXPECT_EQ(ciphertext.size(), plaintext.size());
@@ -371,7 +371,7 @@ TEST_F(XorBitCipherTest, GetCurrentPosition_DuringEncryption)
     EXPECT_EQ(cipher.getCurrentPosition(), 0);
 
     const std::vector<uint8_t> plaintext(10, 0x00);
-    cipher.encrypt(plaintext);
+    static_cast<void>(cipher.encrypt(plaintext));
 
     // After encrypting 10 bytes with 4-byte key, position should be 10 % 4 = 2
     EXPECT_EQ(cipher.getCurrentPosition(), 2);
@@ -408,7 +408,7 @@ TEST_F(XorBitCipherTest, GetCurrentBitPosition_DuringEncryption)
 
     // Process 1 byte -> nextKeyByte resets bit_pos_ to 0
     const std::vector<uint8_t> plaintext(1, 0x00);
-    cipher.encrypt(plaintext);
+    static_cast<void>(cipher.encrypt(plaintext));
 
     EXPECT_EQ(cipher.getCurrentBitPosition(), 0);
     EXPECT_EQ(cipher.getCurrentPosition(), 1);

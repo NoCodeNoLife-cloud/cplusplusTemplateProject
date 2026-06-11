@@ -114,7 +114,7 @@ TEST_F(UserAuthenticatorTest, RegisterUser_Duplicate)
 {
     EXPECT_TRUE(authenticator_->register_user("existing", "password123"));
     EXPECT_THROW(
-        authenticator_->register_user("existing", "other_pass"),
+        static_cast<void>(authenticator_->register_user("existing", "other_pass")),
         AuthenticationException
     );
 }
@@ -126,7 +126,7 @@ TEST_F(UserAuthenticatorTest, RegisterUser_Duplicate)
 TEST_F(UserAuthenticatorTest, RegisterUser_UsernameTooShort)
 {
     EXPECT_THROW(
-        authenticator_->register_user("ab", "password123"),
+        static_cast<void>(authenticator_->register_user("ab", "password123")),
         AuthenticationException
     );
 }
@@ -139,7 +139,7 @@ TEST_F(UserAuthenticatorTest, RegisterUser_UsernameTooLong)
 {
     const std::string long_username(21, 'a');
     EXPECT_THROW(
-        authenticator_->register_user(long_username, "password123"),
+        static_cast<void>(authenticator_->register_user(long_username, "password123")),
         AuthenticationException
     );
 }
@@ -151,15 +151,15 @@ TEST_F(UserAuthenticatorTest, RegisterUser_UsernameTooLong)
 TEST_F(UserAuthenticatorTest, RegisterUser_UsernameSpecialChars)
 {
     EXPECT_THROW(
-        authenticator_->register_user("user@name", "password123"),
+        static_cast<void>(authenticator_->register_user("user@name", "password123")),
         AuthenticationException
     );
     EXPECT_THROW(
-        authenticator_->register_user("user name", "password123"),
+        static_cast<void>(authenticator_->register_user("user name", "password123")),
         AuthenticationException
     );
     EXPECT_THROW(
-        authenticator_->register_user("user.name", "password123"),
+        static_cast<void>(authenticator_->register_user("user.name", "password123")),
         AuthenticationException
     );
 }
@@ -181,7 +181,7 @@ TEST_F(UserAuthenticatorTest, RegisterUser_UsernameUnderscoreHyphen)
 TEST_F(UserAuthenticatorTest, RegisterUser_EmptyUsername)
 {
     EXPECT_THROW(
-        authenticator_->register_user("", "password123"),
+        static_cast<void>(authenticator_->register_user("", "password123")),
         AuthenticationException
     );
 }
@@ -292,7 +292,7 @@ TEST_F(UserAuthenticatorTest, Authenticate_SuccessResetsLockout)
     // Few failed attempts
     for (int i = 0; i < 3; ++i)
     {
-        authenticator_->authenticate("eve", "wrong_pass");
+        static_cast<void>(authenticator_->authenticate("eve", "wrong_pass"));
     }
 
     // Successful login
@@ -327,11 +327,11 @@ TEST_F(UserAuthenticatorTest, ChangePassword_Success)
     EXPECT_TRUE(authenticator_->change_password("frank", "current_pass", "new_pass_123"));
 
     // Old password should no longer work
-    auto old_result = authenticator_->authenticate("frank", "current_pass");
+    const auto old_result = authenticator_->authenticate("frank", "current_pass");
     EXPECT_FALSE(old_result.is_success());
 
     // New password should work
-    auto new_result = authenticator_->authenticate("frank", "new_pass_123");
+    const auto new_result = authenticator_->authenticate("frank", "new_pass_123");
     EXPECT_TRUE(new_result.is_success());
 }
 
@@ -344,12 +344,12 @@ TEST_F(UserAuthenticatorTest, ChangePassword_WrongCurrentPassword)
     EXPECT_TRUE(authenticator_->register_user("grace", "correct_pass"));
 
     EXPECT_THROW(
-        authenticator_->change_password("grace", "wrong_pass", "new_pass_123"),
+        static_cast<void>(authenticator_->change_password("grace", "wrong_pass", "new_pass_123")),
         AuthenticationException
     );
 
     // Original password must remain valid
-    auto result = authenticator_->authenticate("grace", "correct_pass");
+    const auto result = authenticator_->authenticate("grace", "correct_pass");
     EXPECT_TRUE(result.is_success());
 }
 
@@ -360,7 +360,7 @@ TEST_F(UserAuthenticatorTest, ChangePassword_WrongCurrentPassword)
 TEST_F(UserAuthenticatorTest, ChangePassword_NonExistentUser)
 {
     EXPECT_THROW(
-        authenticator_->change_password("ghost", "old", "new_pass_123"),
+        static_cast<void>(authenticator_->change_password("ghost", "old", "new_pass_123")),
         AuthenticationException
     );
 }
@@ -380,11 +380,11 @@ TEST_F(UserAuthenticatorTest, ResetPassword_Success)
     EXPECT_TRUE(authenticator_->reset_password("heidi", "reset_pass_123"));
 
     // Old password should no longer work
-    auto old_result = authenticator_->authenticate("heidi", "original_pass");
+    const auto old_result = authenticator_->authenticate("heidi", "original_pass");
     EXPECT_FALSE(old_result.is_success());
 
     // New password should work
-    auto new_result = authenticator_->authenticate("heidi", "reset_pass_123");
+    const auto new_result = authenticator_->authenticate("heidi", "reset_pass_123");
     EXPECT_TRUE(new_result.is_success());
 }
 
@@ -395,7 +395,7 @@ TEST_F(UserAuthenticatorTest, ResetPassword_Success)
 TEST_F(UserAuthenticatorTest, ResetPassword_NonExistentUser)
 {
     EXPECT_THROW(
-        authenticator_->reset_password("ghost", "new_pass_123"),
+        static_cast<void>(authenticator_->reset_password("ghost", "new_pass_123")),
         AuthenticationException
     );
 }
@@ -474,7 +474,7 @@ TEST_F(UserAuthenticatorTest, PasswordPolicy_RejectsWeakPassword)
 
     // Weak password without uppercase, digit, or special
     EXPECT_THROW(
-        strict_auth.register_user("weak_user", "weakpass"),
+        static_cast<void>(strict_auth.register_user("weak_user", "weakpass")),
         AuthenticationException
     );
 }
@@ -486,12 +486,12 @@ TEST_F(UserAuthenticatorTest, PasswordPolicy_RejectsWeakPassword)
 TEST_F(UserAuthenticatorTest, SetPasswordPolicy_UpdatesValidation)
 {
     // Create with strict policy
-    PasswordPolicy strict_policy(8, 64, true, true, true, true, 5);
+    const PasswordPolicy strict_policy(8, 64, true, true, true, true, 5);
     UserAuthenticator auth(":memory:", strict_policy);
 
     // Weak password fails with strict policy
     EXPECT_THROW(
-        auth.register_user("user1", "weak"),
+        static_cast<void>(auth.register_user("user1", "weak")),
         AuthenticationException
     );
 
@@ -537,7 +537,7 @@ TEST_F(UserAuthenticatorTest, LongPassword)
     const std::string long_password(95, 'x');
     EXPECT_TRUE(authenticator_->register_user("longpass_user", long_password));
 
-    auto result = authenticator_->authenticate("longpass_user", long_password);
+    const auto result = authenticator_->authenticate("longpass_user", long_password);
     EXPECT_TRUE(result.is_success());
 }
 
@@ -592,7 +592,7 @@ TEST_F(UserAuthenticatorTest, Authenticate_ReturnedUserPointer)
 {
     EXPECT_TRUE(authenticator_->register_user("pointer_user", "password123"));
 
-    auto result = authenticator_->authenticate("pointer_user", "password123");
+    const auto result = authenticator_->authenticate("pointer_user", "password123");
     ASSERT_TRUE(result.is_success());
     ASSERT_NE(result.user, nullptr);
     EXPECT_EQ(result.user->get_username(), "pointer_user");

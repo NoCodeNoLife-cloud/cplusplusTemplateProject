@@ -92,9 +92,9 @@ namespace
         /// @brief Get number of encrypt calls for verification
         [[nodiscard]] int getEncryptedCount() const { return encrypted_count_; }
         /// @brief Get number of decrypt calls for verification
-        [[nodiscard]] int getDecryptedCount() const { return decrypted_count_; }
+        [[maybe_unused]] [[nodiscard]] int getDecryptedCount() const { return decrypted_count_; }
         /// @brief Get number of reset calls for verification
-        [[nodiscard]] int getResetCount() const { return reset_count_; }
+        [[maybe_unused]] [[nodiscard]] int getResetCount() const { return reset_count_; }
 
     private:
         bool initialized_ = false;
@@ -127,7 +127,7 @@ protected:
  */
 TEST_F(StreamCipherTest, DestroyThroughBasePointer)
 {
-    StreamCipher* cipher = new TestStreamCipher();
+    StreamCipher* const cipher = new TestStreamCipher();
     EXPECT_NO_THROW(delete cipher);
 }
 
@@ -136,7 +136,7 @@ TEST_F(StreamCipherTest, DestroyThroughBasePointer)
  */
 TEST_F(StreamCipherTest, UniquePtrThroughBasePointer)
 {
-    std::unique_ptr<StreamCipher> cipher = std::make_unique<TestStreamCipher>();
+    const std::unique_ptr<StreamCipher> cipher = std::make_unique<TestStreamCipher>();
     EXPECT_NE(cipher, nullptr);
 }
 
@@ -145,7 +145,7 @@ TEST_F(StreamCipherTest, UniquePtrThroughBasePointer)
  */
 TEST_F(StreamCipherTest, IsInitialized_InitiallyFalse)
 {
-    TestStreamCipher cipher;
+    const TestStreamCipher cipher;
     EXPECT_FALSE(cipher.isInitialized());
 }
 
@@ -164,7 +164,7 @@ TEST_F(StreamCipherTest, IsInitialized_AfterInitialize)
  */
 TEST_F(StreamCipherTest, GetAlgorithmName)
 {
-    TestStreamCipher cipher;
+    const TestStreamCipher cipher;
     EXPECT_EQ(cipher.getAlgorithmName(), "TestStreamCipher");
 }
 
@@ -175,7 +175,7 @@ TEST_F(StreamCipherTest, Encrypt_BeforeInitialization)
 {
     TestStreamCipher cipher;
     const std::vector<uint8_t> data = {0x01, 0x02, 0x03};
-    EXPECT_THROW(cipher.encrypt(data), std::runtime_error);
+    EXPECT_THROW(static_cast<void>(cipher.encrypt(data)), std::runtime_error);
 }
 
 /**
@@ -185,7 +185,7 @@ TEST_F(StreamCipherTest, Decrypt_BeforeInitialization)
 {
     TestStreamCipher cipher;
     const std::vector<uint8_t> data = {0x01, 0x02, 0x03};
-    EXPECT_THROW(cipher.decrypt(data), std::runtime_error);
+    EXPECT_THROW(static_cast<void>(cipher.decrypt(data)), std::runtime_error);
 }
 
 /**
@@ -194,7 +194,7 @@ TEST_F(StreamCipherTest, Decrypt_BeforeInitialization)
 TEST_F(StreamCipherTest, GenerateKeystream_BeforeInitialization)
 {
     TestStreamCipher cipher;
-    EXPECT_THROW(cipher.generateKeystream(16), std::runtime_error);
+    EXPECT_THROW(static_cast<void>(cipher.generateKeystream(16)), std::runtime_error);
 }
 
 /**
@@ -225,7 +225,7 @@ TEST_F(StreamCipherTest, Encrypt_AfterInitialize)
 {
     TestStreamCipher cipher;
     cipher.initialize({0x01}, {0x02});
-    EXPECT_NO_THROW(cipher.encrypt({0x01, 0x02, 0x03}));
+    EXPECT_NO_THROW(static_cast<void>(cipher.encrypt({0x01, 0x02, 0x03})));
     EXPECT_TRUE(cipher.isInitialized());
 }
 
@@ -236,7 +236,7 @@ TEST_F(StreamCipherTest, Decrypt_AfterInitialize)
 {
     TestStreamCipher cipher;
     cipher.initialize({0x01}, {0x02});
-    EXPECT_NO_THROW(cipher.decrypt({0x01, 0x02, 0x03}));
+    EXPECT_NO_THROW(static_cast<void>(cipher.decrypt({0x01, 0x02, 0x03})));
     EXPECT_TRUE(cipher.isInitialized());
 }
 
@@ -273,9 +273,9 @@ TEST_F(StreamCipherTest, FullLifecycle)
     cipher.initialize({0x01}, {0x02});
     EXPECT_TRUE(cipher.isInitialized());
 
-    EXPECT_NO_THROW(cipher.encrypt({0x01}));
-    EXPECT_NO_THROW(cipher.decrypt({0x02}));
-    EXPECT_NO_THROW(cipher.generateKeystream(8));
+    EXPECT_NO_THROW(static_cast<void>(cipher.encrypt({0x01})));
+    EXPECT_NO_THROW(static_cast<void>(cipher.decrypt({0x02})));
+    EXPECT_NO_THROW(static_cast<void>(cipher.generateKeystream(8)));
 
     cipher.reset();
     EXPECT_FALSE(cipher.isInitialized());
@@ -283,7 +283,7 @@ TEST_F(StreamCipherTest, FullLifecycle)
     // Re-initialize with different parameters
     cipher.initialize({0x03}, {0x04});
     EXPECT_TRUE(cipher.isInitialized());
-    EXPECT_NO_THROW(cipher.encrypt({0x05}));
+    EXPECT_NO_THROW(static_cast<void>(cipher.encrypt({0x05})));
 }
 
 /**
@@ -306,7 +306,7 @@ TEST_F(StreamCipherTest, Roundtrip)
  */
 TEST_F(StreamCipherTest, PolymorphicGetAlgorithmName)
 {
-    std::unique_ptr<StreamCipher> cipher = std::make_unique<TestStreamCipher>();
+    const std::unique_ptr<StreamCipher> cipher = std::make_unique<TestStreamCipher>();
     EXPECT_EQ(cipher->getAlgorithmName(), "TestStreamCipher");
 }
 
@@ -315,7 +315,7 @@ TEST_F(StreamCipherTest, PolymorphicGetAlgorithmName)
  */
 TEST_F(StreamCipherTest, PolymorphicIsInitialized)
 {
-    std::unique_ptr<StreamCipher> cipher = std::make_unique<TestStreamCipher>();
+    const std::unique_ptr<StreamCipher> cipher = std::make_unique<TestStreamCipher>();
     EXPECT_FALSE(cipher->isInitialized());
 
     cipher->initialize({0x01}, {0x02});
@@ -331,10 +331,10 @@ TEST_F(StreamCipherTest, MultipleEncryptCalls)
     cipher.initialize({0x01}, {0x02});
 
     EXPECT_EQ(cipher.getEncryptedCount(), 0);
-    cipher.encrypt({0x01});
+    static_cast<void>(cipher.encrypt({0x01}));
     EXPECT_EQ(cipher.getEncryptedCount(), 1);
-    cipher.encrypt({0x02});
-    cipher.encrypt({0x03});
+    static_cast<void>(cipher.encrypt({0x02}));
+    static_cast<void>(cipher.encrypt({0x03}));
     EXPECT_EQ(cipher.getEncryptedCount(), 3);
 }
 
@@ -346,12 +346,12 @@ TEST_F(StreamCipherTest, ResetClearsState)
     TestStreamCipher cipher;
     cipher.initialize({0x01}, {0x02});
 
-    cipher.encrypt({0x01});
-    cipher.encrypt({0x02});
+    static_cast<void>(cipher.encrypt({0x01}));
+    static_cast<void>(cipher.encrypt({0x02}));
     cipher.reset();
 
     // After reset, encrypt/decrypt should throw
-    EXPECT_THROW(cipher.encrypt({0x03}), std::runtime_error);
+    EXPECT_THROW(static_cast<void>(cipher.encrypt({0x03})), std::runtime_error);
 }
 
 /**

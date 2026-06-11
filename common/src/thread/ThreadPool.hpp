@@ -96,7 +96,11 @@ namespace common::thread
             }
         }
 
-        auto task = std::make_shared<std::packaged_task<return_type()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+        auto task = std::make_shared<std::packaged_task<return_type()>>(
+            [f = std::forward<F>(f), ...args = std::forward<Args>(args)] -> return_type
+            {
+                return std::invoke(f, args...);
+            });
 
         std::future<return_type> res = task->get_future();
         {

@@ -228,7 +228,7 @@ TEST_F(SHAToolkitTest, SHA256Strategy_Constants)
  */
 TEST_F(SHAToolkitTest, ToHexString_MismatchedSize)
 {
-    std::vector<uint8_t> digest(32, 0xAB);
+    const std::vector<uint8_t> digest(32, 0xAB);
     const auto hex = SHAToolkit::toHexString(digest, 64);
     EXPECT_FALSE(hex.has_value());
 }
@@ -239,7 +239,7 @@ TEST_F(SHAToolkitTest, ToHexString_MismatchedSize)
  */
 TEST_F(SHAToolkitTest, ToHexString_CorrectOutput)
 {
-    std::vector<uint8_t> digest = {0xAB, 0xCD, 0xEF};
+    const std::vector<uint8_t> digest = {0xAB, 0xCD, 0xEF};
     const auto hex = SHAToolkit::toHexString(digest, 3);
     ASSERT_TRUE(hex.has_value());
     EXPECT_EQ(*hex, "abcdef");
@@ -536,12 +536,12 @@ TEST_F(SHAToolkitTest, BinaryInput_SHA256)
 TEST_F(SHAToolkitTest, DigestSizeConsistency)
 {
     {
-        auto toolkit = SHAToolkit::createSHA256();
+        const auto toolkit = SHAToolkit::createSHA256();
         EXPECT_EQ(toolkit.getDigestSize(), SHA256Strategy::DIGEST_SIZE);
         EXPECT_EQ(toolkit.getHexDigestSize(), SHA256Strategy::HEX_DIGEST_SIZE);
     }
     {
-        auto toolkit = SHAToolkit::createSHA1();
+        const auto toolkit = SHAToolkit::createSHA1();
         EXPECT_EQ(toolkit.getDigestSize(), SHA1Strategy::DIGEST_SIZE);
         EXPECT_EQ(toolkit.getHexDigestSize(), SHA1Strategy::HEX_DIGEST_SIZE);
     }

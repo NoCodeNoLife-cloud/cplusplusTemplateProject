@@ -175,7 +175,7 @@ TEST_F(AuthRpcParamTest, BuilderChaining)
     auto& ref1 = AuthRpcParam::builder().keepaliveTimeMs(10000);
     auto& ref2 = ref1.keepaliveTimeoutMs(5000);
     auto& ref3 = ref2.keepalivePermitWithoutCalls(0);
-    auto& ref4 = ref3.serverAddress("127.0.0.1:50051");
+    const auto& ref4 = ref3.serverAddress("127.0.0.1:50051");
 
     const auto param = ref4.build();
     EXPECT_EQ(param.keepaliveTimeMs(), 10000);
@@ -195,7 +195,7 @@ TEST_F(AuthRpcParamTest, BuilderIndependentBuilds)
         .keepaliveTimeMs(10000);
 
     const auto param1 = builder.build();
-    builder.keepaliveTimeMs(20000);
+    static_cast<void>(builder.keepaliveTimeMs(20000));
     const auto param2 = builder.build();
 
     EXPECT_EQ(param1.keepaliveTimeMs(), 10000);
