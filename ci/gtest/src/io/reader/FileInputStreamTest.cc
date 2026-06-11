@@ -152,8 +152,8 @@ TEST_F(FileInputStreamTest, SkipToEnd)
     const auto content_len = static_cast<size_t>(content_.size());
     // FileInputStream::skip seeks forward; seeking beyond EOF returns 0
     // First skip covers the full file
-    auto skipped = f.skip(content_len);
-    EXPECT_EQ(skipped, content_len);
+    const auto skipped = f.skip(static_cast<int64_t>(content_len));
+    EXPECT_EQ(skipped, static_cast<int64_t>(content_len));
     // EOF triggered on next read
     EXPECT_EQ(f.read(), static_cast<std::byte>(-1));
     EXPECT_TRUE(f.isEof());

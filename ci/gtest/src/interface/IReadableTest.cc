@@ -35,7 +35,7 @@ class IReadableTest : public testing::Test
 protected:
     void SetUp() override
     {
-        mock_.reset(new MockReadable("hello"));
+        mock_ = std::make_unique<MockReadable>("hello");
     }
 
     void TearDown() override
@@ -48,7 +48,7 @@ protected:
 
 TEST_F(IReadableTest, ReadSingleByte)
 {
-    auto ch = mock_->read();
+    const auto ch = mock_->read();
     ASSERT_TRUE(ch.has_value());
     EXPECT_EQ(ch.value(), 'h');
 }
@@ -65,16 +65,16 @@ TEST_F(IReadableTest, ReadMultipleBytes)
 TEST_F(IReadableTest, ReadEof)
 {
     for (int i = 0; i < 5; i++)
-        mock_->read();
+        static_cast<void>(mock_->read());
 
-    auto ch = mock_->read();
+    const auto ch = mock_->read();
     EXPECT_FALSE(ch.has_value());
 }
 
 TEST_F(IReadableTest, ReadEofOnEmpty)
 {
     MockReadable empty("");
-    auto ch = empty.read();
+    const auto ch = empty.read();
     EXPECT_FALSE(ch.has_value());
 }
 
@@ -90,7 +90,7 @@ TEST_F(IReadableTest, ReadSequential)
 TEST_F(IReadableTest, ReadAfterEof)
 {
     for (int i = 0; i < 5; i++)
-        mock_->read();
+        static_cast<void>(mock_->read());
 
     EXPECT_FALSE(mock_->read().has_value());
     EXPECT_FALSE(mock_->read().has_value());

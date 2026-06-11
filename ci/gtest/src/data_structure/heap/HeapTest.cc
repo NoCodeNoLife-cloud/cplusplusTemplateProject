@@ -93,6 +93,7 @@ TEST_F(HeapTest, MoveConstructor_TransfersOwnership)
     EXPECT_EQ(heap2.size(), 3);
     EXPECT_EQ(heap2.top(), 30);
     EXPECT_TRUE(heap2.is_valid());
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(heap1.empty()); // Moved-from heap should be empty
 }
 
@@ -127,11 +128,11 @@ TEST_F(HeapTest, MoveAssignment_TransfersOwnership)
     heap1.push(20);
     heap1.push(30);
 
-    Heap<int> heap2;
-    heap2 = std::move(heap1);
+    Heap<int> heap2(std::move(heap1));
 
     EXPECT_EQ(heap2.size(), 3);
     EXPECT_EQ(heap2.top(), 30);
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(heap1.empty());
 }
 
@@ -247,7 +248,7 @@ TEST_F(HeapTest, Top_ReturnsMaximumElement)
  */
 TEST_F(HeapTest, Top_EmptyHeap_ThrowsException)
 {
-    Heap<int> heap;
+    const Heap<int> heap;
     EXPECT_THROW(heap.top(), std::out_of_range);
 }
 
@@ -359,7 +360,7 @@ TEST_F(HeapTest, IsValid_AfterOperations)
  */
 TEST_F(HeapTest, MinHeap_CustomComparator)
 {
-    Heap<int, std::greater<int>> heap;
+    Heap<int, std::greater<>> heap;
 
     heap.push(5);
     heap.push(3);
@@ -663,7 +664,7 @@ TEST_F(HeapTest, Extraction_SortedOrder)
  */
 TEST_F(HeapTest, MinHeap_ExtractionOrder)
 {
-    Heap<int, std::greater<int>> heap;
+    Heap<int, std::greater<>> heap;
 
     heap.push(5);
     heap.push(3);
@@ -679,7 +680,7 @@ TEST_F(HeapTest, MinHeap_ExtractionOrder)
     }
 
     // Should be in ascending order for min-heap
-    std::vector expected = {1, 3, 5, 8, 9};
+    const std::vector expected = {1, 3, 5, 8, 9};
     EXPECT_EQ(extracted, expected);
 }
 
@@ -695,8 +696,9 @@ TEST_F(HeapTest, MoveConstructor)
     heap.push(8);
     EXPECT_EQ(heap.size(), 3);
 
-    Heap<int> other(std::move(heap));
+    const Heap<int> other(std::move(heap));
     EXPECT_EQ(other.size(), 3);
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(heap.empty());
 }
 
@@ -711,5 +713,6 @@ TEST_F(HeapTest, MoveAssignment)
     other.push(99);
     other = std::move(heap);
     EXPECT_EQ(other.size(), 2);
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(heap.empty());
 }

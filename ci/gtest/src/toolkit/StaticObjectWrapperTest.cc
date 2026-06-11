@@ -39,7 +39,7 @@ struct TestConfig
     {
     }
 
-    TestConfig(const std::string& n, int v) : name(n), value(v)
+    TestConfig(std::string n, int v) : name(std::move(n)), value(v)
     {
     }
 };
@@ -50,7 +50,7 @@ struct NoDefaultConfig
     std::string name;
     int value;
 
-    NoDefaultConfig(const std::string& n, int v) : name(n), value(v)
+    NoDefaultConfig(std::string n, int v) : name(std::move(n)), value(v)
     {
     }
 };

@@ -85,9 +85,9 @@ TEST_F(RedBlackTreeNodeTest, LeftRight_NullByDefault)
 
 TEST_F(RedBlackTreeNodeTest, SetLeftRightParent_UpdatesPointers)
 {
-    auto n1 = std::make_shared<RedBlackTreeNode<int>>(1);
-    auto n2 = std::make_shared<RedBlackTreeNode<int>>(2);
-    auto n3 = std::make_shared<RedBlackTreeNode<int>>(3);
+    const auto n1 = std::make_shared<RedBlackTreeNode<int>>(1);
+    const auto n2 = std::make_shared<RedBlackTreeNode<int>>(2);
+    const auto n3 = std::make_shared<RedBlackTreeNode<int>>(3);
 
     n1->setLeft(n2);
     n1->setRight(n3);
@@ -102,12 +102,12 @@ TEST_F(RedBlackTreeNodeTest, SetLeftRightParent_UpdatesPointers)
 
 TEST_F(RedBlackTreeNodeTest, SetLeft_ReplacesChild)
 {
-    auto n1 = std::make_shared<RedBlackTreeNode<int>>(1);
+    const auto n1 = std::make_shared<RedBlackTreeNode<int>>(1);
     n1->setLeft(std::make_shared<RedBlackTreeNode<int>>(2));
     ASSERT_NE(n1->getLeft(), nullptr);
     EXPECT_EQ(n1->getLeft()->getData(), 2);
 
-    auto n3 = std::make_shared<RedBlackTreeNode<int>>(3);
+    const auto n3 = std::make_shared<RedBlackTreeNode<int>>(3);
     n1->setLeft(n3);
     EXPECT_EQ(n1->getLeft()->getData(), 3);
 }
@@ -479,12 +479,12 @@ TEST_F(RedBlackTreeTest, MoveConstructor)
     tree.insert(10);
     tree.insert(20);
     tree.insert(5);
-    auto root = tree.getRoot();
+    const auto root = tree.getRoot();
     ASSERT_NE(root, nullptr);
 
-    RedBlackTree<int> other(std::move(tree));
+    const RedBlackTree<int> other(std::move(tree));
     ASSERT_NE(other.getRoot(), nullptr);
-    EXPECT_EQ(tree.getRoot(), nullptr);
+    ASSERT_EQ(other.getRoot(), root);
 }
 
 TEST_F(RedBlackTreeTest, MoveAssignment)
@@ -492,11 +492,12 @@ TEST_F(RedBlackTreeTest, MoveAssignment)
     RedBlackTree<int> tree;
     tree.insert(1);
     tree.insert(2);
-    ASSERT_NE(tree.getRoot(), nullptr);
+    const auto root = tree.getRoot();
+    ASSERT_NE(root, nullptr);
 
     RedBlackTree<int> other;
     other.insert(99);
     other = std::move(tree);
     ASSERT_NE(other.getRoot(), nullptr);
-    EXPECT_EQ(tree.getRoot(), nullptr);
+    ASSERT_EQ(other.getRoot(), root);
 }

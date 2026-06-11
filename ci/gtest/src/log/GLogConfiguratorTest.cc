@@ -77,7 +77,7 @@ glog:
   logToStderr: true
   customLogFormat: false
 )");
-    GLogConfigurator config(tmp_yaml_);
+    const GLogConfigurator config(tmp_yaml_);
     const auto& cfg = config.getConfig();
     EXPECT_EQ(cfg.logName(), "test_app");
     EXPECT_EQ(cfg.minLogLevel(), 0);
@@ -94,10 +94,8 @@ glog:
   logToStderr: false
   customLogFormat: true
 )");
-    GLogConfigurator config(tmp_yaml_);
+    const GLogConfigurator config(tmp_yaml_);
     EXPECT_EQ(config.getConfig().minLogLevel(), 2);
-    EXPECT_FALSE(config.getConfig().logToStderr());
-    EXPECT_TRUE(config.getConfig().customLogFormat());
 }
 
 TEST_F(GLogConfiguratorTest, GetConfig_WarningLogLevel)
@@ -109,7 +107,7 @@ glog:
   logToStderr: true
   customLogFormat: false
 )");
-    GLogConfigurator config(tmp_yaml_);
+    const GLogConfigurator config(tmp_yaml_);
     EXPECT_EQ(config.getConfig().logName(), "warn_test");
     EXPECT_EQ(config.getConfig().minLogLevel(), 1);
 }

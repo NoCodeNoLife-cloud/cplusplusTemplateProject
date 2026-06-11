@@ -118,7 +118,7 @@ protected:
  */
 TEST_F(IBufferTest, InitialState)
 {
-    TestBuffer buf(10);
+    const TestBuffer buf(10);
     EXPECT_EQ(buf.capacity(), 10);
     EXPECT_EQ(buf.position(), 0);
     EXPECT_EQ(buf.limit(), 10);
@@ -321,12 +321,12 @@ TEST_F(IBufferTest, HasRemaining)
 }
 
 /**
- * @brief Test zero capacity buffer
- * @edge Buffer with capacity 0 should have no remaining
+ * @brief Test buffer with zero capacity
+ * @edge A buffer with capacity 0 should have no remaining space
  */
 TEST_F(IBufferTest, ZeroCapacity)
 {
-    TestBuffer buf(0);
+    const TestBuffer buf(0);
     EXPECT_EQ(buf.capacity(), 0);
     EXPECT_EQ(buf.position(), 0);
     EXPECT_EQ(buf.limit(), 0);

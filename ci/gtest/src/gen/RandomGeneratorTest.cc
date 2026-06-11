@@ -38,7 +38,7 @@ protected:
  */
 TEST_F(RandomGeneratorTest, DefaultConstructor_ValidGenerator)
 {
-    EXPECT_NO_THROW(RandomGenerator generator);
+    EXPECT_NO_THROW(RandomGenerator());
 }
 
 /**
@@ -47,7 +47,7 @@ TEST_F(RandomGeneratorTest, DefaultConstructor_ValidGenerator)
  */
 TEST_F(RandomGeneratorTest, SeededConstructor_ValidGenerator)
 {
-    EXPECT_NO_THROW(RandomGenerator generator(42));
+    EXPECT_NO_THROW(RandomGenerator(42));
 }
 
 /**
@@ -104,7 +104,7 @@ TEST_F(RandomGeneratorTest, NextInt_MinEqualsMax)
 TEST_F(RandomGeneratorTest, NextInt_InvalidRange_ThrowsException)
 {
     RandomGenerator generator(12345);
-    EXPECT_THROW(generator.nextInt(100, 1), std::invalid_argument);
+    EXPECT_THROW((void)generator.nextInt(100, 1), std::invalid_argument);
 }
 
 /**
@@ -187,8 +187,8 @@ TEST_F(RandomGeneratorTest, NextBool_HalfProbability_MixedResults)
 TEST_F(RandomGeneratorTest, NextBool_InvalidProbability_ThrowsException)
 {
     RandomGenerator generator(12345);
-    EXPECT_THROW(generator.nextBool(-0.1), std::invalid_argument);
-    EXPECT_THROW(generator.nextBool(1.1), std::invalid_argument);
+    EXPECT_THROW((void)generator.nextBool(-0.1), std::invalid_argument);
+    EXPECT_THROW((void)generator.nextBool(1.1), std::invalid_argument);
 }
 
 /**
@@ -230,8 +230,8 @@ TEST_F(RandomGeneratorTest, NextDouble_CustomRange)
 TEST_F(RandomGeneratorTest, NextDouble_InvalidRange_ThrowsException)
 {
     RandomGenerator generator(12345);
-    EXPECT_THROW(generator.nextDouble(10.0, 5.0), std::invalid_argument);
-    EXPECT_THROW(generator.nextDouble(5.0, 5.0), std::invalid_argument);
+    EXPECT_THROW((void)generator.nextDouble(10.0, 5.0), std::invalid_argument);
+    EXPECT_THROW((void)generator.nextDouble(5.0, 5.0), std::invalid_argument);
 }
 
 /**
@@ -294,7 +294,7 @@ TEST_F(RandomGeneratorTest, NextString_CustomCharset)
 TEST_F(RandomGeneratorTest, NextString_EmptyCharset_ThrowsException)
 {
     RandomGenerator generator(12345);
-    EXPECT_THROW(generator.nextString(10, ""), std::invalid_argument);
+    EXPECT_THROW((void)generator.nextString(10, ""), std::invalid_argument);
 }
 
 /**
@@ -319,11 +319,11 @@ TEST_F(RandomGeneratorTest, NextString_DifferentSeeds_ProduceDifferentStrings)
 TEST_F(RandomGeneratorTest, NextGaussian_AroundMean)
 {
     RandomGenerator generator(12345);
-    const double mean = 100.0;
-    const double stddev = 10.0;
+    constexpr double mean = 100.0;
+    constexpr double stddev = 10.0;
 
     double sum = 0.0;
-    const int sampleCount = 10000;
+    constexpr int sampleCount = 10000;
 
     for (int i = 0; i < sampleCount; ++i)
     {
@@ -362,8 +362,8 @@ TEST_F(RandomGeneratorTest, NextGaussian_StandardNormal)
 TEST_F(RandomGeneratorTest, NextGaussian_InvalidStddev_ThrowsException)
 {
     RandomGenerator generator(12345);
-    EXPECT_THROW(generator.nextGaussian(0.0, 0.0), std::invalid_argument);
-    EXPECT_THROW(generator.nextGaussian(0.0, -1.0), std::invalid_argument);
+    EXPECT_THROW((void)generator.nextGaussian(0.0, 0.0), std::invalid_argument);
+    EXPECT_THROW((void)generator.nextGaussian(0.0, -1.0), std::invalid_argument);
 }
 
 /**

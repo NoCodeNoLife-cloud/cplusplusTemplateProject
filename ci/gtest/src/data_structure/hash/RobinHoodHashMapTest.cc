@@ -177,7 +177,7 @@ TEST_F(RobinHoodHashMapTest, Erase_ByConstIterator)
     RobinHoodHashMap<int, int> map;
     map.insert(1, 10);
     map.insert(2, 20);
-    auto it = map.find(1);
+    const auto it = map.find(1);
     ASSERT_NE(it, map.end());
     map.erase(it);
     EXPECT_EQ(map.size(), 1);
@@ -256,8 +256,7 @@ TEST_F(RobinHoodHashMapTest, CopyAssignment)
     map1.insert(1, 10);
     map1.insert(2, 20);
 
-    RobinHoodHashMap<int, int> map2;
-    map2 = map1;
+    RobinHoodHashMap<int, int> map2(map1);
     EXPECT_EQ(map2.size(), 2);
     EXPECT_EQ(map2.at(1), 10);
 }
@@ -309,7 +308,7 @@ TEST_F(RobinHoodHashMapTest, ForEach_Iteration)
     map.insert(3, 30);
 
     int sum = 0;
-    for (auto [key, value] : map)
+    for (const auto& [key, value] : map)
     {
         sum += value;
     }

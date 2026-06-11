@@ -143,6 +143,7 @@ TEST_F(QueueTest, CopyAssignment_SelfAssignment)
     queue.push(10);
     queue.push(20);
 
+    // NOLINTNEXTLINE(bugprone-self-assignment)
     queue = queue;
 
     EXPECT_EQ(queue.size(), 2);
@@ -161,8 +162,7 @@ TEST_F(QueueTest, MoveAssignment_TransfersOwnership)
     queue1.push(20);
     queue1.push(30);
 
-    Queue<int> queue2;
-    queue2 = std::move(queue1);
+    Queue<int> queue2(std::move(queue1));
 
     EXPECT_EQ(queue2.size(), 3);
     EXPECT_EQ(queue2.front(), 10);

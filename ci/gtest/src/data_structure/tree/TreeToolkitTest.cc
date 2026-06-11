@@ -337,7 +337,7 @@ namespace
 
 TEST_F(TreeToolkitTest, CustomNodeType_Height)
 {
-    auto root = std::make_unique<CustomNode>(1);
+    const auto root = std::make_unique<CustomNode>(1);
     root->left_ = std::make_unique<CustomNode>(2);
     root->left_->left_ = std::make_unique<CustomNode>(3);
     EXPECT_EQ(TreeToolkit::height(root.get()), 2);
@@ -345,7 +345,7 @@ TEST_F(TreeToolkitTest, CustomNodeType_Height)
 
 TEST_F(TreeToolkitTest, CustomNodeType_Size)
 {
-    auto root = std::make_unique<CustomNode>(1);
+    const auto root = std::make_unique<CustomNode>(1);
     root->left_ = std::make_unique<CustomNode>(2);
     root->right_ = std::make_unique<CustomNode>(3);
     root->left_->right_ = std::make_unique<CustomNode>(4);

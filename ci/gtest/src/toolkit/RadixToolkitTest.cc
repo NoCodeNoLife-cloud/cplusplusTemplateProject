@@ -33,7 +33,7 @@ protected:
  */
 TEST_F(RadixToolkitTest, Constructor_DefaultConfiguration)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_EQ(toolkit.get_default_base(), 10);
     EXPECT_EQ(toolkit.get_charset(), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 }
@@ -44,7 +44,7 @@ TEST_F(RadixToolkitTest, Constructor_DefaultConfiguration)
  */
 TEST_F(RadixToolkitTest, Constructor_CustomConfiguration)
 {
-    const RadixToolkit toolkit(16, "0123456789ABCDEF");
+    constexpr RadixToolkit toolkit(16, "0123456789ABCDEF");
     EXPECT_EQ(toolkit.get_default_base(), 16);
     EXPECT_EQ(toolkit.get_charset(), "0123456789ABCDEF");
 }
@@ -55,7 +55,7 @@ TEST_F(RadixToolkitTest, Constructor_CustomConfiguration)
  */
 TEST_F(RadixToolkitTest, Constructor_InvalidBaseLow_ThrowsException)
 {
-    EXPECT_THROW(RadixToolkit toolkit(1, "01"), std::invalid_argument);
+    EXPECT_THROW(RadixToolkit(1, "01"), std::invalid_argument);
 }
 
 /**
@@ -64,7 +64,7 @@ TEST_F(RadixToolkitTest, Constructor_InvalidBaseLow_ThrowsException)
  */
 TEST_F(RadixToolkitTest, Constructor_BaseExceedsCharset_ThrowsException)
 {
-    EXPECT_THROW(RadixToolkit toolkit(5, "0123"), std::invalid_argument);
+    EXPECT_THROW(RadixToolkit(5, "0123"), std::invalid_argument);
 }
 
 /**
@@ -73,7 +73,7 @@ TEST_F(RadixToolkitTest, Constructor_BaseExceedsCharset_ThrowsException)
  */
 TEST_F(RadixToolkitTest, ToString_DecimalDefaultBase)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_EQ(toolkit.to_string(42), "42");
     EXPECT_EQ(toolkit.to_string(0), "0");
     EXPECT_EQ(toolkit.to_string(-123), "-123");
@@ -85,7 +85,7 @@ TEST_F(RadixToolkitTest, ToString_DecimalDefaultBase)
  */
 TEST_F(RadixToolkitTest, ToString_BinaryOverrideBase)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_EQ(toolkit.to_string(5, 2), "101");
     EXPECT_EQ(toolkit.to_string(0, 2), "0");
 }
@@ -96,7 +96,7 @@ TEST_F(RadixToolkitTest, ToString_BinaryOverrideBase)
  */
 TEST_F(RadixToolkitTest, ToString_Hexadecimal)
 {
-    const RadixToolkit toolkit(16, "0123456789ABCDEF");
+    constexpr RadixToolkit toolkit(16, "0123456789ABCDEF");
     EXPECT_EQ(toolkit.to_string(255), "FF");
     EXPECT_EQ(toolkit.to_string(10), "A");
     EXPECT_EQ(toolkit.to_string(0), "0");
@@ -108,7 +108,7 @@ TEST_F(RadixToolkitTest, ToString_Hexadecimal)
  */
 TEST_F(RadixToolkitTest, ToString_UnsignedTypes)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_EQ(toolkit.to_string(static_cast<unsigned int>(42)), "42");
     EXPECT_EQ(toolkit.to_string(static_cast<unsigned long>(100)), "100");
 }
@@ -119,7 +119,7 @@ TEST_F(RadixToolkitTest, ToString_UnsignedTypes)
  */
 TEST_F(RadixToolkitTest, FromString_DecimalDefaultBase)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_EQ(toolkit.from_string<int>("42"), 42);
     EXPECT_EQ(toolkit.from_string<int>("0"), 0);
     EXPECT_EQ(toolkit.from_string<int>("-123"), -123);
@@ -131,7 +131,7 @@ TEST_F(RadixToolkitTest, FromString_DecimalDefaultBase)
  */
 TEST_F(RadixToolkitTest, FromString_PositiveSignPrefix)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_EQ(toolkit.from_string<int>("+42"), 42);
 }
 
@@ -141,7 +141,7 @@ TEST_F(RadixToolkitTest, FromString_PositiveSignPrefix)
  */
 TEST_F(RadixToolkitTest, FromString_BinaryOverrideBase)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_EQ(toolkit.from_string<int>("101", 2), 5);
     EXPECT_EQ(toolkit.from_string<int>("0", 2), 0);
 }
@@ -152,7 +152,7 @@ TEST_F(RadixToolkitTest, FromString_BinaryOverrideBase)
  */
 TEST_F(RadixToolkitTest, FromString_Hexadecimal)
 {
-    const RadixToolkit toolkit(16, "0123456789ABCDEF");
+    constexpr RadixToolkit toolkit(16, "0123456789ABCDEF");
     EXPECT_EQ(toolkit.from_string<int>("FF"), 255);
     EXPECT_EQ(toolkit.from_string<int>("A"), 10);
 }
@@ -163,7 +163,7 @@ TEST_F(RadixToolkitTest, FromString_Hexadecimal)
  */
 TEST_F(RadixToolkitTest, FromString_LowercaseLetters)
 {
-    const RadixToolkit toolkit(16, "0123456789ABCDEF");
+    constexpr RadixToolkit toolkit(16, "0123456789ABCDEF");
     EXPECT_EQ(toolkit.from_string<int>("ff"), 255);
     EXPECT_EQ(toolkit.from_string<int>("a"), 10);
 }
@@ -174,7 +174,7 @@ TEST_F(RadixToolkitTest, FromString_LowercaseLetters)
  */
 TEST_F(RadixToolkitTest, FromString_EmptyString_ThrowsException)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>(""), std::invalid_argument);
 }
 
@@ -184,7 +184,7 @@ TEST_F(RadixToolkitTest, FromString_EmptyString_ThrowsException)
  */
 TEST_F(RadixToolkitTest, FromString_InvalidCharacter_ThrowsException)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>("12X", 10), std::invalid_argument);
 }
 
@@ -194,7 +194,7 @@ TEST_F(RadixToolkitTest, FromString_InvalidCharacter_ThrowsException)
  */
 TEST_F(RadixToolkitTest, FromString_Overflow_ThrowsException)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>("99999999999999999999999"), std::out_of_range);
 }
 
@@ -272,7 +272,7 @@ TEST_F(RadixToolkitTest, ConvertToString_BaseExceedsCharset_ThrowsException)
  */
 TEST_F(RadixToolkitTest, ConvertFromString_StaticDecimal)
 {
-    const auto result = RadixToolkit::convert_from_string<int>("42", 10);
+    constexpr auto result = RadixToolkit::convert_from_string<int>("42", 10);
     EXPECT_EQ(result, 42);
 }
 
@@ -282,7 +282,7 @@ TEST_F(RadixToolkitTest, ConvertFromString_StaticDecimal)
  */
 TEST_F(RadixToolkitTest, ConvertFromString_StaticBinary)
 {
-    const auto result = RadixToolkit::convert_from_string<int>("1010", 2);
+    constexpr auto result = RadixToolkit::convert_from_string<int>("1010", 2);
     EXPECT_EQ(result, 10);
 }
 
@@ -292,7 +292,7 @@ TEST_F(RadixToolkitTest, ConvertFromString_StaticBinary)
  */
 TEST_F(RadixToolkitTest, ConvertFromString_StaticHexadecimal)
 {
-    const auto result = RadixToolkit::convert_from_string<int>("FF", 16);
+    constexpr auto result = RadixToolkit::convert_from_string<int>("FF", 16);
     EXPECT_EQ(result, 255);
 }
 
@@ -302,7 +302,7 @@ TEST_F(RadixToolkitTest, ConvertFromString_StaticHexadecimal)
  */
 TEST_F(RadixToolkitTest, ConvertFromString_NegativeValues)
 {
-    const auto result = RadixToolkit::convert_from_string<int>("-42", 10);
+    constexpr auto result = RadixToolkit::convert_from_string<int>("-42", 10);
     EXPECT_EQ(result, -42);
 }
 
@@ -415,7 +415,7 @@ TEST_F(RadixToolkitTest, FromStringNothrow_PartialParse)
  */
 TEST_F(RadixToolkitTest, Boundary_INT_MAX)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     constexpr auto max_val = std::numeric_limits<int>::max();
     const auto str = toolkit.to_string(max_val);
     const auto parsed = toolkit.from_string<int>(str);
@@ -428,7 +428,7 @@ TEST_F(RadixToolkitTest, Boundary_INT_MAX)
  */
 TEST_F(RadixToolkitTest, Boundary_INT_MIN)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     constexpr auto min_val = std::numeric_limits<int>::min();
     const auto str = toolkit.to_string(min_val);
     const auto parsed = toolkit.from_string<int>(str);
@@ -441,7 +441,7 @@ TEST_F(RadixToolkitTest, Boundary_INT_MIN)
  */
 TEST_F(RadixToolkitTest, Boundary_OverflowPositive_ThrowsException)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>("2147483648"), std::out_of_range);
 }
 
@@ -451,7 +451,7 @@ TEST_F(RadixToolkitTest, Boundary_OverflowPositive_ThrowsException)
  */
 TEST_F(RadixToolkitTest, Boundary_UnderflowNegative_ThrowsException)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     EXPECT_THROW((void)toolkit.from_string<int>("-2147483649"), std::out_of_range);
 }
 
@@ -461,7 +461,7 @@ TEST_F(RadixToolkitTest, Boundary_UnderflowNegative_ThrowsException)
  */
 TEST_F(RadixToolkitTest, TypeVariants_DifferentIntegralTypes)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
 
     // short
     EXPECT_EQ(toolkit.to_string(static_cast<short>(100)), "100");
@@ -482,7 +482,7 @@ TEST_F(RadixToolkitTest, TypeVariants_DifferentIntegralTypes)
  */
 TEST_F(RadixToolkitTest, TypeVariants_UnsignedBoundary)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     constexpr auto max_uint = std::numeric_limits<unsigned int>::max();
     const auto str = toolkit.to_string(max_uint);
     const auto parsed = toolkit.from_string<unsigned int>(str);
@@ -495,7 +495,7 @@ TEST_F(RadixToolkitTest, TypeVariants_UnsignedBoundary)
  */
 TEST_F(RadixToolkitTest, RoundTrip_ConversionConsistency)
 {
-    const RadixToolkit toolkit;
+    constexpr RadixToolkit toolkit;
     const std::vector test_values = {0, 1, -1, 42, -42, 100, -100, 255, 1024, -1024};
 
     for (int val : test_values)

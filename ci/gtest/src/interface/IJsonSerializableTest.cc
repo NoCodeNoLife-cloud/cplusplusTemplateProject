@@ -22,8 +22,7 @@ namespace
         std::string name_;
         int value_ = 0;
 
-        MockJsonSerializable() = default;
-        MockJsonSerializable(std::string name, int value)
+        MockJsonSerializable(std::string name = "test", int value = 42)
             : name_(std::move(name)), value_(value) {}
 
         void serialize(rapidjson::Writer<rapidjson::StringBuffer>& writer) const override
@@ -51,7 +50,7 @@ class IJsonSerializableTest : public testing::Test
 protected:
     void SetUp() override
     {
-        obj_.reset(new MockJsonSerializable("test", 42));
+        obj_ = std::make_unique<MockJsonSerializable>();
     }
 
     void TearDown() override

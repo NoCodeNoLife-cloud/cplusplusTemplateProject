@@ -149,7 +149,7 @@ TEST_F(ObjectFactoryTest, CreateObject_ValidTypes)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
 
     // Create Circle
     const auto circle = ObjectFactory<IShape>::createObject("Circle");
@@ -178,7 +178,7 @@ TEST_F(ObjectFactoryTest, CreateObject_MultipleInstances)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
 
     // Create multiple instances of the same type
     const auto circle1 = ObjectFactory<IShape>::createObject("Circle");
@@ -198,10 +198,10 @@ TEST_F(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
 
     EXPECT_THROW(
-        ObjectFactory<IShape>::createObject("UnknownShape"),
+        static_cast<void>(ObjectFactory<IShape>::createObject("UnknownShape")),
         std::runtime_error
     );
 }
@@ -213,7 +213,7 @@ TEST_F(ObjectFactoryTest, CreateObject_UnregisteredType_ThrowsException)
 TEST_F(ObjectFactoryTest, CreateObject_EmptyTypeName_ThrowsException)
 {
     EXPECT_THROW(
-        ObjectFactory<IShape>::createObject(""),
+        static_cast<void>(ObjectFactory<IShape>::createObject("")),
         std::invalid_argument
     );
 }
@@ -241,7 +241,7 @@ TEST_F(ObjectFactoryTest, IsRegistered_AfterExecution)
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered("Circle"));
 
     // After execution, types should be registered
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Circle"));
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Rectangle"));
 }
@@ -255,7 +255,7 @@ TEST_F(ObjectFactoryTest, IsRegistered_NonExistentType)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
 
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered("Pentagon"));
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered("Hexagon"));
@@ -300,7 +300,7 @@ TEST_F(ObjectFactoryTest, ClearRegistry_AfterRegistration)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
 
     // Verify types are registered
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Circle"));
@@ -319,7 +319,7 @@ TEST_F(ObjectFactoryTest, ClearRegistry_AndReregister)
     ShapeFactory factory;
 
     // Register
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Circle"));
 
     // Clear
@@ -327,7 +327,7 @@ TEST_F(ObjectFactoryTest, ClearRegistry_AndReregister)
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered("Circle"));
 
     // Re-register
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Circle"));
 
     // Should be able to create objects again
@@ -354,7 +354,7 @@ TEST_F(ObjectFactoryTest, RegisterWithDifferentArguments)
     };
 
     CustomFactory factory;
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
 
     const auto small = ObjectFactory<IShape>::createObject("SmallCircle");
     const auto large = ObjectFactory<IShape>::createObject("LargeCircle");
@@ -377,7 +377,7 @@ TEST_F(ObjectFactoryTest, PolymorphicBehavior)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
 
     const std::vector<std::string> shape_names = {"Circle", "Rectangle", "Triangle"};
     std::vector<std::unique_ptr<IShape>> shapes;
@@ -403,7 +403,7 @@ TEST_F(ObjectFactoryTest, ThreadSafety_BasicOperations)
 {
     ObjectFactory<IShape>::clearRegistry();
     ShapeFactory factory;
-    factory.execute();
+    EXPECT_TRUE(factory.execute());
 
     // Multiple creations should work correctly
     for (int i = 0; i < 10; ++i)

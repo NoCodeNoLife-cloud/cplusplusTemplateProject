@@ -16,7 +16,7 @@ using namespace common::io::writer;
 class BufferedOutputStreamTest : public testing::Test
 {
 protected:
-    ByteArrayOutputStream* inner_;
+    ByteArrayOutputStream* inner_ = nullptr;
     std::unique_ptr<BufferedOutputStream> stream_;
 
     void SetUp() override

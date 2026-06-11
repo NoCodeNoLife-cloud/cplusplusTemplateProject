@@ -80,11 +80,15 @@ TEST_F(LinkedListTest, CopyConstructor_DeepCopy)
  */
 TEST_F(LinkedListTest, CopyConstructor_EmptyList)
 {
-    const LinkedList<int> list1;
+    LinkedList<int> list1;
     const LinkedList list2(list1);
 
     EXPECT_TRUE(list2.empty());
     EXPECT_EQ(list2.size(), 0);
+
+    // Modify original should not affect copy
+    list1.push_back(10);
+    EXPECT_TRUE(list2.empty());
 }
 
 /**
@@ -105,7 +109,9 @@ TEST_F(LinkedListTest, MoveConstructor_TransfersOwnership)
     EXPECT_EQ(list2.back(), 30);
 
     // Moved-from list should be empty
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(list1.empty());
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_EQ(list1.size(), 0);
 }
 
@@ -143,6 +149,7 @@ TEST_F(LinkedListTest, CopyAssignment_SelfAssignment)
     list.push_back(2);
     list.push_back(3);
 
+    // NOLINTNEXTLINE(bugprone-self-assignment)
     list = list;
 
     EXPECT_EQ(list.size(), 3);
@@ -167,6 +174,7 @@ TEST_F(LinkedListTest, MoveAssignment_TransfersOwnership)
     EXPECT_EQ(list2.size(), 2);
     EXPECT_EQ(list2.front(), 10);
     EXPECT_EQ(list2.back(), 20);
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(list1.empty());
 }
 
@@ -317,7 +325,7 @@ TEST_F(LinkedListTest, Insert_Beginning)
     list.push_back(2);
     list.push_back(3);
 
-    auto it = list.insert(list.begin(), 1);
+    const auto it = list.insert(list.begin(), 1);
     EXPECT_EQ(*it, 1);
     EXPECT_EQ(list.size(), 3);
     EXPECT_EQ(list.front(), 1);
@@ -334,7 +342,7 @@ TEST_F(LinkedListTest, Insert_End)
     list.push_back(1);
     list.push_back(2);
 
-    auto it = list.insert(list.end(), 3);
+    const auto it = list.insert(list.end(), 3);
     EXPECT_EQ(*it, 3);
     EXPECT_EQ(list.size(), 3);
     EXPECT_EQ(list.back(), 3);
@@ -356,7 +364,7 @@ TEST_F(LinkedListTest, Insert_Middle)
     EXPECT_EQ(*it, 2);
     EXPECT_EQ(list.size(), 3);
 
-    std::vector<int> expected = {1, 2, 3};
+    const std::vector expected = {1, 2, 3};
     EXPECT_EQ(list.toVector(), expected);
 }
 
@@ -371,7 +379,7 @@ TEST_F(LinkedListTest, Erase_Beginning)
     list.push_back(2);
     list.push_back(3);
 
-    auto it = list.erase(list.begin());
+    const auto it = list.erase(list.begin());
     EXPECT_EQ(*it, 2);
     EXPECT_EQ(list.size(), 2);
     EXPECT_EQ(list.front(), 2);
@@ -415,7 +423,7 @@ TEST_F(LinkedListTest, Erase_Middle)
     EXPECT_EQ(*it, 3);
     EXPECT_EQ(list.size(), 3);
 
-    std::vector<int> expected = {1, 3, 4};
+    const std::vector expected = {1, 3, 4};
     EXPECT_EQ(list.toVector(), expected);
 }
 
@@ -434,11 +442,11 @@ TEST_F(LinkedListTest, Remove_AllMatchingValues)
     list.push_back(3);
     list.push_back(1);
 
-    auto count = list.remove(1);
+    const auto count = list.remove(1);
     EXPECT_EQ(count, 3);
     EXPECT_EQ(list.size(), 2);
 
-    std::vector<int> expected = {2, 3};
+    const std::vector expected = {2, 3};
     EXPECT_EQ(list.toVector(), expected);
 }
 
@@ -452,7 +460,7 @@ TEST_F(LinkedListTest, Remove_NoMatch)
     list.push_back(1);
     list.push_back(2);
 
-    auto count = list.remove(99);
+    const auto count = list.remove(99);
     EXPECT_EQ(count, 0);
     EXPECT_EQ(list.size(), 2);
 }
@@ -469,11 +477,11 @@ TEST_F(LinkedListTest, RemoveIf_RemovesMatching)
         list.push_back(i);
     }
 
-    auto count = list.remove_if([](int x) { return x % 2 == 0; });
+    const auto count = list.remove_if([](int x) { return x % 2 == 0; });
     EXPECT_EQ(count, 3);
     EXPECT_EQ(list.size(), 3);
 
-    std::vector<int> expected = {1, 3, 5};
+    const std::vector expected = {1, 3, 5};
     EXPECT_EQ(list.toVector(), expected);
 }
 
@@ -493,7 +501,7 @@ TEST_F(LinkedListTest, Reverse_MultipleElements)
 
     list.reverse();
 
-    std::vector<int> expected = {5, 4, 3, 2, 1};
+    const std::vector expected = {5, 4, 3, 2, 1};
     EXPECT_EQ(list.toVector(), expected);
 }
 
@@ -556,12 +564,12 @@ TEST_F(LinkedListTest, Iterators_ForwardTraversal)
     }
 
     std::vector<int> result;
-    for (auto it = list.begin(); it != list.end(); ++it)
+    for (const auto& val : list)
     {
-        result.push_back(*it);
+        result.push_back(val);
     }
 
-    std::vector<int> expected = {1, 2, 3, 4};
+    const std::vector expected = {1, 2, 3, 4};
     EXPECT_EQ(result, expected);
 }
 
@@ -594,7 +602,7 @@ TEST_F(LinkedListTest, Iterators_BackwardTraversal)
         --prev;
     }
 
-    std::vector<int> expected = {4, 3, 2, 1};
+    const std::vector expected = {4, 3, 2, 1};
     EXPECT_EQ(result, expected);
 }
 
@@ -629,12 +637,12 @@ TEST_F(LinkedListTest, Iterators_ConstIteration)
 
     const auto& clist = list;
     std::vector<int> result;
-    for (auto it = clist.cbegin(); it != clist.cend(); ++it)
+    for (const auto& val : clist)
     {
-        result.push_back(*it);
+        result.push_back(val);
     }
 
-    std::vector<int> expected = {1, 2};
+    const std::vector expected = {1, 2};
     EXPECT_EQ(result, expected);
 }
 
@@ -792,7 +800,7 @@ TEST_F(LinkedListTest, ToVector_ReturnsElementsInOrder)
         list.push_back(i);
     }
 
-    std::vector<int> expected = {0, 1, 2, 3, 4};
+    const std::vector expected = {0, 1, 2, 3, 4};
     EXPECT_EQ(list.toVector(), expected);
 }
 
@@ -814,7 +822,7 @@ TEST_F(LinkedListTest, ToVector_EmptyList)
  */
 TEST_F(LinkedListTest, Front_EmptyList_ThrowsException)
 {
-    LinkedList<int> list;
+    const LinkedList<int> list;
     EXPECT_THROW(list.front(), std::out_of_range);
 }
 
@@ -824,7 +832,7 @@ TEST_F(LinkedListTest, Front_EmptyList_ThrowsException)
  */
 TEST_F(LinkedListTest, Back_EmptyList_ThrowsException)
 {
-    LinkedList<int> list;
+    const LinkedList<int> list;
     EXPECT_THROW(list.back(), std::out_of_range);
 }
 
@@ -936,13 +944,13 @@ TEST_F(LinkedListTest, LargeDataSet_RemoveEvenNumbers)
         list.push_back(i);
     }
 
-    auto count = list.remove_if([](int x) { return x % 2 == 0; });
+    const auto count = list.remove_if([](int x) { return x % 2 == 0; });
     EXPECT_EQ(count, n / 2);
     EXPECT_EQ(list.size(), n / 2);
 
     // Verify all remaining are odd
-    for (auto it = list.begin(); it != list.end(); ++it)
+    for (const auto& val : list)
     {
-        EXPECT_NE(*it % 2, 0);
+        EXPECT_NE(val % 2, 0);
     }
 }

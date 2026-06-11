@@ -24,8 +24,10 @@ namespace
         {
             argcArg_ = argc;
             lastArgs_.clear();
-            for (int i = 0; i < argc; i++)
-                lastArgs_.emplace_back(argv[i]);
+            if (argv != nullptr)
+                for (int i = 0; i < argc; i++)
+                    if (argv[i] != nullptr)
+                        lastArgs_.emplace_back(argv[i]);
             return returnValue_;
         }
 
@@ -43,7 +45,7 @@ class IApplicationExecutorTest : public testing::Test
 protected:
     void SetUp() override
     {
-        executor_.reset(new MockExecutor());
+        executor_ = std::make_unique<MockExecutor>();
     }
 
     void TearDown() override
@@ -60,7 +62,7 @@ TEST_F(IApplicationExecutorTest, ExecuteWithArgcArgv)
     char arg2[] = "--help";
     char* argv[] = {arg1, arg2};
 
-    bool result = executor_->execute(2, argv);
+    const bool result = executor_->execute(2, argv);
 
     EXPECT_TRUE(result);
     EXPECT_EQ(executor_->argcArg_, 2);
@@ -71,9 +73,9 @@ TEST_F(IApplicationExecutorTest, ExecuteWithArgcArgv)
 
 TEST_F(IApplicationExecutorTest, ExecuteWithVectorArgs)
 {
-    std::vector<std::string> args = {"app", "-v", "config.yaml"};
+    const std::vector<std::string> args = {"app", "-v", "config.yaml"};
 
-    bool result = executor_->execute(args);
+    const bool result = executor_->execute(args);
 
     EXPECT_TRUE(result);
     EXPECT_EQ(executor_->argcArg_, 3);
@@ -86,18 +88,18 @@ TEST_F(IApplicationExecutorTest, ExecuteWithVectorArgs)
 TEST_F(IApplicationExecutorTest, ExecuteReturnsFalseOnFailure)
 {
     executor_->returnValue_ = false;
-    std::vector<std::string> args = {"fail"};
+    const std::vector<std::string> args = {"fail"};
 
-    bool result = executor_->execute(args);
+    const bool result = executor_->execute(args);
 
     EXPECT_FALSE(result);
 }
 
 TEST_F(IApplicationExecutorTest, ExecuteWithEmptyArgs)
 {
-    std::vector<std::string> args;
+    const std::vector<std::string> args;
 
-    bool result = executor_->execute(args);
+    const bool result = executor_->execute(args);
 
     EXPECT_TRUE(result);
     EXPECT_EQ(executor_->argcArg_, 0);
@@ -106,7 +108,7 @@ TEST_F(IApplicationExecutorTest, ExecuteWithEmptyArgs)
 
 TEST_F(IApplicationExecutorTest, ExecuteWithArgcZero)
 {
-    auto result = executor_->execute(0, nullptr);
+    const auto result = executor_->execute(0, nullptr);
 
     EXPECT_TRUE(result);
     EXPECT_EQ(executor_->argcArg_, 0);
@@ -115,7 +117,7 @@ TEST_F(IApplicationExecutorTest, ExecuteWithArgcZero)
 
 TEST_F(IApplicationExecutorTest, ExecuteWithMultipleArgsPreservesOrder)
 {
-    std::vector<std::string> args = {"first", "second", "third", "fourth"};
+    const std::vector<std::string> args = {"first", "second", "third", "fourth"};
 
     executor_->execute(args);
 
@@ -128,7 +130,7 @@ TEST_F(IApplicationExecutorTest, ExecuteWithMultipleArgsPreservesOrder)
 
 TEST_F(IApplicationExecutorTest, ExecuteDoesNotThrow)
 {
-    std::vector<std::string> args = {"test"};
+    const std::vector<std::string> args = {"test"};
     EXPECT_NO_THROW(executor_->execute(args));
 }
 

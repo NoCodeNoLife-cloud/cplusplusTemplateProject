@@ -60,7 +60,7 @@ TEST_F(TreeSetTest, CopyConstructor_DeepCopy)
     EXPECT_TRUE(set1.insert(20));
     EXPECT_TRUE(set1.insert(30));
 
-    TreeSet set2(set1);
+    const TreeSet set2(set1);
 
     EXPECT_EQ(set2.size(), set1.size());
     EXPECT_TRUE(set2.contains(10));
@@ -95,7 +95,7 @@ TEST_F(TreeSetTest, MoveConstructor_TransfersOwnership)
     set1.insert(10);
     set1.insert(20);
 
-    TreeSet set2(std::move(set1));
+    const TreeSet set2(std::move(set1));
 
     EXPECT_EQ(set2.size(), 2);
     EXPECT_TRUE(set2.contains(10));
@@ -183,7 +183,7 @@ TEST_F(TreeSetTest, Insert_AscendingOrder)
     }
     EXPECT_EQ(set.size(), 100);
 
-    auto vec = set.toVector();
+    const auto vec = set.toVector();
     for (int i = 0; i < 100; ++i)
     {
         EXPECT_EQ(vec[i], i);
@@ -203,7 +203,7 @@ TEST_F(TreeSetTest, Insert_DescendingOrder)
     }
     EXPECT_EQ(set.size(), 100);
 
-    auto vec = set.toVector();
+    const auto vec = set.toVector();
     for (int i = 0; i < 100; ++i)
     {
         EXPECT_EQ(vec[i], i);
@@ -217,7 +217,7 @@ TEST_F(TreeSetTest, Insert_DescendingOrder)
 TEST_F(TreeSetTest, Insert_RandomOrder)
 {
     TreeSet<int> set;
-    std::vector<int> values = {5, 3, 8, 1, 9, 2, 7, 4, 6, 0};
+    const std::vector<int> values = {5, 3, 8, 1, 9, 2, 7, 4, 6, 0};
 
     for (int v : values)
     {
@@ -225,7 +225,7 @@ TEST_F(TreeSetTest, Insert_RandomOrder)
     }
     EXPECT_EQ(set.size(), 10);
 
-    std::vector<int> expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    const std::vector<int> expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     EXPECT_EQ(set.toVector(), expected);
 }
 
@@ -278,7 +278,7 @@ TEST_F(TreeSetTest, Erase_RootElement)
     EXPECT_FALSE(set.contains(5));
     EXPECT_EQ(set.size(), 6);
 
-    std::vector<int> expected = {1, 3, 4, 7, 8, 9};
+    const std::vector<int> expected = {1, 3, 4, 7, 8, 9};
     EXPECT_EQ(set.toVector(), expected);
 }
 
@@ -297,7 +297,7 @@ TEST_F(TreeSetTest, Erase_LeafElement)
     EXPECT_FALSE(set.contains(3));
     EXPECT_EQ(set.size(), 2);
 
-    std::vector<int> expected = {5, 8};
+    const std::vector<int> expected = {5, 8};
     EXPECT_EQ(set.toVector(), expected);
 }
 
@@ -351,7 +351,7 @@ TEST_F(TreeSetTest, FindValue_ExistingElement_ReturnsValue)
 {
     TreeSet<int> set;
     set.insert(42);
-    auto result = set.findValue(42);
+    const auto result = set.findValue(42);
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 42);
 }
@@ -380,7 +380,7 @@ TEST_F(TreeSetTest, Min_ReturnsSmallestElement)
     set.insert(20);
     set.insert(1);
 
-    auto result = set.min();
+    const auto result = set.min();
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 1);
 }
@@ -397,7 +397,7 @@ TEST_F(TreeSetTest, Max_ReturnsLargestElement)
     set.insert(20);
     set.insert(1);
 
-    auto result = set.max();
+    const auto result = set.max();
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value(), 20);
 }
@@ -450,7 +450,7 @@ TEST_F(TreeSetTest, ToVector_ReturnsSortedOrder)
     set.insert(1);
     set.insert(4);
 
-    std::vector<int> expected = {1, 3, 4, 5, 8};
+    const std::vector<int> expected = {1, 3, 4, 5, 8};
     EXPECT_EQ(set.toVector(), expected);
 }
 
@@ -553,8 +553,8 @@ TEST_F(TreeSetTest, StringType_Operations)
     EXPECT_TRUE(set.contains("cherry"));
 
     // Verify sorted order
-    auto vec = set.toVector();
-    std::vector<std::string> expected = {"apple", "banana", "cherry"};
+    const auto vec = set.toVector();
+    const std::vector<std::string> expected = {"apple", "banana", "cherry"};
     EXPECT_EQ(vec, expected);
 
     // Verify min and max
@@ -582,8 +582,8 @@ TEST_F(TreeSetTest, InsertErase_Cycle)
     }
     EXPECT_EQ(set.size(), 5);
 
-    auto vec = set.toVector();
-    std::vector<int> expected = {0, 1, 2, 3, 4};
+    const auto vec = set.toVector();
+    const std::vector<int> expected = {0, 1, 2, 3, 4};
     EXPECT_EQ(vec, expected);
 }
 
@@ -610,7 +610,7 @@ TEST_F(TreeSetTest, LargeNumberOfElements_Correctness)
     }
 
     // Verify sorted order
-    auto vec = set.toVector();
+    const auto vec = set.toVector();
     EXPECT_EQ(vec.size(), n);
     for (int i = 0; i < n; ++i)
     {

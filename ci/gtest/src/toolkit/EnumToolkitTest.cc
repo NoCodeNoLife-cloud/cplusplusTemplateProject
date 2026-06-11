@@ -415,7 +415,7 @@ TEST_F(EnumToolkitTest, FormatEnumInfo_BasicEnum)
     EXPECT_NE(info.find("Enum Type:"), std::string::npos);
     EXPECT_NE(info.find("Color"), std::string::npos);
     EXPECT_NE(info.find("Count:"), std::string::npos);
-    EXPECT_NE(info.find("4"), std::string::npos);
+    EXPECT_NE(info.find('4'), std::string::npos);
     EXPECT_NE(info.find("Red"), std::string::npos);
     EXPECT_NE(info.find("Green"), std::string::npos);
     EXPECT_NE(info.find("Blue"), std::string::npos);
@@ -433,7 +433,7 @@ TEST_F(EnumToolkitTest, FormatEnumInfo_CustomValueEnum)
     EXPECT_NE(info.find("Enum Type:"), std::string::npos);
     EXPECT_NE(info.find("Status"), std::string::npos);
     EXPECT_NE(info.find("Count:"), std::string::npos);
-    EXPECT_NE(info.find("3"), std::string::npos);
+    EXPECT_NE(info.find('3'), std::string::npos);
     EXPECT_NE(info.find("Success"), std::string::npos);
     EXPECT_NE(info.find("Failed"), std::string::npos);
     EXPECT_NE(info.find("Pending"), std::string::npos);

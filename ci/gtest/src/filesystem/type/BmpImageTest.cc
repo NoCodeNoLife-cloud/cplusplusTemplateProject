@@ -38,7 +38,7 @@ protected:
 
 TEST_F(BmpImageTest, CreateValidImage)
 {
-    BmpImage img(10, 10);
+    const BmpImage img(10, 10);
     EXPECT_EQ(img.getWidth(), 10);
     EXPECT_EQ(img.getHeight(), 10);
 }
@@ -81,7 +81,7 @@ TEST_F(BmpImageTest, SetAndGetPixel)
 
 TEST_F(BmpImageTest, GetPixelOutOfBounds)
 {
-    BmpImage img(5, 5);
+    const BmpImage img(5, 5);
     uint8_t r, g, b;
     EXPECT_FALSE(img.getPixel(-1, 0, r, g, b));
     EXPECT_FALSE(img.getPixel(0, -1, r, g, b));
@@ -146,7 +146,7 @@ TEST_F(BmpImageTest, LoadInvalidFile)
 
 TEST_F(BmpImageTest, DefaultPixelsAreBlack)
 {
-    BmpImage img(4, 4);
+    const BmpImage img(4, 4);
     uint8_t r, g, b;
     EXPECT_TRUE(img.getPixel(2, 2, r, g, b));
     EXPECT_EQ(r, 0);
@@ -178,7 +178,7 @@ TEST_F(BmpImageTest, SinglePixelRoundTrip)
         img.setPixel(0, 0, 255, 128, 64);
         EXPECT_TRUE(img.save(tmpPath_));
     }
-    BmpImage loaded(tmpPath_);
+    const BmpImage loaded(tmpPath_);
     EXPECT_EQ(loaded.getWidth(), 1);
     EXPECT_EQ(loaded.getHeight(), 1);
     uint8_t r, g, b;
@@ -195,7 +195,7 @@ TEST_F(BmpImageTest, LargeImageRoundTrip)
         img.setPixel(50, 50, 128, 128, 128);
         EXPECT_TRUE(img.save(tmpPath_));
     }
-    BmpImage loaded(tmpPath_);
+    const BmpImage loaded(tmpPath_);
     EXPECT_EQ(loaded.getWidth(), 100);
     EXPECT_EQ(loaded.getHeight(), 100);
     uint8_t r, g, b;
@@ -218,7 +218,7 @@ TEST_F(BmpImageTest, AllWhiteImage)
     }
     EXPECT_TRUE(img.save(tmpPath_));
 
-    BmpImage loaded(tmpPath_);
+    const BmpImage loaded(tmpPath_);
     for (int y = 0; y < size; ++y)
     {
         for (int x = 0; x < size; ++x)
@@ -235,14 +235,14 @@ TEST_F(BmpImageTest, AllWhiteImage)
 TEST_F(BmpImageTest, OverwriteExistingFile)
 {
     {
-        BmpImage img(2, 2);
+        const BmpImage img(2, 2);
         EXPECT_TRUE(img.save(tmpPath_));
     }
     {
-        BmpImage img(4, 4);
+        const BmpImage img(4, 4);
         EXPECT_TRUE(img.save(tmpPath_));
     }
-    BmpImage loaded(tmpPath_);
+    const BmpImage loaded(tmpPath_);
     EXPECT_EQ(loaded.getWidth(), 4);
     EXPECT_EQ(loaded.getHeight(), 4);
 }
@@ -264,7 +264,7 @@ TEST_F(BmpImageTest, LoadTruncatedFile)
         std::ofstream f(tmpPath_, std::ios::binary);
         f.put('B');
         f.put('M');
-        uint32_t fileSize = 54;
+        const uint32_t fileSize = 54;
         f.write(reinterpret_cast<const char*>(&fileSize), 4);
         for (int i = 0; i < 48; ++i) f.put(0x00);
     }
@@ -274,10 +274,10 @@ TEST_F(BmpImageTest, LoadTruncatedFile)
 TEST_F(BmpImageTest, AllBlackImageRoundTrip)
 {
     {
-        BmpImage img(3, 3);
+        const BmpImage img(3, 3);
         EXPECT_TRUE(img.save(tmpPath_));
     }
-    BmpImage loaded(tmpPath_);
+    const BmpImage loaded(tmpPath_);
     EXPECT_EQ(loaded.getWidth(), 3);
     EXPECT_EQ(loaded.getHeight(), 3);
     uint8_t r, g, b;
@@ -294,7 +294,7 @@ TEST_F(BmpImageTest, RectangularImage)
     EXPECT_EQ(img.getHeight(), 4);
     img.setPixel(7, 3, 255, 0, 0);
     EXPECT_TRUE(img.save(tmpPath_));
-    BmpImage loaded(tmpPath_);
+    const BmpImage loaded(tmpPath_);
     EXPECT_EQ(loaded.getWidth(), 8);
     EXPECT_EQ(loaded.getHeight(), 4);
 }
@@ -307,7 +307,7 @@ TEST_F(BmpImageTest, VeryLargeImageRoundTrip)
         img.setPixel(511, 511, 0, 0, 255);
         EXPECT_TRUE(img.save(tmpPath_));
     }
-    BmpImage loaded(tmpPath_);
+    const BmpImage loaded(tmpPath_);
     EXPECT_EQ(loaded.getWidth(), 512);
     EXPECT_EQ(loaded.getHeight(), 512);
     uint8_t r, g, b;
@@ -323,7 +323,7 @@ TEST_F(BmpImageTest, VeryLargeImageRoundTrip)
 
 TEST_F(BmpImageTest, SaveToInvalidPath_ReturnsFalse)
 {
-    BmpImage img(10, 10);
+    const BmpImage img(10, 10);
     EXPECT_FALSE(img.save("Z:\\invalid_dir\\test.bmp"));
 }
 
@@ -372,7 +372,7 @@ TEST_F(BmpImageTest, LinearGradientRoundTrip)
         }
         EXPECT_TRUE(img.save(tmpPath_));
     }
-    BmpImage loaded(tmpPath_);
+    const BmpImage loaded(tmpPath_);
     for (int y = 0; y < size; ++y)
     {
         for (int x = 0; x < size; ++x)

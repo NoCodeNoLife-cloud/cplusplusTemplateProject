@@ -188,7 +188,7 @@ TEST_F(UuidGeneratorTest, GenerateRandomUuid_ThreadSafety)
     }
 
     // Most UUIDs should be unique (allowing for very rare collisions due to static generator)
-    const int expectedTotal = threadCount * uuidsPerThread;
+    constexpr int expectedTotal = threadCount * uuidsPerThread;
     const double uniquenessRate = static_cast<double>(uniqueUuids.size()) / expectedTotal;
     EXPECT_GE(uniquenessRate, 0.99); // At least 99% unique
 }
@@ -199,12 +199,12 @@ TEST_F(UuidGeneratorTest, GenerateRandomUuid_ThreadSafety)
  */
 TEST_F(UuidGeneratorTest, GenerateRandomUuid_NoExceptions)
 {
-    EXPECT_NO_THROW(UuidGenerator::GenerateRandomUuid());
+    EXPECT_NO_THROW((void)UuidGenerator::GenerateRandomUuid());
 
     // Test multiple calls to ensure stability
     for (int i = 0; i < 100; ++i)
     {
-        EXPECT_NO_THROW(UuidGenerator::GenerateRandomUuid());
+        EXPECT_NO_THROW((void)UuidGenerator::GenerateRandomUuid());
     }
 }
 

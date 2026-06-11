@@ -116,7 +116,7 @@ TEST_F(StringToolkitTest, SplitByString_NoMatch)
 TEST_F(StringToolkitTest, ConcatenateByChar_Basic)
 {
     const std::vector<std::string> parts = {"apple", "banana", "cherry"};
-    const auto result = StringToolkit::concatenate(parts, ',');
+    const auto result = StringToolkit::join(parts, ",");
 
     EXPECT_EQ(result, "apple,banana,cherry");
 }
@@ -124,7 +124,7 @@ TEST_F(StringToolkitTest, ConcatenateByChar_Basic)
 TEST_F(StringToolkitTest, ConcatenateByChar_EmptyVector)
 {
     const std::vector<std::string> parts;
-    const auto result = StringToolkit::concatenate(parts, ',');
+    const auto result = StringToolkit::join(parts, ",");
 
     EXPECT_EQ(result, "");
 }
@@ -132,7 +132,7 @@ TEST_F(StringToolkitTest, ConcatenateByChar_EmptyVector)
 TEST_F(StringToolkitTest, ConcatenateByChar_SingleElement)
 {
     const std::vector<std::string> parts = {"hello"};
-    const auto result = StringToolkit::concatenate(parts, ',');
+    const auto result = StringToolkit::join(parts, ",");
 
     EXPECT_EQ(result, "hello");
 }
@@ -141,7 +141,7 @@ TEST_F(StringToolkitTest, ConcatenateByChar_SingleElement)
 TEST_F(StringToolkitTest, ConcatenateByString_Basic)
 {
     const std::vector<std::string> parts = {"one", "two", "three"};
-    const auto result = StringToolkit::concatenate(parts, "::");
+    const auto result = StringToolkit::join(parts, "::");
 
     EXPECT_EQ(result, "one::two::three");
 }
@@ -149,7 +149,7 @@ TEST_F(StringToolkitTest, ConcatenateByString_Basic)
 TEST_F(StringToolkitTest, ConcatenateByString_EmptyVector)
 {
     const std::vector<std::string> parts;
-    const auto result = StringToolkit::concatenate(parts, "::");
+    const auto result = StringToolkit::join(parts, "::");
 
     EXPECT_EQ(result, "");
 }

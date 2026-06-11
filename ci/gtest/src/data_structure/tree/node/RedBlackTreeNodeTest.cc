@@ -102,7 +102,7 @@ TEST_F(RBTreeNodeTest, SetColor_Toggle)
 TEST_F(RBTreeNodeTest, SetLeft_SetsChild)
 {
     RedBlackTreeNode<int> parent(10);
-    auto child = std::make_shared<RedBlackTreeNode<int>>(5);
+    const auto child = std::make_shared<RedBlackTreeNode<int>>(5);
     parent.setLeft(child);
     EXPECT_EQ(parent.getLeft(), child);
     EXPECT_EQ(parent.getLeft()->getData(), 5);
@@ -119,7 +119,7 @@ TEST_F(RBTreeNodeTest, SetLeft_ReplaceChild)
 {
     RedBlackTreeNode<int> parent(10);
     parent.setLeft(std::make_shared<RedBlackTreeNode<int>>(5));
-    auto newChild = std::make_shared<RedBlackTreeNode<int>>(3);
+    const auto newChild = std::make_shared<RedBlackTreeNode<int>>(3);
     parent.setLeft(newChild);
     EXPECT_EQ(parent.getLeft(), newChild);
     EXPECT_EQ(parent.getLeft()->getData(), 3);
@@ -147,7 +147,7 @@ TEST_F(RBTreeNodeTest, SetRight_ReplaceChild)
 {
     RedBlackTreeNode<int> parent(10);
     parent.setRight(std::make_shared<RedBlackTreeNode<int>>(15));
-    auto newChild = std::make_shared<RedBlackTreeNode<int>>(20);
+    const auto newChild = std::make_shared<RedBlackTreeNode<int>>(20);
     parent.setRight(newChild);
     EXPECT_EQ(parent.getRight(), newChild);
     EXPECT_EQ(parent.getRight()->getData(), 20);
@@ -158,7 +158,7 @@ TEST_F(RBTreeNodeTest, SetRight_ReplaceChild)
 TEST_F(RBTreeNodeTest, SetParent_SetsParent)
 {
     RedBlackTreeNode<int> child(5);
-    auto parent = std::make_shared<RedBlackTreeNode<int>>(10);
+    const auto parent = std::make_shared<RedBlackTreeNode<int>>(10);
     child.setParent(parent);
     EXPECT_EQ(child.getParent(), parent);
     EXPECT_EQ(child.getParent()->getData(), 10);
@@ -175,7 +175,7 @@ TEST_F(RBTreeNodeTest, SetParent_Update)
 {
     RedBlackTreeNode<int> child(5);
     child.setParent(std::make_shared<RedBlackTreeNode<int>>(10));
-    auto newParent = std::make_shared<RedBlackTreeNode<int>>(20);
+    const auto newParent = std::make_shared<RedBlackTreeNode<int>>(20);
     child.setParent(newParent);
     EXPECT_EQ(child.getParent(), newParent);
 }
@@ -184,9 +184,9 @@ TEST_F(RBTreeNodeTest, SetParent_Update)
 
 TEST_F(RBTreeNodeTest, FullLinkage_ConstructTree)
 {
-    auto root = std::make_shared<RedBlackTreeNode<int>>(10);
-    auto left = std::make_shared<RedBlackTreeNode<int>>(5);
-    auto right = std::make_shared<RedBlackTreeNode<int>>(15);
+    const auto root = std::make_shared<RedBlackTreeNode<int>>(10);
+    const auto left = std::make_shared<RedBlackTreeNode<int>>(5);
+    const auto right = std::make_shared<RedBlackTreeNode<int>>(15);
 
     root->setLeft(left);
     root->setRight(right);
@@ -220,7 +220,7 @@ TEST_F(RBTreeNodeTest, DoubleType)
 TEST_F(RBTreeNodeTest, PointerType)
 {
     int value = 42;
-    RedBlackTreeNode<int*> node(&value);
+    const RedBlackTreeNode<int*> node(&value);
     EXPECT_EQ(node.getData(), &value);
     EXPECT_EQ(*node.getData(), 42);
 }

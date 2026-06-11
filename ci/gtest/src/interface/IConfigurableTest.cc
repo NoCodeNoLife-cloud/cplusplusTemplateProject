@@ -33,7 +33,7 @@ class IConfigurableTest : public testing::Test
 protected:
     void SetUp() override
     {
-        configurable_.reset(new MockConfigurable());
+        configurable_ = std::make_unique<MockConfigurable>();
     }
 
     void TearDown() override
@@ -46,7 +46,7 @@ protected:
 
 TEST_F(IConfigurableTest, ConfigReturnsTrueOnSuccess)
 {
-    bool result = configurable_->config();
+    const bool result = configurable_->config();
 
     EXPECT_TRUE(result);
     EXPECT_EQ(configurable_->doConfigCallCount_, 1);
@@ -54,8 +54,8 @@ TEST_F(IConfigurableTest, ConfigReturnsTrueOnSuccess)
 
 TEST_F(IConfigurableTest, ConfigDelegatesToDoConfig)
 {
-    configurable_->config();
-    configurable_->config();
+    (void)configurable_->config();
+    (void)configurable_->config();
 
     EXPECT_EQ(configurable_->doConfigCallCount_, 2);
 }
@@ -64,7 +64,7 @@ TEST_F(IConfigurableTest, ConfigReturnsFalseOnDoConfigFailure)
 {
     configurable_->returnValue_ = false;
 
-    bool result = configurable_->config();
+    const bool result = configurable_->config();
 
     EXPECT_FALSE(result);
     EXPECT_EQ(configurable_->doConfigCallCount_, 1);
@@ -81,11 +81,11 @@ TEST_F(IConfigurableTest, ConfigCanBeCalledMultipleTimes)
 
 TEST_F(IConfigurableTest, ConfigDoesNotThrowByDefault)
 {
-    EXPECT_NO_THROW(configurable_->config());
+    EXPECT_NO_THROW((void)configurable_->config());
 }
 
 TEST_F(IConfigurableTest, ConfigIsMarkedNoDiscard)
 {
-    auto result = configurable_->config();
+    const auto result = configurable_->config();
     EXPECT_TRUE(result);
 }

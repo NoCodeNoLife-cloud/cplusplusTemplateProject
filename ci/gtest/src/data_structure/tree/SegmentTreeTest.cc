@@ -179,14 +179,14 @@ TEST_F(SegmentTreeTest, Query_SingleElement)
 
 TEST_F(SegmentTreeTest, Query_InvalidRange_Throws)
 {
-    SegmentTree<int> st(5);
+    const SegmentTree<int> st(5);
     EXPECT_THROW(st.query(3, 2), std::out_of_range);
     EXPECT_THROW(st.query(3, 3), std::out_of_range);
 }
 
 TEST_F(SegmentTreeTest, Query_OutOfBounds_Throws)
 {
-    SegmentTree<int> st(3);
+    const SegmentTree<int> st(3);
     EXPECT_THROW(st.query(0, 4), std::out_of_range);
 }
 
@@ -213,7 +213,7 @@ TEST_F(SegmentTreeTest, At_AccessElements)
 
 TEST_F(SegmentTreeTest, At_OutOfBounds_Throws)
 {
-    SegmentTree<int> st(3);
+    const SegmentTree<int> st(3);
     EXPECT_THROW(st.at(3), std::out_of_range);
     EXPECT_THROW(st.at(100), std::out_of_range);
 }
@@ -240,11 +240,11 @@ TEST_F(SegmentTreeTest, Empty_NonEmpty)
 
 TEST_F(SegmentTreeTest, Size_CorrectCount)
 {
-    SegmentTree<int> st;
+    const SegmentTree<int> st;
     EXPECT_EQ(st.size(), 0);
-    SegmentTree<int> st2(10);
+    const SegmentTree<int> st2(10);
     EXPECT_EQ(st2.size(), 10);
-    SegmentTree<int> st3(100);
+    const SegmentTree<int> st3(100);
     EXPECT_EQ(st3.size(), 100);
 }
 
@@ -337,7 +337,7 @@ TEST_F(SegmentTreeTest, CustomMerge_MinOp)
 
 TEST_F(SegmentTreeTest, CustomMerge_Multiplies)
 {
-    SegmentTree<int, std::multiplies<int>> st(3);
+    SegmentTree<int, std::multiplies<>> st(3);
     st.update(0, 2);
     st.update(1, 3);
     st.update(2, 4);
@@ -347,7 +347,7 @@ TEST_F(SegmentTreeTest, CustomMerge_Multiplies)
 
 TEST_F(SegmentTreeTest, CustomMerge_StringConcat)
 {
-    SegmentTree<std::string, std::plus<std::string>> st(3);
+    SegmentTree<std::string, std::plus<>> st(3);
     st.update(0, "a");
     st.update(1, "b");
     st.update(2, "c");
@@ -382,8 +382,7 @@ TEST_F(SegmentTreeTest, CopyAssignment_CopiesCorrectly)
     st1.update(1, 2);
     st1.update(2, 3);
 
-    SegmentTree<int> st2;
-    st2 = st1;
+    SegmentTree<int> st2 = st1;
     EXPECT_EQ(st2.size(), 3);
     EXPECT_EQ(st2.at(0), 1);
     EXPECT_EQ(st2.at(1), 2);
@@ -401,7 +400,8 @@ TEST_F(SegmentTreeTest, CopyAssignment_SelfAssignment)
     st.update(1, 2);
     st.update(2, 3);
 
-    st = st;
+    const auto& st_cref = st;
+    st = st_cref;
     EXPECT_EQ(st.size(), 3);
     EXPECT_EQ(st.at(0), 1);
     EXPECT_EQ(st.at(1), 2);
@@ -415,7 +415,7 @@ TEST_F(SegmentTreeTest, MoveConstructor_MovesCorrectly)
     st1.update(1, 2);
     st1.update(2, 3);
 
-    SegmentTree<int> st2(std::move(st1));
+    const SegmentTree<int> st2(std::move(st1));
     EXPECT_EQ(st2.size(), 3);
     EXPECT_EQ(st2.at(0), 1);
     EXPECT_EQ(st2.at(1), 2);
@@ -430,8 +430,7 @@ TEST_F(SegmentTreeTest, MoveAssignment_MovesCorrectly)
     st1.update(1, 2);
     st1.update(2, 3);
 
-    SegmentTree<int> st2;
-    st2 = std::move(st1);
+    const SegmentTree<int> st2(std::move(st1));
     EXPECT_EQ(st2.size(), 3);
     EXPECT_EQ(st2.at(0), 1);
     EXPECT_EQ(st2.at(1), 2);
@@ -469,8 +468,8 @@ TEST_F(SegmentTreeTest, SingleElement_AllOperations)
     EXPECT_EQ(st.query(0, 1), 42);
 
     EXPECT_THROW(st.update(1, 0), std::out_of_range);
-    EXPECT_THROW(st.query(0, 2), std::out_of_range);
-    EXPECT_THROW(st.at(1), std::out_of_range);
+    EXPECT_THROW(std::as_const(st).query(0, 2), std::out_of_range);
+    EXPECT_THROW(std::as_const(st).at(1), std::out_of_range);
 }
 
 TEST_F(SegmentTreeTest, SingleElement_IteratorConstruct)
@@ -587,7 +586,7 @@ TEST_F(SegmentTreeTest, MoveConstructor)
     st.update(2, 3);
     EXPECT_EQ(st.query(0, 4), 6);
 
-    SegmentTree<int> other(std::move(st));
+    const SegmentTree<int> other(std::move(st));
     EXPECT_EQ(other.query(0, 4), 6);
 }
 

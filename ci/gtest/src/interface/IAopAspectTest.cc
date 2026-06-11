@@ -59,7 +59,7 @@ class IAopAspectTest : public testing::Test
 protected:
     void SetUp() override
     {
-        aspect_.reset(new MockAspect());
+        aspect_ = std::make_unique<MockAspect>();
     }
 
     void TearDown() override
@@ -81,7 +81,7 @@ TEST_F(IAopAspectTest, ExecCallsOnEntryAndOnExit)
 
 TEST_F(IAopAspectTest, ExecReturnsValue)
 {
-    auto result = aspect_->exec([](int a, int b) { return a + b; }, 3, 4);
+    const auto result = aspect_->exec([](int a, int b) { return a + b; }, 3, 4);
 
     EXPECT_EQ(result, 7);
     EXPECT_EQ(aspect_->entryCount_, 1);
@@ -90,7 +90,7 @@ TEST_F(IAopAspectTest, ExecReturnsValue)
 
 TEST_F(IAopAspectTest, ExecWithStringResult)
 {
-    auto result = aspect_->exec([]() -> std::string { return "hello"; });
+    const auto result = aspect_->exec([]() -> std::string { return "hello"; });
 
     EXPECT_EQ(result, "hello");
     EXPECT_EQ(aspect_->lastResult_, "hello");
@@ -133,15 +133,15 @@ TEST_F(IAopAspectTest, ExecPreservesExceptionType)
 
 TEST_F(IAopAspectTest, ExecWithArguments)
 {
-    auto result = aspect_->exec([](int x, int y) { return x * y; }, 6, 7);
+    const auto result = aspect_->exec([](int x, int y) { return x * y; }, 6, 7);
 
     EXPECT_EQ(result, 42);
 }
 
 TEST_F(IAopAspectTest, ExecMultipleTimes)
 {
-    auto r1 = aspect_->exec([] { return 1; });
-    auto r2 = aspect_->exec([] { return 2; });
+    const auto r1 = aspect_->exec([] { return 1; });
+    const auto r2 = aspect_->exec([] { return 2; });
 
     EXPECT_EQ(r1, 1);
     EXPECT_EQ(r2, 2);
@@ -152,7 +152,7 @@ TEST_F(IAopAspectTest, ExecMultipleTimes)
 TEST_F(IAopAspectTest, ExecWithLambdaCapture)
 {
     int x = 10;
-    auto result = aspect_->exec([&x] { return x * 2; });
+    const auto result = aspect_->exec([&x] { return x * 2; });
 
     EXPECT_EQ(result, 20);
 }

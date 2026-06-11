@@ -133,7 +133,7 @@ TEST_F(SimpleDateFormatterTest, Format_Tm_CustomSeparator)
 
     std::tm date = {};
     date.tm_year = 2024 - 1900;
-    date.tm_mon = 1 - 1;
+    date.tm_mon = 0;
     date.tm_mday = 1;
 
     const auto result = formatter.format(date);
@@ -208,8 +208,8 @@ TEST_F(SimpleDateFormatterTest, Parse_InvalidFormat_ThrowsException)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d");
 
-    EXPECT_THROW(formatter.parse("2024/06/15"), std::runtime_error);
-    EXPECT_THROW(formatter.parse("invalid-date"), std::runtime_error);
+    EXPECT_THROW((void)formatter.parse("2024/06/15"), std::runtime_error);
+    EXPECT_THROW((void)formatter.parse("invalid-date"), std::runtime_error);
 }
 
 /**
@@ -220,7 +220,7 @@ TEST_F(SimpleDateFormatterTest, Parse_ExtraCharacters_ThrowsException)
 {
     const SimpleDateFormatter formatter("%Y-%m-%d");
 
-    EXPECT_THROW(formatter.parse("2024-06-15 extra"), std::runtime_error);
+    EXPECT_THROW((void)formatter.parse("2024-06-15 extra"), std::runtime_error);
 }
 
 /**

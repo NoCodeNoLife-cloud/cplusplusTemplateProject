@@ -30,7 +30,7 @@ class ITaskTest : public testing::Test
 protected:
     void SetUp() override
     {
-        task_.reset(new MockTask());
+        task_ = std::make_unique<MockTask>();
     }
 
     void TearDown() override

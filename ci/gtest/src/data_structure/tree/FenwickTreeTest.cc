@@ -161,14 +161,14 @@ TEST_F(FenwickTreeTest, Sum_PrefixCorrectness)
 TEST_F(FenwickTreeTest, Sum_PosOutOfBounds_Throws)
 {
     const FenwickTree<int> ft(3);
-    EXPECT_THROW(ft.sum(4), std::out_of_range);
-    EXPECT_THROW(ft.sum(100), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(ft.sum(4)), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(ft.sum(100)), std::out_of_range);
 }
 
 TEST_F(FenwickTreeTest, Sum_EmptyTree_Throws)
 {
     const FenwickTree<int> ft;
-    EXPECT_THROW(ft.sum(1), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(ft.sum(1)), std::out_of_range);
 }
 
 TEST_F(FenwickTreeTest, Sum_ZeroPos_ReturnsZero)
@@ -204,15 +204,15 @@ TEST_F(FenwickTreeTest, RangeSum_SingleElement)
 
 TEST_F(FenwickTreeTest, RangeSum_EmptyRange_Throws)
 {
-    FenwickTree<int> ft(5);
-    EXPECT_THROW(ft.sum(3, 2), std::out_of_range);
-    EXPECT_THROW(ft.sum(3, 3), std::out_of_range);
+    const FenwickTree<int> ft(5);
+    EXPECT_THROW(static_cast<void>(ft.sum(3, 2)), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(ft.sum(3, 3)), std::out_of_range);
 }
 
 TEST_F(FenwickTreeTest, RangeSum_OutOfBounds_Throws)
 {
-    FenwickTree<int> ft(3);
-    EXPECT_THROW(ft.sum(0, 4), std::out_of_range);
+    const FenwickTree<int> ft(3);
+    EXPECT_THROW(static_cast<void>(ft.sum(0, 4)), std::out_of_range);
 }
 
 // ==================== At Tests ====================
@@ -232,15 +232,15 @@ TEST_F(FenwickTreeTest, At_AccessElements)
 
 TEST_F(FenwickTreeTest, At_OutOfBounds_Throws)
 {
-    FenwickTree<int> ft(3);
-    EXPECT_THROW(ft.at(3), std::out_of_range);
-    EXPECT_THROW(ft.at(100), std::out_of_range);
+    const FenwickTree<int> ft(3);
+    EXPECT_THROW(static_cast<void>(ft.at(3)), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(ft.at(100)), std::out_of_range);
 }
 
 TEST_F(FenwickTreeTest, At_EmptyTree_Throws)
 {
     const FenwickTree<int> ft;
-    EXPECT_THROW(ft.at(0), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(ft.at(0)), std::out_of_range);
 }
 
 // ==================== Size & Empty Tests ====================
@@ -259,11 +259,11 @@ TEST_F(FenwickTreeTest, Empty_NonEmpty)
 
 TEST_F(FenwickTreeTest, Size_CorrectCount)
 {
-    FenwickTree<int> ft;
+    const FenwickTree<int> ft;
     EXPECT_EQ(ft.size(), 0);
-    FenwickTree<int> ft2(10);
+    const FenwickTree<int> ft2(10);
     EXPECT_EQ(ft2.size(), 10);
-    FenwickTree<int> ft3(100);
+    const FenwickTree<int> ft3(100);
     EXPECT_EQ(ft3.size(), 100);
 }
 

@@ -46,7 +46,7 @@ TEST_F(RegexToolkitTest, IsMatch_EmailPattern)
 
 TEST_F(RegexToolkitTest, IsMatch_InvalidPattern)
 {
-    EXPECT_THROW(RegexToolkit::is_match("test", "["), std::invalid_argument);
+    EXPECT_THROW((void)RegexToolkit::is_match("test", "["), std::invalid_argument);
 }
 
 /**
@@ -66,7 +66,7 @@ TEST_F(RegexToolkitTest, IsSearch_NotFound)
 
 TEST_F(RegexToolkitTest, IsSearch_InvalidPattern)
 {
-    EXPECT_THROW(RegexToolkit::is_search("test", "("), std::invalid_argument);
+    EXPECT_THROW((void)RegexToolkit::is_search("test", "("), std::invalid_argument);
 }
 
 /**
@@ -103,7 +103,7 @@ TEST_F(RegexToolkitTest, GetMatches_NoMatches)
 
 TEST_F(RegexToolkitTest, GetMatches_InvalidPattern)
 {
-    EXPECT_THROW(RegexToolkit::get_matches("test", "*"), std::invalid_argument);
+    EXPECT_THROW((void)RegexToolkit::get_matches("test", "*"), std::invalid_argument);
 }
 
 /**
@@ -144,7 +144,7 @@ TEST_F(RegexToolkitTest, GetMatchesWithGroups_EmailPattern)
 
 TEST_F(RegexToolkitTest, GetMatchesWithGroups_InvalidPattern)
 {
-    EXPECT_THROW(RegexToolkit::get_matches_with_groups("test", "[invalid"), std::invalid_argument);
+    EXPECT_THROW((void)RegexToolkit::get_matches_with_groups("test", "[invalid"), std::invalid_argument);
 }
 
 /**
@@ -171,7 +171,7 @@ TEST_F(RegexToolkitTest, ReplaceAll_NoMatches)
 
 TEST_F(RegexToolkitTest, ReplaceAll_InvalidPattern)
 {
-    EXPECT_THROW(RegexToolkit::replace_all("test", "(", "replacement"), std::invalid_argument);
+    EXPECT_THROW((void)RegexToolkit::replace_all("test", "(", "replacement"), std::invalid_argument);
 }
 
 /**
@@ -219,5 +219,5 @@ TEST_F(RegexToolkitTest, Split_EmptyResult)
 
 TEST_F(RegexToolkitTest, Split_InvalidPattern)
 {
-    EXPECT_THROW(RegexToolkit::split("test", "["), std::invalid_argument);
+    EXPECT_THROW((void)RegexToolkit::split("test", "["), std::invalid_argument);
 }

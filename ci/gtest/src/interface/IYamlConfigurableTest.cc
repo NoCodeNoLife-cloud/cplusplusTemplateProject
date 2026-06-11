@@ -37,7 +37,7 @@ class IYamlConfigurableTest : public testing::Test
 protected:
     void SetUp() override
     {
-        configurable_.reset(new MockYamlConfigurable());
+        configurable_ = std::make_unique<MockYamlConfigurable>();
         testFile_ = std::filesystem::temp_directory_path() / "test_config.yaml";
         {
             std::ofstream ofs(testFile_);
@@ -64,7 +64,7 @@ TEST_F(IYamlConfigurableTest, DeserializeFromExistingFile)
 
 TEST_F(IYamlConfigurableTest, DeserializeFromNonExistentFileThrows)
 {
-    auto nonexistent = std::filesystem::temp_directory_path() / "nonexistent_config.yaml";
+    const auto nonexistent = std::filesystem::temp_directory_path() / "nonexistent_config.yaml";
 
     EXPECT_THROW(configurable_->deserializeFromYamlFile(nonexistent), std::runtime_error);
 }
@@ -97,9 +97,9 @@ TEST_F(IYamlConfigurableTest, DeserializeDoesNotThrowWhenFileExists)
 
 TEST_F(IYamlConfigurableTest, DeserializeFromYamlWithSubdirectory)
 {
-    auto subdir = std::filesystem::temp_directory_path() / "subdir";
+    const auto subdir = std::filesystem::temp_directory_path() / "subdir";
     std::filesystem::create_directories(subdir);
-    auto subdirFile = subdir / "config.yaml";
+    const auto subdirFile = subdir / "config.yaml";
     {
         std::ofstream ofs(subdirFile);
         ofs << "nested: true\n";

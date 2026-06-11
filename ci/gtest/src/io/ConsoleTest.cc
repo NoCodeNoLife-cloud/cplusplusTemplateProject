@@ -32,7 +32,7 @@ protected:
         std::cin.rdbuf(original_cin_);
     }
 
-    std::string coutOutput() const { return cout_buffer_.str(); }
+    [[nodiscard]] std::string coutOutput() const { return cout_buffer_.str(); }
     void setCinInput(const std::string& input) { cin_buffer_.str(input); }
 
 private:

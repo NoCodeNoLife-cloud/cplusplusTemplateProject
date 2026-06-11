@@ -234,7 +234,7 @@ TEST_F(BinaryTreeTest, SetRight_TakesOwnership)
 TEST_F(BinaryTreeTest, RightSkewedTree_Traversals)
 {
     // 1 -> 2 -> 3 (only right children)
-    auto root = std::make_unique<BinaryTree<int>>(1);
+    const auto root = std::make_unique<BinaryTree<int>>(1);
     root->setRight(std::make_unique<BinaryTree<int>>(2));
     root->right()->setRight(std::make_unique<BinaryTree<int>>(3));
 
@@ -249,7 +249,7 @@ TEST_F(BinaryTreeTest, RightSkewedTree_Traversals)
 TEST_F(BinaryTreeTest, LeftSkewedTree_Traversals)
 {
     // 3 -> 2 -> 1 (only left children)
-    auto root = std::make_unique<BinaryTree<int>>(3);
+    const auto root = std::make_unique<BinaryTree<int>>(3);
     root->setLeft(std::make_unique<BinaryTree<int>>(2));
     root->left()->setLeft(std::make_unique<BinaryTree<int>>(1));
 
@@ -263,7 +263,7 @@ TEST_F(BinaryTreeTest, LeftSkewedTree_Traversals)
 
 TEST_F(BinaryTreeTest, Clear_SingleNode_NoCrash)
 {
-    auto node = std::make_unique<BinaryTree<int>>(42);
+    const auto node = std::make_unique<BinaryTree<int>>(42);
     EXPECT_NO_THROW(node->clear());
     EXPECT_TRUE(node->isLeaf());
 }
@@ -303,7 +303,7 @@ TEST_F(BinaryTreeTest, SetRight_ReplacesExistingChild)
 
 TEST_F(BinaryTreeTest, LevelOrder_RightSkewed)
 {
-    auto root = std::make_unique<BinaryTree<int>>(1);
+    const auto root = std::make_unique<BinaryTree<int>>(1);
     root->setRight(std::make_unique<BinaryTree<int>>(2));
     root->right()->setRight(std::make_unique<BinaryTree<int>>(3));
     EXPECT_EQ(root->levelOrder(), (std::vector<int>{1, 2, 3}));
@@ -311,7 +311,7 @@ TEST_F(BinaryTreeTest, LevelOrder_RightSkewed)
 
 TEST_F(BinaryTreeTest, LevelOrder_LeftSkewed)
 {
-    auto root = std::make_unique<BinaryTree<int>>(3);
+    const auto root = std::make_unique<BinaryTree<int>>(3);
     root->setLeft(std::make_unique<BinaryTree<int>>(2));
     root->left()->setLeft(std::make_unique<BinaryTree<int>>(1));
     EXPECT_EQ(root->levelOrder(), (std::vector<int>{3, 2, 1}));
@@ -319,7 +319,7 @@ TEST_F(BinaryTreeTest, LevelOrder_LeftSkewed)
 
 TEST_F(BinaryTreeTest, StringType_StoresCorrectly)
 {
-    auto root = std::make_unique<BinaryTree<std::string>>("hello");
+    const auto root = std::make_unique<BinaryTree<std::string>>("hello");
     root->setLeft(std::make_unique<BinaryTree<std::string>>("world"));
     root->setRight(std::make_unique<BinaryTree<std::string>>("foo"));
 
@@ -331,7 +331,7 @@ TEST_F(BinaryTreeTest, StringType_StoresCorrectly)
 
 TEST_F(BinaryTreeTest, DoubleType_StoresCorrectly)
 {
-    auto root = std::make_unique<BinaryTree<double>>(3.14);
+    const auto root = std::make_unique<BinaryTree<double>>(3.14);
     root->setLeft(std::make_unique<BinaryTree<double>>(2.71));
 
     EXPECT_DOUBLE_EQ(root->data(), 3.14);
@@ -345,7 +345,7 @@ TEST_F(BinaryTreeTest, DoubleType_StoresCorrectly)
 
 TEST_F(BinaryTreeTest, MoveConstructor)
 {
-    auto root = std::make_unique<BinaryTree<int>>(10);
+    const auto root = std::make_unique<BinaryTree<int>>(10);
     root->setLeft(std::make_unique<BinaryTree<int>>(20));
 
     BinaryTree<int> other(std::move(*root));
@@ -356,10 +356,10 @@ TEST_F(BinaryTreeTest, MoveConstructor)
 
 TEST_F(BinaryTreeTest, MoveAssignment)
 {
-    auto root = std::make_unique<BinaryTree<int>>(10);
+    const auto root = std::make_unique<BinaryTree<int>>(10);
     root->setLeft(std::make_unique<BinaryTree<int>>(20));
 
-    auto other = std::make_unique<BinaryTree<int>>(0);
+    const auto other = std::make_unique<BinaryTree<int>>(0);
     *other = std::move(*root);
     EXPECT_EQ(other->data(), 10);
     EXPECT_EQ(other->left()->data(), 20);

@@ -76,11 +76,15 @@ TEST_F(DequeTest, CopyConstructor_DeepCopy)
  */
 TEST_F(DequeTest, CopyConstructor_EmptyDeque)
 {
-    const Deque<int> deque1;
+    Deque<int> deque1;
     const Deque deque2(deque1);
 
     EXPECT_TRUE(deque2.empty());
     EXPECT_EQ(deque2.size(), 0);
+
+    // Modify original should not affect copy
+    deque1.push_back(10);
+    EXPECT_TRUE(deque2.empty());
 }
 
 /**
@@ -100,7 +104,9 @@ TEST_F(DequeTest, MoveConstructor_TransfersOwnership)
     EXPECT_EQ(deque2.back(), 30);
 
     // Moved-from deque should be empty
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(deque1.empty());
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_EQ(deque1.size(), 0);
 }
 
@@ -138,13 +144,13 @@ TEST_F(DequeTest, MoveAssignment_TransfersOwnership)
     deque1.push_back(20);
     deque1.push_back(30);
 
-    Deque<int> deque2;
-    deque2 = std::move(deque1);
+    Deque<int> deque2(std::move(deque1));
 
     EXPECT_EQ(deque2.size(), 3);
     EXPECT_EQ(deque2.front(), 10);
     EXPECT_EQ(deque2.back(), 30);
 
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(deque1.empty());
 }
 
@@ -732,6 +738,7 @@ TEST_F(DequeTest, CopyAssignment_SelfAssignment)
     deque.push_back(10);
     deque.push_back(20);
 
+    // NOLINTNEXTLINE(bugprone-self-assignment)
     deque = deque;
 
     EXPECT_EQ(deque.size(), 2);
@@ -827,6 +834,7 @@ TEST_F(DequeTest, MoveConstructor)
     EXPECT_EQ(other.size(), 3);
     EXPECT_EQ(other.front(), 1);
     EXPECT_EQ(other.back(), 3);
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(deque.empty());
 }
 
@@ -843,5 +851,6 @@ TEST_F(DequeTest, MoveAssignment)
     EXPECT_EQ(other.size(), 2);
     EXPECT_EQ(other.front(), 10);
     EXPECT_EQ(other.back(), 20);
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(deque.empty());
 }

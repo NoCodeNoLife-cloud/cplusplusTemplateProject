@@ -132,7 +132,7 @@ TEST_F(QuadtreeTest, QueryRange_PartialOverlap_ReturnsSubset)
     const auto results = tree.queryRange(Point(50, 50), 60);
     ASSERT_EQ(results.size(), 2);
     std::vector<int> actual_values;
-    for (const auto& [point, value] : results)
+    for (const auto& [_, value] : results)
     {
         actual_values.push_back(value);
     }
@@ -220,7 +220,7 @@ TEST_F(QuadtreeTest, Insert_StringType_StoresCorrectly)
     EXPECT_EQ(results.size(), 2);
 
     std::vector<std::string> values;
-    for (const auto& [point, value] : results)
+    for (const auto& [_, value] : results)
     {
         values.push_back(value);
     }
@@ -345,14 +345,14 @@ TEST_F(QuadtreeTest, QueryRange_MultipleQueries_ConsistentResults)
     tree.insert(Point(-50, -50), 3);
 
     // Query top-right
-    auto r1 = tree.queryRange(Point(50, 50), 60);
+    const auto r1 = tree.queryRange(Point(50, 50), 60);
     EXPECT_EQ(r1.size(), 2);
 
     // Query bottom-left
-    auto r2 = tree.queryRange(Point(-50, -50), 60);
+    const auto r2 = tree.queryRange(Point(-50, -50), 60);
     EXPECT_EQ(r2.size(), 2);
 
     // Query everything
-    auto r3 = tree.queryRange(Point(0, 0), 150);
+    const auto r3 = tree.queryRange(Point(0, 0), 150);
     EXPECT_EQ(r3.size(), 3);
 }

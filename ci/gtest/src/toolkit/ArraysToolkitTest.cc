@@ -34,7 +34,7 @@ protected:
  */
 TEST_F(ArraysToolkitTest, AsList_BasicConversion)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     const auto result = ArraysToolkit::asList(arr, 5);
 
     EXPECT_EQ(result.size(), 5);
@@ -58,7 +58,7 @@ TEST_F(ArraysToolkitTest, AsList_EmptyArray)
  */
 TEST_F(ArraysToolkitTest, AsList_NullPointerWithSize_ThrowsException)
 {
-    EXPECT_THROW(ArraysToolkit::asList<int>(nullptr, 5), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(ArraysToolkit::asList<int>(nullptr, 5)), std::invalid_argument);
 }
 
 /**
@@ -67,7 +67,7 @@ TEST_F(ArraysToolkitTest, AsList_NullPointerWithSize_ThrowsException)
  */
 TEST_F(ArraysToolkitTest, BinarySearch_KeyFound)
 {
-    const int arr[] = {1, 3, 5, 7, 9};
+    constexpr int arr[] = {1, 3, 5, 7, 9};
     const auto index = ArraysToolkit::binarySearch(arr, 5, 5);
     ASSERT_TRUE(index.has_value());
     EXPECT_EQ(index.value(), 2);
@@ -79,7 +79,7 @@ TEST_F(ArraysToolkitTest, BinarySearch_KeyFound)
  */
 TEST_F(ArraysToolkitTest, BinarySearch_KeyNotFound)
 {
-    const int arr[] = {1, 3, 5, 7, 9};
+    constexpr int arr[] = {1, 3, 5, 7, 9};
     const auto index = ArraysToolkit::binarySearch(arr, 5, 6);
     EXPECT_FALSE(index.has_value());
 }
@@ -90,7 +90,7 @@ TEST_F(ArraysToolkitTest, BinarySearch_KeyNotFound)
  */
 TEST_F(ArraysToolkitTest, BinarySearch_FirstElement)
 {
-    const int arr[] = {1, 3, 5, 7, 9};
+    constexpr int arr[] = {1, 3, 5, 7, 9};
     const auto index = ArraysToolkit::binarySearch(arr, 5, 1);
     ASSERT_TRUE(index.has_value());
     EXPECT_EQ(index.value(), 0);
@@ -102,7 +102,7 @@ TEST_F(ArraysToolkitTest, BinarySearch_FirstElement)
  */
 TEST_F(ArraysToolkitTest, BinarySearch_LastElement)
 {
-    const int arr[] = {1, 3, 5, 7, 9};
+    constexpr int arr[] = {1, 3, 5, 7, 9};
     const auto index = ArraysToolkit::binarySearch(arr, 5, 9);
     ASSERT_TRUE(index.has_value());
     EXPECT_EQ(index.value(), 4);
@@ -114,7 +114,7 @@ TEST_F(ArraysToolkitTest, BinarySearch_LastElement)
  */
 TEST_F(ArraysToolkitTest, BinarySearch_WithRange_KeyFound)
 {
-    const int arr[] = {1, 3, 5, 7, 9, 11, 13};
+    constexpr int arr[] = {1, 3, 5, 7, 9, 11, 13};
     const auto index = ArraysToolkit::binarySearch(arr, 2, 5, 7);
     ASSERT_TRUE(index.has_value());
     EXPECT_EQ(index.value(), 3);
@@ -126,8 +126,8 @@ TEST_F(ArraysToolkitTest, BinarySearch_WithRange_KeyFound)
  */
 TEST_F(ArraysToolkitTest, BinarySearch_WithRange_InvalidRange_ThrowsException)
 {
-    const int arr[] = {1, 3, 5, 7, 9};
-    EXPECT_THROW(ArraysToolkit::binarySearch(arr, 3, 2, 5), std::out_of_range);
+    constexpr int arr[] = {1, 3, 5, 7, 9};
+    EXPECT_THROW(static_cast<void>(ArraysToolkit::binarySearch(arr, 3, 2, 5)), std::out_of_range);
 }
 
 /**
@@ -136,7 +136,7 @@ TEST_F(ArraysToolkitTest, BinarySearch_WithRange_InvalidRange_ThrowsException)
  */
 TEST_F(ArraysToolkitTest, CopyOf_SameLength)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     const auto result = ArraysToolkit::copyOf(arr, 5, 5);
 
     EXPECT_EQ(result.size(), 5);
@@ -152,7 +152,7 @@ TEST_F(ArraysToolkitTest, CopyOf_SameLength)
  */
 TEST_F(ArraysToolkitTest, CopyOf_LongerLength)
 {
-    const int arr[] = {1, 2, 3};
+    constexpr int arr[] = {1, 2, 3};
     const auto result = ArraysToolkit::copyOf(arr, 3, 5);
 
     EXPECT_EQ(result.size(), 5);
@@ -168,7 +168,7 @@ TEST_F(ArraysToolkitTest, CopyOf_LongerLength)
  */
 TEST_F(ArraysToolkitTest, CopyOf_ShorterLength)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     const auto result = ArraysToolkit::copyOf(arr, 5, 3);
 
     EXPECT_EQ(result.size(), 3);
@@ -182,7 +182,7 @@ TEST_F(ArraysToolkitTest, CopyOf_ShorterLength)
  */
 TEST_F(ArraysToolkitTest, CopyOfRange_BasicRange)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     const auto result = ArraysToolkit::copyOfRange(arr, 1, 4);
 
     EXPECT_EQ(result.size(), 3);
@@ -196,7 +196,7 @@ TEST_F(ArraysToolkitTest, CopyOfRange_BasicRange)
  */
 TEST_F(ArraysToolkitTest, CopyOfRange_FullRange)
 {
-    const int arr[] = {1, 2, 3};
+    constexpr int arr[] = {1, 2, 3};
     const auto result = ArraysToolkit::copyOfRange(arr, 0, 3);
 
     EXPECT_EQ(result.size(), 3);
@@ -210,8 +210,8 @@ TEST_F(ArraysToolkitTest, CopyOfRange_FullRange)
  */
 TEST_F(ArraysToolkitTest, CopyOfRange_InvalidRange_ThrowsException)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
-    EXPECT_THROW(ArraysToolkit::copyOfRange(arr, 3, 2), std::out_of_range);
+    constexpr int arr[] = {1, 2, 3, 4, 5};
+    EXPECT_THROW(static_cast<void>(ArraysToolkit::copyOfRange(arr, 3, 2)), std::out_of_range);
 }
 
 /**
@@ -220,8 +220,8 @@ TEST_F(ArraysToolkitTest, CopyOfRange_InvalidRange_ThrowsException)
  */
 TEST_F(ArraysToolkitTest, Equals_IdenticalArrays)
 {
-    const int a[] = {1, 2, 3};
-    const int b[] = {1, 2, 3};
+    constexpr int a[] = {1, 2, 3};
+    constexpr int b[] = {1, 2, 3};
     EXPECT_TRUE(ArraysToolkit::equals(a, 3, b, 3));
 }
 
@@ -231,8 +231,8 @@ TEST_F(ArraysToolkitTest, Equals_IdenticalArrays)
  */
 TEST_F(ArraysToolkitTest, Equals_DifferentContent)
 {
-    const int a[] = {1, 2, 3};
-    const int b[] = {1, 2, 4};
+    constexpr int a[] = {1, 2, 3};
+    constexpr int b[] = {1, 2, 4};
     EXPECT_FALSE(ArraysToolkit::equals(a, 3, b, 3));
 }
 
@@ -242,8 +242,8 @@ TEST_F(ArraysToolkitTest, Equals_DifferentContent)
  */
 TEST_F(ArraysToolkitTest, Equals_DifferentSize)
 {
-    const int a[] = {1, 2, 3};
-    const int b[] = {1, 2};
+    constexpr int a[] = {1, 2, 3};
+    constexpr int b[] = {1, 2};
     EXPECT_FALSE(ArraysToolkit::equals(a, 3, b, 2));
 }
 
@@ -265,9 +265,9 @@ TEST_F(ArraysToolkitTest, Fill_BasicFill)
     int arr[] = {1, 2, 3, 4, 5};
     ArraysToolkit::fill(arr, 5, 0);
 
-    for (int i = 0; i < 5; ++i)
+    for (const auto v : arr)
     {
-        EXPECT_EQ(arr[i], 0);
+        EXPECT_EQ(v, 0);
     }
 }
 
@@ -342,7 +342,7 @@ TEST_F(ArraysToolkitTest, Sort_InvalidRange_ThrowsException)
  */
 TEST_F(ArraysToolkitTest, ToString_BasicArray)
 {
-    const int arr[] = {1, 2, 3};
+    constexpr int arr[] = {1, 2, 3};
     const auto str = ArraysToolkit::toString(arr, 3);
     EXPECT_EQ(str, "[1, 2, 3]");
 }
@@ -363,7 +363,7 @@ TEST_F(ArraysToolkitTest, ToString_EmptyArray)
  */
 TEST_F(ArraysToolkitTest, ToString_SingleElement)
 {
-    const int arr[] = {42};
+    constexpr int arr[] = {42};
     const auto str = ArraysToolkit::toString(arr, 1);
     EXPECT_EQ(str, "[42]");
 }
@@ -396,7 +396,7 @@ TEST_F(ArraysToolkitTest, IsEmpty_NullArray)
  */
 TEST_F(ArraysToolkitTest, IsEmpty_ZeroSize)
 {
-    const int arr[] = {1, 2, 3};
+    constexpr int arr[] = {1, 2, 3};
     EXPECT_TRUE(ArraysToolkit::isEmpty(arr, 0));
 }
 
@@ -406,7 +406,7 @@ TEST_F(ArraysToolkitTest, IsEmpty_ZeroSize)
  */
 TEST_F(ArraysToolkitTest, IsEmpty_NonEmpty)
 {
-    const int arr[] = {1, 2, 3};
+    constexpr int arr[] = {1, 2, 3};
     EXPECT_FALSE(ArraysToolkit::isEmpty(arr, 3));
 }
 
@@ -416,7 +416,7 @@ TEST_F(ArraysToolkitTest, IsEmpty_NonEmpty)
  */
 TEST_F(ArraysToolkitTest, Contains_ElementExists)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     EXPECT_TRUE(ArraysToolkit::contains(arr, 5, 3));
 }
 
@@ -426,7 +426,7 @@ TEST_F(ArraysToolkitTest, Contains_ElementExists)
  */
 TEST_F(ArraysToolkitTest, Contains_ElementNotExists)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     EXPECT_FALSE(ArraysToolkit::contains(arr, 5, 6));
 }
 
@@ -445,7 +445,7 @@ TEST_F(ArraysToolkitTest, Contains_EmptyArray)
  */
 TEST_F(ArraysToolkitTest, LinearSearch_KeyFound)
 {
-    const int arr[] = {5, 3, 8, 1, 9};
+    constexpr int arr[] = {5, 3, 8, 1, 9};
     const auto index = ArraysToolkit::linearSearch(arr, 5, 8);
     ASSERT_TRUE(index.has_value());
     EXPECT_EQ(index.value(), 2);
@@ -457,7 +457,7 @@ TEST_F(ArraysToolkitTest, LinearSearch_KeyFound)
  */
 TEST_F(ArraysToolkitTest, LinearSearch_KeyNotFound)
 {
-    const int arr[] = {5, 3, 8, 1, 9};
+    constexpr int arr[] = {5, 3, 8, 1, 9};
     const auto index = ArraysToolkit::linearSearch(arr, 5, 7);
     EXPECT_FALSE(index.has_value());
 }
@@ -468,7 +468,7 @@ TEST_F(ArraysToolkitTest, LinearSearch_KeyNotFound)
  */
 TEST_F(ArraysToolkitTest, LinearSearch_FirstOccurrence)
 {
-    const int arr[] = {1, 2, 3, 2, 4};
+    constexpr int arr[] = {1, 2, 3, 2, 4};
     const auto index = ArraysToolkit::linearSearch(arr, 5, 2);
     ASSERT_TRUE(index.has_value());
     EXPECT_EQ(index.value(), 1);
@@ -480,7 +480,7 @@ TEST_F(ArraysToolkitTest, LinearSearch_FirstOccurrence)
  */
 TEST_F(ArraysToolkitTest, MaxElement_FindsMaximum)
 {
-    const int arr[] = {5, 2, 8, 1, 9};
+    constexpr int arr[] = {5, 2, 8, 1, 9};
     const auto index = ArraysToolkit::maxElement(arr, 5);
     ASSERT_TRUE(index.has_value());
     EXPECT_EQ(index.value(), 4);
@@ -503,7 +503,7 @@ TEST_F(ArraysToolkitTest, MaxElement_EmptyArray)
  */
 TEST_F(ArraysToolkitTest, MinElement_FindsMinimum)
 {
-    const int arr[] = {5, 2, 8, 1, 9};
+    constexpr int arr[] = {5, 2, 8, 1, 9};
     const auto index = ArraysToolkit::minElement(arr, 5);
     ASSERT_TRUE(index.has_value());
     EXPECT_EQ(index.value(), 3);
@@ -526,7 +526,7 @@ TEST_F(ArraysToolkitTest, MinElement_EmptyArray)
  */
 TEST_F(ArraysToolkitTest, Count_MultipleOccurrences)
 {
-    const int arr[] = {1, 2, 3, 2, 4, 2, 5};
+    constexpr int arr[] = {1, 2, 3, 2, 4, 2, 5};
     const auto cnt = ArraysToolkit::count(arr, 7, 2);
     EXPECT_EQ(cnt, 3);
 }
@@ -537,7 +537,7 @@ TEST_F(ArraysToolkitTest, Count_MultipleOccurrences)
  */
 TEST_F(ArraysToolkitTest, Count_NoOccurrences)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     const auto cnt = ArraysToolkit::count(arr, 5, 6);
     EXPECT_EQ(cnt, 0);
 }
@@ -585,7 +585,7 @@ TEST_F(ArraysToolkitTest, Reverse_InvalidRange_ThrowsException)
  */
 TEST_F(ArraysToolkitTest, Distinct_RemovesDuplicates)
 {
-    const int arr[] = {3, 1, 2, 1, 3, 2, 4};
+    constexpr int arr[] = {3, 1, 2, 1, 3, 2, 4};
     const auto result = ArraysToolkit::distinct(arr, 7);
     ASSERT_EQ(result.size(), 4);
     EXPECT_EQ(result[0], 1);
@@ -600,7 +600,7 @@ TEST_F(ArraysToolkitTest, Distinct_RemovesDuplicates)
  */
 TEST_F(ArraysToolkitTest, Map_TransformElements)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     const auto result = ArraysToolkit::map<int, int>(arr, 5, [](int x)
     {
         return x * 2;
@@ -616,7 +616,7 @@ TEST_F(ArraysToolkitTest, Map_TransformElements)
  */
 TEST_F(ArraysToolkitTest, Map_TypeConversion)
 {
-    const int arr[] = {1, 2, 3};
+    constexpr int arr[] = {1, 2, 3};
     const auto result = ArraysToolkit::map<int, double>(arr, 3, [](int x)
     {
         return static_cast<double>(x) * 1.5;
@@ -632,7 +632,7 @@ TEST_F(ArraysToolkitTest, Map_TypeConversion)
  */
 TEST_F(ArraysToolkitTest, Filter_KeepsMatchingElements)
 {
-    const int arr[] = {1, 2, 3, 4, 5, 6};
+    constexpr int arr[] = {1, 2, 3, 4, 5, 6};
     const auto result = ArraysToolkit::filter(arr, 6, [](int x)
     {
         return x % 2 == 0;
@@ -649,7 +649,7 @@ TEST_F(ArraysToolkitTest, Filter_KeepsMatchingElements)
  */
 TEST_F(ArraysToolkitTest, Filter_NoMatches)
 {
-    const int arr[] = {1, 3, 5, 7};
+    constexpr int arr[] = {1, 3, 5, 7};
     const auto result = ArraysToolkit::filter(arr, 4, [](int x)
     {
         return x % 2 == 0;
@@ -663,7 +663,7 @@ TEST_F(ArraysToolkitTest, Filter_NoMatches)
  */
 TEST_F(ArraysToolkitTest, Sum_CalculatesTotal)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     const auto total = ArraysToolkit::sum(arr, 5);
     EXPECT_EQ(total, 15);
 }
@@ -684,7 +684,7 @@ TEST_F(ArraysToolkitTest, Sum_EmptyArray)
  */
 TEST_F(ArraysToolkitTest, Average_CalculatesMean)
 {
-    const int arr[] = {2, 4, 6, 8};
+    constexpr int arr[] = {2, 4, 6, 8};
     const auto avg = ArraysToolkit::average(arr, 4);
     EXPECT_DOUBLE_EQ(avg, 5.0);
 }
@@ -695,7 +695,7 @@ TEST_F(ArraysToolkitTest, Average_CalculatesMean)
  */
 TEST_F(ArraysToolkitTest, Average_EmptyArray_ThrowsException)
 {
-    EXPECT_THROW(ArraysToolkit::average<int>(nullptr, 0), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(ArraysToolkit::average<int>(nullptr, 0)), std::invalid_argument);
 }
 
 /**
@@ -704,7 +704,7 @@ TEST_F(ArraysToolkitTest, Average_EmptyArray_ThrowsException)
  */
 TEST_F(ArraysToolkitTest, AllMatch_AllSatisfy)
 {
-    const int arr[] = {2, 4, 6, 8};
+    constexpr int arr[] = {2, 4, 6, 8};
     EXPECT_TRUE(ArraysToolkit::allMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
 
@@ -714,7 +714,7 @@ TEST_F(ArraysToolkitTest, AllMatch_AllSatisfy)
  */
 TEST_F(ArraysToolkitTest, AllMatch_NotAllSatisfy)
 {
-    const int arr[] = {2, 3, 6, 8};
+    constexpr int arr[] = {2, 3, 6, 8};
     EXPECT_FALSE(ArraysToolkit::allMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
 
@@ -724,7 +724,7 @@ TEST_F(ArraysToolkitTest, AllMatch_NotAllSatisfy)
  */
 TEST_F(ArraysToolkitTest, AnyMatch_AnySatisfies)
 {
-    const int arr[] = {1, 3, 5, 6};
+    constexpr int arr[] = {1, 3, 5, 6};
     EXPECT_TRUE(ArraysToolkit::anyMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
 
@@ -734,7 +734,7 @@ TEST_F(ArraysToolkitTest, AnyMatch_AnySatisfies)
  */
 TEST_F(ArraysToolkitTest, AnyMatch_NoneSatisfies)
 {
-    const int arr[] = {1, 3, 5, 7};
+    constexpr int arr[] = {1, 3, 5, 7};
     EXPECT_FALSE(ArraysToolkit::anyMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
 
@@ -744,7 +744,7 @@ TEST_F(ArraysToolkitTest, AnyMatch_NoneSatisfies)
  */
 TEST_F(ArraysToolkitTest, NoneMatch_NoneSatisfy)
 {
-    const int arr[] = {1, 3, 5, 7};
+    constexpr int arr[] = {1, 3, 5, 7};
     EXPECT_TRUE(ArraysToolkit::noneMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
 
@@ -754,7 +754,7 @@ TEST_F(ArraysToolkitTest, NoneMatch_NoneSatisfy)
  */
 TEST_F(ArraysToolkitTest, NoneMatch_SomeSatisfy)
 {
-    const int arr[] = {1, 2, 3, 5};
+    constexpr int arr[] = {1, 2, 3, 5};
     EXPECT_FALSE(ArraysToolkit::noneMatch(arr, 4, [](int x) { return x % 2 == 0; }));
 }
 
@@ -764,8 +764,8 @@ TEST_F(ArraysToolkitTest, NoneMatch_SomeSatisfy)
  */
 TEST_F(ArraysToolkitTest, Concat_MergesArrays)
 {
-    const int a[] = {1, 2, 3};
-    const int b[] = {4, 5, 6};
+    constexpr int a[] = {1, 2, 3};
+    constexpr int b[] = {4, 5, 6};
     const auto result = ArraysToolkit::concat(a, 3, b, 3);
     ASSERT_EQ(result.size(), 6);
     EXPECT_EQ(result[0], 1);
@@ -778,7 +778,7 @@ TEST_F(ArraysToolkitTest, Concat_MergesArrays)
  */
 TEST_F(ArraysToolkitTest, Concat_EmptyFirstArray)
 {
-    const int b[] = {4, 5, 6};
+    constexpr int b[] = {4, 5, 6};
     const auto result = ArraysToolkit::concat<int>(nullptr, 0, b, 3);
     ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], 4);
@@ -790,8 +790,8 @@ TEST_F(ArraysToolkitTest, Concat_EmptyFirstArray)
  */
 TEST_F(ArraysToolkitTest, Intersection_FindsCommonElements)
 {
-    const int a[] = {1, 2, 3, 4, 5};
-    const int b[] = {3, 4, 5, 6, 7};
+    constexpr int a[] = {1, 2, 3, 4, 5};
+    constexpr int b[] = {3, 4, 5, 6, 7};
     const auto result = ArraysToolkit::intersection(a, 5, b, 5);
     ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], 3);
@@ -805,8 +805,8 @@ TEST_F(ArraysToolkitTest, Intersection_FindsCommonElements)
  */
 TEST_F(ArraysToolkitTest, Intersection_NoCommonElements)
 {
-    const int a[] = {1, 2, 3};
-    const int b[] = {4, 5, 6};
+    constexpr int a[] = {1, 2, 3};
+    constexpr int b[] = {4, 5, 6};
     const auto result = ArraysToolkit::intersection(a, 3, b, 3);
     EXPECT_TRUE(result.empty());
 }
@@ -817,8 +817,8 @@ TEST_F(ArraysToolkitTest, Intersection_NoCommonElements)
  */
 TEST_F(ArraysToolkitTest, UnionSet_CombinesUniqueElements)
 {
-    const int a[] = {1, 2, 3};
-    const int b[] = {3, 4, 5};
+    constexpr int a[] = {1, 2, 3};
+    constexpr int b[] = {3, 4, 5};
     const auto result = ArraysToolkit::unionSet(a, 3, b, 3);
     ASSERT_EQ(result.size(), 5);
     EXPECT_EQ(result[0], 1);
@@ -831,8 +831,8 @@ TEST_F(ArraysToolkitTest, UnionSet_CombinesUniqueElements)
  */
 TEST_F(ArraysToolkitTest, Difference_FindsUniqueElements)
 {
-    const int a[] = {1, 2, 3, 4, 5};
-    const int b[] = {3, 4, 5, 6, 7};
+    constexpr int a[] = {1, 2, 3, 4, 5};
+    constexpr int b[] = {3, 4, 5, 6, 7};
     const auto result = ArraysToolkit::difference(a, 5, b, 5);
     ASSERT_EQ(result.size(), 2);
     EXPECT_EQ(result[0], 1);
@@ -845,7 +845,7 @@ TEST_F(ArraysToolkitTest, Difference_FindsUniqueElements)
  */
 TEST_F(ArraysToolkitTest, IsSorted_SortedArray)
 {
-    const int arr[] = {1, 2, 3, 4, 5};
+    constexpr int arr[] = {1, 2, 3, 4, 5};
     EXPECT_TRUE(ArraysToolkit::isSorted(arr, 5));
 }
 
@@ -855,7 +855,7 @@ TEST_F(ArraysToolkitTest, IsSorted_SortedArray)
  */
 TEST_F(ArraysToolkitTest, IsSorted_UnsortedArray)
 {
-    const int arr[] = {1, 3, 2, 4, 5};
+    constexpr int arr[] = {1, 3, 2, 4, 5};
     EXPECT_FALSE(ArraysToolkit::isSorted(arr, 5));
 }
 
@@ -865,7 +865,7 @@ TEST_F(ArraysToolkitTest, IsSorted_UnsortedArray)
  */
 TEST_F(ArraysToolkitTest, IsSorted_SingleElement)
 {
-    const int arr[] = {42};
+    constexpr int arr[] = {42};
     EXPECT_TRUE(ArraysToolkit::isSorted(arr, 1));
 }
 
@@ -890,7 +890,7 @@ TEST_F(ArraysToolkitTest, Shuffle_RandomizesOrder)
     auto shuffled = ArraysToolkit::asList(arr, 5);
 
     // Verify same elements exist
-    std::sort(shuffled.begin(), shuffled.end());
+    std::ranges::sort(shuffled);
     EXPECT_EQ(original, shuffled);
 }
 
@@ -942,7 +942,7 @@ TEST_F(ArraysToolkitTest, Rotate_ZeroPositions)
  */
 TEST_F(ArraysToolkitTest, TopK_GetsLargestElements)
 {
-    const int arr[] = {5, 3, 8, 1, 9, 2, 7};
+    constexpr int arr[] = {5, 3, 8, 1, 9, 2, 7};
     const auto result = ArraysToolkit::topK(arr, 7, 3);
     ASSERT_EQ(result.size(), 3);
     EXPECT_EQ(result[0], 9);
@@ -957,8 +957,8 @@ TEST_F(ArraysToolkitTest, TopK_GetsLargestElements)
 TEST_F(ArraysToolkitTest, TopK_InvalidK_ThrowsException)
 {
     int arr[] = {1, 2, 3, 4, 5};
-    EXPECT_THROW(ArraysToolkit::topK(arr, 5, 0), std::invalid_argument);
-    EXPECT_THROW(ArraysToolkit::topK(arr, 5, 6), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(ArraysToolkit::topK(arr, 5, 0)), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(ArraysToolkit::topK(arr, 5, 6)), std::invalid_argument);
 }
 
 /**

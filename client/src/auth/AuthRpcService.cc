@@ -48,7 +48,7 @@ namespace client_app::auth
         DLOG(INFO) << fmt::format("Channel arguments set - Time: {}ms, Timeout: {}ms, Permit without calls: {}", rpc_options.keepaliveTimeMs(), rpc_options.keepaliveTimeoutMs(), rpc_options.keepalivePermitWithoutCalls());
         DLOG(INFO) << fmt::format("Creating channel to server at: {}", server_address);
 
-        auto channel = grpc::CreateCustomChannel(server_address, grpc::InsecureChannelCredentials(), channel_args);
+        const auto channel = grpc::CreateCustomChannel(server_address, grpc::InsecureChannelCredentials(), channel_args);
 
         // Log initial channel state
         const auto initial_state = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(true));

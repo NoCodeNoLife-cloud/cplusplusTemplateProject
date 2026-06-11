@@ -22,7 +22,7 @@ template <typename Key, typename Value>
 class TestCache final : public ICache<Key, Value>
 {
 public:
-    explicit TestCache(size_t capacity) : capacity_(capacity) {}
+    explicit TestCache(size_t capacity) : data_(), capacity_(capacity) {}
 
     std::optional<Value> get(const Key& key) override
     {
@@ -64,22 +64,22 @@ public:
         data_.clear();
     }
 
-    size_t size() const override
+    [[nodiscard]] size_t size() const override
     {
         return data_.size();
     }
 
-    size_t capacity() const override
+    [[nodiscard]] size_t capacity() const override
     {
         return capacity_;
     }
 
-    bool empty() const override
+    [[nodiscard]] bool empty() const override
     {
         return data_.empty();
     }
 
-    bool contains(const Key& key) const override
+    [[nodiscard]] bool contains(const Key& key) const override
     {
         return data_.contains(key);
     }
@@ -114,11 +114,11 @@ TEST_F(ICacheTest, PutAndGet_Basic)
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
 
-    auto result1 = cache.get(1);
+    const auto result1 = cache.get(1);
     ASSERT_TRUE(result1.has_value());
     EXPECT_EQ(result1.value(), "one");
 
-    auto result2 = cache.get(2);
+    const auto result2 = cache.get(2);
     ASSERT_TRUE(result2.has_value());
     EXPECT_EQ(result2.value(), "two");
 }
@@ -179,13 +179,13 @@ TEST_F(ICacheTest, Remove_ExistingKey)
     EXPECT_TRUE(cache.put(1, "one"));
     EXPECT_TRUE(cache.put(2, "two"));
 
-    bool removed = cache.remove(1);
+    const bool removed = cache.remove(1);
     EXPECT_TRUE(removed);
 
-    auto result = cache.get(1);
+    const auto result = cache.get(1);
     EXPECT_FALSE(result.has_value());
 
-    auto result2 = cache.get(2);
+    const auto result2 = cache.get(2);
     ASSERT_TRUE(result2.has_value());
     EXPECT_EQ(result2.value(), "two");
 }
@@ -199,7 +199,7 @@ TEST_F(ICacheTest, Remove_NonExistentKey)
     TestCache<int, std::string> cache(3);
 
     EXPECT_TRUE(cache.put(1, "one"));
-    bool removed = cache.remove(999);
+    const bool removed = cache.remove(999);
     EXPECT_FALSE(removed);
 }
 

@@ -40,7 +40,7 @@ class ICloseableTest : public testing::Test
 protected:
     void SetUp() override
     {
-        mock_.reset(new MockCloseable());
+        mock_ = std::make_unique<MockCloseable>();
     }
 
     void TearDown() override
@@ -65,7 +65,7 @@ TEST_F(ICloseableTest, CloseSetsState)
 
 TEST_F(ICloseableTest, CloseSafeSuccess)
 {
-    bool result = mock_->closeSafe();
+    const bool result = mock_->closeSafe();
     EXPECT_TRUE(result);
     EXPECT_TRUE(mock_->isClosed());
 }
@@ -73,14 +73,14 @@ TEST_F(ICloseableTest, CloseSafeSuccess)
 TEST_F(ICloseableTest, CloseSafeHandlesException)
 {
     mock_->throwOnClose_ = true;
-    bool result = mock_->closeSafe();
+    const bool result = mock_->closeSafe();
     EXPECT_FALSE(result);
     EXPECT_FALSE(mock_->isClosed());
 }
 
 TEST_F(ICloseableTest, CloseSafeCalledClose)
 {
-    mock_->closeSafe();
+    (void)mock_->closeSafe();
     EXPECT_TRUE(mock_->closeCalled_);
 }
 

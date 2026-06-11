@@ -137,7 +137,7 @@ TEST_F(SkipListTest, Insert_MultipleElements_RandomOrder)
 {
     SkipList<int> list;
 
-    std::vector values = {5, 3, 8, 1, 9, 2, 7, 4, 6, 10};
+    const std::vector values = {5, 3, 8, 1, 9, 2, 7, 4, 6, 10};
 
     for (const auto& val : values)
     {
@@ -458,7 +458,7 @@ TEST_F(SkipListTest, LargeDataset_InsertAndSearch_Success)
 {
     SkipList<int> list;
 
-    const int numElements = 1000;
+    constexpr int numElements = 1000;
 
     // Insert elements
     for (int i = 0; i < numElements; ++i)
@@ -487,7 +487,7 @@ TEST_F(SkipListTest, LargeDataset_Erase_Success)
 {
     SkipList<int> list;
 
-    const int numElements = 100;
+    constexpr int numElements = 100;
 
     // Insert elements
     for (int i = 0; i < numElements; ++i)

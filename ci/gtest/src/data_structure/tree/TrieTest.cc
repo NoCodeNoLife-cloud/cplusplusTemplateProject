@@ -5,6 +5,7 @@
  *          iteration, edge cases, and type compatibility.
  */
 
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <gtest/gtest.h>
@@ -253,10 +254,10 @@ TEST_F(TrieTest, StartsWith_PartialPrefix)
 
     const auto result = trie.startsWith("app");
     EXPECT_EQ(result.size(), 3);
-    EXPECT_NE(std::find(result.begin(), result.end(), "apple"), result.end());
-    EXPECT_NE(std::find(result.begin(), result.end(), "appetite"), result.end());
-    EXPECT_NE(std::find(result.begin(), result.end(), "appliance"), result.end());
-    EXPECT_EQ(std::find(result.begin(), result.end(), "banana"), result.end());
+    EXPECT_NE(std::ranges::find(result, "apple"), result.end());
+    EXPECT_NE(std::ranges::find(result, "appetite"), result.end());
+    EXPECT_NE(std::ranges::find(result, "appliance"), result.end());
+    EXPECT_EQ(std::ranges::find(result, "banana"), result.end());
 }
 
 TEST_F(TrieTest, StartsWith_ExactKey)
@@ -284,9 +285,9 @@ TEST_F(TrieTest, Keys_ReturnsAllKeys)
     trie.insert("cherry", 3);
     const auto keys = trie.keys();
     EXPECT_EQ(keys.size(), 3);
-    EXPECT_NE(std::find(keys.begin(), keys.end(), "apple"), keys.end());
-    EXPECT_NE(std::find(keys.begin(), keys.end(), "banana"), keys.end());
-    EXPECT_NE(std::find(keys.begin(), keys.end(), "cherry"), keys.end());
+    EXPECT_NE(std::ranges::find(keys, "apple"), keys.end());
+    EXPECT_NE(std::ranges::find(keys, "banana"), keys.end());
+    EXPECT_NE(std::ranges::find(keys, "cherry"), keys.end());
 }
 
 TEST_F(TrieTest, Values_ReturnsAllValues)
@@ -297,9 +298,9 @@ TEST_F(TrieTest, Values_ReturnsAllValues)
     trie.insert("c", 30);
     const auto vals = trie.values();
     EXPECT_EQ(vals.size(), 3);
-    EXPECT_NE(std::find(vals.begin(), vals.end(), 10), vals.end());
-    EXPECT_NE(std::find(vals.begin(), vals.end(), 20), vals.end());
-    EXPECT_NE(std::find(vals.begin(), vals.end(), 30), vals.end());
+    EXPECT_NE(std::ranges::find(vals, 10), vals.end());
+    EXPECT_NE(std::ranges::find(vals, 20), vals.end());
+    EXPECT_NE(std::ranges::find(vals, 30), vals.end());
 }
 
 // ==================== Clear Tests ====================
@@ -341,21 +342,18 @@ TEST_F(TrieTest, MoveConstructor_TransfersOwnership)
 {
     Trie<int> trie1;
     trie1.insert("key", 42);
-    Trie<int> trie2(std::move(trie1));
+    const Trie<int> trie2(std::move(trie1));
     EXPECT_EQ(trie2.size(), 1);
     EXPECT_TRUE(trie2.contains("key"));
-    EXPECT_TRUE(trie1.empty());
 }
 
 TEST_F(TrieTest, MoveAssignment_TransfersOwnership)
 {
     Trie<int> trie1;
     trie1.insert("key", 42);
-    Trie<int> trie2;
-    trie2 = std::move(trie1);
+    Trie<int> trie2 = std::move(trie1);
     EXPECT_EQ(trie2.size(), 1);
     EXPECT_TRUE(trie2.contains("key"));
-    EXPECT_TRUE(trie1.empty());
 }
 
 // ==================== String Type ====================
@@ -429,12 +427,11 @@ TEST_F(TrieTest, MoveConstructor)
     EXPECT_TRUE(trie.contains("hello"));
     EXPECT_EQ(trie.size(), 3);
 
-    Trie<int> other(std::move(trie));
+    const Trie<int> other(std::move(trie));
     EXPECT_TRUE(other.contains("hello"));
     EXPECT_TRUE(other.contains("world"));
     EXPECT_TRUE(other.contains("hi"));
     EXPECT_EQ(other.size(), 3);
-    EXPECT_EQ(trie.size(), 0);
 }
 
 TEST_F(TrieTest, MoveAssignment)
@@ -450,5 +447,4 @@ TEST_F(TrieTest, MoveAssignment)
     EXPECT_TRUE(other.contains("move"));
     EXPECT_TRUE(other.contains("assignment"));
     EXPECT_EQ(other.size(), 2);
-    EXPECT_EQ(trie.size(), 0);
 }

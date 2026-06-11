@@ -47,7 +47,7 @@ protected:
  */
 TEST_F(RingBufferTest, Constructor_ValidCapacity)
 {
-    RingBuffer<int> buf(8);
+    const RingBuffer<int> buf(8);
     EXPECT_TRUE(buf.empty());
     EXPECT_EQ(buf.size(), 0);
     EXPECT_EQ(buf.capacity(), 8);
@@ -60,7 +60,7 @@ TEST_F(RingBufferTest, Constructor_ValidCapacity)
  */
 TEST_F(RingBufferTest, Constructor_CapacityOne)
 {
-    RingBuffer<int> buf(1);
+    const RingBuffer<int> buf(1);
     EXPECT_TRUE(buf.empty());
     EXPECT_EQ(buf.capacity(), 1);
 }
@@ -104,11 +104,15 @@ TEST_F(RingBufferTest, CopyConstructor_DeepCopy)
  */
 TEST_F(RingBufferTest, CopyConstructor_EmptyBuffer)
 {
-    const RingBuffer<int> buf1(4);
+    RingBuffer<int> buf1(4);
     const RingBuffer buf2(buf1);
 
     EXPECT_TRUE(buf2.empty());
     EXPECT_EQ(buf2.capacity(), 4);
+
+    // Modify original should not affect copy
+    buf1.push_back(99);
+    EXPECT_TRUE(buf2.empty());
 }
 
 /**
@@ -129,6 +133,7 @@ TEST_F(RingBufferTest, MoveConstructor_TransfersOwnership)
     EXPECT_EQ(buf2.back(), 20);
 
     // Moved-from buffer should be empty
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(buf1.empty());
 }
 
@@ -170,6 +175,7 @@ TEST_F(RingBufferTest, MoveAssignment_TransfersOwnership)
     EXPECT_EQ(buf2.capacity(), 8);
     EXPECT_EQ(buf2.front(), 10);
     EXPECT_EQ(buf2.back(), 20);
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(buf1.empty());
 }
 
@@ -232,7 +238,7 @@ TEST_F(RingBufferTest, At_OutOfBounds_ThrowsException)
 {
     RingBuffer<int> buf(8);
     buf.push_back(10);
-    EXPECT_THROW(buf.at(5), std::out_of_range);
+    EXPECT_THROW(buf.at(5u), std::out_of_range);
 }
 
 /**
@@ -562,7 +568,7 @@ TEST_F(RingBufferTest, Resize_ZeroCapacity_ThrowsException)
  */
 TEST_F(RingBufferTest, Front_EmptyBuffer_ThrowsException)
 {
-    RingBuffer<int> buf(4);
+    const RingBuffer<int> buf(4);
     EXPECT_THROW(buf.front(), std::out_of_range);
 }
 
@@ -572,7 +578,7 @@ TEST_F(RingBufferTest, Front_EmptyBuffer_ThrowsException)
  */
 TEST_F(RingBufferTest, Back_EmptyBuffer_ThrowsException)
 {
-    RingBuffer<int> buf(4);
+    const RingBuffer<int> buf(4);
     EXPECT_THROW(buf.back(), std::out_of_range);
 }
 
@@ -735,6 +741,6 @@ TEST_F(RingBufferTest, WrapAround_Correctness)
         result.push_back(buf.front());
         buf.pop_front();
     }
-    std::vector<int> expected = {3, 4, 5, 6, 7};
+    const std::vector expected = {3, 4, 5, 6, 7};
     EXPECT_EQ(result, expected);
 }

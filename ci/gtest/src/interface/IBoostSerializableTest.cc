@@ -19,7 +19,6 @@ namespace
     public:
         std::string name_;
         int value_ = 0;
-        bool throwOnSerialize_ = false;
 
         MockBoostSerializable() = default;
         MockBoostSerializable(std::string name, int value)
@@ -44,7 +43,7 @@ class IBoostSerializableTest : public testing::Test
 protected:
     void SetUp() override
     {
-        obj_.reset(new MockBoostSerializable("test", 42));
+        obj_ = std::make_unique<MockBoostSerializable>("test", 42);
     }
 
     void TearDown() override
@@ -58,7 +57,7 @@ protected:
 TEST_F(IBoostSerializableTest, SerializeToStream)
 {
     std::ostringstream oss;
-    bool result = obj_->serializeTo(oss);
+    const bool result = obj_->serializeTo(oss);
 
     ASSERT_TRUE(result);
     EXPECT_FALSE(oss.str().empty());
@@ -71,7 +70,7 @@ TEST_F(IBoostSerializableTest, RoundTrip)
 
     MockBoostSerializable deserialized;
     std::istringstream iss(oss.str());
-    bool result = deserialized.deserializeFrom(iss);
+    const bool result = deserialized.deserializeFrom(iss);
 
     ASSERT_TRUE(result);
     EXPECT_EQ(deserialized.name_, obj_->name_);

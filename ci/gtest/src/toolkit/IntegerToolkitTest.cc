@@ -1,7 +1,7 @@
 /**
  * @file IntegerToolkitTest.cc
  * @brief Unit tests for the IntegerToolkit class
- * @details Tests cover Roman numeral conversion, power-of-two checking, and bit counting.
+ * @details The tests cover Roman numeral conversion, power-of-two checking, and bit counting.
  */
 
 #include <optional>
@@ -57,9 +57,9 @@ TEST_F(IntegerToolkitTest, IntToRoman_EdgeCases)
  */
 TEST_F(IntegerToolkitTest, IntToRoman_InvalidRange_ThrowsException)
 {
-    EXPECT_THROW(IntegerToolkit::intToRoman(0), std::out_of_range);
-    EXPECT_THROW(IntegerToolkit::intToRoman(4000), std::out_of_range);
-    EXPECT_THROW(IntegerToolkit::intToRoman(-1), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(IntegerToolkit::intToRoman(0)), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(IntegerToolkit::intToRoman(4000)), std::out_of_range);
+    EXPECT_THROW(static_cast<void>(IntegerToolkit::intToRoman(-1)), std::out_of_range);
 }
 
 /**
@@ -128,7 +128,7 @@ TEST_F(IntegerToolkitTest, RomanToInt_CaseInsensitive)
  */
 TEST_F(IntegerToolkitTest, RomanToInt_EmptyString_ThrowsException)
 {
-    EXPECT_THROW(IntegerToolkit::romanToInt(""), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(IntegerToolkit::romanToInt("")), std::invalid_argument);
 }
 
 /**
@@ -137,9 +137,9 @@ TEST_F(IntegerToolkitTest, RomanToInt_EmptyString_ThrowsException)
  */
 TEST_F(IntegerToolkitTest, RomanToInt_InvalidNumeral_ThrowsException)
 {
-    EXPECT_THROW(IntegerToolkit::romanToInt("IIII"), std::invalid_argument);
-    EXPECT_THROW(IntegerToolkit::romanToInt("ABC"), std::invalid_argument);
-    EXPECT_THROW(IntegerToolkit::romanToInt("VV"), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(IntegerToolkit::romanToInt("IIII")), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(IntegerToolkit::romanToInt("ABC")), std::invalid_argument);
+    EXPECT_THROW(static_cast<void>(IntegerToolkit::romanToInt("VV")), std::invalid_argument);
 }
 
 /**

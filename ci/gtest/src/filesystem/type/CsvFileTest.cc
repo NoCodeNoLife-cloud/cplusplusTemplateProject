@@ -37,7 +37,7 @@ protected:
         std::filesystem::remove(tmpPath_ + ".out", ec);
     }
 
-    void createTestCsv()
+    void createTestCsv() const
     {
         std::ofstream f(tmpPath_);
         f << "name,age,city" << std::endl;
@@ -54,19 +54,19 @@ TEST_F(CsvFileTest, LoadValidFile)
 
 TEST_F(CsvFileTest, GetRowCount)
 {
-    CsvFile csv(tmpPath_);
+    const CsvFile csv(tmpPath_);
     EXPECT_EQ(csv.getRowCount(), 3);
 }
 
 TEST_F(CsvFileTest, GetColumnCount)
 {
-    CsvFile csv(tmpPath_);
+    const CsvFile csv(tmpPath_);
     EXPECT_EQ(csv.getColumnCount(), 3);
 }
 
 TEST_F(CsvFileTest, LoadNonExistentFile)
 {
-    CsvFile csv("nonexistent.csv");
+    const CsvFile csv("nonexistent.csv");
     EXPECT_EQ(csv.getRowCount(), 0);
     EXPECT_EQ(csv.getColumnCount(), 0);
 }
@@ -94,14 +94,14 @@ TEST_F(CsvFileTest, InsertRowInvalidIndex)
 
 TEST_F(CsvFileTest, SaveToNewPath)
 {
-    std::string destPath = tmpPath_ + ".out";
+    const std::string destPath = tmpPath_ + ".out";
     {
         CsvFile csv(tmpPath_);
         csv.pushBack({"David", "40", "Seattle"});
         EXPECT_TRUE(csv.save(destPath));
     }
     {
-        CsvFile csv(destPath);
+        const CsvFile csv(destPath);
         EXPECT_EQ(csv.getRowCount(), 4);
         EXPECT_EQ(csv.getColumnCount(), 3);
     }
@@ -127,8 +127,8 @@ TEST_F(CsvFileTest, EmptyCsvAfterInvalidLoad)
 // ============================================================================
 
 /**
- * @brief Test loading an empty file
- * @edge File exists but has no content
+ * @brief Test loading an empty CSV file
+ * @edge Empty file that exists but has no content
  */
 TEST_F(CsvFileTest, EmptyFile)
 {
@@ -136,7 +136,7 @@ TEST_F(CsvFileTest, EmptyFile)
     std::ofstream f(emptyFile);
     f.close();
 
-    CsvFile csv(emptyFile);
+    const CsvFile csv(emptyFile);
     EXPECT_EQ(csv.getRowCount(), 0);
     EXPECT_EQ(csv.getColumnCount(), 0);
 
@@ -156,7 +156,7 @@ TEST_F(CsvFileTest, HeaderOnly)
         f << "name,age,city" << std::endl;
     }
 
-    CsvFile csv(headerFile);
+    const CsvFile csv(headerFile);
     EXPECT_EQ(csv.getRowCount(), 0);
     EXPECT_EQ(csv.getColumnCount(), 3);
 
@@ -178,7 +178,7 @@ TEST_F(CsvFileTest, QuotedFieldsWithCommas)
         f << "2,\"Another, quoted, field\",20.50" << std::endl;
     }
 
-    CsvFile csv(quotedFile);
+    const CsvFile csv(quotedFile);
     EXPECT_EQ(csv.getRowCount(), 2);
     EXPECT_EQ(csv.getColumnCount(), 3);
 
@@ -199,7 +199,7 @@ TEST_F(CsvFileTest, QuotedFieldsWithNewlines)
         f << "1,\"line1\nline2\nline3\"" << std::endl;
     }
 
-    CsvFile csv(newlineFile);
+    const CsvFile csv(newlineFile);
     // The CSV parser may treat the embedded newlines as new rows
     EXPECT_GE(csv.getRowCount(), 1);
 
@@ -223,7 +223,7 @@ TEST_F(CsvFileTest, LargeCsv)
         }
     }
 
-    CsvFile csv(largeFile);
+    const CsvFile csv(largeFile);
     EXPECT_EQ(csv.getRowCount(), 1000);
     EXPECT_EQ(csv.getColumnCount(), 2);
 
@@ -274,13 +274,13 @@ TEST_F(CsvFileTest, Utf8Bom)
     {
         std::ofstream f(bomFile, std::ios::binary);
         // Write UTF-8 BOM followed by CSV content
-        const char bom[] = "\xEF\xBB\xBF";
+        constexpr char bom[] = "\xEF\xBB\xBF";
         f.write(bom, 3);
         f << "name,city" << std::endl;
         f << "Alice,New York" << std::endl;
     }
 
-    CsvFile csv(bomFile);
+    const CsvFile csv(bomFile);
     EXPECT_EQ(csv.getRowCount(), 1);
     EXPECT_EQ(csv.getColumnCount(), 2);
 
@@ -300,7 +300,7 @@ TEST_F(CsvFileTest, SaveRoundTripIntegrity)
         EXPECT_TRUE(csv.save(destPath));
     }
     {
-        CsvFile csv(destPath);
+        const CsvFile csv(destPath);
         EXPECT_EQ(csv.getRowCount(), 3);
         EXPECT_EQ(csv.getColumnCount(), 3);
     }
@@ -318,10 +318,10 @@ TEST_F(CsvFileTest, EscapedQuotesInQuotedFields)
     {
         std::ofstream f(file);
         f << "id,description" << std::endl;
-        f << "1,\"Say \"\"Hello\"\" world\"" << std::endl;
+        f << R"(1,"Say ""Hello"" world")" << std::endl;
     }
 
-    CsvFile csv(file);
+    const CsvFile csv(file);
     EXPECT_EQ(csv.getRowCount(), 1);
     EXPECT_EQ(csv.getColumnCount(), 2);
 
@@ -329,10 +329,6 @@ TEST_F(CsvFileTest, EscapedQuotesInQuotedFields)
     std::filesystem::remove(file, ec);
 }
 
-/**
- * @brief Test CSV with empty fields
- * @edge Empty values between commas
- */
 TEST_F(CsvFileTest, EmptyFields)
 {
     const std::string file = tmpPath_ + "_empty.csv";
@@ -343,7 +339,7 @@ TEST_F(CsvFileTest, EmptyFields)
         f << ",5," << std::endl;
     }
 
-    CsvFile csv(file);
+    const CsvFile csv(file);
     EXPECT_EQ(csv.getRowCount(), 2);
     EXPECT_EQ(csv.getColumnCount(), 3);
 
@@ -351,10 +347,6 @@ TEST_F(CsvFileTest, EmptyFields)
     std::filesystem::remove(file, ec);
 }
 
-/**
- * @brief Test fields with leading/trailing spaces preserved
- * @edge Spaces in unquoted fields
- */
 TEST_F(CsvFileTest, SpacesInFields)
 {
     const std::string file = tmpPath_ + "_spaces.csv";
@@ -364,7 +356,7 @@ TEST_F(CsvFileTest, SpacesInFields)
         f << "  hello  ,world  " << std::endl;
     }
 
-    CsvFile csv(file);
+    const CsvFile csv(file);
     EXPECT_EQ(csv.getRowCount(), 1);
     EXPECT_EQ(csv.getColumnCount(), 2);
 
@@ -372,10 +364,6 @@ TEST_F(CsvFileTest, SpacesInFields)
     std::filesystem::remove(file, ec);
 }
 
-/**
- * @brief Test save to invalid path returns false
- * @edge Unwritable destination
- */
 TEST_F(CsvFileTest, SaveToInvalidPath_ReturnsFalse)
 {
     CsvFile csv(tmpPath_);
@@ -405,7 +393,7 @@ TEST_F(CsvFileTest, VeryWideCsv)
         f << std::endl;
     }
 
-    CsvFile csv(file);
+    const CsvFile csv(file);
     EXPECT_EQ(csv.getRowCount(), 1);
     EXPECT_EQ(csv.getColumnCount(), 100);
 

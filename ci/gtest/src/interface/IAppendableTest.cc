@@ -52,7 +52,7 @@ namespace
 
         MockAppendable& append(std::initializer_list<char> chars) override
         {
-            for (auto c : chars)
+            for (const auto c : chars)
                 data_.push_back(c);
             return *this;
         }
@@ -71,7 +71,7 @@ namespace
 
         MockAppendable& append(std::span<const char> chars) override
         {
-            for (auto c : chars)
+            for (const auto c : chars)
                 data_.push_back(c);
             return *this;
         }
@@ -86,7 +86,7 @@ class IAppendableTest : public testing::Test
 protected:
     void SetUp() override
     {
-        mock_.reset(new MockAppendable());
+        mock_ = std::make_unique<MockAppendable>();
     }
 
     void TearDown() override
@@ -147,7 +147,7 @@ TEST_F(IAppendableTest, AppendCharRepeated)
 
 TEST_F(IAppendableTest, AppendSpan)
 {
-    const char arr[] = {'x', 'y', 'z'};
+    constexpr char arr[] = {'x', 'y', 'z'};
     mock_->append(std::span<const char>(arr));
     EXPECT_EQ(mock_->value(), "xyz");
 }

@@ -45,7 +45,7 @@ TEST_F(GrpcConnectivityManagerTest, ConstructWithNullChannel)
  */
 TEST_F(GrpcConnectivityManagerTest, ConstructWithValidChannel)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
     EXPECT_NO_THROW(GrpcConnectivityManager manager(channel));
 }
 
@@ -55,7 +55,7 @@ TEST_F(GrpcConnectivityManagerTest, ConstructWithValidChannel)
  */
 TEST_F(GrpcConnectivityManagerTest, GetCurrentState_NullChannel)
 {
-    GrpcConnectivityManager manager(nullptr);
+    const GrpcConnectivityManager manager(nullptr);
     EXPECT_EQ(manager.getCurrentState(), GrpcConnectivityState::SHUTDOWN);
 }
 
@@ -65,7 +65,7 @@ TEST_F(GrpcConnectivityManagerTest, GetCurrentState_NullChannel)
  */
 TEST_F(GrpcConnectivityManagerTest, GetCurrentStateString_NullChannel)
 {
-    GrpcConnectivityManager manager(nullptr);
+    const GrpcConnectivityManager manager(nullptr);
     EXPECT_EQ(manager.getCurrentStateString(), "SHUTDOWN");
 }
 
@@ -75,7 +75,7 @@ TEST_F(GrpcConnectivityManagerTest, GetCurrentStateString_NullChannel)
  */
 TEST_F(GrpcConnectivityManagerTest, IsReady_NullChannel)
 {
-    GrpcConnectivityManager manager(nullptr);
+    const GrpcConnectivityManager manager(nullptr);
     EXPECT_FALSE(manager.isReady());
 }
 
@@ -85,8 +85,8 @@ TEST_F(GrpcConnectivityManagerTest, IsReady_NullChannel)
  */
 TEST_F(GrpcConnectivityManagerTest, IsReady_UnconnectedChannel)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
-    GrpcConnectivityManager manager(channel);
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const GrpcConnectivityManager manager(channel);
     EXPECT_FALSE(manager.isReady());
 }
 
@@ -96,10 +96,9 @@ TEST_F(GrpcConnectivityManagerTest, IsReady_UnconnectedChannel)
  */
 TEST_F(GrpcConnectivityManagerTest, GetCurrentState_ValidChannel)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
-    GrpcConnectivityManager manager(channel);
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const GrpcConnectivityManager manager(channel);
     const auto state = manager.getCurrentState();
-    // Should be something other than SHUTDOWN for a valid channel
     EXPECT_NE(state, GrpcConnectivityState::SHUTDOWN);
 }
 
@@ -109,8 +108,8 @@ TEST_F(GrpcConnectivityManagerTest, GetCurrentState_ValidChannel)
  */
 TEST_F(GrpcConnectivityManagerTest, GetCurrentStateString_ValidChannel)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
-    GrpcConnectivityManager manager(channel);
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const GrpcConnectivityManager manager(channel);
     const auto stateStr = manager.getCurrentStateString();
     EXPECT_FALSE(stateStr.empty());
     EXPECT_NE(stateStr, "SHUTDOWN");
@@ -122,9 +121,8 @@ TEST_F(GrpcConnectivityManagerTest, GetCurrentStateString_ValidChannel)
  */
 TEST_F(GrpcConnectivityManagerTest, WaitForState_TimesOut)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
-    GrpcConnectivityManager manager(channel);
-    // Waiting for SHUTDOWN should timeout (channel is not shutting down)
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const GrpcConnectivityManager manager(channel);
     const bool result = manager.waitForState(GrpcConnectivityState::SHUTDOWN, 1);
     EXPECT_FALSE(result);
 }
@@ -135,10 +133,9 @@ TEST_F(GrpcConnectivityManagerTest, WaitForState_TimesOut)
  */
 TEST_F(GrpcConnectivityManagerTest, WaitForState_CurrentState)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
-    GrpcConnectivityManager manager(channel);
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const GrpcConnectivityManager manager(channel);
     const auto currentState = manager.getCurrentState();
-    // Waiting for current state should succeed within short timeout
     const bool result = manager.waitForState(currentState, 5);
     EXPECT_TRUE(result);
 }
@@ -149,14 +146,14 @@ TEST_F(GrpcConnectivityManagerTest, WaitForState_CurrentState)
  */
 TEST_F(GrpcConnectivityManagerTest, StartStopMonitoring)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
     GrpcConnectivityManager manager(channel);
 
     std::atomic<int> callbackCount{0};
 
     manager.startMonitoring([&callbackCount](GrpcConnectivityState)
     {
-        callbackCount++;
+        ++callbackCount;
     }, 100);
 
     // Let monitoring run briefly
@@ -174,7 +171,7 @@ TEST_F(GrpcConnectivityManagerTest, StartStopMonitoring)
  */
 TEST_F(GrpcConnectivityManagerTest, DoubleStartMonitoring)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
     GrpcConnectivityManager manager(channel);
 
     manager.startMonitoring([](GrpcConnectivityState) {}, 500);
@@ -191,7 +188,7 @@ TEST_F(GrpcConnectivityManagerTest, DoubleStartMonitoring)
  */
 TEST_F(GrpcConnectivityManagerTest, DoubleStopMonitoring)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
     GrpcConnectivityManager manager(channel);
 
     manager.startMonitoring([](GrpcConnectivityState) {}, 500);
@@ -208,7 +205,7 @@ TEST_F(GrpcConnectivityManagerTest, DoubleStopMonitoring)
  */
 TEST_F(GrpcConnectivityManagerTest, DestructorWhileMonitoring)
 {
-    auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
+    const auto channel = grpc::CreateChannel("localhost:1", grpc::InsecureChannelCredentials());
     {
         GrpcConnectivityManager manager(channel);
         manager.startMonitoring([](GrpcConnectivityState) {}, 100);

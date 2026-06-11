@@ -32,7 +32,7 @@ class IStartupTaskTest : public testing::Test
 protected:
     void SetUp() override
     {
-        task_.reset(new MockStartupTask());
+        task_ = std::make_unique<MockStartupTask>();
     }
 
     void TearDown() override
@@ -45,7 +45,7 @@ protected:
 
 TEST_F(IStartupTaskTest, ExecuteReturnsTrue)
 {
-    bool result = task_->execute();
+    const bool result = task_->execute();
 
     EXPECT_TRUE(result);
     EXPECT_EQ(task_->executeCount_, 1);
@@ -62,7 +62,7 @@ TEST_F(IStartupTaskTest, ExecuteReturnsFalseOnFailure)
 {
     task_->returnValue_ = false;
 
-    bool result = task_->execute();
+    const bool result = task_->execute();
 
     EXPECT_FALSE(result);
     EXPECT_EQ(task_->executeCount_, 1);
@@ -84,6 +84,6 @@ TEST_F(IStartupTaskTest, ExecuteDoesNotThrow)
 
 TEST_F(IStartupTaskTest, ExecuteIsNoDiscard)
 {
-    auto result = task_->execute();
+    const auto result = task_->execute();
     EXPECT_TRUE(result);
 }

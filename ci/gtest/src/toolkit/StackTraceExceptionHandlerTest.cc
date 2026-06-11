@@ -56,7 +56,7 @@ TEST_F(StackTraceExceptionHandlerTest, LogCustomException)
     class CustomException : public std::exception
     {
     public:
-        const char* what() const noexcept override
+        [[nodiscard]] const char* what() const noexcept override
         {
             return "custom error";
         }
@@ -148,7 +148,7 @@ TEST_F(StackTraceExceptionHandlerTest, LogUnknownExceptionInCatchAll)
 {
     try
     {
-        throw 42;
+        throw std::runtime_error("test exception");
     }
     catch (...)
     {

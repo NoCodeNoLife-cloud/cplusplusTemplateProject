@@ -37,7 +37,7 @@ TEST_F(DateTest, DefaultConstructor_CurrentTime)
     const auto timestamp = now.getTime();
 
     // Should be a reasonable modern timestamp (after year 2020)
-    const auto minTimestamp = 1577836800000LL; // 2020-01-01 in milliseconds
+    constexpr auto minTimestamp = 1577836800000LL; // 2020-01-01 in milliseconds
     EXPECT_GT(timestamp, minTimestamp);
 }
 
@@ -79,7 +79,7 @@ TEST_F(DateTest, Constructor_FullDateTime)
  */
 TEST_F(DateTest, Constructor_FromTimestamp)
 {
-    const int64_t timestamp = 1705276800000LL; // 2024-01-15 00:00:00 UTC (approximate)
+    constexpr int64_t timestamp = 1705276800000LL; // 2024-01-15 00:00:00 UTC (approximate)
     const Date date(timestamp);
 
     EXPECT_EQ(date.getTime(), timestamp);
@@ -502,7 +502,7 @@ TEST_F(DateTest, DateArithmetic_MonthBoundary)
     const auto timestamp = endOfMonth.getTime();
 
     // Create date from timestamp should be valid
-    EXPECT_NO_THROW(Date date(timestamp));
+    EXPECT_NO_THROW(Date(timestamp));
 }
 
 /**

@@ -30,7 +30,7 @@ class ITimerTaskTest : public testing::Test
 protected:
     void SetUp() override
     {
-        task_.reset(new MockTimerTask());
+        task_ = std::make_unique<MockTimerTask>();
     }
 
     void TearDown() override

@@ -215,8 +215,8 @@ namespace common::data_structure::tree
             q.pop();
             result.push_back(node->data_);
 
-            if (node->left_) q.push(node->left_.get());
-            if (node->right_) q.push(node->right_.get());
+            if (node->left_) q.push(static_cast<const BinaryTree<T>*>(node->left_.get()));
+            if (node->right_) q.push(static_cast<const BinaryTree<T>*>(node->right_.get()));
         }
 
         return result;

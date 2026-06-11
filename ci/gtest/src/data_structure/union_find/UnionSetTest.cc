@@ -44,7 +44,7 @@ TEST_F(UnionSetTest, DefaultConstructor_EmptyUnionSet)
  */
 TEST_F(UnionSetTest, Find_SingleElement_ReturnsSelf)
 {
-    UnionSet<int> unionSet;
+    const UnionSet<int> unionSet;
 
     const int root = unionSet.find(5);
 
@@ -60,9 +60,9 @@ TEST_F(UnionSetTest, Find_PathCompression)
     UnionSet<int> unionSet;
 
     // Create a chain: 1 -> 2 -> 3 -> 4
-    unionSet.unionSets(1, 2);
-    unionSet.unionSets(2, 3);
-    unionSet.unionSets(3, 4);
+    EXPECT_TRUE(unionSet.unionSets(1, 2));
+    EXPECT_TRUE(unionSet.unionSets(2, 3));
+    EXPECT_TRUE(unionSet.unionSets(3, 4));
 
     // Find should compress the path
     const int root = unionSet.find(1);
@@ -94,7 +94,7 @@ TEST_F(UnionSetTest, UnionSets_AlreadyConnected_ReturnsFalse)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(1, 2);
+    EXPECT_TRUE(unionSet.unionSets(1, 2));
     const bool result = unionSet.unionSets(1, 2);
 
     EXPECT_FALSE(result);
@@ -108,9 +108,9 @@ TEST_F(UnionSetTest, UnionSets_MultipleElements_TransitiveConnectivity)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(1, 2);
-    unionSet.unionSets(2, 3);
-    unionSet.unionSets(3, 4);
+    EXPECT_TRUE(unionSet.unionSets(1, 2));
+    EXPECT_TRUE(unionSet.unionSets(2, 3));
+    EXPECT_TRUE(unionSet.unionSets(3, 4));
 
     EXPECT_TRUE(unionSet.connected(1, 4));
     EXPECT_TRUE(unionSet.connected(1, 3));
@@ -125,8 +125,8 @@ TEST_F(UnionSetTest, UnionSets_SeparateSets_RemainDisconnected)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(1, 2);
-    unionSet.unionSets(3, 4);
+    EXPECT_TRUE(unionSet.unionSets(1, 2));
+    EXPECT_TRUE(unionSet.unionSets(3, 4));
 
     EXPECT_FALSE(unionSet.connected(1, 3));
     EXPECT_FALSE(unionSet.connected(2, 4));
@@ -164,8 +164,8 @@ TEST_F(UnionSetTest, Connected_AfterUnion_ReturnsTrue)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(10, 20);
-    unionSet.unionSets(20, 30);
+    EXPECT_TRUE(unionSet.unionSets(10, 20));
+    EXPECT_TRUE(unionSet.unionSets(20, 30));
 
     EXPECT_TRUE(unionSet.connected(10, 30));
     EXPECT_TRUE(unionSet.connected(10, 20));
@@ -180,8 +180,8 @@ TEST_F(UnionSetTest, Connected_ConstReference_CorrectBehavior)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(1, 2);
-    unionSet.unionSets(3, 4);
+    EXPECT_TRUE(unionSet.unionSets(1, 2));
+    EXPECT_TRUE(unionSet.unionSets(3, 4));
 
     const UnionSet<int>& constUnionSet = unionSet;
 
@@ -198,18 +198,18 @@ TEST_F(UnionSetTest, UnionByRank_BalancedStructure)
     UnionSet<int> unionSet;
 
     // Create two chains
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 9; ++i)
     {
-        unionSet.unionSets(i, i + 1);
+        EXPECT_TRUE(unionSet.unionSets(i, i + 1));
     }
 
     for (int i = 10; i < 20; ++i)
     {
-        unionSet.unionSets(i, i + 1);
+        EXPECT_TRUE(unionSet.unionSets(i, i + 1));
     }
 
     // Unite the two chains
-    unionSet.unionSets(0, 10);
+    EXPECT_TRUE(unionSet.unionSets(0, 10));
 
     // All elements should be connected
     EXPECT_TRUE(unionSet.connected(0, 20));
@@ -224,8 +224,8 @@ TEST_F(UnionSetTest, StringElements_CorrectBehavior)
 {
     UnionSet<std::string> unionSet;
 
-    unionSet.unionSets("apple", "banana");
-    unionSet.unionSets("banana", "cherry");
+    EXPECT_TRUE(unionSet.unionSets("apple", "banana"));
+    EXPECT_TRUE(unionSet.unionSets("banana", "cherry"));
 
     EXPECT_TRUE(unionSet.connected("apple", "cherry"));
     EXPECT_TRUE(unionSet.connected("apple", "banana"));
@@ -243,7 +243,7 @@ TEST_F(UnionSetTest, LargeNumberOfElements_Correctness)
     // Create 100 separate sets
     for (int i = 0; i < 100; ++i)
     {
-        unionSet.unionSets(i, i + 1);
+        EXPECT_TRUE(unionSet.unionSets(i, i + 1));
     }
 
     // All should be connected
@@ -263,15 +263,15 @@ TEST_F(UnionSetTest, MultipleIndependentComponents_CorrectHandling)
     UnionSet<int> unionSet;
 
     // Component 1: 1-2-3
-    unionSet.unionSets(1, 2);
-    unionSet.unionSets(2, 3);
+    EXPECT_TRUE(unionSet.unionSets(1, 2));
+    EXPECT_TRUE(unionSet.unionSets(2, 3));
 
     // Component 2: 10-11-12
-    unionSet.unionSets(10, 11);
-    unionSet.unionSets(11, 12);
+    EXPECT_TRUE(unionSet.unionSets(10, 11));
+    EXPECT_TRUE(unionSet.unionSets(11, 12));
 
     // Component 3: 100-101
-    unionSet.unionSets(100, 101);
+    EXPECT_TRUE(unionSet.unionSets(100, 101));
 
     // Verify within-component connectivity
     EXPECT_TRUE(unionSet.connected(1, 3));
@@ -292,8 +292,8 @@ TEST_F(UnionSetTest, NegativeNumbers_CorrectHandling)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(-10, -5);
-    unionSet.unionSets(-5, -1);
+    EXPECT_TRUE(unionSet.unionSets(-10, -5));
+    EXPECT_TRUE(unionSet.unionSets(-5, -1));
 
     EXPECT_TRUE(unionSet.connected(-10, -1));
     EXPECT_FALSE(unionSet.connected(-10, 0));
@@ -307,9 +307,9 @@ TEST_F(UnionSetTest, MixedSignNumbers_CorrectHandling)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(-100, 50);
-    unionSet.unionSets(50, -50);
-    unionSet.unionSets(-50, 100);
+    EXPECT_TRUE(unionSet.unionSets(-100, 50));
+    EXPECT_TRUE(unionSet.unionSets(50, -50));
+    EXPECT_TRUE(unionSet.unionSets(-50, 100));
 
     EXPECT_TRUE(unionSet.connected(-100, 100));
     EXPECT_TRUE(unionSet.connected(50, -50));
@@ -323,9 +323,9 @@ TEST_F(UnionSetTest, RepeatedUnions_Idempotent)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(1, 2);
-    unionSet.unionSets(1, 2);
-    unionSet.unionSets(1, 2);
+    EXPECT_TRUE(unionSet.unionSets(1, 2));
+    EXPECT_FALSE(unionSet.unionSets(1, 2));
+    EXPECT_FALSE(unionSet.unionSets(1, 2));
 
     EXPECT_TRUE(unionSet.connected(1, 2));
 }
@@ -338,8 +338,8 @@ TEST_F(UnionSetTest, EquivalenceClasses_CorrectProperties)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(1, 2);
-    unionSet.unionSets(2, 3);
+    EXPECT_TRUE(unionSet.unionSets(1, 2));
+    EXPECT_TRUE(unionSet.unionSets(2, 3));
 
     // Reflexive
     EXPECT_TRUE(unionSet.connected(1, 1));
@@ -364,8 +364,8 @@ TEST_F(UnionSetTest, Find_ConstReference_ReturnsCorrectRoot)
 {
     UnionSet<int> unionSet;
 
-    unionSet.unionSets(1, 2);
-    unionSet.unionSets(2, 3);
+    EXPECT_TRUE(unionSet.unionSets(1, 2));
+    EXPECT_TRUE(unionSet.unionSets(2, 3));
 
     const UnionSet<int>& constUnionSet = unionSet;
 
@@ -384,7 +384,7 @@ TEST_F(UnionSetTest, IterativeFind_DeepChain_CorrectRoot)
 
     for (int i = 0; i < kChainLength; ++i)
     {
-        unionSet.unionSets(i, i + 1);
+        EXPECT_TRUE(unionSet.unionSets(i, i + 1));
     }
 
     const int root = unionSet.find(0);

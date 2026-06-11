@@ -58,7 +58,7 @@ class IYamlSerializableTest : public testing::Test
 protected:
     void SetUp() override
     {
-        obj_.reset(new MockYamlSerializable("test", 42));
+        obj_ = std::make_unique<MockYamlSerializable>("test", 42);
     }
 
     void TearDown() override

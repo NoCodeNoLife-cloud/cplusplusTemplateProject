@@ -101,7 +101,7 @@ TEST_F(Point2DTest, MinusEqualOperator)
 
 /**
  * @brief Test negation operator
- * @details Verifies unary operator- negates both coordinates
+ * @details Verifies unary operator-negates both coordinates
  */
 TEST_F(Point2DTest, NegationOperator)
 {

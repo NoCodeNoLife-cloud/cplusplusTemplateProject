@@ -39,7 +39,7 @@ class IFlushableTest : public testing::Test
 protected:
     void SetUp() override
     {
-        mock_.reset(new MockFlushable());
+        mock_ = std::make_unique<MockFlushable>();
     }
 
     void TearDown() override
@@ -66,7 +66,7 @@ TEST_F(IFlushableTest, FlushMultipleTimes)
 
 TEST_F(IFlushableTest, FlushSafeSuccess)
 {
-    bool result = mock_->flushSafe();
+    const bool result = mock_->flushSafe();
     EXPECT_TRUE(result);
     EXPECT_EQ(mock_->flushCount_, 1);
 }
@@ -74,14 +74,14 @@ TEST_F(IFlushableTest, FlushSafeSuccess)
 TEST_F(IFlushableTest, FlushSafeHandlesException)
 {
     mock_->throwOnFlush_ = true;
-    bool result = mock_->flushSafe();
+    const bool result = mock_->flushSafe();
     EXPECT_FALSE(result);
     EXPECT_EQ(mock_->flushCount_, 1);
 }
 
 TEST_F(IFlushableTest, IsFlushNeededDefault)
 {
-    MockFlushable defaultMock;
+    const MockFlushable defaultMock;
     EXPECT_TRUE(defaultMock.isFlushNeeded());
 }
 

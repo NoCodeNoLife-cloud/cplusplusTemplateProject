@@ -52,7 +52,7 @@ protected:
 TEST_F(IRunnableTest, IntRunnableReturnsCorrectValue)
 {
     MockIntRunnable runnable;
-    auto result = runnable.run(3, 4);
+    const auto result = runnable.run(3, 4);
 
     EXPECT_EQ(result, 7);
 }
@@ -80,7 +80,7 @@ TEST_F(IRunnableTest, StringRunnableReturnsFormattedString)
 {
     MockStringRunnable runnable;
 
-    auto result = runnable.run("world");
+    const auto result = runnable.run("world");
 
     EXPECT_EQ(result, "hello world");
 }
@@ -89,7 +89,7 @@ TEST_F(IRunnableTest, StringRunnableWithEmptyString)
 {
     MockStringRunnable runnable;
 
-    auto result = runnable.run("");
+    const auto result = runnable.run("");
 
     EXPECT_EQ(result, "hello ");
 }
@@ -106,6 +106,6 @@ TEST_F(IRunnableTest, ReusableRunnable)
 TEST_F(IRunnableTest, IntRunnableIsNoDiscard)
 {
     MockIntRunnable runnable;
-    [[maybe_unused]] auto result = runnable.run(5, 5);
+    [[maybe_unused]] const auto result = runnable.run(5, 5);
     EXPECT_EQ(result, 10);
 }

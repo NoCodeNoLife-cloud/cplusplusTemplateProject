@@ -37,9 +37,9 @@ protected:
  */
 TEST_F(SnowflakeGeneratorTest, Constructor_ValidIds)
 {
-    EXPECT_NO_THROW(SnowflakeGenerator generator(0, 0));
-    EXPECT_NO_THROW(SnowflakeGenerator generator(31, 31));
-    EXPECT_NO_THROW(SnowflakeGenerator generator(15, 20));
+    EXPECT_NO_THROW(SnowflakeGenerator(0, 0));
+    EXPECT_NO_THROW(SnowflakeGenerator(31, 31));
+    EXPECT_NO_THROW(SnowflakeGenerator(15, 20));
 }
 
 /**
@@ -48,9 +48,9 @@ TEST_F(SnowflakeGeneratorTest, Constructor_ValidIds)
  */
 TEST_F(SnowflakeGeneratorTest, Constructor_InvalidMachineId_ThrowsException)
 {
-    EXPECT_THROW(SnowflakeGenerator generator(-1, 0), std::invalid_argument);
-    EXPECT_THROW(SnowflakeGenerator generator(32, 0), std::invalid_argument);
-    EXPECT_THROW(SnowflakeGenerator generator(100, 0), std::invalid_argument);
+    EXPECT_THROW(SnowflakeGenerator(-1, 0), std::invalid_argument);
+    EXPECT_THROW(SnowflakeGenerator(32, 0), std::invalid_argument);
+    EXPECT_THROW(SnowflakeGenerator(100, 0), std::invalid_argument);
 }
 
 /**
@@ -59,9 +59,9 @@ TEST_F(SnowflakeGeneratorTest, Constructor_InvalidMachineId_ThrowsException)
  */
 TEST_F(SnowflakeGeneratorTest, Constructor_InvalidDatacenterId_ThrowsException)
 {
-    EXPECT_THROW(SnowflakeGenerator generator(0, -1), std::invalid_argument);
-    EXPECT_THROW(SnowflakeGenerator generator(0, 32), std::invalid_argument);
-    EXPECT_THROW(SnowflakeGenerator generator(0, 100), std::invalid_argument);
+    EXPECT_THROW(SnowflakeGenerator(0, -1), std::invalid_argument);
+    EXPECT_THROW(SnowflakeGenerator(0, 32), std::invalid_argument);
+    EXPECT_THROW(SnowflakeGenerator(0, 100), std::invalid_argument);
 }
 
 /**
@@ -199,7 +199,7 @@ TEST_F(SnowflakeGeneratorTest, NextId_ThreadSafety_ConcurrentGeneration)
     }
 
     // All IDs from all threads should be unique
-    const int expectedTotal = threadCount * idsPerThread;
+    constexpr int expectedTotal = threadCount * idsPerThread;
     EXPECT_EQ(uniqueIds.size(), expectedTotal);
 }
 
@@ -235,9 +235,9 @@ TEST_F(SnowflakeGeneratorTest, NextId_ThreadSafety_MaintainsOrdering)
     }
 
     // Sort and verify all IDs are unique
-    std::sort(generatedIds.begin(), generatedIds.end());
-    const auto last = std::unique(generatedIds.begin(), generatedIds.end());
-    const int uniqueCount = static_cast<int>(last - generatedIds.begin());
+    std::ranges::sort(generatedIds);
+    const auto [first, last] = std::ranges::unique(generatedIds);
+    const int uniqueCount = static_cast<int>(first - generatedIds.begin());
 
     EXPECT_EQ(uniqueCount, threadCount * idsPerThread);
 }
@@ -248,8 +248,8 @@ TEST_F(SnowflakeGeneratorTest, NextId_ThreadSafety_MaintainsOrdering)
  */
 TEST_F(SnowflakeGeneratorTest, Constructor_BoundaryMachineIds)
 {
-    EXPECT_NO_THROW(SnowflakeGenerator generator(0, 0));
-    EXPECT_NO_THROW(SnowflakeGenerator generator(31, 0));
+    EXPECT_NO_THROW(SnowflakeGenerator(0, 0));
+    EXPECT_NO_THROW(SnowflakeGenerator(31, 0));
 
     SnowflakeGenerator genMin(0, 0);
     SnowflakeGenerator genMax(31, 0);
@@ -268,8 +268,8 @@ TEST_F(SnowflakeGeneratorTest, Constructor_BoundaryMachineIds)
  */
 TEST_F(SnowflakeGeneratorTest, Constructor_BoundaryDatacenterIds)
 {
-    EXPECT_NO_THROW(SnowflakeGenerator generator(0, 0));
-    EXPECT_NO_THROW(SnowflakeGenerator generator(0, 31));
+    EXPECT_NO_THROW(SnowflakeGenerator(0, 0));
+    EXPECT_NO_THROW(SnowflakeGenerator(0, 31));
 
     SnowflakeGenerator genMin(0, 0);
     SnowflakeGenerator genMax(0, 31);

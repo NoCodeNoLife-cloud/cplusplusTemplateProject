@@ -76,8 +76,8 @@ TEST_F(PrefixFormatterTest, DefaultConstruction)
  */
 TEST_F(PrefixFormatterTest, CopyConstruction)
 {
-    const PrefixFormatter fmt1;
-    EXPECT_NO_THROW(PrefixFormatter(fmt1));
+    constexpr PrefixFormatter fmt1;
+    EXPECT_NO_THROW((void)PrefixFormatter(fmt1));
 }
 
 /**
@@ -85,9 +85,8 @@ TEST_F(PrefixFormatterTest, CopyConstruction)
  */
 TEST_F(PrefixFormatterTest, CopyAssignment)
 {
-    const PrefixFormatter fmt1;
-    PrefixFormatter fmt2;
-    EXPECT_NO_THROW(fmt2 = fmt1);
+    constexpr PrefixFormatter fmt1;
+    EXPECT_NO_THROW((void)(PrefixFormatter() = fmt1));
 }
 
 /**
@@ -105,8 +104,7 @@ TEST_F(PrefixFormatterTest, MoveConstruction)
 TEST_F(PrefixFormatterTest, MoveAssignment)
 {
     PrefixFormatter fmt1;
-    PrefixFormatter fmt2;
-    EXPECT_NO_THROW(fmt2 = static_cast<PrefixFormatter&&>(fmt1));
+    EXPECT_NO_THROW((void)(PrefixFormatter() = static_cast<PrefixFormatter&&>(fmt1)));
 }
 
 /**

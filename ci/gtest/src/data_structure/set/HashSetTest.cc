@@ -57,7 +57,7 @@ TEST_F(HashSetTest, DefaultConstructor_EmptySet)
  */
 TEST_F(HashSetTest, Constructor_WithCapacity)
 {
-    HashSet<int> set(32);
+    const HashSet<int> set(32);
     EXPECT_TRUE(set.empty());
 }
 
@@ -72,7 +72,7 @@ TEST_F(HashSetTest, CopyConstructor_DeepCopy)
     set1.insert(20);
     set1.insert(30);
 
-    HashSet set2(set1);
+    const HashSet set2(set1);
 
     EXPECT_EQ(set2.size(), set1.size());
     EXPECT_TRUE(set2.contains(10));
@@ -107,7 +107,7 @@ TEST_F(HashSetTest, MoveConstructor_TransfersOwnership)
     set1.insert(10);
     set1.insert(20);
 
-    HashSet set2(std::move(set1));
+    const HashSet set2(std::move(set1));
 
     EXPECT_EQ(set2.size(), 2);
     EXPECT_TRUE(set2.contains(10));
@@ -243,9 +243,9 @@ TEST_F(HashSetTest, Erase_ByIterator)
     set.insert(20);
     set.insert(30);
 
-    auto it = set.find(20);
+    const auto it = set.find(20);
     ASSERT_NE(it, set.end());
-    auto next = set.erase(it);
+    const auto next = set.erase(it);
     EXPECT_EQ(set.size(), 2);
     EXPECT_FALSE(set.contains(20));
 }
@@ -281,7 +281,7 @@ TEST_F(HashSetTest, Find_ExistingElement_ReturnsIterator)
 {
     HashSet<int> set;
     set.insert(42);
-    auto it = set.find(42);
+    const auto it = set.find(42);
     ASSERT_NE(it, set.end());
     EXPECT_EQ(*it, 42);
 }
@@ -315,8 +315,8 @@ TEST_F(HashSetTest, Iterators_AllElements)
         found.push_back(*it);
     }
 
-    std::sort(found.begin(), found.end());
-    std::vector<int> expected = {10, 20, 30};
+    std::ranges::sort(found);
+    const std::vector expected = {10, 20, 30};
     EXPECT_EQ(found, expected);
 }
 

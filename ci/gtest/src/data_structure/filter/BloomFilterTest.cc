@@ -148,7 +148,7 @@ TEST_F(BloomFilterTest, Insert_RawData_ContainsWorks)
     ASSERT_TRUE(params.compute_optimal_parameters());
 
     BloomFilter filter(params);
-    const uint32_t value = 42;
+    const uint32_t value{42};
     filter.insert(value);
     EXPECT_TRUE(filter.contains(value));
 }
@@ -248,7 +248,7 @@ TEST_F(BloomFilterTest, Inequality_DifferentContent)
     ASSERT_TRUE(params.compute_optimal_parameters());
 
     BloomFilter a(params);
-    BloomFilter b(params);
+    const BloomFilter b(params);
     a.insert("unique");
     EXPECT_TRUE(a != b);
     EXPECT_FALSE(a == b);
@@ -266,7 +266,7 @@ TEST_F(BloomFilterTest, BitwiseOr_CombinesFilters)
     a.insert("foo");
     b.insert("bar");
 
-    BloomFilter result = a | b;
+    const BloomFilter result = a | b;
     EXPECT_TRUE(result.contains("foo"));
     EXPECT_TRUE(result.contains("bar"));
 }
@@ -284,7 +284,7 @@ TEST_F(BloomFilterTest, BitwiseAnd_Intersection)
     b.insert("common");
     a.insert("only_in_a");
 
-    BloomFilter result = a & b;
+    const BloomFilter result = a & b;
     EXPECT_TRUE(result.contains("common"));
 }
 
@@ -300,8 +300,9 @@ TEST_F(BloomFilterTest, BitwiseXor_Difference)
     a.insert("one");
     b.insert("two");
 
-    BloomFilter result = a ^ b;
-    result = result;
+    const BloomFilter result = a ^ b;
+    EXPECT_TRUE(result.contains("one"));
+    EXPECT_TRUE(result.contains("two"));
 }
 
 TEST_F(BloomFilterTest, Insert_RangeOfKeys_AllContained)
@@ -312,7 +313,7 @@ TEST_F(BloomFilterTest, Insert_RangeOfKeys_AllContained)
     ASSERT_TRUE(params.compute_optimal_parameters());
 
     BloomFilter filter(params);
-    std::vector keys = {"alpha", "beta", "gamma"};
+    std::vector<std::string> keys = {"alpha", "beta", "gamma"};
     filter.insert(keys.begin(), keys.end());
 
     EXPECT_TRUE(filter.contains("alpha"));
@@ -331,7 +332,7 @@ TEST_F(BloomFilterTest, ContainsAll_AllPresent_ReturnsEnd)
     std::vector keys = {"x", "y", "z"};
     filter.insert(keys.begin(), keys.end());
 
-    auto it = filter.contains_all(keys.begin(), keys.end());
+    const auto it = filter.contains_all(keys.begin(), keys.end());
     EXPECT_EQ(it, keys.end());
 }
 
@@ -344,7 +345,7 @@ TEST_F(BloomFilterTest, ContainsNone_NonePresent_ReturnsEnd)
 
     const BloomFilter filter(params);
     std::vector keys = {"absent1", "absent2"};
-    auto it = filter.contains_none(keys.begin(), keys.end());
+    const auto it = filter.contains_none(keys.begin(), keys.end());
     EXPECT_EQ(it, keys.end());
 }
 
@@ -358,7 +359,7 @@ TEST_F(BloomFilterTest, CopyConstructor_IndependentCopy)
     BloomFilter original(params);
     original.insert("hello");
 
-    BloomFilter copy(original);
+    const BloomFilter copy(original);
     EXPECT_TRUE(copy.contains("hello"));
     EXPECT_EQ(copy.element_count(), original.element_count());
 }
