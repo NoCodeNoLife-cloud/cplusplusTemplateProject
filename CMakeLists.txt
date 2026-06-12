@@ -33,6 +33,8 @@ endif ()
 set(MAIN_PROJECT cpp_project)
 project(${MAIN_PROJECT})
 
+enable_testing()
+
 # Vcpkg dependencies
 find_package(Boost CONFIG REQUIRED COMPONENTS serialization)
 find_package(glog CONFIG REQUIRED)
