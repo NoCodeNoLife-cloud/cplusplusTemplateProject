@@ -12,7 +12,15 @@
 
 namespace common::crypto::hash
 {
-    SHA256Strategy::SHA256Strategy()
+    namespace
+    {
+        void evpDeleter(EVP_MD_CTX* ctx)
+        {
+            EVP_MD_CTX_free(ctx);
+        }
+    }
+
+    SHA256Strategy::SHA256Strategy() : ctx_(EVP_MD_CTX_new(), evpDeleter)
     {
         if (!ctx_)
         {
@@ -97,8 +105,4 @@ namespace common::crypto::hash
         return EVP_DigestInit_ex(ctx_.get(), EVP_sha256(), nullptr) == 1;
     }
 
-    void SHA256Strategy::EvpDeleter::operator()(EVP_MD_CTX* ctx) const
-    {
-        EVP_MD_CTX_free(ctx);
-    }
 }

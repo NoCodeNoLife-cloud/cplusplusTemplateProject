@@ -2,6 +2,7 @@
  * @file BmpImage.cc
  * @brief BmpImage class implementation
  * @details This file contains the implementation of the BmpImage class methods.
+ *          BMP file format structures are kept here as internal implementation details.
  */
 
 #include "filesystem/type/BmpImage.hpp"
@@ -13,6 +14,36 @@
 
 namespace common::filesystem::type
 {
+    namespace
+    {
+#pragma pack(push, 1)
+        struct BitMapFileHeader
+        {
+            uint16_t bf_type_;
+            uint32_t bf_size_;
+            uint16_t bf_reserved1_;
+            uint16_t bf_reserved2_;
+            uint32_t bf_off_bits_;
+        };
+
+        struct BitmapInfoHeader
+        {
+            uint32_t bi_size_;
+            int32_t bi_width_;
+            int32_t bi_height_;
+            uint16_t bi_planes_;
+            uint16_t bi_bit_count_;
+            uint32_t bi_compression_;
+            uint32_t bi_size_image_;
+            int32_t bi_x_pels_per_meter_;
+            int32_t bi_y_pels_per_meter_;
+            uint32_t bi_clr_used_;
+            uint32_t bi_clr_important_;
+        };
+#pragma pack(pop)
+    }
+
+
     BmpImage::BmpImage(const int32_t width, const int32_t height) : width_(width), height_(height)
     {
         if (width <= 0 || height <= 0)

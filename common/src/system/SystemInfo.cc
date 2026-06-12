@@ -45,6 +45,103 @@ namespace common::system
 
             return WideToUtf8(buffer.c_str());
         }
+
+        /// @brief RAII wrapper for Windows Registry keys
+        class RegistryKey
+        {
+        public:
+            explicit RegistryKey(HKEY__* const hKey = nullptr)  : hKey_(hKey)
+            {
+            }
+
+            ~RegistryKey()
+            {
+                if (hKey_)
+                {
+                    RegCloseKey(hKey_);
+                }
+            }
+
+            RegistryKey(const RegistryKey&) = delete;
+
+            RegistryKey& operator=(const RegistryKey&) = delete;
+
+            RegistryKey(RegistryKey&& other)  : hKey_(other.hKey_)
+            {
+                other.hKey_ = nullptr;
+            }
+
+            RegistryKey& operator=(RegistryKey&& other)
+            {
+                if (this != &other)
+                {
+                    if (hKey_)
+                    {
+                        RegCloseKey(hKey_);
+                    }
+                    hKey_ = other.hKey_;
+                    other.hKey_ = nullptr;
+                }
+                return *this;
+            }
+
+            [[nodiscard]] HKEY get() const
+            {
+                return hKey_;
+            }
+
+            explicit operator bool() const
+            {
+                return hKey_ != nullptr;
+            }
+
+        private:
+            HKEY hKey_{};
+        };
+
+        /// @brief Read a string registry value from a given key path
+        std::string ReadRegistryStringValue(HKEY hKeyRoot, const wchar_t* subKey, const wchar_t* valueName)
+        {
+            HKEY hKey;
+            if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
+            {
+                RegistryKey keyGuard(hKey);
+                return ReadStringFromOpenKey(hKey, valueName);
+            }
+            return {};
+        }
+
+        /// @brief Enumerate all values under a registry key path
+        std::vector<std::string> EnumerateRegistryValues(HKEY hKeyRoot, const wchar_t* subKey)
+        {
+            std::vector<std::string> values;
+            HKEY hKey;
+
+            if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
+            {
+                RegistryKey keyGuard(hKey);
+
+                DWORD index = 0;
+                wchar_t valueName[256];
+                wchar_t valueData[512];
+                DWORD valueNameSize = static_cast<DWORD>(std::size(valueName));
+                DWORD valueDataSize = sizeof(valueData);
+
+                while (RegEnumValueW(hKey, index++, valueName, &valueNameSize, nullptr, nullptr, reinterpret_cast<LPBYTE>(valueData), &valueDataSize) == ERROR_SUCCESS)
+                {
+                    const std::string value = WideToUtf8(valueData);
+                    if (!value.empty())
+                    {
+                        values.emplace_back(value);
+                    }
+
+                    valueNameSize = static_cast<DWORD>(std::size(valueName));
+                    valueDataSize = sizeof(valueData);
+                }
+            }
+
+            return values;
+        }
     }
 
     std::string SystemInfo::GetCpuModelFromRegistry()
@@ -156,47 +253,4 @@ namespace common::system
         return entries;
     }
 
-    std::string SystemInfo::ReadRegistryStringValue(HKEY__ * const hKeyRoot, const wchar_t* subKey, const wchar_t* valueName)
-
-    {
-        HKEY hKey;
-        if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
-        {
-            RegistryKey keyGuard(hKey);
-            return ReadStringFromOpenKey(hKey, valueName);
-        }
-        return {};
-    }
-
-    std::vector<std::string> SystemInfo::EnumerateRegistryValues(HKEY__ * const hKeyRoot, const wchar_t* subKey)
-
-    {
-        std::vector<std::string> values;
-        HKEY hKey;
-
-        if (const LONG result = RegOpenKeyExW(hKeyRoot, subKey, 0, KEY_READ, &hKey); result == ERROR_SUCCESS)
-        {
-            RegistryKey keyGuard(hKey);
-
-            DWORD index = 0;
-            wchar_t valueName[256];
-            wchar_t valueData[512];
-            DWORD valueNameSize = static_cast<DWORD>(std::size(valueName));
-            DWORD valueDataSize = sizeof(valueData);
-
-            while (RegEnumValueW(hKey, index++, valueName, &valueNameSize, nullptr, nullptr, reinterpret_cast<LPBYTE>(valueData), &valueDataSize) == ERROR_SUCCESS)
-            {
-                const std::string value = WideToUtf8(valueData);
-                if (!value.empty())
-                {
-                    values.emplace_back(value);
-                }
-
-                valueNameSize = static_cast<DWORD>(std::size(valueName));
-                valueDataSize = sizeof(valueData);
-            }
-        }
-
-        return values;
-    }
 }

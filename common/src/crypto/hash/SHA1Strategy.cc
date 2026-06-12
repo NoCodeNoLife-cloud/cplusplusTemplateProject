@@ -12,7 +12,18 @@
 
 namespace common::crypto::hash
 {
-    SHA1Strategy::SHA1Strategy()
+    namespace
+    {
+        void evpDeleter(EVP_MD_CTX* ctx)
+        {
+            if (ctx != nullptr)
+            {
+                EVP_MD_CTX_free(ctx);
+            }
+        }
+    }
+
+    SHA1Strategy::SHA1Strategy() : ctx_(EVP_MD_CTX_new(), evpDeleter)
     {
         if (!ctx_)
         {
@@ -95,14 +106,6 @@ namespace common::crypto::hash
         }
         finalized_ = false;
         return EVP_DigestInit_ex(ctx_.get(), EVP_sha1(), nullptr) == 1;
-    }
-
-    void SHA1Strategy::EvpDeleter::operator()(EVP_MD_CTX* ctx) const
-    {
-        if (ctx != nullptr)
-        {
-            EVP_MD_CTX_free(ctx);
-        }
     }
 
 }

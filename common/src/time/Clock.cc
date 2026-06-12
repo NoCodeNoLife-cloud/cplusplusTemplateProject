@@ -12,10 +12,9 @@
 #include <sstream>
 #include <string>
 
-namespace common::time
+namespace
 {
-    // Helper function to format time using strftime in a thread-safe way
-    static std::string formatTime(std::time_t time, const std::string& format)
+    std::string formatTime(std::time_t time, const std::string& format)
     {
         std::tm tm_time{};
 #ifdef _WIN32
@@ -27,7 +26,10 @@ namespace common::time
         oss << std::put_time(&tm_time, format.c_str());
         return oss.str();
     }
+}
 
+namespace common::time
+{
     std::string Clock::getCurrentDateTimeString()
     {
         const auto now = std::chrono::system_clock::now();

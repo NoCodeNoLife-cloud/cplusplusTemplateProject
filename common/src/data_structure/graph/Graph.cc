@@ -32,6 +32,13 @@ namespace common::data_structure::graph
             throw std::out_of_range(fmt::format("Graph::addEdge: Node index out of range. Requested: from={}, to={}, but graph has {} nodes", from, to, num_nodes_));
         }
         adj_list_[static_cast<size_t>(from)].emplace_back(to, weight);
+        ++edge_count_;
+    }
+
+    void Graph::addUndirectedEdge(const int32_t u, const int32_t v, const int32_t weight)
+    {
+        addEdge(u, v, weight);
+        addEdge(v, u, weight);
     }
 
     const std::vector<Edge>& Graph::getAdjList(const int32_t node) const
@@ -44,9 +51,24 @@ namespace common::data_structure::graph
         return adj_list_[static_cast<size_t>(node)];
     }
 
+    std::vector<Edge>& Graph::getMutableAdjList(const int32_t node)
+    {
+        if (node < 0 || node >= num_nodes_)
+        {
+            DLOG(WARNING) << fmt::format("Graph getMutableAdjList: Node index out of range. node={}, num_nodes={}", node, num_nodes_);
+            throw std::out_of_range(fmt::format("Graph::getMutableAdjList: Node index out of range. Requested: {}, but graph has {} nodes", node, num_nodes_));
+        }
+        return adj_list_[static_cast<size_t>(node)];
+    }
+
     int32_t Graph::getNodeCount() const
     {
         return num_nodes_;
+    }
+
+    int32_t Graph::getEdgeCount() const
+    {
+        return edge_count_;
     }
 
     bool Graph::isEmpty() const

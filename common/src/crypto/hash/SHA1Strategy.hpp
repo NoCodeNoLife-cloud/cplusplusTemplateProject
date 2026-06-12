@@ -100,15 +100,7 @@ namespace common::crypto::hash
         [[nodiscard]] bool reset() override;
 
     private:
-        /**
-         * @brief Custom deleter for OpenSSL EVP_MD_CTX.
-         */
-        struct EvpDeleter
-        {
-            void operator()(EVP_MD_CTX* ctx) const ;
-        };
-
-        std::unique_ptr<EVP_MD_CTX, EvpDeleter> ctx_{EVP_MD_CTX_new()};
+        std::unique_ptr<EVP_MD_CTX, void(*)(EVP_MD_CTX*)> ctx_;
         bool finalized_{false};
 
     };

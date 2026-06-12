@@ -13,34 +13,6 @@
 
 namespace common::filesystem::type
 {
-#pragma pack(push, 1)
-    /// @brief BMP file header structure
-    struct BitMapFileHeader
-    {
-        uint16_t bf_type_;
-        uint32_t bf_size_;
-        uint16_t bf_reserved1_;
-        uint16_t bf_reserved2_;
-        uint32_t bf_off_bits_;
-    };
-
-    /// @brief BMP info header structure
-    struct BitmapInfoHeader
-    {
-        uint32_t bi_size_;
-        int32_t bi_width_;
-        int32_t bi_height_;
-        uint16_t bi_planes_;
-        uint16_t bi_bit_count_;
-        uint32_t bi_compression_;
-        uint32_t bi_size_image_;
-        int32_t bi_x_pels_per_meter_;
-        int32_t bi_y_pels_per_meter_;
-        uint32_t bi_clr_used_;
-        uint32_t bi_clr_important_;
-    };
-#pragma pack(pop)
-
     /// @brief A class for creating and manipulating 24-bit BMP images
     /// @details This class allows creating BMP images from scratch or loading from files,
     ///          setting and getting pixel colors, and saving to files.

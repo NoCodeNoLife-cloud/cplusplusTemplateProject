@@ -188,3 +188,59 @@ TEST_F(GraphTest, LargeNodeCount)
     ASSERT_EQ(list.size(), static_cast<size_t>(1));
     EXPECT_EQ(list[0].to(), kLargeCount - 1);
 }
+
+TEST_F(GraphTest, AddUndirectedEdge_ValidIndices)
+{
+    Graph g(3);
+    EXPECT_NO_THROW(g.addUndirectedEdge(0, 1, 10));
+
+    const auto& list0 = g.getAdjList(0);
+    const auto& list1 = g.getAdjList(1);
+    ASSERT_EQ(list0.size(), static_cast<size_t>(1));
+    ASSERT_EQ(list1.size(), static_cast<size_t>(1));
+    EXPECT_EQ(list0[0].to(), 1);
+    EXPECT_EQ(list0[0].weight(), 10);
+    EXPECT_EQ(list1[0].to(), 0);
+    EXPECT_EQ(list1[0].weight(), 10);
+}
+
+TEST_F(GraphTest, GetMutableAdjList_ModifyWeight)
+{
+    Graph g(3);
+    g.addEdge(0, 1, 5);
+
+    auto& list = g.getMutableAdjList(0);
+    ASSERT_EQ(list.size(), static_cast<size_t>(1));
+    list[0].setWeight(99);
+
+    const auto& clist = g.getAdjList(0);
+    EXPECT_EQ(clist[0].weight(), 99);
+}
+
+TEST_F(GraphTest, GetMutableAdjList_OutOfRange_ThrowsException)
+{
+    Graph g(3);
+    EXPECT_THROW(g.getMutableAdjList(5), std::out_of_range);
+    EXPECT_THROW(g.getMutableAdjList(-1), std::out_of_range);
+}
+
+TEST_F(GraphTest, GetEdgeCount_NoEdges)
+{
+    const Graph g(3);
+    EXPECT_EQ(g.getEdgeCount(), 0);
+}
+
+TEST_F(GraphTest, GetEdgeCount_AfterAddingEdges)
+{
+    Graph g(3);
+    g.addEdge(0, 1, 10);
+    g.addEdge(0, 2, 20);
+    EXPECT_EQ(g.getEdgeCount(), 2);
+}
+
+TEST_F(GraphTest, GetEdgeCount_UndirectedEdge)
+{
+    Graph g(3);
+    g.addUndirectedEdge(0, 1, 10);
+    EXPECT_EQ(g.getEdgeCount(), 2);
+}

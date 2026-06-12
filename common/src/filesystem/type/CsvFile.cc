@@ -12,9 +12,9 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::filesystem::type
+namespace
 {
-    std::vector<std::string> CsvFile::parseLine(const std::string& line)
+    std::vector<std::string> parseLine(const std::string& line)
     {
         std::vector<std::string> fields;
         std::string field;
@@ -65,7 +65,7 @@ namespace common::filesystem::type
         return fields;
     }
 
-    std::string CsvFile::escapeField(const std::string& field)
+    std::string escapeField(const std::string& field)
     {
         if (field.find(',') == std::string::npos &&
             field.find('"') == std::string::npos &&
@@ -90,7 +90,10 @@ namespace common::filesystem::type
         escaped += '"';
         return escaped;
     }
+}
 
+namespace common::filesystem::type
+{
     CsvFile::CsvFile(const std::string& file_path) : file_path_(file_path)
     {
         std::ifstream file(file_path);

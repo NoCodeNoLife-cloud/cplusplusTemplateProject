@@ -103,26 +103,10 @@ namespace common::auth
         std::mutex& get_users_mutex() const;
 
     private:
-        /// @brief Validate username format against security requirements
-        /// @param username Username string to validate
-        /// @return true if username format is valid, false otherwise
-        static bool validate_username(const std::string& username) ;
-
         /// @brief Load user credentials from database
         /// @param username User identifier to load
         /// @return User credentials if found, nullopt otherwise
         std::optional<UserCredentials> load_user_from_db(const std::string& username) const;
-
-        /// @brief Parse credentials data (salt:hashed_password format)
-        /// @param credentials_data Raw credentials data from database
-        /// @return Parsed salt and hashed password pair, nullopt if invalid format
-        static std::optional<std::pair<std::string, std::string>> parse_credentials_data(const std::string& credentials_data);
-
-        /// @brief Format credentials data (salt:hashed_password format)
-        /// @param salt Salt string
-        /// @param hashed_password Hashed password string
-        /// @return Formatted credentials string
-        static std::string format_credentials_data(const std::string& salt, const std::string& hashed_password);
 
         PasswordPolicy password_policy_;
         std::unordered_map<std::string, std::unique_ptr<UserCredentials>> users_;

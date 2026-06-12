@@ -88,18 +88,6 @@ namespace common::auth
         }
 
     private:
-        /// @brief Check if character is uppercase letter
-        [[nodiscard]] static bool is_uppercase_char(char c) ;
-
-        /// @brief Check if character is lowercase letter
-        [[nodiscard]] static bool is_lowercase_char(char c) ;
-
-        /// @brief Check if character is digit
-        [[nodiscard]] static bool is_digit_char(char c) ;
-
-        /// @brief Check if character is special character
-        [[nodiscard]] static bool is_special_char(char c) ;
-
         size_t min_length_;
         size_t max_length_;
         bool require_uppercase_;

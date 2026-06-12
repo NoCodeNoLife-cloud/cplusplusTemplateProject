@@ -48,11 +48,5 @@ namespace common::filesystem::type
         std::vector<std::vector<std::string>> rows_{};
         uint64_t column_count_{0};
         bool is_valid_{false};
-
-        /// @brief Parse a single CSV line into fields, handling quoted values
-        static std::vector<std::string> parseLine(const std::string& line);
-
-        /// @brief Escape a single field for CSV output
-        static std::string escapeField(const std::string& field);
     };
 }
