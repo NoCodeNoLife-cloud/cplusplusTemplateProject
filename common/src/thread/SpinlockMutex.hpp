@@ -1,7 +1,22 @@
 /**
  * @file SpinlockMutex.hpp
- * @brief SpinlockMutex class declaration
- * @details This header defines the SpinlockMutex class that provides functionality for Threading utilities and thread pool implementation.
+ * @brief Lightweight spinlock mutex for short critical sections
+ * @description Implements a busy-wait mutex using std::atomic_flag.  Suitable
+ *          for very short critical sections where the overhead of OS-level
+ *          mutex (std::mutex) is undesirable.  Uses pause/yield instructions
+ *          to reduce CPU consumption during contention.
+ *
+ * @par Thread Safety
+ * This class is thread-safe (designed for mutual exclusion).
+ *
+ * @par Usage Example
+ * @code
+ * SpinlockMutex mtx;
+ * {
+ *     std::lock_guard<SpinlockMutex> lock(mtx);
+ *     // critical section
+ * }
+ * @endcode
  */
 
 #pragma once

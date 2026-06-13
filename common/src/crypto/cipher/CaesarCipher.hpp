@@ -1,7 +1,13 @@
 /**
  * @file CaesarCipher.hpp
- * @brief CaesarCipher class declaration
- * @details This header defines the CaesarCipher class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief Caesar (shift) cipher — simple substitution for educational use
+ * @details Implements the classic Caesar cipher where each letter is shifted
+ *          by a fixed number of positions.  Supports both encryption and
+ *          decryption.  Preserves letter case and non-alphabetic characters.
+ *          NOT cryptographically secure — for educational purposes only.
+ *
+ * @par Thread Safety
+ * This class is const-only thread-safe.
  */
 
 #pragma once

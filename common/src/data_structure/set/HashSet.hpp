@@ -1,8 +1,21 @@
 /**
  * @file HashSet.hpp
- * @brief HashSet class declaration
- * @details This header defines the HashSet class — a hash set implementation
- *          wrapping RobinHoodHashMap with a key-only interface.
+ * @brief Robin-hood-hashed set with O(1) average insert/erase/find
+ * @details A hash set wrapping RobinHoodHashMap with a key-only interface.
+ *          Provides O(1) average-case insert, erase, and containment checks
+ *          with good cache locality due to open addressing.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * HashSet<std::string> tags;
+ * tags.insert("c++");
+ * tags.insert("template");
+ * assert(tags.contains("c++"));
+ * @endcode
  */
 
 #pragma once
@@ -15,10 +28,19 @@
 
 namespace common::data_structure
 {
-    /// @brief A hash set implementation built on Robin Hood hashing
-    /// @tparam T The element type (must be copyable)
-    /// @tparam Hasher Hash function object type, defaults to std::hash<T>
-    /// @tparam KeyEqual Equality comparison object type, defaults to std::equal_to<T>
+    /// @brief A hash set built on Robin Hood open-addressing hashing.
+    ///
+    /// @tparam T        Element type (must be copyable).
+    /// @tparam Hasher   Hash functor, defaults to std::hash<T>.
+    /// @tparam KeyEqual Equality comparator, defaults to std::equal_to<T>.
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is required
+    /// for concurrent reads and writes.
+    ///
+    /// @par Iterator Invalidation
+    /// Insert may cause rehashing, which invalidates all iterators.
+    /// Erase does not invalidate iterators except to the erased element.
     template <typename T, typename Hasher = std::hash<T>, typename KeyEqual = std::equal_to<T>>
     class HashSet
     {
@@ -69,7 +91,7 @@ namespace common::data_structure
         /// @brief Insert a value into the set
         /// @param value The value to insert
         /// @return A pair of iterator to the element and a bool (true if inserted)
-        std::pair<iterator, bool> insert(const T& value)
+        [[nodiscard]] std::pair<iterator, bool> insert(const T& value)
         {
             auto map_result = map_.insert(value, false);
             return {iterator(map_result.first), map_result.second};
@@ -78,7 +100,7 @@ namespace common::data_structure
         /// @brief Insert a value into the set using move semantics
         /// @param value The value to move into the set
         /// @return A pair of iterator to the element and a bool (true if inserted)
-        std::pair<iterator, bool> insert(T&& value)
+        [[nodiscard]] std::pair<iterator, bool> insert(T&& value)
         {
             auto map_result = map_.insert(std::move(value), false);
             return {iterator(map_result.first), map_result.second};
@@ -87,7 +109,7 @@ namespace common::data_structure
         /// @brief Erase the element with the given value from the set
         /// @param value The value to erase
         /// @return True if the element was erased, false if not found
-        bool erase(const T& value)
+        [[nodiscard]] bool erase(const T& value)
         {
             return map_.erase(value);
         }
@@ -95,7 +117,7 @@ namespace common::data_structure
         /// @brief Erase the element at the given iterator position
         /// @param it Iterator to the element to erase
         /// @return Iterator to the next occupied element
-        iterator erase(const_iterator it)
+        [[nodiscard]] iterator erase(const_iterator it)
         {
             return iterator(map_.erase(it.map_it_));
         }

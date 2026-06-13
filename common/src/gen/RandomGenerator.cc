@@ -1,7 +1,9 @@
 /**
  * @file RandomGenerator.cc
- * @brief RandomGenerator class implementation
- * @details This file contains the implementation of the RandomGenerator class methods for Random number and ID generation utilities.
+ * @brief RandomGenerator implementation — Mersenne Twister distribution wrappers
+ * @details Implements PRNG methods wrapping std::mt19937_64 with uniform,
+ *          normal, and bernoulli distributions.  Seeds from std::random_device
+ *          for non-deterministic initialisation.
  */
 
 #include "gen/RandomGenerator.hpp"

@@ -1,7 +1,9 @@
 /**
  * @file FileOutputStream.cc
- * @brief FileOutputStream class implementation
- * @details This file contains the implementation of the FileOutputStream class methods for Common library utilities.
+ * @brief FileOutputStream implementation — ofstream-based binary file writing
+ * @details Implements file-backed byte output: open() sets up std::ofstream
+ *          in binary mode with configurable append/truncate, write() delegates
+ *          to ofstream, and close() flushes and closes the file handle.
  */
 
 #include "io/writer/FileOutputStream.hpp"

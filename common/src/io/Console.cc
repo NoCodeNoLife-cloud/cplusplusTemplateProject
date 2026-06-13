@@ -1,7 +1,8 @@
 /**
  * @file Console.cc
- * @brief Console class implementation
- * @details This file contains the implementation of the Console class methods for Common library utilities.
+ * @brief Console implementation — ANSI escape codes, progress bar rendering
+ * @details Implements console I/O methods: ANSI escape sequences for colour,
+ *          carriage-return-based progress bar, and stdin/stdout interaction.
  */
 
 #include "io/Console.hpp"

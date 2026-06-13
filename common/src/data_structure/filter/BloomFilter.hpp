@@ -1,7 +1,30 @@
 /**
  * @file BloomFilter.hpp
- * @brief BloomFilter class declaration
- * @details This header defines the BloomFilter class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief Space-efficient Bloom filter with optimal parameter computation
+ * @details A probabilistic data structure for set membership queries with
+ *          tunable false-positive probability.  Uses multiple hash functions
+ *          (derived from a single seed via double-hashing) to set bits in a
+ *          fixed-size bit array.  Provides optimal parameter computation via
+ *          BloomParameters based on expected element count and desired false
+ *          positive rate.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Reference
+ * Bloom, "Space/Time Trade-offs in Hash Coding with Allowable Errors" (1970).
+ *
+ * @par Usage Example
+ * @code
+ * BloomParameters params;
+ * params.projected_element_count = 10000;
+ * params.false_positive_probability = 0.01;
+ * params.compute_optimal_parameters();
+ * BloomFilter filter(params);
+ * filter.insert("key123");
+ * assert(filter.contains("key123"));
+ * @endcode
  */
 
 #pragma once

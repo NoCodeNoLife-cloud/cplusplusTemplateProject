@@ -1,11 +1,23 @@
 /**
  * @file BTree.hpp
- * @brief BTree class declaration
- * @details A B-tree is a self-balancing tree data structure that maintains sorted data
- *          and allows searches, sequential access, insertions, and deletions in logarithmic
- *          time. Each node can have multiple keys and child pointers, making it well-suited
- *          for storage systems with large block sizes.
- *          This implementation follows CLRS (Chapter 18) with minimum degree Order.
+ * @brief B-tree with configurable minimum degree — O(log n) all operations
+ * @details A self-balancing tree that maintains sorted data with multiple keys
+ *          per node.  Each node can hold multiple keys and child pointers,
+ *          minimising I/O for block-oriented storage systems.  This
+ *          implementation follows CLRS (Chapter 18) with configurable minimum
+ *          degree t: internal nodes have [t-1, 2t-1] keys.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - search / insert / remove: O(log n) worst-case
+ * - Order t = 100: typical depth <= 3 for 10^6 elements
+ *
+ * @par Reference
+ * Cormen, Leiserson, Rivest, Stein, "Introduction to Algorithms" (CLRS),
+ * Chapter 18: B-Trees.
  */
 
 #pragma once

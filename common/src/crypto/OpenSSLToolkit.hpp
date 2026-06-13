@@ -1,7 +1,13 @@
 /**
  * @file OpenSSLToolkit.hpp
- * @brief OpenSSLToolkit class declaration
- * @details This header defines the OpenSSLToolkit class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief OpenSSL wrapper for hash, encryption, and random operations
+ * @details Provides a C++ wrapper around the OpenSSL C library for common
+ *          operations: EVP digest (SHA-1, SHA-256), symmetric encryption
+ *          (AES), cryptographically secure random bytes, and PEM key import.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  OpenSSL operations may require global
+ * initialisation (OPENSSL_init_crypto).
  */
 
 #pragma once

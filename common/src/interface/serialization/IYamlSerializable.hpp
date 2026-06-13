@@ -1,7 +1,9 @@
 /**
- * @file serialize/IYamlSerializable.hpp
- * @brief IYamlSerializable class declaration
- * @details This header defines the IYamlSerializable class that provides functionality for Common interface definitions for the framework.
+ * @file IYamlSerializable.hpp
+ * @brief Interface for YAML-serialisable objects (toYaml/fromYaml)
+ * @description Defines the contract for objects that can be serialised to and
+ *          from YAML format.  Implementations provide toYaml() to produce a
+ *          YAML::Node and fromYaml() to restore state from a YAML::Node.
  */
 
 #pragma once

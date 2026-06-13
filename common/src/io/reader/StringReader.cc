@@ -1,7 +1,8 @@
 /**
  * @file StringReader.cc
- * @brief StringReader class implementation
- * @details This file contains the implementation of the StringReader class methods for Common library utilities.
+ * @brief StringReader implementation — in-memory character stream from string
+ * @details Implements character reading from a std::string with position
+ *          tracking, mark/reset, and close behaviour (string clear).
  */
 
 #include "io/reader/StringReader.hpp"

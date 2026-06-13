@@ -1,7 +1,13 @@
 /**
  * @file IntegerToolkit.hpp
- * @brief IntegerToolkit class declaration
- * @details This header defines the IntegerToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief Integer utility functions — parsing, formatting, bit manipulation
+ * @details Provides static utility methods for integer operations:
+ *          parsing integers from strings with radix support, formatting
+ *          integers as hex/octal/binary strings, and bit manipulation
+ *          (popcount, leading/trailing zero count, rotation).
+ *
+ * @par Thread Safety
+ * Static methods are thread-safe.
  */
 
 #pragma once

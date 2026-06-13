@@ -1,7 +1,21 @@
 /**
  * @file PeriodicActuator.hpp
- * @brief PeriodicActuator class declaration
- * @details This header defines the PeriodicActuator class that provides functionality for Threading utilities and thread pool implementation.
+ * @brief Periodically executes a task at fixed-rate or fixed-delay
+ * @description Runs a callable repeatedly at a configurable interval.
+ *          Supports fixed-rate (align to clock) and fixed-delay (from end of
+ *          previous run) scheduling.  Can be started, stopped, and restarted.
+ *          Uses a dedicated background thread for execution.
+ *
+ * @par Thread Safety
+ * All public methods are thread-safe.  Internal state is protected by a mutex.
+ *
+ * @par Usage Example
+ * @code
+ * PeriodicActuator actuator(std::chrono::seconds(1), [] { tick(); });
+ * actuator.start();
+ * // ...
+ * actuator.stop();
+ * @endcode
  */
 
 #pragma once

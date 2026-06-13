@@ -1,7 +1,20 @@
 /**
-* @file UuidGenerator.hpp
- * @brief UuidGenerator class declaration
- * @details This header defines the UuidGenerator class that provides functionality for Random number and ID generation utilities.
+ * @file UuidGenerator.hpp
+ * @brief UUID v4 (random) generator using Boost.UUID
+ * @description Generates universally unique identifiers (UUID v4, random-based)
+ *          using the Boost.UUID library.  Produces UUIDs in standard string
+ *          format (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).  Thread-safe if the
+ *          underlying random number generator is properly seeded.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * UuidGenerator gen;
+ * std::string id = gen.generate(); // e.g. "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+ * @endcode
  */
 
 #pragma once

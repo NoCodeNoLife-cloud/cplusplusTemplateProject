@@ -1,7 +1,9 @@
 /**
  * @file Object.cc
- * @brief Object class implementation
- * @details This file contains the implementation of the Object class methods for Base type classes providing fundamental object functionality.
+ * @brief Object base class — toString, hashCode, equals defaults
+ * @details Implements the virtual methods of the Object base class, providing
+ *          default toString (type-info-based) and optional hashCode/equals
+ *          support.  Subclasses override these for custom behaviour.
  */
 
 #include "Object.hpp"

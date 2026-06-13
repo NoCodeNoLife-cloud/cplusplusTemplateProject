@@ -1,7 +1,8 @@
 /**
-* @file Edge.cc
- * @brief Edge class implementation
- * @details This file contains the implementation of the Edge class methods for graph data structures.
+ * @file Edge.cc
+ * @brief Edge implementation — accessors and reversed-edge construction
+ * @details Implements the Edge data type including source/target/weight
+ *          accessors and the reversed() method for undirected contexts.
  */
 
 #include "data_structure/graph/Edge.hpp"

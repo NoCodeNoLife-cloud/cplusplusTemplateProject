@@ -1,7 +1,22 @@
 /**
  * @file Point2D.hpp
- * @brief Point2D class declaration
- * @details This header defines the Point2D class that provides functionality for geometry utilities.
+ * @brief 2D point with arithmetic operators, distance, and epsilon comparison
+ * @details A 2D geometric point with double-precision x and y coordinates.
+ *          Supports vector addition/subtraction, scalar multiplication,
+ *          Euclidean distance, and equality comparison within an epsilon
+ *          tolerance (default 1e-9) for floating-point safety.
+ *
+ * @par Thread Safety
+ * This class is const-only thread-safe (immutable after construction).
+ *
+ * @par Usage Example
+ * @code
+ * Point2D a(1.0, 2.0);
+ * Point2D b(4.0, 6.0);
+ * double dist = a.distanceTo(b);  // 5.0
+ * Point2D sum = a + b;
+ * bool eq = a.equalWithEpsilon(a); // true
+ * @endcode
  */
 
 #pragma once
@@ -9,9 +24,14 @@
 
 namespace common::data_structure::geometry
 {
-    /// @brief A 2D point class
-    /// @details This class represents a point in 2D space with x and y coordinates.
-    ///          It provides basic operations such as addition, subtraction, and comparison.
+    /// @brief A 2D geometric point with double precision.
+    ///
+    /// @details Provides arithmetic operators, Euclidean distance, and
+    ///          epsilon-aware equality comparison.  Useful for computational
+    ///          geometry, graphics, and physics calculations.
+    ///
+    /// @par Thread Safety
+    /// This class is const-only thread-safe (all members are built-in types).
     class Point2D
     {
     public:

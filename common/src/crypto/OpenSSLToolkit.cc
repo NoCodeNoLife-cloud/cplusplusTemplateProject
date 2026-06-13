@@ -1,7 +1,8 @@
 /**
  * @file OpenSSLToolkit.cc
- * @brief OpenSSLToolkit class implementation
- * @details This file contains the implementation of the OpenSSLToolkit class methods for Cryptographic utilities and toolkit.
+ * @brief OpenSSLToolkit implementation — EVP digest, AES encrypt, RAND bytes
+ * @details Implements the OpenSSL C++ wrapper: EVP_Digest for hash, EVP_CIPHER
+ *          for AES, RAND_bytes for secure random, and PEM parsing for keys.
  */
 
 #include "crypto/OpenSSLToolkit.hpp"

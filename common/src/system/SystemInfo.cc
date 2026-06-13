@@ -1,7 +1,8 @@
 /**
  * @file SystemInfo.cc
- * @brief SystemInfo class implementation
- * @details This file contains the implementation of the SystemInfo class methods for System information and performance monitoring.
+ * @brief SystemInfo implementation — platform-specific system query wrappers
+ * @details Implements system information queries: sysinfo()/uname() on Linux,
+ *          GetSystemInfo/GlobalMemoryStatusEx on Windows.
  */
 
 #include "system/SystemInfo.hpp"

@@ -1,8 +1,29 @@
 /**
  * @file TreeMap.hpp
- * @brief TreeMap class declaration
- * @details This header defines the TreeMap class — an ordered key-value map
- *          backed by an AVL tree, providing O(log n) insert, erase, and lookup.
+ * @brief AVL-tree-backed ordered map with O(log n) insert/erase/lookup
+ * @details An ordered associative container mapping keys to values, backed by
+ *          a self-balancing AVL tree.  Iteration yields key-value pairs in
+ *          ascending key order (determined by the Compare functor).  The AVL
+ *          balancing invariant guarantees O(log n) worst-case complexity for
+ *          insert, erase, and find operations.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - insert / erase / at / contains: O(log n) worst-case
+ * - min / max:                     O(log n) worst-case
+ * - toVector:                      O(n)
+ *
+ * @par Usage Example
+ * @code
+ * TreeMap<std::string, int> scores;
+ * scores.insert("alice", 95);
+ * scores.insert("bob", 87);
+ * assert(scores.at("alice") == 95);
+ * assert(scores.contains("charlie") == false);
+ * @endcode
  */
 
 #pragma once
@@ -54,10 +75,21 @@ namespace common::data_structure::map
         };
     } // namespace detail
 
-    /// @brief An ordered map backed by a self-balancing AVL tree
-    /// @tparam K Key type
-    /// @tparam V Value type
-    /// @tparam Compare Comparison functor, defaults to std::less<K>
+    /// @brief An ordered map backed by a self-balancing AVL tree.
+    ///
+    /// @tparam K       Key type.
+    /// @tparam V       Mapped value type.
+    /// @tparam Compare Comparison functor for strict weak ordering of keys.
+    ///                 Defaults to std::less<K>.
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is required
+    /// for concurrent reads and writes.
+    ///
+    /// @par Memory
+    /// Each key-value pair is stored in a dynamically allocated tree node.
+    /// The tree is node-based (not contiguous), so insert/erase do not
+    /// invalidate iterators to other elements.
     template <typename K, typename V, typename Compare = std::less<K>>
     class TreeMap : private tree::AVLTree<detail::TreeMapEntry<K, V, Compare>>
     {
@@ -136,7 +168,7 @@ namespace common::data_structure::map
         /// @param key The key to insert
         /// @param value The value to associate with the key
         /// @return True if inserted, false if the key already existed
-        bool insert(const K& key, const V& value)
+        [[nodiscard]] bool insert(const K& key, const V& value)
         {
             if (Base::find(Entry(key))) return false;
             Base::insert(Entry(key, value));
@@ -148,7 +180,7 @@ namespace common::data_structure::map
         /// @param key The key to insert or assign
         /// @param value The value to associate with the key
         /// @return True if a new element was inserted, false if an existing key was updated
-        bool insert_or_assign(const K& key, const V& value)
+        [[nodiscard]] bool insert_or_assign(const K& key, const V& value)
         {
             auto* node = tree::node::TreeNode<Entry>::findNode(this->root_.get(), Entry(key));
             if (node)
@@ -164,7 +196,7 @@ namespace common::data_structure::map
         /// @brief Erase a key and its associated value from the map
         /// @param key The key to erase
         /// @return True if the key was erased, false if not found
-        bool erase(const K& key)
+        [[nodiscard]] bool erase(const K& key)
         {
             if (!Base::find(Entry(key))) return false;
             Base::remove(Entry(key));
@@ -276,24 +308,27 @@ namespace common::data_structure::map
         }
 
     private:
-        size_type map_size_ = 0;
+        size_type map_size_ = 0; ///< Number of key-value pairs in the map.
 
-        /// @brief Deep clones a subtree
-        /// @param node The node to clone from
-        /// @return A new unique_ptr to the cloned node
+        // ── Internal helpers ───────────────────────────────────────────
+
+        /// @brief Deep clones a subtree rooted at @p node.
+        /// @param node  Node to clone (may be null).
+        /// @return New unique_ptr owning a deep copy of the subtree.
         static std::unique_ptr<tree::node::TreeNode<Entry>>
         clone_node(const tree::node::TreeNode<Entry>* node)
         {
             if (!node) return nullptr;
+            // Preorder: copy the current node, then recursively copy children.
             auto new_node = std::make_unique<tree::node::TreeNode<Entry>>(node->data);
             new_node->left_ = clone_node(node->left_.get());
             new_node->right_ = clone_node(node->right_.get());
             return new_node;
         }
 
-        /// @brief Collects pairs from the tree in inorder (sorted by key)
-        /// @param node Current node in the recursion
-        /// @param out Output vector to collect pairs into
+        /// @brief Collects key-value pairs from the tree via inorder traversal.
+        /// @param node  Current node (may be null).
+        /// @param out   Output vector receiving pairs in ascending key order.
         static void inorder_collect(const tree::node::TreeNode<Entry>* node,
                                     std::vector<std::pair<K, V>>& out)
         {

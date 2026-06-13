@@ -1,7 +1,10 @@
 /**
- * @file config/IConfigurable.hpp
- * @brief IConfigurable class declaration
- * @details This header defines the IConfigurable class that provides functionality for Common interface definitions for the framework.
+ * @file IConfigurable.hpp
+ * @brief Interface for configurable objects (load/save settings)
+ * @details Defines the contract for objects that can be configured from a
+ *          property source: loadConfiguration() reads settings from a map or
+ *          file, saveConfiguration() writes current settings back.  Usable
+ *          with YAML or JSON serialisers.
  */
 
 #pragma once

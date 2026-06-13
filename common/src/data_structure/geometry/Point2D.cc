@@ -1,7 +1,10 @@
 /**
  * @file Point2D.cc
- * @brief Point2D class implementation
- * @details This file contains the implementation of the Point2D class methods for geometry utilities.
+ * @brief Point2D implementation — arithmetic, distance, stream output
+ * @details Implements 2D point arithmetic (addition, subtraction, scalar
+ *          multiplication), Euclidean and squared-distance calculations, and
+ *          stream formatting.  Delegates all mathematical operations to
+ *          standard <cmath> functions.
  */
 
 #include "data_structure/geometry/Point2D.hpp"

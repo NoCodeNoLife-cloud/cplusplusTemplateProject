@@ -1,7 +1,13 @@
 /**
-* @file AuthenticationException.hpp
- * @brief AuthenticationException class declaration
- * @details This header defines the AuthenticationException class that provides functionality for Custom exception classes for authentication and other operations.
+ * @file AuthenticationException.hpp
+ * @brief Exception type for authentication/authorisation failures
+ * @details Represents errors during authentication (login failure, token
+ *          expired) and authorisation (insufficient permissions).  Extends
+ *          std::runtime_error with an error code and category for structured
+ *          error handling.
+ *
+ * @par Thread Safety
+ * This class is const-only thread-safe (immutable after construction).
  */
 
 #pragma once

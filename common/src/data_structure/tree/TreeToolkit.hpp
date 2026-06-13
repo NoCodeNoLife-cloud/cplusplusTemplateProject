@@ -1,7 +1,16 @@
 /**
  * @file TreeToolkit.hpp
- * @brief TreeToolkit class declaration
- * @details This header defines the TreeToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief Utility functions for tree traversal, printing, and validation
+ * @details Provides static utility methods for common tree operations:
+ *          - Tree traversal (preorder, inorder, postorder, level-order)
+ *          - Pretty-printing of tree structures
+ *          - Validation of BST/Avl/RB tree invariants
+ *          These utilities work with any node type following a standard
+ *          left/right child pointer convention.
+ *
+ * @par Thread Safety
+ * Static utility methods do not modify tree state and are safe to call
+ * concurrently on different tree instances.
  */
 
 #pragma once

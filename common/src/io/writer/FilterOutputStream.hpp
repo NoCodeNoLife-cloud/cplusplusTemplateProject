@@ -1,7 +1,15 @@
 /**
  * @file FilterOutputStream.hpp
- * @brief FilterOutputStream class declaration
- * @details This header defines the FilterOutputStream class that provides functionality for Common library utilities.
+ * @brief Decorator base class for byte-output streams
+ * @details Implements the decorator pattern for AbstractOutputStream.
+ *          Stores a shared_ptr to an underlying stream and delegates all
+ *          write/flush/close calls.  Provides ensureStream/ensureOpen guards.
+ *          Subclasses override specific methods to add buffering, encryption,
+ *          or compression.  Analogous to java.io.FilterOutputStream.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

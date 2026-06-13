@@ -1,7 +1,10 @@
 /**
- * @file task/ITimerTask.hpp
- * @brief ITimerTask class declaration
- * @details This header defines the ITimerTask class that provides functionality for Common interface definitions for the framework.
+ * @file ITimerTask.hpp
+ * @brief Interface for tasks scheduled by a timer (one-shot or periodic)
+ * @description Defines the contract for timer-scheduled tasks.  Implementations
+ *          provide a run() method that is invoked when the timer fires.
+ *          Supports both one-shot execution and periodic execution with
+ *          configurable interval.
  */
 
 #pragma once

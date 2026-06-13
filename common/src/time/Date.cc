@@ -1,7 +1,9 @@
 /**
  * @file Date.cc
- * @brief Date class implementation
- * @details This file contains the implementation of the Date class methods for Time and date utilities including profilers and formatters.
+ * @brief Date implementation — chrono conversion, arithmetic, string formatting
+ * @details Implements Date as a value type: stores time since epoch in ms,
+ *          supports arithmetic with std::chrono::duration, comparison, and
+ *          formatting via std::put_time / strftime.
  */
 
 #include "time/Date.hpp"

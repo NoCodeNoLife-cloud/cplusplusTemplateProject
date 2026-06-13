@@ -1,7 +1,8 @@
 /**
  * @file CharBuffer.cc
- * @brief CharBuffer class implementation
- * @details This file contains the implementation of the CharBuffer class methods for Common library utilities.
+ * @brief CharBuffer implementation — get/put/flip/compact/array operations
+ * @details Implements char buffer operations: absolute and relative get/put,
+ *          bulk array transfer, flip/clear/rewind/compact, and state queries.
  */
 
 #include "buffer/CharBuffer.hpp"

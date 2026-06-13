@@ -1,7 +1,13 @@
 /**
  * @file StreamCipher.hpp
- * @brief StreamCipher class declaration
- * @details This header defines the StreamCipher class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief Abstract interface for stream ciphers (encrypt/decrypt)
+ * @details Defines the contract for symmetric stream ciphers: init with key/IV,
+ *          encrypt and decrypt operations.  Implementations include ChaCha20,
+ *          XorBitCipher, and SubstitutionCipher.  The encrypt/decrypt methods
+ *          are symmetric (XOR-based ciphers use identical operations).
+ *
+ * @par Thread Safety
+ * Implementations are generally **not** thread-safe unless specified otherwise.
  */
 
 #pragma once

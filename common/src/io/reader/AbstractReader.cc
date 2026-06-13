@@ -1,7 +1,9 @@
 /**
-* @file AbstractReader.cc
- * @brief AbstractReader class implementation
- * @details This file contains the implementation of the AbstractReader class methods for Common library utilities.
+ * @file AbstractReader.cc
+ * @brief AbstractReader implementation — default read/skip/ready/mark logic
+ * @details Provides default implementations for AbstractReader methods:
+ *          single-character read() delegates to the array-based read(),
+ *          skip() discards characters, and ready() returns false by default.
  */
 
 #include "io/reader/AbstractReader.hpp"

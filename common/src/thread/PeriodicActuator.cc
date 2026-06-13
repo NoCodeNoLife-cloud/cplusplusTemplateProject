@@ -1,7 +1,9 @@
 /**
  * @file PeriodicActuator.cc
- * @brief PeriodicActuator class implementation
- * @details This file contains the implementation of the PeriodicActuator class methods for Threading utilities and thread pool implementation.
+ * @brief PeriodicActuator implementation — timer loop, start/stop lifecycle
+ * @details Implements the periodic execution loop: uses std::this_thread::sleep_for
+ *          or std::chrono::steady_clock for fixed-rate timing.  start/stop
+ *          are synchronised via a mutex and atomic flag.
  */
 
 #include "thread/PeriodicActuator.hpp"

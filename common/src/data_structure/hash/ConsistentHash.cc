@@ -1,6 +1,18 @@
 /**
  * @file ConsistentHash.cc
- * @brief ConsistentHash implementation
+ * @brief ConsistentHash implementation — virtual-node consistent hashing
+ * @details Implements the IHashRing interface using a std::map as a circular
+ *          hash ring.  Each physical node is represented by multiple virtual
+ *          replicas (VNode) distributed around the ring for improved load
+ *          distribution.  When nodes are added or removed, only O(1/N) of
+ *          keys are remapped on average.
+ *
+ * Thread safety is guaranteed via a per-instance std::mutex that serialises
+ * all ring mutations and queries.
+ *
+ * Reference: Karger et al., "Consistent Hashing and Random Trees:
+ *            Distributed Caching Protocols for Relieving Hot Spots on the
+ *            World Wide Web" (1997).
  */
 
 #include "data_structure/hash/ConsistentHash.hpp"
@@ -185,7 +197,9 @@ auto ConsistentHash::hashBytes(const void* data, std::size_t len) noexcept
         i += 8;
     }
 
-    // Process remaining 1-7 bytes
+    // Tail bytes (1-7): accumulate remaining bytes into k, then apply
+    // one final MurmurHash round.  Fallthrough switch exploits x86
+    // byte-order to avoid branching on partial reads.
     uint64_t k = 0;
     switch (len & 7)
     {

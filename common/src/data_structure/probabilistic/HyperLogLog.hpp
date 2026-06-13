@@ -27,18 +27,39 @@
 
 namespace common::data_structure::probabilistic
 {
-    /// @brief HyperLogLog cardinality estimator.
+    /// @brief HyperLogLog cardinality estimator with bias corrections.
     ///
     /// @tparam Precision Number of bits used for register indexing (4..16).
-    ///         Higher precision = more accuracy + more memory.
     ///         m = 2^Precision registers.
-    ///         Default (14): m=16384, ~16KB, ~0.8% relative error.
+    ///         Default (14): m=16384, ~16 KB, ~0.8% relative error.
     ///
-    /// The algorithm uses a 64-bit hash of each input element. The first @p Precision
-    /// bits select a register, and the remaining bits are used to count leading zeros.
-    /// The register stores the maximum leading-zero count seen (plus one).
-    /// Cardinality is estimated via the harmonic mean of 2^(-register) across all registers,
-    /// with bias corrections for small and large cardinalities.
+    /// @par Algorithm
+    /// Uses a 64-bit hash of each element.  The first @p Precision bits select
+    /// a register; the remaining bits are used to count leading zeros.  Each
+    /// register stores the maximum observed leading-zero count (+1).  The
+    /// cardinality is estimated via the harmonic mean of 2^(-M[j]) with linear
+    /// counting for small cardinalities and saturation correction for large
+    /// ones (64-bit hash range).
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is required
+    /// for concurrent access.
+    ///
+    /// @par Memory
+    /// m = 2^Precision bytes for registers plus class overhead (~40 bytes).
+    /// Precision=14 → ~16 KB, Precision=16 → ~64 KB.
+    ///
+    /// @par Reference
+    /// Flajolet et al., "HyperLogLog: the analysis of a near-optimal
+    /// cardinality estimation algorithm" (2007).
+    ///
+    /// @par Usage Example
+    /// @code
+    /// HyperLogLog<14> hll;
+    /// hll.insert("user:1001");
+    /// hll.insert("user:1002");
+    /// uint64_t est = hll.estimate();
+    /// @endcode
     template <uint8_t Precision = 14>
     class HyperLogLog final : public IBaseEstimator
     {

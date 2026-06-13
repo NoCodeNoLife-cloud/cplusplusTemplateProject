@@ -1,7 +1,10 @@
 /**
- * @file io/ICloseable.hpp
- * @brief ICloseable class declaration
- * @details This header defines the ICloseable class that provides functionality for Common interface definitions for the framework.
+ * @file ICloseable.hpp
+ * @brief Interface for resources that must be explicitly closed
+ * @description Defines the contract for closeable resources (streams, files,
+ *          network connections).  Analogous to java.io.Closeable.
+ *          Implementations must release system resources when close() is
+ *          called and should be idempotent (safe to call multiple times).
  */
 
 #pragma once

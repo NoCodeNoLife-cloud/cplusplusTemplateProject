@@ -1,7 +1,27 @@
 /**
  * @file LFUCache.hpp
- * @brief LFUCache class declaration
- * @details This header defines the LFUCache class that provides functionality for Cache implementations including LRU and LFU strategies.
+ * @brief Least-Frequently-Used (LFU) cache with O(1) get/put and eviction
+ * @details A cache that evicts the least frequently accessed entry when
+ *          capacity is exceeded.  Tracks per-key access frequencies and
+ *          maintains a frequency-indexed data structure for O(1) eviction
+ *          of the minimum-frequency entry.  Falls back to LRU for tie-breaking
+ *          among entries with equal frequency.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - get / put: O(1) amortised
+ *
+ * @par Usage Example
+ * @code
+ * LFUCache<int, std::string> cache(2);
+ * cache.put(1, "one");
+ * cache.put(2, "two");
+ * cache.get(1);      // frequency of 1 increases
+ * cache.put(3, "three"); // evicts key 2 (lowest frequency)
+ * @endcode
  */
 
 #pragma once

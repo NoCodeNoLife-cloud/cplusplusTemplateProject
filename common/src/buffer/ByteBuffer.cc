@@ -1,7 +1,9 @@
 /**
  * @file ByteBuffer.cc
- * @brief ByteBuffer class implementation
- * @details This file contains the implementation of the ByteBuffer class methods for Common library utilities.
+ * @brief ByteBuffer implementation — get/put/flip/compact/array operations
+ * @details Implements byte buffer operations: absolute and relative get/put,
+ *          bulk array transfer, flip/clear/rewind/compact state transitions,
+ *          and direct/array-backed buffer queries.
  */
 
 #include "buffer/ByteBuffer.hpp"

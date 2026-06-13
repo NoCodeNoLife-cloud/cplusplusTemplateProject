@@ -1,7 +1,24 @@
 /**
  * @file Stack.hpp
- * @brief Stack class declaration
- * @details This header defines the Stack class that provides functionality for common data structures.
+ * @brief Container-adapter stack with O(1) push/pop/top
+ * @details A LIFO stack adapter built on a configurable underlying container
+ *          (default std::vector<T>).  Provides O(1) amortised push, O(1) pop
+ *          and top access.  Useful for depth-first traversal, expression
+ *          evaluation, and undo/redo patterns.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * Stack<int> s;
+ * s.push(10);
+ * s.push(20);
+ * assert(s.top() == 20);
+ * s.pop();
+ * assert(s.top() == 10);
+ * @endcode
  */
 
 #pragma once
@@ -13,9 +30,18 @@
 
 namespace common::data_structure
 {
-    /// @brief A simple stack implementation using a container.
-    /// @tparam T The type of elements stored in the stack.
-    /// @tparam Container The underlying container type used to store elements. Defaults to std::vector<T>.
+    /// @brief A LIFO stack adapter over a configurable container.
+    ///
+    /// @tparam T         Element type (must satisfy std::movable).
+    /// @tparam Container Underlying container type, defaults to std::vector<T>.
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is required
+    /// for concurrent access.
+    ///
+    /// @par Complexity
+    /// - push / emplace:  O(1) amortised
+    /// - pop / top:        O(1)
     template <std::movable T, typename Container = std::vector<T>>
     class Stack
     {
@@ -54,12 +80,12 @@ namespace common::data_structure
         /// @brief Accesses the top element of the stack.
         /// @return A reference to the top element.
         /// @throws std::out_of_range If the stack is empty.
-        T& top();
+        [[nodiscard]] T& top();
 
         /// @brief Accesses the top element of the stack.
         /// @return A const reference to the top element.
         /// @throws std::out_of_range If the stack is empty.
-        const T& top() const;
+        [[nodiscard]] const T& top() const;
 
         /// @brief Checks whether the stack is empty.
         /// @return True if the stack is empty, false otherwise.

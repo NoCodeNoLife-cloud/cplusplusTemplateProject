@@ -1,7 +1,19 @@
 /**
  * @file AutoJoinThread.hpp
- * @brief AutoJoinThread class declaration
- * @details This header defines the AutoJoinThread class that provides functionality for Threading utilities and thread pool implementation.
+ * @brief RAII thread wrapper with automatic join on destruction
+ * @description Wraps std::thread with RAII semantics: the thread is joined
+ *          automatically in the destructor, preventing accidental detachment
+ *          or termination.  Provides the same interface as std::thread plus
+ *          joinable() checking.
+ *
+ * @par Thread Safety
+ * The wrapped thread is bound to this instance and is not shared.
+ *
+ * @par Usage Example
+ * @code
+ * AutoJoinThread t([] { doWork(); });
+ * // t joins automatically when it goes out of scope
+ * @endcode
  */
 
 #pragma once

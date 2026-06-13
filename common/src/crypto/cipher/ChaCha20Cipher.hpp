@@ -1,7 +1,18 @@
 /**
  * @file ChaCha20Cipher.hpp
- * @brief ChaCha20Cipher class declaration
- * @details This header defines the ChaCha20Cipher class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief ChaCha20 stream cipher — RFC 8439 implementation
+ * @details Implements the ChaCha20 stream cipher (IETF variant) as defined
+ *          in RFC 8439.  Uses a 256-bit key and 96-bit nonce/IV.  The cipher
+ *          generates a pseudorandom keystream that is XORed with plaintext.
+ *          Provides both encryption and decryption (XOR-based, symmetric).
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  Each encryption stream requires its
+ * own instance with a unique nonce.
+ *
+ * @par Reference
+ * Bernstein, "ChaCha, a variant of Salsa20" (2008).
+ * RFC 8439, "ChaCha20 and Poly1305 for IETF Protocols" (2018).
  */
 
 #pragma once

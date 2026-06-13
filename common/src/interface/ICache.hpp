@@ -1,7 +1,9 @@
 /**
- * @file cache/ICache.hpp
- * @brief ICache class declaration
- * @details This header defines the ICache class that provides functionality for Common interface definitions for the framework.
+ * @file ICache.hpp
+ * @brief Abstract interface for cache implementations (LRU, LFU, etc.)
+ * @details Defines the common contract for all cache implementations: get,
+ *          put, contains, erase, clear, and size.  Implementations include
+ *          LRUCache and LFUCache with different eviction policies.
  */
 
 #pragma once

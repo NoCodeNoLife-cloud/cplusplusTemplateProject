@@ -1,7 +1,17 @@
 /**
  * @file BufferedInputStream.hpp
- * @brief BufferedInputStream class declaration
- * @details This header defines the BufferedInputStream class that provides functionality for Common library utilities.
+ * @brief Buffered byte-input stream with 8 KB default buffer and mark/reset
+ * @details Wraps an AbstractInputStream with an 8 KB default buffer to reduce
+ *          per-byte I/O overhead.  Supports mark/reset up to the buffer size.
+ *          Derived from FilterInputStream (decorator pattern), allowing it to
+ *          wrap any AbstractInputStream.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Memory
+ * Allocates a fixed-size buffer of @p size bytes on construction (default 8192).
  */
 
 #pragma once

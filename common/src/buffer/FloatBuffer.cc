@@ -1,7 +1,8 @@
 /**
  * @file FloatBuffer.cc
- * @brief FloatBuffer class implementation
- * @details This file contains the implementation of the FloatBuffer class methods for Common library utilities.
+ * @brief FloatBuffer implementation — get/put/flip/compact/array operations
+ * @details Implements float buffer operations: absolute and relative get/put,
+ *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
 
 #include "buffer/FloatBuffer.hpp"

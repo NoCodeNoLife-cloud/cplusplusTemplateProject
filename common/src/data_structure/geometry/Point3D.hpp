@@ -1,7 +1,21 @@
 /**
  * @file Point3D.hpp
- * @brief Point3D class declaration
- * @details This header defines the Point3D class that provides functionality for geometry utilities.
+ * @brief 3D point with arithmetic operators, distance, and epsilon comparison
+ * @details A 3D geometric point with double-precision x, y, and z coordinates.
+ *          Supports vector addition/subtraction, scalar multiplication,
+ *          Euclidean distance, and epsilon-aware equality comparison.
+ *          Extends the 2D point concept with a third spatial dimension.
+ *
+ * @par Thread Safety
+ * This class is const-only thread-safe (immutable after construction).
+ *
+ * @par Usage Example
+ * @code
+ * Point3D a(1.0, 2.0, 3.0);
+ * Point3D b(4.0, 5.0, 6.0);
+ * double dist = a.distanceTo(b);
+ * Point3D sum = a + b;
+ * @endcode
  */
 
 #pragma once
@@ -9,9 +23,14 @@
 
 namespace common::data_structure::geometry
 {
-    /// @brief A 3D point class
-    /// @details This class represents a point in 3D space with x, y and z coordinates.
-    ///          It provides basic operations such as addition, subtraction, and comparison.
+    /// @brief A 3D geometric point with double precision.
+    ///
+    /// @details Provides arithmetic operators, Euclidean distance, and
+    ///          epsilon-aware equality comparison.  Useful for computational
+    ///          geometry, graphics, and physics calculations.
+    ///
+    /// @par Thread Safety
+    /// This class is const-only thread-safe (all members are built-in types).
     class Point3D
     {
     public:

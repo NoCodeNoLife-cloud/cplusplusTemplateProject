@@ -1,7 +1,9 @@
 /**
  * @file FilterOutputStream.cc
- * @brief FilterOutputStream class implementation
- * @details This file contains the implementation of the FilterOutputStream class methods for Common library utilities.
+ * @brief FilterOutputStream implementation — delegating all calls to underlying
+ * @details Implements the byte-output decorator: every public method delegates
+ *          to the stored AbstractOutputStream pointer after ensureOpen checks.
+ *          Subclasses override only the methods they need to transform.
  */
 
 #include <stdexcept>

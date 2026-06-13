@@ -1,7 +1,14 @@
 /**
  * @file AbstractInputStream.hpp
- * @brief AbstractInputStream class declaration
- * @details This header defines the AbstractInputStream class that provides functionality for Common library utilities.
+ * @brief Abstract base class for byte-input streams
+ * @details Defines the contract for reading byte data from various sources.
+ *          Implements ICloseable with pure-virtual read(), skip(), and
+ *          available() methods.  Subclasses implement concrete byte sources
+ *          (file, memory, network).  Analogous to java.io.InputStream.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  Derived classes may specify their own
+ * guarantees.
  */
 
 #pragma once

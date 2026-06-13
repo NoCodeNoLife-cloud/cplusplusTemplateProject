@@ -1,7 +1,9 @@
 /**
  * @file FunctionProfilerAspect.cc
- * @brief FunctionProfilerAspect class implementation
- * @details This file contains the implementation of the FunctionProfilerAspect class methods for Aspect-Oriented Programming support.
+ * @brief FunctionProfilerAspect implementation — timer RAII logic
+ * @details Implements the AOP profiler aspect: constructor starts a timer,
+ *          destructor stops it and logs the elapsed duration if it exceeds
+ *          the configurable threshold.
  */
 
 #include "aop/FunctionProfilerAspect.hpp"

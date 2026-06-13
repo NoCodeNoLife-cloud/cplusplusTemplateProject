@@ -1,7 +1,13 @@
 /**
  * @file RadixToolkit.hpp
- * @brief RadixToolkit class declaration
- * @details This header defines the RadixToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief Radix conversion utilities — base-N encoding/decoding
+ * @details Provides static methods for converting between numeric values and
+ *          their string representations in arbitrary bases (2..36).  Supports
+ *          encoding integers as base-N strings and decoding strings back to
+ *          integers.  Useful for short URL generation and number system conversion.
+ *
+ * @par Thread Safety
+ * Static methods are thread-safe.
  */
 
 #pragma once

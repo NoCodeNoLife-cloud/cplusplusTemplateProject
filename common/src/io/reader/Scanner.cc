@@ -1,7 +1,9 @@
 /**
  * @file Scanner.cc
- * @brief Scanner class implementation
- * @details This file contains the implementation of the Scanner class methods for Common library utilities.
+ * @brief Scanner implementation — token parsing, numeric conversion, delimiter split
+ * @details Implements token-based input parsing: nextInt/nextDouble use
+ *          std::sto* for conversion; getNextToken skips whitespace delimiters;
+ *          nextTokens splits the entire input by a configurable delimiter.
  */
 
 #include "io/reader/Scanner.hpp"

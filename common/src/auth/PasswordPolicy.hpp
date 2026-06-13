@@ -1,7 +1,14 @@
 /**
  * @file PasswordPolicy.hpp
- * @brief PasswordPolicy class declaration
- * @details This header defines the PasswordPolicy class that provides functionality for Authentication and authorization utilities.
+ * @brief Password strength policy enforcement — length, complexity, history
+ * @description Enforces password security rules: minimum/maximum length,
+ *          character class requirements (uppercase, lowercase, digit, special),
+ *          history-based reuse prevention, and configurable expiration.
+ *          Returns detailed validation results with failure reasons.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

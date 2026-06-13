@@ -1,7 +1,13 @@
 /**
  * @file BloomFilter.cc
- * @brief BloomFilter class implementation
- * @details This file contains the implementation of the BloomFilter class methods for General utility toolkits for strings, arrays, and other operations.
+ * @brief Bloom filter implementation — parameter computation and membership ops
+ * @details Implements BloomFilter construction, insert, contains, and clear
+ *          operations.  Also provides BloomParameters::compute_optimal_parameters()
+ *          which determines the optimal bit-array size and hash-function count
+ *          from the projected element count and false-positive probability.
+ *
+ * Reference: Bloom, "Space/Time Trade-offs in Hash Coding with Allowable
+ *            Errors" (1970).
  */
 
 #include "BloomFilter.hpp"

@@ -1,7 +1,9 @@
 /**
- * @file serialize/IYamlConfigurable.hpp
- * @brief IYamlConfigurable class declaration
- * @details This header defines the IYamlConfigurable class that provides functionality for Serialization utilities for JSON and YAML.
+ * @file IYamlConfigurable.hpp
+ * @brief Interface for objects configurable via YAML input
+ * @description Defines the contract for objects that can read their
+ *          configuration from a YAML node/source.  Implementations extract
+ *          settings from a YAML::Node and apply them to internal state.
  */
 
 #pragma once

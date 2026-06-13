@@ -1,7 +1,25 @@
 /**
  * @file SkipList.hpp
- * @brief SkipList class declaration
- * @details This header defines the SkipList class that provides functionality for Advanced data structures including trees and skip lists.
+ * @brief Probabilistic skip list with O(log n) expected search/insert/erase
+ * @details A randomised linked-list data structure that maintains a hierarchy
+ *          of forward pointers at multiple levels.  Each node is promoted to
+ *          higher levels with probability p, yielding expected O(log n) search,
+ *          insertion, and deletion without the rebalancing overhead of tree
+ *          structures.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - Search:  Average O(log n), Worst O(n)
+ * - Insert:  Average O(log n), Worst O(n)
+ * - Erase:   Average O(log n), Worst O(n)
+ * - Memory:  Expected O(n) (each node holds ~1/(1-p) pointers on average)
+ *
+ * @par Reference
+ * Pugh, "Skip Lists: A Probabilistic Alternative to Balanced Trees"
+ * (1990), Communications of the ACM.
  */
 
 #pragma once
@@ -11,23 +29,23 @@
 
 namespace common::data_structure
 {
-    /**
-     * @class   SkipList
-     * @tparam  T The type of elements stored in the skip list.
-     *            T must be LessThanComparable (operator< defined).
-     * @brief   A probabilistic data structure providing expected O(log n)
-     *          complexity for search, insertion, and deletion.
-     *
-     * @par Thread Safety
-     * This class is **not** thread-safe. External synchronization is required
-     * for concurrent access.
-     *
-     * @par Complexity Guarantees
-     * - Search:  Average @f$ O(\log n) @f$, Worst @f$ O(n) @f$
-     * - Insert:  Average @f$ O(\log n) @f$, Worst @f$ O(n) @f$
-     * - Erase:   Average @f$ O(\log n) @f$, Worst @f$ O(n) @f$
-     * - Memory:  Expected @f$ O(n) @f$ (each node has expected 2 pointers)
-     */
+    /// @brief A probabilistic skip list with expected O(log n) operations.
+    ///
+    /// @tparam T Element type (must be LessThanComparable, i.e. operator<
+    ///           must be defined).
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is needed
+    /// for concurrent access.
+    ///
+    /// @par Usage Example
+    /// @code
+    /// SkipList<int> list;
+    /// list.insert(10);
+    /// list.insert(5);
+    /// assert(list.search(5));
+    /// list.erase(10);
+    /// @endcode
     template <typename T>
     class SkipList
     {
@@ -94,11 +112,11 @@ namespace common::data_structure
          *
          * @complexity Average @f$ O(\log n) @f$, Worst @f$ O(n) @f$
          */
-        bool search(const T& key) const
+        [[nodiscard]] bool search(const T& key) const
         {
+            // Start from highest level to skip as many elements as possible;
+            // each level acts as an "express lane" over the level below.
             Node* current = header_;
-
-            // Traverse from top level down to level 0
             for (int i = currentLevel_ - 1; i >= 0; --i)
             {
                 while (current->forward[i] != nullptr && current->forward[i]->key < key)
@@ -138,13 +156,15 @@ namespace common::data_structure
 
             current = current->forward[0];
 
-            // Duplicate key: do nothing (or could update associated value)
+            // Skip insertion if key already exists (idempotent insert
+            // preserves set semantics; could be extended to update a value)
             if (current != nullptr && current->key == key)
             {
                 return;
             }
 
-            // Generate random level and expand list if necessary
+            // Determine tower height randomly via geometric distribution;
+            // expand the header if the new tower exceeds the current max.
             int newLevel = randomLevel();
             if (newLevel > currentLevel_)
             {
@@ -174,7 +194,7 @@ namespace common::data_structure
          * @post If the key existed, @c size() is decremented by 1.
          * @complexity Average @f$ O(\log n) @f$, Worst @f$ O(n) @f$
          */
-        bool erase(const T& key)
+        [[nodiscard]] bool erase(const T& key)
         {
             std::vector<Node*> update(maxLevel_, nullptr);
             Node* current = header_;

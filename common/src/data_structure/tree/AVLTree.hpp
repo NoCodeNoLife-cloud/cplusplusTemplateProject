@@ -1,7 +1,18 @@
 /**
  * @file AVLTree.hpp
- * @brief AVLTree class declaration
- * @details This header defines the AVLTree class that provides functionality for Advanced data structures including trees and skip lists.
+ * @brief Self-balancing AVL tree with O(log n) insert/erase/find
+ * @details An AVL tree implementation that maintains the height-balance
+ *          invariant (|height(left) - height(right)| <= 1) after every
+ *          insertion and deletion.  Guarantees O(log n) worst-case
+ *          complexity for search, insertion, and deletion operations.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - insert / remove / find: O(log n) worst-case
+ * - min / max:             O(log n) worst-case
  */
 
 #pragma once

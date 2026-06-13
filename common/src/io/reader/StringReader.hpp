@@ -1,7 +1,20 @@
 /**
  * @file StringReader.hpp
- * @brief StringReader class declaration
- * @details This header defines the StringReader class that provides functionality for Common library utilities.
+ * @brief Character-input stream backed by a std::string
+ * @details Reads characters from a std::string source.  Supports mark/reset
+ *          for replaying the string from a marked position.  On close(),
+ *          the internal string is cleared.  Useful for parsing in-memory
+ *          text without file I/O.  Analogous to java.io.StringReader.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * StringReader reader("hello world");
+ * auto ch = reader.read();  // 'h'
+ * @endcode
  */
 
 #pragma once

@@ -1,7 +1,10 @@
 /**
  * @file OutputStreamWriter.cc
- * @brief OutputStreamWriter class implementation
- * @details This file contains the implementation of the OutputStreamWriter class methods for Common library utilities.
+ * @brief OutputStreamWriter implementation — char-to-byte UTF-8 encoding
+ * @details Implements the character-to-byte bridge: write()/append() encode
+ *          characters as multi-byte UTF-8 sequences and forward them to the
+ *          underlying AbstractOutputStream.  Tracks closed state to prevent
+ *          writes after close.
  */
 
 #include "io/writer/OutputStreamWriter.hpp"

@@ -1,7 +1,10 @@
 /**
  * @file BigDecimal.cc
- * @brief BigDecimal class implementation
- * @details This file contains the implementation of the BigDecimal class methods for Base type classes providing fundamental object functionality.
+ * @brief BigDecimal implementation — arbitrary-precision decimal arithmetic
+ * @details Implements arithmetic operations for arbitrary-precision decimal
+ *          numbers: addition, subtraction, multiplication, division, and
+ *          rounding.  The value is represented as an unscaled BigInteger
+ *          combined with a scale factor (number of fractional digits).
  */
 
 #include "BigDecimal.hpp"

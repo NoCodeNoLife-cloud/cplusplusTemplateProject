@@ -1,6 +1,6 @@
 /**
  * @file Treap.hpp
- * @brief Treap class declaration
+ * @brief Randomized BST combining tree (key) and heap (priority)
  * @details A treap (tree + heap) is a randomized binary search tree where each node
  *          has a random priority. The tree maintains BST ordering by key and heap
  *          ordering by priority (max-heap), providing expected O(log n) operations.

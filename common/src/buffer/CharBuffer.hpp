@@ -1,7 +1,14 @@
 /**
  * @file CharBuffer.hpp
- * @brief CharBuffer class declaration
- * @details This header defines the CharBuffer class that provides functionality for Common library utilities.
+ * @brief NIO-style char buffer with position/limit/capacity tracking
+ * @details A buffer for character data following the java.nio.Buffer pattern:
+ *          maintains position, limit, and capacity state.  Supports get/put
+ *          operations, flip/clear/rewind, compact, and bulk transfer.
+ *          Backed by a std::vector<char>.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

@@ -1,7 +1,23 @@
 /**
  * @file Graph.hpp
- * @brief Graph class declaration
- * @details This header defines the Graph class that provides functionality for graph data structures.
+ * @brief Adjacency-list graph with weighted directed/undirected edges
+ * @details A general-purpose graph representation using adjacency lists.
+ *          Supports both directed and undirected edges with integer weights.
+ *          Vertices are identified by sequential integer indices (0..n-1).
+ *          Provides edge addition, neighbour iteration, and graph property
+ *          queries (vertex count, edge count, density).
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * Graph g(4, false);  // 4 vertices, undirected
+ * g.addEdge(0, 1, 5);
+ * g.addEdge(1, 2, 3);
+ * auto neighbours = g.getNeighbors(1); // {(0,5), (2,3)}
+ * @endcode
  */
 
 #pragma once

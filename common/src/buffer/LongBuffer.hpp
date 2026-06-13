@@ -1,7 +1,14 @@
 /**
  * @file LongBuffer.hpp
- * @brief LongBuffer class declaration
- * @details This header defines the LongBuffer class that provides functionality for Common library utilities.
+ * @brief NIO-style int64 buffer with position/limit/capacity tracking
+ * @details A buffer for int64 data following the java.nio.Buffer pattern:
+ *          maintains position, limit, and capacity.  Supports get/put,
+ *          flip/clear/rewind, compact, and bulk transfer.  Backed by a
+ *          std::vector<int64_t>.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

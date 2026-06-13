@@ -1,7 +1,8 @@
 /**
  * @file SHAToolkit.cc
- * @brief SHAToolkit class implementation
- * @details This file contains the implementation of the SHAToolkit class methods for Cryptographic utilities and toolkit.
+ * @brief SHAToolkit implementation — convenience wrappers for SHA computation
+ * @details Implements static convenience methods that route to the correct
+ *          HashStrategy (SHA-1 or SHA-256) based on the requested bit count.
  */
 
 #include "SHAToolkit.hpp"

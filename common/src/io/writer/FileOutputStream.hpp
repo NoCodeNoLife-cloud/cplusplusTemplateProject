@@ -1,7 +1,20 @@
 /**
  * @file FileOutputStream.hpp
- * @brief FileOutputStream class declaration
- * @details This header defines the FileOutputStream class that provides functionality for Common library utilities.
+ * @brief Byte-output stream to a file (std::ofstream wrapper)
+ * @description Writes bytes to a file using std::ofstream.  Supports append
+ *          and truncate write modes.  Provides checked file open with
+ *          descriptive error messages.  Analogous to java.io.FileOutputStream.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * FileOutputStream file("output.bin");
+ * file.write(someBuffer);
+ * file.close();
+ * @endcode
  */
 
 #pragma once

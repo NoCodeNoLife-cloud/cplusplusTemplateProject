@@ -1,7 +1,9 @@
 /**
  * @file SnowflakeGenerator.cc
- * @brief SnowflakeGenerator class implementation
- * @details This file contains the implementation of the SnowflakeGenerator class methods for Random number and ID generation utilities.
+ * @brief SnowflakeGenerator implementation — timestamp + worker + sequence ID composition
+ * @details Implements 64-bit ID generation: extracts system time (ms), composes
+ *          the ID from epoch offset, worker ID, and per-millisecond sequence
+ *          counter.  Handles clock rollback gracefully.
  */
 
 #include "gen/SnowflakeGenerator.hpp"

@@ -1,7 +1,9 @@
 /**
- * @file serialize/IJsonSerializable.hpp
- * @brief IJsonSerializable class declaration
- * @details This header defines the IJsonSerializable class that provides functionality for Common interface definitions for the framework.
+ * @file IJsonSerializable.hpp
+ * @brief Interface for JSON-serialisable objects (toJson/fromJson)
+ * @description Defines the contract for objects that can be serialised to and
+ *          from JSON format.  Implementations provide toJson() to produce a
+ *          JSON string and fromJson() to restore state from a JSON string.
  */
 
 #pragma once

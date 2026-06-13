@@ -1,7 +1,18 @@
 /**
  * @file BinarySearchTree.hpp
- * @brief BinarySearchTree class declaration
- * @details This header defines the BinarySearchTree class that provides functionality for Advanced data structures including trees and skip lists.
+ * @brief Unbalanced binary search tree (no rebalancing)
+ * @details A standard BST implementation without rebalancing.  Insert/erase/find
+ *          degrade to O(n) in the worst case (inserted sequence is sorted).
+ *          Serves as a baseline for comparing self-balancing variants (AVL,
+ *          RedBlack, Splay, Treap).  Supports inorder traversal for sorted
+ *          iteration.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - search / insert / remove: O(h) where h = height (worst O(n), best O(log n))
  */
 
 #pragma once

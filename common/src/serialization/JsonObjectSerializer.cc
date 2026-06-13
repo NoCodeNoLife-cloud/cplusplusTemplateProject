@@ -1,7 +1,8 @@
 /**
  * @file JsonObjectSerializer.cc
- * @brief JsonObjectSerializer class implementation
- * @details This file contains the implementation of the JsonObjectSerializer class methods for Serialization utilities for JSON and YAML.
+ * @brief JsonObjectSerializer implementation — toJson/fromJson type mapping
+ * @details Implements JSON serialisation: traverses object member fields via
+ *          a registered mapping and converts to/from JSON tree structures.
  */
 
 #include "serialization/JsonObjectSerializer.hpp"

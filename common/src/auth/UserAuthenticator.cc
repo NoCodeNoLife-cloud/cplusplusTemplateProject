@@ -1,7 +1,8 @@
 /**
  * @file UserAuthenticator.cc
- * @brief UserAuthenticator class implementation
- * @details This file contains the implementation of the UserAuthenticator class methods for Authentication and authorization utilities.
+ * @brief UserAuthenticator implementation — login, session, credential store
+ * @details Implements user authentication: credential validation against store,
+ *          session token generation (UUID-based), and login/logout lifecycle.
  */
 
 #include "UserAuthenticator.hpp"

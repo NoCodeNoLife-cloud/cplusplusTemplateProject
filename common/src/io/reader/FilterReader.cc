@@ -1,7 +1,9 @@
 /**
  * @file FilterReader.cc
- * @brief FilterReader class implementation
- * @details This file contains the implementation of the FilterReader class methods for Common library utilities.
+ * @brief FilterReader implementation — delegating all calls to underlying
+ * @details Implements the decorator: every public method delegates to the
+ *          stored AbstractReader pointer.  Subclasses override only the
+ *          methods they need to transform.
  */
 
 #include "io/reader/FilterReader.hpp"

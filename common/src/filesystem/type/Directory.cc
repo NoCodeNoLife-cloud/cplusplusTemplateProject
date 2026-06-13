@@ -1,7 +1,8 @@
 /**
  * @file Directory.cc
- * @brief Directory class implementation
- * @details This file contains the implementation of the Directory class methods for Common library utilities.
+ * @brief Directory implementation — opendir/readdir traversal
+ * @details Implements directory operations using POSIX (opendir, readdir,
+ *          closedir) or Windows (FindFirstFile, FindNextFile) APIs.
  */
 
 #include "filesystem/type/Directory.hpp"

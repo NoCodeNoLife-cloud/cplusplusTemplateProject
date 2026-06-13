@@ -1,7 +1,9 @@
 /**
  * @file ChaCha20Cipher.cc
- * @brief ChaCha20Cipher class implementation
- * @details This file contains the implementation of the ChaCha20Cipher class methods for Cryptographic utilities and toolkit.
+ * @brief ChaCha20Cipher implementation — quarter-round, block generation, encrypt
+ * @details Implements the ChaCha20 stream cipher core: quarter-round function,
+ *          block generation (double-rounds), and keystream XOR encryption.
+ *          Follows RFC 8439 IETF variant with 96-bit nonce.
  */
 
 #include "ChaCha20Cipher.hpp"

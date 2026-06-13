@@ -1,7 +1,13 @@
 /**
  * @file YamlToolkit.hpp
- * @brief YamlToolkit class declaration
- * @details This header defines the YamlToolkit class that provides functionality for Common library utilities.
+ * @brief YAML parsing and generation utilities
+ * @description Provides static convenience methods for parsing YAML strings/files
+ *          into structured data and serialising data back to YAML format.
+ *          Wraps the yaml-cpp library for all YAML operations.
+ *
+ * @par Thread Safety
+ * Static methods are thread-safe as long as input strings/files are not
+ * modified concurrently.
  */
 
 #pragma once

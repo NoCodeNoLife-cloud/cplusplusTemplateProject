@@ -1,7 +1,15 @@
 /**
  * @file FilterReader.hpp
- * @brief FilterReader class declaration
- * @details This header defines the FilterReader class that provides functionality for Common library utilities.
+ * @brief Decorator base class for character-input streams
+ * @details Implements the decorator (wrapper) pattern for AbstractReader.
+ *          Stores a shared_ptr to an underlying AbstractReader and delegates
+ *          all read/skip/mark/reset/close calls.  Subclasses override specific
+ *          methods to add buffering, filtering (e.g., PushbackReader).
+ *          Analogous to java.io.FilterReader.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  The underlying reader's thread-safety
+ * depends on its implementation.
  */
 
 #pragma once

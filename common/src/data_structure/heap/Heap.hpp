@@ -1,7 +1,30 @@
 /**
  * @file Heap.hpp
- * @brief Heap class declaration
- * @details This header defines the Heap class that provides functionality for common data structures.
+ * @brief Generic binary heap (max-heap by default) with O(log n) push/pop
+ * @details A binary heap implementation backed by a contiguous std::vector.
+ *          The heap order is determined by the Compare template parameter
+ *          (default std::less<T> yields a max-heap; use std::greater<T> for
+ *          a min-heap).  Construction from an iterator range runs in O(n)
+ *          via Floyd's heapify algorithm.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - push:          O(log n) amortised
+ * - pop:           O(log n)
+ * - top:           O(1)
+ * - heapify range: O(n)
+ *
+ * @par Usage Example
+ * @code
+ * Heap<int> maxHeap;
+ * maxHeap.push(10);
+ * maxHeap.push(5);
+ * maxHeap.push(20);
+ * assert(maxHeap.top() == 20);  // max-heap default
+ * @endcode
  */
 
 #pragma once
@@ -15,9 +38,20 @@
 
 namespace common::data_structure
 {
-    /// @brief A heap data structure implementation.
-    /// @tparam T The type of elements stored in the heap.
-    /// @tparam Compare The comparison function object type that defines the heap order.
+    /// @brief A generic binary heap with configurable ordering.
+    ///
+    /// @tparam T       Element type (must satisfy std::copyable).
+    /// @tparam Compare Comparison functor defining the heap order.
+    ///                 std::less<T>  → max-heap (root is largest).
+    ///                 std::greater<T> → min-heap (root is smallest).
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is required
+    /// for concurrent reads and writes.
+    ///
+    /// @par Invariants
+    /// - For any node at index i, !compare_(data_[parent(i)], data_[i])
+    /// - The heap is stored in a contiguous vector for cache locality.
     template <std::copyable T, typename Compare = std::less<T>>
     class Heap
     {

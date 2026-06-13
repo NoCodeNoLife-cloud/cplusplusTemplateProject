@@ -1,7 +1,18 @@
 /**
  * @file PushbackInputStream.hpp
- * @brief PushbackInputStream class declaration
- * @details This header defines the PushbackInputStream class that provides functionality for Common library utilities.
+ * @brief Byte-input stream with single-byte / array unread capability
+ * @description Allows bytes to be "pushed back" (unread) into the stream,
+ *          enabling lookahead parsing.  Supports unread of a single byte
+ *          or a full array.  When the pushback buffer overflows, throws
+ *          std::ios_base::failure.  Analogous to java.io.PushbackInputStream.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Memory
+ * Allocates an internal pushback buffer of configurable size (default matches
+ * the underlying stream's buffer size).
  */
 
 #pragma once

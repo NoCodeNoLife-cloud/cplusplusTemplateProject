@@ -1,7 +1,20 @@
 /**
  * @file Date.hpp
- * @brief Date class declaration
- * @details This header defines the Date class that provides functionality for Time and date utilities including profilers and formatters.
+ * @brief Date and time value object with formatting and arithmetic
+ * @description Represents a date/time point with millisecond precision.
+ *          Supports comparison, duration arithmetic, and conversion to/from
+ *          std::chrono time points.  Provides formatting via strftime-style
+ *          format strings.
+ *
+ * @par Thread Safety
+ * This class is const-only thread-safe (immutable after construction).
+ *
+ * @par Usage Example
+ * @code
+ * Date now;
+ * Date tomorrow = now + std::chrono::hours(24);
+ * std::string s = now.format("%Y-%m-%d");
+ * @endcode
  */
 
 #pragma once

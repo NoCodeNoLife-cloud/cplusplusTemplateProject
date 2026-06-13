@@ -1,7 +1,13 @@
 /**
  * @file RedBlackTreeNode.hpp
- * @brief RedBlackTreeNode class declaration
- * @details This header defines the RedBlackTreeNode class that provides functionality for Advanced data structures including trees and skip lists.
+ * @brief Red-Black tree node with colour and sentinel-null support
+ * @details A specialised tree node for Red-Black tree implementations.
+ *          Extends the base TreeNode concept with a colour flag (red/black)
+ *          and support for a sentinel NIL leaf node to simplify edge-case
+ *          handling during insertion and deletion fix-ups.
+ *
+ * @par Reference
+ * Guibas & Sedgewick, "A Dichromatic Framework for Balanced Trees" (1978).
  */
 
 #pragma once

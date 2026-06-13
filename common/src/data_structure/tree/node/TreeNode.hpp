@@ -1,7 +1,15 @@
 /**
  * @file TreeNode.hpp
- * @brief TreeNode class declaration
- * @details This header defines the TreeNode class that provides functionality for Advanced data structures including trees and skip lists.
+ * @brief Generic tree node with left/right children for BST / AVL / RB trees
+ * @details A reusable tree node structure used across multiple tree
+ *          implementations (BinarySearchTree, AVLTree, RedBlackTree, etc.).
+ *          Stores data payload, optional height (for AVL) or colour (for RB),
+ *          and left/right child unique_ptr pointers.  Provides static helper
+ *          methods for findNode, findMin, and findMax.
+ *
+ * @par Ownership
+ * Nodes own their left and right subtrees via std::unique_ptr, ensuring
+ * automatic memory reclamation on node destruction.
  */
 
 #pragma once

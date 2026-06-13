@@ -1,8 +1,14 @@
 /**
  * @file IBaseEstimator.hpp
- * @brief Interface for cardinality estimation structures
- * @details This header defines the abstract interface for all probabilistic
- *          cardinality estimators (HyperLogLog, Count-Min Sketch, etc.).
+ * @brief Abstract interface for cardinality estimators (HyperLogLog, etc.)
+ * @details Defines the common contract for all probabilistic cardinality
+ *          estimators: insert, estimate, merge, clear, and memoryUsage.
+ *          Implementations trade exact accuracy for sub-linear memory usage.
+ *          The canonical implementation is HyperLogLog.
+ *
+ * @par Thread Safety
+ * Implementations must document their own thread-safety guarantees.
+ * Unless specified otherwise, implementations are not thread-safe.
  */
 
 #pragma once

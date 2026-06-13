@@ -1,7 +1,14 @@
 /**
  * @file SystemPerformanceMonitor.hpp
- * @brief SystemPerformanceMonitor class declaration
- * @details This header defines the SystemPerformanceMonitor class that provides functionality for System information and performance monitoring.
+ * @brief Real-time system performance monitoring — CPU, memory, I/O
+ * @description Periodically samples system performance metrics: CPU usage
+ *          (per-core and aggregate), memory usage (RSS, virtual), disk I/O,
+ *          and network throughput.  Stores a rolling window of samples for
+ *          trend analysis.  Usable for health checks and capacity planning.
+ *
+ * @par Thread Safety
+ * All public methods are thread-safe.  Sampling is serialised via an internal
+ * mutex.
  */
 
 #pragma once

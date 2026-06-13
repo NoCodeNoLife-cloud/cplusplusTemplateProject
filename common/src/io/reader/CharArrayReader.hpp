@@ -1,7 +1,13 @@
 /**
  * @file CharArrayReader.hpp
- * @brief CharArrayReader class declaration
- * @details This header defines the CharArrayReader class that provides functionality for Common library utilities.
+ * @brief Character-input stream backed by a std::vector<char>
+ * @details Reads characters from a std::vector<char> buffer with optional
+ *          offset and length bounds.  Supports mark/reset for replaying a
+ *          portion of the buffer.  Analogous to java.io.CharArrayReader.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

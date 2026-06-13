@@ -1,7 +1,9 @@
 /**
  * @file StringToolkit.cc
- * @brief StringToolkit class implementation
- * @details This file contains the implementation of the StringToolkit class methods for General utility toolkits for strings, arrays, and other operations.
+ * @brief StringToolkit implementation — split, join, trim, case conversion
+ * @details Implements string utility methods: split uses std::getline or
+ *          find_first_of, join uses ostringstream, trim finds first/last
+ *          non-whitespace, and case conversion uses std::toupper/tolower.
  */
 
 #include "toolkit/StringToolkit.hpp"

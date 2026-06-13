@@ -1,7 +1,9 @@
 /**
  * @file BigInteger.cc
- * @brief BigInteger class implementation
- * @details This file contains the implementation of the BigInteger class methods for Base type classes providing fundamental object functionality.
+ * @brief BigInteger implementation — arbitrary-precision non-negative integers
+ * @details Implements arithmetic operations for arbitrary-precision non-negative
+ *          integers: addition, subtraction, multiplication, division, modulo,
+ *          and exponentiation.  Uses a std::vector of base-10 digits.
  */
 
 #include "BigInteger.hpp"

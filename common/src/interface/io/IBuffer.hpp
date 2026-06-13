@@ -1,7 +1,10 @@
 /**
- * @file io/IBuffer.hpp
- * @brief IBuffer class declaration
- * @details This header defines the IBuffer class that provides functionality for Common interface definitions for the framework.
+ * @file IBuffer.hpp
+ * @brief Interface for NIO-style buffers with position/limit/capacity
+ * @description Defines the contract for buffer types (ByteBuffer, CharBuffer,
+ *          etc.): position/limit/capacity management, flip/clear/rewind/compact
+ *          state transitions, and remaining element queries.  Analogous to
+ *          java.nio.Buffer.
  */
 
 #pragma once

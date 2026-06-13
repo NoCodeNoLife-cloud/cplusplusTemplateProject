@@ -1,7 +1,21 @@
 /**
  * @file OutputStreamWriter.hpp
- * @brief OutputStreamWriter class declaration
- * @details This header defines the OutputStreamWriter class that provides functionality for Common library utilities.
+ * @brief Character-to-byte bridge (UTF-8 only) — adapts Writer to OutputStream
+ * @details A bridge from character streams to byte streams.  Encodes characters
+ *          as UTF-8 and writes them to an underlying AbstractOutputStream.
+ *          Currently limited to UTF-8 encoding.  Provides charset name querying.
+ *          Analogous to java.io.OutputStreamWriter.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * auto file = std::make_unique<FileOutputStream>("output.txt");
+ * OutputStreamWriter writer(std::move(file));
+ * writer.append(u"Hello 世界");
+ * @endcode
  */
 
 #pragma once

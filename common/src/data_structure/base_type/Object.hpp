@@ -1,7 +1,14 @@
 /**
  * @file Object.hpp
- * @brief Base object class declaration
- * @details This header defines the Object class that provides functionality for Base type classes providing fundamental object functionality.
+ * @brief Common base class with virtual destructor and polymorphic support
+ * @details Analogous to Java's Object or C# System.Object.  Provides a
+ *          virtual destructor for proper cleanup through base-class pointers,
+ *          a virtual toString() for debugging, and optional hashCode()/equals()
+ *          methods for use in hash-based containers.
+ *
+ * @par Thread Safety
+ * This class is not inherently thread-safe.  Subclasses must document their
+ * own thread-safety guarantees.
  */
 
 #pragma once

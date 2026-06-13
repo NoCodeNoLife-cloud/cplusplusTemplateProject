@@ -1,7 +1,10 @@
 /**
  * @file ByteArrayOutputStream.cc
- * @brief ByteArrayOutputStream class implementation
- * @details This file contains the implementation of the ByteArrayOutputStream class methods for Common library utilities.
+ * @brief ByteArrayOutputStream implementation — dynamic byte vector management
+ * @details Implements in-memory byte output: write() appends to the internal
+ *          vector (doubling capacity when full), toByteArray() returns a copy,
+ *          toString() for text, writeTo() copies to another stream, and
+ *          reset() clears for reuse.
  */
 
 #include "io/writer/ByteArrayOutputStream.hpp"

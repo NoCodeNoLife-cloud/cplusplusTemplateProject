@@ -1,7 +1,10 @@
 /**
  * @file TopK.cc
- * @brief TopK class implementation
- * @details This file contains the implementation of the TopK class for tracking the top K largest numbers.
+ * @brief TopK implementation — min-heap-based stream Top-K tracking
+ * @details Implements the bounded and unbounded modes of the TopK class.
+ *          In bounded mode, a std::priority_queue (min-heap) of capacity K
+ *          retains only the K largest elements seen.  In unbounded mode, the
+ *          heap grows with every insertion.
  */
 
 #include "TopK.hpp"

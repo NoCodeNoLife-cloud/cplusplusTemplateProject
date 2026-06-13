@@ -1,7 +1,22 @@
 /**
  * @file BigDecimal.hpp
- * @brief BigDecimal class declaration
- * @details This header defines the BigDecimal class that provides functionality for Base type classes providing fundamental object functionality.
+ * @brief Arbitrary-precision decimal arithmetic with rounding control
+ * @details A decimal number implementation for precise financial and
+ *          scientific calculations where floating-point rounding errors
+ *          are unacceptable.  Stores the value as an unscaled BigInteger
+ *          with a scale (number of fractional digits).  Supports arithmetic
+ *          operations, comparison, rounding modes, and string conversion.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * BigDecimal a("123.45");
+ * BigDecimal b("67.89");
+ * BigDecimal sum = a + b;
+ * @endcode
  */
 
 #pragma once

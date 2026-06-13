@@ -1,6 +1,10 @@
 /**
  * @file StackTraceExceptionHandler.cc
- * @brief Implementation of the StackTraceExceptionHandler utility class
+ * @brief StackTraceExceptionHandler implementation — backtrace capture/format
+ * @details Implements platform-specific stack trace capture: uses execinfo.h
+ *          (backtrace/backtrace_symbols) on Linux and CaptureStackBackTrace
+ *          on Windows.  Formats captured frames into a readable string for
+ *          logging.
  */
 
 #include "toolkit/StackTraceExceptionHandler.hpp"

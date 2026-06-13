@@ -1,7 +1,10 @@
 /**
  * @file BufferedOutputStream.cc
- * @brief BufferedOutputStream class implementation
- * @details This file contains the implementation of the BufferedOutputStream class methods for Common library utilities.
+ * @brief BufferedOutputStream implementation — buffer flush, write-through
+ * @details Implements buffered byte output: write() copies data to the
+ *          internal buffer (via memcpy), flushBuffer() writes the buffer
+ *          to the underlying stream, and flush()/close() ensure all
+ *          buffered data is written out.
  */
 
 #include "io/writer/BufferedOutputStream.hpp"

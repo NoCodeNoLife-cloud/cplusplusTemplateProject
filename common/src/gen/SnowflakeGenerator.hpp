@@ -1,7 +1,23 @@
 /**
  * @file SnowflakeGenerator.hpp
- * @brief SnowflakeGenerator class declaration
- * @details This header defines the SnowflakeGenerator class that provides functionality for Random number and ID generation utilities.
+ * @brief Twitter-style Snowflake ID generator (64-bit unique IDs)
+ * @description Generates globally unique, time-sortable 64-bit IDs following
+ *          the Snowflake format: timestamp + worker ID + sequence number.
+ *          IDs are monotonically increasing within the same worker process.
+ *          Suitable for distributed primary key generation.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access in multi-threaded contexts.
+ *
+ * @par Usage Example
+ * @code
+ * SnowflakeGenerator gen(42); // worker ID = 42
+ * uint64_t id = gen.nextId();
+ * @endcode
+ *
+ * @par Reference
+ * Twitter Engineering Blog, "Announcing Snowflake" (2010).
  */
 
 #pragma once

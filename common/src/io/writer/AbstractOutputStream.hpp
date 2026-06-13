@@ -1,7 +1,19 @@
 /**
  * @file AbstractOutputStream.hpp
- * @brief AbstractOutputStream class declaration
- * @details This header defines the AbstractOutputStream class that provides functionality for Common library utilities.
+ * @brief Abstract base class for byte-output streams
+ * @details Defines the contract for writing byte data to an output sink.
+ *          Implements ICloseable and IFlushable with pure-virtual write()
+ *          methods.  Provides convenience overloads that delegate to the
+ *          core write(std::byte) and write(buffer, length) operations.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  Derived classes may add thread-safety
+ * guarantees.
+ *
+ * @par Design
+ * Follows the Java OutputStream abstraction pattern: subclasses implement
+ * write(std::byte) and write(buffer, length), and the base class provides
+ * default offset/length logic for the vector overloads.
  */
 
 #pragma once

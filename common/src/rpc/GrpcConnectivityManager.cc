@@ -1,7 +1,9 @@
 /**
  * @file GrpcConnectivityManager.cc
- * @brief GrpcConnectivityManager class implementation
- * @details This file contains the implementation of the GrpcConnectivityManager class methods.
+ * @brief GrpcConnectivityManager implementation — channel watch, health ping
+ * @details Implements gRPC channel connectivity: watches state changes via
+ *          grpc::Channel::GetState, runs health pings on idle channels, and
+ *          manages reconnection with backoff timers.
  */
 
 #include "GrpcConnectivityManager.hpp"

@@ -1,7 +1,8 @@
 /**
  * @file RpcMetadata.cc
- * @brief RpcMetadata class implementation
- * @details This file contains the implementation of the RpcMetadata class methods for RPC metadata and connectivity management.
+ * @brief RpcMetadata implementation — key-value storage and iteration
+ * @details Implements RPC metadata management: insert, lookup, erase, and
+ *          iteration over metadata key-value pairs.
  */
 
 #include "RpcMetadata.hpp"

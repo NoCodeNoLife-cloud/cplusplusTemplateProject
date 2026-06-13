@@ -1,7 +1,13 @@
 /**
  * @file Color.hpp
- * @brief Color enum class
- * @details This header defines the Color enum class used for representing various colors (e.g., Red-Black tree node colors).
+ * @brief RGBA colour representation with enum and utility functions
+ * @details Defines a set of named colours via enum class (Color::Red, etc.)
+ *          and provides conversion utilities between enum values and
+ *          RGBA byte quadruplets.  Useful for graphics, console output
+ *          colourisation, and UI components.
+ *
+ * @par Thread Safety
+ * This enum is const-only thread-safe (immutable).
  */
 
 #pragma once

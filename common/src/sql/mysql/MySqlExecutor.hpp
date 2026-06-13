@@ -1,7 +1,13 @@
 /**
  * @file MySqlExecutor.hpp
- * @brief MySqlExecutor class declaration
- * @details This header defines the MySqlExecutor class that provides functionality for SQL database utilities.
+ * @brief MySQL query executor with connection pooling and prepared statements
+ * @description Executes SQL queries against a MySQL database using the MySQL
+ *          C API (libmysqlclient).  Supports connection pooling, prepared
+ *          statements with parameter binding, and result set iteration.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

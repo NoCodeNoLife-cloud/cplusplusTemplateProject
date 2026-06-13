@@ -1,7 +1,26 @@
 /**
  * @file TopK.hpp
- * @brief TopK class declaration
- * @details This header defines the TopK class that tracks the top K largest numbers from a stream using a min-heap.
+ * @brief Min-heap-based Top-K tracking for integer streams
+ * @details Maintains the top K largest integers from an input stream using a
+ *          fixed-capacity min-heap.  When the heap is full, each new element
+ *          is compared against the smallest element in the heap; if larger,
+ *          the smallest is evicted.  Supports bounded (fixed K) and unbounded
+ *          modes, and can output results in ascending or descending order.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - add:   O(log K) when at capacity; O(1) otherwise
+ * - query: O(K log K) for sorted output
+ *
+ * @par Usage Example
+ * @code
+ * TopK topK(3);
+ * topK.add(10); topK.add(5); topK.add(20); topK.add(1);
+ * auto result = topK.getTopK(); // {5, 10, 20}
+ * @endcode
  */
 
 #pragma once

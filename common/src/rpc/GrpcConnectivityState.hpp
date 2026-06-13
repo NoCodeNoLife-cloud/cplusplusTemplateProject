@@ -1,7 +1,12 @@
 /**
  * @file GrpcConnectivityState.hpp
- * @brief GrpcConnectivityState class declaration
- * @details This header defines the GrpcConnectivityState class that provides functionality for RPC metadata and connectivity management.
+ * @brief gRPC connectivity state enum and string conversion
+ * @description Defines the gRPC channel connectivity states: IDLE, CONNECTING,
+ *          READY, TRANSIENT_FAILURE, SHUTDOWN.  Provides enum-to-string
+ *          conversion for logging and diagnostic output.
+ *
+ * @par Thread Safety
+ * This enum is const-only thread-safe (immutable).
  */
 
 #pragma once

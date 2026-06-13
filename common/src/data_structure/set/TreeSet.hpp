@@ -1,8 +1,28 @@
 /**
  * @file TreeSet.hpp
- * @brief TreeSet class declaration
- * @details This header defines the TreeSet class — an ordered set implementation
- *          backed by an AVL tree, providing O(log n) insert, erase, and lookup.
+ * @brief AVL-tree-backed ordered set with O(log n) insert/erase/contains
+ * @details An ordered set backed by a self-balancing AVL tree.  Elements are
+ *          stored in sorted order as determined by T's operator<.  The AVL
+ *          balancing invariant guarantees O(log n) worst-case complexity for
+ *          insert, erase, and find operations.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - insert / erase / contains: O(log n) worst-case
+ * - min / max:                O(log n) worst-case
+ * - toVector:                 O(n)
+ *
+ * @par Usage Example
+ * @code
+ * TreeSet<int> numbers;
+ * numbers.insert(42);
+ * numbers.insert(7);
+ * assert(numbers.contains(42));
+ * assert(numbers.min() == 7);
+ * @endcode
  */
 
 #pragma once
@@ -16,8 +36,18 @@
 
 namespace common::data_structure
 {
-    /// @brief An ordered set backed by a self-balancing AVL tree
-    /// @tparam T The element type (must be LessThanComparable)
+    /// @brief An ordered set backed by a self-balancing AVL tree.
+    ///
+    /// @tparam T Element type (must be LessThanComparable, i.e. operator<
+    ///           must be defined).
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is required
+    /// for concurrent reads and writes.
+    ///
+    /// @par Memory
+    /// Each element is stored in a dynamically allocated tree node.
+    /// Insert/erase do not invalidate iterators to other elements.
     template <typename T>
     class TreeSet : private tree::AVLTree<T>
     {
@@ -73,7 +103,7 @@ namespace common::data_structure
         /// @brief Insert a value into the set
         /// @param value The value to insert
         /// @return True if the value was inserted, false if it already existed
-        bool insert(const T& value)
+        [[nodiscard]] bool insert(const T& value)
         {
             if (Base::find(value)) return false;
             Base::insert(value);
@@ -84,7 +114,7 @@ namespace common::data_structure
         /// @brief Erase a value from the set
         /// @param value The value to erase
         /// @return True if the value was erased, false if not found
-        bool erase(const T& value)
+        [[nodiscard]] bool erase(const T& value)
         {
             if (!Base::find(value)) return false;
             Base::remove(value);
@@ -174,24 +204,27 @@ namespace common::data_structure
         }
 
     private:
-        size_type set_size_ = 0;
+        size_type set_size_ = 0; ///< Number of elements in the set.
 
-        /// @brief Deep clones a subtree
-        /// @param node The node to clone from
-        /// @return A new unique_ptr to the cloned node
+        // ── Internal helpers ───────────────────────────────────────────
+
+        /// @brief Deep clones a subtree rooted at @p node.
+        /// @param node  Node to clone (may be null).
+        /// @return New unique_ptr owning a deep copy of the subtree.
         static std::unique_ptr<tree::node::TreeNode<T>>
         clone_node(const tree::node::TreeNode<T>* node)
         {
             if (!node) return nullptr;
+            // Preorder: copy the current node, then recursively copy children.
             auto new_node = std::make_unique<tree::node::TreeNode<T>>(node->data);
             new_node->left_ = clone_node(node->left_.get());
             new_node->right_ = clone_node(node->right_.get());
             return new_node;
         }
 
-        /// @brief Collects elements from the tree in inorder (sorted order)
-        /// @param node Current node in the recursion
-        /// @param out Output vector to collect elements into
+        /// @brief Collects elements via inorder traversal (ascending order).
+        /// @param node  Current node (may be null).
+        /// @param out   Output vector receiving elements in sorted order.
         static void inorder_collect(const tree::node::TreeNode<T>* node,
                                     std::vector<T>& out)
         {

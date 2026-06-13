@@ -1,7 +1,14 @@
 /**
  * @file FloatBuffer.hpp
- * @brief FloatBuffer class declaration
- * @details This header defines the FloatBuffer class that provides functionality for Common library utilities.
+ * @brief NIO-style float buffer with position/limit/capacity tracking
+ * @details A buffer for float data following the java.nio.Buffer pattern:
+ *          maintains position, limit, and capacity.  Supports get/put,
+ *          flip/clear/rewind, compact, and bulk transfer.  Backed by a
+ *          std::vector<float>.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

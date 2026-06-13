@@ -1,7 +1,9 @@
 /**
  * @file PushbackInputStream.cc
- * @brief PushbackInputStream class implementation
- * @details This file contains the implementation of the PushbackInputStream class methods for Common library utilities.
+ * @brief PushbackInputStream implementation — unread byte buffer management
+ * @details Implements byte pushback: unread() stores bytes in a pushback
+ *          buffer, and subsequent read() operations consume from this buffer
+ *          before reading from the underlying stream.  Buffer overflow throws.
  */
 
 #include "io/reader/PushbackInputStream.hpp"

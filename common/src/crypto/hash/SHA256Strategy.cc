@@ -1,7 +1,8 @@
 /**
  * @file SHA256Strategy.cc
- * @brief SHA256Strategy class implementation
- * @details This file contains the implementation of the SHA256Strategy class methods for Cryptographic utilities and toolkit.
+ * @brief SHA256Strategy implementation — EVP_Digest wrapper for SHA-256
+ * @details Implements SHA-256 hash computation using OpenSSL's EVP_Digest
+ *          interface.  Produces a 256-bit (32-byte) digest, hex-encoded.
  */
 
 #include "SHA256Strategy.hpp"

@@ -1,7 +1,13 @@
 /**
  * @file YamlObjectSerializer.hpp
- * @brief YamlObjectSerializer class declaration
- * @details This header defines the YamlObjectSerializer class that provides functionality for Serialization utilities for JSON and YAML.
+ * @brief YAML serialisation/deserialisation for C++ objects
+ * @description Serialises C++ objects to YAML strings and deserialises YAML
+ *          back to objects.  Supports nested structures, sequences, and
+ *          custom type converters.  Wraps the yaml-cpp library.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

@@ -1,7 +1,21 @@
 /**
  * @file RandomGenerator.hpp
- * @brief RandomGenerator class declaration
- * @details This header defines the RandomGenerator class that provides functionality for Random number and ID generation utilities.
+ * @brief Pseudo-random number generator with multiple distributions
+ * @description Wraps C++ <random> facilities (std::mt19937_64 by default) to
+ *          provide random integers, floating-point numbers, boolean values,
+ *          and byte sequences.  Supports seeding from std::random_device for
+ *          non-deterministic initialisation.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * RandomGenerator rng;
+ * int dice = rng.nextInt(1, 6);
+ * double prob = rng.nextDouble();
+ * @endcode
  */
 
 #pragma once

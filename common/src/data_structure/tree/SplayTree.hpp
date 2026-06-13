@@ -1,8 +1,21 @@
 /**
  * @file SplayTree.hpp
- * @brief SplayTree class declaration
- * @details Self-adjusting binary search tree that splays accessed nodes to the root,
- *          providing amortized O(log n) time for search, insert, and delete operations.
+ * @brief Self-adjusting splay tree — amortised O(log n) ops with locality
+ * @details A self-adjusting BST that moves recently accessed nodes to the root
+ *          via splay rotations.  Frequently accessed elements are found faster
+ *          (working-set property).  All operations have amortised O(log n)
+ *          complexity.  Does not require per-node balance metadata.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - search / insert / remove: amortised O(log n)
+ *
+ * @par Reference
+ * Sleator & Tarjan, "Self-Adjusting Binary Search Trees"
+ * (1985), Journal of the ACM 32(3).
  */
 
 #pragma once

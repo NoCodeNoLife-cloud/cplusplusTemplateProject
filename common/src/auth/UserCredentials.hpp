@@ -1,7 +1,13 @@
 /**
  * @file UserCredentials.hpp
- * @brief UserCredentials class declaration
- * @details This header defines the UserCredentials class that provides functionality for Authentication and authorization utilities.
+ * @brief User credential value object — username, password hash, roles
+ * @description Holds user authentication data: username/email, salted password
+ *          hash (not plaintext), assigned roles/permissions, and account
+ *          status (active/locked/expired).  Used as the data transfer object
+ *          between authentication layers.
+ *
+ * @par Thread Safety
+ * This class is const-only thread-safe (immutable after construction).
  */
 
 #pragma once

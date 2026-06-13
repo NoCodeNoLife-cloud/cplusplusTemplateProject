@@ -1,7 +1,13 @@
 /**
  * @file EnumToolkit.hpp
- * @brief EnumToolkit class declaration
- * @details This header defines the EnumToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief Static utilities for enum-to-string / string-to-enum conversion
+ * @details Provides static methods for converting between enum values and
+ *          their string representations.  Uses preprocessor macros or template
+ *          specialisations to map enum identifiers to strings.  Useful for
+ *          logging, serialisation, and configuration parsing.
+ *
+ * @par Thread Safety
+ * Static methods are thread-safe (read-only lookups).
  */
 
 #pragma once

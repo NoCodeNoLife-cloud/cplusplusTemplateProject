@@ -1,7 +1,8 @@
 /**
  * @file SHA1Strategy.cc
- * @brief SHA1Strategy class implementation
- * @details This file contains the implementation of the SHA1Strategy class methods for Cryptographic utilities and toolkit.
+ * @brief SHA1Strategy implementation — EVP_Digest wrapper for SHA-1
+ * @details Implements SHA-1 hash computation using OpenSSL's EVP_Digest
+ *          interface.  Produces a 160-bit (20-byte) digest, hex-encoded.
  */
 
 #include "SHA1Strategy.hpp"

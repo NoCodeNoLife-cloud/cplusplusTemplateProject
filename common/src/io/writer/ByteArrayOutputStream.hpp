@@ -1,7 +1,17 @@
 /**
  * @file ByteArrayOutputStream.hpp
- * @brief ByteArrayOutputStream class declaration
- * @details This header defines the ByteArrayOutputStream class that provides functionality for Common library utilities.
+ * @brief Byte-output stream backed by a dynamic byte vector
+ * @details Writes bytes to an internal std::vector<std::byte> that grows
+ *          dynamically (doubles in capacity when full).  Supports
+ *          toByteArray(), toString(), writeTo (copy to another stream),
+ *          and reset() for reuse.  Analogous to java.io.ByteArrayOutputStream.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Memory
+ * Internal buffer grows by doubling (2x) when capacity is exceeded.
  */
 
 #pragma once

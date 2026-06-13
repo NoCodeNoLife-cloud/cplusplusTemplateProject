@@ -1,7 +1,17 @@
 /**
  * @file BufferedOutputStream.hpp
- * @brief BufferedOutputStream class declaration
- * @details This header defines the BufferedOutputStream class that provides functionality for Common library utilities.
+ * @brief Buffered byte-output stream with 8 KB default buffer
+ * @description Wraps an AbstractOutputStream with an 8 KB buffer to batch
+ *          small writes into larger chunks, reducing I/O calls.  The buffer
+ *          is flushed automatically when full, and manually via flush() or
+ *          close().  Uses memcpy for efficient buffer management.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Memory
+ * Allocates a fixed-size buffer of @p size bytes on construction (default 8192).
  */
 
 #pragma once

@@ -1,7 +1,9 @@
 /**
  * @file MySqlExecutor.cc
- * @brief MySqlExecutor class implementation
- * @details This file contains the implementation of the MySqlExecutor class methods for SQL database utilities.
+ * @brief MySqlExecutor implementation — query execution, connection management
+ * @details Implements MySQL query execution: connects to MySQL server via
+ *          mysql_real_connect, executes queries via mysql_query, and manages
+ *          connection lifecycle and prepared statement binding.
  */
 
 #include "MySqlExecutor.hpp"

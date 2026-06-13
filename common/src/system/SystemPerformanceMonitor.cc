@@ -1,7 +1,9 @@
 /**
  * @file SystemPerformanceMonitor.cc
- * @brief SystemPerformanceMonitor class implementation
- * @details This file contains the implementation of the SystemPerformanceMonitor class methods for System information and performance monitoring.
+ * @brief SystemPerformanceMonitor implementation — metric sampling and rolling window
+ * @details Implements periodic metric sampling: reads /proc/stat and
+ *          /proc/meminfo on Linux, uses PDH APIs on Windows.  Maintains a
+ *          fixed-size ring buffer of samples for trend reporting.
  */
 
 #include "system/SystemPerformanceMonitor.hpp"

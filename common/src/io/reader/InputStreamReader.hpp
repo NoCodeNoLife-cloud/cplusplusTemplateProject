@@ -1,7 +1,20 @@
 /**
  * @file InputStreamReader.hpp
- * @brief InputStreamReader class declaration
- * @details This header defines the InputStreamReader class that provides functionality for Common library utilities.
+ * @brief Byte-to-character bridge (UTF-8 only) — adapts InputStream to Reader
+ * @details A bridge from byte streams to character streams.  Reads bytes from
+ *          an AbstractInputStream and decodes them as UTF-8 into characters.
+ *          Currently limited to UTF-8 encoding.  Analogous to java.io.InputStreamReader.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * auto file = std::make_unique<FileInputStream>("data.txt");
+ * InputStreamReader reader(std::move(file));
+ * auto ch = reader.read(); // first UTF-8 character
+ * @endcode
  */
 
 #pragma once

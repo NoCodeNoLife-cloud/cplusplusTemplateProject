@@ -1,7 +1,13 @@
 /**
  * @file SystemInfo.hpp
- * @brief SystemInfo class declaration
- * @details This header defines the SystemInfo class that provides functionality for System information and performance monitoring.
+ * @brief System information queries — OS, CPU, memory, hostname
+ * @description Provides static methods for querying system-level information:
+ *          operating system name/version, CPU architecture and core count,
+ *          total/available physical memory, hostname, and process ID.
+ *          Uses platform-specific APIs (/proc on Linux, WinAPI on Windows).
+ *
+ * @par Thread Safety
+ * Static methods are thread-safe (read-only system queries).
  */
 
 #pragma once

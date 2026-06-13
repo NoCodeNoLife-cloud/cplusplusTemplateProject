@@ -1,7 +1,8 @@
 /**
  * @file AutoJoinThread.cc
- * @brief AutoJoinThread class implementation
- * @details This file contains the implementation of the AutoJoinThread class methods for Threading utilities and thread pool implementation.
+ * @brief AutoJoinThread implementation — RAII join wrapper
+ * @details Implements the RAII thread wrapper: destructor calls join() if the
+ *          thread is joinable, ensuring clean thread lifecycle management.
  */
 
 #include "thread/AutoJoinThread.hpp"

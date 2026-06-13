@@ -1,8 +1,9 @@
 /**
  * @file BmpImage.cc
- * @brief BmpImage class implementation
- * @details This file contains the implementation of the BmpImage class methods.
- *          BMP file format structures are kept here as internal implementation details.
+ * @brief BmpImage implementation — BMP header parsing, pixel decoding
+ * @details Implements BMP file format parsing: validates the magic number
+ *          ("BM"), reads the DIB header for width/height/bit-depth, and
+ *          decodes pixel data into a row-major byte array (BGRA format).
  */
 
 #include "filesystem/type/BmpImage.hpp"

@@ -1,7 +1,19 @@
 /**
  * @file SimpleDateFormatter.hpp
- * @brief SimpleDateFormatter class declaration
- * @details This header defines the SimpleDateFormatter class that provides functionality for Time and date utilities including profilers and formatters.
+ * @brief Thread-safe date/time formatter with pattern-based formatting
+ * @description Formats Date objects and std::chrono time points into strings
+ *          using configurable patterns (e.g., "yyyy-MM-dd HH:mm:ss").
+ *          Wraps std::put_time / strftime internally.  Reusable and
+ *          thread-safe after construction.
+ *
+ * @par Thread Safety
+ * Thread-safe after construction (immutable pattern string).
+ *
+ * @par Usage Example
+ * @code
+ * SimpleDateFormatter fmt("yyyy-MM-dd");
+ * std::string today = fmt.format(Date());
+ * @endcode
  */
 
 #pragma once

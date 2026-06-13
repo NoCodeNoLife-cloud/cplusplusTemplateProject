@@ -1,7 +1,9 @@
 /**
  * @file IntegerToolkit.cc
- * @brief IntegerToolkit class implementation
- * @details This file contains the implementation of the IntegerToolkit class methods for General utility toolkits for strings, arrays, and other operations.
+ * @brief IntegerToolkit implementation — parsing, formatting, bit ops
+ * @details Implements integer utility methods: string-to-int parsing with
+ *          radix validation, int-to-hex/octal/binary formatting, and
+ *          bit-manipulation helpers (popcount, clz, ctz, rotl, rotr).
  */
 
 #include "IntegerToolkit.hpp"

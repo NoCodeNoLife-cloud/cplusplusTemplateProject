@@ -1,9 +1,28 @@
 /**
  * @file LinkedList.hpp
- * @brief LinkedList class declaration
- * @details This header defines the LinkedList class — a doubly linked list with
- *          bidirectional iterators, providing O(1) insertion/removal at both ends
- *          and O(n) insertion/removal at arbitrary positions.
+ * @brief Doubly linked list with bidirectional iterators and O(1) end ops
+ * @details A doubly linked list using std::unique_ptr for forward links and
+ *          raw pointers for backward links.  Provides O(1) push/pop at both
+ *          ends and O(n) insertion/removal at arbitrary positions.  Bidirectional
+ *          iterators allow forward and backward traversal.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - push_front / push_back / pop_front / pop_back: O(1)
+ * - insert / erase at arbitrary position:          O(n)
+ * - size:                                          O(n) (not cached)
+ *
+ * @par Usage Example
+ * @code
+ * LinkedList<int> list;
+ * list.push_back(1);
+ * list.push_front(0);
+ * assert(list.front() == 0);
+ * assert(list.back() == 1);
+ * @endcode
  */
 
 #pragma once
@@ -17,8 +36,20 @@
 
 namespace common::data_structure
 {
-    /// @brief A doubly linked list implementation using std::unique_ptr for forward links
-    /// @tparam T The type of elements stored in the list
+    /// @brief A doubly linked list with bidirectional iterators.
+    ///
+    /// @tparam T Element type (must satisfy std::movable).
+    ///
+    /// Forward links use std::unique_ptr for automatic memory management;
+    /// backward links are raw (non-owning) pointers.
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is required
+    /// for concurrent reads and writes.
+    ///
+    /// @par Iterator Invalidation
+    /// Inserting or erasing elements does not invalidate iterators to other
+    /// elements (except those to the erased element).
     template <std::movable T>
     class LinkedList
     {

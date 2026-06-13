@@ -1,7 +1,9 @@
 /**
- * @file task/IRunnable.hpp
- * @brief IRunnable class declaration
- * @details This header defines the IRunnable class that provides functionality for Common interface definitions for the framework.
+ * @file IRunnable.hpp
+ * @brief Interface for runnable tasks (analogous to java.lang.Runnable)
+ * @description Defines the contract for objects that can be executed as tasks.
+ *          Implementations provide a run() method containing the task logic.
+ *          Usable with thread pools and executors.
  */
 
 #pragma once

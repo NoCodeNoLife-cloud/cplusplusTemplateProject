@@ -1,7 +1,14 @@
 /**
  * @file SQLiteManager.hpp
- * @brief SQLiteManager class declaration
- * @details This header defines the SQLiteManager class that provides functionality for SQL database utilities.
+ * @brief SQLite database manager — connection, query, transaction control
+ * @description Manages a SQLite database connection.  Provides open/close,
+ *          DDL execution (CREATE TABLE, etc.), DML (INSERT, SELECT), and
+ *          transaction management (BEGIN, COMMIT, ROLLBACK).  Wraps the
+ *          sqlite3 C API.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  SQLite in single-thread mode requires
+ * external synchronisation for concurrent access.
  */
 
 #pragma once

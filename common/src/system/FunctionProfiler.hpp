@@ -1,7 +1,14 @@
 /**
  * @file FunctionProfiler.hpp
- * @brief FunctionProfiler class declaration
- * @details This header defines the FunctionProfiler class that provides functionality for Time and date utilities including profilers and formatters.
+ * @brief RAII function-level profiler with call-graph timing
+ * @description Measures execution time of function scopes using RAII semantics.
+ *          Records entry/exit timestamps, elapsed wall-clock and CPU time,
+ *          and builds a hierarchical call graph.  Supports nested profiling
+ *          and threshold-based logging for slow functions.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  Each profiler instance should be used
+ * within a single thread.
  */
 
 #pragma once

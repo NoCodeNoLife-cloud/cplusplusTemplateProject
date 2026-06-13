@@ -1,7 +1,8 @@
 /**
  * @file ByteArrayInputStream.cc
- * @brief ByteArrayInputStream class implementation
- * @details This file contains the implementation of the ByteArrayInputStream class methods for Common library utilities.
+ * @brief ByteArrayInputStream implementation — in-memory byte stream
+ * @details Implements reading from a std::vector<std::byte> buffer with
+ *          position tracking, mark/reset, and available-byte counting.
  */
 
 #include "io/reader/ByteArrayInputStream.hpp"

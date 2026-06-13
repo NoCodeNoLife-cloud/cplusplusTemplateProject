@@ -1,7 +1,9 @@
 /**
  * @file RegexToolkit.cc
- * @brief RegexToolkit class implementation
- * @details This file contains the implementation of the RegexToolkit class methods for General utility toolkits for strings, arrays, and other operations.
+ * @brief RegexToolkit implementation — regex match/search/replace/split
+ * @details Implements static regex utility methods: std::regex_match for
+ *          full validation, std::regex_search for extraction, std::regex_replace
+ *          for substitution, and custom split using std::sregex_token_iterator.
  */
 
 #include "toolkit/RegexToolkit.hpp"

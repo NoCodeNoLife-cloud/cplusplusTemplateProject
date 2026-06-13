@@ -1,8 +1,23 @@
 /**
  * @file Trie.hpp
- * @brief Trie class declaration
- * @details This header defines the Trie class, a prefix tree data structure
- *          for efficient string key storage and retrieval with associated values.
+ * @brief Prefix tree (Trie) for efficient string-key storage and prefix matching
+ * @details A trie (prefix tree) that stores strings by their constituent
+ *          characters along a tree path.  Provides O(k) insert, search, and
+ *          prefix-match operations where k is the key length — independent of
+ *          the total number of stored keys.  Each node holds a pointer to
+ *          an associated value type V (null if the path does not form a
+ *          complete key).
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - insert / search / erase: O(k) where k = key length
+ * - startsWith / keysWithPrefix: O(k + m) where m = number of matching keys
+ *
+ * @par Memory
+ * Each character in each unique key path allocates one node.
  */
 
 #pragma once

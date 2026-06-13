@@ -1,7 +1,13 @@
 /**
  * @file ClassToolkit.hpp
- * @brief ClassToolkit class declaration
- * @details This header defines the ClassToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief RTTI and reflection utilities — class name demangling, type info
+ * @details Provides static utility methods for C++ runtime type information:
+ *          demangle() converts std::type_info::name() to human-readable form,
+ *          className() returns the type name of any expression via templates.
+ *          Uses platform-specific demangling (__cxa_demangle on GCC/Clang).
+ *
+ * @par Thread Safety
+ * Static methods are thread-safe.
  */
 
 #pragma once

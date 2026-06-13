@@ -1,12 +1,28 @@
 /**
  * @file RobinHoodHashMap.hpp
- * @brief Robin Hood hash map class declaration
- * @details This header defines the RobinHoodHashMap class — an open-addressing hash map
- *          using Robin Hood hashing with linear probing. On collision, the entry with
- *          larger displacement (farther from its ideal bucket) steals the slot from the
- *          entry with smaller displacement. This keeps probe lengths uniformly low and
- *          provides excellent cache locality. Backward-shift deletion avoids tombstone
+ * @brief Open-addressing hash map using Robin Hood hashing with backward-shift deletion
+ * @details An open-addressing hash map using Robin Hood hashing with linear
+ *          probing.  On collision, the entry with larger displacement (farther
+ *          from its ideal bucket) steals the slot from the entry with smaller
+ *          displacement.  This keeps probe lengths uniformly low and provides
+ *          excellent cache locality.  Backward-shift deletion avoids tombstone
  *          accumulation without requiring a full rehash.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - insert / find / erase: O(1) average, O(n) worst-case
+ * - Memory overhead:       ~1 byte per bucket (metadata) + key + value
+ *
+ * @par Usage Example
+ * @code
+ * RobinHoodHashMap<std::string, int> map;
+ * map.insert("alice", 100);
+ * map.insert("bob", 200);
+ * assert(*map.find("alice") == 100);
+ * @endcode
  */
 
 #pragma once

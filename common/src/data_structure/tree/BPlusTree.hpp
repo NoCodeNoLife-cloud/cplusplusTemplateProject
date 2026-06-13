@@ -1,10 +1,22 @@
 /**
  * @file BPlusTree.hpp
- * @brief BPlusTree class declaration
- * @details A B+Tree is a variant of the B-tree where all values are stored at the leaf
- *          level, while internal nodes contain only routing keys. Leaf nodes are linked
- *          together forming a sequential list, enabling efficient range queries.
- *          This implementation uses the same minimum degree (Order) convention as BTree.
+ * @brief B+ tree with leaf-linked list — O(log n) ops + efficient range scans
+ * @details A B+ tree variant where all key-value pairs reside in leaf nodes
+ *          and internal nodes serve purely as routers.  Leaf nodes form a
+ *          sequential linked list, enabling efficient range queries without
+ *          backtracking up the tree.  Uses the same minimum degree (Order)
+ *          convention as BTree.  Ideal for database indexes and file systems.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - search / insert / remove: O(log n)
+ * - range query:              O(log n + k) where k = result count
+ *
+ * @par Reference
+ * Comer, "Ubiquitous B-Tree", ACM Computing Surveys 11(2), 1979.
  */
 
 #pragma once

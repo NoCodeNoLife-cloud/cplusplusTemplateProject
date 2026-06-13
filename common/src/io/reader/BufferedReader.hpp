@@ -1,7 +1,17 @@
 /**
  * @file BufferedReader.hpp
- * @brief BufferedReader class declaration
- * @details This header defines the BufferedReader class that provides functionality for Common library utilities.
+ * @brief Buffered character-input stream with readLine() support
+ * @details Wraps an AbstractReader with an 8 KB default buffer to reduce
+ *          per-character read overhead.  Supports mark/reset up to the buffer
+ *          size and provides a convenience readLine() method.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Memory
+ * Allocates a fixed-size buffer of @p size bytes on construction (default 8192).
+ * The buffer persists for the lifetime of the reader.
  */
 
 #pragma once

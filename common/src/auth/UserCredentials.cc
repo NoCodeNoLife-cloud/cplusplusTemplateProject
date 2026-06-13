@@ -1,7 +1,8 @@
 /**
  * @file UserCredentials.cc
- * @brief UserCredentials class implementation
- * @details This file contains the implementation of the UserCredentials class methods for Authentication and authorization utilities.
+ * @brief UserCredentials implementation — getters/setters for credential fields
+ * @details Implements the credential data object: accessors for username,
+ *          password hash, roles, and account status flags.
  */
 
 #include "UserCredentials.hpp"

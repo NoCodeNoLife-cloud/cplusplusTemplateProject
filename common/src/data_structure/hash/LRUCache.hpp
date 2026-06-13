@@ -1,10 +1,27 @@
 /**
  * @file LRUCache.hpp
- * @brief LRU (Least Recently Used) cache class declaration
- * @details This header defines the LRUCache class that provides O(1) get and put
- *          operations with automatic eviction of the least recently used item
- *          when capacity is exceeded. Internally uses a hash map for key lookup
- *          and a doubly-linked list to track access order.
+ * @brief LRU cache with O(1) get/put — hash map + doubly linked list
+ * @details A Least-Recently-Used cache providing O(1) get and put operations.
+ *          Uses a hash map for key-to-node lookup and a doubly linked list
+ *          to maintain access-order.  On cache hit the accessed entry is
+ *          promoted to the front (most recently used).  When full, the entry
+ *          at the back (least recently used) is evicted.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - get / put: O(1) amortised
+ *
+ * @par Usage Example
+ * @code
+ * LRUCache<int, std::string> cache(2);
+ * cache.put(1, "one");
+ * cache.put(2, "two");
+ * cache.get(1);      // promotes key 1 to front
+ * cache.put(3, "three"); // evicts key 2 (LRU)
+ * @endcode
  */
 
 #pragma once

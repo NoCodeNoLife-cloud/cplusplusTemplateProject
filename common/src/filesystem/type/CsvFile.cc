@@ -1,7 +1,8 @@
 /**
  * @file CsvFile.cc
- * @brief CsvFile class implementation
- * @details This file contains the implementation of the CsvFile class methods.
+ * @brief CsvFile implementation — CSV parsing, quoting, row iteration
+ * @details Implements CSV parsing: handles quoted fields, escaped quotes,
+ *          configurable delimiters, and header-driven column access.
  */
 
 #include "filesystem/type/CsvFile.hpp"

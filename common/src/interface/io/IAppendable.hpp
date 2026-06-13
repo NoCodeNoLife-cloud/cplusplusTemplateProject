@@ -1,7 +1,9 @@
 /**
- * @file io/IAppendable.hpp
- * @brief IAppendable class declaration
- * @details This header defines the IAppendable class that provides functionality for Common interface definitions for the framework.
+ * @file IAppendable.hpp
+ * @brief Interface for objects that support append operations (char/string/string_view)
+ * @description Defines the append contract for character output.  Analogous to
+ *          java.lang.Appendable.  Provides multiple overloads for appending
+ *          single characters, char arrays, strings, and string_views.
  */
 
 #pragma once

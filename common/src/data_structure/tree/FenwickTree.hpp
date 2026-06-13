@@ -1,8 +1,22 @@
 /**
  * @file FenwickTree.hpp
- * @brief FenwickTree (Binary Indexed Tree) class declaration
- * @details This header defines the FenwickTree class that provides point update
- *          and prefix/range sum query functionality in O(log n) time.
+ * @brief Fenwick Tree (Binary Indexed Tree) — O(log n) prefix sum & point update
+ * @details A Fenwick tree provides O(log n) point updates and prefix-sum queries
+ *          using a compact array representation.  Each index i stores a partial
+ *          sum covering the range (i - LSB(i), i].  Supports range sum queries
+ *          via two prefix-sum calls.  Uses 1-based indexing internally.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - add / prefixSum / rangeSum: O(log n)
+ * - Memory:                     O(n)
+ *
+ * @par Reference
+ * Fenwick, "A New Data Structure for Cumulative Frequency Tables"
+ * (1994), Software: Practice and Experience 24(3).
  */
 
 #pragma once

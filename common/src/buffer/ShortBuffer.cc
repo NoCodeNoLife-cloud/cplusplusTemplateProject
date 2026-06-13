@@ -1,7 +1,8 @@
 /**
  * @file ShortBuffer.cc
- * @brief ShortBuffer class implementation
- * @details This file contains the implementation of the ShortBuffer class methods for Common library utilities.
+ * @brief ShortBuffer implementation — get/put/flip/compact/array operations
+ * @details Implements int16 buffer operations: absolute and relative get/put,
+ *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
 
 #include "buffer/ShortBuffer.hpp"

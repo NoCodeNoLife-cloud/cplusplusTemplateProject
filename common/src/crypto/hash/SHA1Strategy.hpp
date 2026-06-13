@@ -1,7 +1,17 @@
 /**
  * @file SHA1Strategy.hpp
- * @brief SHA1Strategy class declaration
- * @details This header defines the SHA1Strategy class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief SHA-1 hash strategy — 160-bit digest via OpenSSL
+ * @details Implements the HashStrategy interface using the SHA-1 algorithm
+ *          (160-bit output).  Wraps OpenSSL's EVP_Digest API.  SHA-1 is
+ *          considered cryptographically broken for collision resistance;
+ *          use SHA256Strategy for security-sensitive contexts.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Reference
+ * FIPS PUB 180-4, "Secure Hash Standard (SHS)".
  */
 
 #pragma once

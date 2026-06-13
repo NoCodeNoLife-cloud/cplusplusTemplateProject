@@ -1,7 +1,14 @@
 /**
  * @file ArraysToolkit.hpp
- * @brief ArraysToolkit class declaration
- * @details This header defines the ArraysToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief Static utility functions for array operations (min, max, find, shuffle)
+ * @details Provides static methods for common array/container operations:
+ *          find extremum (min/max), linear search, Fisher-Yates shuffle,
+ *          array reversal, and subarray copying.  Works with any container
+ *          supporting random access iterators.
+ *
+ * @par Thread Safety
+ * Static methods are thread-safe as long as input containers are not modified
+ * concurrently.
  */
 
 #pragma once

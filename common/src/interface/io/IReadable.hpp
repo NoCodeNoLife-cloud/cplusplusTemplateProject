@@ -1,7 +1,9 @@
 /**
- * @file io/IReadable.hpp
- * @brief IReadable class declaration
- * @details This header defines the IReadable class that provides functionality for Common interface definitions for the framework.
+ * @file IReadable.hpp
+ * @brief Interface for readable data sources (character streams)
+ * @description Defines the read contract for character-input sources.
+ *          Analogous to java.lang.Readable.  The read() method fills a
+ *          buffer with characters and returns the count read, or -1 at EOF.
  */
 
 #pragma once

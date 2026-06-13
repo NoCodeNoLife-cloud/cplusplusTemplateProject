@@ -1,7 +1,10 @@
 /**
  * @file BufferedWriter.cc
- * @brief BufferedWriter class implementation
- * @details This file contains the implementation of the BufferedWriter class methods for Common library utilities.
+ * @brief BufferedWriter implementation — character buffer, newLine, flush
+ * @details Implements buffered character output: write()/append() fill the
+ *          1 KB buffer, checkAndFlush() writes the buffer to the underlying
+ *          writer when full, and newLine() appends the platform's line
+ *          separator before flushing.
  */
 
 #include "io/writer/BufferedWriter.hpp"

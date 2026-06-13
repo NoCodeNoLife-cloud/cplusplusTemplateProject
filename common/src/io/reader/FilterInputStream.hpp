@@ -1,7 +1,15 @@
 /**
  * @file FilterInputStream.hpp
- * @brief FilterInputStream class declaration
- * @details This header defines the FilterInputStream class that provides functionality for Common library utilities.
+ * @brief Decorator base class for byte-input streams
+ * @details Implements the decorator (wrapper) pattern for AbstractInputStream.
+ *          Stores a shared_ptr to an underlying stream and delegates all
+ *          read/skip/available/mark/reset/close calls to it.  Subclasses
+ *          override specific methods to add buffering, filtering, or other
+ *          transformations.  Analogous to java.io.FilterInputStream.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  The underlying stream's thread-safety
+ * depends on its implementation.
  */
 
 #pragma once

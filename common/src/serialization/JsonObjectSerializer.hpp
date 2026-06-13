@@ -1,7 +1,14 @@
 /**
  * @file JsonObjectSerializer.hpp
- * @brief JsonObjectSerializer class declaration
- * @details This header defines the JsonObjectSerializer class that provides functionality for Serialization utilities for JSON and YAML.
+ * @brief JSON serialisation/deserialisation for C++ objects
+ * @description Serialises C++ objects to JSON strings and deserialises JSON
+ *          back to objects using a mapping-based approach.  Supports nested
+ *          objects, arrays, and custom type converters.  Wraps a JSON library
+ *          (nlohmann/json or custom) for all JSON operations.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

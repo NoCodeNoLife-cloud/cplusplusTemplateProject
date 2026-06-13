@@ -1,7 +1,13 @@
 /**
  * @file HashStrategy.hpp
- * @brief HashStrategy class declaration
- * @details This header defines the HashStrategy class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief Abstract interface for hash computation strategies (Strategy pattern)
+ * @details Defines the contract for hash computation: compute() accepts a
+ *          byte sequence and returns a hex-encoded string digest.  Concrete
+ *          implementations include SHA1Strategy and SHA256Strategy.  Supports
+ *          runtime selection of hash algorithm via the Strategy pattern.
+ *
+ * @par Thread Safety
+ * Implementations are **not** thread-safe unless specified otherwise.
  */
 
 #pragma once

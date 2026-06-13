@@ -1,7 +1,10 @@
 /**
- * @file serialize/IBoostSerializable.hpp
- * @brief IBoostSerializable class declaration
- * @details This header defines the IBoostSerializable class that provides functionality for Common interface definitions for the framework.
+ * @file IBoostSerializable.hpp
+ * @brief Interface for Boost.Serialization-compatible classes
+ * @description Defines the contract for classes that can be serialised using
+ *          the Boost.Serialization library.  Implementations provide a
+ *          serialize() method that handles both save and load via Boost's
+ *          split member or single-archive approach.
  */
 
 #pragma once

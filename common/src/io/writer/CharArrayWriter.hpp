@@ -1,7 +1,16 @@
 /**
  * @file CharArrayWriter.hpp
- * @brief CharArrayWriter class declaration
- * @details This header defines the CharArrayWriter class that provides functionality for Common library utilities.
+ * @brief Character-output stream backed by a dynamic char vector
+ * @details Writes characters to an internal std::vector<char> that grows
+ *          dynamically.  Supports toCharArray(), toString(), writeTo (copy
+ *          to another writer), and reset().  Analogous to java.io.CharArrayWriter.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Memory
+ * Internal buffer grows by doubling (2x) when capacity is exceeded.
  */
 
 #pragma once

@@ -1,7 +1,13 @@
 /**
  * @file DelayedTaskActuator.hpp
- * @brief DelayedTaskActuator class declaration
- * @details This header defines the DelayedTaskActuator class that provides functionality for Threading utilities and thread pool implementation.
+ * @brief Schedules and executes tasks after a configurable delay
+ * @description Executes a given task (callable) once after a specified delay.
+ *          Uses a dedicated thread or timer to wait asynchronously without
+ *          blocking the caller.  Supports cancellation of pending tasks.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

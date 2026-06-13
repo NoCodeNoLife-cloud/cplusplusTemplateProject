@@ -1,7 +1,9 @@
 /**
  * @file SpinlockMutex.cc
- * @brief SpinlockMutex class implementation
- * @details This file contains the implementation of the SpinlockMutex class methods for Threading utilities and thread pool implementation.
+ * @brief SpinlockMutex implementation — atomic_flag busy-wait with pause
+ * @details Implements spinlock using std::atomic_flag::test_and_set with
+ *          acquire-release semantics.  Uses platform-specific pause/yield
+ *          instructions to reduce CPU contention.
  */
 
 #include "thread/SpinlockMutex.hpp"

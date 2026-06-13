@@ -1,7 +1,8 @@
 /**
  * @file AuthenticationException.cc
- * @brief AuthenticationException class implementation
- * @details This file contains the implementation of the AuthenticationException class methods for Custom exception classes for authentication and other operations.
+ * @brief AuthenticationException implementation — error code and message
+ * @details Implements the authentication exception with error code assignment
+ *          and category label for structured error handling.
  */
 
 #include "AuthenticationException.hpp"

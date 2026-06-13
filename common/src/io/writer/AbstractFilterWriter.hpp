@@ -1,7 +1,15 @@
 /**
  * @file AbstractFilterWriter.hpp
- * @brief AbstractFilterWriter class declaration
- * @details This header defines the AbstractFilterWriter class that provides functionality for Common library utilities.
+ * @brief Decorator base class for character-output writers
+ * @details Implements the decorator pattern for AbstractWriter.  Stores a
+ *          pointer to an underlying AbstractWriter and delegates all
+ *          write/append/flush/close calls to it.  Subclasses override specific
+ *          methods to add buffering, filtering, or encoding transformations.
+ *          Analogous to java.io.FilterWriter.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

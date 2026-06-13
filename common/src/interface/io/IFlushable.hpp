@@ -1,7 +1,9 @@
 /**
- * @file io/IFlushable.hpp
- * @brief IFlushable class declaration
- * @details This header defines the IFlushable class that provides functionality for Common interface definitions for the framework.
+ * @file IFlushable.hpp
+ * @brief Interface for output streams that support flushing buffered data
+ * @description Defines the flush contract for output streams and writers.
+ *          Analogous to java.io.Flushable.  Implementations must write any
+ *          buffered bytes to the underlying sink when flush() is called.
  */
 
 #pragma once

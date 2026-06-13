@@ -1,7 +1,9 @@
 /**
-* @file UuidGenerator.cc
- * @brief UuidGenerator class implementation
- * @details This file contains the implementation of the UuidGenerator class methods for Random number and ID generation utilities.
+ * @file UuidGenerator.cc
+ * @brief UuidGenerator implementation — Boost.UUID random_generator wrapper
+ * @details Implements UUID v4 generation via boost::uuids::random_generator.
+ *          Converts the generated UUID to standard string format via
+ *          boost::uuids::to_string.
  */
 
 #include "gen/UuidGenerator.hpp"

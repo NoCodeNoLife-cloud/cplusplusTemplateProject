@@ -1,7 +1,17 @@
 /**
  * @file SHA256Strategy.hpp
- * @brief SHA256Strategy class declaration
- * @details This header defines the SHA256Strategy class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief SHA-256 hash strategy — 256-bit digest via OpenSSL
+ * @details Implements the HashStrategy interface using the SHA-256 algorithm
+ *          (256-bit output).  Wraps OpenSSL's EVP_Digest API.  Provides
+ *          collision-resistant hashing suitable for digital signatures,
+ *          password hashing, and integrity verification.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Reference
+ * FIPS PUB 180-4, "Secure Hash Standard (SHS)".
  */
 
 #pragma once

@@ -1,7 +1,14 @@
 /**
  * @file UserAuthenticator.hpp
- * @brief UserAuthenticator class declaration
- * @details This header defines the UserAuthenticator class that provides functionality for Authentication and authorization utilities.
+ * @brief User authentication service — login, session, credential validation
+ * @description Authenticates users against a credential store (database/LDAP).
+ *          Manages login/logout workflows, session token generation, and
+ *          credential validation.  Uses PasswordPolicy for strength checking
+ *          and AuthenticationException for error reporting.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

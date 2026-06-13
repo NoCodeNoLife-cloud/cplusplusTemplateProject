@@ -1,7 +1,9 @@
 /**
  * @file Clock.cc
- * @brief Clock class implementation
- * @details This file contains the implementation of the Clock class methods for Time and date utilities including profilers and formatters.
+ * @brief Clock implementation — elapsed-time measurement helpers
+ * @details Implements start/stop/pause/resume for elapsed-time measurement
+ *          using std::chrono::high_resolution_clock.  Supports lap timing
+ *          and conversion to nanoseconds/microseconds/milliseconds/seconds.
  */
 
 #include "time/Clock.hpp"

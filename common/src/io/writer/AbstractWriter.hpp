@@ -1,7 +1,15 @@
 /**
  * @file AbstractWriter.hpp
- * @brief AbstractWriter class declaration
- * @details This header defines the AbstractWriter class that provides functionality for Common library utilities.
+ * @brief Abstract base class for character-output writers with append support
+ * @details Defines the contract for writing character data to an output sink.
+ *          Implements ICloseable, IFlushable, and IAppendable.  Provides 14
+ *          overloads of append() for various string/char/string_view types.
+ *          Subclasses implement the core write() methods.  Analogous to
+ *          java.io.Writer.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  Subclasses may specify their own
+ * guarantees.
  */
 
 #pragma once

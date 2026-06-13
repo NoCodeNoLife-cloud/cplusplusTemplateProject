@@ -1,7 +1,17 @@
 /**
  * @file BufferedWriter.hpp
- * @brief BufferedWriter class declaration
- * @details This header defines the BufferedWriter class that provides functionality for Common library utilities.
+ * @brief Buffered character-output writer with newLine() support
+ * @details Wraps an AbstractWriter with a 1 KB default character buffer.
+ *          The buffer is flushed when full, on newLine(), or on flush()/close().
+ *          Uses std::ofstream for the underlying output.  Analogous to
+ *          java.io.BufferedWriter.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Memory
+ * Allocates a fixed-size buffer of @p size characters (default 1024).
  */
 
 #pragma once

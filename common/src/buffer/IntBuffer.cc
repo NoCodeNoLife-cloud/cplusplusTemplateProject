@@ -1,7 +1,8 @@
 /**
  * @file IntBuffer.cc
- * @brief IntBuffer class implementation
- * @details This file contains the implementation of the IntBuffer class methods for Common library utilities.
+ * @brief IntBuffer implementation — get/put/flip/compact/array operations
+ * @details Implements int32 buffer operations: absolute and relative get/put,
+ *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
 
 #include "buffer/IntBuffer.hpp"

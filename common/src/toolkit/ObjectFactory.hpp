@@ -1,7 +1,14 @@
 /**
  * @file ObjectFactory.hpp
- * @brief ObjectFactory class declaration
- * @details This header defines the ObjectFactory class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief Generic object factory for cloneable types
+ * @details Implements the Factory Method pattern for creating copies or new
+ *          instances of polymorphic types.  Maintains a registry of prototype
+ *          instances keyed by type identifier (string or type_index).
+ *          Supports cloning via prototype pattern.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

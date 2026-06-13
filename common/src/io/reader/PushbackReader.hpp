@@ -1,7 +1,23 @@
 /**
  * @file PushbackReader.hpp
- * @brief PushbackReader class declaration
- * @details This header defines the PushbackReader class that provides functionality for Common library utilities.
+ * @brief Character-input stream with pushback (unread) capability
+ * @details Allows characters to be "pushed back" (unread) into the stream,
+ *          enabling parser lookahead.  Supports unread of a single character
+ *          or a character array (up to 1 KB by default).  Does NOT support
+ *          mark/reset when pushback has been used.  Analogous to
+ *          java.io.PushbackReader.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * PushbackReader reader(std::make_unique<StringReader>("abc"));
+ * auto ch = reader.read();  // 'a'
+ * reader.unread('X');
+ * ch = reader.read();       // 'X' (pushed back)
+ * @endcode
  */
 
 #pragma once

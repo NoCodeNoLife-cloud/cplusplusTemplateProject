@@ -1,7 +1,14 @@
 /**
  * @file XorBitCipher.hpp
- * @brief XorBitCipher class declaration
- * @details This header defines the XorBitCipher class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief XOR-based stream cipher with repeating key
+ * @details Implements a simple XOR cipher where plaintext is XORed with a
+ *          repeating key stream.  Both encryption and decryption use the same
+ *          XOR operation (symmetric).  NOT cryptographically secure for
+ *          production use — suitable for obfuscation and educational purposes.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

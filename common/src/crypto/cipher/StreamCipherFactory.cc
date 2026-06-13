@@ -1,7 +1,8 @@
 /**
-* @file StreamCipherFactory.cc
- * @brief StreamCipherFactory class implementation
- * @details This file contains the implementation of the StreamCipherFactory class methods for Cryptographic utilities and toolkit.
+ * @file StreamCipherFactory.cc
+ * @brief StreamCipherFactory implementation — cipher type registration and creation
+ * @details Implements factory dispatch: maps cipher type strings ("caesar",
+ *          "xor", "chacha20") to concrete StreamCipher constructors.
  */
 
 #include "StreamCipherFactory.hpp"

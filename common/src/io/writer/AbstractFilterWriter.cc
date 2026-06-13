@@ -1,7 +1,9 @@
 /**
  * @file AbstractFilterWriter.cc
- * @brief AbstractFilterWriter class implementation
- * @details This file contains the implementation of the AbstractFilterWriter class methods for Common library utilities.
+ * @brief AbstractFilterWriter implementation — delegating all calls to underlying
+ * @details Implements the character-writer decorator: every public method
+ *          (write/append/flush/close) delegates to the stored AbstractWriter.
+ *          Subclasses override only the methods they need to transform.
  */
 
 #include "io/writer/AbstractFilterWriter.hpp"

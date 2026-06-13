@@ -1,7 +1,21 @@
 /**
  * @file FileInputStream.hpp
- * @brief FileInputStream class declaration
- * @details This header defines the FileInputStream class that provides functionality for Common library utilities.
+ * @brief Byte-input stream from a file (std::ifstream wrapper)
+ * @details Reads bytes from a file using std::ifstream in binary mode.
+ *          Provides checked file open with descriptive error messages.
+ *          Supports available() via seekg to determine remaining file size.
+ *          Analogous to java.io.FileInputStream.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe (file streams have mutable internal state).
+ * External synchronisation is required for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * FileInputStream file("data.bin");
+ * std::vector<std::byte> buf(1024);
+ * int n = file.read(buf, 0, 1024);
+ * @endcode
  */
 
 #pragma once

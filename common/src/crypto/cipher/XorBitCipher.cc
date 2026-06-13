@@ -1,7 +1,8 @@
 /**
  * @file XorBitCipher.cc
- * @brief XorBitCipher class implementation
- * @details This file contains the implementation of the XorBitCipher class methods for Cryptographic utilities and toolkit.
+ * @brief XorBitCipher implementation — repeating-key XOR encryption/decryption
+ * @details Implements symmetric XOR cipher: iterates through key bytes and
+ *          XORs with plaintext/ciphertext.  Key wraps around when exhausted.
  */
 
 #include "XorBitCipher.hpp"

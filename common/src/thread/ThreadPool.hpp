@@ -1,7 +1,22 @@
 /**
  * @file ThreadPool.hpp
- * @brief ThreadPool class declaration
- * @details This header defines the ThreadPool class that provides functionality for Threading utilities and thread pool implementation.
+ * @brief Fixed-size thread pool for parallel task execution
+ * @description Manages a fixed-size pool of worker threads that execute
+ *          submitted tasks (Callables) from a concurrent work queue.
+ *          Supports both fire-and-forget enqueue and future-based async
+ *          result retrieval.  Threads are created on construction and joined
+ *          on destruction.
+ *
+ * @par Thread Safety
+ * All public methods are thread-safe.  Tasks may be submitted concurrently
+ * from any thread.
+ *
+ * @par Usage Example
+ * @code
+ * ThreadPool pool(4); // 4 worker threads
+ * auto future = pool.enqueue([] { return 42; });
+ * int result = future.get();
+ * @endcode
  */
 
 #pragma once

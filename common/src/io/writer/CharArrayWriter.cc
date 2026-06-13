@@ -1,7 +1,10 @@
 /**
  * @file CharArrayWriter.cc
- * @brief CharArrayWriter class implementation
- * @details This file contains the implementation of the CharArrayWriter class methods for Common library utilities.
+ * @brief CharArrayWriter implementation — dynamic char vector management
+ * @details Implements in-memory character output: write()/append() append to
+ *          the internal vector (doubling capacity when full), toCharArray()
+ *          returns a copy, toString() for string output, writeTo() copies
+ *          to another writer, and reset() clears for reuse.
  */
 
 #include "io/writer/CharArrayWriter.hpp"

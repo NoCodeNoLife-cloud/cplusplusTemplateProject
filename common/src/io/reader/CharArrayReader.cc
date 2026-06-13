@@ -1,7 +1,8 @@
 /**
  * @file CharArrayReader.cc
- * @brief CharArrayReader class implementation
- * @details This file contains the implementation of the CharArrayReader class methods for Common library utilities.
+ * @brief CharArrayReader implementation — in-memory character stream
+ * @details Implements character reading from a std::vector<char> with
+ *          offset/length bounds, position tracking, and mark/reset support.
  */
 
 #include "io/reader/CharArrayReader.hpp"

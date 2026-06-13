@@ -1,7 +1,14 @@
 /**
  * @file Directory.hpp
- * @brief Directory class declaration
- * @details This header defines the Directory class that provides functionality for Common library utilities.
+ * @brief Directory abstraction — listing, creation, recursive traversal
+ * @description Represents a filesystem directory.  Provides operations for
+ *          listing contents, creating/deleting directories, recursive
+ *          traversal (depth-first), and filtering by extension or name
+ *          pattern.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe for mutation.  Concurrent reads on
+ * different Directory instances are safe.
  */
 
 #pragma once

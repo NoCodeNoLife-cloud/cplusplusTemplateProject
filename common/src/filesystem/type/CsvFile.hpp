@@ -1,8 +1,14 @@
 /**
  * @file CsvFile.hpp
- * @brief CsvFile class declaration
- * @details This header defines the CsvFile class that provides functionality for reading,
- *          modifying, and saving CSV files.
+ * @brief CSV file reader/writer with header support and quoting
+ * @description Parses and writes CSV (Comma-Separated Values) files with
+ *          configurable delimiter, quote character, and escape character.
+ *          Supports header row detection, quoted fields with embedded
+ *          delimiters, and row-based iteration.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

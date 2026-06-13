@@ -1,7 +1,14 @@
 /**
  * @file RegexToolkit.hpp
- * @brief RegexToolkit class declaration
- * @details This header defines the RegexToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief Regular expression utilities — match, search, replace, split
+ * @details Provides static convenience methods for common regex operations
+ *          wrapping std::regex: full match, partial search, token replace,
+ *          and string splitting by pattern.  Reduces boilerplate for common
+ *          regex use cases.
+ *
+ * @par Thread Safety
+ * Static methods are thread-safe (std::regex objects are immutable after
+ * construction, though a new instance is created per call).
  */
 
 #pragma once

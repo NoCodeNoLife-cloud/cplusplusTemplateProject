@@ -1,7 +1,13 @@
 /**
-* @file Edge.hpp
- * @brief Edge class declaration
- * @details This header defines the Edge class that provides functionality for graph data structures.
+ * @file Edge.hpp
+ * @brief Weighted directed edge with source, target, and weight
+ * @details Represents a single edge in a weighted graph.  Stores the source
+ *          vertex, destination vertex, and edge weight.  Provides named
+ *          accessors (src, dst, weight) and a reversed() method for
+ *          undirected graph contexts.
+ *
+ * @par Thread Safety
+ * This class is const-only thread-safe (all members are built-in types).
  */
 
 #pragma once

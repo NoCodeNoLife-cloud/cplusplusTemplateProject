@@ -1,8 +1,30 @@
 /**
  * @file RingBuffer.hpp
- * @brief RingBuffer class declaration
- * @details This header defines the RingBuffer class — a fixed-capacity circular buffer
- *          that overwrites the oldest element when full, with O(1) push/pop on both ends.
+ * @brief Fixed-capacity circular buffer with O(1) push/pop on both ends
+ * @details A fixed-capacity ring (circular) buffer backed by a std::vector.
+ *          When the buffer is full, pushing a new element silently overwrites
+ *          the oldest element.  Uses a sentinel slot (capacity + 1 allocation)
+ *          to distinguish full vs empty without an additional size counter.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - push_front / push_back / pop_front / pop_back: O(1)
+ * - at / operator[]:                              O(1)
+ * - resize:                                       O(n)
+ *
+ * @par Usage Example
+ * @code
+ * RingBuffer<int> buf(3);
+ * buf.push_back(1);
+ * buf.push_back(2);
+ * buf.push_back(3);
+ * buf.push_back(4); // overwrites 1
+ * assert(buf.front() == 2);
+ * assert(buf.back() == 4);
+ * @endcode
  */
 
 #pragma once
@@ -14,9 +36,17 @@
 
 namespace common::data_structure
 {
-    /// @brief A fixed-capacity circular buffer (ring buffer)
-    ///        When the buffer is full, pushing a new element overwrites the oldest
-    /// @tparam T The type of elements stored in the buffer
+    /// @brief A fixed-capacity circular buffer with overwrite-on-full semantics.
+    ///
+    /// @tparam T Element type (must satisfy std::movable).
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is required
+    /// for concurrent reads and writes.
+    ///
+    /// @par Memory
+    /// Allocates capacity + 1 slots to distinguish full vs empty states.
+    /// The underlying std::vector grows only on resize().
     template <std::movable T>
     class RingBuffer
     {

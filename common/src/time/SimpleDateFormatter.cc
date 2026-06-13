@@ -1,7 +1,9 @@
 /**
  * @file SimpleDateFormatter.cc
- * @brief SimpleDateFormatter class implementation
- * @details This file contains the implementation of the SimpleDateFormatter class methods for Time and date utilities including profilers and formatters.
+ * @brief SimpleDateFormatter implementation — pattern parsing and strftime wrapper
+ * @details Implements pattern-based date formatting: converts Java-style
+ *          patterns ("yyyy-MM-dd") to strftime format strings and delegates
+ *          to std::put_time for actual formatting.
  */
 
 #include "time/SimpleDateFormatter.hpp"

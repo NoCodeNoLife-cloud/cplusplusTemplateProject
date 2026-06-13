@@ -1,7 +1,19 @@
 /**
  * @file AbstractReader.hpp
- * @brief AbstractReader class declaration
- * @details This header defines the AbstractReader class that provides functionality for Common library utilities.
+ * @brief Abstract base class for character-stream readers
+ * @details Defines the contract for reading character data from various sources.
+ *          Implements ICloseable and IReadable with pure-virtual read() targeted
+ *          at buffered or unbuffered character input.  Provides default
+ *          implementations for skip(), ready(), and markSupported().
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  Derived classes may add thread-safety
+ * guarantees.
+ *
+ * @par Design
+ * Follows the Java Reader abstraction pattern: a single abstract read()
+ * method that subclasses implement, with template-method defaults for the
+ * rest.
  */
 
 #pragma once

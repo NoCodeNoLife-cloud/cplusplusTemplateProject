@@ -1,8 +1,28 @@
 /**
  * @file Deque.hpp
- * @brief Deque class declaration
- * @details This header defines the Deque class that provides a double-ended queue
- *          with O(1) amortized push/pop on both ends using a circular buffer.
+ * @brief Double-ended queue with O(1) amortised push/pop on both ends
+ * @details A double-ended queue backed by a circular buffer (std::vector).
+ *          Supports O(1) amortised push_front, push_back, pop_front, and
+ *          pop_back.  Random-access via operator[] and at() is also O(1).
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - push_front / push_back:         O(1) amortised
+ * - pop_front / pop_back:           O(1)
+ * - at / operator[]:                O(1)
+ * - insert / erase at arbitrary:    O(n)
+ *
+ * @par Usage Example
+ * @code
+ * Deque<int> dq;
+ * dq.push_back(1);
+ * dq.push_front(0);
+ * assert(dq.front() == 0);
+ * assert(dq.back() == 1);
+ * @endcode
  */
 
 #pragma once
@@ -14,8 +34,18 @@
 
 namespace common::data_structure
 {
-    /// @brief A double-ended queue implementation using a circular buffer
-    /// @tparam T The type of elements stored in the deque
+    /// @brief A double-ended queue backed by a circular buffer.
+    ///
+    /// @tparam T Element type (must satisfy std::movable).
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  External synchronisation is required
+    /// for concurrent reads and writes.
+    ///
+    /// @par Iterator Invalidation
+    /// push_front / push_back may cause reallocation, which invalidates all
+    /// iterators.  pop_front / pop_back do not invalidate iterators to other
+    /// elements.
     template <std::movable T>
     class Deque
     {
@@ -41,37 +71,37 @@ namespace common::data_structure
         /// @return Reference to this deque
         Deque& operator=(Deque&& other) noexcept;
 
-        /// @brief Access the first element
-        /// @return Reference to the first element
-        /// @throws std::out_of_range If the deque is empty
-        T& front();
+        /// @brief Access the first element.
+        /// @return Reference to the first element.
+        /// @throws std::out_of_range If the deque is empty.
+        [[nodiscard]] T& front();
 
-        /// @brief Access the first element (const)
-        /// @return Const reference to the first element
-        /// @throws std::out_of_range If the deque is empty
-        const T& front() const;
+        /// @brief Access the first element (const).
+        /// @return Const reference to the first element.
+        /// @throws std::out_of_range If the deque is empty.
+        [[nodiscard]] const T& front() const;
 
-        /// @brief Access the last element
-        /// @return Reference to the last element
-        /// @throws std::out_of_range If the deque is empty
-        T& back();
+        /// @brief Access the last element.
+        /// @return Reference to the last element.
+        /// @throws std::out_of_range If the deque is empty.
+        [[nodiscard]] T& back();
 
-        /// @brief Access the last element (const)
-        /// @return Const reference to the last element
-        /// @throws std::out_of_range If the deque is empty
-        const T& back() const;
+        /// @brief Access the last element (const).
+        /// @return Const reference to the last element.
+        /// @throws std::out_of_range If the deque is empty.
+        [[nodiscard]] const T& back() const;
 
-        /// @brief Access element by index
-        /// @param index Position of the element (0-based)
-        /// @return Reference to the element at the given index
-        /// @throws std::out_of_range If index is out of bounds
-        T& at(size_t index);
+        /// @brief Access element by index with bounds checking.
+        /// @param index 0-based position of the element.
+        /// @return Reference to the element at the given index.
+        /// @throws std::out_of_range If index is out of bounds.
+        [[nodiscard]] T& at(size_t index);
 
-        /// @brief Access element by index (const)
-        /// @param index Position of the element (0-based)
-        /// @return Const reference to the element at the given index
-        /// @throws std::out_of_range If index is out of bounds
-        const T& at(size_t index) const;
+        /// @brief Access element by index with bounds checking (const).
+        /// @param index 0-based position of the element.
+        /// @return Const reference to the element at the given index.
+        /// @throws std::out_of_range If index is out of bounds.
+        [[nodiscard]] const T& at(size_t index) const;
 
         /// @brief Access element by index without bounds checking
         /// @param index Position of the element (0-based)

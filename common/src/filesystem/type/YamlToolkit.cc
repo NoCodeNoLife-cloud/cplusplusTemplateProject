@@ -1,7 +1,8 @@
 /**
  * @file YamlToolkit.cc
- * @brief YamlToolkit class implementation
- * @details This file contains the implementation of the YamlToolkit class methods for Common library utilities.
+ * @brief YamlToolkit implementation — yaml-cpp parse/emit wrappers
+ * @details Implements YAML utility methods: ParseFile loads YAML from disk,
+ *          ParseString loads from memory, and ToString serialises a YAML::Node.
  */
 
 #include "filesystem/type/YamlToolkit.hpp"

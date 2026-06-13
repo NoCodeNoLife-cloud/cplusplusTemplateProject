@@ -1,7 +1,10 @@
 /**
- * @file aop/IAopAspect.hpp
- * @brief IAopAspect class declaration
- * @details This header defines the IAopAspect class that provides functionality for Common interface definitions for the framework.
+ * @file IAopAspect.hpp
+ * @brief Interface for AOP aspect implementations
+ * @details Defines the contract for aspect-oriented programming aspects:
+ *          before/after/around advice methods that can be woven around
+ *          target function invocations.  Implementations provide cross-cutting
+ *          concerns like logging, profiling, and transaction management.
  */
 
 #pragma once

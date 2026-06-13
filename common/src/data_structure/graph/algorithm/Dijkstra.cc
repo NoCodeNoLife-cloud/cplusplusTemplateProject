@@ -1,11 +1,16 @@
 /**
  * @file Dijkstra.cc
- * @brief Dijkstra's shortest path algorithm implementation
- * @details Uses a priority queue (min-heap) to efficiently extract the node
- *          with the smallest tentative distance. Each edge is processed at most
- *          once per node. Time complexity: O((V+E)logV).
- *          Negative edge weights are not supported — the algorithm checks
- *          new_dist >= 0 to avoid issues with negative weights causing overflow.
+ * @brief Dijkstra's shortest path algorithm — priority-queue implementation
+ * @details Implements single-source shortest paths for graphs with non-negative
+ *          edge weights.  Uses a std::priority_queue (min-heap) to extract the
+ *          minimum-distance node in O(log V).  Each edge is relaxed at most
+ *          once per node.  Time complexity: O((V + E) log V).
+ *
+ *          Negative edge weights are not supported; the algorithm explicitly
+ *          guards against negative distances to prevent overflow.
+ *
+ * Reference: Dijkstra, "A Note on Two Problems in Connexion with Graphs"
+ *            (1959), Numerische Mathematik 1, 269–271.
  */
 
 #include "data_structure/graph/algorithm/Dijkstra.hpp"

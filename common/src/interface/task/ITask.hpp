@@ -1,7 +1,10 @@
 /**
- * @file task/ITask.hpp
- * @brief ITask class declaration
- * @details This header defines the ITask class that provides functionality for Common interface definitions for the framework.
+ * @file ITask.hpp
+ * @brief Generic task interface with name, status, and cancel support
+ * @description Defines the contract for managed tasks: getTaskName(),
+ *          getStatus() (PENDING, RUNNING, COMPLETED, FAILED, CANCELLED),
+ *          cancel(), and getResult().  Used by task schedulers and executors
+ *          for tracking and controlling task execution.
  */
 
 #pragma once

@@ -1,7 +1,14 @@
 /**
  * @file BigInteger.hpp
- * @brief BigInteger class declaration
- * @details This header defines the BigInteger class that provides functionality for Base type classes providing fundamental object functionality.
+ * @brief Arbitrary-precision integer arithmetic (non-negative)
+ * @details Implements arbitrary-precision non-negative integers using a
+ *          std::vector of base-10 digits.  Supports addition, subtraction,
+ *          multiplication, division, modulo, exponentiation, and comparison.
+ *          Used internally by BigDecimal and for cryptographic computations.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

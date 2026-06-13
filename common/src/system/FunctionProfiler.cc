@@ -1,7 +1,9 @@
 /**
  * @file FunctionProfiler.cc
- * @brief FunctionProfiler class implementation
- * @details This file contains the implementation of the FunctionProfiler class methods for Time and date utilities including profilers and formatters.
+ * @brief FunctionProfiler implementation — timer start/stop, call-graph recording
+ * @details Implements RAII profiling: constructor captures entry time,
+ *          destructor captures exit time and records the elapsed duration
+ *          in the parent profiler's call graph.
  */
 
 #include "system/FunctionProfiler.hpp"

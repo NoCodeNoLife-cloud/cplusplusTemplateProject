@@ -1,7 +1,14 @@
 /**
  * @file RpcMetadata.hpp
- * @brief RpcMetadata class declaration
- * @details This header defines the RpcMetadata class that provides functionality for RPC metadata and connectivity management.
+ * @brief RPC metadata key-value container for gRPC custom headers
+ * @description Stores and manages RPC metadata as key-value pairs (similar to
+ *          gRPC's metadata facility).  Supports iteration, lookup, and
+ *          serialisation.  Used for passing custom headers (auth tokens,
+ *          tracing IDs) in gRPC calls.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

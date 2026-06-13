@@ -1,7 +1,9 @@
 /**
  * @file FilterInputStream.cc
- * @brief FilterInputStream class implementation
- * @details This file contains the implementation of the FilterInputStream class methods for Common library utilities.
+ * @brief FilterInputStream implementation — delegating all calls to underlying
+ * @details Implements the decorator: every public method delegates to the
+ *          stored AbstractInputStream pointer.  Subclasses override only the
+ *          methods they need to transform.
  */
 
 #include "io/reader/FilterInputStream.hpp"

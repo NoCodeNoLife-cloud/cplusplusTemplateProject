@@ -1,9 +1,28 @@
 /**
  * @file ConcurrentQueue.hpp
- * @brief ConcurrentQueue class declaration
- * @details This header defines the ConcurrentQueue class -- a thread-safe,
- *          multiple-producer multiple-consumer (MPMC) bounded queue using
- *          mutex and condition variables for synchronization.
+ * @brief Thread-safe MPMC bounded/unbounded queue with blocking and non-blocking ops
+ * @details A thread-safe multiple-producer multiple-consumer (MPMC) queue that
+ *          supports both bounded (fixed capacity) and unbounded modes.  Blocking
+ *          operations (push/pop/emplace) wait on condition variables when the
+ *          queue is full or empty.  Non-blocking variants (try_push/try_pop)
+ *          return immediately with a success indicator.
+ *
+ * @par Thread Safety
+ * All public methods are thread-safe.  Internal state is protected by a
+ * std::mutex, and condition variables (not_empty_, not_full_) coordinate
+ * producer-consumer synchronisation.
+ *
+ * @par Usage Example
+ * @code
+ * ConcurrentQueue<int> queue(100); // bounded to 100 elements
+ * queue.push(42);
+ * int val = queue.pop();           // blocking
+ *
+ * int maybe;
+ * if (queue.try_pop(maybe)) {
+ *     // element available
+ * }
+ * @endcode
  */
 
 #pragma once
@@ -18,11 +37,18 @@
 
 namespace common::data_structure
 {
-    /// @brief A thread-safe concurrent queue implementation
-    /// @details Provides both blocking and non-blocking push/pop operations.
-    ///          Supports bounded mode (fixed capacity) and unbounded mode.
-    ///          Multiple threads can safely push and pop concurrently.
-    /// @tparam T The type of elements stored in the queue
+    /// @brief A thread-safe MPMC queue with blocking and non-blocking operations.
+    ///
+    /// @tparam T Element type stored in the queue.
+    ///
+    /// @par Thread Safety
+    /// All public methods are thread-safe.  Internal mutations are serialised
+    /// via a std::mutex; push/pop use condition_variable::wait for blocking
+    /// semantics.
+    ///
+    /// @par Bounded vs Unbounded
+    /// Construct with max_size = std::numeric_limits<size_type>::max() for
+    /// unbounded behaviour (the queue never blocks on push).
     template <typename T>
     class ConcurrentQueue
     {
@@ -98,7 +124,7 @@ namespace common::data_structure
         /// @param timeout Maximum time to wait
         /// @return true if an element was popped, false on timeout
         template <typename Rep, typename Period>
-        bool try_pop_for(T& value, const std::chrono::duration<Rep, Period>& timeout)
+        [[nodiscard]] bool try_pop_for(T& value, const std::chrono::duration<Rep, Period>& timeout)
         {
             std::unique_lock lock(mutex_);
             if (!not_empty_.wait_for(lock, timeout, [this] { return !queue_.empty(); }))
@@ -117,7 +143,7 @@ namespace common::data_structure
         /// @brief Non-blocking push attempt
         /// @param value The value to add
         /// @return true if the element was added, false if the queue is full
-        bool try_push(const T& value)
+        [[nodiscard]] bool try_push(const T& value)
         {
             std::lock_guard lock(mutex_);
             if (queue_.size() >= max_size_)
@@ -132,7 +158,7 @@ namespace common::data_structure
         /// @brief Non-blocking push attempt with move semantics
         /// @param value The value to move into the queue
         /// @return true if the element was added, false if the queue is full
-        bool try_push(T&& value)
+        [[nodiscard]] bool try_push(T&& value)
         {
             std::lock_guard lock(mutex_);
             if (queue_.size() >= max_size_)
@@ -149,7 +175,7 @@ namespace common::data_structure
         /// @param args The arguments to forward
         /// @return true if the element was added, false if the queue is full
         template <typename... Args>
-        bool try_emplace(Args&&... args)
+        [[nodiscard]] bool try_emplace(Args&&... args)
         {
             std::lock_guard lock(mutex_);
             if (queue_.size() >= max_size_)
@@ -164,7 +190,7 @@ namespace common::data_structure
         /// @brief Non-blocking pop attempt
         /// @param value Reference to store the popped element
         /// @return true if an element was popped, false if the queue is empty
-        bool try_pop(T& value)
+        [[nodiscard]] bool try_pop(T& value)
         {
             std::lock_guard lock(mutex_);
             if (queue_.empty())

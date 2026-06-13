@@ -1,7 +1,23 @@
 /**
  * @file Scanner.hpp
- * @brief Scanner class declaration
- * @details This header defines the Scanner class that provides functionality for Common library utilities.
+ * @brief Token-based input scanner for integers, doubles, lines, and delimited tokens
+ * @details A simple lexical scanner wrapping a std::istream.  Provides
+ *          nextInt(), nextDouble(), nextLine(), and configurable delimiter-based
+ *          tokenisation (nextTokens).  Designed for structured input parsing
+ *          without the overhead of a full regex-based scanner.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  The underlying std::istream must not be
+ * shared with other readers during scanning.
+ *
+ * @par Usage Example
+ * @code
+ * std::istringstream input("42 3.14 hello world");
+ * Scanner scanner(input);
+ * int i = scanner.nextInt();
+ * double d = scanner.nextDouble();
+ * auto tokens = scanner.nextTokens(' ');
+ * @endcode
  */
 
 #pragma once

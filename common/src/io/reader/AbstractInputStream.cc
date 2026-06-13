@@ -1,7 +1,9 @@
 /**
  * @file AbstractInputStream.cc
- * @brief AbstractInputStream class implementation
- * @details This file contains the implementation of the AbstractInputStream class methods for Common library utilities.
+ * @brief AbstractInputStream implementation — default read/skip/available logic
+ * @details Provides default implementations for AbstractInputStream methods:
+ *          single-byte read() delegates to array read(), skip() via read(),
+ *          and available() defaults to 0.  Subclasses override for efficiency.
  */
 
 #include "io/reader/AbstractInputStream.hpp"

@@ -1,7 +1,8 @@
 /**
  * @file PasswordPolicy.cc
- * @brief PasswordPolicy class implementation
- * @details This file contains the implementation of the PasswordPolicy class methods for Authentication and authorization utilities.
+ * @brief PasswordPolicy implementation — strength validation rule engine
+ * @details Implements password validation rules: character class counting,
+ *          length checks, history comparison, and composite score calculation.
  */
 
 #include "PasswordPolicy.hpp"

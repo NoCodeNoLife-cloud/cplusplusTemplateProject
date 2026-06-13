@@ -1,7 +1,14 @@
 /**
  * @file Console.hpp
- * @brief Console class declaration
- * @details This header defines the Console class that provides functionality for Common library utilities.
+ * @brief Console I/O utilities — colour output, progress bar, prompts
+ * @description Provides static methods for interactive console I/O: coloured
+ *          text output (ANSI escape codes), progress bar display, user prompt
+ *          with confirmation, and formatted table output.  Works on both
+ *          POSIX terminals and Windows console.
+ *
+ * @par Thread Safety
+ * Static methods that write to stdout/stderr are not thread-safe; external
+ * synchronisation is needed for concurrent output.
  */
 
 #pragma once

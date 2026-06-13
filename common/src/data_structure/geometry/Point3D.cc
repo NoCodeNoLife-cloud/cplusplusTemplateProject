@@ -1,7 +1,10 @@
 /**
  * @file Point3D.cc
- * @brief Point3D class implementation
- * @details This file contains the implementation of the Point3D class methods for geometry utilities.
+ * @brief Point3D implementation — 3D arithmetic, distance, stream output
+ * @details Implements 3D point arithmetic (addition, subtraction, scalar
+ *          multiplication), Euclidean and squared-distance calculations, and
+ *          stream formatting.  Delegates all mathematical operations to
+ *          standard <cmath> functions.
  */
 
 #include "data_structure/geometry/Point3D.hpp"

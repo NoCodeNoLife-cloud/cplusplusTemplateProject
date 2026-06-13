@@ -1,7 +1,8 @@
 /**
  * @file PasswordSQL.cc
- * @brief PasswordSQL class implementation
- * @details This file contains the implementation of the PasswordSQL class methods for SQL database utilities.
+ * @brief PasswordSQL implementation — parameterised query template building
+ * @details Implements SQL query templates for password operations, using
+ *          parameterised statements to prevent SQL injection.
  */
 
 #include "PasswordSQL.hpp"

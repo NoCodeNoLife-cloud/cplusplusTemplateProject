@@ -1,7 +1,9 @@
 /**
  * @file SubstitutionCipher.cc
- * @brief SubstitutionCipher class implementation
- * @details This file contains the implementation of the SubstitutionCipher class methods for Cryptographic utilities and toolkit.
+ * @brief SubstitutionCipher implementation — key scheduling and character mapping
+ * @details Implements monoalphabetic substitution: the key schedules a
+ *          permutation of the alphabet, and encrypt/decrypt map characters
+ *          through the forward/reverse permutation tables.
  */
 
 #include "SubstitutionCipher.hpp"

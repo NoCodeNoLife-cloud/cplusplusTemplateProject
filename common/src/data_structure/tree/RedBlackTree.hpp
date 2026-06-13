@@ -1,7 +1,21 @@
 /**
  * @file RedBlackTree.hpp
- * @brief RedBlackTree class declaration
- * @details This header defines the RedBlackTree class that provides functionality for Advanced data structures including trees and skip lists.
+ * @brief Red-Black tree — self-balancing BST with O(log n) guaranteed ops
+ * @details A self-balancing binary search tree that maintains five red-black
+ *          invariants (root is black, no adjacent red nodes, equal black-height
+ *          on every path).  Guarantees O(log n) worst-case insert, erase, and
+ *          find without requiring the rigid rebalancing of AVL trees.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - insert / remove / find: O(log n) worst-case
+ *
+ * @par Reference
+ * Guibas & Sedgewick, "A Dichromatic Framework for Balanced Trees"
+ * (1978), FOCS.
  */
 
 #pragma once

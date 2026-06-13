@@ -1,7 +1,9 @@
 /**
  * @file PushbackReader.cc
- * @brief PushbackReader class implementation
- * @details This file contains the implementation of the PushbackReader class methods for Common library utilities.
+ * @brief PushbackReader implementation — character unread buffer management
+ * @details Implements character pushback: unread() stores characters in a
+ *          pushback buffer, and subsequent read() operations consume from
+ *          this buffer first.  Supports single-character and array unread.
  */
 
 #include "io/reader/PushbackReader.hpp"

@@ -1,7 +1,19 @@
 /**
  * @file Quadtree.hpp
- * @brief Quadtree class declaration
- * @details This header defines the Quadtree class that provides functionality for Advanced data structures including trees and skip lists.
+ * @brief Spatial Quadtree for 2D point data with recursive subdivision
+ * @details A tree data structure that recursively subdivides a 2D bounding box
+ *          into four quadrants.  Each node stores points within its region;
+ *          when a node exceeds capacity, it splits into four children.
+ *          Commonly used for spatial indexing, collision detection, and
+ *          image compression.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - insert / query:              O(log n) average
+ * - range search:                O(log n + k) where k = result count
  */
 
 #pragma once

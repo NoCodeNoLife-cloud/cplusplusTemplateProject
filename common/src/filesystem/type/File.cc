@@ -1,7 +1,8 @@
 /**
  * @file File.cc
- * @brief File class implementation
- * @details This file contains the implementation of the File class methods for Common library utilities.
+ * @brief File implementation — platform-specific stat, readdir, fopen
+ * @details Implements file operations using POSIX (stat, open, read, write)
+ *          or Windows (GetFileAttributesEx, CreateFile, ReadFile) APIs.
  */
 
 #include "filesystem/type/File.hpp"

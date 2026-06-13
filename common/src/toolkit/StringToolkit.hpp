@@ -1,7 +1,20 @@
 /**
  * @file StringToolkit.hpp
- * @brief StringToolkit class declaration
- * @details This header defines the StringToolkit class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief String utility functions — split, join, trim, case conversion
+ * @details Provides static utility methods for string manipulation:
+ *          split by delimiter, join with separator, trim whitespace,
+ *          toUpper/toLower conversion, substring search/replace, and
+ *          format-style concatenation.  Works with std::string and std::string_view.
+ *
+ * @par Thread Safety
+ * Static methods are thread-safe as long as input strings are not modified
+ * concurrently.
+ *
+ * @par Usage Example
+ * @code
+ * auto parts = StringToolkit::split("a,b,c", ',');
+ * std::string joined = StringToolkit::join(parts, "|");
+ * @endcode
  */
 
 #pragma once

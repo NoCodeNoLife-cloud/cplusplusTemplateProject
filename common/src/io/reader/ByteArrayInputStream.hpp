@@ -1,7 +1,13 @@
 /**
  * @file ByteArrayInputStream.hpp
- * @brief ByteArrayInputStream class declaration
- * @details This header defines the ByteArrayInputStream class that provides functionality for Common library utilities.
+ * @brief Byte-input stream backed by a std::vector<std::byte>
+ * @details Reads bytes from a std::vector<std::byte> buffer.  Supports
+ *          mark/reset for replaying the buffer from a marked position.
+ *          Useful for testing and in-memory byte processing without I/O.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

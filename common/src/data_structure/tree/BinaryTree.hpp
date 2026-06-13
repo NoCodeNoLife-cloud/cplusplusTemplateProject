@@ -1,7 +1,14 @@
 /**
  * @file BinaryTree.hpp
- * @brief BinaryTree class declaration
- * @details This header defines the BinaryTree class that provides functionality for Advanced data structures including trees and skip lists.
+ * @brief Generic binary tree with pre/in/post-order traversal
+ * @details A general-purpose binary tree structure supporting traversal in
+ *          pre-order, in-order, and post-order.  Unlike BinarySearchTree,
+ *          no ordering invariant is enforced — nodes store arbitrary values.
+ *          Uses std::unique_ptr for automatic child memory management.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

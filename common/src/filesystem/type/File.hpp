@@ -1,7 +1,21 @@
 /**
  * @file File.hpp
- * @brief File class declaration
- * @details This header defines the File class that provides functionality for Common library utilities.
+ * @brief File abstraction — path, metadata, read/write, directory operations
+ * @description Represents a file on the filesystem.  Provides operations for
+ *          path manipulation, metadata query (size, last modified, permissions),
+ *          read/write content, and directory listing/creation/deletion.
+ *          Wraps platform-specific system calls (POSIX/Windows).
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe for mutation.  Concurrent reads on
+ * different File instances are safe.
+ *
+ * @par Usage Example
+ * @code
+ * File f("/tmp/data.txt");
+ * std::string content = f.readAll();
+ * f.write("new content");
+ * @endcode
  */
 
 #pragma once

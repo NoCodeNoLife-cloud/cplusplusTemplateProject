@@ -1,7 +1,9 @@
 /**
  * @file SQLiteManager.cc
- * @brief SQLiteManager class implementation
- * @details This file contains the implementation of the SQLiteManager class methods for SQL database utilities.
+ * @brief SQLiteManager implementation — sqlite3 C API wrapper
+ * @details Implements SQLite database operations: open/close via sqlite3_open,
+ *          query execution via sqlite3_exec and sqlite3_prepare, and
+ *          transaction control via BEGIN/COMMIT/ROLLBACK SQL commands.
  */
 
 #include "SQLiteManager.hpp"

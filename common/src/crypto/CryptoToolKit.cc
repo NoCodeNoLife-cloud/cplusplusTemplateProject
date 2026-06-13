@@ -1,7 +1,8 @@
 /**
-* @file CryptoToolKit.cc
- * @brief CryptoToolKit class implementation
- * @details This file contains the implementation of the CryptoToolKit class methods for Cryptographic utilities and toolkit.
+ * @file CryptoToolKit.cc
+ * @brief CryptoToolKit implementation — hashing, encoding, password utilities
+ * @details Implements static utility methods: hash computation via OpenSSL,
+ *          base64 encoding/decoding, HMAC, and password hashing with salt.
  */
 
 #include "CryptoToolKit.hpp"

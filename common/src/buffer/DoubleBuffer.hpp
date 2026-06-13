@@ -1,7 +1,14 @@
 /**
  * @file DoubleBuffer.hpp
- * @brief DoubleBuffer class declaration
- * @details This header defines the DoubleBuffer class that provides functionality for Common library utilities.
+ * @brief NIO-style double-precision buffer with position/limit/capacity
+ * @details A buffer for double data following the java.nio.Buffer pattern:
+ *          maintains position, limit, and capacity.  Supports get/put,
+ *          flip/clear/rewind, compact, and bulk transfer.  Backed by a
+ *          std::vector<double>.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

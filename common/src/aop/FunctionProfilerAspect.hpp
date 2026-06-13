@@ -1,7 +1,14 @@
 /**
  * @file FunctionProfilerAspect.hpp
- * @brief FunctionProfilerAspect class declaration
- * @details This header defines the FunctionProfilerAspect class that provides functionality for Aspect-Oriented Programming support.
+ * @brief AOP aspect for automatic function profiling via RAII
+ * @description Implements a cross-cutting profiling aspect using RAII.
+ *          When applied to a function scope, automatically records execution
+ *          time and logs slow invocations.  Can be selectively enabled/disabled
+ *          at runtime without modifying the target function code.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  Each thread requires its own aspect
+ * instance for correct timing.
  */
 
 #pragma once

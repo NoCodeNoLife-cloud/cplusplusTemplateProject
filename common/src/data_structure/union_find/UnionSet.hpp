@@ -1,7 +1,30 @@
 /**
  * @file UnionSet.hpp
- * @brief UnionSet class declaration
- * @details This header defines the UnionSet class that provides functionality for common data structures.
+ * @brief Union-Find (Disjoint Set Union) with path compression + union by rank
+ * @details A near-O(α(n)) Union-Find data structure (Disjoint Set Union)
+ *          implementing path compression and union by rank.  Uses two
+ *          unordered_maps for parent and rank storage, allowing arbitrary
+ *          element types (not just integer indices).  Elements are registered
+ *          lazily on first access.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access as the internal maps are mutated on read (path
+ * compression).
+ *
+ * @par Complexity
+ * - find:       Amortised O(α(n))  (inverse Ackermann)
+ * - unionSets:  Amortised O(α(n))
+ * - connected:  Amortised O(α(n))
+ *
+ * @par Usage Example
+ * @code
+ * UnionSet<int> dsu;
+ * dsu.unionSets(1, 2);
+ * dsu.unionSets(2, 3);
+ * assert(dsu.connected(1, 3));  // transitive
+ * assert(!dsu.connected(1, 4));
+ * @endcode
  */
 
 #pragma once
@@ -10,15 +33,22 @@
 
 namespace common::data_structure
 {
-    /// @brief A Union-Find (Disjoint Set Union) data structure implementation.
-    /// This class provides efficient operations for disjoint sets, including:
-    /// - Finding the root of a set with path compression
-    /// - Uniting two sets with union by rank
-    /// - Checking if two elements are in the same set
+    /// @brief A Union-Find (Disjoint Set Union) with path compression + union by rank.
     ///
-    /// The implementation uses two hash maps:
-    /// - parent: Maps each element to its parent in the set
-    /// - rank: Maps each element to its rank (used for union by rank optimization)
+    /// @tparam T Element type (any hashable type usable as unordered_map key).
+    ///
+    /// Uses two unordered_maps for storage:
+    /// - parent: element → its representative parent
+    /// - rank:   element → rank (tree height upper bound) for union by rank
+    ///
+    /// @par Thread Safety
+    /// This class is **not** thread-safe.  The internal maps are mutated on
+    /// every find() call due to path compression, so external synchronisation
+    /// is required even for concurrent reads.
+    ///
+    /// @par Memory
+    /// Elements are registered lazily on first access via ensureRegistered().
+    /// Each element consumes two entries (parent + rank) in the hash maps.
     template <typename T>
     class UnionSet
     {

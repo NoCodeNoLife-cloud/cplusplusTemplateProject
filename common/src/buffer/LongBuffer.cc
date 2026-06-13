@@ -1,7 +1,8 @@
 /**
  * @file LongBuffer.cc
- * @brief LongBuffer class implementation
- * @details This file contains the implementation of the LongBuffer class methods for Common library utilities.
+ * @brief LongBuffer implementation — get/put/flip/compact/array operations
+ * @details Implements int64 buffer operations: absolute and relative get/put,
+ *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
 
 #include "buffer/LongBuffer.hpp"

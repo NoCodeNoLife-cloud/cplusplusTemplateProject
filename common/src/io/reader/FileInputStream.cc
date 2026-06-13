@@ -1,7 +1,9 @@
 /**
  * @file FileInputStream.cc
- * @brief FileInputStream class implementation
- * @details This file contains the implementation of the FileInputStream class methods for Common library utilities.
+ * @brief FileInputStream implementation — ifstream-based binary file reading
+ * @details Implements file-backed byte input: open() checks file existence and
+ *          sets up std::ifstream in binary mode, read() delegates to ifstream,
+ *          and available() uses seekg to compute remaining bytes.
  */
 
 #include "io/reader/FileInputStream.hpp"

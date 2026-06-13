@@ -1,7 +1,10 @@
 /**
- * @file task/IApplicationExecutor.hpp
- * @brief IApplicationExecutor class declaration
- * @details This header defines the IApplicationExecutor class that provides functionality for Common interface definitions for the framework.
+ * @file IApplicationExecutor.hpp
+ * @brief Interface for application lifecycle executors (start/shutdown)
+ * @description Defines the contract for application-level execution:
+ *          initialise, run (main loop), and shutdown.  Implementations
+ *          manage the overall application lifecycle, including startup
+ *          tasks and graceful shutdown on signals.
  */
 
 #pragma once

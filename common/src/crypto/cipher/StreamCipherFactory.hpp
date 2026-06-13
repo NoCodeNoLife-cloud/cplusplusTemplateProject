@@ -1,7 +1,14 @@
 /**
  * @file StreamCipherFactory.hpp
- * @brief StreamCipherFactory class declaration
- * @details This header defines the StreamCipherFactory class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief Factory for creating stream cipher instances by type name
+ * @details Implements the factory pattern for stream cipher creation.
+ *          Given a cipher type string ("caesar", "xor", "chacha20") and
+ *          optional key material, returns a unique_ptr<StreamCipher>.
+ *          Allows runtime selection of encryption strategy.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

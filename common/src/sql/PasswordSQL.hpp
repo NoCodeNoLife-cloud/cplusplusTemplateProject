@@ -1,7 +1,14 @@
 /**
  * @file PasswordSQL.hpp
- * @brief PasswordSQL class declaration
- * @details This header defines the PasswordSQL class that provides functionality for SQL database utilities.
+ * @brief SQL query builder for password-related database operations
+ * @description Builds parameterised SQL queries for password management:
+ *          storing password hashes, verifying credentials, updating passwords,
+ *          and querying password history.  Prevents SQL injection via
+ *          parameterised query templates.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

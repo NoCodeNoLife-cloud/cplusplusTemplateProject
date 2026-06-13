@@ -1,7 +1,10 @@
 /**
  * @file AbstractOutputStream.cc
- * @brief AbstractOutputStream class implementation
- * @details This file contains the implementation of the AbstractOutputStream class methods for Common library utilities.
+ * @brief AbstractOutputStream implementation — default vector-based write logic
+ * @details Provides default implementations for the vector-based write()
+ *          overloads: write(vector) calls write(vector, 0, size), and
+ *          write(vector, offset, len) delegates to the pure-virtual
+ *          write(byte*, length) after bounds-checking.
  */
 
 #include "io/writer/AbstractOutputStream.hpp"

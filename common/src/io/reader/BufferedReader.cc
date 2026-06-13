@@ -1,7 +1,9 @@
 /**
  * @file BufferedReader.cc
- * @brief BufferedReader class implementation
- * @details This file contains the implementation of the BufferedReader class methods for Common library utilities.
+ * @brief BufferedReader implementation — buffered character I/O and readLine
+ * @details Implements buffered character input: fillBuffer() refills the
+ *          8 KB buffer from the underlying AbstractReader, read() and skip()
+ *          operate on the buffer, and readLine() scans for newline delimiters.
  */
 
 #include "io/reader/BufferedReader.hpp"

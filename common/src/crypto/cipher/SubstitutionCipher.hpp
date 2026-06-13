@@ -1,7 +1,14 @@
 /**
  * @file SubstitutionCipher.hpp
- * @brief SubstitutionCipher class declaration
- * @details This header defines the SubstitutionCipher class that provides functionality for Cryptographic utilities and toolkit.
+ * @brief Monoalphabetic substitution cipher with configurable alphabet
+ * @details Implements a monoalphabetic substitution cipher using a keyed
+ *          permutation of the alphabet.  Supports encryption, decryption,
+ *          and key scheduling.  NOT cryptographically secure — for
+ *          educational purposes and legacy protocol compatibility only.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

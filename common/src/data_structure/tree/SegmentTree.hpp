@@ -1,8 +1,20 @@
 /**
  * @file SegmentTree.hpp
- * @brief SegmentTree class declaration
- * @details This header defines the SegmentTree class that provides range query
- *          and point update functionality with a customizable merge operation.
+ * @brief Segment tree for O(log n) range queries and point updates
+ * @details A segment tree stores an array of elements and supports range queries
+ *          (sum, min, max, etc.) and point updates in O(log n) time.  Each leaf
+ *          represents a single element; each internal node represents the
+ *          combined value of its segment.  Uses a recursive build/query/update
+ *          approach with configurable combining operation.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - build:                      O(n)
+ * - rangeQuery / pointUpdate:   O(log n)
+ * - Memory:                     O(4n)
  */
 
 #pragma once

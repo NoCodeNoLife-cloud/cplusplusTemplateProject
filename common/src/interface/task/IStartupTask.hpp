@@ -1,7 +1,10 @@
 /**
- * @file task/IStartupTask.hpp
- * @brief IStartupTask class declaration
- * @details This header defines the IStartupTask class that provides functionality for Common interface definitions for the framework.
+ * @file IStartupTask.hpp
+ * @brief Interface for tasks executed during application startup
+ * @description Defines the contract for initialisation tasks that run during
+ *          application startup.  Supports ordered execution via a priority
+ *          value.  Implementations perform setup actions like loading config,
+ *          connecting to databases, or registering services.
  */
 
 #pragma once

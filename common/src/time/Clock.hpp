@@ -1,7 +1,21 @@
 /**
  * @file Clock.hpp
- * @brief Clock class declaration
- * @details This header defines the Clock class that provides functionality for Time and date utilities including profilers and formatters.
+ * @brief High-resolution clock wrapper with monotonic and wall-clock time
+ * @details Provides a convenience wrapper around std::chrono::high_resolution_clock
+ *          and std::chrono::system_clock.  Supports measuring elapsed time
+ *          (monotonic), getting current wall-clock time, and converting to
+ *          various time units (nanoseconds, microseconds, milliseconds, seconds).
+ *
+ * @par Thread Safety
+ * This class is const-only thread-safe (stateless methods).
+ *
+ * @par Usage Example
+ * @code
+ * Clock c;
+ * c.start();
+ * doWork();
+ * auto elapsed = c.elapsedMillis();
+ * @endcode
  */
 
 #pragma once

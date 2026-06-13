@@ -1,7 +1,22 @@
 /**
  * @file ByteBuffer.hpp
- * @brief ByteBuffer class declaration
- * @details This header defines the ByteBuffer class that provides functionality for Common library utilities.
+ * @brief NIO-style byte buffer with position/limit/capacity tracking
+ * @details A buffer for byte data following the java.nio.Buffer pattern:
+ *          maintains position, limit, and capacity state.  Supports get/put
+ *          operations (absolute and relative), flip/clear/rewind, compact,
+ *          and bulk transfer.  Backed by a std::vector<std::byte>.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * ByteBuffer buf(16);
+ * buf.put(std::byte{0x41});
+ * buf.flip();
+ * auto b = buf.get();  // 0x41
+ * @endcode
  */
 
 #pragma once

@@ -1,7 +1,9 @@
 /**
  * @file InputStreamReader.cc
- * @brief InputStreamReader class implementation
- * @details This file contains the implementation of the InputStreamReader class methods for Common library utilities.
+ * @brief InputStreamReader implementation — byte-to-char UTF-8 decoding
+ * @details Implements the byte-to-character bridge: reads bytes from the
+ *          underlying AbstractInputStream and decodes multi-byte UTF-8
+ *          sequences into single characters.  Validates continuation bytes.
  */
 
 #include "io/reader/InputStreamReader.hpp"

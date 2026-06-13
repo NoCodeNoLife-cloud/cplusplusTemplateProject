@@ -1,7 +1,8 @@
 /**
  * @file HashStrategy.cc
- * @brief HashStrategy class implementation
- * @details This file contains the implementation of the HashStrategy class methods for Cryptographic utilities and toolkit.
+ * @brief HashStrategy base implementation — default compute routing
+ * @details Provides default implementations for the HashStrategy interface,
+ *          including the hex-encoding helper shared by all strategy types.
  */
 
 #include "HashStrategy.hpp"

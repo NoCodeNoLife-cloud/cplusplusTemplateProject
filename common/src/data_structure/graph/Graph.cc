@@ -1,7 +1,9 @@
 /**
  * @file Graph.cc
- * @brief Graph class implementation
- * @details This file contains the implementation of the Graph class methods for graph data structures.
+ * @brief Graph implementation — adjacency-list management
+ * @details Implements the adjacency-list-based graph: edge addition,
+ *          neighbour retrieval, degree queries, and edge removal.
+ *          Uses a vector of adjacency lists indexed by vertex ID.
  */
 
 #include "data_structure/graph/Graph.hpp"

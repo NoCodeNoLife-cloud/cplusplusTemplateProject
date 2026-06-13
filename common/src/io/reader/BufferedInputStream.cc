@@ -1,7 +1,9 @@
 /**
  * @file BufferedInputStream.cc
- * @brief BufferedInputStream class implementation
- * @details This file contains the implementation of the BufferedInputStream class methods for Common library utilities.
+ * @brief BufferedInputStream implementation — buffer fill, mark/reset, read
+ * @details Implements buffered byte input: fillBuffer() refills the internal
+ *          8 KB buffer from the underlying stream, read() copies from buffer,
+ *          and mark/reset are supported up to the buffer capacity.
  */
 
 #include "io/reader/BufferedInputStream.hpp"

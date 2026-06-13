@@ -1,7 +1,8 @@
 /**
  * @file CaesarCipher.cc
- * @brief CaesarCipher class implementation
- * @details This file contains the implementation of the CaesarCipher class methods for Cryptographic utilities and toolkit.
+ * @brief CaesarCipher implementation — shift encryption/decryption
+ * @details Implements the Caesar cipher: shift each alphabetic character by
+ *          a fixed offset, preserving case and non-alphabetic characters.
  */
 
 #include "CaesarCipher.hpp"

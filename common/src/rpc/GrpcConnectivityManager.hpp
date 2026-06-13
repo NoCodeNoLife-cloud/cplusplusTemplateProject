@@ -1,7 +1,22 @@
 /**
  * @file GrpcConnectivityManager.hpp
- * @brief GrpcConnectivityManager class declaration
- * @details This header defines the GrpcConnectivityManager class that provides functionality for RPC metadata and connectivity management.
+ * @brief gRPC channel connectivity management with health checking
+ * @description Manages gRPC channel connectivity state transitions (IDLE,
+ *          CONNECTING, READY, TRANSIENT_FAILURE, SHUTDOWN).  Monitors
+ *          channel health via periodic ping checks and provides automatic
+ *          reconnection with exponential backoff.
+ *
+ * @par Thread Safety
+ * All public methods are thread-safe.  Internal state is guarded by a mutex.
+ *
+ * @par Usage Example
+ * @code
+ * GrpcConnectivityManager mgr("localhost:50051");
+ * mgr.waitForReady(std::chrono::seconds(5));
+ * if (mgr.isReady()) {
+ *     // use channel
+ * }
+ * @endcode
  */
 
 #pragma once

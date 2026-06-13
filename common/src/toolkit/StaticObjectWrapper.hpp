@@ -1,7 +1,13 @@
 /**
  * @file StaticObjectWrapper.hpp
- * @brief StaticObjectWrapper class declaration
- * @details This header defines the StaticObjectWrapper class that provides functionality for General utility toolkits for strings, arrays, and other operations.
+ * @brief Thread-safe singleton wrapper for static objects with lazy init
+ * @description Provides a wrapper for static objects with lazy initialisation
+ *          and thread-safe access semantics.  Guarantees the object is
+ *          initialised exactly once, even in multi-threaded contexts, using
+ *          std::call_once or C++11 magic statics.
+ *
+ * @par Thread Safety
+ * Thread-safe by design — get() provides safe access after lazy init.
  */
 
 #pragma once

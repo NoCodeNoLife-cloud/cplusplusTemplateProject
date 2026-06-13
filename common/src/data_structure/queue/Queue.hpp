@@ -1,7 +1,27 @@
 /**
  * @file Queue.hpp
- * @brief Queue class declaration
- * @details This header defines the Queue class that provides functionality for common data structures.
+ * @brief Linked-list-based FIFO queue with O(1) push/pop/front/back
+ * @details A first-in-first-out queue backed by a singly linked list of
+ *          std::unique_ptr nodes.  Maintains separate head (front) and tail
+ *          (back) pointers for O(1) enqueue and dequeue.  Supports emplace
+ *          for in-place construction of elements.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Complexity
+ * - push / emplace / pop / front / back: O(1)
+ *
+ * @par Usage Example
+ * @code
+ * Queue<int> q;
+ * q.push(10);
+ * q.push(20);
+ * assert(q.front() == 10);
+ * q.pop();
+ * assert(q.front() == 20);
+ * @endcode
  */
 
 #pragma once

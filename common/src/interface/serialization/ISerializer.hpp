@@ -1,7 +1,9 @@
 /**
- * @file serialize/ISerializer.hpp
- * @brief ISerializer class declaration
- * @details This header defines the ISerializer class that provides functionality for Serialization utilities for JSON and YAML.
+ * @file ISerializer.hpp
+ * @brief Generic serializer interface for multiple data formats
+ * @description Defines the contract for serialiser implementations that
+ *          convert objects to/from various formats (binary, JSON, YAML, XML).
+ *          Implementations handle format-specific encoding and decoding.
  */
 
 #pragma once

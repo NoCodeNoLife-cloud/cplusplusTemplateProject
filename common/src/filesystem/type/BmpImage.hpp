@@ -1,8 +1,14 @@
 /**
  * @file BmpImage.hpp
- * @brief BmpImage class declaration
- * @details This header defines the BmpImage class that provides functionality for
- *          creating, loading, manipulating, and saving 24-bit BMP images.
+ * @brief BMP image file reader — header parsing and pixel data access
+ * @description Reads BMP (Bitmap) image files, parsing the file header,
+ *          DIB header, and pixel data.  Supports 24-bit and 32-bit BMP
+ *          formats.  Provides pixel access by coordinate and basic image
+ *          metadata (width, height, bit depth).
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once
