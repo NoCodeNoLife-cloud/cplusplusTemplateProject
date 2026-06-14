@@ -1,14 +1,14 @@
 /**
  * @file MichaelScottQueueTest.cc
  * @brief Unit tests for MichaelScottQueue — single-threaded functional and
- *        multi-threaded concurrent tests
+ *        multithreaded concurrent tests
  * @details Comprehensive tests covering construction, basic operations,
  *          FIFO ordering, edge cases, move semantics, and concurrent
  *          producer/consumer correctness for the lock-free MPMC queue.
  *
  * @par Threading patterns
- * - Threads are synchronised via a spin barrier (std::atomic<bool> go_flag)
- *   to maximise contention at the start of each concurrent test.
+ * - Threads are synchronized via a spin barrier (std::atomic<bool> go_flag)
+ *   to maximize contention at the start of each concurrent test.
  * - std::atomic counters track per-thread progress.
  * - Sanitizers (AddressSanitizer / ThreadSanitizer) are expected to pass.
  */
@@ -80,7 +80,8 @@ TEST_F(MichaelScottQueueTest, MoveConstructor_TransfersData)
     EXPECT_EQ(*dst.try_dequeue(), 3);
     EXPECT_TRUE(dst.empty());
 
-    // Source should be empty but valid.
+    // NOLINTNEXTLINE(bugprone-use-after-move)
+    // After move, source is documented to be in a valid empty state.
     EXPECT_TRUE(src.empty());
     EXPECT_EQ(src.size(), 0);
 }
@@ -106,7 +107,7 @@ TEST_F(MichaelScottQueueTest, MoveAssignment_TransfersData)
     EXPECT_EQ(*dst.try_dequeue(), 2);
     EXPECT_TRUE(dst.empty());
 
-    // Source should be empty.
+    // NOLINTNEXTLINE(bugprone-use-after-move)
     EXPECT_TRUE(src.empty());
     EXPECT_EQ(src.size(), 0);
 
@@ -173,14 +174,14 @@ TEST_F(MichaelScottQueueTest, InterleavedEnqueueDequeue)
 
     // ── Operations (STEP output pinpoints crash location in CI logs) ──
     std::cout << "STEP: try_dequeue #1" << std::endl;
-    auto v1 = q.try_dequeue();
+    const auto v1 = q.try_dequeue();
     std::cout << "STEP: try_dequeue #1 result = "
               << (v1.has_value() ? std::to_string(*v1) : "nullopt") << std::endl;
     EXPECT_TRUE(v1.has_value());
     EXPECT_EQ(*v1, 1);
 
     std::cout << "STEP: try_dequeue #2" << std::endl;
-    auto v2 = q.try_dequeue();
+    const auto v2 = q.try_dequeue();
     std::cout << "STEP: try_dequeue #2 result = "
               << (v2.has_value() ? std::to_string(*v2) : "nullopt") << std::endl;
     EXPECT_TRUE(v2.has_value());
@@ -192,21 +193,21 @@ TEST_F(MichaelScottQueueTest, InterleavedEnqueueDequeue)
     q.enqueue(5);
 
     std::cout << "STEP: try_dequeue #3" << std::endl;
-    auto v3 = q.try_dequeue();
+    const auto v3 = q.try_dequeue();
     std::cout << "STEP: try_dequeue #3 result = "
               << (v3.has_value() ? std::to_string(*v3) : "nullopt") << std::endl;
     EXPECT_TRUE(v3.has_value());
     EXPECT_EQ(*v3, 3);
 
     std::cout << "STEP: try_dequeue #4" << std::endl;
-    auto v4 = q.try_dequeue();
+    const auto v4 = q.try_dequeue();
     std::cout << "STEP: try_dequeue #4 result = "
               << (v4.has_value() ? std::to_string(*v4) : "nullopt") << std::endl;
     EXPECT_TRUE(v4.has_value());
     EXPECT_EQ(*v4, 4);
 
     std::cout << "STEP: try_dequeue #5" << std::endl;
-    auto v5 = q.try_dequeue();
+    const auto v5 = q.try_dequeue();
     std::cout << "STEP: try_dequeue #5 result = "
               << (v5.has_value() ? std::to_string(*v5) : "nullopt") << std::endl;
     EXPECT_TRUE(v5.has_value());
@@ -233,7 +234,7 @@ TEST_F(MichaelScottQueueTest, BulkEnqueueDequeue)
 
     for (int i = 0; i < N; ++i)
     {
-        auto val = q.try_dequeue();
+        const auto val = q.try_dequeue();
         ASSERT_TRUE(val.has_value());
         EXPECT_EQ(*val, i);
     }
@@ -252,7 +253,7 @@ TEST_F(MichaelScottQueueTest, BulkEnqueueDequeue)
 TEST_F(MichaelScottQueueTest, TryDequeue_Empty_ReturnsNullopt)
 {
     MichaelScottQueue<int> empty_q;
-    auto val = empty_q.try_dequeue();
+    const auto val = empty_q.try_dequeue();
     EXPECT_FALSE(val.has_value());
 }
 
@@ -267,7 +268,7 @@ TEST_F(MichaelScottQueueTest, TryDequeue_AfterFullDrain_ReturnsNullopt)
     std::ignore = q.try_dequeue();  // Drain.
     EXPECT_TRUE(q.empty());
 
-    auto val = q.try_dequeue();
+    const auto val = q.try_dequeue();
     EXPECT_FALSE(val.has_value());
 }
 
@@ -303,11 +304,11 @@ TEST_F(MichaelScottQueueTest, MoveOnlyType)
     q.enqueue(std::make_unique<int>(42));
     q.enqueue(std::make_unique<int>(100));
 
-    auto a = q.try_dequeue();
+    const auto a = q.try_dequeue();
     ASSERT_TRUE(a.has_value());
     EXPECT_EQ(**a, 42);
 
-    auto b = q.try_dequeue();
+    const auto b = q.try_dequeue();
     ASSERT_TRUE(b.has_value());
     EXPECT_EQ(**b, 100);
 
@@ -346,12 +347,12 @@ TEST_F(MichaelScottQueueTest, LargeMovableType)
     q.enqueue(LargeMovable("hello", 1));
     q.enqueue(LargeMovable("world", 2));
 
-    auto a = q.try_dequeue();
+    const auto a = q.try_dequeue();
     ASSERT_TRUE(a.has_value());
     EXPECT_EQ(a->data, "hello");
     EXPECT_EQ(a->id, 1);
 
-    auto b = q.try_dequeue();
+    const auto b = q.try_dequeue();
     ASSERT_TRUE(b.has_value());
     EXPECT_EQ(b->data, "world");
     EXPECT_EQ(b->id, 2);
@@ -513,7 +514,7 @@ TEST_F(MichaelScottQueueTest, ConcurrentProducersConsumers_NoDataLoss)
 
             while (true)
             {
-                auto val = q.try_dequeue();
+                const auto val = q.try_dequeue();
                 if (val.has_value())
                 {
                     std::lock_guard<std::mutex> lock(consumed_mutex);
@@ -524,7 +525,7 @@ TEST_F(MichaelScottQueueTest, ConcurrentProducersConsumers_NoDataLoss)
                 {
                     // One more attempt after the done flag to avoid
                     // missing the last item.
-                    auto last = q.try_dequeue();
+                    const auto last = q.try_dequeue();
                     if (last.has_value())
                     {
                         std::lock_guard<std::mutex> lock(consumed_mutex);
@@ -608,24 +609,22 @@ TEST_F(MichaelScottQueueTest, ConcurrentAllProducersConsumers_Stress)
     for (int t = 0; t < CONCUR_NUM_THREADS; ++t)
     {
         threads.emplace_back([&, t]() {
-            std::mt19937 rng(static_cast<unsigned int>(t) * 9999 + 7777);
-
             barrier.arrive_and_wait();
 
             // Produce ITEMS_PER_THREAD items.
             for (int i = 0; i < ITEMS_PER_THREAD; ++i)
             {
-                int val = t * ITEMS_PER_THREAD + i;
+                const int val = t * ITEMS_PER_THREAD + i;
                 q.enqueue(val);
             }
 
             // Consume items until stop.
             while (!stop.load(std::memory_order_relaxed))
             {
-                auto val = q.try_dequeue();
+                const auto val = q.try_dequeue();
                 if (val.has_value())
                 {
-                    int idx = *val;
+                    const int idx = *val;
                     consumed_counts[static_cast<std::size_t>(idx)]
                         .fetch_add(1, std::memory_order_relaxed);
                     total_consumed.fetch_add(1, std::memory_order_relaxed);
@@ -724,7 +723,7 @@ TEST_F(MichaelScottQueueTest, ConcurrentEnqueueOnly_SizeCorrect)
     std::vector<int> seen(TOTAL, 0);
     for (int i = 0; i < TOTAL; ++i)
     {
-        auto val = q.try_dequeue();
+        const auto val = q.try_dequeue();
         if (!val.has_value())
         {
             break;  // Queue empty before all items drained — will fail below.
@@ -768,12 +767,12 @@ TEST_F(MichaelScottQueueTest, MixedEnqueueDequeue_NoCorruption)
 
             while (!stop.load(std::memory_order_relaxed))
             {
-                const int op = rng() % 2;
+                const int op = static_cast<int>(rng() % 2);
 
                 if (op == 0)
                 {
                     // Enqueue.
-                    q.enqueue(rng() % 10000);
+                    q.enqueue(static_cast<int>(rng() % 10000));
                 }
                 else
                 {
@@ -797,7 +796,7 @@ TEST_F(MichaelScottQueueTest, MixedEnqueueDequeue_NoCorruption)
     EXPECT_GT(ops_done.load(), 0);
 
     // Queue must be in a valid state (no crash, size is consistent).
-    std::size_t s = q.size();
+    const std::size_t s = q.size();
     // size() is approximate, but it should be a non-negative value consistent
     // with internal invariants (no wraparound, no corruption).
     EXPECT_LE(s, static_cast<std::size_t>(ops_done.load() / 2 + CONCUR_NUM_THREADS));
