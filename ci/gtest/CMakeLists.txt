@@ -1,5 +1,5 @@
 # ══════════════════════════════════════════════════════════════════════════
-#  GTest unit tests — per-directory parallel executables
+#  GTest unit tests �?per-directory parallel executables
 # ══════════════════════════════════════════════════════════════════════════
 #
 # Each sub-directory under src/ becomes a separate test executable named
@@ -49,9 +49,9 @@ set(CI_GTEST_LIBS
 # ── Discover test files ────────────────────────────────────────────────
 file(GLOB_RECURSE CI_GTEST_ALL_FILES *.cc *.cpp)
 
-# ── Group files by parent directory → one executable per directory ─────
+# ── Group files by parent directory �?one executable per directory ─────
 # Rationale: each directory corresponds to one source module (toolkit/,
-# cache/, io/reader/, …).  Parallelising at directory level gives good
+# cache/, io/reader/, �?.  Parallelising at directory level gives good
 # granularity without excessive linking overhead.
 set(CI_GTEST_DIRS)
 foreach(FILE ${CI_GTEST_ALL_FILES})
@@ -63,6 +63,8 @@ list(REMOVE_DUPLICATES CI_GTEST_DIRS)
 foreach(DIR ${CI_GTEST_DIRS})
     # Derive executable name: ut_<relative_path_with_underscores>
     file(RELATIVE_PATH REL_DIR ${CMAKE_CURRENT_SOURCE_DIR} ${DIR})
+    # Strip leading "src/" prefix for cleaner target names.
+    string(REGEX REPLACE "^(src/|src\\\\)" "" REL_DIR ${REL_DIR})
     string(REPLACE "/" "_" TARGET_NAME "ut_${REL_DIR}")
     string(REPLACE "\\" "_" TARGET_NAME ${TARGET_NAME})
 
