@@ -80,10 +80,6 @@ TEST_F(StreamCipherFactoryTest, PolymorphicBehavior)
     EXPECT_FALSE(base_ptr->isInitialized());
 }
 
-// ============================================================================
-// Additional Boundary Condition Tests
-// ============================================================================
-
 TEST_F(StreamCipherFactoryTest, IsSupported_Unsupported)
 {
     EXPECT_FALSE(StreamCipherFactory::isSupported(static_cast<StreamCipherFactory::Algorithm>(99)));

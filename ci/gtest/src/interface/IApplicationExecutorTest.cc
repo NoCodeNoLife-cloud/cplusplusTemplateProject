@@ -40,6 +40,7 @@ namespace
     };
 }
 
+/// @brief Test fixture for IApplicationExecutor tests.
 class IApplicationExecutorTest : public testing::Test
 {
 protected:
@@ -56,6 +57,7 @@ protected:
     std::unique_ptr<MockExecutor> executor_;
 };
 
+/** @brief Verifies execute(argc, argv) forwards arguments correctly. */
 TEST_F(IApplicationExecutorTest, ExecuteWithArgcArgv)
 {
     char arg1[] = "program";
@@ -71,6 +73,7 @@ TEST_F(IApplicationExecutorTest, ExecuteWithArgcArgv)
     EXPECT_EQ(executor_->lastArgs_[1], "--help");
 }
 
+/** @brief Verifies execute(vector<string>) forwards arguments correctly. */
 TEST_F(IApplicationExecutorTest, ExecuteWithVectorArgs)
 {
     const std::vector<std::string> args = {"app", "-v", "config.yaml"};
@@ -85,6 +88,7 @@ TEST_F(IApplicationExecutorTest, ExecuteWithVectorArgs)
     EXPECT_EQ(executor_->lastArgs_[2], "config.yaml");
 }
 
+/** @brief Verifies execute returns false when the mock reports failure. */
 TEST_F(IApplicationExecutorTest, ExecuteReturnsFalseOnFailure)
 {
     executor_->returnValue_ = false;
@@ -95,6 +99,7 @@ TEST_F(IApplicationExecutorTest, ExecuteReturnsFalseOnFailure)
     EXPECT_FALSE(result);
 }
 
+/** @brief Verifies execute with an empty argument vector returns true. */
 TEST_F(IApplicationExecutorTest, ExecuteWithEmptyArgs)
 {
     const std::vector<std::string> args;
@@ -106,6 +111,7 @@ TEST_F(IApplicationExecutorTest, ExecuteWithEmptyArgs)
     EXPECT_TRUE(executor_->lastArgs_.empty());
 }
 
+/** @brief Verifies execute with argc=0 and nullptr argv is safe. */
 TEST_F(IApplicationExecutorTest, ExecuteWithArgcZero)
 {
     const auto result = executor_->execute(0, nullptr);
@@ -115,6 +121,7 @@ TEST_F(IApplicationExecutorTest, ExecuteWithArgcZero)
     EXPECT_TRUE(executor_->lastArgs_.empty());
 }
 
+/** @brief Verifies the order of arguments is preserved. */
 TEST_F(IApplicationExecutorTest, ExecuteWithMultipleArgsPreservesOrder)
 {
     const std::vector<std::string> args = {"first", "second", "third", "fourth"};
@@ -128,12 +135,14 @@ TEST_F(IApplicationExecutorTest, ExecuteWithMultipleArgsPreservesOrder)
     EXPECT_EQ(executor_->lastArgs_[3], "fourth");
 }
 
+/** @brief Verifies execute does not throw under normal conditions. */
 TEST_F(IApplicationExecutorTest, ExecuteDoesNotThrow)
 {
     const std::vector<std::string> args = {"test"};
     EXPECT_NO_THROW(executor_->execute(args));
 }
 
+/** @brief Verifies the executor can be called multiple times sequentially. */
 TEST_F(IApplicationExecutorTest, ExecuteReusesExecutor)
 {
     executor_->execute({"first"});

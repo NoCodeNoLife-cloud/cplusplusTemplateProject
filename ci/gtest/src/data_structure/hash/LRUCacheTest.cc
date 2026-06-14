@@ -27,6 +27,10 @@ protected:
     }
 };
 
+/**
+ * @brief Test constructor creates cache with valid capacity
+ * @details Verifies that a newly constructed LRUCache has the specified capacity, zero size, and is empty
+ */
 TEST_F(LRUCacheTest, Constructor_ValidCapacity)
 {
     const LRUCache<int, std::string> cache(10);
@@ -35,11 +39,19 @@ TEST_F(LRUCacheTest, Constructor_ValidCapacity)
     EXPECT_TRUE(cache.empty());
 }
 
+/**
+ * @brief Test constructor throws on zero capacity
+ * @details Verifies that constructing an LRUCache with zero capacity throws std::invalid_argument
+ */
 TEST_F(LRUCacheTest, Constructor_ThrowsOnZeroCapacity)
 {
     EXPECT_THROW((LRUCache<int, int>(0)), std::invalid_argument);
 }
 
+/**
+ * @brief Test put inserts a new entry into the cache
+ * @details Verifies that putting a new key-value pair increases the cache size and the key becomes contained
+ */
 TEST_F(LRUCacheTest, Put_InsertsNewEntry)
 {
     LRUCache<int, std::string> cache(5);
@@ -48,6 +60,10 @@ TEST_F(LRUCacheTest, Put_InsertsNewEntry)
     EXPECT_TRUE(cache.contains(1));
 }
 
+/**
+ * @brief Test put updates an existing entry in the cache
+ * @details Verifies that putting a key that already exists updates its value without increasing the cache size
+ */
 TEST_F(LRUCacheTest, Put_UpdatesExistingEntry)
 {
     LRUCache<int, std::string> cache(5);
@@ -59,12 +75,20 @@ TEST_F(LRUCacheTest, Put_UpdatesExistingEntry)
     EXPECT_EQ(cache.size(), 1);
 }
 
+/**
+ * @brief Test get returns nullopt for missing key
+ * @details Verifies that get() for a key not present in the cache returns std::nullopt
+ */
 TEST_F(LRUCacheTest, Get_ReturnsNulloptWhenMissing)
 {
     LRUCache<int, std::string> cache(5);
     EXPECT_FALSE(cache.get(99).has_value());
 }
 
+/**
+ * @brief Test get returns the value when key is present
+ * @details Verifies that get() returns the correct value for a key that exists in the cache
+ */
 TEST_F(LRUCacheTest, Get_ReturnsValueWhenPresent)
 {
     LRUCache<int, int> cache(5);
@@ -74,6 +98,10 @@ TEST_F(LRUCacheTest, Get_ReturnsValueWhenPresent)
     EXPECT_EQ(val.value(), 100);
 }
 
+/**
+ * @brief Test eviction removes the least recently used entry
+ * @details Verifies that when the cache exceeds capacity, the least recently used entry is evicted while other entries remain accessible
+ */
 TEST_F(LRUCacheTest, EvictsLeastRecentlyUsed)
 {
     LRUCache<int, int> cache(3);
@@ -89,6 +117,10 @@ TEST_F(LRUCacheTest, EvictsLeastRecentlyUsed)
     EXPECT_EQ(cache.get(4).value(), 40);
 }
 
+/**
+ * @brief Test get promotes the accessed entry to most recently used
+ * @details Verifies that calling get() on an entry promotes it to MRU status, preventing its eviction when a new entry is added
+ */
 TEST_F(LRUCacheTest, GetPromotesToMRU)
 {
     LRUCache<int, int> cache(2);
@@ -103,6 +135,10 @@ TEST_F(LRUCacheTest, GetPromotesToMRU)
     EXPECT_EQ(cache.size(), 2);
 }
 
+/**
+ * @brief Test put promotes the updated entry to most recently used
+ * @details Verifies that updating an existing entry via put() promotes it to MRU status, changing eviction behaviour
+ */
 TEST_F(LRUCacheTest, PutPromotesToMRU)
 {
     LRUCache<int, int> cache(2);
@@ -116,6 +152,10 @@ TEST_F(LRUCacheTest, PutPromotesToMRU)
     EXPECT_EQ(cache.get(1).value(), 100);
 }
 
+/**
+ * @brief Test erase removes an existing entry
+ * @details Verifies that erasing a key present in the cache returns true, decreases size, and the key is no longer contained
+ */
 TEST_F(LRUCacheTest, Erase_RemovesEntry)
 {
     LRUCache<int, int> cache(5);
@@ -127,12 +167,20 @@ TEST_F(LRUCacheTest, Erase_RemovesEntry)
     EXPECT_TRUE(cache.contains(2));
 }
 
+/**
+ * @brief Test erase returns false for a missing key
+ * @details Verifies that erasing a key not present in the cache returns false
+ */
 TEST_F(LRUCacheTest, Erase_MissingKeyReturnsFalse)
 {
     LRUCache<int, int> cache(5);
     EXPECT_FALSE(cache.erase(99));
 }
 
+/**
+ * @brief Test erase followed by reinsert works correctly
+ * @details Verifies that after erasing a key, reinserting it adds a fresh entry without conflicts
+ */
 TEST_F(LRUCacheTest, Erase_ThenReinsert)
 {
     LRUCache<int, std::string> cache(3);
@@ -145,6 +193,10 @@ TEST_F(LRUCacheTest, Erase_ThenReinsert)
     EXPECT_EQ(cache.get(1).value(), "new_a");
 }
 
+/**
+ * @brief Test clear removes all entries from the cache
+ * @details Verifies that clear() empties the cache, resets size to zero, and contained keys become absent
+ */
 TEST_F(LRUCacheTest, Clear)
 {
     LRUCache<int, int> cache(5);
@@ -156,6 +208,10 @@ TEST_F(LRUCacheTest, Clear)
     EXPECT_FALSE(cache.contains(1));
 }
 
+/**
+ * @brief Test move constructor transfers cache state
+ * @details Verifies that moving an LRUCache transfers capacity, size, and entries to the new cache
+ */
 TEST_F(LRUCacheTest, MoveConstructor)
 {
     LRUCache<int, int> cache1(3);
@@ -168,6 +224,10 @@ TEST_F(LRUCacheTest, MoveConstructor)
     EXPECT_EQ(cache2.get(1).value(), 10);
 }
 
+/**
+ * @brief Test move assignment transfers cache state
+ * @details Verifies that move assignment transfers entries from source to target, replacing previous content
+ */
 TEST_F(LRUCacheTest, MoveAssignment)
 {
     LRUCache<int, int> cache1(3);
@@ -180,6 +240,10 @@ TEST_F(LRUCacheTest, MoveAssignment)
     EXPECT_EQ(cache2.get(1).value(), 10);
 }
 
+/**
+ * @brief Test cache works with string keys
+ * @details Verifies that the LRUCache handles std::string keys correctly, including insertion, eviction, and containment checks
+ */
 TEST_F(LRUCacheTest, StringKeys)
 {
     LRUCache<std::string, int> cache(3);
@@ -195,6 +259,10 @@ TEST_F(LRUCacheTest, StringKeys)
     EXPECT_EQ(cache.size(), 3);
 }
 
+/**
+ * @brief Test cache with capacity of one evicts correctly
+ * @details Verifies that a cache of capacity 1 evicts the existing entry when a new one is inserted
+ */
 TEST_F(LRUCacheTest, CapacityOne)
 {
     LRUCache<int, int> cache(1);
@@ -206,6 +274,10 @@ TEST_F(LRUCacheTest, CapacityOne)
     EXPECT_EQ(cache.size(), 1);
 }
 
+/**
+ * @brief Test large cache under stress with sequential insertion
+ * @details Verifies that a cache of capacity 100 correctly evicts the first 100 entries after 200 sequential insertions, keeping the last 100 entries intact
+ */
 TEST_F(LRUCacheTest, LargeCacheStress)
 {
     LRUCache<int, int> cache(100);
@@ -226,6 +298,10 @@ TEST_F(LRUCacheTest, LargeCacheStress)
     }
 }
 
+/**
+ * @brief Test get does not change the cache size
+ * @details Verifies that calling get() on an existing key does not alter the cache size
+ */
 TEST_F(LRUCacheTest, GetDoesNotChangeCacheSize)
 {
     LRUCache<int, int> cache(3);

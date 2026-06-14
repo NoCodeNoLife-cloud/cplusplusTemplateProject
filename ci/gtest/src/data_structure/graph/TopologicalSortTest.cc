@@ -1,3 +1,11 @@
+/**
+ * @file TopologicalSortTest.cc
+ * @brief Unit tests for topological sorting algorithms
+ * @details Tests cover both DFS-based and Kahn's algorithm (BFS-based)
+ *          topological sort implementations, including cycle detection,
+ *          single-node edge cases, and complex DAG ordering invariants.
+ */
+
 #include <gtest/gtest.h>
 
 #include "data_structure/graph/algorithm/TopologicalSort.hpp"
@@ -5,6 +13,9 @@
 using namespace common::data_structure::graph;
 using namespace common::data_structure::graph::algorithm;
 
+/**
+ * @brief Test fixture for TopologicalSort tests
+ */
 class TopologicalSortTest : public testing::Test
 {
 protected:
@@ -12,6 +23,10 @@ protected:
     void TearDown() override {}
 };
 
+/**
+ * @brief Test DFS-based topological sort on a simple DAG
+ * @details Verifies that a linear DAG (0→1→2→3) produces a valid topological order
+ */
 TEST_F(TopologicalSortTest, Sort_DAG)
 {
     Graph g(4);
@@ -26,6 +41,11 @@ TEST_F(TopologicalSortTest, Sort_DAG)
     EXPECT_EQ(result.order[3], 3);
 }
 
+/**
+ * @brief Test DFS-based sort on a graph with a cycle
+ * @details Verifies that has_cycle is set to true and order is empty
+ *          when the graph contains a directed cycle
+ */
 TEST_F(TopologicalSortTest, Sort_HasCycle)
 {
     Graph g(3);
@@ -38,6 +58,11 @@ TEST_F(TopologicalSortTest, Sort_HasCycle)
     EXPECT_TRUE(result.order.empty());
 }
 
+/**
+ * @brief Test Kahn's (BFS-based) topological sort on a simple DAG
+ * @details Verifies that Kahn's algorithm produces a valid topological order
+ *          for a linear DAG (0→1→2→3)
+ */
 TEST_F(TopologicalSortTest, SortKahn_DAG)
 {
     Graph g(4);
@@ -52,6 +77,11 @@ TEST_F(TopologicalSortTest, SortKahn_DAG)
     EXPECT_EQ(result.order[3], 3);
 }
 
+/**
+ * @brief Test Kahn's sort on a graph with a cycle
+ * @details Verifies that Kahn's algorithm detects cycles and returns
+ *          an empty order when the graph contains a directed cycle
+ */
 TEST_F(TopologicalSortTest, SortKahn_HasCycle)
 {
     Graph g(3);
@@ -64,6 +94,11 @@ TEST_F(TopologicalSortTest, SortKahn_HasCycle)
     EXPECT_TRUE(result1.order.empty());
 }
 
+/**
+ * @brief Test topological sort on a single-node graph
+ * @details Edge case: verifies that a graph with one node produces
+ *          a valid single-element topological order
+ */
 TEST_F(TopologicalSortTest, Sort_SingleNode)
 {
     Graph g(1);
@@ -73,6 +108,11 @@ TEST_F(TopologicalSortTest, Sort_SingleNode)
     EXPECT_EQ(result.order[0], 0);
 }
 
+/**
+ * @brief Test topological sort on a complex DAG with multiple partial orders
+ * @details Verifies that the output respects all edge dependencies:
+ *          each edge (u→v) implies u appears before v in the order
+ */
 TEST_F(TopologicalSortTest, Sort_ComplexDAG)
 {
     Graph g(6);

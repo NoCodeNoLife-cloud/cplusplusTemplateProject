@@ -41,12 +41,20 @@ protected:
 //  1. Empty ring behaviours
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test getNode throws on empty ring
+ * @details Verifies that calling getNode() on a newly constructed empty ring throws std::runtime_error
+ */
 TEST_F(ConsistentHashTest, EmptyRing_GetNode_Throws)
 {
     const ConsistentHash ring;
     EXPECT_THROW(static_cast<void>(ring.getNode("any-key")), std::runtime_error);
 }
 
+/**
+ * @brief Test getNodes returns empty on empty ring
+ * @details Verifies that calling getNodes() on an empty ring returns an empty vector
+ */
 TEST_F(ConsistentHashTest, EmptyRing_GetNodes_ReturnsEmpty)
 {
     const ConsistentHash ring;
@@ -54,12 +62,20 @@ TEST_F(ConsistentHashTest, EmptyRing_GetNodes_ReturnsEmpty)
     EXPECT_TRUE(nodes.empty());
 }
 
+/**
+ * @brief Test removeNode returns false on empty ring
+ * @details Verifies that attempting to remove a node from an empty ring returns false
+ */
 TEST_F(ConsistentHashTest, EmptyRing_RemoveNode_ReturnsFalse)
 {
     ConsistentHash ring;
     EXPECT_FALSE(ring.removeNode("non-existent"));
 }
 
+/**
+ * @brief Test node counts are zero on empty ring
+ * @details Verifies that both nodeCount() and virtualNodeCount() return zero for a freshly constructed empty ring
+ */
 TEST_F(ConsistentHashTest, EmptyRing_NodeCountIsZero)
 {
     const ConsistentHash ring;
@@ -67,6 +83,10 @@ TEST_F(ConsistentHashTest, EmptyRing_NodeCountIsZero)
     EXPECT_EQ(ring.virtualNodeCount(), 0);
 }
 
+/**
+ * @brief Test containsNode returns false on empty ring
+ * @details Verifies that containsNode() returns false for any node name on an empty ring
+ */
 TEST_F(ConsistentHashTest, EmptyRing_ContainsNode_ReturnsFalse)
 {
     const ConsistentHash ring;
@@ -77,6 +97,10 @@ TEST_F(ConsistentHashTest, EmptyRing_ContainsNode_ReturnsFalse)
 //  2. Single node
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test all keys map to the only node in a single-node ring
+ * @details Verifies that every key routed through getNode() maps to the single added node
+ */
 TEST_F(ConsistentHashTest, SingleNode_AllKeysMapToIt)
 {
     ConsistentHash ring;
@@ -89,6 +113,10 @@ TEST_F(ConsistentHashTest, SingleNode_AllKeysMapToIt)
     }
 }
 
+/**
+ * @brief Test getNodes returns only the single node
+ * @details Verifies that getNodes() returns only the existing node even when more replicas than available are requested
+ */
 TEST_F(ConsistentHashTest, SingleNode_GetNodes_ReturnsJustThatNode)
 {
     ConsistentHash ring;
@@ -99,6 +127,10 @@ TEST_F(ConsistentHashTest, SingleNode_GetNodes_ReturnsJustThatNode)
     EXPECT_EQ(nodes[0], "node-X");
 }
 
+/**
+ * @brief Test node counters after adding a single node
+ * @details Verifies that nodeCount() and virtualNodeCount() reflect the correct values for a single-node ring
+ */
 TEST_F(ConsistentHashTest, SingleNode_Counters)
 {
     ConsistentHash ring;
@@ -111,6 +143,10 @@ TEST_F(ConsistentHashTest, SingleNode_Counters)
 //  3. Multiple nodes — basic correctness
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test keys are distributed across multiple nodes
+ * @details Verifies that with multiple nodes in the ring, all nodes receive at least some keys
+ */
 TEST_F(ConsistentHashTest, MultipleNodes_KeysDistribution)
 {
     ConsistentHash ring;
@@ -132,6 +168,10 @@ TEST_F(ConsistentHashTest, MultipleNodes_KeysDistribution)
     EXPECT_EQ(usedNodes.size(), NODE_COUNT);
 }
 
+/**
+ * @brief Test getNodes returns unique nodes without duplicates
+ * @details Verifies that getNodes() does not return duplicate node entries for a single key
+ */
 TEST_F(ConsistentHashTest, MultipleNodes_GetNodes_NoDuplicates)
 {
     ConsistentHash ring;
@@ -147,6 +187,10 @@ TEST_F(ConsistentHashTest, MultipleNodes_GetNodes_NoDuplicates)
     EXPECT_EQ(unique.size(), nodes.size());
 }
 
+/**
+ * @brief Test first element of getNodes matches getNode result
+ * @details Verifies that the first element returned by getNodes() equals the result of getNode() for the same key
+ */
 TEST_F(ConsistentHashTest, GetNodes_FirstElementEqualsGetNode)
 {
     ConsistentHash ring;
@@ -160,6 +204,10 @@ TEST_F(ConsistentHashTest, GetNodes_FirstElementEqualsGetNode)
     EXPECT_EQ(nodes[0], ring.getNode("test-key"));
 }
 
+/**
+ * @brief Test getNodes returns only available nodes when requesting more
+ * @details Verifies that requesting more nodes than available returns all existing nodes without error
+ */
 TEST_F(ConsistentHashTest, GetNodes_MoreThanAvailable)
 {
     ConsistentHash ring;
@@ -174,6 +222,10 @@ TEST_F(ConsistentHashTest, GetNodes_MoreThanAvailable)
 //  4. Determinism
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test determinism guarantees same key maps to same node
+ * @details Verifies that repeated calls to getNode() with the same key always return the same node across multiple trials
+ */
 TEST_F(ConsistentHashTest, Determinism_SameKeySameNode)
 {
     ConsistentHash ring;
@@ -200,6 +252,10 @@ TEST_F(ConsistentHashTest, Determinism_SameKeySameNode)
 //  5. Node addition & removal — minimal remapping invariant
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test adding a node causes minimal key remapping
+ * @details Verifies that adding a new node to the ring remaps only approximately 1/(N+1) of the keys, preserving the consistent-hashing minimal-remapping invariant within [5%, 20%] bounds
+ */
 TEST_F(ConsistentHashTest, AddNode_MinimalRemapping)
 {
     constexpr uint64_t KEY_COUNT = 20000;
@@ -242,6 +298,10 @@ TEST_F(ConsistentHashTest, AddNode_MinimalRemapping)
     EXPECT_LT(ratio, 0.20);
 }
 
+/**
+ * @brief Test removing a node only moves keys assigned to that node
+ * @details Verifies that after removing a node, keys that were mapped to other nodes remain unchanged, and no key maps to the removed node; non-affected key movement is below 0.5% tolerance
+ */
 TEST_F(ConsistentHashTest, RemoveNode_OnlyAffectedKeysMove)
 {
     constexpr uint64_t KEY_COUNT = 30000;
@@ -317,6 +377,10 @@ TEST_F(ConsistentHashTest, RemoveNode_OnlyAffectedKeysMove)
 //  6. Node re-addition (duplicate)
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test re-adding a node updates its virtual node count
+ * @details Verifies that re-adding an existing node with a different virtual node count updates the ring while keeping the physical node count unchanged
+ */
 TEST_F(ConsistentHashTest, ReAddNode_UpdatesVirtualCount)
 {
     ConsistentHash ring;
@@ -332,6 +396,10 @@ TEST_F(ConsistentHashTest, ReAddNode_UpdatesVirtualCount)
 //  7. Clear
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test clear empties the ring completely
+ * @details Verifies that clear() removes all nodes and resets nodeCount and virtualNodeCount to zero
+ */
 TEST_F(ConsistentHashTest, Clear_EmptiesRing)
 {
     ConsistentHash ring;
@@ -351,6 +419,10 @@ TEST_F(ConsistentHashTest, Clear_EmptiesRing)
 //  8. ContainsNode
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test containsNode reflects add and remove operations
+ * @details Verifies that containsNode() returns true after adding a node and false after removing it
+ */
 TEST_F(ConsistentHashTest, ContainsNode_AfterAddAndRemove)
 {
     ConsistentHash ring;
@@ -366,6 +438,10 @@ TEST_F(ConsistentHashTest, ContainsNode_AfterAddAndRemove)
 //  9. Statistical distribution balance (chi-squared style)
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test keys are distributed fairly uniformly across nodes
+ * @details Verifies that with sufficient virtual nodes, the key distribution across physical nodes stays within [60%, 140%] of the ideal uniform distribution using a chi-squared-style check
+ */
 TEST_F(ConsistentHashTest, StatisticalDistribution_FairlyUniform)
 {
     constexpr int NODE_COUNT = 10;
@@ -403,6 +479,10 @@ TEST_F(ConsistentHashTest, StatisticalDistribution_FairlyUniform)
 //  10. Edge cases
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test empty key does not cause a crash
+ * @details Verifies that getNode() handles empty string and empty string_view inputs without throwing or crashing
+ */
 TEST_F(ConsistentHashTest, EmptyKey_DoesNotCrash)
 {
     ConsistentHash ring;
@@ -411,6 +491,10 @@ TEST_F(ConsistentHashTest, EmptyKey_DoesNotCrash)
     EXPECT_NO_THROW(static_cast<void>(ring.getNode(std::string_view{})));
 }
 
+/**
+ * @brief Test zero virtual nodes falls back to default count
+ * @details Verifies that adding a node with zero virtual nodes uses DEFAULT_VNODE_COUNT rather than zero
+ */
 TEST_F(ConsistentHashTest, ZeroVirtualNodes_FallsBackToDefault)
 {
     ConsistentHash ring;
@@ -420,6 +504,10 @@ TEST_F(ConsistentHashTest, ZeroVirtualNodes_FallsBackToDefault)
     EXPECT_EQ(ring.virtualNodeCount(), ConsistentHash::DEFAULT_VNODE_COUNT);
 }
 
+/**
+ * @brief Test many nodes and many keys route without error
+ * @details Verifies that the ring handles 300 physical nodes with 15000 virtual replicas and 100k keys without crash or empty node responses
+ */
 TEST_F(ConsistentHashTest, ManyNodes_ManyKeys_NoError)
 {
     ConsistentHash ring;
@@ -444,6 +532,10 @@ TEST_F(ConsistentHashTest, ManyNodes_ManyKeys_NoError)
 //  11. Thread safety
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test concurrent reads from the ring do not crash
+ * @details Verifies that multiple threads can safely call getNode() concurrently on a pre-populated ring with no data races
+ */
 TEST_F(ConsistentHashTest, ConcurrentReads_NoCrash)
 {
     ConsistentHash ring;
@@ -483,6 +575,10 @@ TEST_F(ConsistentHashTest, ConcurrentReads_NoCrash)
     EXPECT_EQ(successCount.load(), THREADS * OPS_PER_THREAD);
 }
 
+/**
+ * @brief Test concurrent read and write operations do not crash
+ * @details Verifies that the ring handles simultaneous reader threads and a writer thread (add/remove) without data races or crashes
+ */
 TEST_F(ConsistentHashTest, ConcurrentReadWrite_NoCrash)
 {
     ConsistentHash ring;
@@ -551,6 +647,10 @@ TEST_F(ConsistentHashTest, ConcurrentReadWrite_NoCrash)
 //  12. Interface compliance
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test full lifecycle through IHashRing polymorphic interface
+ * @details Verifies that add, get, remove, and clear operations work correctly when accessed through the IHashRing base class pointer
+ */
 TEST_F(ConsistentHashTest, Interface_AddGetRemove)
 {
     // Verify the full lifecycle through the interface
@@ -578,6 +678,10 @@ TEST_F(ConsistentHashTest, Interface_AddGetRemove)
 //  13. Move semantics
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test move constructor transfers ring state
+ * @details Verifies that moving a ConsistentHash object transfers all node state to the new object and leaves the source object empty
+ */
 TEST_F(ConsistentHashTest, MoveConstructor_TransfersState)
 {
     ConsistentHash original;
@@ -595,6 +699,10 @@ TEST_F(ConsistentHashTest, MoveConstructor_TransfersState)
     EXPECT_EQ(original.nodeCount(), 0);
 }
 
+/**
+ * @brief Test move assignment transfers ring state
+ * @details Verifies that move assignment transfers all node state to the target and leaves the source object empty
+ */
 TEST_F(ConsistentHashTest, MoveAssignment_TransfersState)
 {
     ConsistentHash first;
@@ -615,6 +723,10 @@ TEST_F(ConsistentHashTest, MoveAssignment_TransfersState)
 //  14. Multiple calls to removeNode (idempotency)
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test removeNode is idempotent
+ * @details Verifies that calling removeNode() on an already removed node returns false and the ring remains empty
+ */
 TEST_F(ConsistentHashTest, RemoveNode_Idempotent)
 {
     ConsistentHash ring;

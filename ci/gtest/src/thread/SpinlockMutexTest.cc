@@ -16,6 +16,7 @@
 
 using namespace common::thread;
 
+/// @brief Test fixture for SpinlockMutex tests.
 class SpinlockMutexTest : public testing::Test
 {
 protected:
@@ -30,18 +31,33 @@ protected:
     }
 };
 
+/**
+ * @brief Verify basic lock/unlock cycle without contention
+ * @details Single-threaded acquire and release of the spinlock to confirm
+ *          the simplest lock/unlock path works correctly.
+ */
 TEST_F(SpinlockMutexTest, Lock_Unlock_NoContention)
 {
     mutex_.lock();
     mutex_.unlock();
 }
 
+/**
+ * @brief Verify try_lock succeeds when the mutex is not held
+ * @details Ensures try_lock returns true and acquires the lock when no
+ *          other thread holds it.
+ */
 TEST_F(SpinlockMutexTest, TryLock_SucceedsWhenUnlocked)
 {
     EXPECT_TRUE(mutex_.try_lock());
     mutex_.unlock();
 }
 
+/**
+ * @brief Verify try_lock fails when the mutex is already held
+ * @details After locking, a second try_lock attempt should return false
+ *          without deadlocking.
+ */
 TEST_F(SpinlockMutexTest, TryLock_FailsWhenLocked)
 {
     mutex_.lock();
@@ -49,6 +65,11 @@ TEST_F(SpinlockMutexTest, TryLock_FailsWhenLocked)
     mutex_.unlock();
 }
 
+/**
+ * @brief Verify std::lock_guard compiles and works with SpinlockMutex
+ * @details Ensures RAII lock_guard properly locks on construction and
+ *          unlocks on destruction.
+ */
 TEST_F(SpinlockMutexTest, LockGuard_CompilesAndWorks)
 {
     {
@@ -56,6 +77,11 @@ TEST_F(SpinlockMutexTest, LockGuard_CompilesAndWorks)
     }
 }
 
+/**
+ * @brief Verify std::unique_lock compiles and works with SpinlockMutex
+ * @details Ensures RAII unique_lock properly locks on construction and
+ *          unlocks on destruction.
+ */
 TEST_F(SpinlockMutexTest, UniqueLock_CompilesAndWorks)
 {
     {
@@ -63,6 +89,11 @@ TEST_F(SpinlockMutexTest, UniqueLock_CompilesAndWorks)
     }
 }
 
+/**
+ * @brief Verify mutual exclusion protects shared data across threads
+ * @details Two threads each increment a shared counter 10000 times under
+ *          lock; the final value must equal the exact sum.
+ */
 TEST_F(SpinlockMutexTest, MutualExclusion_ProtectsSharedData)
 {
     int shared = 0;
@@ -96,12 +127,22 @@ TEST_F(SpinlockMutexTest, MutualExclusion_ProtectsSharedData)
     EXPECT_EQ(shared, iterations * 2);
 }
 
+/**
+ * @brief Verify try_lock_for succeeds within the given timeout
+ * @details With an uncontested mutex, try_lock_for with a 10ms timeout
+ *          should acquire the lock immediately.
+ */
 TEST_F(SpinlockMutexTest, TryLockFor_SucceedsWithinTimeout)
 {
     EXPECT_TRUE(mutex_.try_lock_for(std::chrono::milliseconds(10)));
     mutex_.unlock();
 }
 
+/**
+ * @brief Verify try_lock_for times out when the mutex is held
+ * @details While the mutex is locked, try_lock_for with a 10ms timeout
+ *          should return false after the timeout expires.
+ */
 TEST_F(SpinlockMutexTest, TryLockFor_TimesOutWhenLocked)
 {
     mutex_.lock();

@@ -54,6 +54,7 @@ namespace
     };
 }
 
+/// @brief Test fixture for IAopAspect tests.
 class IAopAspectTest : public testing::Test
 {
 protected:
@@ -70,6 +71,7 @@ protected:
     std::unique_ptr<MockAspect> aspect_;
 };
 
+/** @brief Verifies onEntry and onExit are called for a void exec(). */
 TEST_F(IAopAspectTest, ExecCallsOnEntryAndOnExit)
 {
     aspect_->exec([]{});
@@ -79,6 +81,7 @@ TEST_F(IAopAspectTest, ExecCallsOnEntryAndOnExit)
     EXPECT_EQ(aspect_->exceptionCount_, 0);
 }
 
+/** @brief Verifies exec() returns the value produced by the function. */
 TEST_F(IAopAspectTest, ExecReturnsValue)
 {
     const auto result = aspect_->exec([](int a, int b) { return a + b; }, 3, 4);
@@ -88,6 +91,8 @@ TEST_F(IAopAspectTest, ExecReturnsValue)
     EXPECT_EQ(aspect_->exitCount_, 1);
 }
 
+/** @brief Verifies exec() handles a string-returning function
+    @details Ensures the result is forwarded and recorded by handleResult. */
 TEST_F(IAopAspectTest, ExecWithStringResult)
 {
     const auto result = aspect_->exec([]() -> std::string { return "hello"; });
@@ -96,6 +101,7 @@ TEST_F(IAopAspectTest, ExecWithStringResult)
     EXPECT_EQ(aspect_->lastResult_, "hello");
 }
 
+/** @brief Verifies exec() invokes a void lambda and triggers lifecycle. */
 TEST_F(IAopAspectTest, ExecVoidFunction)
 {
     bool called = false;
@@ -106,6 +112,7 @@ TEST_F(IAopAspectTest, ExecVoidFunction)
     EXPECT_EQ(aspect_->exitCount_, 1);
 }
 
+/** @brief Verifies onException is invoked when the function throws. */
 TEST_F(IAopAspectTest, ExecCallsOnExceptionOnThrow)
 {
     EXPECT_THROW(
@@ -118,6 +125,7 @@ TEST_F(IAopAspectTest, ExecCallsOnExceptionOnThrow)
     EXPECT_EQ(aspect_->exitCount_, 0);
 }
 
+/** @brief Verifies the original exception type propagates through exec(). */
 TEST_F(IAopAspectTest, ExecPreservesExceptionType)
 {
     try
@@ -131,6 +139,7 @@ TEST_F(IAopAspectTest, ExecPreservesExceptionType)
     }
 }
 
+/** @brief Verifies arguments are forwarded correctly to the function. */
 TEST_F(IAopAspectTest, ExecWithArguments)
 {
     const auto result = aspect_->exec([](int x, int y) { return x * y; }, 6, 7);
@@ -138,6 +147,7 @@ TEST_F(IAopAspectTest, ExecWithArguments)
     EXPECT_EQ(result, 42);
 }
 
+/** @brief Verifies repeated exec() calls increment lifecycle counters. */
 TEST_F(IAopAspectTest, ExecMultipleTimes)
 {
     const auto r1 = aspect_->exec([] { return 1; });
@@ -149,6 +159,7 @@ TEST_F(IAopAspectTest, ExecMultipleTimes)
     EXPECT_EQ(aspect_->exitCount_, 2);
 }
 
+/** @brief Verifies exec() works with lambdas that capture variables. */
 TEST_F(IAopAspectTest, ExecWithLambdaCapture)
 {
     int x = 10;
@@ -157,11 +168,13 @@ TEST_F(IAopAspectTest, ExecWithLambdaCapture)
     EXPECT_EQ(result, 20);
 }
 
+/** @brief Verifies exec() does not throw for an empty function. */
 TEST_F(IAopAspectTest, ExecEmptyFunctionDoesNotThrow)
 {
     EXPECT_NO_THROW(aspect_->exec([]{}));
 }
 
+/** @brief Verifies onEntry exception is propagated and onExit is skipped. */
 TEST_F(IAopAspectTest, ExecHandlesExceptionsFromOnEntry)
 {
     aspect_->throwOnEntry_ = true;
@@ -171,6 +184,7 @@ TEST_F(IAopAspectTest, ExecHandlesExceptionsFromOnEntry)
     EXPECT_EQ(aspect_->exitCount_, 0);
 }
 
+/** @brief Verifies onExit exception is propagated after entry succeeds. */
 TEST_F(IAopAspectTest, ExecHandlesExceptionsFromOnExit)
 {
     aspect_->throwOnExit_ = true;

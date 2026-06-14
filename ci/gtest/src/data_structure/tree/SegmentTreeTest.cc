@@ -49,6 +49,10 @@ protected:
 
 // ==================== Constructor Tests ====================
 
+/**
+ * @brief Test default constructor creates empty segment tree
+ * @details Verifies that a default-constructed SegmentTree is empty with zero size
+ */
 TEST_F(SegmentTreeTest, DefaultConstructor_EmptyTree)
 {
     const SegmentTree<int> st;
@@ -56,6 +60,11 @@ TEST_F(SegmentTreeTest, DefaultConstructor_EmptyTree)
     EXPECT_EQ(st.size(), 0);
 }
 
+/**
+ * @brief Test size constructor creates tree with correct size
+ * @details Verifies that constructing with a size creates a non-empty tree
+ *          with all elements initialized to zero
+ */
 TEST_F(SegmentTreeTest, SizeConstructor_CorrectSize)
 {
     const SegmentTree<int> st(10);
@@ -64,6 +73,10 @@ TEST_F(SegmentTreeTest, SizeConstructor_CorrectSize)
     EXPECT_EQ(st.query(0, 10), 0);
 }
 
+/**
+ * @brief Test size constructor with zero size
+ * @details Verifies that constructing with size zero creates an empty tree
+ */
 TEST_F(SegmentTreeTest, SizeConstructor_ZeroSize)
 {
     const SegmentTree<int> st(0);
@@ -71,6 +84,11 @@ TEST_F(SegmentTreeTest, SizeConstructor_ZeroSize)
     EXPECT_EQ(st.size(), 0);
 }
 
+/**
+ * @brief Test size and init value constructor
+ * @details Verifies that constructing with size and initial value initializes
+ *          all elements to that value
+ */
 TEST_F(SegmentTreeTest, SizeInitValueConstructor_AllInitialized)
 {
     const SegmentTree<int> st(5, 3);
@@ -80,6 +98,11 @@ TEST_F(SegmentTreeTest, SizeInitValueConstructor_AllInitialized)
     EXPECT_EQ(st.at(4), 3);
 }
 
+/**
+ * @brief Test iterator range constructor from vector
+ * @details Verifies that constructing from an iterator range correctly
+ *          initializes the tree with the given elements
+ */
 TEST_F(SegmentTreeTest, IteratorConstructor_FromVector)
 {
     const std::vector<int> data = {1, 2, 3, 4, 5};
@@ -88,6 +111,10 @@ TEST_F(SegmentTreeTest, IteratorConstructor_FromVector)
     EXPECT_EQ(st.query(0, 5), 15);
 }
 
+/**
+ * @brief Test iterator constructor with empty range
+ * @details Verifies that constructing from an empty range creates an empty tree
+ */
 TEST_F(SegmentTreeTest, IteratorConstructor_EmptyRange)
 {
     const std::vector<int> data;
@@ -95,6 +122,10 @@ TEST_F(SegmentTreeTest, IteratorConstructor_EmptyRange)
     EXPECT_TRUE(st.empty());
 }
 
+/**
+ * @brief Test initializer list constructor
+ * @details Verifies that constructing from an initializer list works correctly
+ */
 TEST_F(SegmentTreeTest, InitializerListConstructor)
 {
     const SegmentTree<int> st = {1, 2, 3, 4, 5};
@@ -102,6 +133,10 @@ TEST_F(SegmentTreeTest, InitializerListConstructor)
     EXPECT_EQ(st.query(0, 5), 15);
 }
 
+/**
+ * @brief Test initializer list constructor with empty list
+ * @details Verifies that constructing from an empty initializer list creates an empty tree
+ */
 TEST_F(SegmentTreeTest, InitializerListConstructor_Empty)
 {
     const SegmentTree<int> st = {};
@@ -110,6 +145,10 @@ TEST_F(SegmentTreeTest, InitializerListConstructor_Empty)
 
 // ==================== Point Update Tests ====================
 
+/**
+ * @brief Test updating a single element
+ * @details Verifies that update changes the element value and range query reflects it
+ */
 TEST_F(SegmentTreeTest, Update_SingleElement)
 {
     SegmentTree<int> st(1);
@@ -118,6 +157,10 @@ TEST_F(SegmentTreeTest, Update_SingleElement)
     EXPECT_EQ(st.at(0), 5);
 }
 
+/**
+ * @brief Test updating multiple elements
+ * @details Verifies that multiple point updates accumulate correctly in range queries
+ */
 TEST_F(SegmentTreeTest, Update_MultipleElements)
 {
     SegmentTree<int> st(5);
@@ -129,6 +172,10 @@ TEST_F(SegmentTreeTest, Update_MultipleElements)
     EXPECT_EQ(st.query(0, 5), 15);
 }
 
+/**
+ * @brief Test update overwrites previous value
+ * @details Verifies that updating the same position multiple times overwrites
+ */
 TEST_F(SegmentTreeTest, Update_OverwriteValue)
 {
     SegmentTree<int> st(3);
@@ -139,6 +186,10 @@ TEST_F(SegmentTreeTest, Update_OverwriteValue)
     EXPECT_EQ(st.query(0, 3), 30);
 }
 
+/**
+ * @brief Test update with out-of-bounds index throws
+ * @details Verifies that update throws std::out_of_range for invalid indices
+ */
 TEST_F(SegmentTreeTest, Update_OutOfBounds_Throws)
 {
     SegmentTree<int> st(3);
@@ -146,6 +197,10 @@ TEST_F(SegmentTreeTest, Update_OutOfBounds_Throws)
     EXPECT_THROW(st.update(100, 5), std::out_of_range);
 }
 
+/**
+ * @brief Test update on an empty tree throws
+ * @details Verifies that update throws std::out_of_range when tree is empty
+ */
 TEST_F(SegmentTreeTest, Update_EmptyTree_Throws)
 {
     SegmentTree<int> st;
@@ -154,6 +209,10 @@ TEST_F(SegmentTreeTest, Update_EmptyTree_Throws)
 
 // ==================== Range Query Tests ====================
 
+/**
+ * @brief Test range query over the full range
+ * @details Verifies that query(0, n) returns the total sum of all elements
+ */
 TEST_F(SegmentTreeTest, Query_FullRange)
 {
     SegmentTree<int> st(5);
@@ -161,6 +220,10 @@ TEST_F(SegmentTreeTest, Query_FullRange)
     EXPECT_EQ(st.query(0, 5), 15);
 }
 
+/**
+ * @brief Test range query over sub-ranges
+ * @details Verifies that query over various sub-ranges returns correct partial sums
+ */
 TEST_F(SegmentTreeTest, Query_SubRange)
 {
     SegmentTree<int> st(5);
@@ -170,6 +233,10 @@ TEST_F(SegmentTreeTest, Query_SubRange)
     EXPECT_EQ(st.query(2, 5), 12);
 }
 
+/**
+ * @brief Test range query over a single element
+ * @details Verifies that query(i, i+1) returns the value at position i
+ */
 TEST_F(SegmentTreeTest, Query_SingleElement)
 {
     SegmentTree<int> st(5);
@@ -177,6 +244,10 @@ TEST_F(SegmentTreeTest, Query_SingleElement)
     EXPECT_EQ(st.query(2, 3), 10);
 }
 
+/**
+ * @brief Test range query with invalid range throws
+ * @details Verifies that query throws std::out_of_range when left >= right
+ */
 TEST_F(SegmentTreeTest, Query_InvalidRange_Throws)
 {
     const SegmentTree<int> st(5);
@@ -184,12 +255,20 @@ TEST_F(SegmentTreeTest, Query_InvalidRange_Throws)
     EXPECT_THROW(st.query(3, 3), std::out_of_range);
 }
 
+/**
+ * @brief Test range query with out-of-bounds range throws
+ * @details Verifies that query throws std::out_of_range when range exceeds tree size
+ */
 TEST_F(SegmentTreeTest, Query_OutOfBounds_Throws)
 {
     const SegmentTree<int> st(3);
     EXPECT_THROW(st.query(0, 4), std::out_of_range);
 }
 
+/**
+ * @brief Test range query on an empty tree throws
+ * @details Verifies that query throws std::out_of_range when tree is empty
+ */
 TEST_F(SegmentTreeTest, Query_EmptyTree_Throws)
 {
     const SegmentTree<int> st;
@@ -198,6 +277,10 @@ TEST_F(SegmentTreeTest, Query_EmptyTree_Throws)
 
 // ==================== At Tests ====================
 
+/**
+ * @brief Test at element access
+ * @details Verifies that at() returns the correct values at various positions
+ */
 TEST_F(SegmentTreeTest, At_AccessElements)
 {
     SegmentTree<int> st(5);
@@ -211,6 +294,10 @@ TEST_F(SegmentTreeTest, At_AccessElements)
     EXPECT_EQ(st.at(4), 0);
 }
 
+/**
+ * @brief Test at with out-of-bounds index throws
+ * @details Verifies that at() throws std::out_of_range for invalid indices
+ */
 TEST_F(SegmentTreeTest, At_OutOfBounds_Throws)
 {
     const SegmentTree<int> st(3);
@@ -218,6 +305,10 @@ TEST_F(SegmentTreeTest, At_OutOfBounds_Throws)
     EXPECT_THROW(st.at(100), std::out_of_range);
 }
 
+/**
+ * @brief Test at on an empty tree throws
+ * @details Verifies that at() throws std::out_of_range when tree is empty
+ */
 TEST_F(SegmentTreeTest, At_EmptyTree_Throws)
 {
     const SegmentTree<int> st;
@@ -226,18 +317,30 @@ TEST_F(SegmentTreeTest, At_EmptyTree_Throws)
 
 // ==================== Size & Empty Tests ====================
 
+/**
+ * @brief Test empty returns true for default-constructed tree
+ * @details Verifies that a default-constructed SegmentTree is empty
+ */
 TEST_F(SegmentTreeTest, Empty_InitiallyEmpty)
 {
     const SegmentTree<int> st;
     EXPECT_TRUE(st.empty());
 }
 
+/**
+ * @brief Test empty returns false for non-empty tree
+ * @details Verifies that a tree with elements is not empty
+ */
 TEST_F(SegmentTreeTest, Empty_NonEmpty)
 {
     const SegmentTree<int> st(5);
     EXPECT_FALSE(st.empty());
 }
 
+/**
+ * @brief Test size returns correct element count
+ * @details Verifies that size() returns the number of elements for various sizes
+ */
 TEST_F(SegmentTreeTest, Size_CorrectCount)
 {
     const SegmentTree<int> st;
@@ -250,6 +353,10 @@ TEST_F(SegmentTreeTest, Size_CorrectCount)
 
 // ==================== Swap Tests ====================
 
+/**
+ * @brief Test swap exchanges contents between two trees
+ * @details Verifies that after swap, each tree holds the other's data
+ */
 TEST_F(SegmentTreeTest, Swap_ExchangesContents)
 {
     SegmentTree<int> st1(3);
@@ -273,6 +380,10 @@ TEST_F(SegmentTreeTest, Swap_ExchangesContents)
     EXPECT_EQ(st2.at(2), 3);
 }
 
+/**
+ * @brief Test swap with an empty tree
+ * @details Verifies that swapping a non-empty tree with an empty tree works correctly
+ */
 TEST_F(SegmentTreeTest, Swap_WithEmpty)
 {
     SegmentTree<int> st1(2);
@@ -288,6 +399,10 @@ TEST_F(SegmentTreeTest, Swap_WithEmpty)
     EXPECT_EQ(st2.at(0), 5);
 }
 
+/**
+ * @brief Test swap is symmetric
+ * @details Verifies that swapping twice restores the original contents
+ */
 TEST_F(SegmentTreeTest, Swap_Symmetric)
 {
     SegmentTree<int> st1(2);
@@ -309,6 +424,10 @@ TEST_F(SegmentTreeTest, Swap_Symmetric)
 
 // ==================== Custom Merge Operation Tests ====================
 
+/**
+ * @brief Test custom merge with max operation
+ * @details Verifies that a segment tree using MaxOp correctly computes range maximums
+ */
 TEST_F(SegmentTreeTest, CustomMerge_MaxOp)
 {
     SegmentTree<int, MaxOp> st(5);
@@ -322,6 +441,10 @@ TEST_F(SegmentTreeTest, CustomMerge_MaxOp)
     EXPECT_EQ(st.query(2, 4), 7);
 }
 
+/**
+ * @brief Test custom merge with min operation
+ * @details Verifies that a segment tree using MinOp correctly computes range minimums
+ */
 TEST_F(SegmentTreeTest, CustomMerge_MinOp)
 {
     SegmentTree<int, MinOp> st(5);
@@ -335,6 +458,10 @@ TEST_F(SegmentTreeTest, CustomMerge_MinOp)
     EXPECT_EQ(st.query(3, 5), 2);
 }
 
+/**
+ * @brief Test custom merge with multiplication
+ * @details Verifies that a segment tree using multiplication works correctly
+ */
 TEST_F(SegmentTreeTest, CustomMerge_Multiplies)
 {
     SegmentTree<int, std::multiplies<>> st(3);
@@ -345,6 +472,10 @@ TEST_F(SegmentTreeTest, CustomMerge_Multiplies)
     EXPECT_EQ(st.query(0, 2), 6);
 }
 
+/**
+ * @brief Test custom merge with string concatenation
+ * @details Verifies that a segment tree with string concatenation works correctly
+ */
 TEST_F(SegmentTreeTest, CustomMerge_StringConcat)
 {
     SegmentTree<std::string, std::plus<>> st(3);
@@ -357,6 +488,10 @@ TEST_F(SegmentTreeTest, CustomMerge_StringConcat)
 
 // ==================== Copy & Move Tests ====================
 
+/**
+ * @brief Test copy constructor creates independent copy
+ * @details Verifies that the copy constructor creates a deep copy that does not share data
+ */
 TEST_F(SegmentTreeTest, CopyConstructor_CopiesCorrectly)
 {
     SegmentTree<int> st1(3);
@@ -375,6 +510,10 @@ TEST_F(SegmentTreeTest, CopyConstructor_CopiesCorrectly)
     EXPECT_EQ(st1.at(0), 1);
 }
 
+/**
+ * @brief Test copy assignment creates independent copy
+ * @details Verifies that copy assignment creates a deep copy with independent data
+ */
 TEST_F(SegmentTreeTest, CopyAssignment_CopiesCorrectly)
 {
     SegmentTree<int> st1(3);
@@ -393,6 +532,10 @@ TEST_F(SegmentTreeTest, CopyAssignment_CopiesCorrectly)
     EXPECT_EQ(st1.at(0), 1);
 }
 
+/**
+ * @brief Test self-assignment via copy
+ * @details Verifies that self-assignment works correctly without data corruption
+ */
 TEST_F(SegmentTreeTest, CopyAssignment_SelfAssignment)
 {
     SegmentTree<int> st(3);
@@ -408,6 +551,10 @@ TEST_F(SegmentTreeTest, CopyAssignment_SelfAssignment)
     EXPECT_EQ(st.at(2), 3);
 }
 
+/**
+ * @brief Test move constructor moves data correctly
+ * @details Verifies that the move constructor transfers data to the new tree
+ */
 TEST_F(SegmentTreeTest, MoveConstructor_MovesCorrectly)
 {
     SegmentTree<int> st1(3);
@@ -423,6 +570,10 @@ TEST_F(SegmentTreeTest, MoveConstructor_MovesCorrectly)
     EXPECT_EQ(st2.query(0, 3), 6);
 }
 
+/**
+ * @brief Test move assignment moves data correctly
+ * @details Verifies that move assignment transfers data to the destination
+ */
 TEST_F(SegmentTreeTest, MoveAssignment_MovesCorrectly)
 {
     SegmentTree<int> st1(3);
@@ -438,6 +589,10 @@ TEST_F(SegmentTreeTest, MoveAssignment_MovesCorrectly)
     EXPECT_EQ(st2.query(0, 3), 6);
 }
 
+/**
+ * @brief Test self-swap does not corrupt data
+ * @details Verifies that swapping a tree with itself is safe
+ */
 TEST_F(SegmentTreeTest, Swap_SelfSwap)
 {
     SegmentTree<int> st(3);
@@ -455,6 +610,11 @@ TEST_F(SegmentTreeTest, Swap_SelfSwap)
 
 // ==================== Single Element Edge Cases ====================
 
+/**
+ * @brief Test all operations on a single-element tree
+ * @details Verifies that update, query, at, and out-of-bounds checks work
+ *          correctly on a tree with one element
+ */
 TEST_F(SegmentTreeTest, SingleElement_AllOperations)
 {
     SegmentTree<int> st(1);
@@ -472,6 +632,10 @@ TEST_F(SegmentTreeTest, SingleElement_AllOperations)
     EXPECT_THROW(std::as_const(st).at(1), std::out_of_range);
 }
 
+/**
+ * @brief Test iterator construction with single element
+ * @details Verifies that constructing from a single-element range works
+ */
 TEST_F(SegmentTreeTest, SingleElement_IteratorConstruct)
 {
     const std::vector<int> data = {7};
@@ -481,6 +645,10 @@ TEST_F(SegmentTreeTest, SingleElement_IteratorConstruct)
     EXPECT_EQ(st.query(0, 1), 7);
 }
 
+/**
+ * @brief Test initializer list construction with single element
+ * @details Verifies that constructing with a single-element initializer list works
+ */
 TEST_F(SegmentTreeTest, SingleElement_InitListConstruct)
 {
     const SegmentTree<int> st = {7};
@@ -491,6 +659,10 @@ TEST_F(SegmentTreeTest, SingleElement_InitListConstruct)
 
 // ==================== Negative Values ====================
 
+/**
+ * @brief Test segment tree with negative values
+ * @details Verifies that range queries with negative values compute correct sums
+ */
 TEST_F(SegmentTreeTest, NegativeValues_Correctness)
 {
     SegmentTree<int> st(4);
@@ -504,6 +676,10 @@ TEST_F(SegmentTreeTest, NegativeValues_Correctness)
     EXPECT_EQ(st.query(2, 4), 7);
 }
 
+/**
+ * @brief Test negative values with custom min operation
+ * @details Verifies that a segment tree with MinOp handles negative values correctly
+ */
 TEST_F(SegmentTreeTest, NegativeValues_WithCustomMinOp)
 {
     SegmentTree<int, MinOp> st(4);
@@ -520,6 +696,11 @@ TEST_F(SegmentTreeTest, NegativeValues_WithCustomMinOp)
 
 // ==================== Large Dataset ====================
 
+/**
+ * @brief Test correctness with a large dataset
+ * @details Verifies that the segment tree handles 1000 elements correctly,
+ *          including updates, range queries, and zeroing out even indices
+ */
 TEST_F(SegmentTreeTest, LargeDataset_Correctness)
 {
     constexpr int kCount = 1000;
@@ -555,6 +736,10 @@ TEST_F(SegmentTreeTest, LargeDataset_Correctness)
 
 // ==================== Different Types ====================
 
+/**
+ * @brief Test segment tree with double type
+ * @details Verifies that the segment tree works correctly with double-precision values
+ */
 TEST_F(SegmentTreeTest, DoubleType_Correctness)
 {
     SegmentTree<double> st(3);
@@ -565,6 +750,10 @@ TEST_F(SegmentTreeTest, DoubleType_Correctness)
     EXPECT_DOUBLE_EQ(st.at(1), 2.5);
 }
 
+/**
+ * @brief Test segment tree with long long type
+ * @details Verifies that the segment tree works correctly with large 64-bit integers
+ */
 TEST_F(SegmentTreeTest, LongLongType_Correctness)
 {
     SegmentTree<long long> st(3);
@@ -578,6 +767,10 @@ TEST_F(SegmentTreeTest, LongLongType_Correctness)
 // Move Semantics Tests
 // ============================================================================
 
+/**
+ * @brief Test move constructor
+ * @details Verifies that the move constructor transfers data correctly
+ */
 TEST_F(SegmentTreeTest, MoveConstructor)
 {
     SegmentTree<int> st(4);
@@ -590,6 +783,10 @@ TEST_F(SegmentTreeTest, MoveConstructor)
     EXPECT_EQ(other.query(0, 4), 6);
 }
 
+/**
+ * @brief Test move assignment
+ * @details Verifies that move assignment transfers data correctly
+ */
 TEST_F(SegmentTreeTest, MoveAssignment)
 {
     SegmentTree<int> st(3);

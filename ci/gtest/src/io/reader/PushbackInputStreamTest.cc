@@ -7,6 +7,7 @@
 
 using namespace common::io::reader;
 
+/// @brief Test fixture for PushbackInputStream tests.
 class PushbackInputStreamTest : public testing::Test
 {
 protected:
@@ -21,6 +22,7 @@ protected:
     }
 };
 
+/** @brief Test normal read of all bytes from the stream. @details Verifies that sequential read() calls return each byte from the underlying ByteArrayInputStream. */
 TEST_F(PushbackInputStreamTest, ReadNormal)
 {
     EXPECT_EQ(stream_->read(), std::byte{0x41});
@@ -28,6 +30,7 @@ TEST_F(PushbackInputStreamTest, ReadNormal)
     EXPECT_EQ(stream_->read(), std::byte{0x43});
 }
 
+/** @brief Test unread of a single byte and re-read. @details Verifies that unread() pushes back one byte and a subsequent read() returns it again. */
 TEST_F(PushbackInputStreamTest, UnreadSingleAndReRead)
 {
     const auto byte = stream_->read();
@@ -36,6 +39,7 @@ TEST_F(PushbackInputStreamTest, UnreadSingleAndReRead)
     EXPECT_EQ(stream_->read(), std::byte{0x41});
 }
 
+/** @brief Test unread of a buffer and re-read. @details Verifies that unread(buf) pushes back multiple bytes which are returned in LIFO order before the original stream data. */
 TEST_F(PushbackInputStreamTest, UnreadBufferAndReRead)
 {
     (void)stream_->read();
@@ -45,37 +49,35 @@ TEST_F(PushbackInputStreamTest, UnreadBufferAndReRead)
     EXPECT_EQ(stream_->read(), std::byte{0x42});
 }
 
+/** @brief Test unread with overflow beyond pushback capacity. @details Verifies that unread() throws std::overflow_error when the buffer exceeds the configured pushback size (4). */
 TEST_F(PushbackInputStreamTest, UnreadOverflow)
 {
     const std::vector<std::byte> large(5);
     EXPECT_THROW(stream_->unread(large), std::overflow_error);
 }
 
+/** @brief Test available() returns at least the underlying data count. @details Verifies that available() reports the number of bytes available including any pushback buffer contents. */
 TEST_F(PushbackInputStreamTest, Available)
 {
     const auto avail = stream_->available();
     EXPECT_GE(avail, 3);
 }
 
+/** @brief Test the close operation. @details Verifies that close() transitions the stream to the closed state. */
 TEST_F(PushbackInputStreamTest, Close)
 {
     stream_->close();
     EXPECT_TRUE(stream_->isClosed());
 }
 
-// ============================================================================
-// Additional Boundary Condition Tests
-// ============================================================================
-
 /**
  * @brief Test unread after close
- * @details After close, unread might throw or be a no-op
+ * @details Verifies that after close, unread does not crash regardless of
+ *          whether the implementation allows post-close pushback.
  */
 TEST_F(PushbackInputStreamTest, UnreadAfterClose)
 {
     stream_->close();
-    // unread may or may not throw depending on implementation;
-    // verify the stream is closed and no crash occurs
     EXPECT_TRUE(stream_->isClosed());
     EXPECT_NO_THROW(stream_->unread(std::byte{0xFF}));
 }
@@ -110,27 +112,27 @@ TEST_F(PushbackInputStreamTest, UnreadAfterExhaustion)
 
 /**
  * @brief Test unread buffer overflow is preserved (no data corruption)
- * @details After an overflow exception, the pushback buffer should remain usable
+ * @details After an overflow exception from a 5-byte buffer exceeding the
+ *          pushback capacity of 4, the stream remains usable and subsequent
+ *          reads return remaining data without corruption.
  */
 TEST_F(PushbackInputStreamTest, OverflowDoesNotCorruptState)
 {
-    // Pushback capacity is 4, so this should work after overflow cleanup
     (void)stream_->read();
     const std::vector<std::byte> large(5);
     EXPECT_THROW(stream_->unread(large), std::overflow_error);
-    // Stream should still work after failed unread
     EXPECT_EQ(stream_->read(), std::byte{0x42});
 }
 
 /**
  * @brief Test available includes pushback buffer
- * @details available() should count bytes in pushback buffer plus remaining
+ * @details Verifies that available() counts bytes in the pushback buffer
+ *          (2 pushed back) plus remaining stream data (3) for a total of 5.
  */
 TEST_F(PushbackInputStreamTest, AvailableWithPushback)
 {
     stream_->unread(std::byte{0xFF});
     stream_->unread(std::byte{0xFE});
-    // 2 pushback + 3 remaining = 5
     EXPECT_GE(stream_->available(), 2);
 }
 

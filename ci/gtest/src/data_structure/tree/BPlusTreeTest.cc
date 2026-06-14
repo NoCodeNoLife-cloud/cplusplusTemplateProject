@@ -28,6 +28,11 @@ protected:
 
 // ==================== Insertion & Find Tests ====================
 
+/**
+ * @brief Test inserting a single key-value pair
+ * @details Verifies that after inserting one pair, find returns the expected value
+ *          and size reflects the insertion
+ */
 TEST_F(BPlusTreeTest, Insert_SinglePair_FindReturnsValue)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -39,6 +44,10 @@ TEST_F(BPlusTreeTest, Insert_SinglePair_FindReturnsValue)
     EXPECT_FALSE(tree.empty());
 }
 
+/**
+ * @brief Test inserting multiple key-value pairs
+ * @details Verifies that all inserted pairs can be found and size is correct
+ */
 TEST_F(BPlusTreeTest, Insert_MultiplePairs_AllFound)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -51,6 +60,10 @@ TEST_F(BPlusTreeTest, Insert_MultiplePairs_AllFound)
     EXPECT_EQ(3, tree.size());
 }
 
+/**
+ * @brief Test inserting keys in sequential ascending order
+ * @details Verifies that 50 sequentially ascending insertions all remain findable
+ */
 TEST_F(BPlusTreeTest, Insert_SequentialAscending_AllFound)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -65,6 +78,11 @@ TEST_F(BPlusTreeTest, Insert_SequentialAscending_AllFound)
     }
 }
 
+/**
+ * @brief Test inserting a duplicate key updates the value
+ * @details Verifies that inserting an existing key overwrites the old value
+ *          without changing the size
+ */
 TEST_F(BPlusTreeTest, Insert_DuplicateKey_UpdatesValue)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -74,6 +92,11 @@ TEST_F(BPlusTreeTest, Insert_DuplicateKey_UpdatesValue)
     EXPECT_EQ(1, tree.size());
 }
 
+/**
+ * @brief Test insertion triggers leaf node split
+ * @details Verifies that when a leaf exceeds its capacity, a split occurs
+ *          and the tree's height increases
+ */
 TEST_F(BPlusTreeTest, Insert_TriggersLeafSplit)
 {
     BPlusTree<int32_t, std::string, std::less<int32_t>, 2> tree; // t=2 => max 3 keys per leaf
@@ -84,6 +107,11 @@ TEST_F(BPlusTreeTest, Insert_TriggersLeafSplit)
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test inserting many elements and verifying all
+ * @details Verifies that all 200 inserted elements can be found and
+ *          structural invariants hold via verify()
+ */
 TEST_F(BPlusTreeTest, Insert_ManyElements_AllFound)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -101,6 +129,10 @@ TEST_F(BPlusTreeTest, Insert_ManyElements_AllFound)
 
 // ==================== Contains Tests ====================
 
+/**
+ * @brief Test contains with an existing key
+ * @details Verifies that contains returns true for a key that was inserted
+ */
 TEST_F(BPlusTreeTest, Contains_ExistingKey_ReturnsTrue)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -108,6 +140,10 @@ TEST_F(BPlusTreeTest, Contains_ExistingKey_ReturnsTrue)
     EXPECT_TRUE(tree.contains(42));
 }
 
+/**
+ * @brief Test contains with a non-existing key
+ * @details Verifies that contains returns false for a key not in the tree
+ */
 TEST_F(BPlusTreeTest, Contains_NonExisting_ReturnsFalse)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -115,6 +151,10 @@ TEST_F(BPlusTreeTest, Contains_NonExisting_ReturnsFalse)
     EXPECT_FALSE(tree.contains(20));
 }
 
+/**
+ * @brief Test contains on an empty tree
+ * @details Verifies that contains returns false when the tree is empty
+ */
 TEST_F(BPlusTreeTest, Contains_EmptyTree_ReturnsFalse)
 {
     const BPlusTree<int32_t, std::string> tree;
@@ -123,6 +163,10 @@ TEST_F(BPlusTreeTest, Contains_EmptyTree_ReturnsFalse)
 
 // ==================== Range Scan Tests ====================
 
+/**
+ * @brief Test range scan on an empty tree
+ * @details Verifies that range scanning an empty tree returns an empty vector
+ */
 TEST_F(BPlusTreeTest, RangeScan_EmptyTree_ReturnsEmpty)
 {
     const BPlusTree<int32_t, std::string> tree;
@@ -130,6 +174,10 @@ TEST_F(BPlusTreeTest, RangeScan_EmptyTree_ReturnsEmpty)
     EXPECT_TRUE(result.empty());
 }
 
+/**
+ * @brief Test range scan for a single point
+ * @details Verifies that scanning a narrow range returns only the matching element
+ */
 TEST_F(BPlusTreeTest, RangeScan_SinglePoint_ReturnsThatElement)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -141,6 +189,10 @@ TEST_F(BPlusTreeTest, RangeScan_SinglePoint_ReturnsThatElement)
     EXPECT_EQ("five", result[0].second);
 }
 
+/**
+ * @brief Test range scan with a partial range
+ * @details Verifies that scanning a sub-range returns only the elements within that range
+ */
 TEST_F(BPlusTreeTest, RangeScan_PartialRange_ReturnsCorrectElements)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -152,6 +204,10 @@ TEST_F(BPlusTreeTest, RangeScan_PartialRange_ReturnsCorrectElements)
         EXPECT_EQ(5 + i, result[i].first);
 }
 
+/**
+ * @brief Test full range scan returns all elements sorted
+ * @details Verifies that scanning the full key range returns all elements in sorted order
+ */
 TEST_F(BPlusTreeTest, RangeScan_FullRange_ReturnsAllSorted)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -163,6 +219,10 @@ TEST_F(BPlusTreeTest, RangeScan_FullRange_ReturnsAllSorted)
         EXPECT_EQ(i, result[i].first);
 }
 
+/**
+ * @brief Test range scan with no matching keys
+ * @details Verifies that scanning a range with no elements returns an empty result
+ */
 TEST_F(BPlusTreeTest, RangeScan_NoMatch_ReturnsEmpty)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -172,6 +232,10 @@ TEST_F(BPlusTreeTest, RangeScan_NoMatch_ReturnsEmpty)
     EXPECT_TRUE(result.empty());
 }
 
+/**
+ * @brief Test range scan end-exclusive behavior
+ * @details Verifies that the end key is excluded from the range scan result
+ */
 TEST_F(BPlusTreeTest, RangeScan_EndExclusive_ExcludesEnd)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -185,6 +249,10 @@ TEST_F(BPlusTreeTest, RangeScan_EndExclusive_ExcludesEnd)
 
 // ==================== Leaf List Tests ====================
 
+/**
+ * @brief Test inorder traversal from a single leaf
+ * @details Verifies that inorder returns all elements when they fit in one leaf
+ */
 TEST_F(BPlusTreeTest, LeafList_SingleLeaf_AllElements)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -196,6 +264,10 @@ TEST_F(BPlusTreeTest, LeafList_SingleLeaf_AllElements)
     EXPECT_EQ(2, inorder[1].first);
 }
 
+/**
+ * @brief Test inorder traversal after leaf splits
+ * @details Verifies that the leaf list remains correctly linked after multiple splits
+ */
 TEST_F(BPlusTreeTest, LeafList_AfterSplits_LinkedCorrectly)
 {
     BPlusTree<int32_t, std::string, std::less<int32_t>, 2> tree; // small degree => many splits
@@ -209,6 +281,11 @@ TEST_F(BPlusTreeTest, LeafList_AfterSplits_LinkedCorrectly)
 
 // ==================== Removal Tests ====================
 
+/**
+ * @brief Test removing a non-existing key has no effect
+ * @details Verifies that attempting to remove a key not in the tree
+ *          returns false and leaves the tree unchanged
+ */
 TEST_F(BPlusTreeTest, Remove_NonExisting_NoEffect)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -217,6 +294,10 @@ TEST_F(BPlusTreeTest, Remove_NonExisting_NoEffect)
     EXPECT_EQ(1, tree.size());
 }
 
+/**
+ * @brief Test removing the single element empties the tree
+ * @details Verifies that after removing the only element, the tree becomes empty
+ */
 TEST_F(BPlusTreeTest, Remove_SingleElement_EmptiesTree)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -227,6 +308,10 @@ TEST_F(BPlusTreeTest, Remove_SingleElement_EmptiesTree)
     EXPECT_EQ(0, tree.size());
 }
 
+/**
+ * @brief Test removing multiple elements
+ * @details Verifies that all 20 inserted elements can be removed sequentially
+ */
 TEST_F(BPlusTreeTest, Remove_MultipleElements_AllRemoved)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -238,6 +323,11 @@ TEST_F(BPlusTreeTest, Remove_MultipleElements_AllRemoved)
     EXPECT_EQ(0, tree.size());
 }
 
+/**
+ * @brief Test inorder traversal correctness after removal
+ * @details Verifies that after removing specific keys, the inorder traversal
+ *          reflects the correct remaining elements
+ */
 TEST_F(BPlusTreeTest, Remove_CheckInorderAfterRemoval)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -253,6 +343,11 @@ TEST_F(BPlusTreeTest, Remove_CheckInorderAfterRemoval)
     EXPECT_EQ(8, inorder[5].first);
 }
 
+/**
+ * @brief Test remove then re-insert the same key
+ * @details Verifies that after removing a key, re-inserting it works correctly
+ *          with a new value
+ */
 TEST_F(BPlusTreeTest, Remove_ThenInsert_Works)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -269,12 +364,20 @@ TEST_F(BPlusTreeTest, Remove_ThenInsert_Works)
 
 // ==================== Verification Tests ====================
 
+/**
+ * @brief Test verify on an empty tree
+ * @details Verifies that an empty tree passes structural validation
+ */
 TEST_F(BPlusTreeTest, Verify_EmptyTree_ReturnsTrue)
 {
     BPlusTree<int32_t, std::string> tree;
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test verify after multiple inserts
+ * @details Verifies that the tree passes structural validation after insertions
+ */
 TEST_F(BPlusTreeTest, Verify_AfterInserts_ReturnsTrue)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -283,6 +386,10 @@ TEST_F(BPlusTreeTest, Verify_AfterInserts_ReturnsTrue)
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test verify after insert and delete operations
+ * @details Verifies that the tree passes structural validation after mixed operations
+ */
 TEST_F(BPlusTreeTest, Verify_AfterInsertDelete_ReturnsTrue)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -295,12 +402,20 @@ TEST_F(BPlusTreeTest, Verify_AfterInsertDelete_ReturnsTrue)
 
 // ==================== Height Tests ====================
 
+/**
+ * @brief Test height of an empty tree
+ * @details Verifies that an empty tree has height zero
+ */
 TEST_F(BPlusTreeTest, Height_EmptyTree_Zero)
 {
     BPlusTree<int32_t, std::string> tree;
     EXPECT_EQ(0, tree.height());
 }
 
+/**
+ * @brief Test height with a single node
+ * @details Verifies that a tree with one element has height one
+ */
 TEST_F(BPlusTreeTest, Height_SingleNode_One)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -308,6 +423,11 @@ TEST_F(BPlusTreeTest, Height_SingleNode_One)
     EXPECT_EQ(1, tree.height());
 }
 
+/**
+ * @brief Test height after multiple inserts
+ * @details Verifies that the tree height stays within expected bounds
+ *          after inserting 100 elements with a small degree
+ */
 TEST_F(BPlusTreeTest, Height_AfterInserts_Reasonable)
 {
     BPlusTree<int32_t, std::string, std::less<int32_t>, 2> tree;
@@ -321,6 +441,10 @@ TEST_F(BPlusTreeTest, Height_AfterInserts_Reasonable)
 
 // ==================== Edge Cases ====================
 
+/**
+ * @brief Test clear empties the tree
+ * @details Verifies that clear removes all elements and the tree passes validation
+ */
 TEST_F(BPlusTreeTest, Clear_EmptiesTree)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -332,6 +456,11 @@ TEST_F(BPlusTreeTest, Clear_EmptiesTree)
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test move constructor transfers ownership
+ * @details Verifies that the move constructor transfers all elements
+ *          and the source tree becomes empty
+ */
 TEST_F(BPlusTreeTest, MoveConstructor_TransfersOwnership)
 {
     BPlusTree<int32_t, std::string> tree;
@@ -345,6 +474,11 @@ TEST_F(BPlusTreeTest, MoveConstructor_TransfersOwnership)
     EXPECT_TRUE(moved.contains(2));
 }
 
+/**
+ * @brief Test move assignment transfers ownership
+ * @details Verifies that move assignment transfers all elements
+ *          and the source tree becomes empty
+ */
 TEST_F(BPlusTreeTest, MoveAssignment_TransfersOwnership)
 {
     BPlusTree<int32_t, std::string> a;
@@ -357,6 +491,11 @@ TEST_F(BPlusTreeTest, MoveAssignment_TransfersOwnership)
     EXPECT_TRUE(b.contains(1));
 }
 
+/**
+ * @brief Test large dataset with minimum order
+ * @details Verifies that the B+ tree handles 500 elements with minimum order (t=2)
+ *          and all elements remain findable
+ */
 TEST_F(BPlusTreeTest, LargeDataset_MinimumOrder)
 {
     BPlusTree<int32_t, std::string, std::less<int32_t>, 2> tree; // t=2
@@ -368,6 +507,11 @@ TEST_F(BPlusTreeTest, LargeDataset_MinimumOrder)
         EXPECT_TRUE(tree.contains(i));
 }
 
+/**
+ * @brief Test range scan spanning multiple leaf nodes
+ * @details Verifies that range scan correctly retrieves elements that span
+ *          across multiple leaf nodes in the B+ tree
+ */
 TEST_F(BPlusTreeTest, RangeScan_SpansMultipleLeafNodes)
 {
     BPlusTree<int32_t, std::string, std::less<int32_t>, 2> tree;

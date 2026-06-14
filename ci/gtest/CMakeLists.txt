@@ -1,5 +1,15 @@
-# Project
-# Common shared test support sources
+# ══════════════════════════════════════════════════════════════════════════
+#  GTest unit tests — per-directory parallel executables
+# ══════════════════════════════════════════════════════════════════════════
+#
+# Each sub-directory under src/ becomes a separate test executable named
+# ut_<relative_path> (e.g., ut_toolkit, ut_cache, ut_interface_io).
+# This allows ctest -j N to run all modules in parallel.
+#
+# Shared support sources (auth/config helpers) are linked into every
+# test executable to reduce per-test-file boilerplate.
+
+# ── Shared support sources ─────────────────────────────────────────────
 set(CI_GTEST_SHARED_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../../client/src/auth/AuthRpcParam.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/../../server/src/auth/AuthRpcParam.cc
@@ -7,7 +17,7 @@ set(CI_GTEST_SHARED_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../../client/src/config/ConfigParam.cc
 )
 
-# Common include directories
+# ── Common include directories ─────────────────────────────────────────
 set(CI_GTEST_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../../common/src
@@ -17,7 +27,7 @@ set(CI_GTEST_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/../../server/src
 )
 
-# Common linked libraries
+# ── Common linked libraries ────────────────────────────────────────────
 set(CI_GTEST_LIBS
     GTest::gtest
     GTest::gtest_main
@@ -36,11 +46,13 @@ set(CI_GTEST_LIBS
     unofficial::mysql-connector-cpp::connector
 )
 
-# Collect all test .cc/.cpp files
+# ── Discover test files ────────────────────────────────────────────────
 file(GLOB_RECURSE CI_GTEST_ALL_FILES *.cc *.cpp)
 
-# Group by parent directory to create per-directory test executables
-# This allows ctest -j N to run tests in parallel across directories
+# ── Group files by parent directory → one executable per directory ─────
+# Rationale: each directory corresponds to one source module (toolkit/,
+# cache/, io/reader/, …).  Parallelising at directory level gives good
+# granularity without excessive linking overhead.
 set(CI_GTEST_DIRS)
 foreach(FILE ${CI_GTEST_ALL_FILES})
     get_filename_component(FILE_DIR ${FILE} DIRECTORY)
@@ -49,18 +61,18 @@ endforeach()
 list(REMOVE_DUPLICATES CI_GTEST_DIRS)
 
 foreach(DIR ${CI_GTEST_DIRS})
-    # Target name: relative path with / replaced by _
+    # Derive executable name: ut_<relative_path_with_underscores>
     file(RELATIVE_PATH REL_DIR ${CMAKE_CURRENT_SOURCE_DIR} ${DIR})
     string(REPLACE "/" "_" TARGET_NAME "ut_${REL_DIR}")
     string(REPLACE "\\" "_" TARGET_NAME ${TARGET_NAME})
 
-    # Collect test files in this directory only (non-recursive to avoid
-    # duplicate compilation across sibling directories)
+    # Collect files in this directory only (non-recursive) to avoid
+    # double-compiling sibling-directory files
     file(GLOB DIR_FILES ${DIR}/*.cc ${DIR}/*.cpp)
 
     add_executable(${TARGET_NAME} ${DIR_FILES})
 
-    # Add the shared support sources
+    # Attach shared support sources
     target_sources(${TARGET_NAME} PRIVATE ${CI_GTEST_SHARED_SRC})
 
     target_include_directories(${TARGET_NAME} PRIVATE ${CI_GTEST_INCLUDE_DIRS})

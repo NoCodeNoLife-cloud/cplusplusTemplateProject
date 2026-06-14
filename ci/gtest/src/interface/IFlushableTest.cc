@@ -34,6 +34,7 @@ namespace
     };
 }
 
+/// @brief Test fixture for IFlushable tests.
 class IFlushableTest : public testing::Test
 {
 protected:
@@ -50,12 +51,14 @@ protected:
     std::unique_ptr<MockFlushable> mock_;
 };
 
+/** @brief Verifies flush() increments the flush counter. */
 TEST_F(IFlushableTest, FlushIncrementsCount)
 {
     mock_->flush();
     EXPECT_EQ(mock_->flushCount_, 1);
 }
 
+/** @brief Verifies flush() can be called multiple times. */
 TEST_F(IFlushableTest, FlushMultipleTimes)
 {
     mock_->flush();
@@ -64,6 +67,7 @@ TEST_F(IFlushableTest, FlushMultipleTimes)
     EXPECT_EQ(mock_->flushCount_, 3);
 }
 
+/** @brief Verifies flushSafe flushes successfully and returns true. */
 TEST_F(IFlushableTest, FlushSafeSuccess)
 {
     const bool result = mock_->flushSafe();
@@ -71,6 +75,7 @@ TEST_F(IFlushableTest, FlushSafeSuccess)
     EXPECT_EQ(mock_->flushCount_, 1);
 }
 
+/** @brief Verifies flushSafe catches exceptions and returns false. */
 TEST_F(IFlushableTest, FlushSafeHandlesException)
 {
     mock_->throwOnFlush_ = true;
@@ -79,12 +84,14 @@ TEST_F(IFlushableTest, FlushSafeHandlesException)
     EXPECT_EQ(mock_->flushCount_, 1);
 }
 
+/** @brief Verifies isFlushNeeded returns true by default. */
 TEST_F(IFlushableTest, IsFlushNeededDefault)
 {
     const MockFlushable defaultMock;
     EXPECT_TRUE(defaultMock.isFlushNeeded());
 }
 
+/** @brief Verifies isFlushNeeded returns false when set. */
 TEST_F(IFlushableTest, IsFlushNeededFalse)
 {
     mock_->flushNeeded_ = false;

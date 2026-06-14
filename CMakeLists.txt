@@ -1,26 +1,38 @@
-# CMake version requirement and standard settings
+# ══════════════════════════════════════════════════════════════════════════
+#  Root project — cpp_project
+# ══════════════════════════════════════════════════════════════════════════
+#
+# Top-level CMake configuration for the entire C++ project.
+# Defines global compiler settings, toolchain, dependencies, and
+# sub-project entry points (common, proto, log, client, server, ci).
+#
+# ══════════════════════════════════════════════════════════════════════════
+
+# ── Compiler & standards ─────────────────────────────────────────────────
 cmake_minimum_required(VERSION 3.30)
 set(CMAKE_CXX_STANDARD 26)
 
+# Enable UTF-8 source/execution character set on MSVC
 if (MSVC)
     add_compile_options("/source-charset:utf-8")
     add_compile_options("/execution-charset:utf-8")
     add_compile_options("/utf-8")
 endif ()
 
+# ── Build type ───────────────────────────────────────────────────────────
+# Default to Debug unless the user explicitly chooses another type
 set(default_build_type "Debug")
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
     set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
-    # Set the possible values of build type for cmake-gui
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif ()
 
-# Toolchain configuration
+# ── Toolchain (vcpkg) ────────────────────────────────────────────────────
+# Prefer an explicit toolchain file; fall back to $VCPKG_ROOT if set
 if (CMAKE_TOOLCHAIN_FILE)
     message(STATUS "Using toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 else ()
-    # Try to find vcpkg toolchain file automatically
     if (DEFINED ENV{VCPKG_ROOT})
         set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
         message(STATUS "Automatically detected vcpkg toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
@@ -29,13 +41,14 @@ else ()
     endif ()
 endif ()
 
-# Project setup
+# ── Project declaration ──────────────────────────────────────────────────
 set(MAIN_PROJECT cpp_project)
 project(${MAIN_PROJECT})
 
 enable_testing()
 
-# Vcpkg dependencies
+# ── Package dependencies ─────────────────────────────────────────────────
+# All third-party libraries are managed through vcpkg
 find_package(Boost CONFIG REQUIRED COMPONENTS serialization)
 find_package(glog CONFIG REQUIRED)
 find_package(gtest CONFIG REQUIRED)
@@ -51,7 +64,7 @@ find_package(fmt CONFIG REQUIRED)
 find_package(unofficial-mysql-connector-cpp CONFIG REQUIRED)
 find_package(benchmark CONFIG REQUIRED)
 
-# Subdirectories
+# ── Sub-projects ─────────────────────────────────────────────────────────
 add_subdirectory(common)
 add_subdirectory(proto)
 add_subdirectory(log)

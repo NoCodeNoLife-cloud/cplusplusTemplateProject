@@ -78,6 +78,7 @@ namespace
     };
 }
 
+/// @brief Test fixture for PeriodicActuator tests.
 class PeriodicActuatorTest : public testing::Test
 {
 protected:
@@ -90,6 +91,11 @@ protected:
     }
 };
 
+/**
+ * @brief Verifies actuator is running immediately after start
+ * @details Starts the actuator and asserts that isRunning() returns true
+ *          before the task has had a chance to execute.
+ */
 TEST_F(PeriodicActuatorTest, Start_IsRunning)
 {
     std::atomic<int> counter{0};
@@ -100,6 +106,11 @@ TEST_F(PeriodicActuatorTest, Start_IsRunning)
     actuator.stop();
 }
 
+/**
+ * @brief Verifies actuator is stopped after calling stop
+ * @details Starts the actuator, immediately stops it, and asserts that
+ *          isRunning() returns false.
+ */
 TEST_F(PeriodicActuatorTest, Stop_IsNotRunning)
 {
     std::atomic<int> counter{0};
@@ -110,6 +121,11 @@ TEST_F(PeriodicActuatorTest, Stop_IsNotRunning)
     EXPECT_FALSE(actuator.isRunning());
 }
 
+/**
+ * @brief Verifies task executes periodically and counter increases
+ * @details Runs a MockTimerTask at 10ms interval for 100ms and asserts
+ *          the counter is incremented at least 3 times.
+ */
 TEST_F(PeriodicActuatorTest, PeriodicExecution_IncrementsCounter)
 {
     std::atomic<int> counter{0};
@@ -121,6 +137,12 @@ TEST_F(PeriodicActuatorTest, PeriodicExecution_IncrementsCounter)
     EXPECT_GE(counter.load(), 3);
 }
 
+/**
+ * @brief Verifies exception in task does not halt the scheduler
+ * @details Runs a ThrowingTimerTask that increments a counter before
+ *          throwing each invocation; asserts the counter reaches >= 3,
+ *          proving subsequent invocations still fire.
+ */
 TEST_F(PeriodicActuatorTest, ThrowingTask_DoesNotStopScheduler)
 {
     std::atomic<int> counter{0};
@@ -132,6 +154,11 @@ TEST_F(PeriodicActuatorTest, ThrowingTask_DoesNotStopScheduler)
     EXPECT_GE(counter.load(), 3);
 }
 
+/**
+ * @brief Verifies double start throws std::runtime_error
+ * @details Calls start() on an already-running actuator and asserts that
+ *          a std::runtime_error is thrown.
+ */
 TEST_F(PeriodicActuatorTest, StartTwice_Throws)
 {
     std::atomic<int> counter{0};
@@ -142,6 +169,11 @@ TEST_F(PeriodicActuatorTest, StartTwice_Throws)
     actuator.stop();
 }
 
+/**
+ * @brief Verifies stop on a never-started actuator is a no-op
+ * @details Calls stop() on an actuator that was never started and asserts
+ *          that no exception is thrown and isRunning() remains false.
+ */
 TEST_F(PeriodicActuatorTest, StopWithoutStart_NoOp)
 {
     std::atomic<int> counter{0};
@@ -150,6 +182,12 @@ TEST_F(PeriodicActuatorTest, StopWithoutStart_NoOp)
     EXPECT_NO_THROW(actuator.stop());
 }
 
+/**
+ * @brief Verifies restart after stop resumes task execution
+ * @details Starts, stops, then restarts the actuator, capturing the
+ *          counter after each phase and asserting it continues to
+ *          increase after the second start.
+ */
 TEST_F(PeriodicActuatorTest, RestartAfterStop_ResumesExecution)
 {
     std::atomic<int> counter{0};

@@ -18,6 +18,7 @@ using namespace common::io::writer;
 
 namespace fs = std::filesystem;
 
+/// @brief Test fixture for FileOutputStream tests using temporary files.
 class FileOutputStreamTest : public testing::Test
 {
 protected:
@@ -35,6 +36,8 @@ protected:
     fs::path test_path_;
 };
 
+/** @brief Create a file, write a single byte, and verify on disk.
+    @details Writes 0x41, closes, then reads back from the file and confirms the byte value. */
 TEST_F(FileOutputStreamTest, CreateAndWriteSingleByte)
 {
     FileOutputStream fos(test_path_.string(), false);
@@ -48,6 +51,8 @@ TEST_F(FileOutputStreamTest, CreateAndWriteSingleByte)
     EXPECT_EQ(static_cast<unsigned char>(content[0]), 0x41);
 }
 
+/** @brief Write multiple bytes sequentially to a file.
+    @details Writes {0x01,0x02,0x03}, closes, and reads back to verify all three bytes. */
 TEST_F(FileOutputStreamTest, WriteMultipleBytes)
 {
     FileOutputStream fos(test_path_.string(), false);
@@ -64,6 +69,8 @@ TEST_F(FileOutputStreamTest, WriteMultipleBytes)
     EXPECT_EQ(static_cast<unsigned char>(content[2]), 0x03);
 }
 
+/** @brief Write a full byte vector to a file.
+    @details Writes {0x10,0x20,0x30} and reads back from file. */
 TEST_F(FileOutputStreamTest, WriteVector)
 {
     const std::vector<std::byte> data = {std::byte{0x10}, std::byte{0x20}, std::byte{0x30}};
@@ -78,6 +85,8 @@ TEST_F(FileOutputStreamTest, WriteVector)
     EXPECT_EQ(static_cast<unsigned char>(content[0]), 0x10);
 }
 
+/** @brief Write a sub-range of a byte vector to a file.
+    @details Writes offset=1, length=2 from {0x00,0x11,0x22,0x33} and reads back. */
 TEST_F(FileOutputStreamTest, WriteVectorPartial)
 {
     const std::vector<std::byte> data = {std::byte{0x00}, std::byte{0x11}, std::byte{0x22}, std::byte{0x33}};
@@ -93,6 +102,8 @@ TEST_F(FileOutputStreamTest, WriteVectorPartial)
     EXPECT_EQ(static_cast<unsigned char>(content[1]), 0x22);
 }
 
+/** @brief Out-of-bounds vector offset throws.
+    @details Offset 5 on a size-1 buffer triggers std::out_of_range. */
 TEST_F(FileOutputStreamTest, WriteVectorOffsetOutOfRange)
 {
     FileOutputStream fos(test_path_.string(), false);
@@ -100,6 +111,8 @@ TEST_F(FileOutputStreamTest, WriteVectorOffsetOutOfRange)
     EXPECT_THROW(fos.write(data, 5, 1), std::out_of_range);
 }
 
+/** @brief Write a raw C-style byte buffer to a file.
+    @details Writes a constexpr array {0x41,0x42} with explicit length and reads back. */
 TEST_F(FileOutputStreamTest, WriteRawBuffer)
 {
     constexpr std::byte buf[] = {std::byte{0x41}, std::byte{0x42}};
@@ -113,12 +126,16 @@ TEST_F(FileOutputStreamTest, WriteRawBuffer)
     ASSERT_EQ(content.size(), 2);
 }
 
+/** @brief Null raw buffer with non-zero length throws.
+    @details Passing nullptr with length 3 triggers std::invalid_argument. */
 TEST_F(FileOutputStreamTest, WriteRawBufferNullThrows)
 {
     FileOutputStream fos(test_path_.string(), false);
     EXPECT_THROW(fos.write(nullptr, 3), std::invalid_argument);
 }
 
+/** @brief Append mode preserves existing file content.
+    @details Writes 0x01 in non-append mode, then 0x02 in append mode, verifies both bytes. */
 TEST_F(FileOutputStreamTest, AppendMode)
 {
     {
@@ -137,6 +154,8 @@ TEST_F(FileOutputStreamTest, AppendMode)
     EXPECT_EQ(static_cast<unsigned char>(content[1]), 0x02);
 }
 
+/** @brief Flush does not throw.
+    @details Writes a byte, calls flush, and verifies no exception is thrown. */
 TEST_F(FileOutputStreamTest, Flush)
 {
     FileOutputStream fos(test_path_.string(), false);
@@ -145,6 +164,8 @@ TEST_F(FileOutputStreamTest, Flush)
     fos.close();
 }
 
+/** @brief Close is idempotent.
+    @details Calling close twice does not throw and leaves the stream closed. */
 TEST_F(FileOutputStreamTest, CloseIsIdempotent)
 {
     FileOutputStream fos(test_path_.string(), false);
@@ -153,6 +174,8 @@ TEST_F(FileOutputStreamTest, CloseIsIdempotent)
     EXPECT_NO_THROW(fos.close());
 }
 
+/** @brief isClosed returns correct state before and after close.
+    @details Returns false initially and true after close. */
 TEST_F(FileOutputStreamTest, IsClosedAfterClose)
 {
     FileOutputStream fos(test_path_.string(), false);
@@ -161,6 +184,8 @@ TEST_F(FileOutputStreamTest, IsClosedAfterClose)
     EXPECT_TRUE(fos.isClosed());
 }
 
+/** @brief Constructor accepts a C-string path.
+    @details Creates a FileOutputStream with .c_str() path and verifies file is created. */
 TEST_F(FileOutputStreamTest, CStringConstructor)
 {
     {
@@ -170,6 +195,8 @@ TEST_F(FileOutputStreamTest, CStringConstructor)
     EXPECT_TRUE(fs::exists(test_path_));
 }
 
+/** @brief Constructor accepts a std::filesystem::path.
+    @details Creates a FileOutputStream with fs::path and verifies file is created. */
 TEST_F(FileOutputStreamTest, FilesystemPathConstructor)
 {
     {
@@ -179,6 +206,8 @@ TEST_F(FileOutputStreamTest, FilesystemPathConstructor)
     EXPECT_TRUE(fs::exists(test_path_));
 }
 
+/** @brief Write after close throws.
+    @details Closing then writing triggers std::ios_base::failure. */
 TEST_F(FileOutputStreamTest, WriteAfterCloseThrows)
 {
     FileOutputStream fos(test_path_.string(), false);
@@ -186,6 +215,8 @@ TEST_F(FileOutputStreamTest, WriteAfterCloseThrows)
     EXPECT_THROW(fos.write(std::byte{0x00}), std::ios_base::failure);
 }
 
+/** @brief Flush after close throws.
+    @details Closing then flushing triggers std::ios_base::failure. */
 TEST_F(FileOutputStreamTest, FlushAfterCloseThrows)
 {
     FileOutputStream fos(test_path_.string(), false);
@@ -193,6 +224,8 @@ TEST_F(FileOutputStreamTest, FlushAfterCloseThrows)
     EXPECT_THROW(fos.flush(), std::ios_base::failure);
 }
 
+/** @brief Truncate mode overwrites existing file content.
+    @details Writes two bytes, then reopens in non-append mode and writes one byte; only the last byte survives. */
 TEST_F(FileOutputStreamTest, TruncateMode)
 {
     {

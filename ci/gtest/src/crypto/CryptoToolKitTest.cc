@@ -387,10 +387,6 @@ TEST_F(CryptoToolKitTest, SaltRandomness_Quality)
     EXPECT_GT(uniqueBytes.size(), 100); // At least 100 different byte values
 }
 
-// ============================================================================
-// Boundary Condition Tests
-// ============================================================================
-
 /**
  * @brief Test hash_password with zero iterations
  * @details PKCS5_PBKDF2_HMAC with iterations=0 - OpenSSL may reject this.
@@ -514,10 +510,6 @@ TEST_F(CryptoToolKitTest, HashPassword_BinaryPassword)
         EXPECT_EQ(hash.size(), CryptoToolKit::HASH_SIZE);
     });
 }
-
-// ============================================================================
-// Additional Boundary Condition Tests
-// ============================================================================
 
 /**
  * @brief Test secure_compare with embedded null bytes at different positions

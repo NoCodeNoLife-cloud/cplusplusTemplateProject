@@ -1,3 +1,11 @@
+/**
+ * @file CycleDetectionTest.cc
+ * @brief Unit tests for cycle detection algorithms in directed and undirected graphs
+ * @details Tests cover directed cycle detection (DFS-based), undirected cycle
+ *          detection (union-find / DFS-based), self-loop handling, and edge cases
+ *          such as empty and single-node graphs.
+ */
+
 #include <gtest/gtest.h>
 
 #include "data_structure/graph/algorithm/CycleDetection.hpp"
@@ -5,6 +13,9 @@
 using namespace common::data_structure::graph;
 using namespace common::data_structure::graph::algorithm;
 
+/**
+ * @brief Test fixture for CycleDetection tests
+ */
 class CycleDetectionTest : public testing::Test
 {
 protected:
@@ -12,6 +23,10 @@ protected:
     void TearDown() override {}
 };
 
+/**
+ * @brief Test directed cycle detection on an acyclic graph
+ * @details Verifies that a linear DAG (0→1→2→3) has no cycles
+ */
 TEST_F(CycleDetectionTest, DetectDirected_NoCycle)
 {
     Graph g(4);
@@ -24,6 +39,10 @@ TEST_F(CycleDetectionTest, DetectDirected_NoCycle)
     EXPECT_TRUE(result.cycle.empty());
 }
 
+/**
+ * @brief Test directed cycle detection on a graph with a cycle
+ * @details Verifies that a 3-node directed cycle (0→1→2→0) is correctly detected
+ */
 TEST_F(CycleDetectionTest, DetectDirected_HasCycle)
 {
     Graph g(3);
@@ -36,6 +55,10 @@ TEST_F(CycleDetectionTest, DetectDirected_HasCycle)
     EXPECT_FALSE(result.cycle.empty());
 }
 
+/**
+ * @brief Test directed cycle detection with a self-loop
+ * @details Verifies that a self-loop edge (0→0) is detected as a cycle
+ */
 TEST_F(CycleDetectionTest, DetectDirected_SelfLoop)
 {
     Graph g(2);
@@ -46,6 +69,10 @@ TEST_F(CycleDetectionTest, DetectDirected_SelfLoop)
     EXPECT_FALSE(result.cycle.empty());
 }
 
+/**
+ * @brief Test undirected cycle detection on an acyclic graph
+ * @details Verifies that a simple undirected path has no cycles
+ */
 TEST_F(CycleDetectionTest, DetectUndirected_NoCycle)
 {
     Graph g(4);
@@ -58,6 +85,10 @@ TEST_F(CycleDetectionTest, DetectUndirected_NoCycle)
     EXPECT_TRUE(result.cycle.empty());
 }
 
+/**
+ * @brief Test undirected cycle detection on a graph with a cycle
+ * @details Verifies that a 3-node undirected triangle has a cycle
+ */
 TEST_F(CycleDetectionTest, DetectUndirected_HasCycle)
 {
     Graph g(3);
@@ -70,6 +101,10 @@ TEST_F(CycleDetectionTest, DetectUndirected_HasCycle)
     EXPECT_FALSE(result.cycle.empty());
 }
 
+/**
+ * @brief Test directed cycle detection on an empty graph
+ * @details Edge case: verifies that a graph with zero nodes has no cycles
+ */
 TEST_F(CycleDetectionTest, DetectDirected_EmptyGraph)
 {
     const Graph g(0);
@@ -77,6 +112,10 @@ TEST_F(CycleDetectionTest, DetectDirected_EmptyGraph)
     EXPECT_FALSE(result.has_cycle);
 }
 
+/**
+ * @brief Test directed cycle detection on a single-node graph
+ * @details Edge case: verifies that a graph with one node and no edges has no cycles
+ */
 TEST_F(CycleDetectionTest, DetectDirected_SingleNode)
 {
     Graph g(1);

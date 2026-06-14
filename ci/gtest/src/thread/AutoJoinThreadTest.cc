@@ -14,6 +14,7 @@
 
 using namespace common::thread;
 
+/// @brief Test fixture for AutoJoinThread tests.
 class AutoJoinThreadTest : public testing::Test
 {
 protected:
@@ -26,6 +27,11 @@ protected:
     }
 };
 
+/**
+ * @brief Verify a moved-from AutoJoinThread is not joinable
+ * @details Constructs a thread, move-constructs another from it, then
+ *          asserts the source thread is no longer joinable.
+ */
 TEST_F(AutoJoinThreadTest, MovedFrom_NotJoinable)
 {
     AutoJoinThread t([] {});
@@ -35,6 +41,11 @@ TEST_F(AutoJoinThreadTest, MovedFrom_NotJoinable)
     moved.join();
 }
 
+/**
+ * @brief Verify thread becomes joinable after construction with a callable
+ * @details Creates an AutoJoinThread with a lambda that sleeps, then
+ *          checks joinable() returns true before joining.
+ */
 TEST_F(AutoJoinThreadTest, ConstructWithCallable_Joinable)
 {
     AutoJoinThread t([] { std::this_thread::sleep_for(std::chrono::milliseconds(10)); });
@@ -42,6 +53,12 @@ TEST_F(AutoJoinThreadTest, ConstructWithCallable_Joinable)
     t.join();
 }
 
+/**
+ * @brief Verify join() blocks until the thread completes execution
+ * @details Uses an atomic flag set by the thread after a sleep; after
+ *          join() returns the flag must be true, confirming the thread
+ *          finished before join() unblocked.
+ */
 TEST_F(AutoJoinThreadTest, Join_WaitsForCompletion)
 {
     {
@@ -56,6 +73,11 @@ TEST_F(AutoJoinThreadTest, Join_WaitsForCompletion)
     }
 }
 
+/**
+ * @brief Verify calling join() on an already-joined thread is a no-op
+ * @details Joins a thread once, verifies it is no longer joinable, then
+ *          joins again to confirm no crash or state change occurs.
+ */
 TEST_F(AutoJoinThreadTest, Join_AlreadyJoined_NoOp)
 {
     AutoJoinThread t([] { std::this_thread::sleep_for(std::chrono::milliseconds(5)); });
@@ -65,6 +87,12 @@ TEST_F(AutoJoinThreadTest, Join_AlreadyJoined_NoOp)
     EXPECT_FALSE(t.joinable());
 }
 
+/**
+ * @brief Verify detach() releases ownership and thread continues running
+ * @details Detaches a thread, then allows the AutoJoinThread to go out of
+ *          scope; the detached thread should still complete and set the
+ *          flag, proving no auto-join occurred.
+ */
 TEST_F(AutoJoinThreadTest, Detach_ReleasesOwnership)
 {
     {
@@ -83,6 +111,11 @@ TEST_F(AutoJoinThreadTest, Detach_ReleasesOwnership)
     }
 }
 
+/**
+ * @brief Verify move constructor transfers thread ownership to new instance
+ * @details Move-constructs t2 from t1; t1 becomes non-joinable, t2 owns
+ *          the thread and can join it, confirming ownership transfer.
+ */
 TEST_F(AutoJoinThreadTest, MoveConstructor_TransfersOwnership)
 {
     {
@@ -102,6 +135,12 @@ TEST_F(AutoJoinThreadTest, MoveConstructor_TransfersOwnership)
     }
 }
 
+/**
+ * @brief Verify move assignment joins the current thread then transfers
+ * @details t2 initially owns a thread; move-assigning t1 to t2 should
+ *          join t2's original thread (flag2 becomes true), then transfer
+ *          t1's thread to t2.
+ */
 TEST_F(AutoJoinThreadTest, MoveAssignment_JoinsCurrentAndTransfers)
 {
     {
@@ -130,6 +169,11 @@ TEST_F(AutoJoinThreadTest, MoveAssignment_JoinsCurrentAndTransfers)
     }
 }
 
+/**
+ * @brief Verify swap() exchanges thread contents between two instances
+ * @details After swapping, t1's join() waits for t2's original thread and
+ *          vice versa, proving the underlying thread handles were exchanged.
+ */
 TEST_F(AutoJoinThreadTest, Swap_ExchangesContents)
 {
     {
@@ -148,6 +192,12 @@ TEST_F(AutoJoinThreadTest, Swap_ExchangesContents)
     }
 }
 
+/**
+ * @brief Verify destructor automatically joins the running thread
+ * @details Creates a thread inside a nested scope; when the
+ *          AutoJoinThread goes out of scope, its destructor joins the
+ *          thread, so the flag is set by the time we check it outside.
+ */
 TEST_F(AutoJoinThreadTest, Destructor_AutoJoins)
 {
     std::atomic<bool> flag{false};
@@ -161,6 +211,12 @@ TEST_F(AutoJoinThreadTest, Destructor_AutoJoins)
     EXPECT_TRUE(flag);
 }
 
+/**
+ * @brief Verify joinable() reflects the thread lifecycle state
+ * @details Checks that a newly constructed thread is joinable, becomes
+ *          non-joinable after join(), and that a moved-from thread is
+ *          also non-joinable.
+ */
 TEST_F(AutoJoinThreadTest, Joinable_ReturnsCorrectState)
 {
     AutoJoinThread t([] {});
@@ -175,6 +231,12 @@ TEST_F(AutoJoinThreadTest, Joinable_ReturnsCorrectState)
     moved.join();
 }
 
+/**
+ * @brief Verify native_handle() is non-default after thread construction
+ * @details Checks that native_handle() returns a valid (non-default)
+ *          handle immediately after constructing AutoJoinThread with a
+ *          callable.
+ */
 TEST_F(AutoJoinThreadTest, NativeHandle_ValidAfterConstruction)
 {
     AutoJoinThread t([] {});
@@ -182,12 +244,23 @@ TEST_F(AutoJoinThreadTest, NativeHandle_ValidAfterConstruction)
     t.join();
 }
 
+/**
+ * @brief Verify construction with arguments forwarded to the callable
+ * @details Passes additional arguments (2, 3) to the callable; the thread
+ *          sums them inside and asserts the expected result.
+ */
 TEST_F(AutoJoinThreadTest, ConstructWithArgs)
 {
     AutoJoinThread t([](int a, int b) { EXPECT_EQ(a + b, 5); }, 2, 3);
     t.join();
 }
 
+/**
+ * @brief Verify detach() on a moved-from thread is a safe no-op
+ * @details After move-constructing, calls detach() on the now-empty
+ *          source; asserts no exception is thrown and joinable() remains
+ *          false.
+ */
 TEST_F(AutoJoinThreadTest, DetachMovedFrom_NoOp)
 {
     AutoJoinThread t([] {});
@@ -198,6 +271,11 @@ TEST_F(AutoJoinThreadTest, DetachMovedFrom_NoOp)
     moved.join();
 }
 
+/**
+ * @brief Verify multiple move assignments correctly manage ownership
+ * @details Moves t2 into t1, then t3 into t1; t1 ends up owning t3's
+ *          thread while t3 becomes non-joinable, and t1 remains joinable.
+ */
 TEST_F(AutoJoinThreadTest, MultipleMoveAssignments)
 {
     AutoJoinThread t1([] {});

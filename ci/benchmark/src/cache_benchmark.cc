@@ -1,12 +1,23 @@
+/**
+ * @file cache_benchmark.cc
+ * @brief Micro-benchmarks for LRU and LFU cache implementations
+ * @details Measures put, get (hit / miss), and eviction throughput for
+ *          LRUCache and LFUCache under varying capacity configurations.
+ *          Each benchmark is parameterised by cache capacity
+ *          (state.range(0)).
+ */
+
 #include <benchmark/benchmark.h>
 #include <random>
 
 #include "cache/LRUCache.hpp"
 #include "cache/LFUCache.hpp"
 
-// ============================================================
-// LRUCache
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  LRUCache
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief LRU cache put throughput with random keys.
 static void BM_LRUCache_Put(benchmark::State& state)
 {
     const auto capacity = static_cast<int>(state.range(0));

@@ -28,6 +28,10 @@ protected:
 
 // ==================== Insertion Tests ====================
 
+/**
+ * @brief Test inserting a single node
+ * @details Verifies that the inserted value is found, size is 1, and tree is not empty
+ */
 TEST_F(TreapTest, Insert_SingleNode_FindReturnsTrue)
 {
     Treap<int> tree;
@@ -37,6 +41,10 @@ TEST_F(TreapTest, Insert_SingleNode_FindReturnsTrue)
     EXPECT_FALSE(tree.empty());
 }
 
+/**
+ * @brief Test inserting multiple values
+ * @details Verifies that all inserted values can be found and size is correct
+ */
 TEST_F(TreapTest, Insert_MultipleValues_AllFound)
 {
     Treap<int> tree;
@@ -54,6 +62,10 @@ TEST_F(TreapTest, Insert_MultipleValues_AllFound)
     EXPECT_EQ(5, tree.size());
 }
 
+/**
+ * @brief Test inserting duplicate values
+ * @details Verifies that duplicates do not increase tree size
+ */
 TEST_F(TreapTest, Insert_Duplicate_NoChange)
 {
     Treap<int> tree;
@@ -64,6 +76,10 @@ TEST_F(TreapTest, Insert_Duplicate_NoChange)
     EXPECT_EQ(1, tree.size());
 }
 
+/**
+ * @brief Test that insertion maintains the treap heap property
+ * @details Verifies that tree invariants hold after multiple insertions
+ */
 TEST_F(TreapTest, Insert_MaintainsHeapProperty)
 {
     Treap<int> tree;
@@ -75,6 +91,10 @@ TEST_F(TreapTest, Insert_MaintainsHeapProperty)
     EXPECT_EQ(7, tree.size());
 }
 
+/**
+ * @brief Test that insertion maintains inorder ordering
+ * @details Verifies that inorder traversal produces sorted output
+ */
 TEST_F(TreapTest, Insert_MaintainsInorder)
 {
     Treap<int> tree;
@@ -90,6 +110,10 @@ TEST_F(TreapTest, Insert_MaintainsInorder)
     EXPECT_EQ(expected, tree.inorder());
 }
 
+/**
+ * @brief Test that sequential insert still produces a balanced treap
+ * @details Verifies that treap remains balanced and verified due to random priorities
+ */
 TEST_F(TreapTest, Insert_SequentialValues_StillBalanced)
 {
     Treap<int> tree;
@@ -110,12 +134,20 @@ TEST_F(TreapTest, Insert_SequentialValues_StillBalanced)
 
 // ==================== Find Tests ====================
 
+/**
+ * @brief Test find on an empty treap
+ * @details Verifies that find returns false for an empty tree
+ */
 TEST_F(TreapTest, Find_EmptyTree_ReturnsFalse)
 {
     const Treap<int> tree;
     EXPECT_FALSE(tree.find(1));
 }
 
+/**
+ * @brief Test find on an existing value
+ * @details Verifies that find returns true for an inserted key
+ */
 TEST_F(TreapTest, Find_ExistingValue_ReturnsTrue)
 {
     Treap<int> tree;
@@ -123,6 +155,10 @@ TEST_F(TreapTest, Find_ExistingValue_ReturnsTrue)
     EXPECT_TRUE(tree.find(42));
 }
 
+/**
+ * @brief Test find on a non-existing value
+ * @details Verifies that find returns false for a missing key
+ */
 TEST_F(TreapTest, Find_NonExistingValue_ReturnsFalse)
 {
     Treap<int> tree;
@@ -131,6 +167,10 @@ TEST_F(TreapTest, Find_NonExistingValue_ReturnsFalse)
     EXPECT_FALSE(tree.find(30));
 }
 
+/**
+ * @brief Test findValue on an existing key
+ * @details Verifies that findValue returns the correct value wrapped in optional
+ */
 TEST_F(TreapTest, FindValue_Existing_ReturnsValue)
 {
     Treap<int> tree;
@@ -140,6 +180,10 @@ TEST_F(TreapTest, FindValue_Existing_ReturnsValue)
     EXPECT_EQ(42, result.value());
 }
 
+/**
+ * @brief Test findValue on a non-existing key
+ * @details Verifies that findValue returns nullopt for missing keys
+ */
 TEST_F(TreapTest, FindValue_NonExisting_ReturnsNullopt)
 {
     Treap<int> tree;
@@ -149,6 +193,10 @@ TEST_F(TreapTest, FindValue_NonExisting_ReturnsNullopt)
     EXPECT_FALSE(result.has_value());
 }
 
+/**
+ * @brief Test findValue on an empty tree
+ * @details Verifies that findValue returns nullopt on empty tree
+ */
 TEST_F(TreapTest, FindValue_EmptyTree_ReturnsNullopt)
 {
     const Treap<int> tree;
@@ -158,6 +206,10 @@ TEST_F(TreapTest, FindValue_EmptyTree_ReturnsNullopt)
 
 // ==================== Removal Tests ====================
 
+/**
+ * @brief Test removing a leaf node
+ * @details Verifies that removing a leaf correctly updates the tree and maintains invariants
+ */
 TEST_F(TreapTest, Remove_LeafNode)
 {
     Treap<int> tree;
@@ -171,6 +223,10 @@ TEST_F(TreapTest, Remove_LeafNode)
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test removing a node with only a left child
+ * @details Verifies that removal correctly re-links the left child
+ */
 TEST_F(TreapTest, Remove_NodeWithLeftChild)
 {
     Treap<int> tree;
@@ -184,6 +240,10 @@ TEST_F(TreapTest, Remove_NodeWithLeftChild)
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test removing a node with only a right child
+ * @details Verifies that removal correctly re-links the right child
+ */
 TEST_F(TreapTest, Remove_NodeWithRightChild)
 {
     Treap<int> tree;
@@ -197,6 +257,10 @@ TEST_F(TreapTest, Remove_NodeWithRightChild)
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test removing a node with two children
+ * @details Verifies that removal correctly handles nodes with both subtrees
+ */
 TEST_F(TreapTest, Remove_NodeWithTwoChildren)
 {
     Treap<int> tree;
@@ -212,6 +276,10 @@ TEST_F(TreapTest, Remove_NodeWithTwoChildren)
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test removing the root node
+ * @details Verifies that removing the only node empties the tree
+ */
 TEST_F(TreapTest, Remove_RootNode)
 {
     Treap<int> tree;
@@ -222,6 +290,10 @@ TEST_F(TreapTest, Remove_RootNode)
     EXPECT_EQ(0, tree.size());
 }
 
+/**
+ * @brief Test removing a non-existing value
+ * @details Verifies that removing a non-existent key does not alter the tree
+ */
 TEST_F(TreapTest, Remove_NonExisting_NoChange)
 {
     Treap<int> tree;
@@ -234,6 +306,10 @@ TEST_F(TreapTest, Remove_NonExisting_NoChange)
     EXPECT_TRUE(tree.find(2));
 }
 
+/**
+ * @brief Test removing from an empty tree
+ * @details Verifies that removing on an empty tree does not crash
+ */
 TEST_F(TreapTest, Remove_EmptyTree_NoCrash)
 {
     Treap<int> tree;
@@ -241,6 +317,10 @@ TEST_F(TreapTest, Remove_EmptyTree_NoCrash)
     EXPECT_TRUE(tree.empty());
 }
 
+/**
+ * @brief Test removing all elements
+ * @details Verifies that removing all inserted values results in an empty tree
+ */
 TEST_F(TreapTest, Remove_AllElements)
 {
     Treap<int> tree;
@@ -255,6 +335,10 @@ TEST_F(TreapTest, Remove_AllElements)
     EXPECT_EQ(0, tree.size());
 }
 
+/**
+ * @brief Test removal from a complex tree preserves invariants
+ * @details Verifies that after removing nodes, treap invariants and inorder are correct
+ */
 TEST_F(TreapTest, Remove_ComplexTree_InvariantsPreserved)
 {
     Treap<int> tree;
@@ -275,6 +359,10 @@ TEST_F(TreapTest, Remove_ComplexTree_InvariantsPreserved)
     EXPECT_EQ(expected, tree.inorder());
 }
 
+/**
+ * @brief Test sequential removal of all nodes
+ * @details Verifies that removing all nodes one by one maintains invariants
+ */
 TEST_F(TreapTest, Remove_AllNodesSequentially)
 {
     Treap<int> tree;
@@ -294,6 +382,10 @@ TEST_F(TreapTest, Remove_AllNodesSequentially)
 
 // ==================== Edge Case Tests ====================
 
+/**
+ * @brief Test clearing all nodes
+ * @details Verifies that clear removes all nodes and resets state
+ */
 TEST_F(TreapTest, Clear_RemovesAllNodes)
 {
     Treap<int> tree;
@@ -308,6 +400,10 @@ TEST_F(TreapTest, Clear_RemovesAllNodes)
     EXPECT_FALSE(tree.find(1));
 }
 
+/**
+ * @brief Test large dataset insertion and retrieval
+ * @details Verifies that 1000 inserted values can all be found and invariants hold
+ */
 TEST_F(TreapTest, LargeDataset_InsertAndFindAll)
 {
     Treap<int> tree;
@@ -326,6 +422,10 @@ TEST_F(TreapTest, LargeDataset_InsertAndFindAll)
     }
 }
 
+/**
+ * @brief Test large dataset insert-remove consistency
+ * @details Verifies that inserting then removing all values maintains invariants
+ */
 TEST_F(TreapTest, LargeDataset_InsertRemoveConsistency)
 {
     Treap<int> tree;
@@ -345,6 +445,10 @@ TEST_F(TreapTest, LargeDataset_InsertRemoveConsistency)
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test random operations maintain invariants
+ * @details Verifies that random insertions maintain heap property and sorted order
+ */
 TEST_F(TreapTest, RandomOperations_InvariantsHold)
 {
     Treap<int> tree;
@@ -366,6 +470,10 @@ TEST_F(TreapTest, RandomOperations_InvariantsHold)
 
 // ==================== String Type Tests ====================
 
+/**
+ * @brief Test string key insertion and lookup
+ * @details Verifies that string keys work correctly with insert and find
+ */
 TEST_F(TreapTest, StringType_InsertAndFind)
 {
     Treap<std::string> tree;
@@ -380,6 +488,10 @@ TEST_F(TreapTest, StringType_InsertAndFind)
     EXPECT_TRUE(tree.verify());
 }
 
+/**
+ * @brief Test findValue with string keys
+ * @details Verifies that findValue returns the correct string value
+ */
 TEST_F(TreapTest, StringType_FindValue)
 {
     Treap<std::string> tree;
@@ -391,6 +503,10 @@ TEST_F(TreapTest, StringType_FindValue)
 
 // ==================== Negative Key Tests ====================
 
+/**
+ * @brief Test negative keys insertion and lookup
+ * @details Verifies that negative keys work correctly and maintain invariants
+ */
 TEST_F(TreapTest, NegativeKeys_InsertAndFind)
 {
     Treap<int> tree;
@@ -410,6 +526,10 @@ TEST_F(TreapTest, NegativeKeys_InsertAndFind)
     EXPECT_EQ(expected, tree.inorder());
 }
 
+/**
+ * @brief Test removing negative keys
+ * @details Verifies that removal works correctly for negative key values
+ */
 TEST_F(TreapTest, NegativeKeys_Remove)
 {
     Treap<int> tree;
@@ -426,6 +546,10 @@ TEST_F(TreapTest, NegativeKeys_Remove)
 
 // ==================== Move Semantics Tests ====================
 
+/**
+ * @brief Test move constructor
+ * @details Verifies that moving a treap transfers ownership and maintains invariants
+ */
 TEST_F(TreapTest, MoveConstructor)
 {
     Treap<int> tree;
@@ -442,6 +566,10 @@ TEST_F(TreapTest, MoveConstructor)
     EXPECT_TRUE(other.verify());
 }
 
+/**
+ * @brief Test move assignment
+ * @details Verifies that move assignment transfers ownership correctly
+ */
 TEST_F(TreapTest, MoveAssignment)
 {
     Treap<int> tree;
@@ -460,6 +588,10 @@ TEST_F(TreapTest, MoveAssignment)
 
 // ==================== Priority Distribution Tests ====================
 
+/**
+ * @brief Test that priorities are not all equal
+ * @details Verifies that random priorities produce a valid treap structure
+ */
 TEST_F(TreapTest, PrioritiesAreNotAllEqual)
 {
     Treap<int> tree;

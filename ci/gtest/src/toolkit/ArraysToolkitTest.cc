@@ -379,8 +379,6 @@ TEST_F(ArraysToolkitTest, ToString_StringArray)
     EXPECT_EQ(str, "[hello, world]");
 }
 
-// ==================== New Feature Tests ====================
-
 /**
  * @brief Test isEmpty with null array
  * @details Verifies null array is considered empty

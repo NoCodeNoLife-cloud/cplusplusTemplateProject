@@ -28,6 +28,7 @@ namespace
     };
 }
 
+/// @brief Test fixture for IConfigurable tests.
 class IConfigurableTest : public testing::Test
 {
 protected:
@@ -44,6 +45,7 @@ protected:
     std::unique_ptr<MockConfigurable> configurable_;
 };
 
+/** @brief Verifies config() returns true when doConfig succeeds. */
 TEST_F(IConfigurableTest, ConfigReturnsTrueOnSuccess)
 {
     const bool result = configurable_->config();
@@ -52,6 +54,7 @@ TEST_F(IConfigurableTest, ConfigReturnsTrueOnSuccess)
     EXPECT_EQ(configurable_->doConfigCallCount_, 1);
 }
 
+/** @brief Verifies config() delegates to doConfig() internally. */
 TEST_F(IConfigurableTest, ConfigDelegatesToDoConfig)
 {
     (void)configurable_->config();
@@ -60,6 +63,7 @@ TEST_F(IConfigurableTest, ConfigDelegatesToDoConfig)
     EXPECT_EQ(configurable_->doConfigCallCount_, 2);
 }
 
+/** @brief Verifies config() returns false when doConfig fails. */
 TEST_F(IConfigurableTest, ConfigReturnsFalseOnDoConfigFailure)
 {
     configurable_->returnValue_ = false;
@@ -70,6 +74,7 @@ TEST_F(IConfigurableTest, ConfigReturnsFalseOnDoConfigFailure)
     EXPECT_EQ(configurable_->doConfigCallCount_, 1);
 }
 
+/** @brief Verifies config() can be invoked multiple times. */
 TEST_F(IConfigurableTest, ConfigCanBeCalledMultipleTimes)
 {
     EXPECT_TRUE(configurable_->config());
@@ -79,11 +84,13 @@ TEST_F(IConfigurableTest, ConfigCanBeCalledMultipleTimes)
     EXPECT_EQ(configurable_->doConfigCallCount_, 3);
 }
 
+/** @brief Verifies config() does not throw under normal conditions. */
 TEST_F(IConfigurableTest, ConfigDoesNotThrowByDefault)
 {
     EXPECT_NO_THROW((void)configurable_->config());
 }
 
+/** @brief Verifies the return value of config() can be tested. */
 TEST_F(IConfigurableTest, ConfigIsMarkedNoDiscard)
 {
     const auto result = configurable_->config();

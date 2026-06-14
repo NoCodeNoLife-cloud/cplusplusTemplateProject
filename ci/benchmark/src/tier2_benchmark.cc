@@ -1,3 +1,12 @@
+/**
+ * @file tier2_benchmark.cc
+ * @brief Micro-benchmarks for concurrency and generation utilities
+ * @details Measures ThreadPool submit/get latency, batch throughput,
+ *          and construction overhead; SnowflakeGenerator ID generation
+ *          rate; RandomGenerator throughput for int, double, bool,
+ *          string, and gaussian distributions.
+ */
+
 #include <benchmark/benchmark.h>
 #include <atomic>
 #include <chrono>
@@ -9,10 +18,11 @@
 #include "gen/SnowflakeGenerator.hpp"
 #include "thread/ThreadPool.hpp"
 
-// ============================================================
-// ThreadPool
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  ThreadPool
+// ══════════════════════════════════════════════════════════════════════════
 
+/// @brief ThreadPool submit + future::get round-trip latency (empty task).
 static void BM_ThreadPool_Submit_Get(benchmark::State& state)
 {
     common::thread::ThreadPool pool(4, 8, 1024, std::chrono::seconds(60));
@@ -27,6 +37,7 @@ static void BM_ThreadPool_Submit_Get(benchmark::State& state)
 }
 BENCHMARK(BM_ThreadPool_Submit_Get);
 
+/// @brief ThreadPool submit + get with a 1 µs simulated workload.
 static void BM_ThreadPool_Submit_Sleep1us(benchmark::State& state)
 {
     common::thread::ThreadPool pool(4, 8, 1024, std::chrono::seconds(60));
@@ -43,6 +54,7 @@ static void BM_ThreadPool_Submit_Sleep1us(benchmark::State& state)
 }
 BENCHMARK(BM_ThreadPool_Submit_Sleep1us);
 
+/// @brief ThreadPool batch throughput: submit N tasks, then collect all results.
 static void BM_ThreadPool_BatchThroughput(benchmark::State& state)
 {
     const auto batch_size = static_cast<int>(state.range(0));
@@ -63,6 +75,7 @@ static void BM_ThreadPool_BatchThroughput(benchmark::State& state)
 }
 BENCHMARK(BM_ThreadPool_BatchThroughput)->Arg(64)->Arg(256)->Arg(1024);
 
+/// @brief ThreadPool construction + single-task cost (minimal pool).
 static void BM_ThreadPool_NoTaskOverhead(benchmark::State& state)
 {
     for (auto _ : state)
@@ -75,10 +88,11 @@ static void BM_ThreadPool_NoTaskOverhead(benchmark::State& state)
 }
 BENCHMARK(BM_ThreadPool_NoTaskOverhead);
 
-// ============================================================
-// SnowflakeGenerator
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  SnowflakeGenerator
+// ══════════════════════════════════════════════════════════════════════════
 
+/// @brief SnowflakeGenerator sequential ID generation throughput.
 static void BM_SnowflakeGenerator_NextId(benchmark::State& state)
 {
     common::gen::SnowflakeGenerator gen(1, 1);
@@ -92,10 +106,11 @@ static void BM_SnowflakeGenerator_NextId(benchmark::State& state)
 }
 BENCHMARK(BM_SnowflakeGenerator_NextId);
 
-// ============================================================
-// RandomGenerator
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  RandomGenerator
+// ══════════════════════════════════════════════════════════════════════════
 
+/// @brief Uniform random int in [0, 1 000 000].
 static void BM_RandomGenerator_NextInt(benchmark::State& state)
 {
     common::gen::RandomGenerator rng;
@@ -109,6 +124,7 @@ static void BM_RandomGenerator_NextInt(benchmark::State& state)
 }
 BENCHMARK(BM_RandomGenerator_NextInt);
 
+/// @brief Uniform random double in [0.0, 1.0).
 static void BM_RandomGenerator_NextDouble(benchmark::State& state)
 {
     common::gen::RandomGenerator rng;
@@ -122,6 +138,7 @@ static void BM_RandomGenerator_NextDouble(benchmark::State& state)
 }
 BENCHMARK(BM_RandomGenerator_NextDouble);
 
+/// @brief Random boolean generation throughput.
 static void BM_RandomGenerator_NextBool(benchmark::State& state)
 {
     common::gen::RandomGenerator rng;
@@ -135,6 +152,7 @@ static void BM_RandomGenerator_NextBool(benchmark::State& state)
 }
 BENCHMARK(BM_RandomGenerator_NextBool);
 
+/// @brief Random alphanumeric string generation at various lengths.
 static void BM_RandomGenerator_NextString(benchmark::State& state)
 {
     common::gen::RandomGenerator rng;
@@ -149,6 +167,7 @@ static void BM_RandomGenerator_NextString(benchmark::State& state)
 }
 BENCHMARK(BM_RandomGenerator_NextString)->Arg(8)->Arg(64)->Arg(256);
 
+/// @brief Gaussian (normal) distribution sample throughput.
 static void BM_RandomGenerator_NextGaussian(benchmark::State& state)
 {
     common::gen::RandomGenerator rng;

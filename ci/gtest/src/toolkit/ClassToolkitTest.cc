@@ -264,8 +264,6 @@ TEST_F(ClassToolkitTest, ConstructorDeleted)
                   "ClassToolkit should not be constructible");
 }
 
-// ==================== New Feature Tests ====================
-
 /**
  * @brief Test isSameType with identical types
  * @details Verifies true is returned for same types

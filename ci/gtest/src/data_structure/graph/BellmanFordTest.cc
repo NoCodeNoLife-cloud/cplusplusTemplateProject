@@ -1,3 +1,11 @@
+/**
+ * @file BellmanFordTest.cc
+ * @brief Unit tests for the Bellman-Ford shortest-path algorithm
+ * @details Tests cover shortest-path computation with positive and negative
+ *          edge weights, negative-cycle detection, disconnected graph handling,
+ *          and path reconstruction.
+ */
+
 #include <gtest/gtest.h>
 
 #include "data_structure/graph/algorithm/BellmanFord.hpp"
@@ -5,6 +13,9 @@
 using namespace common::data_structure::graph;
 using namespace common::data_structure::graph::algorithm;
 
+/**
+ * @brief Test fixture for BellmanFord algorithm tests
+ */
 class BellmanFordTest : public testing::Test
 {
 protected:
@@ -12,6 +23,11 @@ protected:
     void TearDown() override {}
 };
 
+/**
+ * @brief Test Bellman-Ford on a simple three-node line graph
+ * @details Verifies that shortest distances are computed correctly with
+ *          positive edge weights: 0→1 (2) + 1→2 (3) = 5
+ */
 TEST_F(BellmanFordTest, ShortestPath_Simple)
 {
     Graph g(3);
@@ -23,6 +39,11 @@ TEST_F(BellmanFordTest, ShortestPath_Simple)
     EXPECT_TRUE(result.hasPath());
 }
 
+/**
+ * @brief Test Bellman-Ford with mixed positive and negative edge weights
+ * @details Verifies correct distance calculation when negative edges
+ *          produce shorter alternative paths: 0→1→2 = 1 (via 4 + -3)
+ */
 TEST_F(BellmanFordTest, ShortestPath_NegativeWeights)
 {
     Graph g(4);
@@ -39,6 +60,11 @@ TEST_F(BellmanFordTest, ShortestPath_NegativeWeights)
     EXPECT_EQ(result.distance[static_cast<size_t>(3)], 2);
 }
 
+/**
+ * @brief Test that a graph with only positive edges has no negative cycle
+ * @details Verifies that hasNegativeCycle returns false for acyclic graphs
+ *          and graphs with only non-negative weights
+ */
 TEST_F(BellmanFordTest, HasNegativeCycle_NoCycle)
 {
     Graph g(3);
@@ -48,6 +74,11 @@ TEST_F(BellmanFordTest, HasNegativeCycle_NoCycle)
     EXPECT_FALSE(BellmanFord::hasNegativeCycle(g));
 }
 
+/**
+ * @brief Test negative cycle detection on a graph with a negative cycle
+ * @details Creates a 3-node cycle where total weight is negative (-3)
+ *          and verifies that hasNegativeCycle detects it
+ */
 TEST_F(BellmanFordTest, HasNegativeCycle_HasCycle)
 {
     Graph g(3);
@@ -58,6 +89,11 @@ TEST_F(BellmanFordTest, HasNegativeCycle_HasCycle)
     EXPECT_TRUE(BellmanFord::hasNegativeCycle(g));
 }
 
+/**
+ * @brief Test Bellman-Ford on a disconnected graph
+ * @details Verifies that unreachable nodes have distance INT32_MAX
+ *          and no valid predecessor
+ */
 TEST_F(BellmanFordTest, ShortestPath_Disconnected)
 {
     Graph g(4);
@@ -68,6 +104,11 @@ TEST_F(BellmanFordTest, ShortestPath_Disconnected)
     EXPECT_EQ(result.distance[static_cast<size_t>(3)], INT32_MAX);
 }
 
+/**
+ * @brief Test path reconstruction from Bellman-Ford result
+ * @details Verifies that reconstructPath returns the correct node sequence
+ *          from source to target through intermediate nodes
+ */
 TEST_F(BellmanFordTest, ReconstructPath)
 {
     Graph g(3);

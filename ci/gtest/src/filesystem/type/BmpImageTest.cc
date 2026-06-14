@@ -36,6 +36,10 @@ protected:
     }
 };
 
+/**
+ * @brief Test creating a BmpImage with valid dimensions
+ * @details Verifies that a 10x10 BmpImage object stores the correct width and height values
+ */
 TEST_F(BmpImageTest, CreateValidImage)
 {
     const BmpImage img(10, 10);
@@ -43,18 +47,30 @@ TEST_F(BmpImageTest, CreateValidImage)
     EXPECT_EQ(img.getHeight(), 10);
 }
 
+/**
+ * @brief Test creating BmpImage with invalid width throws
+ * @details Verifies that passing zero or negative width to the constructor throws std::invalid_argument
+ */
 TEST_F(BmpImageTest, CreateInvalidWidth)
 {
     EXPECT_THROW(BmpImage(0, 10), std::invalid_argument);
     EXPECT_THROW(BmpImage(-1, 10), std::invalid_argument);
 }
 
+/**
+ * @brief Test creating BmpImage with invalid height throws
+ * @details Verifies that passing zero or negative height to the constructor throws std::invalid_argument
+ */
 TEST_F(BmpImageTest, CreateInvalidHeight)
 {
     EXPECT_THROW(BmpImage(10, 0), std::invalid_argument);
     EXPECT_THROW(BmpImage(10, -1), std::invalid_argument);
 }
 
+/**
+ * @brief Test setting and getting pixel RGB values
+ * @details Verifies that setPixel() stores RGB values and getPixel() retrieves them correctly for multiple pixels
+ */
 TEST_F(BmpImageTest, SetAndGetPixel)
 {
     BmpImage img(3, 3);
@@ -79,6 +95,10 @@ TEST_F(BmpImageTest, SetAndGetPixel)
     EXPECT_EQ(b, 255);
 }
 
+/**
+ * @brief Test getPixel returns false for out-of-bounds coordinates
+ * @details Verifies that getPixel() returns false when requesting a pixel outside the image dimensions
+ */
 TEST_F(BmpImageTest, GetPixelOutOfBounds)
 {
     const BmpImage img(5, 5);
@@ -89,6 +109,10 @@ TEST_F(BmpImageTest, GetPixelOutOfBounds)
     EXPECT_FALSE(img.getPixel(0, 5, r, g, b));
 }
 
+/**
+ * @brief Test setPixel handles out-of-bounds coordinates gracefully
+ * @details Verifies that setPixel() does not crash when coordinates are outside the image boundaries
+ */
 TEST_F(BmpImageTest, SetPixelOutOfBoundsDoesNotCrash)
 {
     BmpImage img(5, 5);
@@ -98,6 +122,10 @@ TEST_F(BmpImageTest, SetPixelOutOfBoundsDoesNotCrash)
     EXPECT_NO_THROW(img.setPixel(0, 10, 255, 0, 0));
 }
 
+/**
+ * @brief Test saving and loading an image preserves pixel data
+ * @details Verifies that a 2x2 image with four different pixel colors is faithfully restored after a save/load cycle
+ */
 TEST_F(BmpImageTest, SaveAndLoadRoundTrip)
 {
     {
@@ -130,11 +158,19 @@ TEST_F(BmpImageTest, SaveAndLoadRoundTrip)
     EXPECT_EQ(b, 255);
 }
 
+/**
+ * @brief Test loading a non-existent BMP file throws
+ * @details Verifies that constructing BmpImage from a non-existent path throws std::runtime_error
+ */
 TEST_F(BmpImageTest, LoadNonExistentFile)
 {
     EXPECT_THROW(BmpImage("nonexistent_file.bmp"), std::runtime_error);
 }
 
+/**
+ * @brief Test loading an invalid BMP file throws
+ * @details Verifies that constructing BmpImage from a file with non-BMP content throws std::runtime_error
+ */
 TEST_F(BmpImageTest, LoadInvalidFile)
 {
     {
@@ -144,6 +180,10 @@ TEST_F(BmpImageTest, LoadInvalidFile)
     EXPECT_THROW(BmpImage{tmpPath_}, std::runtime_error);
 }
 
+/**
+ * @brief Test default pixel values are black (zero RGB)
+ * @details Verifies that all pixels in a newly created BmpImage default to RGB(0, 0, 0)
+ */
 TEST_F(BmpImageTest, DefaultPixelsAreBlack)
 {
     const BmpImage img(4, 4);
@@ -158,6 +198,10 @@ TEST_F(BmpImageTest, DefaultPixelsAreBlack)
 // Additional Boundary Condition Tests
 // ============================================================================
 
+/**
+ * @brief Test creating and manipulating a single-pixel image
+ * @details Verifies that a 1x1 BMP can store and retrieve pixel data correctly
+ */
 TEST_F(BmpImageTest, SinglePixelImage)
 {
     BmpImage img(1, 1);
@@ -171,6 +215,10 @@ TEST_F(BmpImageTest, SinglePixelImage)
     EXPECT_EQ(b, 32);
 }
 
+/**
+ * @brief Test save/load round-trip for a single-pixel image
+ * @details Verifies that a 1x1 BMP with a specific color survives a full save and reload cycle
+ */
 TEST_F(BmpImageTest, SinglePixelRoundTrip)
 {
     {
@@ -188,6 +236,10 @@ TEST_F(BmpImageTest, SinglePixelRoundTrip)
     EXPECT_EQ(b, 64);
 }
 
+/**
+ * @brief Test save/load round-trip for a large 100x100 image
+ * @details Verifies that a 100x100 BMP with specific pixel colors survives a full save and reload cycle
+ */
 TEST_F(BmpImageTest, LargeImageRoundTrip)
 {
     {
@@ -205,6 +257,10 @@ TEST_F(BmpImageTest, LargeImageRoundTrip)
     EXPECT_EQ(b, 128);
 }
 
+/**
+ * @brief Test creating a fully white image and verifying round-trip
+ * @details Verifies that a 5x5 white image can be saved and reloaded with all pixels at RGB(255, 255, 255)
+ */
 TEST_F(BmpImageTest, AllWhiteImage)
 {
     constexpr int size = 5;
@@ -232,6 +288,10 @@ TEST_F(BmpImageTest, AllWhiteImage)
     }
 }
 
+/**
+ * @brief Test overwriting an existing BMP file with a new image
+ * @details Verifies that saving a different image to the same file path replaces the content correctly
+ */
 TEST_F(BmpImageTest, OverwriteExistingFile)
 {
     {
@@ -247,6 +307,10 @@ TEST_F(BmpImageTest, OverwriteExistingFile)
     EXPECT_EQ(loaded.getHeight(), 4);
 }
 
+/**
+ * @brief Test loading a BMP with a corrupted header throws
+ * @details Verifies that a file with 'BM' signature but corrupted header data throws std::runtime_error
+ */
 TEST_F(BmpImageTest, LoadCorruptedHeader)
 {
     {
@@ -258,6 +322,10 @@ TEST_F(BmpImageTest, LoadCorruptedHeader)
     EXPECT_THROW(BmpImage{tmpPath_}, std::runtime_error);
 }
 
+/**
+ * @brief Test loading a truncated BMP file throws
+ * @details Verifies that a BMP file with a valid header but insufficient pixel data throws std::runtime_error
+ */
 TEST_F(BmpImageTest, LoadTruncatedFile)
 {
     {
@@ -271,6 +339,10 @@ TEST_F(BmpImageTest, LoadTruncatedFile)
     EXPECT_THROW(BmpImage{tmpPath_}, std::runtime_error);
 }
 
+/**
+ * @brief Test save/load round-trip for a default all-black image
+ * @details Verifies that a 3x3 default (all-black) BMP survives a full save and reload cycle
+ */
 TEST_F(BmpImageTest, AllBlackImageRoundTrip)
 {
     {
@@ -287,6 +359,10 @@ TEST_F(BmpImageTest, AllBlackImageRoundTrip)
     EXPECT_EQ(b, 0);
 }
 
+/**
+ * @brief Test creating a rectangular (non-square) BMP image
+ * @details Verifies that an 8x4 image with a single red pixel survives a save/load round-trip
+ */
 TEST_F(BmpImageTest, RectangularImage)
 {
     BmpImage img(8, 4);
@@ -299,6 +375,10 @@ TEST_F(BmpImageTest, RectangularImage)
     EXPECT_EQ(loaded.getHeight(), 4);
 }
 
+/**
+ * @brief Test save/load round-trip for a 512x512 image
+ * @details Verifies that a large BMP with corner pixel colors survives a full save and reload cycle
+ */
 TEST_F(BmpImageTest, VeryLargeImageRoundTrip)
 {
     {
@@ -321,12 +401,20 @@ TEST_F(BmpImageTest, VeryLargeImageRoundTrip)
     EXPECT_EQ(b, 255);
 }
 
+/**
+ * @brief Test save to an invalid path returns false
+ * @details Verifies that save() returns false when the target path is not writable
+ */
 TEST_F(BmpImageTest, SaveToInvalidPath_ReturnsFalse)
 {
     const BmpImage img(10, 10);
     EXPECT_FALSE(img.save("Z:\\invalid_dir\\test.bmp"));
 }
 
+/**
+ * @brief Test saving the same image to multiple file paths
+ * @details Verifies that save() works correctly when called on different destination paths with the same image
+ */
 TEST_F(BmpImageTest, MultipleSavesToDifferentPaths)
 {
     const auto dest1 = tmpPath_ + ".v1.bmp";
@@ -355,6 +443,10 @@ TEST_F(BmpImageTest, MultipleSavesToDifferentPaths)
     std::filesystem::remove(dest2, ec);
 }
 
+/**
+ * @brief Test save/load round-trip for a linear gradient image
+ * @details Verifies that a 10x10 image with a gradient pattern survives a full save and reload cycle
+ */
 TEST_F(BmpImageTest, LinearGradientRoundTrip)
 {
     constexpr int size = 10;

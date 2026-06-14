@@ -1,3 +1,11 @@
+/**
+ * @file crypto_benchmark.cc
+ * @brief Micro-benchmarks for cryptographic operations
+ * @details Measures throughput of PBKDF2 key derivation, AES-256-CBC
+ *          encrypt/decrypt, ChaCha20 stream cipher, SHA-256 hashing
+ *          (single-shot and chunked), and constant-time secure comparison.
+ */
+
 #include <benchmark/benchmark.h>
 #include <vector>
 #include <string>
@@ -7,9 +15,11 @@
 #include "crypto/cipher/ChaCha20Cipher.hpp"
 #include "crypto/hash/SHA256Strategy.hpp"
 
-// ============================================================
-// PBKDF2-HMAC-SHA256 (hash_password)
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  PBKDF2-HMAC-SHA256 (hash_password)
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief PBKDF2 with 10 000 iterations (low iteration count).
 static void BM_PBKDF2_LowIterations(benchmark::State& state)
 {
     const std::string password = "TestPassword123!@#";
@@ -22,6 +32,7 @@ static void BM_PBKDF2_LowIterations(benchmark::State& state)
 }
 BENCHMARK(BM_PBKDF2_LowIterations);
 
+/// @brief PBKDF2 with default iteration count (production value).
 static void BM_PBKDF2_DefaultIterations(benchmark::State& state)
 {
     const std::string password = "TestPassword123!@#";
@@ -34,9 +45,11 @@ static void BM_PBKDF2_DefaultIterations(benchmark::State& state)
 }
 BENCHMARK(BM_PBKDF2_DefaultIterations)->Iterations(5);
 
-// ============================================================
-// Secure compare (constant-time)
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  Secure compare (constant-time)
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief Constant-time string comparison on 1 KiB inputs.
 static void BM_SecureCompare(benchmark::State& state)
 {
     const std::string a(1024, 'A');
@@ -50,9 +63,11 @@ static void BM_SecureCompare(benchmark::State& state)
 }
 BENCHMARK(BM_SecureCompare);
 
-// ============================================================
-// AES-256-CBC Encrypt / Decrypt
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  AES-256-CBC Encrypt / Decrypt
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief AES-256-CBC encryption throughput at various plaintext sizes.
 static void BM_AES256CBC_Encrypt(benchmark::State& state)
 {
     const std::string password = "StrongPassword123!";
@@ -67,6 +82,7 @@ static void BM_AES256CBC_Encrypt(benchmark::State& state)
 }
 BENCHMARK(BM_AES256CBC_Encrypt)->Arg(64)->Arg(1024)->Arg(16384);
 
+/// @brief AES-256-CBC decryption throughput (uses pre-encrypted ciphertext).
 static void BM_AES256CBC_Decrypt(benchmark::State& state)
 {
     const std::string password = "StrongPassword123!";
@@ -82,19 +98,23 @@ static void BM_AES256CBC_Decrypt(benchmark::State& state)
 }
 BENCHMARK(BM_AES256CBC_Decrypt)->Arg(64)->Arg(1024)->Arg(16384);
 
-// ============================================================
-// ChaCha20 Stream Cipher
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  ChaCha20 Stream Cipher
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief Returns a fixed 32-byte ChaCha20 key for reproducible benchmarks.
 static std::vector<uint8_t> make_chacha_key()
 {
     return std::vector<uint8_t>(32, 0x2B);
 }
 
+/// @brief Returns a fixed 12-byte ChaCha20 nonce for reproducible benchmarks.
 static std::vector<uint8_t> make_chacha_nonce()
 {
     return std::vector<uint8_t>(12, 0x1A);
 }
 
+/// @brief ChaCha20 encryption throughput at 64 B, 1 KiB, and 64 KiB payloads.
 static void BM_ChaCha20_Encrypt(benchmark::State& state)
 {
     const auto data_size = static_cast<size_t>(state.range(0));
@@ -112,9 +132,11 @@ static void BM_ChaCha20_Encrypt(benchmark::State& state)
 }
 BENCHMARK(BM_ChaCha20_Encrypt)->Arg(64)->Arg(1024)->Arg(65536);
 
-// ============================================================
-// SHA-256 Hashing
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  SHA-256 Hashing
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief SHA-256 single-shot hash throughput from 64 B to 1 MiB.
 static void BM_SHA256_SmallData(benchmark::State& state)
 {
     const auto data_size = static_cast<size_t>(state.range(0));
@@ -130,6 +152,7 @@ static void BM_SHA256_SmallData(benchmark::State& state)
 }
 BENCHMARK(BM_SHA256_SmallData)->Arg(64)->Arg(1024)->Arg(65536)->Arg(1048576);
 
+/// @brief SHA-256 chunked update: 1 MiB total via varying chunk sizes.
 static void BM_SHA256_ChunkedUpdate(benchmark::State& state)
 {
     constexpr size_t total_size = 1048576;

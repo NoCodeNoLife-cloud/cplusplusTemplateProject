@@ -316,6 +316,10 @@ TEST_F(SHAToolkitTest, SHA1Strategy_Constants)
     EXPECT_EQ(SHA1Strategy::HEX_DIGEST_SIZE, 40);
 }
 
+/**
+ * @brief Test SHA1Strategy move operations are noexcept
+ * @details Verifies that move constructor and move assignment are properly noexcept
+ */
 TEST_F(SHAToolkitTest, SHA1Strategy_MoveNoexcept)
 {
     static_assert(std::is_nothrow_move_constructible_v<SHA1Strategy>,
@@ -325,6 +329,10 @@ TEST_F(SHAToolkitTest, SHA1Strategy_MoveNoexcept)
     SUCCEED() << "SHA1Strategy move operations are properly noexcept";
 }
 
+/**
+ * @brief Test SHA1Strategy move semantics
+ * @details Verifies that move constructor correctly transfers hashing state
+ */
 TEST_F(SHAToolkitTest, SHA1Strategy_MoveSemantics)
 {
     SHA1Strategy s1;
@@ -336,6 +344,10 @@ TEST_F(SHAToolkitTest, SHA1Strategy_MoveSemantics)
     EXPECT_EQ(hash->size(), 20);
 }
 
+/**
+ * @brief Test SHA1Strategy reset after move
+ * @details Verifies that reset, update, and finalize fail after moving from a strategy
+ */
 TEST_F(SHAToolkitTest, SHA1Strategy_ResetAfterMove)
 {
     SHA1Strategy s1;
@@ -347,6 +359,10 @@ TEST_F(SHAToolkitTest, SHA1Strategy_ResetAfterMove)
     EXPECT_FALSE(s1.finalize().has_value());
 }
 
+/**
+ * @brief Test SHA1Strategy copy operations are deleted
+ * @details Verifies that copy constructor and copy assignment are disabled
+ */
 TEST_F(SHAToolkitTest, SHA1Strategy_CopyDeleted)
 {
     static_assert(!std::is_copy_constructible_v<SHA1Strategy>,
@@ -356,6 +372,10 @@ TEST_F(SHAToolkitTest, SHA1Strategy_CopyDeleted)
     SUCCEED() << "SHA1Strategy copy operations are properly deleted";
 }
 
+/**
+ * @brief Test SHA256Strategy move operations are noexcept
+ * @details Verifies that move constructor and move assignment are properly noexcept
+ */
 TEST_F(SHAToolkitTest, SHA256Strategy_MoveNoexcept)
 {
     static_assert(std::is_nothrow_move_constructible_v<SHA256Strategy>,
@@ -365,6 +385,10 @@ TEST_F(SHAToolkitTest, SHA256Strategy_MoveNoexcept)
     SUCCEED() << "SHA256Strategy move operations are properly noexcept";
 }
 
+/**
+ * @brief Test SHA256Strategy move semantics
+ * @details Verifies that move constructor correctly transfers hashing state
+ */
 TEST_F(SHAToolkitTest, SHA256Strategy_MoveSemantics)
 {
     SHA256Strategy s1;
@@ -376,6 +400,10 @@ TEST_F(SHAToolkitTest, SHA256Strategy_MoveSemantics)
     EXPECT_EQ(hash->size(), 32);
 }
 
+/**
+ * @brief Test SHA256Strategy reset after move
+ * @details Verifies that reset, update, and finalize fail after moving from a strategy
+ */
 TEST_F(SHAToolkitTest, SHA256Strategy_ResetAfterMove)
 {
     SHA256Strategy s1;
@@ -387,6 +415,10 @@ TEST_F(SHAToolkitTest, SHA256Strategy_ResetAfterMove)
     EXPECT_FALSE(s1.finalize().has_value());
 }
 
+/**
+ * @brief Test SHA256Strategy copy operations are deleted
+ * @details Verifies that copy constructor and copy assignment are disabled
+ */
 TEST_F(SHAToolkitTest, SHA256Strategy_CopyDeleted)
 {
     static_assert(!std::is_copy_constructible_v<SHA256Strategy>,
@@ -395,10 +427,6 @@ TEST_F(SHAToolkitTest, SHA256Strategy_CopyDeleted)
                   "SHA256Strategy should not be copy assignable");
     SUCCEED() << "SHA256Strategy copy operations are properly deleted";
 }
-
-// ============================================================================
-// Boundary Condition Tests
-// ============================================================================
 
 /**
  * @brief Test hashing of very large input (100KB+)

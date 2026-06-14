@@ -50,6 +50,10 @@ protected:
 //  Construction & basic operations
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test constructor with default options
+ * @details Verifies that an LSM tree constructed with default options is empty
+ */
 TEST_F(LSMTreeTest, Constructor_DefaultOptions)
 {
     LSMTree<int, std::string> tree;
@@ -57,12 +61,20 @@ TEST_F(LSMTreeTest, Constructor_DefaultOptions)
     EXPECT_TRUE(tree.memtableSize() == 0);
 }
 
+/**
+ * @brief Test constructor with custom options
+ * @details Verifies that an LSM tree constructed with custom options is empty
+ */
 TEST_F(LSMTreeTest, Constructor_CustomOptions)
 {
     LSMTree<int, std::string> tree(opts_);
     EXPECT_EQ(tree.size(), 0);
 }
 
+/**
+ * @brief Test basic put and get operations
+ * @details Verifies that values stored via put can be retrieved via get
+ */
 TEST_F(LSMTreeTest, PutAndGet_Basic)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -75,6 +87,10 @@ TEST_F(LSMTreeTest, PutAndGet_Basic)
     EXPECT_EQ(tree.get(3).value_or(""), "three");
 }
 
+/**
+ * @brief Test get with a non-existent key
+ * @details Verifies that get returns nullopt for a key that was never inserted
+ */
 TEST_F(LSMTreeTest, Get_NonExistentKey)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -84,6 +100,10 @@ TEST_F(LSMTreeTest, Get_NonExistentKey)
     EXPECT_FALSE(result.has_value());
 }
 
+/**
+ * @brief Test put updates an existing key
+ * @details Verifies that putting a new value for an existing key overwrites the old value
+ */
 TEST_F(LSMTreeTest, Put_UpdateExistingKey)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -94,6 +114,10 @@ TEST_F(LSMTreeTest, Put_UpdateExistingKey)
     EXPECT_EQ(tree.size(), 1);
 }
 
+/**
+ * @brief Test contains with an existing key
+ * @details Verifies that contains returns false initially and true after insertion
+ */
 TEST_F(LSMTreeTest, Contains_ExistingKey)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -103,6 +127,10 @@ TEST_F(LSMTreeTest, Contains_ExistingKey)
     EXPECT_TRUE(tree.contains(1));
 }
 
+/**
+ * @brief Test contains after a key has been removed
+ * @details Verifies that contains returns false for a key that was deleted
+ */
 TEST_F(LSMTreeTest, Contains_AfterRemove)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -115,6 +143,10 @@ TEST_F(LSMTreeTest, Contains_AfterRemove)
 //  Remove (tombstone)
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test removing an existing key
+ * @details Verifies that removing an existing key makes it not findable
+ */
 TEST_F(LSMTreeTest, Remove_ExistingKey)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -126,6 +158,10 @@ TEST_F(LSMTreeTest, Remove_ExistingKey)
     EXPECT_FALSE(tree.get(42).has_value());
 }
 
+/**
+ * @brief Test removing a non-existent key
+ * @details Verifies that removing a key that was never inserted is a no-op
+ */
 TEST_F(LSMTreeTest, Remove_NonExistentKey)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -134,6 +170,10 @@ TEST_F(LSMTreeTest, Remove_NonExistentKey)
     EXPECT_FALSE(tree.contains(999));
 }
 
+/**
+ * @brief Test re-inserting a key after deletion
+ * @details Verifies that a key can be re-inserted after removal with a new value
+ */
 TEST_F(LSMTreeTest, Remove_ReinsertAfterDelete)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -147,6 +187,10 @@ TEST_F(LSMTreeTest, Remove_ReinsertAfterDelete)
     EXPECT_EQ(tree.get(1).value_or(""), "ONE");
 }
 
+/**
+ * @brief Test removing multiple keys
+ * @details Verifies that removing even keys leaves odd keys findable
+ */
 TEST_F(LSMTreeTest, Remove_MultipleKeys)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -178,6 +222,11 @@ TEST_F(LSMTreeTest, Remove_MultipleKeys)
 //  Flush & compaction
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test flush forces SSTable creation
+ * @details Verifies that when the MemTable exceeds its size threshold,
+ *          it is automatically flushed to an L0 SSTable
+ */
 TEST_F(LSMTreeTest, Flush_ForcesSSTableCreation)
 {
     // Use a tiny memtable so that inserts trigger automatic flushes.
@@ -201,6 +250,10 @@ TEST_F(LSMTreeTest, Flush_ForcesSSTableCreation)
     EXPECT_GE(tree.sstableCount(0), 1) << "MemTable should have been flushed";
 }
 
+/**
+ * @brief Test data persists in SSTable after flush
+ * @details Verifies that flushed data remains readable after MemTable is persisted
+ */
 TEST_F(LSMTreeTest, Flush_DataPersistsInSSTable)
 {
     LSMTreeOptions tinyOpts = opts_;
@@ -222,6 +275,11 @@ TEST_F(LSMTreeTest, Flush_DataPersistsInSSTable)
     }
 }
 
+/**
+ * @brief Test explicit flush operation
+ * @details Verifies that calling flush() explicitly creates an SSTable
+ *          and data survives the flush
+ */
 TEST_F(LSMTreeTest, ExplicitFlush)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -239,6 +297,11 @@ TEST_F(LSMTreeTest, ExplicitFlush)
     EXPECT_EQ(tree.get(2).value_or(""), "two");
 }
 
+/**
+ * @brief Test compaction merges SSTables
+ * @details Verifies that compaction merges multiple SSTables into one
+ *          and all data remains readable
+ */
 TEST_F(LSMTreeTest, Compaction_MergesSSTables)
 {
     LSMTreeOptions tinyOpts = opts_;
@@ -266,6 +329,11 @@ TEST_F(LSMTreeTest, Compaction_MergesSSTables)
     }
 }
 
+/**
+ * @brief Test tombstone survives flush
+ * @details Verifies that a tombstone (delete marker) persists after flushing
+ *          and shadows the older value
+ */
 TEST_F(LSMTreeTest, Tombstone_SurvivesFlush)
 {
     LSMTreeOptions tinyOpts = opts_;
@@ -285,6 +353,11 @@ TEST_F(LSMTreeTest, Tombstone_SurvivesFlush)
     EXPECT_FALSE(tree.get(1).has_value());
 }
 
+/**
+ * @brief Test tombstone survives compaction
+ * @details Verifies that a tombstone persists across compaction cycles
+ *          and correctly deletes values from earlier SSTables
+ */
 TEST_F(LSMTreeTest, Tombstone_SurvivesCompaction)
 {
     LSMTreeOptions tinyOpts = opts_;
@@ -312,6 +385,11 @@ TEST_F(LSMTreeTest, Tombstone_SurvivesCompaction)
     EXPECT_EQ(tree.get(2).value_or(""), "two");
 }
 
+/**
+ * @brief Test tombstone cancels value in compaction
+ * @details Verifies that when a tombstone and the value it deletes are in the
+ *          same compaction input, both are dropped from the output
+ */
 TEST_F(LSMTreeTest, Tombstone_CancelsValueInCompaction)
 {
     // When a tombstone and the value it deletes are in the same compaction
@@ -343,12 +421,20 @@ TEST_F(LSMTreeTest, Tombstone_CancelsValueInCompaction)
 //  Size tracking
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test size on an empty tree
+ * @details Verifies that a newly constructed LSM tree has size zero
+ */
 TEST_F(LSMTreeTest, Size_Empty)
 {
     LSMTree<int, std::string> tree(opts_);
     EXPECT_EQ(tree.size(), 0);
 }
 
+/**
+ * @brief Test size increases after insert
+ * @details Verifies that putting new keys increases the size count
+ */
 TEST_F(LSMTreeTest, Size_AfterInsert)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -359,6 +445,10 @@ TEST_F(LSMTreeTest, Size_AfterInsert)
     EXPECT_EQ(tree.size(), 2);
 }
 
+/**
+ * @brief Test size does not change on update
+ * @details Verifies that updating an existing key does not change the size
+ */
 TEST_F(LSMTreeTest, Size_UpdateDoesNotChange)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -369,6 +459,10 @@ TEST_F(LSMTreeTest, Size_UpdateDoesNotChange)
     EXPECT_EQ(tree.size(), 1);
 }
 
+/**
+ * @brief Test size decreases after remove
+ * @details Verifies that removing a key decreases the approximate size count
+ */
 TEST_F(LSMTreeTest, Size_AfterRemove)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -382,6 +476,10 @@ TEST_F(LSMTreeTest, Size_AfterRemove)
     EXPECT_EQ(tree.size(), 1);
 }
 
+/**
+ * @brief Test size becomes zero after clear
+ * @details Verifies that clearing the tree resets size to zero
+ */
 TEST_F(LSMTreeTest, Size_AfterClear)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -395,12 +493,20 @@ TEST_F(LSMTreeTest, Size_AfterClear)
 //  Clear
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test clear on an empty tree
+ * @details Verifies that clearing an empty tree does not throw
+ */
 TEST_F(LSMTreeTest, Clear_Empty)
 {
     LSMTree<int, std::string> tree(opts_);
     EXPECT_NO_THROW(tree.clear());
 }
 
+/**
+ * @brief Test clear removes all entries
+ * @details Verifies that clearing a tree with 20 entries removes all of them
+ */
 TEST_F(LSMTreeTest, Clear_RemovesAllEntries)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -419,6 +525,10 @@ TEST_F(LSMTreeTest, Clear_RemovesAllEntries)
     }
 }
 
+/**
+ * @brief Test reusing tree after clear
+ * @details Verifies that the tree can be reused after clearing
+ */
 TEST_F(LSMTreeTest, ClearThenReuse)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -434,6 +544,10 @@ TEST_F(LSMTreeTest, ClearThenReuse)
 //  Large-scale / stress
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test large-scale put and get operations
+ * @details Verifies that 500 entries can be inserted and retrieved correctly
+ */
 TEST_F(LSMTreeTest, LargeScale_PutAndGet)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -454,6 +568,10 @@ TEST_F(LSMTreeTest, LargeScale_PutAndGet)
     }
 }
 
+/**
+ * @brief Test large-scale update of all values
+ * @details Verifies that all 200 entries can be updated and the new values are retrieved
+ */
 TEST_F(LSMTreeTest, LargeScale_Update)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -476,6 +594,10 @@ TEST_F(LSMTreeTest, LargeScale_Update)
     }
 }
 
+/**
+ * @brief Test deleting all entries in a large dataset
+ * @details Verifies that all 200 entries can be removed and none remain findable
+ */
 TEST_F(LSMTreeTest, LargeScale_DeleteAll)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -497,6 +619,11 @@ TEST_F(LSMTreeTest, LargeScale_DeleteAll)
     }
 }
 
+/**
+ * @brief Test interleaved put and remove operations
+ * @details Verifies that alternating put and remove on even keys works correctly,
+ *          with re-insertion using different values
+ */
 TEST_F(LSMTreeTest, LargeScale_InterleavedPutRemove)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -535,6 +662,10 @@ TEST_F(LSMTreeTest, LargeScale_InterleavedPutRemove)
 //  Move semantics
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test move constructor
+ * @details Verifies that the move constructor transfers all data to the new tree
+ */
 TEST_F(LSMTreeTest, MoveConstruct)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -546,6 +677,10 @@ TEST_F(LSMTreeTest, MoveConstruct)
     EXPECT_EQ(moved.get(2).value_or(""), "two");
 }
 
+/**
+ * @brief Test move assignment
+ * @details Verifies that move assignment transfers all data to the destination
+ */
 TEST_F(LSMTreeTest, MoveAssign)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -560,6 +695,10 @@ TEST_F(LSMTreeTest, MoveAssign)
 //  Edge cases
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test operations on an empty tree
+ * @details Verifies that size, contains, get, and levelCount behave correctly on empty tree
+ */
 TEST_F(LSMTreeTest, EmptyTree)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -569,6 +708,10 @@ TEST_F(LSMTreeTest, EmptyTree)
     EXPECT_EQ(tree.levelCount(), 0);
 }
 
+/**
+ * @brief Test LSM tree with string keys
+ * @details Verifies that string keys work correctly with put and get
+ */
 TEST_F(LSMTreeTest, StringKeys)
 {
     LSMTree<std::string, int> tree(opts_);
@@ -582,6 +725,10 @@ TEST_F(LSMTreeTest, StringKeys)
     EXPECT_FALSE(tree.get("delta").has_value());
 }
 
+/**
+ * @brief Test moving a value into the tree
+ * @details Verifies that a value can be moved into a put operation
+ */
 TEST_F(LSMTreeTest, MoveValue)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -591,6 +738,10 @@ TEST_F(LSMTreeTest, MoveValue)
     EXPECT_EQ(tree.get(1).value_or(""), "hello");
 }
 
+/**
+ * @brief Test level count tracking
+ * @details Verifies that levelCount is zero initially and increases after flush
+ */
 TEST_F(LSMTreeTest, LevelCount)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -608,6 +759,10 @@ TEST_F(LSMTreeTest, LevelCount)
 //  Value persistence: correctness across flush & compaction cycles
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test values survive multiple flushes
+ * @details Verifies that data remains readable after multiple MemTable flushes
+ */
 TEST_F(LSMTreeTest, ValuesSurviveMultipleFlushes)
 {
     LSMTreeOptions tinyOpts = opts_;
@@ -630,6 +785,10 @@ TEST_F(LSMTreeTest, ValuesSurviveMultipleFlushes)
     }
 }
 
+/**
+ * @brief Test values survive compaction cycles
+ * @details Verifies that 400 entries remain readable after multiple compaction rounds
+ */
 TEST_F(LSMTreeTest, ValuesSurviveCompactionCycles)
 {
     LSMTreeOptions tinyOpts = opts_;
@@ -661,6 +820,11 @@ TEST_F(LSMTreeTest, ValuesSurviveCompactionCycles)
     }
 }
 
+/**
+ * @brief Test tombstone vs newer value across compaction
+ * @details Verifies that a new value written after a tombstone correctly
+ *          shadows the tombstone across compaction boundaries
+ */
 TEST_F(LSMTreeTest, Tombstone_VsNewerValueAcrossCompaction)
 {
     // Scenario:
@@ -697,6 +861,10 @@ TEST_F(LSMTreeTest, Tombstone_VsNewerValueAcrossCompaction)
 //  Sorted order invariants (SSTable entries are always sorted by key)
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test non-sequential key insertion
+ * @details Verifies that keys inserted in random order are all findable
+ */
 TEST_F(LSMTreeTest, NonSequentialKeys)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -715,6 +883,10 @@ TEST_F(LSMTreeTest, NonSequentialKeys)
     }
 }
 
+/**
+ * @brief Test descending key insertion order
+ * @details Verifies that keys inserted in descending order are all findable
+ */
 TEST_F(LSMTreeTest, DescendingKeyOrder)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -735,6 +907,11 @@ TEST_F(LSMTreeTest, DescendingKeyOrder)
 //  Thread safety (basic concurrent access)
 // ══════════════════════════════════════════════════════════════════════════
 
+/**
+ * @brief Test concurrent reads
+ * @details Verifies that multiple threads can read from the tree simultaneously
+ *          without crashing or producing incorrect values
+ */
 TEST_F(LSMTreeTest, ConcurrentReads)
 {
     LSMTree<int, std::string> tree(opts_);
@@ -766,6 +943,11 @@ TEST_F(LSMTreeTest, ConcurrentReads)
     }
 }
 
+/**
+ * @brief Test concurrent read and write
+ * @details Verifies that concurrent reads and writes do not crash,
+ *          and all data is consistent after both threads complete
+ */
 TEST_F(LSMTreeTest, ConcurrentReadWrite)
 {
     LSMTree<int, std::string> tree(opts_);

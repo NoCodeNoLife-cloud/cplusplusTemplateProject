@@ -118,6 +118,10 @@ TEST_F(TreeNodeTest, FindMin_Null_ReturnsNull)
 
 // ==================== findNode (mutable overload) ====================
 
+/**
+ * @brief Test mutable findNode on an existing value
+ * @details Verifies that findNode returns a modifiable pointer to the correct node
+ */
 TEST_F(TreeNodeTest, FindNode_Mutable_ExistingValue_ReturnsNode)
 {
     auto* found = TreeNode<int>::findNode(root_.get(), 8);
@@ -128,12 +132,20 @@ TEST_F(TreeNodeTest, FindNode_Mutable_ExistingValue_ReturnsNode)
     EXPECT_EQ(found->data, 88);
 }
 
+/**
+ * @brief Test mutable findNode on a null root
+ * @details Verifies that findNode returns nullptr for empty tree
+ */
 TEST_F(TreeNodeTest, FindNode_Mutable_Null_ReturnsNull)
 {
     auto* found = TreeNode<int>::findNode(static_cast<TreeNode<int>*>(nullptr), 10);
     EXPECT_EQ(found, nullptr);
 }
 
+/**
+ * @brief Test mutable findNode on a non-existing value
+ * @details Verifies that findNode returns nullptr for missing value
+ */
 TEST_F(TreeNodeTest, FindNode_Mutable_NonExisting_ReturnsNull)
 {
     auto* found = TreeNode<int>::findNode(root_.get(), 999);

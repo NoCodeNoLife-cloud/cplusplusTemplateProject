@@ -47,18 +47,30 @@ protected:
 
 // ==================== RedBlackTreeNode Tests ====================
 
+/**
+ * @brief Test constructor sets node data
+ * @details Verifies that constructing a RedBlackTreeNode with a value sets data correctly
+ */
 TEST_F(RedBlackTreeNodeTest, Constructor_SetsData)
 {
     const RedBlackTreeNode<int> node(42);
     EXPECT_EQ(node.getData(), 42);
 }
 
+/**
+ * @brief Test default color of new node is red
+ * @details Verifies that a newly constructed RedBlackTreeNode has Color::Red by default
+ */
 TEST_F(RedBlackTreeNodeTest, Constructor_DefaultColorIsRed)
 {
     const RedBlackTreeNode<int> node(42);
     EXPECT_EQ(node.getColor(), Color::Red);
 }
 
+/**
+ * @brief Test setData updates node value
+ * @details Verifies that setData correctly updates the stored data
+ */
 TEST_F(RedBlackTreeNodeTest, SetData_UpdatesValue)
 {
     RedBlackTreeNode<int> node(10);
@@ -66,6 +78,10 @@ TEST_F(RedBlackTreeNodeTest, SetData_UpdatesValue)
     EXPECT_EQ(node.getData(), 99);
 }
 
+/**
+ * @brief Test setColor updates node color
+ * @details Verifies that setColor correctly changes between Red and Black
+ */
 TEST_F(RedBlackTreeNodeTest, SetColor_UpdatesColor)
 {
     RedBlackTreeNode<int> node(10);
@@ -75,6 +91,10 @@ TEST_F(RedBlackTreeNodeTest, SetColor_UpdatesColor)
     EXPECT_EQ(node.getColor(), Color::Red);
 }
 
+/**
+ * @brief Test left, right, and parent are null by default
+ * @details Verifies that a new node has null child and parent pointers
+ */
 TEST_F(RedBlackTreeNodeTest, LeftRight_NullByDefault)
 {
     const RedBlackTreeNode<int> node(10);
@@ -83,6 +103,10 @@ TEST_F(RedBlackTreeNodeTest, LeftRight_NullByDefault)
     EXPECT_EQ(node.getParent(), nullptr);
 }
 
+/**
+ * @brief Test setLeft, setRight, setParent update pointers
+ * @details Verifies that child and parent pointers are correctly linked
+ */
 TEST_F(RedBlackTreeNodeTest, SetLeftRightParent_UpdatesPointers)
 {
     const auto n1 = std::make_shared<RedBlackTreeNode<int>>(1);
@@ -100,6 +124,10 @@ TEST_F(RedBlackTreeNodeTest, SetLeftRightParent_UpdatesPointers)
     EXPECT_EQ(n3->getParent(), n1);
 }
 
+/**
+ * @brief Test setLeft replaces existing child
+ * @details Verifies that setting a new left child replaces the old one
+ */
 TEST_F(RedBlackTreeNodeTest, SetLeft_ReplacesChild)
 {
     const auto n1 = std::make_shared<RedBlackTreeNode<int>>(1);
@@ -114,6 +142,10 @@ TEST_F(RedBlackTreeNodeTest, SetLeft_ReplacesChild)
 
 // ==================== RedBlackTree Insertion Tests ====================
 
+/**
+ * @brief Test single node insertion results in black root
+ * @details Verifies that after inserting one node, the root is black
+ */
 TEST_F(RedBlackTreeTest, Insert_SingleNode_RootIsBlack)
 {
     RedBlackTree<int> tree;
@@ -124,6 +156,10 @@ TEST_F(RedBlackTreeTest, Insert_SingleNode_RootIsBlack)
     EXPECT_EQ(root->getColor(), Color::Black);
 }
 
+/**
+ * @brief Test two-node insertion maintains correct order
+ * @details Verifies that inserting two nodes maintains BST ordering
+ */
 TEST_F(RedBlackTreeTest, Insert_TwoNodes_MaintainsOrder)
 {
     RedBlackTree<int> tree;
@@ -137,6 +173,10 @@ TEST_F(RedBlackTreeTest, Insert_TwoNodes_MaintainsOrder)
     EXPECT_EQ(root->getLeft()->getData(), 5);
 }
 
+/**
+ * @brief Test duplicate insertion goes to right subtree
+ * @details Verifies that inserting a duplicate key places it in the right subtree
+ */
 TEST_F(RedBlackTreeTest, Insert_Duplicate_GoesToRight)
 {
     RedBlackTree<int> tree;
@@ -150,6 +190,11 @@ TEST_F(RedBlackTreeTest, Insert_Duplicate_GoesToRight)
     EXPECT_EQ(root->getRight()->getData(), 10);
 }
 
+/**
+ * @brief Test left-left insertion case triggers right rotation
+ * @details Verifies that inserting 30, 20, 10 triggers a right rotation
+ *          and the tree maintains red-black properties
+ */
 TEST_F(RedBlackTreeTest, Insert_LeftLeftCase_RotatesCorrectly)
 {
     // Insert 30, 20, 10 should trigger right rotation
@@ -170,6 +215,11 @@ TEST_F(RedBlackTreeTest, Insert_LeftLeftCase_RotatesCorrectly)
     EXPECT_EQ(root->getRight()->getColor(), Color::Red);
 }
 
+/**
+ * @brief Test right-right insertion case triggers left rotation
+ * @details Verifies that inserting 10, 20, 30 triggers a left rotation
+ *          and the tree maintains red-black properties
+ */
 TEST_F(RedBlackTreeTest, Insert_RightRightCase_RotatesCorrectly)
 {
     // Insert 10, 20, 30 should trigger left rotation
@@ -190,6 +240,10 @@ TEST_F(RedBlackTreeTest, Insert_RightRightCase_RotatesCorrectly)
     EXPECT_EQ(root->getRight()->getColor(), Color::Red);
 }
 
+/**
+ * @brief Test left-right insertion case triggers double rotation
+ * @details Verifies that inserting 30, 10, 20 triggers a left-right double rotation
+ */
 TEST_F(RedBlackTreeTest, Insert_LeftRightCase_RotatesCorrectly)
 {
     // Insert 30, 10, 20 should trigger left-right rotation
@@ -210,6 +264,10 @@ TEST_F(RedBlackTreeTest, Insert_LeftRightCase_RotatesCorrectly)
     EXPECT_EQ(root->getRight()->getColor(), Color::Red);
 }
 
+/**
+ * @brief Test right-left insertion case triggers double rotation
+ * @details Verifies that inserting 10, 30, 20 triggers a right-left double rotation
+ */
 TEST_F(RedBlackTreeTest, Insert_RightLeftCase_RotatesCorrectly)
 {
     // Insert 10, 30, 20 should trigger right-left rotation
@@ -232,6 +290,10 @@ TEST_F(RedBlackTreeTest, Insert_RightLeftCase_RotatesCorrectly)
 
 // ==================== Color Invariant Tests ====================
 
+/**
+ * @brief Test root remains black after multiple insertions
+ * @details Verifies that the root node is always black after 100 insertions
+ */
 TEST_F(RedBlackTreeTest, RootRemainsBlack_AfterMultipleInsertions)
 {
     RedBlackTree<int> tree;
@@ -245,6 +307,11 @@ TEST_F(RedBlackTreeTest, RootRemainsBlack_AfterMultipleInsertions)
     EXPECT_EQ(root->getColor(), Color::Black);
 }
 
+/**
+ * @brief Test no consecutive red nodes after insertion
+ * @details Verifies that after inserting values that force various rebalancing,
+ *          no red node has a red child (red-black property 4)
+ */
 TEST_F(RedBlackTreeTest, NoConsecutiveRedNodes_AfterInsertion)
 {
     RedBlackTree<int> tree;
@@ -270,6 +337,10 @@ TEST_F(RedBlackTreeTest, NoConsecutiveRedNodes_AfterInsertion)
     EXPECT_TRUE(checkNoRedRed(checkNoRedRed, tree.getRoot()));
 }
 
+/**
+ * @brief Test black height consistency across paths
+ * @details Verifies that every path from root to leaf has the same number of black nodes
+ */
 TEST_F(RedBlackTreeTest, BlackHeight_ConsistentAcrossPaths)
 {
     RedBlackTree<int> tree;
@@ -296,6 +367,10 @@ TEST_F(RedBlackTreeTest, BlackHeight_ConsistentAcrossPaths)
 
 // ==================== Remove Tests ====================
 
+/**
+ * @brief Test removing a leaf node
+ * @details Verifies that a leaf node can be removed from the red-black tree
+ */
 TEST_F(RedBlackTreeTest, Remove_LeafNode_Removed)
 {
     RedBlackTree<int> tree;
@@ -309,6 +384,10 @@ TEST_F(RedBlackTreeTest, Remove_LeafNode_Removed)
     EXPECT_EQ(root->getData(), 20);
 }
 
+/**
+ * @brief Test removing a non-existing key does not crash
+ * @details Verifies that attempting to remove a key not in the tree is a no-op
+ */
 TEST_F(RedBlackTreeTest, Remove_NonExisting_NoCrash)
 {
     RedBlackTree<int> tree;
@@ -317,6 +396,10 @@ TEST_F(RedBlackTreeTest, Remove_NonExisting_NoCrash)
     EXPECT_NE(tree.getRoot(), nullptr);
 }
 
+/**
+ * @brief Test removing from an empty tree does not crash
+ * @details Verifies that calling remove on an empty tree handles gracefully
+ */
 TEST_F(RedBlackTreeTest, Remove_FromEmptyTree_NoCrash)
 {
     RedBlackTree<int> tree;
@@ -324,6 +407,10 @@ TEST_F(RedBlackTreeTest, Remove_FromEmptyTree_NoCrash)
     EXPECT_EQ(tree.getRoot(), nullptr);
 }
 
+/**
+ * @brief Test removing all elements empties the tree
+ * @details Verifies that after removing all inserted elements, the root is null
+ */
 TEST_F(RedBlackTreeTest, Remove_AllElements_TreeEmpty)
 {
     RedBlackTree<int> tree;
@@ -337,6 +424,10 @@ TEST_F(RedBlackTreeTest, Remove_AllElements_TreeEmpty)
     EXPECT_EQ(tree.getRoot(), nullptr);
 }
 
+/**
+ * @brief Test removing root with single left child
+ * @details Verifies that removing root when it only has a left child works correctly
+ */
 TEST_F(RedBlackTreeTest, Remove_RootWithSingleLeftChild_Works)
 {
     RedBlackTree<int> tree;
@@ -350,6 +441,10 @@ TEST_F(RedBlackTreeTest, Remove_RootWithSingleLeftChild_Works)
     EXPECT_EQ(root->getColor(), Color::Black);
 }
 
+/**
+ * @brief Test removing root with single right child
+ * @details Verifies that removing root when it only has a right child works correctly
+ */
 TEST_F(RedBlackTreeTest, Remove_RootWithSingleRightChild_Works)
 {
     RedBlackTree<int> tree;
@@ -363,6 +458,11 @@ TEST_F(RedBlackTreeTest, Remove_RootWithSingleRightChild_Works)
     EXPECT_EQ(root->getColor(), Color::Black);
 }
 
+/**
+ * @brief Test removing a node with two children
+ * @details Verifies that a node with two children is replaced by its inorder successor
+ *          and red-black properties are maintained
+ */
 TEST_F(RedBlackTreeTest, Remove_NodeWithTwoChildren_Works)
 {
     RedBlackTree<int> tree;
@@ -393,6 +493,11 @@ TEST_F(RedBlackTreeTest, Remove_NodeWithTwoChildren_Works)
     EXPECT_EQ(values, expected);
 }
 
+/**
+ * @brief Test large dataset removal
+ * @details Verifies that removing half of 100 elements maintains red-black properties
+ *          and remaining nodes are all reachable
+ */
 TEST_F(RedBlackTreeTest, Remove_LargeDataset_RemainingNodesReachable)
 {
     RedBlackTree<int> tree;
@@ -436,6 +541,11 @@ TEST_F(RedBlackTreeTest, Remove_LargeDataset_RemainingNodesReachable)
 
 // ==================== Large Dataset ====================
 
+/**
+ * @brief Test large dataset insertion
+ * @details Verifies that inserting 1000 elements results in all nodes reachable
+ *          via in-order traversal and root remains black
+ */
 TEST_F(RedBlackTreeTest, Insert_LargeDataset_AllNodesReachable)
 {
     RedBlackTree<int> tree;
@@ -473,6 +583,11 @@ TEST_F(RedBlackTreeTest, Insert_LargeDataset_AllNodesReachable)
 // Move Semantics Tests
 // ============================================================================
 
+/**
+ * @brief Test move constructor transfers ownership
+ * @details Verifies that the move constructor transfers the root pointer
+ *          from the source tree to the destination tree
+ */
 TEST_F(RedBlackTreeTest, MoveConstructor)
 {
     RedBlackTree<int> tree;
@@ -487,6 +602,11 @@ TEST_F(RedBlackTreeTest, MoveConstructor)
     ASSERT_EQ(other.getRoot(), root);
 }
 
+/**
+ * @brief Test move assignment transfers ownership
+ * @details Verifies that move assignment transfers the root pointer
+ *          from the source tree to the destination tree
+ */
 TEST_F(RedBlackTreeTest, MoveAssignment)
 {
     RedBlackTree<int> tree;

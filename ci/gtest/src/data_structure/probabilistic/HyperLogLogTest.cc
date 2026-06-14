@@ -38,12 +38,20 @@ protected:
 //  Empty / Default state
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test default constructor produces zero estimate
+ * @details Verifies that a newly constructed HyperLogLog returns an estimate of zero before any insertions
+ */
 TEST_F(HyperLogLogTest, DefaultConstructor_EmptyEstimate_ReturnsZero)
 {
     const HyperLogLog<14> hll;
     EXPECT_EQ(hll.estimate(), 0);
 }
 
+/**
+ * @brief Test clear resets the estimate to zero after insertions
+ * @details Verifies that clear() resets the cardinality estimate back to zero after elements have been inserted
+ */
 TEST_F(HyperLogLogTest, Clear_AfterInsert_ReturnsZero)
 {
     HyperLogLog<14> hll;
@@ -58,6 +66,10 @@ TEST_F(HyperLogLogTest, Clear_AfterInsert_ReturnsZero)
 //  Basic insertion
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test inserting a single element yields an estimate close to 1
+ * @details Verifies that the cardinality estimate for a single unique element is within [1, 3]
+ */
 TEST_F(HyperLogLogTest, Insert_SingleElement_EstimateApproximatelyOne)
 {
     HyperLogLog<14> hll;
@@ -68,6 +80,10 @@ TEST_F(HyperLogLogTest, Insert_SingleElement_EstimateApproximatelyOne)
     EXPECT_LE(est, 3); // small jitter allowed for probabilistic structure
 }
 
+/**
+ * @brief Test repeated insertion of the same element yields a stable estimate
+ * @details Verifies that inserting the same element 10000 times still results in an estimate close to 1
+ */
 TEST_F(HyperLogLogTest, Insert_SameElementRepeated_StableEstimate)
 {
     HyperLogLog<14> hll;
@@ -80,6 +96,10 @@ TEST_F(HyperLogLogTest, Insert_SameElementRepeated_StableEstimate)
     EXPECT_LE(est, 10); // should still be very close to 1
 }
 
+/**
+ * @brief Test inserting many distinct elements yields an estimate close to the actual count
+ * @details Verifies that the estimate for 10000 distinct elements is within [90%, 110%] of the true cardinality
+ */
 TEST_F(HyperLogLogTest, Insert_MultipleDistinctElements_NearActual)
 {
     HyperLogLog<14> hll;
@@ -103,6 +123,10 @@ TEST_F(HyperLogLogTest, Insert_MultipleDistinctElements_NearActual)
 //  Precision variants
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test HyperLogLog works with different precision values
+ * @details Verifies that precision values from 10 to 16 all produce reasonable estimates for 1000 elements
+ */
 TEST_F(HyperLogLogTest, DifferentPrecision_AllWork)
 {
     {
@@ -139,6 +163,10 @@ TEST_F(HyperLogLogTest, DifferentPrecision_AllWork)
 //  Error rate (theoretical)
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test error rate decreases as precision increases
+ * @details Verifies that the theoretical error rate is monotonically decreasing with higher precision and the default precision error is approximately 0.8%
+ */
 TEST_F(HyperLogLogTest, ErrorRate_DecreasesWithPrecision)
 {
     const double e10 = HyperLogLog<10>::errorRate();
@@ -159,6 +187,10 @@ TEST_F(HyperLogLogTest, ErrorRate_DecreasesWithPrecision)
 //  Merge
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test merging two halves yields an estimate close to the full set
+ * @details Verifies that merging two disjoint halves of a 5000-element set produces an estimate within 10% of the full-set estimate
+ */
 TEST_F(HyperLogLogTest, Merge_TwoHalfSets_EqualsFullSet)
 {
     HyperLogLog<12> full;
@@ -191,6 +223,10 @@ TEST_F(HyperLogLogTest, Merge_TwoHalfSets_EqualsFullSet)
     EXPECT_LT(ratio, 1.10);
 }
 
+/**
+ * @brief Test merging an empty HyperLogLog into a non-empty one leaves it unchanged
+ * @details Verifies that merging an empty estimator into a populated one does not alter the estimate
+ */
 TEST_F(HyperLogLogTest, Merge_EmptyIntoNonEmpty_NoChange)
 {
     HyperLogLog<12> original;
@@ -207,6 +243,10 @@ TEST_F(HyperLogLogTest, Merge_EmptyIntoNonEmpty_NoChange)
     EXPECT_EQ(original.estimate(), before);
 }
 
+/**
+ * @brief Test merging an estimator with itself leaves it unchanged
+ * @details Verifies that self-merge (merging an estimator with itself) does not alter the estimate
+ */
 TEST_F(HyperLogLogTest, Merge_SelfMerge_NoChange)
 {
     HyperLogLog<14> hll;
@@ -220,6 +260,10 @@ TEST_F(HyperLogLogTest, Merge_SelfMerge_NoChange)
     EXPECT_EQ(hll.estimate(), before);
 }
 
+/**
+ * @brief Test merge through the polymorphic IBaseEstimator interface
+ * @details Verifies that merging via the base class reference works correctly for compatible HyperLogLog types
+ */
 TEST_F(HyperLogLogTest, Merge_PolymorphicInterface_Works)
 {
     // Verify that polymorphic merge (through IBaseEstimator) works for
@@ -234,6 +278,10 @@ TEST_F(HyperLogLogTest, Merge_PolymorphicInterface_Works)
     EXPECT_GT(hll1.estimate(), 1);
 }
 
+/**
+ * @brief Test merge with incompatible precision documents the limitation
+ * @details Documents that merging HyperLogLog estimators of different precision through the polymorphic interface is undefined behaviour and should be avoided by the caller
+ */
 TEST_F(HyperLogLogTest, Merge_IncompatiblePrecision_Throws)
 {
     // Merging HyperLogLog with different precision through IBaseEstimator
@@ -257,6 +305,10 @@ TEST_F(HyperLogLogTest, Merge_IncompatiblePrecision_Throws)
 //  Statistical error bounds (multiple trials)
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test statistical error stays within 5 sigma across multiple trials
+ * @details Verifies that the estimation error for HyperLogLog with p=12 across 10 independent trials stays within 5 times the theoretical standard error
+ */
 TEST_F(HyperLogLogTest, StatisticalError_WithinExpectedBounds)
 {
     // Test that HyperLogLog with p=12 (m=4096) stays within ~3x theoretical
@@ -295,6 +347,10 @@ TEST_F(HyperLogLogTest, StatisticalError_WithinExpectedBounds)
 //  Serialization
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test serialization and deserialization preserves the estimate
+ * @details Verifies that serializing a HyperLogLog with 5000 inserted elements and deserializing it yields the same cardinality estimate
+ */
 TEST_F(HyperLogLogTest, SerializeDeserialize_PreservesEstimate)
 {
     HyperLogLog<14> original;
@@ -310,6 +366,10 @@ TEST_F(HyperLogLogTest, SerializeDeserialize_PreservesEstimate)
     EXPECT_EQ(restored.estimate(), originalEst);
 }
 
+/**
+ * @brief Test serialization and deserialization of an empty HyperLogLog
+ * @details Verifies that an empty HyperLogLog can be serialized and deserialized, yielding an estimate of zero
+ */
 TEST_F(HyperLogLogTest, SerializeDeserialize_Empty_Works)
 {
     const HyperLogLog<14> original;
@@ -319,6 +379,10 @@ TEST_F(HyperLogLogTest, SerializeDeserialize_Empty_Works)
     EXPECT_EQ(restored.estimate(), 0);
 }
 
+/**
+ * @brief Test deserialize with wrong precision throws
+ * @details Verifies that deserializing data from a 14-bit precision HyperLogLog into a 16-bit precision type throws std::invalid_argument
+ */
 TEST_F(HyperLogLogTest, Deserialize_WrongPrecision_Throws)
 {
     HyperLogLog<14> hll;
@@ -328,12 +392,20 @@ TEST_F(HyperLogLogTest, Deserialize_WrongPrecision_Throws)
     EXPECT_THROW(HyperLogLog<16>::deserialize(data), std::invalid_argument);
 }
 
+/**
+ * @brief Test deserialize with truncated data throws
+ * @details Verifies that deserializing data that is too short (missing register data) throws std::invalid_argument
+ */
 TEST_F(HyperLogLogTest, Deserialize_TruncatedData_Throws)
 {
     const std::vector<uint8_t> badData = {uint8_t{0x01}, uint8_t{0x0E}}; // version + precision but no registers
     EXPECT_THROW(HyperLogLog<14>::deserialize(badData), std::invalid_argument);
 }
 
+/**
+ * @brief Test deserialize with unknown version throws
+ * @details Verifies that deserializing data with an unsupported version byte throws std::invalid_argument
+ */
 TEST_F(HyperLogLogTest, Deserialize_WrongVersion_Throws)
 {
     std::vector<uint8_t> badData = {uint8_t{0xFF}, uint8_t{0x0E}}; // unknown version
@@ -345,6 +417,10 @@ TEST_F(HyperLogLogTest, Deserialize_WrongVersion_Throws)
 //  Large cardinality test
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test large cardinality of 100k elements yields a reasonable estimate
+ * @details Verifies that the estimate for 100000 distinct elements stays within [95%, 105%] of the true cardinality
+ */
 TEST_F(HyperLogLogTest, LargeCardinality_100k_ReasonableEstimate)
 {
     HyperLogLog<14> hll;
@@ -367,6 +443,10 @@ TEST_F(HyperLogLogTest, LargeCardinality_100k_ReasonableEstimate)
 //  Memory usage
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test memory usage is within expected bounds
+ * @details Verifies that memoryUsage() returns at least REGISTER_COUNT bytes and no more than REGISTER_COUNT plus 128 bytes of overhead
+ */
 TEST_F(HyperLogLogTest, MemoryUsage_Reasonable)
 {
     const HyperLogLog<14> hll;
@@ -380,6 +460,10 @@ TEST_F(HyperLogLogTest, MemoryUsage_Reasonable)
 //  Type insertion — various data types
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test inserting a std::string works
+ * @details Verifies that inserting a std::string key produces a positive cardinality estimate
+ */
 TEST_F(HyperLogLogTest, Insert_StdString_Works)
 {
     HyperLogLog<14> hll;
@@ -387,6 +471,10 @@ TEST_F(HyperLogLogTest, Insert_StdString_Works)
     EXPECT_GT(hll.estimate(), 0);
 }
 
+/**
+ * @brief Test inserting an integer works
+ * @details Verifies that inserting an integer key produces a positive cardinality estimate
+ */
 TEST_F(HyperLogLogTest, Insert_Integer_Works)
 {
     HyperLogLog<14> hll;
@@ -394,6 +482,10 @@ TEST_F(HyperLogLogTest, Insert_Integer_Works)
     EXPECT_GT(hll.estimate(), 0);
 }
 
+/**
+ * @brief Test inserting different data types into the same estimator
+ * @details Verifies that the HyperLogLog can accept std::string, int, double, and const char* keys in the same instance
+ */
 TEST_F(HyperLogLogTest, Insert_MultipleTypes_SameEstimator)
 {
     HyperLogLog<14> hll;
@@ -404,6 +496,10 @@ TEST_F(HyperLogLogTest, Insert_MultipleTypes_SameEstimator)
     EXPECT_GT(hll.estimate(), 0);
 }
 
+/**
+ * @brief Test inserting raw byte data works
+ * @details Verifies that the HyperLogLog accepts raw byte data via pointer and size overload
+ */
 TEST_F(HyperLogLogTest, Insert_RawBytes_Works)
 {
     HyperLogLog<14> hll;
@@ -416,6 +512,10 @@ TEST_F(HyperLogLogTest, Insert_RawBytes_Works)
 //  Interface compliance
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test insert raw data through the IBaseEstimator interface
+ * @details Verifies that the insert(const void*, size_t) method works when called through the base class interface
+ */
 TEST_F(HyperLogLogTest, Interface_InsertRaw_Override)
 {
     // Verify we can call the interface method directly
@@ -425,6 +525,10 @@ TEST_F(HyperLogLogTest, Interface_InsertRaw_Override)
     EXPECT_GT(estimator.estimate(), 0);
 }
 
+/**
+ * @brief Test memoryUsage through the IBaseEstimator interface
+ * @details Verifies that memoryUsage() returns a positive value when called through the base class interface
+ */
 TEST_F(HyperLogLogTest, Interface_MemoryUsage_Override)
 {
     const HyperLogLog<14> hll;
@@ -436,6 +540,10 @@ TEST_F(HyperLogLogTest, Interface_MemoryUsage_Override)
 //  Edge cases
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test inserting an empty string does not crash
+ * @details Verifies that inserting an empty string or empty std::string does not cause a crash or exception
+ */
 TEST_F(HyperLogLogTest, Insert_EmptyString_DoesNotCrash)
 {
     HyperLogLog<14> hll;
@@ -443,6 +551,10 @@ TEST_F(HyperLogLogTest, Insert_EmptyString_DoesNotCrash)
     EXPECT_NO_THROW(hll.insert(std::string{}));
 }
 
+/**
+ * @brief Test inserting zero bytes does not crash
+ * @details Verifies that inserting with a null pointer and zero size does not cause a crash
+ */
 TEST_F(HyperLogLogTest, Insert_ZeroBytes_DoesNotCrash)
 {
     HyperLogLog<14> hll;
@@ -453,6 +565,10 @@ TEST_F(HyperLogLogTest, Insert_ZeroBytes_DoesNotCrash)
 //  Determinism — same data -> same estimate
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test determinism ensures same inserts produce the same estimate
+ * @details Verifies that inserting the same set of data into two separate HyperLogLog instances produces identical estimates
+ */
 TEST_F(HyperLogLogTest, Determinism_SameInserts_SameEstimate)
 {
     HyperLogLog<14> hll1;
@@ -472,6 +588,10 @@ TEST_F(HyperLogLogTest, Determinism_SameInserts_SameEstimate)
 //  Comparison with exact set (small scale)
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test estimate against an exact set for small cardinality
+ * @details Verifies that the HyperLogLog estimate stays within [90%, 110%] of the exact distinct count for 5000 random 64-bit values
+ */
 TEST_F(HyperLogLogTest, CompareWithExact_SmallSet)
 {
     HyperLogLog<14> hll;
@@ -497,6 +617,10 @@ TEST_F(HyperLogLogTest, CompareWithExact_SmallSet)
 //  High-cardinality merge (distinct element sets)
 // ---------------------------------------------------------------------------
 
+/**
+ * @brief Test merging disjoint sets yields an estimate near the sum of individual estimates
+ * @details Verifies that merging two disjoint sets of 20000 elements each produces a combined estimate close to the sum of the individual estimates
+ */
 TEST_F(HyperLogLogTest, Merge_DisjointSets_UnionNearSum)
 {
     HyperLogLog<14> hllA;

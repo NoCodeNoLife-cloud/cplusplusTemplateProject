@@ -32,10 +32,6 @@ protected:
     }
 };
 
-// ============================================================================
-// toHexString Tests
-// ============================================================================
-
 /**
  * @brief Test toHexString with correct expected_size
  * @details Verifies that a valid digest produces correct hex output
@@ -95,10 +91,6 @@ TEST_F(HashStrategyTest, ToHexString_AllFF)
     EXPECT_EQ(*hex, "ffffff");
 }
 
-// ============================================================================
-// hashString Tests
-// ============================================================================
-
 /**
  * @brief Test hashString with SHA-256
  * @details Verifies that hashString produces a valid hash via SHA-256 strategy
@@ -152,10 +144,6 @@ TEST_F(HashStrategyTest, HashString_LargeInput)
     EXPECT_EQ(hash->size(), 32);
 }
 
-// ============================================================================
-// hashStringToHex Tests
-// ============================================================================
-
 /**
  * @brief Test hashStringToHex with SHA-256
  * @details Verifies that hashStringToHex produces correct hex output
@@ -196,10 +184,6 @@ TEST_F(HashStrategyTest, HashStringToHex_EmptyInput)
     ASSERT_TRUE(hex.has_value());
     EXPECT_EQ(hex->length(), 64);
 }
-
-// ============================================================================
-// hashFile Tests
-// ============================================================================
 
 /**
  * @brief Test hashFile with SHA-256
@@ -321,10 +305,6 @@ TEST_F(HashStrategyTest, HashFile_CustomChunkSize)
 
     std::filesystem::remove(temp_file);
 }
-
-// ============================================================================
-// hashFileToHex Tests
-// ============================================================================
 
 /**
  * @brief Test hashFileToHex with SHA-256

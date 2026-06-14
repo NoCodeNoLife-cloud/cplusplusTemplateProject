@@ -688,6 +688,11 @@ TEST_F(HeapTest, MinHeap_ExtractionOrder)
 // Move Semantics Tests
 // ============================================================================
 
+/**
+ * @brief Test move constructor transfers resources
+ * @details Verifies that move construction transfers heap contents and
+ *          leaves the source in an empty state
+ */
 TEST_F(HeapTest, MoveConstructor)
 {
     Heap<int> heap;
@@ -702,6 +707,11 @@ TEST_F(HeapTest, MoveConstructor)
     EXPECT_TRUE(heap.empty());
 }
 
+/**
+ * @brief Test move assignment transfers resources
+ * @details Verifies that move assignment transfers heap contents and
+ *          leaves the source in an empty state
+ */
 TEST_F(HeapTest, MoveAssignment)
 {
     Heap<int> heap;

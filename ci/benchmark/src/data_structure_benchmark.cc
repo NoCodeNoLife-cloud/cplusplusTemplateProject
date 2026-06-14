@@ -1,3 +1,13 @@
+/**
+ * @file data_structure_benchmark.cc
+ * @brief Micro-benchmarks for fundamental data structures
+ * @details Measures insertion, search, and erasure throughput for
+ *          SkipList, RedBlackTree, BinarySearchTree, and TopK;
+ *          push/pop/bulk-construction for Heap; find/union for
+ *          UnionSet (disjoint-set).  All benchmarks use integer
+ *          keys with shuffled or sequential input distributions.
+ */
+
 #include <benchmark/benchmark.h>
 #include <numeric>
 #include <vector>
@@ -11,9 +21,11 @@
 #include "data_structure/tree/BinarySearchTree.hpp"
 #include "data_structure/top_k/TopK.hpp"
 
-// ============================================================
-// Helper: generate shuffled data
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  Helpers
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief Produces a shuffled vector of [0, n) for benchmark input generation.
 static std::vector<int> generate_shuffled(const size_t n)
 {
     std::vector<int> data(n);
@@ -23,9 +35,11 @@ static std::vector<int> generate_shuffled(const size_t n)
     return data;
 }
 
-// ============================================================
-// SkipList
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  SkipList
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief SkipList insertion throughput with shuffled keys.
 static void BM_SkipList_Insert(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -44,6 +58,7 @@ static void BM_SkipList_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_SkipList_Insert)->Range(8, 8 << 10);
 
+/// @brief SkipList search throughput — all queries target present keys.
 static void BM_SkipList_Search_Hit(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -62,6 +77,7 @@ static void BM_SkipList_Search_Hit(benchmark::State& state)
 }
 BENCHMARK(BM_SkipList_Search_Hit)->Range(8, 8 << 10);
 
+/// @brief SkipList erase throughput — pacing timing excludes re-population.
 static void BM_SkipList_Erase(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -84,9 +100,11 @@ static void BM_SkipList_Erase(benchmark::State& state)
 }
 BENCHMARK(BM_SkipList_Erase)->Range(8, 8 << 10);
 
-// ============================================================
-// RedBlackTree
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  RedBlackTree
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief RBT insertion throughput with shuffled (randomised) keys.
 static void BM_RedBlackTree_Insert(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -105,6 +123,7 @@ static void BM_RedBlackTree_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_RedBlackTree_Insert)->Range(8, 8 << 10);
 
+/// @brief RBT insertion throughput with sequentially increasing keys.
 static void BM_RedBlackTree_Insert_Sorted(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -122,9 +141,11 @@ static void BM_RedBlackTree_Insert_Sorted(benchmark::State& state)
 }
 BENCHMARK(BM_RedBlackTree_Insert_Sorted)->Range(8, 8 << 10);
 
-// ============================================================
-// BinarySearchTree
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  BinarySearchTree
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief Unbalanced BST insertion throughput with shuffled keys.
 static void BM_BST_Insert(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -143,6 +164,7 @@ static void BM_BST_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_BST_Insert)->Range(8, 8 << 10);
 
+/// @brief BST search throughput — all queries target present keys.
 static void BM_BST_Find(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -161,6 +183,7 @@ static void BM_BST_Find(benchmark::State& state)
 }
 BENCHMARK(BM_BST_Find)->Range(8, 8 << 10);
 
+/// @brief BST erase throughput — pacing timing excludes re-population.
 static void BM_BST_Remove(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -182,9 +205,11 @@ static void BM_BST_Remove(benchmark::State& state)
 }
 BENCHMARK(BM_BST_Remove)->Range(8, 8 << 10);
 
-// ============================================================
-// TopK
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  TopK
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief TopK::add throughput — pacing excludes container re-creation.
 static void BM_TopK_Add(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -207,6 +232,7 @@ static void BM_TopK_Add(benchmark::State& state)
 }
 BENCHMARK(BM_TopK_Add)->Range(8, 8 << 10);
 
+/// @brief TopK::getTopK throughput after all elements are inserted.
 static void BM_TopK_GetTopK(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -223,9 +249,11 @@ static void BM_TopK_GetTopK(benchmark::State& state)
 }
 BENCHMARK(BM_TopK_GetTopK)->Range(8, 8 << 10);
 
-// ============================================================
-// Heap
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  Heap
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief Min-heap push throughput with random values.
 static void BM_Heap_Push(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -245,6 +273,7 @@ static void BM_Heap_Push(benchmark::State& state)
 }
 BENCHMARK(BM_Heap_Push)->Range(64, 8 << 10);
 
+/// @brief Min-heap pop throughput — pacing excludes re-population.
 static void BM_Heap_Pop(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -267,6 +296,7 @@ static void BM_Heap_Pop(benchmark::State& state)
 }
 BENCHMARK(BM_Heap_Pop)->Range(64, 8 << 10);
 
+/// @brief Heap bulk-construction from shuffled iterators (heapify).
 static void BM_Heap_BulkConstruction(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -284,6 +314,7 @@ static void BM_Heap_BulkConstruction(benchmark::State& state)
 }
 BENCHMARK(BM_Heap_BulkConstruction)->Range(64, 8 << 10);
 
+/// @brief Interleaved push+pop on a pre-filled heap (steady-state size).
 static void BM_Heap_PushPop_Interleaved(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -302,9 +333,11 @@ static void BM_Heap_PushPop_Interleaved(benchmark::State& state)
 }
 BENCHMARK(BM_Heap_PushPop_Interleaved)->Range(64, 8 << 10);
 
-// ============================================================
-// UnionSet (Disjoint Set Union)
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  UnionSet (Disjoint Set Union)
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief UnionSet find throughput after a chain of union operations.
 static void BM_UnionSet_Find(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -324,6 +357,7 @@ static void BM_UnionSet_Find(benchmark::State& state)
 }
 BENCHMARK(BM_UnionSet_Find)->Range(64, 8 << 10);
 
+/// @brief UnionSet consecutive union throughput with a fresh instance each iteration.
 static void BM_UnionSet_Union(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));

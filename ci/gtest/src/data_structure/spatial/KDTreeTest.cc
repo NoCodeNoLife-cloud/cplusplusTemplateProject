@@ -67,6 +67,7 @@ protected:
 
 /**
  * @brief A default-constructed tree has size 0.
+ * @details Verifies that a newly constructed KDTree reports size zero
  */
 TEST_F(KDTreeTest, Empty_SizeIsZero)
 {
@@ -76,6 +77,7 @@ TEST_F(KDTreeTest, Empty_SizeIsZero)
 
 /**
  * @brief A default-constructed tree reports empty() == true.
+ * @details Verifies that a default-constructed KDTree is considered empty
  */
 TEST_F(KDTreeTest, Empty_EmptyReturnsTrue)
 {
@@ -85,6 +87,7 @@ TEST_F(KDTreeTest, Empty_EmptyReturnsTrue)
 
 /**
  * @brief nearestNeighbor on an empty tree returns std::nullopt.
+ * @details Verifies that querying nearest neighbor on an empty tree returns no result
  */
 TEST_F(KDTreeTest, Empty_NearestNeighbor_ReturnsNullopt)
 {
@@ -95,6 +98,7 @@ TEST_F(KDTreeTest, Empty_NearestNeighbor_ReturnsNullopt)
 
 /**
  * @brief kNearestNeighbors on an empty tree returns an empty vector.
+ * @details Verifies that KNN query on an empty tree returns an empty result vector
  */
 TEST_F(KDTreeTest, Empty_KNearestNeighbors_ReturnsEmpty)
 {
@@ -105,6 +109,7 @@ TEST_F(KDTreeTest, Empty_KNearestNeighbors_ReturnsEmpty)
 
 /**
  * @brief rangeSearch on an empty tree returns an empty vector.
+ * @details Verifies that radius-based range search on an empty tree returns an empty vector
  */
 TEST_F(KDTreeTest, Empty_RangeSearch_ReturnsEmpty)
 {
@@ -115,6 +120,7 @@ TEST_F(KDTreeTest, Empty_RangeSearch_ReturnsEmpty)
 
 /**
  * @brief Calling clear() on an empty tree is safe and idempotent.
+ * @details Verifies that clearing an already empty tree does not crash and maintains empty state
  */
 TEST_F(KDTreeTest, Empty_Clear_IsSafe)
 {
@@ -130,6 +136,7 @@ TEST_F(KDTreeTest, Empty_Clear_IsSafe)
 
 /**
  * @brief Building via initializer list produces the correct size.
+ * @details Verifies that building a KDTree from an initializer list yields the expected element count
  */
 TEST_F(KDTreeTest, Build_WithInitializerList_CreatesCorrectSize)
 {
@@ -141,6 +148,7 @@ TEST_F(KDTreeTest, Build_WithInitializerList_CreatesCorrectSize)
 
 /**
  * @brief Building via iterator range produces the correct size.
+ * @details Verifies that building a KDTree from iterator pair yields the expected element count
  */
 TEST_F(KDTreeTest, Build_WithIteratorRange_CreatesCorrectSize)
 {
@@ -154,6 +162,7 @@ TEST_F(KDTreeTest, Build_WithIteratorRange_CreatesCorrectSize)
 
 /**
  * @brief A second build() discards points from the first build.
+ * @details Verifies that calling build() again replaces all previously stored points
  */
 TEST_F(KDTreeTest, Build_ReplacesPreviousContent)
 {
@@ -167,6 +176,7 @@ TEST_F(KDTreeTest, Build_ReplacesPreviousContent)
 
 /**
  * @brief Build with a single point produces a searchable tree.
+ * @details Verifies that a KDTree built with a single point can be queried via nearest neighbor
  */
 TEST_F(KDTreeTest, Build_WithSinglePoint)
 {
@@ -182,6 +192,7 @@ TEST_F(KDTreeTest, Build_WithSinglePoint)
 
 /**
  * @brief Build with an even number of points.
+ * @details Verifies that building a KDTree with an even number of points completes without error
  */
 TEST_F(KDTreeTest, Build_WithEvenNumberOfPoints)
 {
@@ -192,6 +203,7 @@ TEST_F(KDTreeTest, Build_WithEvenNumberOfPoints)
 
 /**
  * @brief Build with an odd number of points.
+ * @details Verifies that building a KDTree with an odd number of points completes without error
  */
 TEST_F(KDTreeTest, Build_WithOddNumberOfPoints)
 {
@@ -203,6 +215,7 @@ TEST_F(KDTreeTest, Build_WithOddNumberOfPoints)
 
 /**
  * @brief Build with an empty range produces an empty tree.
+ * @details Verifies that building a KDTree from an empty point range results in an empty tree
  */
 TEST_F(KDTreeTest, Build_EmptyRange_ResultsInEmptyTree)
 {
@@ -219,6 +232,7 @@ TEST_F(KDTreeTest, Build_EmptyRange_ResultsInEmptyTree)
 
 /**
  * @brief Inserting a single point increases the tree size to 1.
+ * @details Verifies that inserting one point increments size and returns true
  */
 TEST_F(KDTreeTest, Insert_SinglePoint_IncreasesSize)
 {
@@ -229,6 +243,7 @@ TEST_F(KDTreeTest, Insert_SinglePoint_IncreasesSize)
 
 /**
  * @brief Inserting multiple unique points increases the size accordingly.
+ * @details Verifies that inserting multiple distinct points correctly increments size for each insertion
  */
 TEST_F(KDTreeTest, Insert_MultiplePoints_IncreasesSize)
 {
@@ -241,6 +256,7 @@ TEST_F(KDTreeTest, Insert_MultiplePoints_IncreasesSize)
 
 /**
  * @brief Inserting a duplicate returns false and does not change size.
+ * @details Verifies that inserting an already existing point is rejected and size remains unchanged
  */
 TEST_F(KDTreeTest, Insert_Duplicate_ReturnsFalse)
 {
@@ -252,6 +268,7 @@ TEST_F(KDTreeTest, Insert_Duplicate_ReturnsFalse)
 
 /**
  * @brief Inserting a duplicate after build does not increase size.
+ * @details Verifies that inserting a duplicate point into a tree built via build() is correctly rejected
  */
 TEST_F(KDTreeTest, Insert_Duplicate_AfterBuild_ReturnsFalse)
 {
@@ -265,6 +282,7 @@ TEST_F(KDTreeTest, Insert_Duplicate_AfterBuild_ReturnsFalse)
 
 /**
  * @brief Insert after build adds to the existing tree.
+ * @details Verifies that inserting new points into a tree previously built via build() correctly increases size
  */
 TEST_F(KDTreeTest, Insert_AfterBuild_AddsPoints)
 {
@@ -282,6 +300,7 @@ TEST_F(KDTreeTest, Insert_AfterBuild_AddsPoints)
 
 /**
  * @brief NN on a single-point tree returns that exact point.
+ * @details Verifies that nearest neighbor search on a tree with one point returns that point
  */
 TEST_F(KDTreeTest, NearestNeighbor_SinglePoint_ReturnsThatPoint)
 {
@@ -295,6 +314,7 @@ TEST_F(KDTreeTest, NearestNeighbor_SinglePoint_ReturnsThatPoint)
 
 /**
  * @brief NN finds the exact duplicate when the query matches a stored point.
+ * @details Verifies that nearest neighbor returns the exact point when the query coincides with a stored point
  */
 TEST_F(KDTreeTest, NearestNeighbor_ExactMatch_ReturnsQuery)
 {
@@ -308,6 +328,7 @@ TEST_F(KDTreeTest, NearestNeighbor_ExactMatch_ReturnsQuery)
 
 /**
  * @brief NN identifies the closest point among multiple candidates.
+ * @details Verifies that nearest neighbor correctly identifies the closest point when multiple candidates exist
  */
 TEST_F(KDTreeTest, NearestNeighbor_FindsClosest)
 {
@@ -322,6 +343,7 @@ TEST_F(KDTreeTest, NearestNeighbor_FindsClosest)
 
 /**
  * @brief NN with a richer set of points.
+ * @details Verifies that nearest neighbor returns the correct point from a diverse set of candidates
  */
 TEST_F(KDTreeTest, NearestNeighbor_MultiplePoints_CorrectResult)
 {
@@ -337,6 +359,7 @@ TEST_F(KDTreeTest, NearestNeighbor_MultiplePoints_CorrectResult)
 
 /**
  * @brief NN works correctly with negative coordinates.
+ * @details Verifies that nearest neighbor search handles points with negative coordinate values correctly
  */
 TEST_F(KDTreeTest, NearestNeighbor_WithNegativeCoordinates)
 {
@@ -350,6 +373,7 @@ TEST_F(KDTreeTest, NearestNeighbor_WithNegativeCoordinates)
 
 /**
  * @brief NN does not crash when coordinates are at extremes.
+ * @details Verifies that nearest neighbor handles extremely large coordinate values without numeric issues
  */
 TEST_F(KDTreeTest, NearestNeighbor_WithExtremeValues)
 {
@@ -368,6 +392,7 @@ TEST_F(KDTreeTest, NearestNeighbor_WithExtremeValues)
 
 /**
  * @brief K = 0 returns an empty vector regardless of tree contents.
+ * @details Verifies that requesting zero nearest neighbors returns an empty result vector
  */
 TEST_F(KDTreeTest, KNearestNeighbors_KIsZero_ReturnsEmpty)
 {
@@ -379,6 +404,7 @@ TEST_F(KDTreeTest, KNearestNeighbors_KIsZero_ReturnsEmpty)
 
 /**
  * @brief K = 1 should return the same point as nearestNeighbor.
+ * @details Verifies that KNN with K=1 produces the same result as a single nearestNeighbor query
  */
 TEST_F(KDTreeTest, KNearestNeighbors_KIsOne_EqualsNearestNeighbor)
 {
@@ -393,6 +419,7 @@ TEST_F(KDTreeTest, KNearestNeighbors_KIsOne_EqualsNearestNeighbor)
 
 /**
  * @brief When K > tree size, all points are returned.
+ * @details Verifies that requesting more neighbors than available points returns all stored points
  */
 TEST_F(KDTreeTest, KNearestNeighbors_KGreaterThanSize_ReturnsAll)
 {
@@ -404,6 +431,7 @@ TEST_F(KDTreeTest, KNearestNeighbors_KGreaterThanSize_ReturnsAll)
 
 /**
  * @brief Results are sorted by increasing distance from the query.
+ * @details Verifies that KNN returns results in non-decreasing order of squared distance from the query point
  */
 TEST_F(KDTreeTest, KNearestNeighbors_ResultsSortedByDistance)
 {
@@ -430,6 +458,7 @@ TEST_F(KDTreeTest, KNearestNeighbors_ResultsSortedByDistance)
 
 /**
  * @brief An exact match appears as the first element (distance 0).
+ * @details Verifies that when the query point exactly matches a stored point, it is the first result
  */
 TEST_F(KDTreeTest, KNearestNeighbors_ExactMatchIsFirst)
 {
@@ -447,6 +476,7 @@ TEST_F(KDTreeTest, KNearestNeighbors_ExactMatchIsFirst)
 
 /**
  * @brief Radius = 0 returns only exact matches (distance 0).
+ * @details Verifies that range search with radius zero returns only points that exactly match the query coordinates
  */
 TEST_F(KDTreeTest, RangeSearch_RadiusZero_ReturnsOnlyExactMatches)
 {
@@ -460,6 +490,7 @@ TEST_F(KDTreeTest, RangeSearch_RadiusZero_ReturnsOnlyExactMatches)
 
 /**
  * @brief Radius captures a subset of points.
+ * @details Verifies that range search with an appropriate radius returns only points within that distance
  */
 TEST_F(KDTreeTest, RangeSearch_RadiusIncludesSomePoints)
 {
@@ -472,6 +503,7 @@ TEST_F(KDTreeTest, RangeSearch_RadiusIncludesSomePoints)
 
 /**
  * @brief A sufficiently large radius returns all points.
+ * @details Verifies that a radius large enough to cover all points returns the entire dataset
  */
 TEST_F(KDTreeTest, RangeSearch_RadiusIncludesAllPoints)
 {
@@ -483,6 +515,7 @@ TEST_F(KDTreeTest, RangeSearch_RadiusIncludesAllPoints)
 
 /**
  * @brief Radius that captures no points returns an empty vector.
+ * @details Verifies that range search with a radius too small to include any points returns an empty result
  */
 TEST_F(KDTreeTest, RangeSearch_NoPointsInRange_ReturnsEmpty)
 {
@@ -495,6 +528,7 @@ TEST_F(KDTreeTest, RangeSearch_NoPointsInRange_ReturnsEmpty)
 /**
  * @brief rangeSearch on an empty tree returns empty (already covered by
  *        Empty_RangeSearch_ReturnsEmpty, but re-verified here).
+ * @details Re-verifies that range search on an empty tree returns an empty vector
  */
 TEST_F(KDTreeTest, RangeSearch_EmptyTree_ReturnsEmpty)
 {
@@ -508,6 +542,7 @@ TEST_F(KDTreeTest, RangeSearch_EmptyTree_ReturnsEmpty)
 
 /**
  * @brief Points inserted incrementally can be found by NN.
+ * @details Verifies that incrementally inserted points are correctly discoverable via nearest neighbor search
  */
 TEST_F(KDTreeTest, InsertThenNearestNeighbor_FindsCorrectPoint)
 {
@@ -524,6 +559,7 @@ TEST_F(KDTreeTest, InsertThenNearestNeighbor_FindsCorrectPoint)
 
 /**
  * @brief Points inserted incrementally are found by range search.
+ * @details Verifies that incrementally inserted points are correctly discoverable via range search
  */
 TEST_F(KDTreeTest, InsertThenRangeSearch_FindsPoints)
 {
@@ -544,6 +580,7 @@ TEST_F(KDTreeTest, InsertThenRangeSearch_FindsPoints)
 
 /**
  * @brief Build and NN with geometry::Point2D.
+ * @details Verifies that KDTree works correctly with geometry::Point2D point type for build and nearest neighbor
  */
 TEST_F(KDTreeTest, Point2D_BuildAndNearestNeighbor)
 {
@@ -558,6 +595,7 @@ TEST_F(KDTreeTest, Point2D_BuildAndNearestNeighbor)
 
 /**
  * @brief Insert and KNN with geometry::Point2D.
+ * @details Verifies that KDTree supports insert and K-nearest-neighbors with geometry::Point2D
  */
 TEST_F(KDTreeTest, Point2D_InsertAndKNN)
 {
@@ -574,6 +612,7 @@ TEST_F(KDTreeTest, Point2D_InsertAndKNN)
 
 /**
  * @brief Duplicate detection with Point2D (K=2 fast path).
+ * @details Verifies that inserting a duplicate Point2D returns false using the K=2 optimized duplicate check
  */
 TEST_F(KDTreeTest, Point2D_DuplicateInsert_ReturnsFalse)
 {
@@ -585,6 +624,7 @@ TEST_F(KDTreeTest, Point2D_DuplicateInsert_ReturnsFalse)
 
 /**
  * @brief Range search with geometry::Point2D.
+ * @details Verifies that radius-based range search works correctly with geometry::Point2D points
  */
 TEST_F(KDTreeTest, Point2D_RangeSearch)
 {
@@ -600,6 +640,7 @@ TEST_F(KDTreeTest, Point2D_RangeSearch)
 
 /**
  * @brief Build and NN with geometry::Point3D.
+ * @details Verifies that KDTree works correctly with geometry::Point3D point type for build and nearest neighbor
  */
 TEST_F(KDTreeTest, Point3D_BuildAndNearestNeighbor)
 {
@@ -615,6 +656,7 @@ TEST_F(KDTreeTest, Point3D_BuildAndNearestNeighbor)
 
 /**
  * @brief Range search in 3D.
+ * @details Verifies that radius-based range search works correctly in three-dimensional space
  */
 TEST_F(KDTreeTest, Point3D_RangeSearch)
 {
@@ -628,6 +670,7 @@ TEST_F(KDTreeTest, Point3D_RangeSearch)
 
 /**
  * @brief Duplicate detection with Point3D (K=3 fast path).
+ * @details Verifies that inserting a duplicate Point3D returns false using the K=3 optimized duplicate check
  */
 TEST_F(KDTreeTest, Point3D_DuplicateInsert_ReturnsFalse)
 {
@@ -639,6 +682,7 @@ TEST_F(KDTreeTest, Point3D_DuplicateInsert_ReturnsFalse)
 
 /**
  * @brief KNN with geometry::Point3D.
+ * @details Verifies that K-nearest-neighbors search works correctly with geometry::Point3D points
  */
 TEST_F(KDTreeTest, Point3D_KNearestNeighbors)
 {
@@ -659,6 +703,7 @@ TEST_F(KDTreeTest, Point3D_KNearestNeighbors)
 
 /**
  * @brief 1-D build and NN.
+ * @details Verifies that a one-dimensional KDTree supports build and nearest neighbor search
  */
 TEST_F(KDTreeTest, KDTree1D_BuildAndNearestNeighbor)
 {
@@ -673,6 +718,7 @@ TEST_F(KDTreeTest, KDTree1D_BuildAndNearestNeighbor)
 
 /**
  * @brief 1-D KNN.
+ * @details Verifies that K-nearest-neighbors search works correctly in one dimension
  */
 TEST_F(KDTreeTest, KDTree1D_KNearestNeighbors)
 {
@@ -687,6 +733,7 @@ TEST_F(KDTreeTest, KDTree1D_KNearestNeighbors)
 
 /**
  * @brief 1-D insert duplicates.
+ * @details Verifies that inserting a duplicate point in a one-dimensional tree returns false
  */
 TEST_F(KDTreeTest, KDTree1D_DuplicateInsert_ReturnsFalse)
 {
@@ -705,6 +752,7 @@ using KDTreeArr4D = KDTree<std::array<double, 4>, 4>;
 
 /**
  * @brief Insert and duplicate detection with K=4 (generic path).
+ * @details Verifies that duplicate detection works via the generic coordinate-wise path for K=4
  */
 TEST_F(KDTreeTest, KDTree4D_DuplicateInsert_ReturnsFalse)
 {
@@ -717,6 +765,7 @@ TEST_F(KDTreeTest, KDTree4D_DuplicateInsert_ReturnsFalse)
 
 /**
  * @brief NN with K=4.
+ * @details Verifies that nearest neighbor search works correctly in four-dimensional space
  */
 TEST_F(KDTreeTest, KDTree4D_NearestNeighbor)
 {
@@ -739,6 +788,7 @@ TEST_F(KDTreeTest, KDTree4D_NearestNeighbor)
 
 /**
  * @brief clear() removes all points and resets the tree to empty state.
+ * @details Verifies that clear removes all points and all query methods return empty results afterward
  */
 TEST_F(KDTreeTest, Clear_EmptiesTheTree)
 {
@@ -758,6 +808,7 @@ TEST_F(KDTreeTest, Clear_EmptiesTheTree)
 
 /**
  * @brief After clear(), the tree can be reused for a new build.
+ * @details Verifies that a cleared tree can be rebuilt with new points and functions correctly
  */
 TEST_F(KDTreeTest, Clear_ThenRebuild_Works)
 {
@@ -776,6 +827,7 @@ TEST_F(KDTreeTest, Clear_ThenRebuild_Works)
 
 /**
  * @brief Move constructor transfers state; source becomes empty.
+ * @details Verifies that move construction transfers all points to the new tree and leaves the source empty
  */
 TEST_F(KDTreeTest, MoveConstructor_TransfersState)
 {
@@ -796,6 +848,7 @@ TEST_F(KDTreeTest, MoveConstructor_TransfersState)
 
 /**
  * @brief Move assignment transfers state; source becomes empty.
+ * @details Verifies that move assignment transfers all points to the target and leaves the source empty
  */
 TEST_F(KDTreeTest, MoveAssignment_TransfersState)
 {
@@ -818,6 +871,7 @@ TEST_F(KDTreeTest, MoveAssignment_TransfersState)
 
 /**
  * @brief Self-move-assignment is safe (no crash, no hang).
+ * @details Verifies that self-move-assignment via std::move does not crash and leaves the tree in a valid state
  */
 TEST_F(KDTreeTest, MoveAssignment_SelfMove_IsSafe)
 {
@@ -839,6 +893,7 @@ TEST_F(KDTreeTest, MoveAssignment_SelfMove_IsSafe)
 /**
  * @brief Concurrent read-only operations do not crash or produce wrong
  *        results.
+ * @details Verifies that multiple threads performing nearest neighbor queries concurrently are safe and correct
  */
 TEST_F(KDTreeTest, ConcurrentReads_NoCrash)
 {
@@ -879,6 +934,7 @@ TEST_F(KDTreeTest, ConcurrentReads_NoCrash)
 
 /**
  * @brief Concurrent read + write operations do not crash.
+ * @details Verifies that simultaneous read (NN queries) and write (insert) operations do not cause crashes
  */
 TEST_F(KDTreeTest, ConcurrentReadWrite_NoCrash)
 {
@@ -945,6 +1001,7 @@ TEST_F(KDTreeTest, ConcurrentReadWrite_NoCrash)
 /**
  * @brief Points that share the same value on the splitting axis should not
  *        break the tree.
+ * @details Verifies that the KDTree handles points with identical coordinates on the splitting axis correctly
  */
 TEST_F(KDTreeTest, PointsWithSameAxisValue_Works)
 {
@@ -962,6 +1019,7 @@ TEST_F(KDTreeTest, PointsWithSameAxisValue_Works)
 
 /**
  * @brief Many identical points (same coordinates) — only the first is stored.
+ * @details Verifies that inserting the same point many times only stores the first and rejects duplicates
  */
 TEST_F(KDTreeTest, ManyDuplicateInserts_OnlyFirstStored)
 {
@@ -975,6 +1033,7 @@ TEST_F(KDTreeTest, ManyDuplicateInserts_OnlyFirstStored)
 
 /**
  * @brief Building with a large number of points (stress test).
+ * @details Verifies that building a KDTree with 10,000 points and performing searches completes without error
  */
 TEST_F(KDTreeTest, LargeBuild_Stress)
 {
@@ -1002,6 +1061,7 @@ TEST_F(KDTreeTest, LargeBuild_Stress)
 /**
  * @brief Verify that K=2 tree with std::array works after move assignment
  *        for Point2D and Point3D as well (cross-type sanity).
+ * @details Verifies that both Point2D and Point3D KDTree variants correctly handle build and search operations
  */
 TEST_F(KDTreeTest, MixedPointTypes_BuildAndSearch)
 {

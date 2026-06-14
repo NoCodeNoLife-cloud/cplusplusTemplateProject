@@ -52,6 +52,7 @@ struct YAML::convert<TestConfig>
     }
 };
 
+/// @brief Test fixture for YamlObjectSerializer tests.
 class YamlObjectSerializerTest : public testing::Test
 {
 protected:
@@ -74,6 +75,10 @@ protected:
     std::filesystem::path test_file_;
 };
 
+/**
+ * @brief Serialize and deserialize preserves all data
+ * @details Verifies round-trip of a complete TestConfig object.
+ */
 TEST_F(YamlObjectSerializerTest, SerializeAndDeserializePreservesData)
 {
     const TestConfig original{"localhost", 8080, true};
@@ -84,6 +89,10 @@ TEST_F(YamlObjectSerializerTest, SerializeAndDeserializePreservesData)
     EXPECT_EQ(result, original);
 }
 
+/**
+ * @brief Deserialize throws for nonexistent file
+ * @details Verifies runtime_error when the YAML file does not exist.
+ */
 TEST_F(YamlObjectSerializerTest, DeserializeThrowsForMissingFile)
 {
     EXPECT_THROW(
@@ -91,17 +100,29 @@ TEST_F(YamlObjectSerializerTest, DeserializeThrowsForMissingFile)
         std::runtime_error);
 }
 
+/**
+ * @brief Serialize throws for empty filename
+ * @details Verifies invalid_argument when filename is empty.
+ */
 TEST_F(YamlObjectSerializerTest, SerializeThrowsForEmptyFilename)
 {
     const TestConfig cfg{"localhost", 8080, false};
     EXPECT_THROW(serializer_->serialize(cfg, ""), std::invalid_argument);
 }
 
+/**
+ * @brief Deserialize throws for empty filename
+ * @details Verifies runtime_error when filename is empty.
+ */
 TEST_F(YamlObjectSerializerTest, DeserializeThrowsForEmptyFilename)
 {
     EXPECT_THROW(static_cast<void>(serializer_->deserialize("")), std::runtime_error);
 }
 
+/**
+ * @brief Overwrite existing file with new data
+ * @details Verifies that serializing again overwrites the old content.
+ */
 TEST_F(YamlObjectSerializerTest, OverwriteExistingFile)
 {
     const TestConfig original{"original", 111, false};
@@ -113,10 +134,6 @@ TEST_F(YamlObjectSerializerTest, OverwriteExistingFile)
     const TestConfig result = serializer_->deserialize(test_file_.string());
     EXPECT_EQ(result, updated);
 }
-
-// ============================================================================
-// Additional Boundary Condition Tests
-// ============================================================================
 
 /**
  * @brief Test serialization of empty/default values

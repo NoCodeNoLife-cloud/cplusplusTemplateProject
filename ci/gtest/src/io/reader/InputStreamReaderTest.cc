@@ -7,6 +7,7 @@
 
 using namespace common::io::reader;
 
+/// @brief Test fixture for InputStreamReader tests.
 class InputStreamReaderTest : public testing::Test
 {
 protected:
@@ -22,6 +23,7 @@ protected:
     }
 };
 
+/** @brief Test reading a UTF-8 stream byte by byte. @details Verifies that the 7-byte stream "h€llo" (ASCII 'h', 3-byte €, "llo") is read as individual bytes including the UTF-8 continuation bytes. */
 TEST_F(InputStreamReaderTest, ReadByteByByte)
 {
     EXPECT_EQ(reader_->read(), 'h');
@@ -34,6 +36,7 @@ TEST_F(InputStreamReaderTest, ReadByteByByte)
     EXPECT_FALSE(reader_->read().has_value());
 }
 
+/** @brief Test reading UTF-8 bytes into a buffer. @details Verifies that read(buf, off, len) correctly copies the raw UTF-8 bytes including the first 3 bytes of the € character. */
 TEST_F(InputStreamReaderTest, ReadIntoBuffer)
 {
     std::vector<char> buf(3);
@@ -44,16 +47,19 @@ TEST_F(InputStreamReaderTest, ReadIntoBuffer)
     EXPECT_EQ(buf[2], static_cast<char>(0x82));
 }
 
+/** @brief Test charset validation rejects unsupported encodings. @details Verifies that constructing InputStreamReader with "ISO-8859-1" throws std::invalid_argument since only UTF-8 is supported. */
 TEST_F(InputStreamReaderTest, CharsetValidation)
 {
     EXPECT_THROW(InputStreamReader(inner_, "ISO-8859-1"), std::invalid_argument);
 }
 
+/** @brief Test that mark is not supported. @details Verifies that markSupported() returns false for InputStreamReader. */
 TEST_F(InputStreamReaderTest, MarkNotSupported)
 {
     EXPECT_FALSE(reader_->markSupported());
 }
 
+/** @brief Test the close operation. @details Verifies that close() transitions the reader to closed state and subsequent read() throws std::runtime_error. */
 TEST_F(InputStreamReaderTest, Close)
 {
     reader_->close();
@@ -61,6 +67,7 @@ TEST_F(InputStreamReaderTest, Close)
     EXPECT_THROW(reader_->read(), std::runtime_error);
 }
 
+/** @brief Test reading from an empty stream. @details Verifies that an InputStreamReader wrapping an empty StringReader immediately returns std::nullopt. */
 TEST_F(InputStreamReaderTest, ReadEmptyStream)
 {
     const auto inner = std::make_shared<StringReader>("");
@@ -68,9 +75,9 @@ TEST_F(InputStreamReaderTest, ReadEmptyStream)
     EXPECT_FALSE(empty.read().has_value());
 }
 
+/** @brief Test reading a 4-byte UTF-8 sequence. @details Verifies that U+1F600 (😀), encoded as F0 9F 98 80 in UTF-8, is read as four individual bytes. */
 TEST_F(InputStreamReaderTest, Read4ByteSequence)
 {
-    // U+1F600 (😀) is 4 bytes in UTF-8: F0 9F 98 80
     const auto inner = std::make_shared<StringReader>(std::string("\xF0\x9F\x98\x80"));
     InputStreamReader isr(inner);
     EXPECT_EQ(isr.read(), static_cast<char>(0xF0));
@@ -79,10 +86,6 @@ TEST_F(InputStreamReaderTest, Read4ByteSequence)
     EXPECT_EQ(isr.read(), static_cast<char>(0x80));
     EXPECT_FALSE(isr.read().has_value());
 }
-
-// ============================================================================
-// Additional Boundary Condition Tests
-// ============================================================================
 
 /**
  * @brief Test reading into a full buffer
@@ -151,11 +154,11 @@ TEST_F(InputStreamReaderTest, ReadIntoBufferWithOffset)
 
 /**
  * @brief Test 2-byte UTF-8 sequence
- * @details Verify 2-byte character handling
+ * @details Verifies that U+00E9 (é), encoded as C3 A9 in UTF-8, is read as
+ *          two individual bytes.
  */
 TEST_F(InputStreamReaderTest, Read2ByteSequence)
 {
-    // U+00E9 (é) is 2 bytes in UTF-8: C3 A9
     const auto inner = std::make_shared<StringReader>(std::string("\xC3\xA9"));
     InputStreamReader isr(inner);
     EXPECT_EQ(isr.read(), static_cast<char>(0xC3));
@@ -165,11 +168,12 @@ TEST_F(InputStreamReaderTest, Read2ByteSequence)
 
 /**
  * @brief Test mixed 1/2/3/4-byte UTF-8 sequences
- * @details Mixed character widths
+ * @details Verifies that a stream containing 1-byte 'a', 2-byte é (C3 A9),
+ *          3-byte € (E2 82 AC), and 4-byte 😀 (F0 9F 98 80) is read
+ *          correctly as 10 individual bytes.
  */
 TEST_F(InputStreamReaderTest, MixedCharacterWidths)
 {
-    // 'a' (1) + é(2) + €(3) + 😀(4) = 10 bytes
     const auto inner = std::make_shared<StringReader>(
         std::string("a\xC3\xA9\xE2\x82\xAC\xF0\x9F\x98\x80"));
     InputStreamReader isr(inner);

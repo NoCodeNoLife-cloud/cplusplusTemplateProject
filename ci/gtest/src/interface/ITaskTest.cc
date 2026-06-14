@@ -25,6 +25,7 @@ namespace
     };
 }
 
+/// @brief Test fixture for ITask tests.
 class ITaskTest : public testing::Test
 {
 protected:
@@ -41,12 +42,18 @@ protected:
     std::unique_ptr<MockTask> task_;
 };
 
+/** @brief Tests run executes the task once.
+ *  @details Verifies runCount_ increments to 1 after calling run().
+ */
 TEST_F(ITaskTest, RunExecutesTask)
 {
     task_->run();
     EXPECT_EQ(task_->runCount_, 1);
 }
 
+/** @brief Tests run can be called multiple times.
+ *  @details Verifies runCount_ reaches 3 after three sequential calls.
+ */
 TEST_F(ITaskTest, RunMultipleTimes)
 {
     task_->run();

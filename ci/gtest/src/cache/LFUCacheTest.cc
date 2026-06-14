@@ -391,10 +391,6 @@ TEST_F(LFUCacheTest, Get_ConstVersion)
     EXPECT_EQ(result.value(), "one");
 }
 
-// ============================================================================
-// Boundary Condition Tests
-// ============================================================================
-
 /**
  * @brief Test eviction chain with multiple insertions at capacity
  * @details Each new insertion beyond capacity triggers exactly one eviction

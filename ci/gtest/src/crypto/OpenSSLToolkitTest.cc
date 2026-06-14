@@ -33,6 +33,10 @@ TEST(OpenSSLToolkitTest, DeriveKey_ConsistentOutput)
     EXPECT_EQ(key1, key2);
 }
 
+/**
+ * @brief Different passwords produce different derived keys
+ * @details Verifies that deriveKey() produces unique keys when given different passwords with the same salt
+ */
 TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys)
 {
     std::array<unsigned char, OpenSSLToolkit::kSaltSize> salt{};
@@ -47,6 +51,10 @@ TEST(OpenSSLToolkitTest, DeriveKey_DifferentPasswords_DifferentKeys)
     EXPECT_NE(key1, key2);
 }
 
+/**
+ * @brief Different salts produce different derived keys
+ * @details Verifies that deriveKey() produces unique keys when given different salts with the same password
+ */
 TEST(OpenSSLToolkitTest, DeriveKey_DifferentSalts_DifferentKeys)
 {
     const std::string password = "same_password";
@@ -82,6 +90,10 @@ TEST(OpenSSLToolkitTest, EncryptDecrypt_RoundTrip)
     EXPECT_EQ(plaintext, decrypted);
 }
 
+/**
+ * @brief Encrypting and decrypting empty plaintext succeeds
+ * @details Verifies that encryptAES256CBC and decryptAES256CBC handle empty strings gracefully
+ */
 TEST(OpenSSLToolkitTest, EncryptDecrypt_EmptyPlaintext)
 {
     const std::string password = "password";
@@ -93,6 +105,10 @@ TEST(OpenSSLToolkitTest, EncryptDecrypt_EmptyPlaintext)
     EXPECT_TRUE(decrypted.empty());
 }
 
+/**
+ * @brief Decryption with wrong password throws runtime_error
+ * @details Verifies that decryptAES256CBC throws when the password does not match the encryption
+ */
 TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException)
 {
     const std::vector<unsigned char> ciphertext(OpenSSLToolkit::kSaltSize + OpenSSLToolkit::kIvSize + 16, 0x42);
@@ -101,6 +117,10 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_WrongPassword_ThrowsException)
     EXPECT_THROW(OpenSSLToolkit::decryptAES256CBC(ciphertext, wrongPassword), std::runtime_error);
 }
 
+/**
+ * @brief Truncated ciphertext causes decryption to throw
+ * @details Verifies that decryptAES256CBC throws when ciphertext is too short to contain salt+IV+data
+ */
 TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException)
 {
     const std::vector<unsigned char> truncated(OpenSSLToolkit::kSaltSize - 1, 0x42);
@@ -109,6 +129,10 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_TruncatedCiphertext_ThrowsException)
     EXPECT_THROW(OpenSSLToolkit::decryptAES256CBC(truncated, password), std::runtime_error);
 }
 
+/**
+ * @brief Empty ciphertext causes decryption to throw
+ * @details Verifies that decryptAES256CBC throws when given an empty ciphertext vector
+ */
 TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException)
 {
     const std::vector<unsigned char> emptyCiphertext;
@@ -116,10 +140,6 @@ TEST(OpenSSLToolkitTest, DecryptAES256CBC_EmptyCiphertext_ThrowsException)
 
     EXPECT_THROW(OpenSSLToolkit::decryptAES256CBC(emptyCiphertext, password), std::runtime_error);
 }
-
-// ============================================================================
-// Additional Boundary Condition Tests
-// ============================================================================
 
 /**
  * @brief Test encryption/decryption with large plaintext

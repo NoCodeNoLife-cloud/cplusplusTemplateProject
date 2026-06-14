@@ -1,3 +1,12 @@
+/**
+ * @file BufferTest.cc
+ * @brief Unit tests for buffer implementations (ByteBuffer, CharBuffer, etc.)
+ * @details Contains TYPED_TEST suites for common IBuffer interface behavior
+ *          across all buffer types and TEST_F suites for each concrete buffer
+ *          type, covering normal operations, boundary conditions, and error
+ *          handling.
+ */
+
 #include <gtest/gtest.h>
 #include <cstdint>
 #include <vector>
@@ -12,10 +21,7 @@
 
 using namespace common::buffer;
 
-// ============================================================
-// IBuffer interface common behavior tests
-// ============================================================
-
+/// @brief Typed test fixture for common IBuffer interface behavior across all buffer types.
 template <typename T>
 class BufferCommonTest : public testing::Test
 {
@@ -27,6 +33,7 @@ using BufferTypes = testing::Types<
 
 TYPED_TEST_SUITE(BufferCommonTest, BufferTypes);
 
+/** @brief Verifies initial state after construction: capacity, position, limit, remaining, hasRemaining. */
 TYPED_TEST(BufferCommonTest, InitialState)
 {
     TypeParam buf(10);
@@ -37,6 +44,7 @@ TYPED_TEST(BufferCommonTest, InitialState)
     EXPECT_TRUE(buf.hasRemaining());
 }
 
+/** @brief Verifies that setting a valid position updates position and remaining correctly. */
 TYPED_TEST(BufferCommonTest, PositionSetterValid)
 {
     TypeParam buf(10);
@@ -45,12 +53,14 @@ TYPED_TEST(BufferCommonTest, PositionSetterValid)
     EXPECT_EQ(buf.remaining(), 5);
 }
 
+/** @brief Verifies that setting position beyond limit throws std::out_of_range. */
 TYPED_TEST(BufferCommonTest, PositionSetterThrowsOnExceedLimit)
 {
     TypeParam buf(10);
     EXPECT_THROW(buf.position(11), std::out_of_range);
 }
 
+/** @brief Verifies that setting position beyond a reduced limit throws std::out_of_range, and boundary succeeds. */
 TYPED_TEST(BufferCommonTest, PositionSetterThrowsOnExceedLimitAfterLimitChange)
 {
     TypeParam buf(10);
@@ -60,6 +70,7 @@ TYPED_TEST(BufferCommonTest, PositionSetterThrowsOnExceedLimitAfterLimitChange)
     EXPECT_EQ(buf.position(), 5);
 }
 
+/** @brief Verifies that setting a valid limit updates limit and remaining correctly. */
 TYPED_TEST(BufferCommonTest, LimitSetterValid)
 {
     TypeParam buf(10);
@@ -68,12 +79,14 @@ TYPED_TEST(BufferCommonTest, LimitSetterValid)
     EXPECT_EQ(buf.remaining(), 7);
 }
 
+/** @brief Verifies that setting limit beyond capacity throws std::out_of_range. */
 TYPED_TEST(BufferCommonTest, LimitSetterThrowsOnExceedCapacity)
 {
     TypeParam buf(10);
     EXPECT_THROW(buf.limit(11), std::out_of_range);
 }
 
+/** @brief Verifies that reducing limit below current position clamps position to the new limit. */
 TYPED_TEST(BufferCommonTest, LimitSetterClampsPosition)
 {
     TypeParam buf(10);
@@ -83,6 +96,7 @@ TYPED_TEST(BufferCommonTest, LimitSetterClampsPosition)
     EXPECT_EQ(buf.position(), 5);
 }
 
+/** @brief Verifies that clear() resets position to 0 and limit to capacity. */
 TYPED_TEST(BufferCommonTest, ClearResetsPositionAndLimit)
 {
     TypeParam buf(10);
@@ -94,6 +108,7 @@ TYPED_TEST(BufferCommonTest, ClearResetsPositionAndLimit)
     EXPECT_EQ(buf.remaining(), 10);
 }
 
+/** @brief Verifies that flip() sets limit to current position and resets position to 0. */
 TYPED_TEST(BufferCommonTest, FlipSetsLimitToPositionAndResetsPosition)
 {
     TypeParam buf(10);
@@ -103,6 +118,7 @@ TYPED_TEST(BufferCommonTest, FlipSetsLimitToPositionAndResetsPosition)
     EXPECT_EQ(buf.position(), 0);
 }
 
+/** @brief Verifies that rewind() resets position to 0 without affecting limit. */
 TYPED_TEST(BufferCommonTest, RewindResetsPositionOnly)
 {
     TypeParam buf(10);
@@ -113,6 +129,7 @@ TYPED_TEST(BufferCommonTest, RewindResetsPositionOnly)
     EXPECT_EQ(buf.limit(), 8);
 }
 
+/** @brief Verifies remaining() returns correct count as position and limit change. */
 TYPED_TEST(BufferCommonTest, Remaining)
 {
     TypeParam buf(10);
@@ -123,6 +140,7 @@ TYPED_TEST(BufferCommonTest, Remaining)
     EXPECT_EQ(buf.remaining(), 3);
 }
 
+/** @brief Verifies hasRemaining() returns true when position < limit, false otherwise. */
 TYPED_TEST(BufferCommonTest, HasRemaining)
 {
     TypeParam buf(10);
@@ -131,10 +149,10 @@ TYPED_TEST(BufferCommonTest, HasRemaining)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
-// ============================================================================
-// Buffer Common: Boundary Condition Tests
-// ============================================================================
+/// @name Common Buffer Boundary Conditions
+///@{
 
+/** @brief Verifies zero-capacity buffer has zero position, limit, remaining, and no elements. */
 TYPED_TEST(BufferCommonTest, ZeroCapacity)
 {
     TypeParam buf(0);
@@ -145,6 +163,7 @@ TYPED_TEST(BufferCommonTest, ZeroCapacity)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Verifies single-element buffer: hasRemaining true until position moves to limit. */
 TYPED_TEST(BufferCommonTest, SingleElementCapacity)
 {
     TypeParam buf(1);
@@ -156,46 +175,50 @@ TYPED_TEST(BufferCommonTest, SingleElementCapacity)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Verifies that flip() on an empty buffer sets limit to 0 and hasRemaining to false. */
 TYPED_TEST(BufferCommonTest, FlipOnEmptyBuffer)
 {
     TypeParam buf(10);
-    // position is 0, flip sets limit = position = 0
     buf.flip();
     EXPECT_EQ(buf.limit(), 0);
     EXPECT_EQ(buf.position(), 0);
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Verifies that calling flip() twice collapses limit further (second flip sets limit=pos=0). */
 TYPED_TEST(BufferCommonTest, FlipTwice)
 {
     TypeParam buf(10);
     buf.position(3);
-    buf.flip(); // limit=3, pos=0
-    buf.flip(); // limit=0, pos=0
+    buf.flip();
+    buf.flip();
     EXPECT_EQ(buf.limit(), 0);
     EXPECT_EQ(buf.position(), 0);
 }
 
+/** @brief Verifies that calling clear() twice is idempotent. */
 TYPED_TEST(BufferCommonTest, ClearTwice)
 {
     TypeParam buf(10);
     buf.position(3);
     buf.limit(7);
     buf.clear();
-    buf.clear(); // second clear should be idempotent
+    buf.clear();
     EXPECT_EQ(buf.position(), 0);
     EXPECT_EQ(buf.limit(), 10);
 }
 
+/** @brief Verifies that calling rewind() twice is idempotent. */
 TYPED_TEST(BufferCommonTest, RewindTwice)
 {
     TypeParam buf(10);
     buf.position(5);
     buf.rewind();
-    buf.rewind(); // second rewind should be idempotent
+    buf.rewind();
     EXPECT_EQ(buf.position(), 0);
 }
 
+/** @brief Verifies that when position equals limit, remaining is 0 and hasRemaining is false. */
 TYPED_TEST(BufferCommonTest, PositionAtLimitHasNoRemaining)
 {
     TypeParam buf(10);
@@ -204,20 +227,22 @@ TYPED_TEST(BufferCommonTest, PositionAtLimitHasNoRemaining)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Verifies the combined flip->rewind->clear cycle correctly transitions states. */
 TYPED_TEST(BufferCommonTest, FullCycleClearFlipRewind)
 {
     TypeParam buf(10);
     buf.position(4);
     buf.limit(8);
-    buf.flip();     // limit=4, pos=0
-    buf.rewind();   // pos=0 (no change)
+    buf.flip();
+    buf.rewind();
     EXPECT_EQ(buf.position(), 0);
     EXPECT_EQ(buf.limit(), 4);
-    buf.clear();    // limit=10, pos=0
+    buf.clear();
     EXPECT_EQ(buf.limit(), 10);
     EXPECT_EQ(buf.position(), 0);
 }
 
+/** @brief Verifies that filling buffer to capacity yields zero remaining, then rewinding restores it. */
 TYPED_TEST(BufferCommonTest, ZeroRemainingOnFullCapacity)
 {
     TypeParam buf(5);
@@ -229,14 +254,14 @@ TYPED_TEST(BufferCommonTest, ZeroRemainingOnFullCapacity)
     EXPECT_TRUE(buf.hasRemaining());
 }
 
-// ============================================================
-// ByteBuffer specific tests
-// ============================================================
+///@}
 
+/// @brief Fixture for ByteBuffer-specific tests.
 class ByteBufferTest : public testing::Test
 {
 };
 
+/** @brief Writes and reads single bytes, verifying position advances correctly. */
 TEST_F(ByteBufferTest, PutAndGetSingle)
 {
     ByteBuffer buf(5);
@@ -250,6 +275,7 @@ TEST_F(ByteBufferTest, PutAndGetSingle)
     EXPECT_EQ(buf.position(), 2);
 }
 
+/** @brief Writes a vector of bytes and reads them back via get(n). */
 TEST_F(ByteBufferTest, PutAndGetVector)
 {
     ByteBuffer buf(5);
@@ -264,6 +290,7 @@ TEST_F(ByteBufferTest, PutAndGetVector)
     EXPECT_EQ(result[2], std::byte{3});
 }
 
+/** @brief Verifies that put() on a full buffer throws std::overflow_error. */
 TEST_F(ByteBufferTest, PutOverflowThrows)
 {
     ByteBuffer buf(2);
@@ -272,6 +299,7 @@ TEST_F(ByteBufferTest, PutOverflowThrows)
     EXPECT_THROW(buf.put(std::byte{3}), std::overflow_error);
 }
 
+/** @brief Verifies that get() on an empty buffer throws std::underflow_error. */
 TEST_F(ByteBufferTest, GetUnderflowThrows)
 {
     ByteBuffer buf(2);
@@ -281,6 +309,7 @@ TEST_F(ByteBufferTest, GetUnderflowThrows)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Verifies that putting a vector larger than remaining space throws std::overflow_error. */
 TEST_F(ByteBufferTest, PutVectorOverflowThrows)
 {
     ByteBuffer buf(2);
@@ -288,6 +317,7 @@ TEST_F(ByteBufferTest, PutVectorOverflowThrows)
     EXPECT_THROW(buf.put(src), std::overflow_error);
 }
 
+/** @brief Verifies that get(n) with n > remaining throws std::underflow_error. */
 TEST_F(ByteBufferTest, GetVectorUnderflowThrows)
 {
     ByteBuffer buf(3);
@@ -296,6 +326,7 @@ TEST_F(ByteBufferTest, GetVectorUnderflowThrows)
     EXPECT_THROW({ (void)buf.get(5); }, std::underflow_error);
 }
 
+/** @brief Verifies that get(0) returns an empty vector. */
 TEST_F(ByteBufferTest, GetZeroLength)
 {
     ByteBuffer buf(5);
@@ -303,6 +334,7 @@ TEST_F(ByteBufferTest, GetZeroLength)
     EXPECT_TRUE(result.empty());
 }
 
+/** @brief Verifies that putting an empty vector does not change position. */
 TEST_F(ByteBufferTest, PutEmptyVector)
 {
     ByteBuffer buf(5);
@@ -311,6 +343,7 @@ TEST_F(ByteBufferTest, PutEmptyVector)
     EXPECT_EQ(buf.position(), 0);
 }
 
+/** @brief Verifies that compact() moves remaining data to front and allows further writes. */
 TEST_F(ByteBufferTest, Compact)
 {
     ByteBuffer buf(5);
@@ -329,6 +362,7 @@ TEST_F(ByteBufferTest, Compact)
     EXPECT_EQ(buf.get(), std::byte{3});
 }
 
+/** @brief Verifies compact() after flip without reading is equivalent to position=limit. */
 TEST_F(ByteBufferTest, CompactWithZeroPositionDoesNothing)
 {
     ByteBuffer buf(5);
@@ -339,6 +373,7 @@ TEST_F(ByteBufferTest, CompactWithZeroPositionDoesNothing)
     EXPECT_EQ(buf.limit(), 5);
 }
 
+/** @brief Reads a subset of data via getRemaining() after consuming one element. */
 TEST_F(ByteBufferTest, GetRemaining)
 {
     ByteBuffer buf(5);
@@ -353,6 +388,7 @@ TEST_F(ByteBufferTest, GetRemaining)
     EXPECT_EQ(remaining[1], std::byte{3});
 }
 
+/** @brief Verifies getRemaining() returns empty vector when no data remains. */
 TEST_F(ByteBufferTest, GetRemainingEmpty)
 {
     ByteBuffer buf(5);
@@ -362,10 +398,10 @@ TEST_F(ByteBufferTest, GetRemainingEmpty)
     EXPECT_TRUE(buf.getRemaining().empty());
 }
 
-// ============================================================================
-// ByteBuffer: Boundary Condition Tests
-// ============================================================================
+/// @name ByteBuffer Boundary Conditions
+///@{
 
+/** @brief Verifies zero-capacity ByteBuffer rejects put and get with overflow/underflow. */
 TEST_F(ByteBufferTest, ZeroCapacity)
 {
     ByteBuffer buf(0);
@@ -374,6 +410,7 @@ TEST_F(ByteBufferTest, ZeroCapacity)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Fills ByteBuffer to exact capacity and verifies subsequent put throws overflow. */
 TEST_F(ByteBufferTest, FillToExactCapacity)
 {
     ByteBuffer buf(3);
@@ -384,6 +421,7 @@ TEST_F(ByteBufferTest, FillToExactCapacity)
     EXPECT_THROW(buf.put(std::byte{4}), std::overflow_error);
 }
 
+/** @brief Writes, reads all, clears, then writes again in a full put-get-put cycle. */
 TEST_F(ByteBufferTest, PutThenGetThenPutAgain)
 {
     ByteBuffer buf(5);
@@ -393,7 +431,6 @@ TEST_F(ByteBufferTest, PutThenGetThenPutAgain)
     (void)buf.get();
     (void)buf.get();
     EXPECT_FALSE(buf.hasRemaining());
-    // After consuming all data, re-fill via compact+put or clear+put
     buf.clear();
     buf.put(std::byte{3});
     buf.put(std::byte{4});
@@ -402,16 +439,17 @@ TEST_F(ByteBufferTest, PutThenGetThenPutAgain)
     EXPECT_EQ(buf.get(), std::byte{4});
 }
 
+/** @brief Verifies compact() on a buffer with no data read causes position to advance to limit. */
 TEST_F(ByteBufferTest, CompactOnEmptyBuffer)
 {
     ByteBuffer buf(5);
     buf.compact();
-    // compact moves remaining (limit-pos = 5) bytes and sets pos=5
     EXPECT_EQ(buf.position(), 5);
     EXPECT_EQ(buf.limit(), 5);
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Reads exactly the remaining elements and confirms no data remains. */
 TEST_F(ByteBufferTest, GetExactRemaining)
 {
     ByteBuffer buf(10);
@@ -424,6 +462,7 @@ TEST_F(ByteBufferTest, GetExactRemaining)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Puts a vector that exactly fills the buffer capacity without error. */
 TEST_F(ByteBufferTest, PutVectorExactFit)
 {
     ByteBuffer buf(3);
@@ -432,6 +471,7 @@ TEST_F(ByteBufferTest, PutVectorExactFit)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Mixes vector put and single put, then verifies all elements in order. */
 TEST_F(ByteBufferTest, PutSingleAfterVector)
 {
     ByteBuffer buf(5);
@@ -444,6 +484,7 @@ TEST_F(ByteBufferTest, PutSingleAfterVector)
     EXPECT_EQ(buf.get(), std::byte{3});
 }
 
+/** @brief Reuses buffer across multiple compact cycles to simulate sliding window. */
 TEST_F(ByteBufferTest, MultipleCompactCycles)
 {
     ByteBuffer buf(3);
@@ -451,8 +492,8 @@ TEST_F(ByteBufferTest, MultipleCompactCycles)
     buf.put(std::byte{2});
     buf.put(std::byte{3});
     buf.flip();
-    (void)buf.get(); // pos=1
-    buf.compact();   // pos=2, limit=3
+    (void)buf.get();
+    buf.compact();
     buf.put(std::byte{4});
     buf.flip();
     EXPECT_EQ(buf.get(), std::byte{2});
@@ -460,14 +501,14 @@ TEST_F(ByteBufferTest, MultipleCompactCycles)
     EXPECT_EQ(buf.get(), std::byte{4});
 }
 
-// ============================================================
-// CharBuffer specific tests
-// ============================================================
+///@}
 
+/// @brief Fixture for CharBuffer-specific tests.
 class CharBufferTest : public testing::Test
 {
 };
 
+/** @brief Writes and reads single characters, verifying position advances. */
 TEST_F(CharBufferTest, PutAndGetSingle)
 {
     CharBuffer buf(5);
@@ -479,6 +520,7 @@ TEST_F(CharBufferTest, PutAndGetSingle)
     EXPECT_EQ(buf.get(), 'b');
 }
 
+/** @brief Puts a C-string and reads it back via getRemaining(). */
 TEST_F(CharBufferTest, PutAndGetString)
 {
     CharBuffer buf(10);
@@ -488,12 +530,14 @@ TEST_F(CharBufferTest, PutAndGetString)
     EXPECT_EQ(buf.getRemaining(), "hello");
 }
 
+/** @brief Verifies that putting a string longer than capacity throws std::overflow_error. */
 TEST_F(CharBufferTest, PutStringOverflowThrows)
 {
     CharBuffer buf(3);
     EXPECT_THROW(buf.put("toolong"), std::overflow_error);
 }
 
+/** @brief Verifies that putting a char into a full buffer throws std::overflow_error. */
 TEST_F(CharBufferTest, PutOverflowThrows)
 {
     CharBuffer buf(1);
@@ -501,6 +545,7 @@ TEST_F(CharBufferTest, PutOverflowThrows)
     EXPECT_THROW(buf.put('b'), std::overflow_error);
 }
 
+/** @brief Verifies that getting from an empty buffer throws std::underflow_error. */
 TEST_F(CharBufferTest, GetUnderflowThrows)
 {
     CharBuffer buf(5);
@@ -510,6 +555,7 @@ TEST_F(CharBufferTest, GetUnderflowThrows)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Verifies compact() moves unread chars to front and allows further writes. */
 TEST_F(CharBufferTest, Compact)
 {
     CharBuffer buf(5);
@@ -527,6 +573,7 @@ TEST_F(CharBufferTest, Compact)
     EXPECT_EQ(buf.getRemaining(), "bcde");
 }
 
+/** @brief Gets the remaining substring after consuming one character. */
 TEST_F(CharBufferTest, GetRemaining)
 {
     CharBuffer buf(11);
@@ -537,6 +584,7 @@ TEST_F(CharBufferTest, GetRemaining)
     EXPECT_EQ(remaining, "ello world");
 }
 
+/** @brief Verifies getRemaining() returns empty string when all data is consumed. */
 TEST_F(CharBufferTest, GetRemainingEmptyAtLimit)
 {
     CharBuffer buf(5);
@@ -550,10 +598,10 @@ TEST_F(CharBufferTest, GetRemainingEmptyAtLimit)
     EXPECT_TRUE(buf.getRemaining().empty());
 }
 
-// ============================================================================
-// CharBuffer: Boundary Condition Tests
-// ============================================================================
+/// @name CharBuffer Boundary Conditions
+///@{
 
+/** @brief Verifies zero-capacity CharBuffer rejects put and get. */
 TEST_F(CharBufferTest, ZeroCapacity)
 {
     CharBuffer buf(0);
@@ -562,6 +610,7 @@ TEST_F(CharBufferTest, ZeroCapacity)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Fills CharBuffer to exact capacity and verifies subsequent put throws. */
 TEST_F(CharBufferTest, FillToExactCapacity)
 {
     CharBuffer buf(3);
@@ -572,6 +621,7 @@ TEST_F(CharBufferTest, FillToExactCapacity)
     EXPECT_THROW(buf.put('d'), std::overflow_error);
 }
 
+/** @brief Verifies that putting an empty string does not change position. */
 TEST_F(CharBufferTest, PutEmptyString)
 {
     CharBuffer buf(5);
@@ -579,6 +629,7 @@ TEST_F(CharBufferTest, PutEmptyString)
     EXPECT_EQ(buf.position(), 0);
 }
 
+/** @brief Puts a string that exactly fills capacity without error. */
 TEST_F(CharBufferTest, PutStringExactFit)
 {
     CharBuffer buf(5);
@@ -586,6 +637,7 @@ TEST_F(CharBufferTest, PutStringExactFit)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Verifies compact() on CharBuffer with no data consumed advances position to limit. */
 TEST_F(CharBufferTest, CompactOnEmptyBuffer)
 {
     CharBuffer buf(5);
@@ -595,36 +647,35 @@ TEST_F(CharBufferTest, CompactOnEmptyBuffer)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Overwrites content after flip() without reading, verifying position reset. */
 TEST_F(CharBufferTest, PutAfterFlipWithoutRead)
 {
     CharBuffer buf(5);
     buf.put('a');
-    buf.flip(); // limit=1, pos=0
-    // Overwrite without reading
+    buf.flip();
     buf.put('b');
     buf.flip();
     EXPECT_EQ(buf.get(), 'b');
 }
 
+/** @brief Verifies getRemaining() after clear() returns all content since clear resets to capacity. */
 TEST_F(CharBufferTest, GetRemainingAfterClear)
 {
     CharBuffer buf(5);
     buf.put("hello");
     buf.clear();
-    // clear() resets position and limit but does not erase internal buffer,
-    // so getRemaining returns all content between position and limit
     EXPECT_EQ(buf.getRemaining(), "hello");
     EXPECT_FALSE(buf.getRemaining().empty());
 }
 
-// ============================================================
-// DoubleBuffer specific tests
-// ============================================================
+///@}
 
+/// @brief Fixture for DoubleBuffer-specific tests.
 class DoubleBufferTest : public testing::Test
 {
 };
 
+/** @brief Writes and reads single double values, verifying position and values. */
 TEST_F(DoubleBufferTest, PutAndGetSingle)
 {
     DoubleBuffer buf(5);
@@ -636,6 +687,7 @@ TEST_F(DoubleBufferTest, PutAndGetSingle)
     EXPECT_DOUBLE_EQ(buf.get(), 2.71);
 }
 
+/** @brief Writes a vector of doubles and reads them back sequentially. */
 TEST_F(DoubleBufferTest, PutAndGetVector)
 {
     DoubleBuffer buf(5);
@@ -648,6 +700,7 @@ TEST_F(DoubleBufferTest, PutAndGetVector)
     EXPECT_DOUBLE_EQ(buf.get(), 3.0);
 }
 
+/** @brief Verifies that put() returns a reference to the buffer for chaining. */
 TEST_F(DoubleBufferTest, PutReturnsReference)
 {
     DoubleBuffer buf(5);
@@ -656,6 +709,7 @@ TEST_F(DoubleBufferTest, PutReturnsReference)
     EXPECT_EQ(buf.position(), 2);
 }
 
+/** @brief Verifies that putting into a full DoubleBuffer throws std::overflow_error. */
 TEST_F(DoubleBufferTest, PutOverflowThrows)
 {
     DoubleBuffer buf(2);
@@ -664,6 +718,7 @@ TEST_F(DoubleBufferTest, PutOverflowThrows)
     EXPECT_THROW(buf.put(3.0), std::overflow_error);
 }
 
+/** @brief Verifies that getting from an empty DoubleBuffer throws std::underflow_error. */
 TEST_F(DoubleBufferTest, GetUnderflowThrows)
 {
     DoubleBuffer buf(2);
@@ -673,6 +728,7 @@ TEST_F(DoubleBufferTest, GetUnderflowThrows)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Verifies that putting an oversized vector throws std::overflow_error. */
 TEST_F(DoubleBufferTest, PutVectorOverflowThrows)
 {
     DoubleBuffer buf(2);
@@ -680,6 +736,7 @@ TEST_F(DoubleBufferTest, PutVectorOverflowThrows)
     EXPECT_THROW(buf.put(src), std::overflow_error);
 }
 
+/** @brief Verifies compact() moves unread doubles to front and allows continued writing. */
 TEST_F(DoubleBufferTest, Compact)
 {
     DoubleBuffer buf(5);
@@ -698,6 +755,7 @@ TEST_F(DoubleBufferTest, Compact)
     EXPECT_DOUBLE_EQ(buf.get(), 4.0);
 }
 
+/** @brief Gets the remaining doubles after consuming one, verifying size and values. */
 TEST_F(DoubleBufferTest, GetRemaining)
 {
     DoubleBuffer buf(5);
@@ -712,10 +770,10 @@ TEST_F(DoubleBufferTest, GetRemaining)
     EXPECT_DOUBLE_EQ(remaining[1], 3.0);
 }
 
-// ============================================================================
-// DoubleBuffer: Boundary Condition Tests
-// ============================================================================
+/// @name DoubleBuffer Boundary Conditions
+///@{
 
+/** @brief Verifies zero-capacity DoubleBuffer rejects put and get. */
 TEST_F(DoubleBufferTest, ZeroCapacity)
 {
     DoubleBuffer buf(0);
@@ -724,6 +782,7 @@ TEST_F(DoubleBufferTest, ZeroCapacity)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Fills DoubleBuffer to capacity and verifies subsequent put throws. */
 TEST_F(DoubleBufferTest, FillToExactCapacity)
 {
     DoubleBuffer buf(3);
@@ -734,6 +793,7 @@ TEST_F(DoubleBufferTest, FillToExactCapacity)
     EXPECT_THROW(buf.put(4.0), std::overflow_error);
 }
 
+/** @brief Puts a vector that exactly fills capacity without error. */
 TEST_F(DoubleBufferTest, PutVectorExactFit)
 {
     DoubleBuffer buf(3);
@@ -742,6 +802,7 @@ TEST_F(DoubleBufferTest, PutVectorExactFit)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Verifies that putting an empty vector does not change position. */
 TEST_F(DoubleBufferTest, PutEmptyVector)
 {
     DoubleBuffer buf(5);
@@ -750,6 +811,7 @@ TEST_F(DoubleBufferTest, PutEmptyVector)
     EXPECT_EQ(buf.position(), 0);
 }
 
+/** @brief Verifies compact() on unwritten DoubleBuffer advances position to limit. */
 TEST_F(DoubleBufferTest, CompactOnEmptyBuffer)
 {
     DoubleBuffer buf(5);
@@ -759,14 +821,14 @@ TEST_F(DoubleBufferTest, CompactOnEmptyBuffer)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
-// ============================================================
-// FloatBuffer specific tests
-// ============================================================
+///@}
 
+/// @brief Fixture for FloatBuffer-specific tests.
 class FloatBufferTest : public testing::Test
 {
 };
 
+/** @brief Verifies the static allocate() factory returns a properly initialized FloatBuffer. */
 TEST_F(FloatBufferTest, Allocate)
 {
     const FloatBuffer buf = FloatBuffer::allocate(10);
@@ -775,6 +837,7 @@ TEST_F(FloatBufferTest, Allocate)
     EXPECT_EQ(buf.limit(), 10);
 }
 
+/** @brief Writes and reads single float values, verifying position and values. */
 TEST_F(FloatBufferTest, PutAndGetSingle)
 {
     FloatBuffer buf(5);
@@ -786,6 +849,7 @@ TEST_F(FloatBufferTest, PutAndGetSingle)
     EXPECT_FLOAT_EQ(buf.get(), 2.5f);
 }
 
+/** @brief Writes a vector of floats and reads them back via get(n). */
 TEST_F(FloatBufferTest, PutAndGetVector)
 {
     FloatBuffer buf(5);
@@ -800,6 +864,7 @@ TEST_F(FloatBufferTest, PutAndGetVector)
     EXPECT_FLOAT_EQ(result[2], 3.0f);
 }
 
+/** @brief Reads a specified number of floats and confirms position advances correctly. */
 TEST_F(FloatBufferTest, GetWithLength)
 {
     FloatBuffer buf(10);
@@ -814,6 +879,7 @@ TEST_F(FloatBufferTest, GetWithLength)
     EXPECT_EQ(buf.position(), 2);
 }
 
+/** @brief Verifies that get(0) returns an empty vector. */
 TEST_F(FloatBufferTest, GetZeroLength)
 {
     FloatBuffer buf(5);
@@ -821,6 +887,7 @@ TEST_F(FloatBufferTest, GetZeroLength)
     EXPECT_TRUE(result.empty());
 }
 
+/** @brief Verifies that putting into a full FloatBuffer throws std::overflow_error. */
 TEST_F(FloatBufferTest, PutOverflowThrows)
 {
     FloatBuffer buf(2);
@@ -829,6 +896,7 @@ TEST_F(FloatBufferTest, PutOverflowThrows)
     EXPECT_THROW(buf.put(3.0f), std::overflow_error);
 }
 
+/** @brief Verifies that getting from an empty FloatBuffer throws std::underflow_error. */
 TEST_F(FloatBufferTest, GetUnderflowThrows)
 {
     FloatBuffer buf(2);
@@ -838,6 +906,7 @@ TEST_F(FloatBufferTest, GetUnderflowThrows)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Verifies that get(n) with n > remaining throws std::underflow_error. */
 TEST_F(FloatBufferTest, GetVectorUnderflowThrows)
 {
     FloatBuffer buf(3);
@@ -846,6 +915,7 @@ TEST_F(FloatBufferTest, GetVectorUnderflowThrows)
     EXPECT_THROW({ (void)buf.get(5); }, std::underflow_error);
 }
 
+/** @brief Verifies that putting an oversized vector throws std::overflow_error. */
 TEST_F(FloatBufferTest, PutVectorOverflowThrows)
 {
     FloatBuffer buf(2);
@@ -853,6 +923,7 @@ TEST_F(FloatBufferTest, PutVectorOverflowThrows)
     EXPECT_THROW(buf.put(src), std::overflow_error);
 }
 
+/** @brief Verifies that putting an empty vector does not change position. */
 TEST_F(FloatBufferTest, PutEmptyVector)
 {
     FloatBuffer buf(5);
@@ -861,6 +932,7 @@ TEST_F(FloatBufferTest, PutEmptyVector)
     EXPECT_EQ(buf.position(), 0);
 }
 
+/** @brief Verifies compact() moves unread floats to front and allows continued writing. */
 TEST_F(FloatBufferTest, Compact)
 {
     FloatBuffer buf(5);
@@ -879,6 +951,7 @@ TEST_F(FloatBufferTest, Compact)
     EXPECT_FLOAT_EQ(buf.get(), 4.0f);
 }
 
+/** @brief Gets remaining floats after consuming one, verifying size and value. */
 TEST_F(FloatBufferTest, GetRemaining)
 {
     FloatBuffer buf(5);
@@ -891,10 +964,10 @@ TEST_F(FloatBufferTest, GetRemaining)
     EXPECT_FLOAT_EQ(remaining[0], 2.0f);
 }
 
-// ============================================================================
-// FloatBuffer: Boundary Condition Tests
-// ============================================================================
+/// @name FloatBuffer Boundary Conditions
+///@{
 
+/** @brief Verifies compact() on FloatBuffer with no data consumed advances position to limit. */
 TEST_F(FloatBufferTest, CompactOnEmptyBuffer)
 {
     FloatBuffer buf(5);
@@ -904,20 +977,22 @@ TEST_F(FloatBufferTest, CompactOnEmptyBuffer)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Combines flip, get, compact, and put to verify read-write transition. */
 TEST_F(FloatBufferTest, PutAfterFlip)
 {
     FloatBuffer buf(5);
     buf.put(1.0f);
     buf.put(2.0f);
-    buf.flip();       // limit=2, pos=0
-    (void)buf.get();  // pos=1
-    buf.compact();    // pos=1, limit=5
+    buf.flip();
+    (void)buf.get();
+    buf.compact();
     buf.put(3.0f);
     buf.flip();
     EXPECT_FLOAT_EQ(buf.get(), 2.0f);
     EXPECT_FLOAT_EQ(buf.get(), 3.0f);
 }
 
+/** @brief Puts a vector that exactly fills capacity without error. */
 TEST_F(FloatBufferTest, PutVectorExactFit)
 {
     FloatBuffer buf(3);
@@ -926,6 +1001,7 @@ TEST_F(FloatBufferTest, PutVectorExactFit)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Fills FloatBuffer to capacity and verifies subsequent put throws. */
 TEST_F(FloatBufferTest, FillToExactCapacity)
 {
     FloatBuffer buf(3);
@@ -936,14 +1012,14 @@ TEST_F(FloatBufferTest, FillToExactCapacity)
     EXPECT_THROW(buf.put(4.0f), std::overflow_error);
 }
 
-// ============================================================
-// IntBuffer specific tests
-// ============================================================
+///@}
 
+/// @brief Fixture for IntBuffer-specific tests.
 class IntBufferTest : public testing::Test
 {
 };
 
+/** @brief Writes and reads single int values, verifying position and values. */
 TEST_F(IntBufferTest, PutAndGetSingle)
 {
     IntBuffer buf(5);
@@ -955,6 +1031,7 @@ TEST_F(IntBufferTest, PutAndGetSingle)
     EXPECT_EQ(buf.get(), 100);
 }
 
+/** @brief Puts and gets ints by absolute index without affecting position. */
 TEST_F(IntBufferTest, PutAndGetByIndex)
 {
     IntBuffer buf(5);
@@ -965,18 +1042,21 @@ TEST_F(IntBufferTest, PutAndGetByIndex)
     EXPECT_EQ(buf.position(), 0);
 }
 
+/** @brief Verifies that put(index) with index >= capacity throws std::out_of_range. */
 TEST_F(IntBufferTest, PutIndexOutOfRangeThrows)
 {
     IntBuffer buf(5);
     EXPECT_THROW(buf.put(5, 100), std::out_of_range);
 }
 
+/** @brief Verifies that get(index) with index >= capacity throws std::out_of_range. */
 TEST_F(IntBufferTest, GetIndexOutOfRangeThrows)
 {
     const IntBuffer buf(5);
     EXPECT_THROW({ (void)buf.get(5); }, std::out_of_range);
 }
 
+/** @brief Verifies that putting into a full IntBuffer throws std::overflow_error. */
 TEST_F(IntBufferTest, PutOverflowThrows)
 {
     IntBuffer buf(2);
@@ -985,6 +1065,7 @@ TEST_F(IntBufferTest, PutOverflowThrows)
     EXPECT_THROW(buf.put(3), std::overflow_error);
 }
 
+/** @brief Verifies that getting from an empty IntBuffer throws std::underflow_error. */
 TEST_F(IntBufferTest, GetUnderflowThrows)
 {
     IntBuffer buf(2);
@@ -994,6 +1075,7 @@ TEST_F(IntBufferTest, GetUnderflowThrows)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Verifies compact() moves unread ints to front and allows continued writing. */
 TEST_F(IntBufferTest, Compact)
 {
     IntBuffer buf(5);
@@ -1012,6 +1094,7 @@ TEST_F(IntBufferTest, Compact)
     EXPECT_EQ(buf.get(), 4);
 }
 
+/** @brief Gets remaining ints after consuming one, verifying size and values. */
 TEST_F(IntBufferTest, GetRemaining)
 {
     IntBuffer buf(5);
@@ -1026,10 +1109,10 @@ TEST_F(IntBufferTest, GetRemaining)
     EXPECT_EQ(remaining[1], 30);
 }
 
-// ============================================================================
-// IntBuffer: Boundary Condition Tests
-// ============================================================================
+/// @name IntBuffer Boundary Conditions
+///@{
 
+/** @brief Verifies compact() on unwritten IntBuffer advances position to limit. */
 TEST_F(IntBufferTest, CompactOnEmptyBuffer)
 {
     IntBuffer buf(5);
@@ -1039,6 +1122,7 @@ TEST_F(IntBufferTest, CompactOnEmptyBuffer)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Fills IntBuffer to capacity and verifies subsequent put throws overflow. */
 TEST_F(IntBufferTest, FillToExactCapacity)
 {
     IntBuffer buf(3);
@@ -1049,6 +1133,7 @@ TEST_F(IntBufferTest, FillToExactCapacity)
     EXPECT_THROW(buf.put(4), std::overflow_error);
 }
 
+/** @brief Verifies that negative values and INT_MIN/INT_MAX round-trip correctly. */
 TEST_F(IntBufferTest, PutNegativeValues)
 {
     IntBuffer buf(5);
@@ -1063,6 +1148,7 @@ TEST_F(IntBufferTest, PutNegativeValues)
     EXPECT_EQ(buf.get(), INT_MAX);
 }
 
+/** @brief Verifies out-of-bounds access via both get(index) and put(index) throws. */
 TEST_F(IntBufferTest, PutAndGetByIndexOutOfBounds)
 {
     IntBuffer buf(5);
@@ -1070,14 +1156,14 @@ TEST_F(IntBufferTest, PutAndGetByIndexOutOfBounds)
     EXPECT_THROW(buf.put(5, 100), std::out_of_range);
 }
 
-// ============================================================
-// LongBuffer specific tests
-// ============================================================
+///@}
 
+/// @brief Fixture for LongBuffer-specific tests.
 class LongBufferTest : public testing::Test
 {
 };
 
+/** @brief Writes and reads large long values, verifying position and round-trip. */
 TEST_F(LongBufferTest, PutAndGet)
 {
     LongBuffer buf(5);
@@ -1089,6 +1175,7 @@ TEST_F(LongBufferTest, PutAndGet)
     EXPECT_EQ(buf.get(), 20000000000LL);
 }
 
+/** @brief Verifies that putting into a full LongBuffer throws std::overflow_error. */
 TEST_F(LongBufferTest, PutOverflowThrows)
 {
     LongBuffer buf(2);
@@ -1097,6 +1184,7 @@ TEST_F(LongBufferTest, PutOverflowThrows)
     EXPECT_THROW(buf.put(3), std::overflow_error);
 }
 
+/** @brief Verifies that getting from an empty LongBuffer throws std::underflow_error. */
 TEST_F(LongBufferTest, GetUnderflowThrows)
 {
     LongBuffer buf(2);
@@ -1106,6 +1194,7 @@ TEST_F(LongBufferTest, GetUnderflowThrows)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Verifies compact() moves unread longs to front and allows continued writing. */
 TEST_F(LongBufferTest, Compact)
 {
     LongBuffer buf(5);
@@ -1124,6 +1213,7 @@ TEST_F(LongBufferTest, Compact)
     EXPECT_EQ(buf.get(), 40);
 }
 
+/** @brief Gets remaining longs after consuming one, verifying size and value. */
 TEST_F(LongBufferTest, GetRemaining)
 {
     LongBuffer buf(5);
@@ -1136,10 +1226,10 @@ TEST_F(LongBufferTest, GetRemaining)
     EXPECT_EQ(remaining[0], 200);
 }
 
-// ============================================================================
-// LongBuffer: Boundary Condition Tests
-// ============================================================================
+/// @name LongBuffer Boundary Conditions
+///@{
 
+/** @brief Verifies compact() on unwritten LongBuffer advances position to limit. */
 TEST_F(LongBufferTest, CompactOnEmptyBuffer)
 {
     LongBuffer buf(5);
@@ -1149,6 +1239,7 @@ TEST_F(LongBufferTest, CompactOnEmptyBuffer)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Fills LongBuffer to capacity and verifies subsequent put throws overflow. */
 TEST_F(LongBufferTest, FillToExactCapacity)
 {
     LongBuffer buf(3);
@@ -1159,6 +1250,7 @@ TEST_F(LongBufferTest, FillToExactCapacity)
     EXPECT_THROW(buf.put(4LL), std::overflow_error);
 }
 
+/** @brief Verifies negative long values and LLONG_MIN/LLONG_MAX round-trip correctly. */
 TEST_F(LongBufferTest, PutNegativeValues)
 {
     LongBuffer buf(5);
@@ -1171,14 +1263,14 @@ TEST_F(LongBufferTest, PutNegativeValues)
     EXPECT_EQ(buf.get(), LLONG_MAX);
 }
 
-// ============================================================
-// ShortBuffer specific tests
-// ============================================================
+///@}
 
+/// @brief Fixture for ShortBuffer-specific tests.
 class ShortBufferTest : public testing::Test
 {
 };
 
+/** @brief Wraps an existing array into a ShortBuffer, verifying capacity, position, and limit. */
 TEST_F(ShortBufferTest, Wrap)
 {
     constexpr int16_t arr[] = {10, 20, 30};
@@ -1188,6 +1280,7 @@ TEST_F(ShortBufferTest, Wrap)
     EXPECT_EQ(buf.limit(), 3);
 }
 
+/** @brief Verifies that wrap() copies data and the buffer can read it back. */
 TEST_F(ShortBufferTest, WrapCopiesData)
 {
     constexpr int16_t arr[] = {100, 200, 300};
@@ -1197,12 +1290,14 @@ TEST_F(ShortBufferTest, WrapCopiesData)
     EXPECT_EQ(buf.get(), 300);
 }
 
+/** @brief Verifies that wrap(nullptr, 0) creates a zero-capacity buffer. */
 TEST_F(ShortBufferTest, WrapNullptr)
 {
     const ShortBuffer buf = ShortBuffer::wrap(nullptr, 0);
     EXPECT_EQ(buf.capacity(), 0);
 }
 
+/** @brief Writes and reads single int16_t values, verifying position and values. */
 TEST_F(ShortBufferTest, PutAndGet)
 {
     ShortBuffer buf(5);
@@ -1214,6 +1309,7 @@ TEST_F(ShortBufferTest, PutAndGet)
     EXPECT_EQ(buf.get(), 99);
 }
 
+/** @brief Puts and gets int16_t by absolute index without affecting position. */
 TEST_F(ShortBufferTest, PutAndGetByIndex)
 {
     ShortBuffer buf(5);
@@ -1223,18 +1319,21 @@ TEST_F(ShortBufferTest, PutAndGetByIndex)
     EXPECT_EQ(buf.get(1), 222);
 }
 
+/** @brief Verifies that put(index) with index >= capacity throws std::out_of_range. */
 TEST_F(ShortBufferTest, PutIndexOutOfRangeThrows)
 {
     ShortBuffer buf(5);
     EXPECT_THROW(buf.put(5, 100), std::out_of_range);
 }
 
+/** @brief Verifies that get(index) with index >= capacity throws std::out_of_range. */
 TEST_F(ShortBufferTest, GetIndexOutOfRangeThrows)
 {
     const ShortBuffer buf(5);
     EXPECT_THROW({ (void)buf.get(5); }, std::out_of_range);
 }
 
+/** @brief Verifies that putting into a full ShortBuffer throws std::overflow_error. */
 TEST_F(ShortBufferTest, PutOverflowThrows)
 {
     ShortBuffer buf(2);
@@ -1243,6 +1342,7 @@ TEST_F(ShortBufferTest, PutOverflowThrows)
     EXPECT_THROW(buf.put(3), std::overflow_error);
 }
 
+/** @brief Verifies that getting from an empty ShortBuffer throws std::underflow_error. */
 TEST_F(ShortBufferTest, GetUnderflowThrows)
 {
     ShortBuffer buf(2);
@@ -1252,6 +1352,7 @@ TEST_F(ShortBufferTest, GetUnderflowThrows)
     EXPECT_THROW({ (void)buf.get(); }, std::underflow_error);
 }
 
+/** @brief Accesses the underlying int16_t raw pointer and verifies elements. */
 TEST_F(ShortBufferTest, Data)
 {
     ShortBuffer buf(3);
@@ -1262,6 +1363,7 @@ TEST_F(ShortBufferTest, Data)
     EXPECT_EQ(raw[1], 20);
 }
 
+/** @brief Accesses the underlying const int16_t raw pointer via const reference. */
 TEST_F(ShortBufferTest, ConstData)
 {
     ShortBuffer buf(3);
@@ -1273,6 +1375,7 @@ TEST_F(ShortBufferTest, ConstData)
     EXPECT_EQ(raw[1], 20);
 }
 
+/** @brief Verifies compact() moves unread int16_t values to front and allows continued writing. */
 TEST_F(ShortBufferTest, Compact)
 {
     ShortBuffer buf(5);
@@ -1291,6 +1394,7 @@ TEST_F(ShortBufferTest, Compact)
     EXPECT_EQ(buf.get(), 4);
 }
 
+/** @brief Gets remaining int16_t values after consuming one, verifying size and values. */
 TEST_F(ShortBufferTest, GetRemaining)
 {
     ShortBuffer buf(5);
@@ -1305,10 +1409,10 @@ TEST_F(ShortBufferTest, GetRemaining)
     EXPECT_EQ(remaining[1], 30);
 }
 
-// ============================================================================
-// ShortBuffer: Boundary Condition Tests
-// ============================================================================
+/// @name ShortBuffer Boundary Conditions
+///@{
 
+/** @brief Verifies wrap() with zero-length array creates a zero-capacity buffer. */
 TEST_F(ShortBufferTest, WrapZeroLength)
 {
     constexpr int16_t arr[1] = {0};
@@ -1319,6 +1423,7 @@ TEST_F(ShortBufferTest, WrapZeroLength)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Wraps a large array (1000 elements) and reads all values back. */
 TEST_F(ShortBufferTest, WrapLargeArray)
 {
     const std::vector<int16_t> vec(1000, 42);
@@ -1330,6 +1435,7 @@ TEST_F(ShortBufferTest, WrapLargeArray)
     }
 }
 
+/** @brief Verifies compact() on unwritten ShortBuffer advances position to limit. */
 TEST_F(ShortBufferTest, CompactOnEmptyBuffer)
 {
     ShortBuffer buf(5);
@@ -1339,6 +1445,7 @@ TEST_F(ShortBufferTest, CompactOnEmptyBuffer)
     EXPECT_FALSE(buf.hasRemaining());
 }
 
+/** @brief Fills ShortBuffer to capacity and verifies subsequent put throws overflow. */
 TEST_F(ShortBufferTest, FillToExactCapacity)
 {
     ShortBuffer buf(3);
@@ -1349,6 +1456,7 @@ TEST_F(ShortBufferTest, FillToExactCapacity)
     EXPECT_THROW(buf.put(4), std::overflow_error);
 }
 
+/** @brief Verifies negative int16_t values and SHRT_MIN/SHRT_MAX round-trip correctly. */
 TEST_F(ShortBufferTest, PutNegativeValues)
 {
     ShortBuffer buf(5);
@@ -1361,10 +1469,12 @@ TEST_F(ShortBufferTest, PutNegativeValues)
     EXPECT_EQ(buf.get(), SHRT_MAX);
 }
 
-// ============================================================================
-// Additional Boundary Condition Tests
-// ============================================================================
+///@}
 
+/// @name Additional Cross-Type Boundary Conditions
+///@{
+
+/** @brief Repeats compact-write-flip-read cycle 5 times on ByteBuffer to stress sliding-window reuse. */
 TEST_F(ByteBufferTest, MultipleCompactCycles_Repeated)
 {
     for (int cycle = 0; cycle < 5; ++cycle)
@@ -1384,6 +1494,7 @@ TEST_F(ByteBufferTest, MultipleCompactCycles_Repeated)
     }
 }
 
+/** @brief Verifies full write-read-clear-write-read cycle on ByteBuffer. */
 TEST_F(ByteBufferTest, ReadWriteCycle)
 {
     ByteBuffer buf(5);
@@ -1400,6 +1511,7 @@ TEST_F(ByteBufferTest, ReadWriteCycle)
     EXPECT_EQ(buf.get(), std::byte{4});
 }
 
+/** @brief Repeats compact cycle 3 times on CharBuffer to verify consistent sliding-window behavior. */
 TEST_F(CharBufferTest, MultipleCompactCycles)
 {
     for (int cycle = 0; cycle < 3; ++cycle)
@@ -1417,6 +1529,7 @@ TEST_F(CharBufferTest, MultipleCompactCycles)
     }
 }
 
+/** @brief Verifies write-read-clear-write-read cycle on CharBuffer with string data. */
 TEST_F(CharBufferTest, ReadWriteCycle)
 {
     CharBuffer buf(5);
@@ -1429,6 +1542,7 @@ TEST_F(CharBufferTest, ReadWriteCycle)
     EXPECT_EQ(buf.getRemaining(), "cd");
 }
 
+/** @brief Repeats compact cycle 3 times on DoubleBuffer to verify consistent sliding-window behavior. */
 TEST_F(DoubleBufferTest, MultipleCompactCycles)
 {
     for (int cycle = 0; cycle < 3; ++cycle)
@@ -1448,6 +1562,7 @@ TEST_F(DoubleBufferTest, MultipleCompactCycles)
     }
 }
 
+/** @brief Verifies write-read-clear-write-read cycle on DoubleBuffer. */
 TEST_F(DoubleBufferTest, ReadWriteCycle)
 {
     DoubleBuffer buf(5);
@@ -1464,6 +1579,7 @@ TEST_F(DoubleBufferTest, ReadWriteCycle)
     EXPECT_DOUBLE_EQ(buf.get(), 4.0);
 }
 
+/** @brief Repeats compact cycle 3 times on FloatBuffer to verify consistent sliding-window behavior. */
 TEST_F(FloatBufferTest, MultipleCompactCycles)
 {
     for (int cycle = 0; cycle < 3; ++cycle)
@@ -1483,6 +1599,7 @@ TEST_F(FloatBufferTest, MultipleCompactCycles)
     }
 }
 
+/** @brief Verifies write-read-clear-write-read cycle on FloatBuffer. */
 TEST_F(FloatBufferTest, ReadWriteCycle)
 {
     FloatBuffer buf(5);
@@ -1499,6 +1616,7 @@ TEST_F(FloatBufferTest, ReadWriteCycle)
     EXPECT_FLOAT_EQ(buf.get(), 4.0f);
 }
 
+/** @brief Repeats compact cycle 3 times on IntBuffer to verify consistent sliding-window behavior. */
 TEST_F(IntBufferTest, MultipleCompactCycles)
 {
     for (int cycle = 0; cycle < 3; ++cycle)
@@ -1518,6 +1636,7 @@ TEST_F(IntBufferTest, MultipleCompactCycles)
     }
 }
 
+/** @brief Verifies write-read-clear-write-read cycle on IntBuffer. */
 TEST_F(IntBufferTest, ReadWriteCycle)
 {
     IntBuffer buf(5);
@@ -1534,6 +1653,7 @@ TEST_F(IntBufferTest, ReadWriteCycle)
     EXPECT_EQ(buf.get(), 4);
 }
 
+/** @brief Repeats compact cycle 3 times on LongBuffer to verify consistent sliding-window behavior. */
 TEST_F(LongBufferTest, MultipleCompactCycles)
 {
     for (int cycle = 0; cycle < 3; ++cycle)
@@ -1553,6 +1673,7 @@ TEST_F(LongBufferTest, MultipleCompactCycles)
     }
 }
 
+/** @brief Verifies write-read-clear-write-read cycle on LongBuffer. */
 TEST_F(LongBufferTest, ReadWriteCycle)
 {
     LongBuffer buf(5);
@@ -1569,6 +1690,7 @@ TEST_F(LongBufferTest, ReadWriteCycle)
     EXPECT_EQ(buf.get(), 400);
 }
 
+/** @brief Combines flip, get, compact, and put on ShortBuffer to verify read-write transition. */
 TEST_F(ShortBufferTest, PutAfterFlip)
 {
     ShortBuffer buf(5);
@@ -1583,6 +1705,7 @@ TEST_F(ShortBufferTest, PutAfterFlip)
     EXPECT_EQ(buf.get(), 3);
 }
 
+/** @brief Repeats compact cycle 3 times on ShortBuffer to verify consistent sliding-window behavior. */
 TEST_F(ShortBufferTest, MultipleCompactCycles)
 {
     for (int cycle = 0; cycle < 3; ++cycle)
@@ -1602,6 +1725,7 @@ TEST_F(ShortBufferTest, MultipleCompactCycles)
     }
 }
 
+/** @brief Verifies write-read-clear-write-read cycle on ShortBuffer. */
 TEST_F(ShortBufferTest, ReadWriteCycle)
 {
     ShortBuffer buf(5);
@@ -1617,3 +1741,5 @@ TEST_F(ShortBufferTest, ReadWriteCycle)
     EXPECT_EQ(buf.get(), 30);
     EXPECT_EQ(buf.get(), 40);
 }
+
+///@}

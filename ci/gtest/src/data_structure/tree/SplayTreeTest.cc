@@ -28,6 +28,10 @@ protected:
 
 // ==================== Insertion Tests ====================
 
+/**
+ * @brief Test inserting a single node
+ * @details Verifies that the inserted value is found, size is 1, and the tree is not empty
+ */
 TEST_F(SplayTreeTest, Insert_SingleNode_FindReturnsTrue)
 {
     SplayTree<int> tree;
@@ -37,6 +41,10 @@ TEST_F(SplayTreeTest, Insert_SingleNode_FindReturnsTrue)
     EXPECT_FALSE(tree.empty());
 }
 
+/**
+ * @brief Test that the last inserted node becomes root after splay
+ * @details Verifies splay semantics — the last inserted value is at the root
+ */
 TEST_F(SplayTreeTest, Insert_LastInsertedBecomesRoot)
 {
     SplayTree<int> tree;
@@ -50,6 +58,10 @@ TEST_F(SplayTreeTest, Insert_LastInsertedBecomesRoot)
     EXPECT_EQ(expected, tree.inorder());
 }
 
+/**
+ * @brief Test inserting multiple values
+ * @details Verifies that all inserted values can be found
+ */
 TEST_F(SplayTreeTest, Insert_MultipleValues_AllFound)
 {
     SplayTree<int> tree;
@@ -66,6 +78,10 @@ TEST_F(SplayTreeTest, Insert_MultipleValues_AllFound)
     EXPECT_TRUE(tree.find(50));
 }
 
+/**
+ * @brief Test inserting duplicate values
+ * @details Verifies that duplicate inserts do not increase size
+ */
 TEST_F(SplayTreeTest, Insert_Duplicate_NoChange)
 {
     SplayTree<int> tree;
@@ -76,6 +92,10 @@ TEST_F(SplayTreeTest, Insert_Duplicate_NoChange)
     EXPECT_EQ(1, tree.size());
 }
 
+/**
+ * @brief Test sequential ascending insert with zig-zag splay
+ * @details Verifies that ascending insert produces correct inorder sequence
+ */
 TEST_F(SplayTreeTest, Insert_SequentialAscending_ZigZagSplayAtRoot)
 {
     SplayTree<int> tree;
@@ -89,6 +109,10 @@ TEST_F(SplayTreeTest, Insert_SequentialAscending_ZigZagSplayAtRoot)
     EXPECT_EQ(expected, vec);
 }
 
+/**
+ * @brief Test sequential descending insert with zig-zig splay
+ * @details Verifies that descending insert produces correct inorder sequence
+ */
 TEST_F(SplayTreeTest, Insert_SequentialDescending_ZigZigSplayAtRoot)
 {
     SplayTree<int> tree;
@@ -101,6 +125,10 @@ TEST_F(SplayTreeTest, Insert_SequentialDescending_ZigZigSplayAtRoot)
     EXPECT_EQ(expected, vec);
 }
 
+/**
+ * @brief Test inserting values in complex order
+ * @details Verifies that inorder traversal produces sorted output and size is correct
+ */
 TEST_F(SplayTreeTest, Insert_ComplexOrder_InorderCorrect)
 {
     SplayTree<int> tree;
@@ -119,6 +147,10 @@ TEST_F(SplayTreeTest, Insert_ComplexOrder_InorderCorrect)
 
 // ==================== Splay Semantic Tests ====================
 
+/**
+ * @brief Test that find splays the found node to root
+ * @details Verifies splay semantics — accessing a node brings it to the root
+ */
 TEST_F(SplayTreeTest, Find_SplaysFoundNodeToRoot)
 {
     SplayTree<int> tree;
@@ -134,6 +166,10 @@ TEST_F(SplayTreeTest, Find_SplaysFoundNodeToRoot)
     EXPECT_EQ(10, tree.inorder()[0]); // 10 is smallest, stays in correct position
 }
 
+/**
+ * @brief Test find on a non-existing value
+ * @details Verifies that find returns false without crashing
+ */
 TEST_F(SplayTreeTest, Find_NonExisting_DoesNotCrash)
 {
     SplayTree<int> tree;
@@ -142,12 +178,20 @@ TEST_F(SplayTreeTest, Find_NonExisting_DoesNotCrash)
     EXPECT_FALSE(tree.find(30));
 }
 
+/**
+ * @brief Test find on an empty tree
+ * @details Verifies that find returns false on empty tree
+ */
 TEST_F(SplayTreeTest, Find_EmptyTree_ReturnsFalse)
 {
     SplayTree<int> tree;
     EXPECT_FALSE(tree.find(1));
 }
 
+/**
+ * @brief Test findValue on an existing key
+ * @details Verifies that findValue returns the correct value wrapped in optional
+ */
 TEST_F(SplayTreeTest, FindValue_Existing_ReturnsValue)
 {
     SplayTree<int> tree;
@@ -157,6 +201,10 @@ TEST_F(SplayTreeTest, FindValue_Existing_ReturnsValue)
     EXPECT_EQ(42, result.value());
 }
 
+/**
+ * @brief Test findValue on a non-existing key
+ * @details Verifies that findValue returns nullopt for missing keys
+ */
 TEST_F(SplayTreeTest, FindValue_NonExisting_ReturnsNullopt)
 {
     SplayTree<int> tree;
@@ -166,6 +214,10 @@ TEST_F(SplayTreeTest, FindValue_NonExisting_ReturnsNullopt)
     EXPECT_FALSE(result.has_value());
 }
 
+/**
+ * @brief Test findValue on an empty tree
+ * @details Verifies that findValue returns nullopt on empty tree
+ */
 TEST_F(SplayTreeTest, FindValue_EmptyTree_ReturnsNullopt)
 {
     SplayTree<int> tree;
@@ -175,6 +227,10 @@ TEST_F(SplayTreeTest, FindValue_EmptyTree_ReturnsNullopt)
 
 // ==================== Removal Tests ====================
 
+/**
+ * @brief Test removing a leaf node
+ * @details Verifies that removing a leaf node correctly updates the tree
+ */
 TEST_F(SplayTreeTest, Remove_LeafNode)
 {
     SplayTree<int> tree;
@@ -187,6 +243,10 @@ TEST_F(SplayTreeTest, Remove_LeafNode)
     EXPECT_EQ(1, tree.size());
 }
 
+/**
+ * @brief Test removing a node with only a left child
+ * @details Verifies that removal correctly re-links the left child
+ */
 TEST_F(SplayTreeTest, Remove_NodeWithLeftChild)
 {
     SplayTree<int> tree;
@@ -199,6 +259,10 @@ TEST_F(SplayTreeTest, Remove_NodeWithLeftChild)
     EXPECT_EQ(1, tree.size());
 }
 
+/**
+ * @brief Test removing a node with only a right child
+ * @details Verifies that removal correctly re-links the right child
+ */
 TEST_F(SplayTreeTest, Remove_NodeWithRightChild)
 {
     SplayTree<int> tree;
@@ -211,6 +275,10 @@ TEST_F(SplayTreeTest, Remove_NodeWithRightChild)
     EXPECT_EQ(1, tree.size());
 }
 
+/**
+ * @brief Test removing a node with two children
+ * @details Verifies that removal correctly handles nodes with both subtrees
+ */
 TEST_F(SplayTreeTest, Remove_NodeWithTwoChildren)
 {
     SplayTree<int> tree;
@@ -225,6 +293,10 @@ TEST_F(SplayTreeTest, Remove_NodeWithTwoChildren)
     EXPECT_EQ(2, tree.size());
 }
 
+/**
+ * @brief Test removing the root node
+ * @details Verifies that removing the only node empties the tree
+ */
 TEST_F(SplayTreeTest, Remove_RootNode)
 {
     SplayTree<int> tree;
@@ -235,6 +307,10 @@ TEST_F(SplayTreeTest, Remove_RootNode)
     EXPECT_EQ(0, tree.size());
 }
 
+/**
+ * @brief Test removing a non-existing value
+ * @details Verifies that removing a non-existent key does not alter the tree
+ */
 TEST_F(SplayTreeTest, Remove_NonExisting_NoChange)
 {
     SplayTree<int> tree;
@@ -247,6 +323,10 @@ TEST_F(SplayTreeTest, Remove_NonExisting_NoChange)
     EXPECT_TRUE(tree.find(2));
 }
 
+/**
+ * @brief Test removing from an empty tree
+ * @details Verifies that removing on an empty tree does not crash
+ */
 TEST_F(SplayTreeTest, Remove_EmptyTree_NoCrash)
 {
     SplayTree<int> tree;
@@ -254,6 +334,10 @@ TEST_F(SplayTreeTest, Remove_EmptyTree_NoCrash)
     EXPECT_TRUE(tree.empty());
 }
 
+/**
+ * @brief Test removing all elements
+ * @details Verifies that removing all inserted values results in an empty tree
+ */
 TEST_F(SplayTreeTest, Remove_AllElements)
 {
     SplayTree<int> tree;
@@ -268,6 +352,10 @@ TEST_F(SplayTreeTest, Remove_AllElements)
     EXPECT_EQ(0, tree.size());
 }
 
+/**
+ * @brief Test removal from a complex tree preserves inorder
+ * @details Verifies that after removing nodes, the inorder traversal remains correct
+ */
 TEST_F(SplayTreeTest, Remove_ComplexTree_InorderPreserved)
 {
     SplayTree<int> tree;
@@ -286,6 +374,10 @@ TEST_F(SplayTreeTest, Remove_ComplexTree_InorderPreserved)
 
 // ==================== Edge Case Tests ====================
 
+/**
+ * @brief Test clearing all nodes
+ * @details Verifies that clear removes all nodes and resets state
+ */
 TEST_F(SplayTreeTest, Clear_RemovesAllNodes)
 {
     SplayTree<int> tree;
@@ -300,6 +392,10 @@ TEST_F(SplayTreeTest, Clear_RemovesAllNodes)
     EXPECT_FALSE(tree.find(1));
 }
 
+/**
+ * @brief Test large dataset insertion and retrieval
+ * @details Verifies that 1000 inserted values can all be found
+ */
 TEST_F(SplayTreeTest, LargeDataset_InsertAndFindAll)
 {
     SplayTree<int> tree;
@@ -317,6 +413,10 @@ TEST_F(SplayTreeTest, LargeDataset_InsertAndFindAll)
     }
 }
 
+/**
+ * @brief Test large dataset insert-remove consistency
+ * @details Verifies that inserting then removing all values results in empty tree
+ */
 TEST_F(SplayTreeTest, LargeDataset_InsertRemoveConsistency)
 {
     SplayTree<int> tree;
@@ -337,6 +437,10 @@ TEST_F(SplayTreeTest, LargeDataset_InsertRemoveConsistency)
 
 // ==================== String Type Tests ====================
 
+/**
+ * @brief Test string key insertion and lookup
+ * @details Verifies that string keys work correctly with insert and find
+ */
 TEST_F(SplayTreeTest, StringType_InsertAndFind)
 {
     SplayTree<std::string> tree;
@@ -350,6 +454,10 @@ TEST_F(SplayTreeTest, StringType_InsertAndFind)
     EXPECT_FALSE(tree.find("nonexistent"));
 }
 
+/**
+ * @brief Test findValue with string keys
+ * @details Verifies that findValue returns the correct string value
+ */
 TEST_F(SplayTreeTest, StringType_FindValue)
 {
     SplayTree<std::string> tree;
@@ -361,6 +469,10 @@ TEST_F(SplayTreeTest, StringType_FindValue)
 
 // ==================== Negative Key Tests ====================
 
+/**
+ * @brief Test negative keys insertion and lookup
+ * @details Verifies that negative keys work correctly and inorder is sorted
+ */
 TEST_F(SplayTreeTest, NegativeKeys_InsertAndFind)
 {
     SplayTree<int> tree;
@@ -379,6 +491,10 @@ TEST_F(SplayTreeTest, NegativeKeys_InsertAndFind)
     EXPECT_EQ(expected, tree.inorder());
 }
 
+/**
+ * @brief Test removing negative keys
+ * @details Verifies that removal works correctly for negative key values
+ */
 TEST_F(SplayTreeTest, NegativeKeys_Remove)
 {
     SplayTree<int> tree;
@@ -394,6 +510,10 @@ TEST_F(SplayTreeTest, NegativeKeys_Remove)
 
 // ==================== Move Semantics Tests ====================
 
+/**
+ * @brief Test move constructor
+ * @details Verifies that moving a tree transfers ownership of all nodes
+ */
 TEST_F(SplayTreeTest, MoveConstructor)
 {
     SplayTree<int> tree;
@@ -409,6 +529,10 @@ TEST_F(SplayTreeTest, MoveConstructor)
     EXPECT_TRUE(tree.empty()); // NOLINT: moved-from is valid but unspecified
 }
 
+/**
+ * @brief Test move assignment
+ * @details Verifies that move assignment transfers ownership correctly
+ */
 TEST_F(SplayTreeTest, MoveAssignment)
 {
     SplayTree<int> tree;
@@ -426,6 +550,10 @@ TEST_F(SplayTreeTest, MoveAssignment)
 
 // ==================== Splay-Specific Tests ====================
 
+/**
+ * @brief Test that repeated find benefits from splay reorganisation
+ * @details Verifies that all values remain accessible after splay operations
+ */
 TEST_F(SplayTreeTest, FindRepeatedly_SplayAffectsStructure)
 {
     SplayTree<int> tree;
@@ -448,6 +576,10 @@ TEST_F(SplayTreeTest, FindRepeatedly_SplayAffectsStructure)
     }
 }
 
+/**
+ * @brief Test insert after remove reuses size correctly
+ * @details Verifies that inserting after removal maintains correct size
+ */
 TEST_F(SplayTreeTest, InsertAfterRemove_ReusesSize)
 {
     SplayTree<int> tree;

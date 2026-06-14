@@ -47,23 +47,39 @@ protected:
     }
 };
 
+/**
+ * @brief Test loading a valid CSV file
+ * @details Verifies that loading a well-formed CSV file completes without throwing any exception
+ */
 TEST_F(CsvFileTest, LoadValidFile)
 {
     EXPECT_NO_THROW(CsvFile csv(tmpPath_));
 }
 
+/**
+ * @brief Test getRowCount returns the number of data rows
+ * @details Verifies that getRowCount() returns 3 for a CSV with a header row and 3 data rows
+ */
 TEST_F(CsvFileTest, GetRowCount)
 {
     const CsvFile csv(tmpPath_);
     EXPECT_EQ(csv.getRowCount(), 3);
 }
 
+/**
+ * @brief Test getColumnCount returns the number of columns
+ * @details Verifies that getColumnCount() returns 3 for a CSV with three columns: name, age, city
+ */
 TEST_F(CsvFileTest, GetColumnCount)
 {
     const CsvFile csv(tmpPath_);
     EXPECT_EQ(csv.getColumnCount(), 3);
 }
 
+/**
+ * @brief Test loading a non-existent CSV file
+ * @details Verifies that constructing a CsvFile from a non-existent path produces zero rows and columns
+ */
 TEST_F(CsvFileTest, LoadNonExistentFile)
 {
     const CsvFile csv("nonexistent.csv");
@@ -71,6 +87,10 @@ TEST_F(CsvFileTest, LoadNonExistentFile)
     EXPECT_EQ(csv.getColumnCount(), 0);
 }
 
+/**
+ * @brief Test pushing a row to the end of the CSV
+ * @details Verifies that pushBack() appends a new row and increases the row count by one
+ */
 TEST_F(CsvFileTest, PushBack)
 {
     CsvFile csv(tmpPath_);
@@ -78,6 +98,10 @@ TEST_F(CsvFileTest, PushBack)
     EXPECT_EQ(csv.getRowCount(), 4);
 }
 
+/**
+ * @brief Test inserting a row at a valid index
+ * @details Verifies that insertRow() inserts a row at position 1 and increases the row count
+ */
 TEST_F(CsvFileTest, InsertRow)
 {
     CsvFile csv(tmpPath_);
@@ -85,6 +109,10 @@ TEST_F(CsvFileTest, InsertRow)
     EXPECT_EQ(csv.getRowCount(), 4);
 }
 
+/**
+ * @brief Test inserting a row at an invalid index
+ * @details Verifies that insertRow() returns false when the index is out of range and does not change the row count
+ */
 TEST_F(CsvFileTest, InsertRowInvalidIndex)
 {
     CsvFile csv(tmpPath_);
@@ -92,6 +120,10 @@ TEST_F(CsvFileTest, InsertRowInvalidIndex)
     EXPECT_EQ(csv.getRowCount(), 3);
 }
 
+/**
+ * @brief Test saving CSV to a new file path
+ * @details Verifies that save(destPath) writes the modified CSV content to a different file path
+ */
 TEST_F(CsvFileTest, SaveToNewPath)
 {
     const std::string destPath = tmpPath_ + ".out";
@@ -107,6 +139,10 @@ TEST_F(CsvFileTest, SaveToNewPath)
     }
 }
 
+/**
+ * @brief Test saving CSV back to the original file path
+ * @details Verifies that save() without arguments overwrites the original file with modified content
+ */
 TEST_F(CsvFileTest, SaveToOriginalPath)
 {
     CsvFile csv(tmpPath_);
@@ -115,6 +151,10 @@ TEST_F(CsvFileTest, SaveToOriginalPath)
     EXPECT_EQ(csv.getRowCount(), 4);
 }
 
+/**
+ * @brief Test operations on a CSV after an invalid load
+ * @details Verifies that pushBack() and save() return false when the underlying file does not exist
+ */
 TEST_F(CsvFileTest, EmptyCsvAfterInvalidLoad)
 {
     CsvFile csv("nonexistent.csv");
@@ -329,6 +369,10 @@ TEST_F(CsvFileTest, EscapedQuotesInQuotedFields)
     std::filesystem::remove(file, ec);
 }
 
+/**
+ * @brief Test CSV with empty fields between delimiters
+ * @details Verifies that fields with empty values (,,) are parsed correctly without data loss
+ */
 TEST_F(CsvFileTest, EmptyFields)
 {
     const std::string file = tmpPath_ + "_empty.csv";
@@ -347,6 +391,10 @@ TEST_F(CsvFileTest, EmptyFields)
     std::filesystem::remove(file, ec);
 }
 
+/**
+ * @brief Test CSV with leading/trailing spaces in fields
+ * @details Verifies that whitespace within fields is preserved as-is during CSV parsing
+ */
 TEST_F(CsvFileTest, SpacesInFields)
 {
     const std::string file = tmpPath_ + "_spaces.csv";
@@ -364,6 +412,10 @@ TEST_F(CsvFileTest, SpacesInFields)
     std::filesystem::remove(file, ec);
 }
 
+/**
+ * @brief Test save to an invalid (non-writable) path returns false
+ * @details Verifies that save() returns false when the target path cannot be written to
+ */
 TEST_F(CsvFileTest, SaveToInvalidPath_ReturnsFalse)
 {
     CsvFile csv(tmpPath_);

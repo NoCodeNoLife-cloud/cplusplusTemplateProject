@@ -38,6 +38,7 @@ namespace
     };
 }
 
+/// @brief Test fixture for IBoostSerializable tests.
 class IBoostSerializableTest : public testing::Test
 {
 protected:
@@ -54,6 +55,7 @@ protected:
     std::unique_ptr<MockBoostSerializable> obj_;
 };
 
+/** @brief Verifies serializeTo writes non-empty output to a stream. */
 TEST_F(IBoostSerializableTest, SerializeToStream)
 {
     std::ostringstream oss;
@@ -63,6 +65,7 @@ TEST_F(IBoostSerializableTest, SerializeToStream)
     EXPECT_FALSE(oss.str().empty());
 }
 
+/** @brief Verifies serialization round-trip preserves all fields. */
 TEST_F(IBoostSerializableTest, RoundTrip)
 {
     std::ostringstream oss;
@@ -77,6 +80,7 @@ TEST_F(IBoostSerializableTest, RoundTrip)
     EXPECT_EQ(deserialized.value_, obj_->value_);
 }
 
+/** @brief Verifies round-trip of non-default field values. */
 TEST_F(IBoostSerializableTest, MultipleFieldsRoundTrip)
 {
     obj_->name_ = "hello";
@@ -93,6 +97,8 @@ TEST_F(IBoostSerializableTest, MultipleFieldsRoundTrip)
     EXPECT_EQ(deserialized.value_, 99);
 }
 
+/** @brief Verifies serialization after mutation produces different output.
+    @details Ensures each call to serializeTo reflects the current state. */
 TEST_F(IBoostSerializableTest, SerializeTwice)
 {
     std::ostringstream oss1;

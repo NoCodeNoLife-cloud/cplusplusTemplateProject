@@ -35,6 +35,7 @@ namespace
     };
 }
 
+/// @brief Test fixture for ICloseable tests.
 class ICloseableTest : public testing::Test
 {
 protected:
@@ -51,11 +52,13 @@ protected:
     std::unique_ptr<MockCloseable> mock_;
 };
 
+/** @brief Verifies a newly created closeable is not closed. */
 TEST_F(ICloseableTest, InitiallyNotClosed)
 {
     EXPECT_FALSE(mock_->isClosed());
 }
 
+/** @brief Verifies close() marks the object as closed. */
 TEST_F(ICloseableTest, CloseSetsState)
 {
     mock_->close();
@@ -63,6 +66,7 @@ TEST_F(ICloseableTest, CloseSetsState)
     EXPECT_TRUE(mock_->isClosed());
 }
 
+/** @brief Verifies closeSafe closes successfully and returns true. */
 TEST_F(ICloseableTest, CloseSafeSuccess)
 {
     const bool result = mock_->closeSafe();
@@ -70,6 +74,7 @@ TEST_F(ICloseableTest, CloseSafeSuccess)
     EXPECT_TRUE(mock_->isClosed());
 }
 
+/** @brief Verifies closeSafe catches exceptions and returns false. */
 TEST_F(ICloseableTest, CloseSafeHandlesException)
 {
     mock_->throwOnClose_ = true;
@@ -78,12 +83,14 @@ TEST_F(ICloseableTest, CloseSafeHandlesException)
     EXPECT_FALSE(mock_->isClosed());
 }
 
+/** @brief Verifies closeSafe delegates to close(). */
 TEST_F(ICloseableTest, CloseSafeCalledClose)
 {
     (void)mock_->closeSafe();
     EXPECT_TRUE(mock_->closeCalled_);
 }
 
+/** @brief Verifies calling close() multiple times is idempotent. */
 TEST_F(ICloseableTest, IdempotentClose)
 {
     mock_->close();

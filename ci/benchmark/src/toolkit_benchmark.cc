@@ -1,3 +1,13 @@
+/**
+ * @file toolkit_benchmark.cc
+ * @brief Micro-benchmarks for utility toolkits and BloomFilter
+ * @details Measures BloomFilter insert/contains (hit/miss) throughput;
+ *          StringToolkit split, replace, repeat, trim, toUpperCase;
+ *          RegexToolkit is_match, get_matches, replace_all;
+ *          RadixToolkit number-to-string and string-to-number conversion
+ *          across bases 2, 10, 16, and 36.
+ */
+
 #include <benchmark/benchmark.h>
 #include <random>
 #include <string>
@@ -8,9 +18,11 @@
 #include "toolkit/RegexToolkit.hpp"
 #include "toolkit/RadixToolkit.hpp"
 
-// ============================================================
-// BloomFilter
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  BloomFilter
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief Creates a BloomFilter configured for @p expected_elements with 1 % FP rate.
 static common::data_structure::BloomFilter create_bloom(const size_t expected_elements)
 {
     common::data_structure::BloomParameters params;
@@ -24,6 +36,7 @@ static common::data_structure::BloomFilter create_bloom(const size_t expected_el
     return common::data_structure::BloomFilter(params);
 }
 
+/// @brief BloomFilter insert throughput with random string keys.
 static void BM_BloomFilter_Insert(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -40,6 +53,7 @@ static void BM_BloomFilter_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_BloomFilter_Insert)->Arg(1000)->Arg(10000);
 
+/// @brief BloomFilter contains throughput — all queries target present keys.
 static void BM_BloomFilter_Contains_Hit(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -60,6 +74,7 @@ static void BM_BloomFilter_Contains_Hit(benchmark::State& state)
 }
 BENCHMARK(BM_BloomFilter_Contains_Hit)->Arg(1000)->Arg(10000);
 
+/// @brief BloomFilter contains throughput — all queries target absent keys.
 static void BM_BloomFilter_Contains_Miss(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -75,9 +90,11 @@ static void BM_BloomFilter_Contains_Miss(benchmark::State& state)
 }
 BENCHMARK(BM_BloomFilter_Contains_Miss)->Arg(1000)->Arg(10000);
 
-// ============================================================
-// StringToolkit
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  StringToolkit
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief StringToolkit::split throughput with varying numbers of parts.
 static void BM_StringToolkit_Split(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -94,6 +111,7 @@ static void BM_StringToolkit_Split(benchmark::State& state)
 }
 BENCHMARK(BM_StringToolkit_Split)->Arg(10)->Arg(100)->Arg(1000);
 
+/// @brief StringToolkit::replaceAll throughput (substitution of a fixed marker).
 static void BM_StringToolkit_ReplaceAll(benchmark::State& state)
 {
     const std::string text = std::string(state.range(0), 'a') + "XYZ" + std::string(state.range(0), 'b');
@@ -107,6 +125,7 @@ static void BM_StringToolkit_ReplaceAll(benchmark::State& state)
 }
 BENCHMARK(BM_StringToolkit_ReplaceAll)->Arg(100)->Arg(1000)->Arg(10000);
 
+/// @brief StringToolkit::repeat throughput for various repetition counts.
 static void BM_StringToolkit_Repeat(benchmark::State& state)
 {
     const std::string base = "HelloWorld!";
@@ -120,6 +139,7 @@ static void BM_StringToolkit_Repeat(benchmark::State& state)
 }
 BENCHMARK(BM_StringToolkit_Repeat)->Arg(10)->Arg(100)->Arg(1000);
 
+/// @brief StringToolkit::trim throughput (removes leading/trailing whitespace).
 static void BM_StringToolkit_Trim(benchmark::State& state)
 {
     const std::string text = std::string(state.range(0), ' ') + "content" + std::string(state.range(0), ' ');
@@ -133,6 +153,7 @@ static void BM_StringToolkit_Trim(benchmark::State& state)
 }
 BENCHMARK(BM_StringToolkit_Trim)->Arg(100)->Arg(1000)->Arg(10000);
 
+/// @brief StringToolkit::toUpperCase throughput across various input lengths.
 static void BM_StringToolkit_ToUpperCase(benchmark::State& state)
 {
     const std::string text(state.range(0), 'a');
@@ -146,9 +167,11 @@ static void BM_StringToolkit_ToUpperCase(benchmark::State& state)
 }
 BENCHMARK(BM_StringToolkit_ToUpperCase)->Arg(100)->Arg(1000)->Arg(10000);
 
-// ============================================================
-// RegexToolkit
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  RegexToolkit
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief RegexToolkit::is_match with an email regex pattern.
 static void BM_RegexToolkit_IsMatch(benchmark::State& state)
 {
     const std::string pattern = R"(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)";
@@ -162,6 +185,7 @@ static void BM_RegexToolkit_IsMatch(benchmark::State& state)
 }
 BENCHMARK(BM_RegexToolkit_IsMatch);
 
+/// @brief RegexToolkit::get_matches throughput (word-boundary pattern).
 static void BM_RegexToolkit_GetMatches(benchmark::State& state)
 {
     const std::string pattern = R"(\b\w+\b)";
@@ -177,6 +201,7 @@ static void BM_RegexToolkit_GetMatches(benchmark::State& state)
 }
 BENCHMARK(BM_RegexToolkit_GetMatches)->Arg(100)->Arg(1000);
 
+/// @brief RegexToolkit::replace_all throughput (whitespace-to-underscore).
 static void BM_RegexToolkit_ReplaceAll(benchmark::State& state)
 {
     const std::string pattern = R"(\s+)";
@@ -192,9 +217,11 @@ static void BM_RegexToolkit_ReplaceAll(benchmark::State& state)
 }
 BENCHMARK(BM_RegexToolkit_ReplaceAll)->Arg(100)->Arg(1000);
 
-// ============================================================
-// RadixToolkit
-// ============================================================
+// ══════════════════════════════════════════════════════════════════════════
+//  RadixToolkit
+// ══════════════════════════════════════════════════════════════════════════
+
+/// @brief RadixToolkit::convert_to_string throughput across bases 2–36.
 static void BM_RadixToolkit_ConvertToString(benchmark::State& state)
 {
     const auto base = static_cast<int>(state.range(0));
@@ -209,6 +236,7 @@ static void BM_RadixToolkit_ConvertToString(benchmark::State& state)
 }
 BENCHMARK(BM_RadixToolkit_ConvertToString)->Arg(2)->Arg(10)->Arg(16)->Arg(36);
 
+/// @brief RadixToolkit::convert_from_string throughput across bases 2, 10, 16.
 static void BM_RadixToolkit_ConvertFromString(benchmark::State& state)
 {
     const auto base = static_cast<int>(state.range(0));

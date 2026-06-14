@@ -1,3 +1,10 @@
+/**
+ * @file GLogParamTest.cc
+ * @brief Unit tests for the GLogParam class
+ * @details Tests cover construction, setters, YAML deserialization,
+ *          comparison operators, encode/decode round-trip, and edge cases.
+ */
+
 #include <filesystem>
 #include <fstream>
 #include <gtest/gtest.h>
@@ -7,6 +14,7 @@
 
 namespace
 {
+    /// @brief Test fixture for GLogParam tests.
     class GLogParamTest : public testing::Test
     {
     protected:
@@ -46,6 +54,10 @@ namespace
     };
 }
 
+/**
+ * @brief Default construction uses zero values
+ * @details Verifies default-constructed GLogParam has expected defaults.
+ */
 TEST_F(GLogParamTest, DefaultConstruction)
 {
     const glog::param::GLogParam param;
@@ -55,6 +67,10 @@ TEST_F(GLogParamTest, DefaultConstruction)
     EXPECT_FALSE(param.customLogFormat());
 }
 
+/**
+ * @brief Parameterized construction sets all fields
+ * @details Verifies 4-argument constructor assigns all values correctly.
+ */
 TEST_F(GLogParamTest, ParameterizedConstruction)
 {
     const glog::param::GLogParam param(3, "test_log", true, true);
@@ -64,12 +80,20 @@ TEST_F(GLogParamTest, ParameterizedConstruction)
     EXPECT_TRUE(param.customLogFormat());
 }
 
+/**
+ * @brief Parameterized construction with default custom format
+ * @details Verifies 3-argument constructor leaves customLogFormat as false.
+ */
 TEST_F(GLogParamTest, ParameterizedConstructionDefaultCustomFormat)
 {
     const glog::param::GLogParam param(0, "default_fmt", false);
     EXPECT_FALSE(param.customLogFormat());
 }
 
+/**
+ * @brief Setter for minLogLevel
+ * @details Verifies minLogLevel setter returns the expected value.
+ */
 TEST_F(GLogParamTest, MinLogLevelSetter)
 {
     glog::param::GLogParam param;
@@ -77,6 +101,10 @@ TEST_F(GLogParamTest, MinLogLevelSetter)
     EXPECT_EQ(param.minLogLevel(), 5);
 }
 
+/**
+ * @brief Setter for logName
+ * @details Verifies logName setter returns the expected value.
+ */
 TEST_F(GLogParamTest, LogNameSetter)
 {
     glog::param::GLogParam param;
@@ -84,6 +112,10 @@ TEST_F(GLogParamTest, LogNameSetter)
     EXPECT_EQ(param.logName(), "custom_name");
 }
 
+/**
+ * @brief Setter for logToStderr
+ * @details Verifies logToStderr setter returns the expected value.
+ */
 TEST_F(GLogParamTest, LogToStderrSetter)
 {
     glog::param::GLogParam param;
@@ -91,6 +123,10 @@ TEST_F(GLogParamTest, LogToStderrSetter)
     EXPECT_TRUE(param.logToStderr());
 }
 
+/**
+ * @brief Setter for customLogFormat
+ * @details Verifies customLogFormat setter returns the expected value.
+ */
 TEST_F(GLogParamTest, CustomLogFormatSetter)
 {
     glog::param::GLogParam param;
@@ -98,6 +134,10 @@ TEST_F(GLogParamTest, CustomLogFormatSetter)
     EXPECT_TRUE(param.customLogFormat());
 }
 
+/**
+ * @brief Deserialize from flat YAML file
+ * @details Verifies deserialization of top-level YAML fields.
+ */
 TEST_F(GLogParamTest, DeserializeFromFlatYaml)
 {
     glog::param::GLogParam param;
@@ -108,6 +148,10 @@ TEST_F(GLogParamTest, DeserializeFromFlatYaml)
     EXPECT_TRUE(param.customLogFormat());
 }
 
+/**
+ * @brief Deserialize from nested YAML under glog: key
+ * @details Verifies deserialization from nested YAML structure.
+ */
 TEST_F(GLogParamTest, DeserializeFromNestedYaml)
 {
     glog::param::GLogParam param;
@@ -118,6 +162,10 @@ TEST_F(GLogParamTest, DeserializeFromNestedYaml)
     EXPECT_FALSE(param.customLogFormat());
 }
 
+/**
+ * @brief Deserialize from nonexistent file throws
+ * @details Verifies runtime_error when YAML file is missing.
+ */
 TEST_F(GLogParamTest, DeserializeFromNonExistentFileThrows)
 {
     glog::param::GLogParam param;
@@ -125,6 +173,10 @@ TEST_F(GLogParamTest, DeserializeFromNonExistentFileThrows)
     EXPECT_THROW(param.deserializeFromYamlFile(nonexistent), std::runtime_error);
 }
 
+/**
+ * @brief Equality operator for identical params
+ * @details Verifies operator== returns true for equal objects.
+ */
 TEST_F(GLogParamTest, EqualityOperator)
 {
     const glog::param::GLogParam a(1, "eq_log", true, false);
@@ -133,6 +185,10 @@ TEST_F(GLogParamTest, EqualityOperator)
     EXPECT_FALSE(a != b);
 }
 
+/**
+ * @brief Inequality operator for different params
+ * @details Verifies operator!= returns true for different objects.
+ */
 TEST_F(GLogParamTest, InequalityOperator)
 {
     const glog::param::GLogParam a(1, "log_a", true, false);
@@ -141,6 +197,10 @@ TEST_F(GLogParamTest, InequalityOperator)
     EXPECT_FALSE(a == b);
 }
 
+/**
+ * @brief YAML encode/decode round-trip
+ * @details Verifies encode and decode preserve all field values.
+ */
 TEST_F(GLogParamTest, YamlEncodeDecodeRoundTrip)
 {
     const glog::param::GLogParam original(3, "roundtrip", true, true);
@@ -152,6 +212,10 @@ TEST_F(GLogParamTest, YamlEncodeDecodeRoundTrip)
     EXPECT_EQ(original, decoded);
 }
 
+/**
+ * @brief Decode non-map node returns false
+ * @details Verifies decode returns false for scalar YAML nodes.
+ */
 TEST_F(GLogParamTest, YamlDecodeNonMapNodeReturnsFalse)
 {
     const YAML::Node scalar_node = YAML::Node("hello");
@@ -159,6 +223,10 @@ TEST_F(GLogParamTest, YamlDecodeNonMapNodeReturnsFalse)
     EXPECT_FALSE(YAML::convert<glog::param::GLogParam>::decode(scalar_node, param));
 }
 
+/**
+ * @brief logName returns a reference, not a copy
+ * @details Verifies that logName() getter returns a const reference.
+ */
 TEST_F(GLogParamTest, LogNameReturnsReferenceNotCopy)
 {
     glog::param::GLogParam param;

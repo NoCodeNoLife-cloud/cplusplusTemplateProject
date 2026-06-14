@@ -218,6 +218,10 @@ TEST_F(ObjectFactoryTest, CreateObject_EmptyTypeName_ThrowsException)
     );
 }
 
+/**
+ * @brief Test registerType with an empty type name
+ * @details Verifies std::invalid_argument is thrown for empty string
+ */
 TEST_F(ObjectFactoryTest, RegisterType_EmptyTypeName_ThrowsException)
 {
     ShapeFactory factory;
@@ -246,11 +250,19 @@ TEST_F(ObjectFactoryTest, IsRegistered_AfterExecution)
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Rectangle"));
 }
 
+/**
+ * @brief Test isRegistered with an empty type name
+ * @details Verifies false is returned for empty string
+ */
 TEST_F(ObjectFactoryTest, IsRegistered_EmptyTypeName)
 {
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered(""));
 }
 
+/**
+ * @brief Test isRegistered for a type that was never registered
+ * @details Verifies false is returned for non-existent types
+ */
 TEST_F(ObjectFactoryTest, IsRegistered_NonExistentType)
 {
     ObjectFactory<IShape>::clearRegistry();
@@ -277,6 +289,10 @@ TEST_F(ObjectFactoryTest, Execute_SuccessfulRegistration)
     EXPECT_TRUE(ObjectFactory<IShape>::isRegistered("Circle"));
 }
 
+/**
+ * @brief Test execute called multiple times
+ * @details Verifies re-execution succeeds and types remain registered
+ */
 TEST_F(ObjectFactoryTest, Execute_MultipleCalls)
 {
     ObjectFactory<IShape>::clearRegistry();
@@ -313,6 +329,10 @@ TEST_F(ObjectFactoryTest, ClearRegistry_AfterRegistration)
     EXPECT_FALSE(ObjectFactory<IShape>::isRegistered("Rectangle"));
 }
 
+/**
+ * @brief Test clearRegistry followed by re-registration
+ * @details Verifies types can be re-registered and created after a clear
+ */
 TEST_F(ObjectFactoryTest, ClearRegistry_AndReregister)
 {
     ObjectFactory<IShape>::clearRegistry();
@@ -336,7 +356,10 @@ TEST_F(ObjectFactoryTest, ClearRegistry_AndReregister)
     EXPECT_EQ(circle->getName(), "Circle");
 }
 
-// Test with different constructor arguments
+/**
+ * @brief Test registration with different constructor arguments
+ * @details Verifies multiple instances of the same type with different parameters
+ */
 TEST_F(ObjectFactoryTest, RegisterWithDifferentArguments)
 {
     // Clear any existing registrations
@@ -398,7 +421,10 @@ TEST_F(ObjectFactoryTest, PolymorphicBehavior)
     EXPECT_GT(shapes[2]->getArea(), 0);
 }
 
-// Test thread safety (basic test)
+/**
+ * @brief Test thread safety for basic create operations
+ * @details Verifies multiple sequential creations succeed without error
+ */
 TEST_F(ObjectFactoryTest, ThreadSafety_BasicOperations)
 {
     ObjectFactory<IShape>::clearRegistry();

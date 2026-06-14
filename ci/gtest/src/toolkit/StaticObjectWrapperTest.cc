@@ -125,7 +125,10 @@ TEST_F(StaticObjectWrapperTest, InitWithParamsAndGet)
     Wrapper1::destroy();
 }
 
-// Test init without parameters (default constructible)
+/**
+ * @brief Test init without parameters for a default-constructible type
+ * @details Verifies default constructor is used when init() is called without arguments
+ */
 TEST_F(StaticObjectWrapperTest, InitDefaultConstructible)
 {
     // Clean state
@@ -144,7 +147,10 @@ TEST_F(StaticObjectWrapperTest, InitDefaultConstructible)
     Wrapper2::destroy();
 }
 
-// Test get without initialization for default constructible type
+/**
+ * @brief Test get() auto-init for default-constructible types
+ * @details Verifies get() implicitly initializes a default-constructible wrapper
+ */
 TEST_F(StaticObjectWrapperTest, GetWithoutInitDefaultConstructible)
 {
     // Clean state
@@ -161,7 +167,10 @@ TEST_F(StaticObjectWrapperTest, GetWithoutInitDefaultConstructible)
     Wrapper3::destroy();
 }
 
-// Test get without initialization for non-default constructible type
+/**
+ * @brief Test get() failure for non-default-constructible types
+ * @details Verifies get() throws std::runtime_error when no init() was called
+ */
 TEST_F(StaticObjectWrapperTest, GetWithoutInitNonDefaultConstructible)
 {
     // Clean state
@@ -173,7 +182,10 @@ TEST_F(StaticObjectWrapperTest, GetWithoutInitNonDefaultConstructible)
     EXPECT_FALSE(Wrapper4::isInitialized());
 }
 
-// Test init with non-default constructible type
+/**
+ * @brief Test init with explicit parameters for non-default-constructible types
+ * @details Verifies parameterized initialization works for types without default constructor
+ */
 TEST_F(StaticObjectWrapperTest, InitNonDefaultConstructible)
 {
     // Clean state
@@ -209,7 +221,10 @@ TEST_F(StaticObjectWrapperTest, Destroy)
     EXPECT_FALSE(Wrapper6::isInitialized());
 }
 
-// Test isInitialized state tracking
+/**
+ * @brief Test isInitialized state tracking
+ * @details Verifies state transitions: init → true, destroy → false
+ */
 TEST_F(StaticObjectWrapperTest, IsInitializedStateTracking)
 {
     // Initial state
@@ -226,7 +241,10 @@ TEST_F(StaticObjectWrapperTest, IsInitializedStateTracking)
     EXPECT_FALSE(Wrapper7::isInitialized());
 }
 
-// Test multiple calls to init (only first should take effect)
+/**
+ * @brief Test multiple calls to init (only first should take effect)
+ * @details Verifies std::call_once semantics — subsequent init() calls are ignored
+ */
 TEST_F(StaticObjectWrapperTest, MultipleInitCalls)
 {
     // Clean state
@@ -260,14 +278,20 @@ TEST_F(StaticObjectWrapperTest, ConstructorDeleted)
                   "StaticObjectWrapper should not be constructible");
 }
 
-// Test copy constructor is deleted (compile-time check)
+/**
+ * @brief Test copy constructor is deleted (compile-time check)
+ * @details Verifies StaticObjectWrapper is non-copy-constructible
+ */
 TEST_F(StaticObjectWrapperTest, CopyConstructorDeleted)
 {
     static_assert(std::is_copy_constructible_v<StaticObjectWrapper<TestConfig>> == false,
                   "StaticObjectWrapper should not be copy constructible");
 }
 
-// Test copy assignment is deleted (compile-time check)
+/**
+ * @brief Test copy assignment is deleted (compile-time check)
+ * @details Verifies StaticObjectWrapper is non-copy-assignable
+ */
 TEST_F(StaticObjectWrapperTest, CopyAssignmentDeleted)
 {
     static_assert(std::is_copy_assignable_v<StaticObjectWrapper<TestConfig>> == false,

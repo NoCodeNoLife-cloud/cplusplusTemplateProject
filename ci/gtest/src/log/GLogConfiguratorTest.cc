@@ -14,6 +14,7 @@
 
 using namespace glog::config;
 
+/// @brief Test fixture for GLogConfigurator tests.
 class GLogConfiguratorTest : public testing::Test
 {
 protected:
@@ -39,6 +40,10 @@ protected:
     }
 };
 
+/**
+ * @brief Construct with valid YAML config file
+ * @details Verifies no exception is thrown when constructing from valid YAML.
+ */
 TEST_F(GLogConfiguratorTest, Constructor_ValidYaml)
 {
     writeYaml(R"(
@@ -51,23 +56,39 @@ glog:
     EXPECT_NO_THROW(GLogConfigurator config(tmp_yaml_));
 }
 
+/**
+ * @brief Construct with malformed YAML
+ * @details Verifies exception thrown for invalid YAML syntax.
+ */
 TEST_F(GLogConfiguratorTest, Constructor_InvalidYaml)
 {
     writeYaml("invalid: yaml: [[");
     EXPECT_THROW(GLogConfigurator config(tmp_yaml_), std::exception);
 }
 
+/**
+ * @brief Construct with nonexistent file path
+ * @details Verifies exception thrown when config file does not exist.
+ */
 TEST_F(GLogConfiguratorTest, Constructor_NonExistentPath)
 {
     EXPECT_THROW(GLogConfigurator config("nonexistent_file_xyz.yaml"), std::exception);
 }
 
+/**
+ * @brief Construct with empty YAML file
+ * @details Verifies no exception on empty file; defaults are used.
+ */
 TEST_F(GLogConfiguratorTest, Constructor_EmptyFile)
 {
     writeYaml("");
     EXPECT_NO_THROW(GLogConfigurator config(tmp_yaml_));
 }
 
+/**
+ * @brief GetConfig returns values matching input YAML
+ * @details Verifies all config fields are correctly parsed after construction.
+ */
 TEST_F(GLogConfiguratorTest, GetConfig_AfterConstruction)
 {
     writeYaml(R"(
@@ -85,6 +106,10 @@ glog:
     EXPECT_FALSE(cfg.customLogFormat());
 }
 
+/**
+ * @brief GetConfig extracts minLogLevel field
+ * @details Verifies correct parsing of minLogLevel from YAML.
+ */
 TEST_F(GLogConfiguratorTest, GetConfig_MinLogLevel)
 {
     writeYaml(R"(
@@ -98,6 +123,10 @@ glog:
     EXPECT_EQ(config.getConfig().minLogLevel(), 2);
 }
 
+/**
+ * @brief GetConfig with warning-level settings
+ * @details Verifies logName and minLogLevel for warning-level config.
+ */
 TEST_F(GLogConfiguratorTest, GetConfig_WarningLogLevel)
 {
     writeYaml(R"(
@@ -112,11 +141,19 @@ glog:
     EXPECT_EQ(config.getConfig().minLogLevel(), 1);
 }
 
+/**
+ * @brief IsInitialized returns false before any config
+ * @details Verifies the static init flag is false initially.
+ */
 TEST_F(GLogConfiguratorTest, IsInitialized_InitiallyFalse)
 {
     EXPECT_FALSE(GLogConfigurator::isInitialized());
 }
 
+/**
+ * @brief Update config at runtime
+ * @details Verifies updateConfig changes values and persists them.
+ */
 TEST_F(GLogConfiguratorTest, UpdateConfig)
 {
     writeYaml(R"(
@@ -137,6 +174,10 @@ glog:
     EXPECT_EQ(config.getConfig().minLogLevel(), 3);
 }
 
+/**
+ * @brief Multiple configurators are independent
+ * @details Verifies separate instances hold independent config state.
+ */
 TEST_F(GLogConfiguratorTest, MultipleConfigurators_Independent)
 {
     writeYaml(R"(

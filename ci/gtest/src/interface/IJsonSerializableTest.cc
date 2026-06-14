@@ -45,6 +45,7 @@ namespace
     };
 }
 
+/// @brief Test fixture for IJsonSerializable tests.
 class IJsonSerializableTest : public testing::Test
 {
 protected:
@@ -61,6 +62,7 @@ protected:
     std::unique_ptr<MockJsonSerializable> obj_;
 };
 
+/** @brief Verifies serialize produces valid JSON with correct fields. */
 TEST_F(IJsonSerializableTest, SerializeProducesValidJson)
 {
     rapidjson::StringBuffer buffer;
@@ -81,6 +83,7 @@ TEST_F(IJsonSerializableTest, SerializeProducesValidJson)
     EXPECT_EQ(doc["value"].GetInt(), 42);
 }
 
+/** @brief Verifies deserialize populates fields from a JSON object. */
 TEST_F(IJsonSerializableTest, DeserializePopulatesFields)
 {
     rapidjson::Document doc;
@@ -94,6 +97,7 @@ TEST_F(IJsonSerializableTest, DeserializePopulatesFields)
     EXPECT_EQ(obj_->value_, 99);
 }
 
+/** @brief Verifies serialization round-trip preserves all fields. */
 TEST_F(IJsonSerializableTest, RoundTripPreservesData)
 {
     rapidjson::StringBuffer buffer;
@@ -110,6 +114,7 @@ TEST_F(IJsonSerializableTest, RoundTripPreservesData)
     EXPECT_EQ(deserialized.value_, 42);
 }
 
+/** @brief Verifies deserialize handles missing fields gracefully. */
 TEST_F(IJsonSerializableTest, DeserializeMissingField)
 {
     rapidjson::Document doc;
@@ -122,6 +127,7 @@ TEST_F(IJsonSerializableTest, DeserializeMissingField)
     EXPECT_EQ(obj_->value_, 42);
 }
 
+/** @brief Verifies serialization after mutation reflects new state. */
 TEST_F(IJsonSerializableTest, MultipleSerializations)
 {
     rapidjson::StringBuffer buffer1;
