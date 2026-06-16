@@ -50,7 +50,7 @@
 - **用途：** 流式计算 P50/P95/P99 等百分位数
 - **场景：** 性能监控、APM 系统（项目已有 `SystemPerformanceMonitor`）
 - **新建目录：** `data_structure/probabilistic/`
-- **状态：** `[ ]` 未开始
+- **状态：** `[x]` 已完成
 
 ### 7. UnionSet with Rollback — 可撤销并查集
 
@@ -254,10 +254,10 @@ namespace common::data_structure::probabilistic
 
 ```
 P0: [          ] 0 / 10 (  0%)
-P1: [#         ] 1 / 7  ( 14%)
+P1: [##        ] 2 / 7  ( 28%)
 P2: [          ] 0 / 10 (  0%)
 P3: [          ] 0 / 10 (  0%)
-总计: [#         ] 1 / 37 (  3%)
+总计: [##        ] 2 / 37 (  5%)
 ```
 
 > **现状：** P0 全部 10 项已完成，P1 已完成 4 项（R-Tree、Treiber Stack、SeqLock、Sparse Table）。
