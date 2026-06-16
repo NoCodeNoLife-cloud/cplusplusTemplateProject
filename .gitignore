@@ -3,6 +3,7 @@
 
 cmake-build*
 build/
+proto/generated/
 .idea
 
 # Compiled Object files
