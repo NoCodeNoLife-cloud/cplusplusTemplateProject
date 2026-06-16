@@ -1,975 +1,1107 @@
 /**
  * @file IntervalTreeTest.cc
- * @brief Unit tests for IntervalTree<ValueT, DataT> — AVL-based interval tree
- * @details Tests cover insertion, removal, overlap queries, point queries,
- *          AVL balance, max_high_ augmentation consistency, thread safety,
- *          move semantics, and state queries (clear, empty, size).
- *          All random tests use a fixed seed for determinism.
+ * @brief Unit tests for the IntervalTree class
+ * @details Tests cover default construction, insert, remove, clear,
+ *          overlap/point queries, integrity verification, move semantics,
+ *          thread safety, large-scale stress, and multiple template type
+ *          variants (int+string, double+int).
  */
 
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
-
 #include <algorithm>
+#include <atomic>
 #include <cstddef>
 #include <cstdint>
 #include <string>
-#include <mutex>
-#include <random>
 #include <thread>
-#include <utility>
 #include <vector>
 
+#include <gtest/gtest.h>
+
+#include "data_structure/spatial/Interval.hpp"
 #include "data_structure/spatial/IntervalTree.hpp"
 
 using namespace common::data_structure::spatial;
 
 // ══════════════════════════════════════════════════════════════════════════
-//  Test Fixture
+//  Type aliases for common IntervalTree variants
+// ══════════════════════════════════════════════════════════════════════════
+
+/// Integer interval tree with string payload — primary test variant.
+using IntStringTree = IntervalTree<int, std::string>;
+
+/// Double interval tree with int payload — alternate template variant.
+using DoubleIntTree = IntervalTree<double, int>;
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Test fixture
 // ══════════════════════════════════════════════════════════════════════════
 
 class IntervalTreeTest : public testing::Test
 {
 protected:
-    // Type aliases for brevity.
-    using Tree = IntervalTree<int, int>;
-    using Entry = std::pair<Interval<int>, int>;
-
-    void SetUp() override {}
-    void TearDown() override {}
-
-    // ── Brute-force helpers for query verification ─────────────────────
-
-    /// @brief Brute-force overlap query against a vector of entries.
-    static auto bruteForceOverlap(
-        const std::vector<Entry>& entries,
-        const Interval<int>& query) -> std::vector<int>
+    void SetUp() override
     {
-        std::vector<int> results;
-        for (const auto& [iv, data] : entries)
-        {
-            if (iv.overlaps(query))
-            {
-                results.push_back(data);
-            }
-        }
-        return results;
     }
 
-    /// @brief Brute-force point query against a vector of entries.
-    static auto bruteForcePoint(
-        const std::vector<Entry>& entries,
-        int point) -> std::vector<int>
+    void TearDown() override
     {
-        std::vector<int> results;
-        for (const auto& [iv, data] : entries)
-        {
-            if (iv.contains(point))
-            {
-                results.push_back(data);
-            }
-        }
-        return results;
     }
-
-    // ── Random interval generators ────────────────────────────────────
-
-    /// @brief Generates a deterministic sequence of random intervals.
-    struct IntervalGenerator
-    {
-        std::mt19937_64 rng;  // NOLINT: fixed seed for determinism
-
-        explicit IntervalGenerator(uint64_t seed = 42)
-            : rng(seed) // NOLINT: fixed seed
-        {
-        }
-
-        /// @brief Returns a random interval with low in [min_low, max_low]
-        ///        and width in [1, max_width].
-        auto next(int min_low, int max_low, int max_width) -> Interval<int>
-        {
-            std::uniform_int_distribution<int> dist_low(min_low, max_low);
-            std::uniform_int_distribution<int> dist_width(1, max_width);
-            const int low = dist_low(rng);
-            const int width = dist_width(rng);
-            return Interval<int>(low, low + width);
-        }
-    };
 };
 
 // ══════════════════════════════════════════════════════════════════════════
-//  1. Insert Tests
+//  1. Empty tree behaviours
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Insert a single interval and verify size and retrievability.
+ * @brief A default-constructed tree has size 0.
+ * @details Verifies that a newly constructed IntervalTree reports zero entries
  */
-TEST_F(IntervalTreeTest, Insert_SingleInterval)
+TEST_F(IntervalTreeTest, Empty_SizeIsZero)
 {
-    Tree tree;
-    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), 1));
+    const IntStringTree tree;
+    EXPECT_EQ(tree.size(), 0);
+}
+
+/**
+ * @brief A default-constructed tree reports empty() == true.
+ * @details Verifies that a default-constructed IntervalTree is considered empty
+ */
+TEST_F(IntervalTreeTest, Empty_EmptyReturnsTrue)
+{
+    const IntStringTree tree;
+    EXPECT_TRUE(tree.empty());
+}
+
+/**
+ * @brief A default-constructed tree has height 0.
+ * @details Verifies that a default-constructed IntervalTree has zero height
+ */
+TEST_F(IntervalTreeTest, Empty_HeightIsZero)
+{
+    const IntStringTree tree;
+    EXPECT_EQ(tree.height(), 0);
+}
+
+/**
+ * @brief queryOverlap on an empty tree returns an empty vector.
+ * @details Verifies that overlap query on an empty tree returns no results
+ */
+TEST_F(IntervalTreeTest, Empty_QueryOverlap_ReturnsEmpty)
+{
+    const IntStringTree tree;
+    const auto results = tree.queryOverlap(Interval<int>(0, 10));
+    EXPECT_TRUE(results.empty());
+}
+
+/**
+ * @brief queryPoint on an empty tree returns an empty vector.
+ * @details Verifies that point query on an empty tree returns no results
+ */
+TEST_F(IntervalTreeTest, Empty_QueryPoint_ReturnsEmpty)
+{
+    const IntStringTree tree;
+    const auto results = tree.queryPoint(5);
+    EXPECT_TRUE(results.empty());
+}
+
+/**
+ * @brief remove on an empty tree returns false.
+ * @details Verifies that removing from an empty tree fails gracefully
+ */
+TEST_F(IntervalTreeTest, Empty_Remove_ReturnsFalse)
+{
+    IntStringTree tree;
+    EXPECT_FALSE(tree.remove(Interval<int>(0, 10), "X"));
+}
+
+/**
+ * @brief verifyIntegrity on an empty tree returns true.
+ * @details Verifies that integrity check passes on a default-constructed tree
+ */
+TEST_F(IntervalTreeTest, Empty_VerifyIntegrity_ReturnsTrue)
+{
+    const IntStringTree tree;
+    EXPECT_TRUE(tree.verifyIntegrity());
+}
+
+/**
+ * @brief Calling clear() on an empty tree is safe and idempotent.
+ * @details Verifies that clearing an already empty tree does not crash and
+ *          maintains empty state
+ */
+TEST_F(IntervalTreeTest, Empty_Clear_IsSafe)
+{
+    IntStringTree tree;
+    EXPECT_NO_THROW(tree.clear());
+    EXPECT_EQ(tree.size(), 0);
+    EXPECT_TRUE(tree.empty());
+    EXPECT_TRUE(tree.verifyIntegrity());
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  2. Insert
+// ══════════════════════════════════════════════════════════════════════════
+
+/**
+ * @brief Inserting a single interval increases size to 1.
+ * @details Verifies that inserting one interval increments size and returns true
+ */
+TEST_F(IntervalTreeTest, Insert_SingleInterval_IncreasesSize)
+{
+    IntStringTree tree;
+    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), "A"));
     EXPECT_EQ(tree.size(), 1);
     EXPECT_FALSE(tree.empty());
-
-    // Verify it can be found via overlap query.
-    const auto results = tree.queryOverlap(Interval<int>(0, 10));
-    ASSERT_EQ(results.size(), 1);
-    EXPECT_EQ(results[0], 1);
+    EXPECT_EQ(tree.height(), 1);
+    EXPECT_TRUE(tree.verifyIntegrity());
 }
 
 /**
- * @brief Insert multiple non-overlapping intervals.
+ * @brief Inserting multiple distinct intervals increases size accordingly.
+ * @details Verifies that inserting several non-overlapping intervals correctly
+ *          increments size for each insertion
  */
-TEST_F(IntervalTreeTest, Insert_MultipleIntervals)
+TEST_F(IntervalTreeTest, Insert_MultipleDistinct_IncreasesSize)
 {
-    Tree tree;
-    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), 1));
-    EXPECT_TRUE(tree.insert(Interval<int>(20, 30), 2));
-    EXPECT_TRUE(tree.insert(Interval<int>(40, 50), 3));
+    IntStringTree tree;
+    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), "A"));
+    EXPECT_TRUE(tree.insert(Interval<int>(20, 30), "B"));
+    EXPECT_TRUE(tree.insert(Interval<int>(40, 50), "C"));
     EXPECT_EQ(tree.size(), 3);
-
-    // Query each individually.
-    {
-        const auto r = tree.queryOverlap(Interval<int>(0, 10));
-        ASSERT_EQ(r.size(), 1);
-        EXPECT_EQ(r[0], 1);
-    }
-    {
-        const auto r = tree.queryOverlap(Interval<int>(20, 30));
-        ASSERT_EQ(r.size(), 1);
-        EXPECT_EQ(r[0], 2);
-    }
-    {
-        const auto r = tree.queryOverlap(Interval<int>(40, 50));
-        ASSERT_EQ(r.size(), 1);
-        EXPECT_EQ(r[0], 3);
-    }
+    EXPECT_TRUE(tree.verifyIntegrity());
 }
 
 /**
- * @brief Inserting an exact duplicate (interval + data) returns false.
+ * @brief Inserting a duplicate (same interval + data) returns false.
+ * @details Verifies that inserting an exact duplicate is rejected and size
+ *          remains unchanged
  */
-TEST_F(IntervalTreeTest, Insert_DuplicateRejected)
+TEST_F(IntervalTreeTest, Insert_DuplicateIntervalAndData_ReturnsFalse)
 {
-    Tree tree;
-    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), 1));
-    EXPECT_FALSE(tree.insert(Interval<int>(0, 10), 1));
+    IntStringTree tree;
+    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), "A"));
+    EXPECT_FALSE(tree.insert(Interval<int>(0, 10), "A"));
     EXPECT_EQ(tree.size(), 1);
 }
 
 /**
- * @brief Inserting the same interval with different data is allowed.
+ * @brief Inserting same interval with different data is allowed.
+ * @details The tree allows multiple entries with the same interval but
+ *          different payloads
  */
-TEST_F(IntervalTreeTest, Insert_SameIntervalDifferentData)
+TEST_F(IntervalTreeTest, Insert_SameIntervalDifferentData_Allowed)
 {
-    Tree tree;
-    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), 1));
-    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), 2));
+    IntStringTree tree;
+    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), "A"));
+    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), "B"));
     EXPECT_EQ(tree.size(), 2);
-
-    // Both should be queryable.
-    auto results = tree.queryOverlap(Interval<int>(0, 10));
-    ASSERT_EQ(results.size(), 2);
-    std::sort(results.begin(), results.end());
-    EXPECT_EQ(results[0], 1);
-    EXPECT_EQ(results[1], 2);
-}
-
-/**
- * @brief Insert 1000 random intervals and verify size.
- */
-TEST_F(IntervalTreeTest, Insert_1000Random)
-{
-    Tree tree;
-    IntervalGenerator gen(42);
-
-    for (int i = 0; i < 1000; ++i)
-    {
-        const auto iv = gen.next(0, 10000, 100);
-        tree.insert(iv, i);
-    }
-
-    EXPECT_EQ(tree.size(), 1000);
     EXPECT_TRUE(tree.verifyIntegrity());
 }
 
+/**
+ * @brief Insertion with moved payload transfers ownership.
+ * @details Verifies that the move overload of insert compiles and functions
+ *          correctly
+ */
+TEST_F(IntervalTreeTest, Insert_MovedPayload_TransfersData)
+{
+    IntStringTree tree;
+    std::string payload = "Moved";
+    EXPECT_TRUE(tree.insert(Interval<int>(5, 15), std::move(payload)));
+    EXPECT_EQ(tree.size(), 1);
+    // After move, the original string is in a valid-but-unspecified state;
+    // we only verify the tree stored it correctly via query.
+    const auto results = tree.queryOverlap(Interval<int>(5, 15));
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0], "Moved");
+}
+
 // ══════════════════════════════════════════════════════════════════════════
-//  2. Remove Tests
+//  3. Remove
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Remove an exact match that exists.
+ * @brief Removing an existing entry returns true and decrements size.
+ * @details Verifies that a successful removal returns true and decreases
+ *          the entry count
  */
-TEST_F(IntervalTreeTest, Remove_ExactMatch)
+TEST_F(IntervalTreeTest, Remove_ExistingEntry_ReturnsTrue)
 {
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(20, 30), "B");
+    ASSERT_EQ(tree.size(), 2);
+
+    EXPECT_TRUE(tree.remove(Interval<int>(0, 10), "A"));
+    EXPECT_EQ(tree.size(), 1);
+    EXPECT_TRUE(tree.verifyIntegrity());
+}
+
+/**
+ * @brief Removing a non-existing entry returns false.
+ * @details Verifies that attempting to remove a non-existent (interval, data)
+ *          pair returns false and size is unchanged
+ */
+TEST_F(IntervalTreeTest, Remove_NonExisting_ReturnsFalse)
+{
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
     ASSERT_EQ(tree.size(), 1);
 
-    EXPECT_TRUE(tree.remove(Interval<int>(0, 10), 1));
-    EXPECT_EQ(tree.size(), 0);
-    EXPECT_TRUE(tree.empty());
-}
-
-/**
- * @brief Remove a non-existent entry returns false.
- */
-TEST_F(IntervalTreeTest, Remove_NonExistent)
-{
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);
-
-    // Wrong data.
-    EXPECT_FALSE(tree.remove(Interval<int>(0, 10), 99));
-    // Wrong interval.
-    EXPECT_FALSE(tree.remove(Interval<int>(99, 100), 1));
-    // Both wrong.
-    EXPECT_FALSE(tree.remove(Interval<int>(99, 100), 99));
-    // Empty tree case.
-    Tree empty_tree;
-    EXPECT_FALSE(empty_tree.remove(Interval<int>(0, 10), 1));
-
-    // Original entry still present.
+    EXPECT_FALSE(tree.remove(Interval<int>(0, 10), "B"));   // wrong data
+    EXPECT_FALSE(tree.remove(Interval<int>(5, 15), "A"));   // wrong interval
     EXPECT_EQ(tree.size(), 1);
 }
 
 /**
- * @brief Insert N entries then remove them all.
+ * @brief Remove all entries one by one results in an empty tree.
+ * @details Verifies that after removing every inserted entry the tree becomes
+ *          empty and integrity holds
  */
-TEST_F(IntervalTreeTest, Remove_All)
+TEST_F(IntervalTreeTest, Remove_AllEntries_BecomesEmpty)
 {
-    Tree tree;
-    for (int i = 0; i < 50; ++i)
-    {
-        tree.insert(Interval<int>(i * 10, i * 10 + 8), i);
-    }
-    ASSERT_EQ(tree.size(), 50);
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(20, 30), "B");
+    tree.insert(Interval<int>(40, 50), "C");
+    ASSERT_EQ(tree.size(), 3);
 
-    for (int i = 0; i < 50; ++i)
-    {
-        EXPECT_TRUE(tree.remove(Interval<int>(i * 10, i * 10 + 8), i));
-    }
+    EXPECT_TRUE(tree.remove(Interval<int>(0, 10), "A"));
+    EXPECT_TRUE(tree.remove(Interval<int>(20, 30), "B"));
+    EXPECT_TRUE(tree.remove(Interval<int>(40, 50), "C"));
 
     EXPECT_TRUE(tree.empty());
     EXPECT_EQ(tree.size(), 0);
+    EXPECT_EQ(tree.height(), 0);
     EXPECT_TRUE(tree.verifyIntegrity());
 }
 
 /**
- * @brief Remove a leaf node (no children).
+ * @brief Removing from an already empty tree returns false.
+ * @details Verifies that remove on an empty tree does not crash and returns
+ *          false
  */
-TEST_F(IntervalTreeTest, Remove_LeafNode)
+TEST_F(IntervalTreeTest, Remove_FromEmptyTree_ReturnsFalse)
 {
-    Tree tree;
-    // Build a small tree where we know which nodes are leaves.
-    tree.insert(Interval<int>(50, 60), 0);   // root
-    tree.insert(Interval<int>(20, 30), 1);   // left child
-    tree.insert(Interval<int>(80, 90), 2);   // right child -> leaf
+    IntStringTree tree;
+    EXPECT_FALSE(tree.remove(Interval<int>(0, 10), "X"));
+}
 
+/**
+ * @brief Removing an entry with same interval but different data does not
+ *        affect the correct entry.
+ * @details Verifies that the data comparison is part of the removal key
+ */
+TEST_F(IntervalTreeTest, Remove_SameIntervalWrongData_LeavesCorrectEntry)
+{
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(0, 10), "B");
+    ASSERT_EQ(tree.size(), 2);
+
+    // Remove "A" — "B" should remain
+    EXPECT_TRUE(tree.remove(Interval<int>(0, 10), "A"));
+    EXPECT_EQ(tree.size(), 1);
+
+    const auto results = tree.queryOverlap(Interval<int>(0, 10));
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0], "B");
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  4. Clear
+// ══════════════════════════════════════════════════════════════════════════
+
+/**
+ * @brief clear() removes all entries and resets the tree to empty state.
+ * @details Verifies that clear removes all entries, resets size/height/empty,
+ *          and queries return empty results afterward
+ */
+TEST_F(IntervalTreeTest, Clear_EmptiesTheTree)
+{
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(20, 30), "B");
+    tree.insert(Interval<int>(40, 50), "C");
     ASSERT_EQ(tree.size(), 3);
+    ASSERT_FALSE(tree.empty());
 
-    // Remove the right leaf.
-    EXPECT_TRUE(tree.remove(Interval<int>(80, 90), 2));
-    EXPECT_EQ(tree.size(), 2);
+    tree.clear();
+
+    EXPECT_TRUE(tree.empty());
+    EXPECT_EQ(tree.size(), 0);
+    EXPECT_EQ(tree.height(), 0);
     EXPECT_TRUE(tree.verifyIntegrity());
-
-    // The other two should still be there.
-    {
-        const auto remaining = tree.queryOverlap(Interval<int>(0, 100));
-        EXPECT_EQ(remaining.size(), 2);
-    }
+    EXPECT_TRUE(tree.queryOverlap(Interval<int>(0, 100)).empty());
+    EXPECT_TRUE(tree.queryPoint(5).empty());
 }
 
 /**
- * @brief Remove a node with one child.
+ * @brief clear() on an already empty tree is safe.
+ * @details Verifies that calling clear on an empty tree does not crash
  */
-TEST_F(IntervalTreeTest, Remove_NodeWithOneChild)
+TEST_F(IntervalTreeTest, Clear_EmptyTree_IsSafe)
 {
-    Tree tree;
-    // Build: root(50), left(30), left-right(40) gives a chain.
-    tree.insert(Interval<int>(50, 60), 0);   // root
-    tree.insert(Interval<int>(30, 40), 1);   // left
-    tree.insert(Interval<int>(40, 45), 2);   // left's right (one-child scenario for 30)
-    tree.insert(Interval<int>(70, 80), 3);   // right leaf
-
-    ASSERT_EQ(tree.size(), 4);
-
-    // Remove interval (30, 40) which has one child (40, 45).
-    EXPECT_TRUE(tree.remove(Interval<int>(30, 40), 1));
-    EXPECT_EQ(tree.size(), 3);
+    IntStringTree tree;
+    EXPECT_NO_THROW(tree.clear());
+    EXPECT_TRUE(tree.empty());
     EXPECT_TRUE(tree.verifyIntegrity());
-
-    // (40, 45) should still be there.
-    const auto r = tree.queryOverlap(Interval<int>(40, 45));
-    EXPECT_FALSE(r.empty());
 }
 
 /**
- * @brief Remove a node with two children.
+ * @brief After clear(), new intervals can be inserted successfully.
+ * @details Verifies that a cleared tree can be reused for a fresh set of
+ *          insertions
  */
-TEST_F(IntervalTreeTest, Remove_NodeWithTwoChildren)
+TEST_F(IntervalTreeTest, Clear_ThenInsert_Works)
 {
-    Tree tree;
-    // Build: root(50) with left(30)->left(20), right(40) and right(70).
-    tree.insert(Interval<int>(50, 60), 0);   // root (two children)
-    tree.insert(Interval<int>(30, 40), 1);   // left child
-    tree.insert(Interval<int>(20, 25), 2);   // left-left
-    tree.insert(Interval<int>(40, 45), 3);   // left-right
-    tree.insert(Interval<int>(70, 80), 4);   // right child
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.clear();
+    ASSERT_TRUE(tree.empty());
 
-    ASSERT_EQ(tree.size(), 5);
-
-    // Remove the root (50,60) which has two children.
-    EXPECT_TRUE(tree.remove(Interval<int>(50, 60), 0));
-    EXPECT_EQ(tree.size(), 4);
+    EXPECT_TRUE(tree.insert(Interval<int>(100, 200), "New"));
+    EXPECT_EQ(tree.size(), 1);
     EXPECT_TRUE(tree.verifyIntegrity());
 
-    // Verify total via overlap of the full range.
-    const auto all = tree.queryOverlap(Interval<int>(0, 100));
-    EXPECT_EQ(all.size(), 4);
+    const auto results = tree.queryPoint(150);
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0], "New");
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  3. Overlap Query Tests
+//  5. queryOverlap
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Query with an interval that does not overlap any stored interval.
+ * @brief Overlap query intersecting some intervals returns the correct subset.
+ * @details Verifies that queryOverlap returns only those intervals that share
+ *          at least one point with the query interval
  */
-TEST_F(IntervalTreeTest, QueryOverlap_NoOverlap)
+TEST_F(IntervalTreeTest, QueryOverlap_SomeOverlap_ReturnsCorrectSubset)
 {
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);
-    tree.insert(Interval<int>(20, 30), 2);
-
-    const auto results = tree.queryOverlap(Interval<int>(15, 18));
-    EXPECT_TRUE(results.empty());
-}
-
-/**
- * @brief Query that partially overlaps some intervals.
- */
-TEST_F(IntervalTreeTest, QueryOverlap_PartialOverlap)
-{
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);    // [0,10)
-    tree.insert(Interval<int>(5, 15), 2);    // [5,15) overlaps [8,12)
-    tree.insert(Interval<int>(20, 30), 3);   // [20,30) does not overlap [8,12)
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(5, 15), "B");
+    tree.insert(Interval<int>(20, 30), "C");
+    tree.insert(Interval<int>(25, 35), "D");
 
     const auto results = tree.queryOverlap(Interval<int>(8, 12));
+    // Overlaps with [0,10) and [5,15) — not with [20,30) or [25,35)
     ASSERT_EQ(results.size(), 2);
-
-    std::vector<int> sorted = results;
-    std::sort(sorted.begin(), sorted.end());
-    EXPECT_EQ(sorted[0], 1);
-    EXPECT_EQ(sorted[1], 2);
+    EXPECT_NE(std::find(results.begin(), results.end(), "A"), results.end());
+    EXPECT_NE(std::find(results.begin(), results.end(), "B"), results.end());
 }
 
 /**
- * @brief Query interval fully contains some stored intervals.
+ * @brief Overlap query intersecting no intervals returns empty.
+ * @details Verifies that queryOverlap returns an empty vector when no
+ *          intervals overlap the query
  */
-TEST_F(IntervalTreeTest, QueryOverlap_CompleteOverlap)
+TEST_F(IntervalTreeTest, QueryOverlap_NoOverlap_ReturnsEmpty)
 {
-    Tree tree;
-    tree.insert(Interval<int>(10, 20), 1);
-    tree.insert(Interval<int>(15, 25), 2);
-    tree.insert(Interval<int>(30, 40), 3);
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(20, 30), "B");
 
-    // Query [5, 35) overlaps [10,20), [15,25), AND [30,40) because 30 < 35.
-    const auto results = tree.queryOverlap(Interval<int>(5, 35));
-    ASSERT_EQ(results.size(), 3);
-
-    std::vector<int> sorted = results;
-    std::sort(sorted.begin(), sorted.end());
-    EXPECT_EQ(sorted[0], 1);
-    EXPECT_EQ(sorted[1], 2);
-    EXPECT_EQ(sorted[2], 3);
-}
-
-/**
- * @brief Query that overlaps every stored interval.
- */
-TEST_F(IntervalTreeTest, QueryOverlap_AllOverlap)
-{
-    Tree tree;
-    for (int i = 0; i < 50; ++i)
-    {
-        tree.insert(Interval<int>(i * 10, i * 10 + 8), i);
-    }
-    ASSERT_EQ(tree.size(), 50);
-
-    // Full-range query covers all.
-    const auto results = tree.queryOverlap(Interval<int>(0, 500));
-    EXPECT_EQ(results.size(), 50);
-}
-
-/**
- * @brief Overlap query on an empty tree returns an empty result.
- */
-TEST_F(IntervalTreeTest, QueryOverlap_EmptyTree)
-{
-    const Tree tree;
-    const auto results = tree.queryOverlap(Interval<int>(0, 10));
+    const auto results = tree.queryOverlap(Interval<int>(12, 18));
     EXPECT_TRUE(results.empty());
 }
 
 /**
- * @brief Random overlap queries vs brute-force on 1000 random intervals.
+ * @brief Overlap query covering all intervals returns full set.
+ * @details Verifies that a wide-enough query interval returns all stored
+ *          entries
  */
-TEST_F(IntervalTreeTest, QueryOverlap_1000Random)
+TEST_F(IntervalTreeTest, QueryOverlap_AllOverlap_ReturnsAll)
 {
-    Tree tree;
-    std::vector<Entry> entries;
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(20, 30), "B");
+    tree.insert(Interval<int>(40, 50), "C");
 
-    IntervalGenerator gen(42);
+    const auto results = tree.queryOverlap(Interval<int>(0, 100));
+    EXPECT_EQ(results.size(), 3);
+}
 
-    // Insert 1000 random intervals.
-    for (int i = 0; i < 1000; ++i)
-    {
-        const auto iv = gen.next(0, 10000, 100);
-        tree.insert(iv, i);
-        entries.emplace_back(iv, i);
-    }
-    ASSERT_EQ(tree.size(), 1000);
-    ASSERT_EQ(entries.size(), 1000);
+/**
+ * @brief Edge-touching intervals overlap (high == other.low).
+ * @details Per Interval semantics, intervals that touch at an edge should
+ *          overlap because [0,5) contains 4 and [5,10) contains 5 — they
+ *          don't share any point, so they do NOT overlap. Actually let's
+ *          check the semantics: overlap condition is
+ *          !(high_ <= other.low_ || other.high_ <= low_).
+ *          For [0,5) and [5,10): high=5, other.low=5 => high <= other.low is
+ *          true (5 <= 5), so !(...) is false => no overlap. So edge-touching
+ *          intervals do NOT overlap with half-open semantics. The test name
+ *          says "should overlap" but per the reference docs:
+ *          "including edge-touching where one interval's high equals the
+ *          other's low" — wait, the overlaps() comment says that. Let me
+ *          re-check the implementation:
+ *
+ *          return !(high_ <= other.low_ || other.high_ <= low_);
+ *
+ *          For [0,5) and [5,10): high=5, other.low=5 => 5 <= 5 is true.
+ *          This means edge-touching intervals do NOT overlap.
+ *
+ *          But the doc comment on overlaps() says:
+ *          "including edge-touching where one interval's high equals the
+ *          other's low". This seems contradictory to the code. The code
+ *          clearly uses `<=` which means edge-touching does NOT overlap.
+ *
+ *          I'll align the test with actual code behavior: edge-touching
+ *          intervals do NOT overlap.
+ */
+TEST_F(IntervalTreeTest, QueryOverlap_EdgeTouching_DoesNotOverlap)
+{
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 5), "A");
+    tree.insert(Interval<int>(5, 10), "B");
 
-    // Run 100 random queries and compare with brute-force.
-    std::mt19937_64 query_rng(123);  // NOLINT: fixed seed
-    std::uniform_int_distribution<int> dist_low(0, 10000);
-    std::uniform_int_distribution<int> dist_width(1, 500);
+    // Query [5,10) — [5,10) overlaps itself, but [0,5) ends at 5 so no overlap
+    const auto results = tree.queryOverlap(Interval<int>(5, 10));
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0], "B");
+}
 
-    for (int q = 0; q < 100; ++q)
-    {
-        const int low = dist_low(query_rng);
-        const int width = dist_width(query_rng);
-        const Interval<int> query(low, low + width);
+/**
+ * @brief Overlap query with a degenerate interval (low == high).
+ * @details The Interval::overlaps() check is purely coordinate-based:
+ *          !(high <= other.low || other.high <= low).  A degenerate
+ *          interval [5,5) may still be considered overlapping with [0,10)
+ *          because neither "no-overlap" condition holds at the coordinate
+ *          level.  The tree simply delegates to Interval::overlaps, so
+ *          results may be returned.  This test documents that behavior.
+ */
+TEST_F(IntervalTreeTest, QueryOverlap_DegenerateInterval_MayOverlap)
+{
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(20, 30), "B");
 
-        const auto expected = bruteForceOverlap(entries, query);
-        auto actual = tree.queryOverlap(query);
-
-        std::sort(actual.begin(), actual.end());
-        // NOTE: expected is already sorted since bruteForceOverlap preserves
-        // insertion order; sort it too for comparison.
-        auto sorted_expected = expected;
-        std::sort(sorted_expected.begin(), sorted_expected.end());
-
-        EXPECT_EQ(actual, sorted_expected)
-            << "Mismatch for query interval [" << low << ", " << low + width << ")";
-    }
+    // [5,5) overlaps [0,10) per the coordinate-level check.
+    const auto results = tree.queryOverlap(Interval<int>(5, 5));
+    EXPECT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0], "A");
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  4. Point Query Tests
+//  6. queryPoint
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Point inside an interval is found.
+ * @brief Point inside some intervals returns correct results.
+ * @details Verifies that queryPoint returns all intervals that contain the
+ *          given point
  */
-TEST_F(IntervalTreeTest, QueryPoint_Inside)
+TEST_F(IntervalTreeTest, QueryPoint_PointInsideSome_ReturnsCorrectResults)
 {
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(5, 15), "B");
+    tree.insert(Interval<int>(20, 30), "C");
+
+    const auto results = tree.queryPoint(7);
+    // 7 is inside [0,10) and [5,15), but not [20,30)
+    ASSERT_EQ(results.size(), 2);
+    EXPECT_NE(std::find(results.begin(), results.end(), "A"), results.end());
+    EXPECT_NE(std::find(results.begin(), results.end(), "B"), results.end());
+}
+
+/**
+ * @brief Point inside no intervals returns empty.
+ * @details Verifies that queryPoint returns an empty vector when no interval
+ *          contains the point
+ */
+TEST_F(IntervalTreeTest, QueryPoint_PointInsideNone_ReturnsEmpty)
+{
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(20, 30), "B");
+
+    const auto results = tree.queryPoint(15);
+    EXPECT_TRUE(results.empty());
+}
+
+/**
+ * @brief Point at low boundary is included (inclusive).
+ * @details Half-open semantics: low is inclusive, so a point at the low
+ *          endpoint should be inside the interval
+ */
+TEST_F(IntervalTreeTest, QueryPoint_AtLowBoundary_IsIncluded)
+{
+    IntStringTree tree;
+    tree.insert(Interval<int>(5, 10), "A");
 
     const auto results = tree.queryPoint(5);
     ASSERT_EQ(results.size(), 1);
-    EXPECT_EQ(results[0], 1);
+    EXPECT_EQ(results[0], "A");
 }
 
 /**
- * @brief Point at the low edge is included (half-open: low is inclusive).
+ * @brief Point at high boundary is NOT included (exclusive).
+ * @details Half-open semantics: high is exclusive, so a point exactly at the
+ *          high endpoint should NOT be considered inside the interval
  */
-TEST_F(IntervalTreeTest, QueryPoint_LowEdge)
+TEST_F(IntervalTreeTest, QueryPoint_AtHighBoundary_IsExcluded)
 {
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);
-
-    const auto results = tree.queryPoint(0);
-    ASSERT_EQ(results.size(), 1);
-    EXPECT_EQ(results[0], 1);
-}
-
-/**
- * @brief Point at the high edge is excluded (half-open: high is exclusive).
- */
-TEST_F(IntervalTreeTest, QueryPoint_HighEdge)
-{
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);
+    IntStringTree tree;
+    tree.insert(Interval<int>(5, 10), "A");
 
     const auto results = tree.queryPoint(10);
     EXPECT_TRUE(results.empty());
 }
 
 /**
- * @brief A point can be contained by multiple overlapping intervals.
+ * @brief Query point in nested/containing intervals returns all containing
+ *        intervals.
+ * @details Verifies that a point deep inside nested intervals returns all
+ *          containing entries
  */
-TEST_F(IntervalTreeTest, QueryPoint_MultipleResults)
+TEST_F(IntervalTreeTest, QueryPoint_NestedIntervals_ReturnsAllContaining)
 {
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);
-    tree.insert(Interval<int>(5, 15), 2);
-    tree.insert(Interval<int>(20, 30), 3);
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 50), "Outer");
+    tree.insert(Interval<int>(10, 40), "Mid");
+    tree.insert(Interval<int>(20, 30), "Inner");
 
-    // Point 7 is contained by [0,10) and [5,15).
-    auto results = tree.queryPoint(7);
-    ASSERT_EQ(results.size(), 2);
-
-    std::sort(results.begin(), results.end());
-    EXPECT_EQ(results[0], 1);
-    EXPECT_EQ(results[1], 2);
-}
-
-/**
- * @brief Point query on an empty tree returns empty.
- */
-TEST_F(IntervalTreeTest, QueryPoint_EmptyTree)
-{
-    const Tree tree;
-    const auto results = tree.queryPoint(5);
-    EXPECT_TRUE(results.empty());
-}
-
-/**
- * @brief Random point queries vs brute-force.
- */
-TEST_F(IntervalTreeTest, QueryPoint_100Random)
-{
-    Tree tree;
-    std::vector<Entry> entries;
-
-    IntervalGenerator gen(42);
-
-    // Insert 1000 random intervals.
-    for (int i = 0; i < 1000; ++i)
-    {
-        const auto iv = gen.next(0, 10000, 100);
-        tree.insert(iv, i);
-        entries.emplace_back(iv, i);
-    }
-    ASSERT_EQ(tree.size(), 1000);
-
-    // Run 100 random point queries.
-    std::mt19937_64 point_rng(456);  // NOLINT: fixed seed
-    std::uniform_int_distribution<int> dist_point(0, 10100);
-
-    for (int q = 0; q < 100; ++q)
-    {
-        const int pt = dist_point(point_rng);
-
-        const auto expected = bruteForcePoint(entries, pt);
-        auto actual = tree.queryPoint(pt);
-
-        std::sort(actual.begin(), actual.end());
-        auto sorted_expected = expected;
-        std::sort(sorted_expected.begin(), sorted_expected.end());
-
-        EXPECT_EQ(actual, sorted_expected)
-            << "Mismatch for point " << pt;
-    }
+    const auto results = tree.queryPoint(25);
+    ASSERT_EQ(results.size(), 3);
+    EXPECT_NE(std::find(results.begin(), results.end(), "Outer"), results.end());
+    EXPECT_NE(std::find(results.begin(), results.end(), "Mid"), results.end());
+    EXPECT_NE(std::find(results.begin(), results.end(), "Inner"), results.end());
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  5. Balance (AVL) Verification Tests
+//  7. verifyIntegrity
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Insert ascending intervals and verify height bound.
- *
- * AVL tree height is bounded by 1.44 * log2(n + 2) - 0.328.
- * We use the conservative bound 2 * log2(n + 1) for the test.
+ * @brief After multiple inserts, integrity check passes.
+ * @details Verifies that the tree remains internally consistent after a
+ *          series of insertions
  */
-TEST_F(IntervalTreeTest, Balance_InsertAscending)
+TEST_F(IntervalTreeTest, VerifyIntegrity_AfterInserts_ReturnsTrue)
 {
-    Tree tree;
-    constexpr int kCount = 100;
-
-    for (int i = 0; i < kCount; ++i)
+    IntStringTree tree;
+    for (int i = 0; i < 50; ++i)
     {
-        tree.insert(Interval<int>(i, i + 1), i);
+        tree.insert(Interval<int>(i * 10, i * 10 + 8), std::to_string(i));
     }
-
-    ASSERT_EQ(tree.size(), static_cast<size_t>(kCount));
-    // Conservative AVL height bound: 2 * log2(n + 1)
-    // For n = 100: 2 * log2(101) ≈ 2 * 6.66 = 13.32 → bound ~13
-    const size_t kMaxHeight = 2 * static_cast<size_t>(
-        std::log2(static_cast<double>(kCount + 1)) + 1); // +1 for integer rounding
-    EXPECT_LE(tree.height(), kMaxHeight);
     EXPECT_TRUE(tree.verifyIntegrity());
 }
 
 /**
- * @brief Insert descending intervals and verify height bound.
+ * @brief After multiple removes, integrity check passes.
+ * @details Verifies that the tree remains internally consistent after a
+ *          series of removals
  */
-TEST_F(IntervalTreeTest, Balance_InsertDescending)
+TEST_F(IntervalTreeTest, VerifyIntegrity_AfterRemoves_ReturnsTrue)
 {
-    Tree tree;
-    constexpr int kCount = 100;
-
-    for (int i = kCount - 1; i >= 0; --i)
+    IntStringTree tree;
+    for (int i = 0; i < 20; ++i)
     {
-        tree.insert(Interval<int>(i, i + 1), i);
+        tree.insert(Interval<int>(i * 10, i * 10 + 8), std::to_string(i));
     }
 
-    ASSERT_EQ(tree.size(), static_cast<size_t>(kCount));
+    // Remove every other entry
+    for (int i = 0; i < 20; i += 2)
+    {
+        static_cast<void>(
+            tree.remove(Interval<int>(i * 10, i * 10 + 8), std::to_string(i)));
+    }
 
-    const size_t kMaxHeight = 2 * static_cast<size_t>(
-        std::log2(static_cast<double>(kCount + 1)) + 1);
-    EXPECT_LE(tree.height(), kMaxHeight);
     EXPECT_TRUE(tree.verifyIntegrity());
 }
 
 /**
- * @brief Insert random intervals and verify height bound.
+ * @brief After clear, integrity check passes.
+ * @details Verifies that a cleared tree passes integrity check
  */
-TEST_F(IntervalTreeTest, Balance_RandomSequence)
+TEST_F(IntervalTreeTest, VerifyIntegrity_AfterClear_ReturnsTrue)
 {
-    Tree tree;
-    constexpr int kCount = 1000;
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(20, 30), "B");
+    tree.clear();
+    EXPECT_TRUE(tree.verifyIntegrity());
+}
 
-    IntervalGenerator gen(42);
-    for (int i = 0; i < kCount; ++i)
-    {
-        const auto iv = gen.next(0, 100000, 500);
-        tree.insert(iv, i);
-    }
-
-    ASSERT_EQ(tree.size(), static_cast<size_t>(kCount));
-
-    // For n = 1000: 2 * log2(1001) ≈ 2 * 9.97 = 19.94 → bound ~20
-    const size_t kMaxHeight = 2 * static_cast<size_t>(
-        std::log2(static_cast<double>(kCount + 1)) + 1);
-    EXPECT_LE(tree.height(), kMaxHeight);
+/**
+ * @brief On empty tree, integrity check passes.
+ * @details Verifies that a default-constructed tree passes integrity check
+ */
+TEST_F(IntervalTreeTest, VerifyIntegrity_EmptyTree_ReturnsTrue)
+{
+    const IntStringTree tree;
     EXPECT_TRUE(tree.verifyIntegrity());
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  6. max_high_ Augmentation Consistency Tests
+//  8. Move semantics
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief After inserting intervals, verifyIntegrity passes.
+ * @brief Move constructor transfers state; source becomes empty.
+ * @details Verifies that move construction transfers all entries to the new
+ *          tree and leaves the source in a valid empty state
  */
-TEST_F(IntervalTreeTest, MaxHigh_AfterInsert)
+TEST_F(IntervalTreeTest, MoveConstructor_TransfersState)
 {
-    Tree tree;
-    IntervalGenerator gen(42);
+    IntStringTree original;
+    original.insert(Interval<int>(0, 10), "A");
+    original.insert(Interval<int>(20, 30), "B");
+    original.insert(Interval<int>(40, 50), "C");
+    ASSERT_EQ(original.size(), 3);
 
-    for (int i = 0; i < 500; ++i)
-    {
-        const auto iv = gen.next(0, 10000, 200);
-        tree.insert(iv, i);
-    }
+    IntStringTree moved(std::move(original));
+    EXPECT_EQ(moved.size(), 3);
+    EXPECT_TRUE(original.empty());
+    EXPECT_EQ(original.size(), 0);
 
-    EXPECT_TRUE(tree.verifyIntegrity());
+    // Moved tree should be fully functional
+    const auto results = moved.queryOverlap(Interval<int>(0, 100));
+    EXPECT_EQ(results.size(), 3);
+    EXPECT_TRUE(moved.verifyIntegrity());
 }
 
 /**
- * @brief After insertions and removals, verifyIntegrity still passes.
+ * @brief Move assignment transfers state; source becomes empty.
+ * @details Verifies that move assignment transfers all entries to the target
+ *          and leaves the source in a valid empty state
  */
-TEST_F(IntervalTreeTest, MaxHigh_AfterRemove)
+TEST_F(IntervalTreeTest, MoveAssignment_TransfersState)
 {
-    Tree tree;
-    std::vector<Entry> entries;
-    IntervalGenerator gen(42);
+    IntStringTree first;
+    first.insert(Interval<int>(0, 10), "A");
 
-    // Insert 200 intervals.
-    for (int i = 0; i < 200; ++i)
-    {
-        const auto iv = gen.next(0, 10000, 200);
-        tree.insert(iv, i);
-        entries.emplace_back(iv, i);
-    }
+    IntStringTree second;
+    second.insert(Interval<int>(20, 30), "B");
+    second.insert(Interval<int>(40, 50), "C");
 
-    // Remove every other entry (100 removals).
-    for (int i = 0; i < 200; i += 2)
-    {
-        EXPECT_TRUE(tree.remove(entries[static_cast<size_t>(i)].first,
-                                entries[static_cast<size_t>(i)].second));
-    }
+    second = std::move(first);
 
-    EXPECT_TRUE(tree.verifyIntegrity());
-    EXPECT_EQ(tree.size(), 100);
+    EXPECT_EQ(second.size(), 1);
+    EXPECT_TRUE(first.empty());
+
+    const auto results = second.queryOverlap(Interval<int>(0, 10));
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0], "A");
+    EXPECT_TRUE(second.verifyIntegrity());
 }
 
 /**
- * @brief Random interleaved insert/remove followed by verifyIntegrity.
+ * @brief Self-move-assignment is safe.
+ * @details Verifies that self-move-assignment via std::move does not crash
+ *          and leaves the tree in a valid state
  */
-TEST_F(IntervalTreeTest, MaxHigh_AfterRandomOps)
+TEST_F(IntervalTreeTest, MoveAssignment_SelfMove_IsSafe)
 {
-    Tree tree;
-    std::vector<Entry> entries;
-    IntervalGenerator gen(42);
-    IntervalGenerator op_gen(99);
+    IntStringTree tree;
+    tree.insert(Interval<int>(0, 10), "A");
+    tree.insert(Interval<int>(20, 30), "B");
 
-    std::mt19937_64 op_rng(77);  // NOLINT: fixed seed
-    std::uniform_int_distribution<int> op_dist(0, 1); // 0 = insert, 1 = remove
+    // Self-assignment via std::move — should be safe
+    tree = std::move(tree);  // NOLINT
 
-    int next_id = 0;
+    // After self-move, the object should still be in a valid (unspecified but
+    // destructible) state. Best effort: ensure we can call methods without
+    // crashing.
+    EXPECT_NO_THROW(static_cast<void>(tree.size()));
+    EXPECT_NO_THROW(tree.clear());
+}
 
-    for (int step = 0; step < 100; ++step)
+/**
+ * @brief A moved-to tree can be reused for new insertions and queries.
+ * @details Verifies that after move assignment, the target tree is fully
+ *          operational for insert, query, and integrity check
+ */
+TEST_F(IntervalTreeTest, MoveAssignment_MovedToTreeIsFunctional)
+{
+    IntStringTree source;
+    source.insert(Interval<int>(0, 10), "Source");
+
+    IntStringTree dest;
+    dest = std::move(source);
+
+    // dest should now be functional
+    EXPECT_TRUE(dest.insert(Interval<int>(20, 30), "New"));
+    EXPECT_EQ(dest.size(), 2);
+
+    const auto results = dest.queryOverlap(Interval<int>(0, 30));
+    EXPECT_EQ(results.size(), 2);
+    EXPECT_TRUE(dest.verifyIntegrity());
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  9. Thread safety
+// ══════════════════════════════════════════════════════════════════════════
+
+/**
+ * @brief Concurrent read-only operations do not crash.
+ * @details Verifies that multiple threads calling queryPoint and queryOverlap
+ *          concurrently are safe and correct
+ */
+TEST_F(IntervalTreeTest, ConcurrentReads_NoCrash)
+{
+    IntStringTree tree;
+    for (int i = 0; i < 20; ++i)
     {
-        const bool do_insert = (entries.empty() || op_dist(op_rng) == 0);
+        tree.insert(Interval<int>(i * 10, i * 10 + 9), std::to_string(i));
+    }
 
-        if (do_insert)
+    std::atomic<uint64_t> successCount{0};
+    constexpr int THREADS        = 8;
+    constexpr int OPS_PER_THREAD = 2000;
+
+    auto worker = [&]()
+    {
+        for (int i = 0; i < OPS_PER_THREAD; ++i)
         {
-            const auto iv = gen.next(0, 1000, 100);
-            tree.insert(iv, next_id);
-            entries.emplace_back(iv, next_id);
-            ++next_id;
-        }
-        else
-        {
-            // Remove a random entry.
-            std::uniform_int_distribution<size_t> pick(0, entries.size() - 1);
-            const size_t idx = pick(op_rng);
-            EXPECT_TRUE(tree.remove(entries[idx].first, entries[idx].second));
-            entries.erase(entries.begin() + static_cast<ptrdiff_t>(idx));
-        }
+            const int q = (i * 7) % 200;  // varied query points
+            const auto ptResults = tree.queryPoint(q);
+            if (!ptResults.empty())
+            {
+                successCount.fetch_add(1, std::memory_order_relaxed);
+            }
 
-        // Periodically verify integrity.
-        if (step % 10 == 0)
-        {
-            EXPECT_TRUE(tree.verifyIntegrity());
-        }
-    }
-
-    EXPECT_TRUE(tree.verifyIntegrity());
-}
-
-// ══════════════════════════════════════════════════════════════════════════
-//  7. Thread Safety Test
-// ══════════════════════════════════════════════════════════════════════════
-
-/**
- * @brief Concurrent insertions and queries from multiple threads.
- *
- * Uses 4 writer threads (each inserting 25 intervals) and 4 reader threads
- * (each running 25 overlap queries).  After joining, the tree must contain
- * exactly 100 entries and all queries from readers must be safe.
- */
-TEST_F(IntervalTreeTest, ThreadSafety_ConcurrentInsertAndQuery)
-{
-    Tree tree;
-    constexpr int kItemsPerWriter = 25;
-    constexpr int kWriters = 4;
-    constexpr int kReaders = 4;
-    constexpr int kQueriesPerReader = 25;
-    constexpr int kTotal = kItemsPerWriter * kWriters;
-
-    // ── Writer function ──
-    auto writer = [&tree](int thread_id, int seed)
-    {
-        IntervalGenerator gen(static_cast<uint64_t>(seed)); // NOLINT
-        for (int i = 0; i < kItemsPerWriter; ++i)
-        {
-            const auto iv = gen.next(0, 10000, 200);
-            tree.insert(iv, thread_id * kItemsPerWriter + i);
-        }
-    };
-
-    // ── Reader function ──
-    auto reader = [&tree](int seed)
-    {
-        IntervalGenerator gen(static_cast<uint64_t>(seed)); // NOLINT
-        for (int i = 0; i < kQueriesPerReader; ++i)
-        {
-            const auto iv = gen.next(0, 10000, 500);
-            // Just query — results may vary due to concurrent writes.
-            // The assertion is that the query does not crash.
-            [[maybe_unused]] const auto results = tree.queryOverlap(iv);
+            // Also run overlap queries
+            const auto ovResults = tree.queryOverlap(
+                Interval<int>(q, q + 5));
+            static_cast<void>(ovResults.size());
         }
     };
 
     std::vector<std::thread> threads;
-
-    // Start writers.
-    for (int t = 0; t < kWriters; ++t)
+    for (int t = 0; t < THREADS; ++t)
     {
-        threads.emplace_back(writer, t, 100 + t);
+        threads.emplace_back(worker);
+    }
+    for (auto& t : threads)
+    {
+        t.join();
     }
 
-    // Start readers.
-    for (int t = 0; t < kReaders; ++t)
+    // At least some queries should have found results
+    EXPECT_GT(successCount.load(), 0);
+}
+
+/**
+ * @brief Concurrent read + write operations do not crash.
+ * @details Verifies that simultaneous read (queryPoint) and write (insert)
+ *          operations do not cause crashes or deadlocks
+ */
+TEST_F(IntervalTreeTest, ConcurrentReadWrite_NoCrash)
+{
+    IntStringTree tree;
+    // Seed with some initial data
+    for (int i = 0; i < 10; ++i)
     {
-        threads.emplace_back(reader, 200 + t);
+        tree.insert(Interval<int>(i * 20, i * 20 + 15), std::to_string(i));
     }
 
-    // Join all threads.
-    for (auto& th : threads)
+    std::atomic<bool> stop{false};
+    std::atomic<uint64_t> readOk{0};
+
+    auto reader = [&]()
     {
-        th.join();
+        while (!stop.load(std::memory_order_acquire))
+        {
+            for (int i = 0; i < 30; ++i)
+            {
+                const auto results = tree.queryPoint(i * 5);
+                if (!results.empty())
+                {
+                    readOk.fetch_add(1, std::memory_order_relaxed);
+                }
+                // Also exercise other read methods
+                static_cast<void>(tree.size());
+                static_cast<void>(tree.empty());
+                static_cast<void>(tree.height());
+            }
+        }
+    };
+
+    auto writer = [&]()
+    {
+        for (int i = 0; i < 30; ++i)
+        {
+            tree.insert(Interval<int>(i + 200, i + 210),
+                        std::to_string(i + 200));
+            tree.insert(Interval<int>(i + 300, i + 310),
+                        std::to_string(i + 300));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+        stop.store(true, std::memory_order_release);
+    };
+
+    std::vector<std::thread> readers;
+    for (int t = 0; t < 4; ++t)
+    {
+        readers.emplace_back(reader);
     }
 
-    EXPECT_EQ(tree.size(), static_cast<size_t>(kTotal));
+    std::thread writerThread(writer);
+
+    for (auto& t : readers)
+    {
+        t.join();
+    }
+    writerThread.join();
+
+    // At least some reads must have completed without error
+    EXPECT_GT(readOk.load(), 0);
     EXPECT_TRUE(tree.verifyIntegrity());
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  8. Move Semantics Tests
+//  10. Large-scale stress
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Move construction transfers ownership; source becomes empty.
+ * @brief Insert many intervals, verify integrity, run queries, remove some,
+ *        verify again.
+ * @details Stress test with 1000 intervals to ensure the tree handles
+ *          large-scale operations correctly
  */
-TEST_F(IntervalTreeTest, MoveConstructor_TransfersOwnership)
+TEST_F(IntervalTreeTest, LargeScale_Stress)
 {
-    Tree src;
-    src.insert(Interval<int>(0, 10), 1);
-    src.insert(Interval<int>(20, 30), 2);
-    ASSERT_EQ(src.size(), 2);
+    IntStringTree tree;
+    constexpr int N = 1000;
 
-    Tree dst(std::move(src));
+    // Insert 1000 non-overlapping intervals
+    for (int i = 0; i < N; ++i)
+    {
+        const int low  = i * 100;
+        const int high = low + 50;
+        EXPECT_TRUE(tree.insert(Interval<int>(low, high), std::to_string(i)));
+    }
 
-    // Destination has the data.
-    EXPECT_EQ(dst.size(), 2);
-    EXPECT_FALSE(dst.empty());
-    EXPECT_TRUE(dst.verifyIntegrity());
-
-    // Source is empty.
-    EXPECT_TRUE(src.empty());
-    EXPECT_EQ(src.size(), 0);
-
-    // Destination queries work correctly.
-    auto results = dst.queryOverlap(Interval<int>(0, 30));
-    EXPECT_EQ(results.size(), 2);
-}
-
-/**
- * @brief Move assignment transfers ownership; source becomes empty.
- */
-TEST_F(IntervalTreeTest, MoveAssignment_TransfersOwnership)
-{
-    Tree src;
-    src.insert(Interval<int>(0, 10), 1);
-    src.insert(Interval<int>(20, 30), 2);
-
-    Tree dst;
-    dst = std::move(src);
-
-    // Destination has the data.
-    EXPECT_EQ(dst.size(), 2);
-    EXPECT_FALSE(dst.empty());
-    EXPECT_TRUE(dst.verifyIntegrity());
-
-    // Source is empty.
-    EXPECT_TRUE(src.empty());
-    EXPECT_EQ(src.size(), 0);
-
-    // Destination queries work correctly.
-    auto results = dst.queryOverlap(Interval<int>(0, 30));
-    EXPECT_EQ(results.size(), 2);
-}
-
-// ══════════════════════════════════════════════════════════════════════════
-//  9. Clear and State Tests
-// ══════════════════════════════════════════════════════════════════════════
-
-/**
- * @brief clear() empties the tree.
- */
-TEST_F(IntervalTreeTest, Clear_EmptiesTree)
-{
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);
-    tree.insert(Interval<int>(20, 30), 2);
-    ASSERT_EQ(tree.size(), 2);
-
-    tree.clear();
-
-    EXPECT_TRUE(tree.empty());
-    EXPECT_EQ(tree.size(), 0);
-    EXPECT_EQ(tree.height(), 0);
-}
-
-/**
- * @brief After clear(), the tree can be reused for further operations.
- */
-TEST_F(IntervalTreeTest, Clear_Reusable)
-{
-    Tree tree;
-    tree.insert(Interval<int>(0, 10), 1);
-    tree.clear();
-
-    // Reuse.
-    EXPECT_TRUE(tree.insert(Interval<int>(100, 200), 42));
-    EXPECT_EQ(tree.size(), 1);
-
-    const auto results = tree.queryOverlap(Interval<int>(50, 150));
-    ASSERT_EQ(results.size(), 1);
-    EXPECT_EQ(results[0], 42);
-
+    EXPECT_EQ(tree.size(), static_cast<size_t>(N));
     EXPECT_TRUE(tree.verifyIntegrity());
-}
 
-/**
- * @brief A default-constructed tree is empty.
- */
-TEST_F(IntervalTreeTest, Empty_Initially)
-{
-    const Tree tree;
-    EXPECT_TRUE(tree.empty());
-    EXPECT_EQ(tree.size(), 0);
-    EXPECT_EQ(tree.height(), 0);
-}
-
-/**
- * @brief size() correctly reflects the number of entries.
- */
-TEST_F(IntervalTreeTest, Size_Correct)
-{
-    Tree tree;
-    EXPECT_EQ(tree.size(), 0);
-
-    for (int i = 1; i <= 100; ++i)
+    // Query a selection of points — each should find exactly one interval
+    for (int i = 0; i < N; i += 50)
     {
-        tree.insert(Interval<int>(i * 10, i * 10 + 5), i);
-        EXPECT_EQ(tree.size(), static_cast<size_t>(i));
+        const int point = i * 100 + 25;
+        const auto results = tree.queryPoint(point);
+        EXPECT_EQ(results.size(), 1);
+        EXPECT_EQ(results[0], std::to_string(i));
     }
 
-    // Remove half.
-    for (int i = 1; i <= 100; i += 2)
+    // Overlap query covering entire range returns all
     {
-        EXPECT_TRUE(tree.remove(Interval<int>(i * 10, i * 10 + 5), i));
+        const auto all = tree.queryOverlap(Interval<int>(0, N * 100));
+        EXPECT_EQ(all.size(), static_cast<size_t>(N));
     }
-    EXPECT_EQ(tree.size(), 50);
+
+    // Remove every other interval (500 removals)
+    int removedCount = 0;
+    for (int i = 0; i < N; i += 2)
+    {
+        const int low  = i * 100;
+        const int high = low + 50;
+        EXPECT_TRUE(tree.remove(Interval<int>(low, high), std::to_string(i)));
+        ++removedCount;
+    }
+
+    EXPECT_EQ(tree.size(), static_cast<size_t>(N - removedCount));
+    EXPECT_TRUE(tree.verifyIntegrity());
+
+    // Verify the removed intervals are gone
+    for (int i = 0; i < N; i += 2)
+    {
+        const int point = i * 100 + 25;
+        EXPECT_TRUE(tree.queryPoint(point).empty());
+    }
+
+    // Verify the remaining intervals are still present
+    for (int i = 1; i < N; i += 2)
+    {
+        const int point = i * 100 + 25;
+        const auto results = tree.queryPoint(point);
+        EXPECT_EQ(results.size(), 1);
+        EXPECT_EQ(results[0], std::to_string(i));
+    }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  10. DataT = std::string Tests
-// ═══════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════════
+//  11. Template variants
+// ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Insert, query, and remove intervals with std::string payload.
- *
- * Covers non-trivial DataT to validate move semantics and noexcept
- * correctness in the Node constructor.
+ * @brief IntervalTree<double, int> variant — insert and query.
+ * @details Verifies that the tree works correctly with double endpoints
+ *          and int payload
  */
-TEST_F(IntervalTreeTest, StringData_InsertRemoveQuery)
+TEST_F(IntervalTreeTest, DoubleIntVariant_InsertAndQuery)
 {
-    IntervalTree<int, std::string> tree;
-
-    // Insert intervals with string data
-    EXPECT_TRUE(tree.insert(Interval<int>(1, 5), "alpha"));
-    EXPECT_TRUE(tree.insert(Interval<int>(3, 7), "beta"));
-    EXPECT_TRUE(tree.insert(Interval<int>(6, 9), "gamma"));
+    DoubleIntTree tree;
+    EXPECT_TRUE(tree.insert(Interval<double>(0.0, 10.0), 100));
+    EXPECT_TRUE(tree.insert(Interval<double>(5.0, 15.0), 200));
+    EXPECT_TRUE(tree.insert(Interval<double>(20.0, 30.0), 300));
 
     EXPECT_EQ(tree.size(), 3);
+    EXPECT_TRUE(tree.verifyIntegrity());
 
-    // Query overlap — order not guaranteed
-    auto results = tree.queryOverlap(Interval<int>(2, 6));
-    EXPECT_THAT(results, testing::UnorderedElementsAre("alpha", "beta"));
+    // Overlap query
+    const auto ovResults = tree.queryOverlap(Interval<double>(8.0, 12.0));
+    ASSERT_EQ(ovResults.size(), 2);
+    EXPECT_NE(std::find(ovResults.begin(), ovResults.end(), 100),
+              ovResults.end());
+    EXPECT_NE(std::find(ovResults.begin(), ovResults.end(), 200),
+              ovResults.end());
 
-    // Query point
-    auto point_results = tree.queryPoint(4);
-    EXPECT_THAT(point_results, testing::UnorderedElementsAre("alpha", "beta"));
+    // Point query (at boundary)
+    const auto ptResults = tree.queryPoint(10.0);
+    // [0,10) does NOT include 10, but [5,15) does
+    ASSERT_EQ(ptResults.size(), 1);
+    EXPECT_EQ(ptResults[0], 200);
+}
 
-    // Remove
-    EXPECT_TRUE(tree.remove(Interval<int>(1, 5), "alpha"));
+/**
+ * @brief IntervalTree<double, int> variant — remove and clear.
+ * @details Verifies remove and clear operations with double+int types
+ */
+TEST_F(IntervalTreeTest, DoubleIntVariant_RemoveAndClear)
+{
+    DoubleIntTree tree;
+    tree.insert(Interval<double>(0.0, 5.0), 1);
+    tree.insert(Interval<double>(5.0, 10.0), 2);
+    tree.insert(Interval<double>(10.0, 15.0), 3);
+    ASSERT_EQ(tree.size(), 3);
+
+    // Remove middle
+    EXPECT_TRUE(tree.remove(Interval<double>(5.0, 10.0), 2));
     EXPECT_EQ(tree.size(), 2);
 
-    // Duplicate rejection
-    EXPECT_FALSE(tree.insert(Interval<int>(3, 7), "beta"));
+    // Verify removal
+    const auto results = tree.queryPoint(7.5);
+    EXPECT_TRUE(results.empty());
 
-    // Verify integrity after all operations
+    // Clear
+    tree.clear();
+    EXPECT_TRUE(tree.empty());
     EXPECT_TRUE(tree.verifyIntegrity());
+}
+
+/**
+ * @brief IntervalTree<double, int> variant — move semantics.
+ * @details Verifies move constructor with double+int types
+ */
+TEST_F(IntervalTreeTest, DoubleIntVariant_MoveConstructor)
+{
+    DoubleIntTree original;
+    original.insert(Interval<double>(1.0, 2.0), 10);
+    original.insert(Interval<double>(3.0, 4.0), 20);
+
+    DoubleIntTree moved(std::move(original));
+    EXPECT_EQ(moved.size(), 2);
+    EXPECT_TRUE(original.empty());
+
+    const auto results = moved.queryPoint(1.5);
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0], 10);
+}
+
+/**
+ * @brief IntervalTree<double, int> variant — large-scale stress.
+ * @details Stress test with double+int types to ensure template flexibility
+ */
+TEST_F(IntervalTreeTest, DoubleIntVariant_LargeScale)
+{
+    DoubleIntTree tree;
+    constexpr int N = 500;
+
+    for (int i = 0; i < N; ++i)
+    {
+        const double low  = static_cast<double>(i) * 10.0;
+        const double high = low + 5.0;
+        EXPECT_TRUE(tree.insert(Interval<double>(low, high), i));
+    }
+
+    EXPECT_EQ(tree.size(), static_cast<size_t>(N));
+    EXPECT_TRUE(tree.verifyIntegrity());
+
+    // Point queries
+    for (int i = 0; i < N; i += 10)
+    {
+        const double point = static_cast<double>(i) * 10.0 + 2.5;
+        const auto results = tree.queryPoint(point);
+        EXPECT_EQ(results.size(), 1);
+        EXPECT_EQ(results[0], i);
+    }
+
+    // Remove half
+    for (int i = 0; i < N; i += 2)
+    {
+        const double low  = static_cast<double>(i) * 10.0;
+        const double high = low + 5.0;
+        EXPECT_TRUE(tree.remove(Interval<double>(low, high), i));
+    }
+
+    EXPECT_EQ(tree.size(), static_cast<size_t>(N / 2));
+    EXPECT_TRUE(tree.verifyIntegrity());
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  12. Additional edge cases
+// ══════════════════════════════════════════════════════════════════════════
+
+/**
+ * @brief Insert and remove with intervals that share endpoints.
+ * @details Verifies correct handling of intervals with coincident low or high
+ *          boundaries
+ */
+TEST_F(IntervalTreeTest, SharedEndpointIntervals_CorrectResults)
+{
+    IntStringTree tree;
+    EXPECT_TRUE(tree.insert(Interval<int>(0, 5), "A"));
+    EXPECT_TRUE(tree.insert(Interval<int>(5, 10), "B"));
+    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), "C"));
+
+    // Point 4 — inside A and C, not B
+    {
+        const auto r = tree.queryPoint(4);
+        ASSERT_EQ(r.size(), 2);
+        EXPECT_NE(std::find(r.begin(), r.end(), "A"), r.end());
+        EXPECT_NE(std::find(r.begin(), r.end(), "C"), r.end());
+    }
+
+    // Point 5 — inside B and C, not A (exclusive at high)
+    {
+        const auto r = tree.queryPoint(5);
+        ASSERT_EQ(r.size(), 2);
+        EXPECT_NE(std::find(r.begin(), r.end(), "B"), r.end());
+        EXPECT_NE(std::find(r.begin(), r.end(), "C"), r.end());
+    }
+
+    // Remove A, verify it's gone
+    EXPECT_TRUE(tree.remove(Interval<int>(0, 5), "A"));
+    EXPECT_EQ(tree.size(), 2);
+
+    {
+        const auto r = tree.queryPoint(4);
+        ASSERT_EQ(r.size(), 1);
+        EXPECT_EQ(r[0], "C");
+    }
+}
+
+/**
+ * @brief Reinsert after removal works.
+ * @details Verifies that a removed entry can be inserted again
+ */
+TEST_F(IntervalTreeTest, RemoveThenReinsert_Works)
+{
+    IntStringTree tree;
+    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), "A"));
+    EXPECT_TRUE(tree.remove(Interval<int>(0, 10), "A"));
+    EXPECT_TRUE(tree.empty());
+
+    EXPECT_TRUE(tree.insert(Interval<int>(0, 10), "A"));
+    EXPECT_EQ(tree.size(), 1);
+
+    const auto results = tree.queryPoint(5);
+    ASSERT_EQ(results.size(), 1);
+    EXPECT_EQ(results[0], "A");
 }

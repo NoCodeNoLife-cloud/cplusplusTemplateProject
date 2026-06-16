@@ -31,7 +31,6 @@ set(CI_GTEST_INCLUDE_DIRS
 set(CI_GTEST_LIBS
     GTest::gtest
     GTest::gtest_main
-    GTest::gmock
     glog::glog
     yaml-cpp::yaml-cpp
     rapidjson
