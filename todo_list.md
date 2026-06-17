@@ -39,8 +39,8 @@
 
 - **用途：** 不可变 vector，`O(log n)` 更新，近乎 `O(1)` 索引
 - **场景：** 函数式编程范式、版本化数据
-- **新建目录：** `data_structure/persistent/`
-- **状态：** `[ ]` 未开始
+- **目录：** `data_structure/persistent/`
+- **状态：** `[x]` 已完成
 
 ### 6. HAMT (Hash Array Mapped Trie) — 哈希数组映射字典树
 
@@ -170,7 +170,6 @@
 
 ```
 data_structure/
-├── persistent/       ← 待新建（Persistent Vector、HAMT、Persistent List、Persistent DSU）
 └── array/            ← 待新建（Judy Array）
 ```
 
@@ -195,12 +194,14 @@ data_structure/
 ## 进度追踪
 
 ```
-P1: [          ] 0 / 3  (  0%)   ← 3 项待办
-P2: [          ] 0 / 10 (  0%)   ← 10 项待办
+P1: [          ] 0 / 2  (  0%)   ← 2 项待办
+P2: [#         ] 1 / 10 ( 10%)   ← 10 项待办
 P3: [          ] 0 / 10 (  0%)   ← 10 项待办
-总计: [          ] 0 / 23 (  0%)
+总计: [#         ] 1 / 22 (  5%)
 ```
 
 > **现状：** 4 项 P1 已完成（Sparse Table、Interval Tree、T-Digest、UnionSet with Rollback），
-> 剩余 **23 项**待实现：P1 3 项、P2 10 项、P3 10 项。
-> 重点方向：字符串索引（Suffix Array、SAM）、持久化结构（persistent/ 系列）、并发跳表。
+> 新增 1 项 P2 已完成（Persistent Vector / RRB-Tree），
+> 新增 1 项已完成（MinHash / 概率性 Jaccard 相似度估计），
+> 剩余 **21 项**待实现：P1 2 项、P2 9 项、P3 10 项。
+> 重点方向：字符串索引（Suffix Array、SAM）、持久化结构（Persistent List、Persistent DSU）、并发跳表。
