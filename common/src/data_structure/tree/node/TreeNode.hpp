@@ -19,7 +19,7 @@
 #include <memory>
 #include <utility>
 
-#include "data_structure/tree/TreeToolkit.hpp"
+#include "data_structure/tree/core/TreeToolkit.hpp"
 
 namespace common::data_structure::tree::node
 {
@@ -92,12 +92,12 @@ namespace common::data_structure::tree::node
     template <typename T>
     int32_t TreeNode<T>::height(const TreeNode<T>* node)
     {
-        return TreeToolkit::height(node);
+        return core::TreeToolkit::height(node);
     }
 
     template <typename T>
     size_t TreeNode<T>::size(const TreeNode<T>* node)
     {
-        return TreeToolkit::size(node);
+        return core::TreeToolkit::size(node);
     }
 }

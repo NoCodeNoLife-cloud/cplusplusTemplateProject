@@ -10,7 +10,6 @@
 
 #include "data_structure/tree/node/TreeNode.hpp"
 
-using namespace common::data_structure::tree;
 using namespace common::data_structure::tree::node;
 
 /**

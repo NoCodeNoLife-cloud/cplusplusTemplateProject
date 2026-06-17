@@ -17,8 +17,8 @@
 #include "data_structure/heap/Heap.hpp"
 #include "data_structure/union_find/UnionSet.hpp"
 #include "data_structure/list/SkipList.hpp"
-#include "data_structure/tree/RedBlackTree.hpp"
-#include "data_structure/tree/BinarySearchTree.hpp"
+#include "data_structure/tree/balanced/RedBlackTree.hpp"
+#include "data_structure/tree/core/BinarySearchTree.hpp"
 #include "data_structure/top_k/TopK.hpp"
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -113,7 +113,7 @@ static void BM_RedBlackTree_Insert(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::tree::RedBlackTree<int> rbt;
+        common::data_structure::tree::balanced::RedBlackTree<int> rbt;
         for (size_t i = 0; i < n; ++i)
         {
             rbt.insert(data[i]);
@@ -131,7 +131,7 @@ static void BM_RedBlackTree_Insert_Sorted(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::tree::RedBlackTree<int> rbt;
+        common::data_structure::tree::balanced::RedBlackTree<int> rbt;
         for (size_t i = 0; i < n; ++i)
         {
             rbt.insert(static_cast<int>(i));
@@ -154,7 +154,7 @@ static void BM_BST_Insert(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::tree::BinarySearchTree<int> bst;
+        common::data_structure::tree::core::BinarySearchTree<int> bst;
         for (size_t i = 0; i < n; ++i)
         {
             bst.insert(data[i]);
@@ -169,7 +169,7 @@ static void BM_BST_Find(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto data = generate_shuffled(n);
-    common::data_structure::tree::BinarySearchTree<int> bst;
+    common::data_structure::tree::core::BinarySearchTree<int> bst;
     for (const auto v : data) bst.insert(v);
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution dist(0, static_cast<int>(n - 1));
@@ -193,7 +193,7 @@ static void BM_BST_Remove(benchmark::State& state)
     {
         (void)_;
         state.PauseTiming();
-        common::data_structure::tree::BinarySearchTree<int> bst;
+        common::data_structure::tree::core::BinarySearchTree<int> bst;
         for (const auto v : data) bst.insert(v);
         state.ResumeTiming();
 

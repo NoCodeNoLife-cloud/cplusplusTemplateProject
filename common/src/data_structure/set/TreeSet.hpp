@@ -31,7 +31,7 @@
 #include <utility>
 #include <vector>
 
-#include "data_structure/tree/AVLTree.hpp"
+#include "data_structure/tree/balanced/AVLTree.hpp"
 #include "data_structure/tree/node/TreeNode.hpp"
 
 namespace common::data_structure
@@ -49,10 +49,10 @@ namespace common::data_structure
     /// Each element is stored in a dynamically allocated tree node.
     /// Insert/erase do not invalidate iterators to other elements.
     template <typename T>
-    class TreeSet : private tree::AVLTree<T>
+    class TreeSet : private tree::balanced::AVLTree<T>
     {
     private:
-        using Base = tree::AVLTree<T>;
+        using Base = tree::balanced::AVLTree<T>;
 
     public:
         using size_type = std::size_t;

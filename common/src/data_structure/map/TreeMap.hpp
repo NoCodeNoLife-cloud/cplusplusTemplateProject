@@ -34,7 +34,7 @@
 #include <utility>
 #include <vector>
 
-#include "data_structure/tree/AVLTree.hpp"
+#include "data_structure/tree/balanced/AVLTree.hpp"
 #include "data_structure/tree/node/TreeNode.hpp"
 
 namespace common::data_structure::map
@@ -91,11 +91,11 @@ namespace common::data_structure::map
     /// The tree is node-based (not contiguous), so insert/erase do not
     /// invalidate iterators to other elements.
     template <typename K, typename V, typename Compare = std::less<K>>
-    class TreeMap : private tree::AVLTree<detail::TreeMapEntry<K, V, Compare>>
+    class TreeMap : private tree::balanced::AVLTree<detail::TreeMapEntry<K, V, Compare>>
     {
     private:
         using Entry = detail::TreeMapEntry<K, V, Compare>;
-        using Base = tree::AVLTree<Entry>;
+        using Base = tree::balanced::AVLTree<Entry>;
 
     public:
         using key_type = K;
