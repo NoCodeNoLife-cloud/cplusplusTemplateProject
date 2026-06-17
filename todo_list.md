@@ -24,13 +24,6 @@
 - **目录：** `data_structure/concurrent/`（已有 TreiberStack、MichaelScottQueue、SeqLock）
 - **状态：** `[ ]` 未开始
 
-### 3. MinHash — 最小哈希
-
-- **用途：** 集合相似度估计，计算 Jaccard 相似度
-- **场景：** 近似去重、文本相似度检测
-- **目录：** `data_structure/probabilistic/`（已有 HyperLogLog、CountMinSketch、TDigest）
-- **状态：** `[ ]` 未开始
-
 ---
 
 ## P2 — 中优先级
