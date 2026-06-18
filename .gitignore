@@ -36,3 +36,6 @@ proto/generated/
 *.out
 *.app
 /.agentbridge/
+
+# OpenCode artifact 缓存
+.cache/
