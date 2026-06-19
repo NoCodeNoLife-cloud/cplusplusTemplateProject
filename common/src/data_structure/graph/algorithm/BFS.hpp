@@ -4,6 +4,10 @@
  * @details Provides BFS traversal and shortest path (in number of edges) computation.
  *          BFS explores the graph level by level, guaranteeing the shortest path
  *          in terms of edge count in unweighted graphs.
+ *
+ * @par Thread Safety
+ * This class provides only static methods and holds no internal state.
+ * It is safe to call concurrently on different input instances.
  */
 
 #pragma once

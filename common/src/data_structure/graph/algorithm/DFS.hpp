@@ -4,6 +4,10 @@
  * @details Provides DFS traversal (single-source and full graph), path finding,
  *          and visitor callback support. DFS explores as deep as possible along
  *          each branch before backtracking.
+ *
+ * @par Thread Safety
+ * This class provides only static methods and holds no internal state.
+ * It is safe to call concurrently on different input instances.
  */
 
 #pragma once

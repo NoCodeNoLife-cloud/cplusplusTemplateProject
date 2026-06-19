@@ -8,6 +8,10 @@
  *
  * @par Reference
  * Guibas & Sedgewick, "A Dichromatic Framework for Balanced Trees" (1978).
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

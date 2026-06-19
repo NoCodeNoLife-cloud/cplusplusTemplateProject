@@ -4,6 +4,10 @@
  * @details Computes single-source shortest paths in graphs with non-negative edge weights.
  *          Uses a priority queue (min-heap) for efficient extraction of the minimum-distance node.
  *          Does NOT handle negative edge weights — use BellmanFord for graphs with negative weights.
+ *
+ * @par Thread Safety
+ * This class provides only static methods and holds no internal state.
+ * It is safe to call concurrently on different input instances.
  */
 
 #pragma once

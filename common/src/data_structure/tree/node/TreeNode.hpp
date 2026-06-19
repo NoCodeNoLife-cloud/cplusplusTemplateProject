@@ -10,6 +10,10 @@
  * @par Ownership
  * Nodes own their left and right subtrees via std::unique_ptr, ensuring
  * automatic memory reclamation on node destruction.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

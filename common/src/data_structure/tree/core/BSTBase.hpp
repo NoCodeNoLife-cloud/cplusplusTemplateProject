@@ -4,6 +4,10 @@
  * @details Provides shared insert/remove/find/findValue logic for BST and AVL.
  *          Derived classes override postInsert() / postRemove() hooks to add
  *          rebalancing (AVL) or leave them as no-ops (plain BST).
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
  */
 
 #pragma once

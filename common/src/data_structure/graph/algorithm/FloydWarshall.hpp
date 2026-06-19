@@ -5,6 +5,10 @@
  *          Iteratively considers each node k as an intermediate point and checks whether
  *          the path i→k→j is shorter than the current i→j path.
  *          Time complexity: O(V³). Also detects negative-weight cycles.
+ *
+ * @par Thread Safety
+ * This class provides only static methods and holds no internal state.
+ * It is safe to call concurrently on different input instances.
  */
 
 #pragma once

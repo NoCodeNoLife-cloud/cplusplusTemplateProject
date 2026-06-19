@@ -6,6 +6,10 @@
  *          ring maps keys to nodes in a way that minimises re-mapping when nodes
  *          are added or removed, making it ideal for distributed caching, load
  *          balancing, and sharding.
+ *
+ * @par Thread Safety
+ * Implementations must document their own thread-safety guarantees.
+ * Unless specified otherwise, implementations are not thread-safe.
  */
 
 #pragma once

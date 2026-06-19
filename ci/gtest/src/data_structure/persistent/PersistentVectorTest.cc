@@ -15,11 +15,14 @@
 
 #include <gtest/gtest.h>
 
+#include <atomic>
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <random>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include "data_structure/persistent/PersistentVector.hpp"
@@ -3034,4 +3037,449 @@ TEST_F(PersistentVectorTest, PersistentInvariant_VersionsNeverChange)
     EXPECT_EQ(snapshots[4]->size(), 2u);
     EXPECT_EQ(snapshots[4]->get(0), 99);
     EXPECT_EQ(snapshots[4]->get(1), 20);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  Thread Safety / Concurrent Access
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// @brief Spin barrier: N threads spin until a shared flag goes true.
+///        Maximises the chance of true concurrent execution.
+class SpinBarrier
+{
+public:
+    explicit SpinBarrier(int num_threads)
+        : num_threads_(num_threads)
+        , ready_{0}
+        , go_{false}
+    {
+    }
+
+    /// @brief Register this thread and wait for the go signal.
+    void arrive_and_wait()
+    {
+        ready_.fetch_add(1, std::memory_order_release);
+        while (!go_.load(std::memory_order_acquire))
+        {
+            std::this_thread::yield();
+        }
+    }
+
+    /// @brief Release all waiting threads.
+    void release()
+    {
+        while (ready_.load(std::memory_order_acquire) < num_threads_)
+        {
+            std::this_thread::yield();
+        }
+        go_.store(true, std::memory_order_release);
+    }
+
+private:
+    int              num_threads_;
+    std::atomic<int> ready_;
+    std::atomic<bool> go_;
+};
+
+/// @brief Number of threads used in concurrent tests.
+constexpr int CONCUR_NUM_THREADS = 8;
+
+/// @brief Number of elements pre-inserted for read-only tests.
+constexpr int CONCUR_PRE_INSERT = 1000;
+
+// ── Test 1: Concurrent read-only ──
+
+/**
+ * @brief Multiple threads read from a shared immutable vector concurrently.
+ * @details Pre-populate a PersistentVector with 1000 elements, then 8 threads
+ *          each perform 2000 random get() calls.  Since the vector is immutable,
+ *          all reads can proceed without synchronisation.  No thread should
+ *          observe a wrong value or trigger a data race (verified by ASan/TSan).
+ */
+TEST_F(PersistentVectorTest, ConcurrentRead_SharedImmutable_NoDataRace)
+{
+    constexpr int LOOKUPS_PER_THREAD = 2000;
+
+    // Build the shared vector: v[i] = i * 3
+    auto base = PersistentVector<int>();
+    for (int i = 0; i < CONCUR_PRE_INSERT; ++i)
+    {
+        base = base.push_back(i * 3);
+    }
+    ASSERT_EQ(base.size(), static_cast<std::size_t>(CONCUR_PRE_INSERT));
+
+    std::atomic<bool>       fail{false};
+    SpinBarrier             barrier(CONCUR_NUM_THREADS);
+    std::vector<std::thread> threads;
+
+    for (int t = 0; t < CONCUR_NUM_THREADS; ++t)
+    {
+        threads.emplace_back([&, t]() {
+            // NOLINTNEXTLINE: fixed seed for determinism
+            std::mt19937 rng(static_cast<unsigned int>(t) + 42);
+            barrier.arrive_and_wait();
+
+            for (int i = 0; i < LOOKUPS_PER_THREAD; ++i)
+            {
+                const int  idx      = static_cast<int>(rng() % CONCUR_PRE_INSERT);
+                const int  expected = idx * 3;
+                if (base.get(static_cast<std::size_t>(idx)) != expected)
+                {
+                    fail.store(true, std::memory_order_relaxed);
+                    return;
+                }
+            }
+        });
+    }
+
+    barrier.release();
+    for (auto& th : threads)
+    {
+        th.join();
+    }
+
+    EXPECT_FALSE(fail.load()) << "A thread observed an incorrect value from the shared vector";
+}
+
+// ── Test 2: Multiple threads sharing the same immutable instance ──
+
+/**
+ * @brief Multiple threads simultaneously access size(), empty(), and get()
+ *        on the same immutable vector instance.
+ * @details Verifies that size/empty queries and random element access from
+ *          the same immutable vector are consistent under concurrent access.
+ *          Each thread performs 1000 iterations of { size, empty, get }.
+ */
+TEST_F(PersistentVectorTest, ConcurrentRead_SizeEmptyGet_Consistent)
+{
+    constexpr std::size_t NUM_ELEMS          = 500;
+    constexpr int         CHECKS_PER_THREAD  = 1000;
+
+    auto v = PersistentVector<int>();
+    for (std::size_t i = 0; i < NUM_ELEMS; ++i)
+    {
+        v = v.push_back(static_cast<int>(i) * 2);
+    }
+    ASSERT_EQ(v.size(), NUM_ELEMS);
+    ASSERT_FALSE(v.empty());
+
+    std::atomic<bool>       fail{false};
+    SpinBarrier             barrier(CONCUR_NUM_THREADS);
+    std::vector<std::thread> threads;
+
+    for (int t = 0; t < CONCUR_NUM_THREADS; ++t)
+    {
+        threads.emplace_back([&, t]() {
+            // NOLINTNEXTLINE: fixed seed for determinism
+            std::mt19937 rng(static_cast<unsigned int>(t) + 99);
+            barrier.arrive_and_wait();
+
+            for (int i = 0; i < CHECKS_PER_THREAD; ++i)
+            {
+                // size() must always be consistent
+                if (v.size() != NUM_ELEMS)
+                {
+                    fail.store(true, std::memory_order_relaxed);
+                    return;
+                }
+                // empty() must always be false (vector is non-empty)
+                if (v.empty())
+                {
+                    fail.store(true, std::memory_order_relaxed);
+                    return;
+                }
+                // Random get — every element must match the pattern v[i] = i * 2
+                const std::size_t idx      = rng() % NUM_ELEMS;
+                const int         expected = static_cast<int>(idx) * 2;
+                if (v.get(idx) != expected)
+                {
+                    fail.store(true, std::memory_order_relaxed);
+                    return;
+                }
+            }
+        });
+    }
+
+    barrier.release();
+    for (auto& th : threads)
+    {
+        th.join();
+    }
+
+    EXPECT_FALSE(fail.load()) << "Inconsistent size/empty/get observed across threads";
+}
+
+// ── Test 3: Multi-threaded version branching ──
+
+/**
+ * @brief Each thread creates its own branch from a shared base vector.
+ * @details Starting from the same base vector (50 elements), each thread
+ *          calls push_back to create an independent new version with 100
+ *          additional elements unique to that thread.  Verifies that:
+ *          - Each thread's version has the expected size and content.
+ *          - The original base vector is unaffected by all concurrent activity.
+ *          - Versions from different threads are independent.
+ */
+TEST_F(PersistentVectorTest, VersionBranching_MultipleThreads_IndependentVersions)
+{
+    constexpr int BASE_ELEMS       = 50;
+    constexpr int PUSH_PER_THREAD  = 100;
+
+    // Build the shared base: v[i] = i
+    auto base = PersistentVector<int>();
+    for (int i = 0; i < BASE_ELEMS; ++i)
+    {
+        base = base.push_back(i);
+    }
+    ASSERT_EQ(base.size(), static_cast<std::size_t>(BASE_ELEMS));
+
+    SpinBarrier                       barrier(CONCUR_NUM_THREADS);
+    std::vector<std::thread>          threads;
+    PersistentVector<int>             results[CONCUR_NUM_THREADS];
+
+    for (int t = 0; t < CONCUR_NUM_THREADS; ++t)
+    {
+        threads.emplace_back([&, t]() {
+            barrier.arrive_and_wait();
+
+            // Each thread gets its own branch by calling push_back on the shared base.
+            // This is safe: push_back is const and does not modify the base.
+            auto branch = base.push_back(t * 10000);
+
+            // Push additional elements unique to this thread.
+            for (int j = 1; j < PUSH_PER_THREAD; ++j)
+            {
+                branch = branch.push_back(t * 10000 + j);
+            }
+
+            // Store the result — each thread writes to a distinct slot.
+            results[t] = std::move(branch);
+        });
+    }
+
+    barrier.release();
+    for (auto& th : threads)
+    {
+        th.join();
+    }
+
+    // ── Verify the base vector is unchanged ──
+    EXPECT_EQ(base.size(), static_cast<std::size_t>(BASE_ELEMS));
+    for (int i = 0; i < BASE_ELEMS; ++i)
+    {
+        EXPECT_EQ(base.get(static_cast<std::size_t>(i)), i);
+    }
+
+    // ── Verify each thread's version has correct content ──
+    for (int t = 0; t < CONCUR_NUM_THREADS; ++t)
+    {
+        const auto expected_size = static_cast<std::size_t>(BASE_ELEMS + PUSH_PER_THREAD);
+        EXPECT_EQ(results[t].size(), expected_size);
+
+        // First BASE_ELEMS elements should match the base.
+        for (int i = 0; i < BASE_ELEMS; ++i)
+        {
+            EXPECT_EQ(results[t].get(static_cast<std::size_t>(i)), i);
+        }
+
+        // The additional PUSH_PER_THREAD elements are thread-unique.
+        for (int j = 0; j < PUSH_PER_THREAD; ++j)
+        {
+            const auto idx  = static_cast<std::size_t>(BASE_ELEMS + j);
+            const int  expected = t * 10000 + j;
+            EXPECT_EQ(results[t].get(idx), expected);
+        }
+    }
+}
+
+// ── Test 4: Multi-threaded structural sharing verification ──
+
+/**
+ * @brief Multiple threads create updated versions from a large shared vector.
+ * @details Create a large vector v0 (10000 elements).  Each of 8 threads
+ *          independently creates modified versions using push_back, update,
+ *          and pop_back.  Verifies that:
+ *          - v0 is unchanged after all threads finish.
+ *          - Each thread's version has correct content reflecting its edits.
+ *          - Structural sharing (via shared_ptr) does not cause data races.
+ */
+TEST_F(PersistentVectorTest, StructuralSharing_ConcurrentUpdates_AllVersionsAccessible)
+{
+    constexpr std::size_t LARGE_SIZE = 10000;
+
+    // Build a large vector: v0[i] = static_cast<int>(i)
+    auto v0 = PersistentVector<int>();
+    for (std::size_t i = 0; i < LARGE_SIZE; ++i)
+    {
+        v0 = v0.push_back(static_cast<int>(i));
+    }
+    ASSERT_EQ(v0.size(), LARGE_SIZE);
+
+    SpinBarrier                       barrier(CONCUR_NUM_THREADS);
+    std::vector<std::thread>          threads;
+    PersistentVector<int>             results[CONCUR_NUM_THREADS];
+
+    for (int t = 0; t < CONCUR_NUM_THREADS; ++t)
+    {
+        threads.emplace_back([&, t]() {
+            barrier.arrive_and_wait();
+
+            // Thread t creates a modified version by:
+            //   - updating element at index t to 999999
+            //   - pushing back 5 new elements unique to this thread
+            //   - popping back the last element
+            auto ver = v0.update(static_cast<std::size_t>(t), 999999);
+
+            for (int j = 0; j < 5; ++j)
+            {
+                ver = ver.push_back(t * 1000 + j);
+            }
+
+            // pop_back — safe because we just pushed 5 elements
+            ver = ver.pop_back();
+
+            results[t] = std::move(ver);
+        });
+    }
+
+    barrier.release();
+    for (auto& th : threads)
+    {
+        th.join();
+    }
+
+    // ── v0 must remain unchanged ──
+    EXPECT_EQ(v0.size(), LARGE_SIZE);
+    for (std::size_t i = 0; i < LARGE_SIZE; ++i)
+    {
+        EXPECT_EQ(v0.get(i), static_cast<int>(i));
+    }
+
+    // ── Verify each thread's version ──
+    for (int t = 0; t < CONCUR_NUM_THREADS; ++t)
+    {
+        // Each version has size = LARGE_SIZE + 5 - 1 = LARGE_SIZE + 4
+        EXPECT_EQ(results[t].size(), LARGE_SIZE + 4);
+
+        // Element at index t was updated to 999999.
+        EXPECT_EQ(results[t].get(static_cast<std::size_t>(t)), 999999);
+
+        // All other original elements (i != t) must match v0.
+        for (std::size_t i = 0; i < LARGE_SIZE; ++i)
+        {
+            if (i != static_cast<std::size_t>(t))
+            {
+                EXPECT_EQ(results[t].get(i), static_cast<int>(i));
+            }
+        }
+
+        // The 4 appended elements (we pushed 5 then popped 1)
+        for (int j = 0; j < 4; ++j)
+        {
+            const auto idx  = LARGE_SIZE + static_cast<std::size_t>(j);
+            const int  expected = t * 1000 + j;
+            EXPECT_EQ(results[t].get(idx), expected);
+        }
+    }
+}
+
+// ── Test 5: Long-duration pressure test ──
+
+/**
+ * @brief Concurrent random reads and version creation under pressure.
+ * @details 8 threads each run for approximately 2 seconds, randomly choosing
+ *          between get (read from the shared base) and create_version
+ *          (push_back/update to spawn a new instance).  Verifies no crashes,
+ *          no deadlocks, and no data corruption.  Each thread uses a local
+ *          RNG with a fixed seed for determinism.
+ */
+TEST_F(PersistentVectorTest, PressureTest_RandomReadAndVersionCreate_NoCrash)
+{
+    constexpr std::size_t PRESSURE_SIZE = 500;
+    constexpr auto        TEST_DURATION = std::chrono::seconds(2);
+
+    // Build a shared vector.
+    auto base = PersistentVector<int>();
+    for (std::size_t i = 0; i < PRESSURE_SIZE; ++i)
+    {
+        base = base.push_back(static_cast<int>(i) * 10);
+    }
+    ASSERT_EQ(base.size(), PRESSURE_SIZE);
+
+    std::atomic<bool>                   stop{false};
+    std::atomic<std::uint64_t>          ops_done{0};
+    std::atomic<std::uint64_t>          errors{0};
+    std::vector<std::thread>            threads;
+
+    for (int t = 0; t < CONCUR_NUM_THREADS; ++t)
+    {
+        threads.emplace_back([&, t]() {
+            // NOLINTNEXTLINE: fixed seed for determinism
+            std::mt19937 rng(static_cast<unsigned int>(t) * 7777 + 1111);
+
+            // Each thread needs its own "current version" to avoid
+            // constantly creating from base (which is also fine but
+            // creates more allocation churn).  We start from base
+            // and chain modifications.
+            auto current = base.push_back(static_cast<int>(t) * 100000);
+
+            while (!stop.load(std::memory_order_relaxed))
+            {
+                const int op = static_cast<int>(rng() % 3);
+
+                switch (op)
+                {
+                case 0: // get — read from the shared base
+                {
+                    const std::size_t idx = rng() % PRESSURE_SIZE;
+                    const int expected = static_cast<int>(idx) * 10;
+                    if (base.get(idx) != expected)
+                    {
+                        errors.fetch_add(1, std::memory_order_relaxed);
+                    }
+                    break;
+                }
+                case 1: // push_back — create a new version
+                {
+                    const int val = static_cast<int>(rng() % 100000);
+                    current = current.push_back(val);
+                    break;
+                }
+                case 2: // update — modify an element in the local version
+                {
+                    if (current.size() > 0)
+                    {
+                        const std::size_t idx = rng() % current.size();
+                        const int val = static_cast<int>(rng() % 100000);
+                        current = current.update(idx, val);
+                    }
+                    break;
+                }
+                }
+                ops_done.fetch_add(1, std::memory_order_relaxed);
+            }
+        });
+    }
+
+    // Let the threads run for the test duration.
+    std::this_thread::sleep_for(TEST_DURATION);
+
+    stop.store(true, std::memory_order_relaxed);
+    for (auto& th : threads)
+    {
+        th.join();
+    }
+
+    // At least some operations completed.
+    EXPECT_GT(ops_done.load(), 0u);
+
+    // No errors detected.
+    EXPECT_EQ(errors.load(), 0u) << "Data corruption detected during concurrent access";
+
+    // The base vector must still be intact.
+    EXPECT_EQ(base.size(), PRESSURE_SIZE);
+    for (std::size_t i = 0; i < PRESSURE_SIZE; ++i)
+    {
+        EXPECT_EQ(base.get(i), static_cast<int>(i) * 10);
+    }
 }

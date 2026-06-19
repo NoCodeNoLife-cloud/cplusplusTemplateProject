@@ -5,6 +5,10 @@
  *          negative edge weights. Also detects negative-weight cycles.
  *          Uses edge relaxation repeated V-1 times, with an extra V-th pass
  *          to detect negative cycles. Time complexity: O(VE).
+ *
+ * @par Thread Safety
+ * This class provides only static methods and holds no internal state.
+ * It is safe to call concurrently on different input instances.
  */
 
 #pragma once
