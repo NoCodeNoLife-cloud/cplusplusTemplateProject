@@ -5,7 +5,10 @@
  *          or Windows (GetFileAttributesEx, CreateFile, ReadFile) APIs.
  */
 
-#include "filesystem/type/File.hpp"
+#include "filesystem/core/File.hpp"
+
+#include "filesystem/core/Path.hpp"
+#include "filesystem/core/Directory.hpp"
 
 #include <algorithm>
 #include <array>
@@ -28,7 +31,7 @@
 #include <windows.h>
 #endif
 
-namespace common::filesystem::type
+namespace common::filesystem::core
 {
     File::File(const std::string& path) : file_path_(path)
     {
@@ -511,4 +514,17 @@ namespace common::filesystem::type
 
         return oss.str();
     }
-}
+
+    // ── New methods ───────────────────────────────────────────────
+
+    auto File::toPath() const -> Path
+    {
+        return Path(file_path_);
+    }
+
+    auto File::getParentDirectory() const -> Directory
+    {
+        return Directory(file_path_.parent_path());
+    }
+
+}  // namespace common::filesystem::core

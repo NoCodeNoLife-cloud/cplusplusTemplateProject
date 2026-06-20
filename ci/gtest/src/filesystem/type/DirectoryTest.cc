@@ -12,9 +12,12 @@
 
 #include <gtest/gtest.h>
 
-#include "filesystem/type/Directory.hpp"
+#include "filesystem/core/Directory.hpp"
 
-using namespace common::filesystem::type;
+#include "filesystem/core/Path.hpp"
+#include "filesystem/core/File.hpp"
+
+using namespace common::filesystem::core;
 namespace fs = std::filesystem;
 
 class DirectoryTest : public testing::Test
@@ -521,7 +524,7 @@ TEST_F(DirectoryTest, RenameToSamePath)
     fs::create_directories(dirPath);
 
     const Directory d(dirPath);
-    EXPECT_NO_THROW(d.rename(dirPath.filename().string()));
+    EXPECT_NO_THROW(static_cast<void>(d.rename(dirPath.filename().string())));
     EXPECT_TRUE(fs::exists(dirPath));
 }
 
@@ -568,4 +571,63 @@ TEST_F(DirectoryTest, MoveToExistingLocation)
     const Directory src(srcPath);
     EXPECT_NO_THROW(static_cast<void>(src.move(dstPath)));
     EXPECT_FALSE(fs::exists(srcPath));
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Path Conversion & Listing (new methods)
+// ══════════════════════════════════════════════════════════════════════════
+
+/**
+ * @brief Test converting Directory to Path
+ * @details Verifies that toPath() returns a Path whose string matches the
+ *          directory path
+ */
+TEST_F(DirectoryTest, ToPath)
+{
+    const auto dirPath = tmpDir_ / "topath_dir";
+    fs::create_directories(dirPath);
+    const Directory d(dirPath);
+    const Path path = d.toPath();
+    EXPECT_EQ(path.string(), dirPath.string());
+}
+
+/**
+ * @brief Test listing only regular files in a directory
+ * @details Verifies that listFiles() returns File objects and excludes
+ *          subdirectory entries
+ */
+TEST_F(DirectoryTest, ListFiles)
+{
+    const auto dirPath = tmpDir_ / "listfiles_test";
+    fs::create_directories(dirPath);
+
+    // Create two regular files and one subdirectory
+    std::ofstream((dirPath / "a.txt").c_str()) << "content a";
+    std::ofstream((dirPath / "b.txt").c_str()) << "content b";
+    fs::create_directories(dirPath / "sub");
+
+    const Directory d(dirPath);
+    const auto files = d.listFiles(false);
+
+    // Should contain exactly the two files, not the subdirectory
+    EXPECT_EQ(files.size(), 2);
+    for (const auto& f : files)
+    {
+        EXPECT_TRUE(f.isFile());
+    }
+}
+
+/**
+ * @brief Test listFiles on an empty directory
+ * @details Verifies that listFiles() returns an empty vector when the
+ *          directory contains no files
+ */
+TEST_F(DirectoryTest, ListFilesEmptyDir)
+{
+    const auto dirPath = tmpDir_ / "empty_listfiles";
+    fs::create_directories(dirPath);
+
+    const Directory d(dirPath);
+    const auto files = d.listFiles(false);
+    EXPECT_TRUE(files.empty());
 }

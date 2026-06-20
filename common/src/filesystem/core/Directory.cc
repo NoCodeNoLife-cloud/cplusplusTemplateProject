@@ -5,7 +5,10 @@
  *          closedir) or Windows (FindFirstFile, FindNextFile) APIs.
  */
 
-#include "filesystem/type/Directory.hpp"
+#include "filesystem/core/Directory.hpp"
+
+#include "filesystem/core/Path.hpp"
+#include "filesystem/core/File.hpp"
 
 #include <chrono>
 #include <filesystem>
@@ -14,7 +17,7 @@
 
 #include <glog/logging.h>
 
-namespace common::filesystem::type
+namespace common::filesystem::core
 {
     Directory::Directory(std::filesystem::path filePath)
         : dir_path_(std::move(filePath))
@@ -277,4 +280,45 @@ namespace common::filesystem::type
     {
         return std::filesystem::current_path();
     }
-}
+
+    // ── New methods ───────────────────────────────────────────────
+
+    auto Directory::toPath() const -> Path
+    {
+        return Path(dir_path_);
+    }
+
+    auto Directory::listFiles(const bool recursive) const -> std::vector<File>
+    {
+        std::vector<File> files;
+        try
+        {
+            if (recursive)
+            {
+                for (const auto& entry : std::filesystem::recursive_directory_iterator(dir_path_))
+                {
+                    if (entry.is_regular_file())
+                    {
+                        files.emplace_back(entry.path());
+                    }
+                }
+            }
+            else
+            {
+                for (const auto& entry : std::filesystem::directory_iterator(dir_path_))
+                {
+                    if (entry.is_regular_file())
+                    {
+                        files.emplace_back(entry.path());
+                    }
+                }
+            }
+        }
+        catch (const std::exception& e)
+        {
+            LOG(WARNING) << "listFiles failed: " << e.what();
+        }
+        return files;
+    }
+
+}  // namespace common::filesystem::core

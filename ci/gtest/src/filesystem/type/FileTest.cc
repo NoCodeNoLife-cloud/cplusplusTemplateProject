@@ -12,9 +12,12 @@
 
 #include <gtest/gtest.h>
 
-#include "filesystem/type/File.hpp"
+#include "filesystem/core/File.hpp"
 
-using namespace common::filesystem::type;
+#include "filesystem/core/Directory.hpp"
+#include "filesystem/core/Path.hpp"
+
+using namespace common::filesystem::core;
 namespace fs = std::filesystem;
 
 class FileTest : public testing::Test
@@ -556,4 +559,48 @@ TEST_F(FileTest, PrintFilesWithDepthThrowsOnFile)
 TEST_F(FileTest, PrintFilesWithDepthThrowsOnNonExistent)
 {
     EXPECT_THROW(File::printFilesWithDepth(tmpDir_ / "ghost"), std::runtime_error);
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Path Conversion (new methods)
+// ══════════════════════════════════════════════════════════════════════════
+
+/**
+ * @brief Test converting File to Path
+ * @details Verifies that toPath() returns a Path whose string matches the File path
+ */
+TEST_F(FileTest, ToPath)
+{
+    const auto p = createFile("topath.txt");
+    const File f(p);
+    const Path path = f.toPath();
+    EXPECT_EQ(path.string(), p.string());
+}
+
+/**
+ * @brief Test getting parent directory from a File
+ * @details Verifies that getParentDirectory() returns a Directory object
+ *          representing the correct parent directory path
+ */
+TEST_F(FileTest, GetParentDirectory)
+{
+    const auto p = createFile("parent_dir_test.txt");
+    const File f(p);
+    const Directory parent = f.getParentDirectory();
+    EXPECT_TRUE(parent.exists());
+    EXPECT_TRUE(parent.isDirectory());
+}
+
+/**
+ * @brief Test round-trip conversion File → Path → File
+ * @details Verifies that converting a File to a Path and back via
+ *          toFile() preserves the original path
+ */
+TEST_F(FileTest, ToPathRoundTrip)
+{
+    const auto p = createFile("roundtrip.txt");
+    const File f(p);
+    const Path path = f.toPath();
+    const File roundTripped = path.toFile();
+    EXPECT_EQ(roundTripped.getPath(), f.getPath());
 }
