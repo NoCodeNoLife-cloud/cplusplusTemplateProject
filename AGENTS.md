@@ -1,4 +1,4 @@
-# AGENTS.md — cplusplus_project_template
+﻿# AGENTS.md — cplusplus_project_template
 
 A C++ project template for rapid program development (Apache 2.0).  
 Minimal README — the build files and code are the source of truth.
@@ -6,56 +6,75 @@ Minimal README — the build files and code are the source of truth.
 ## Project structure
 
 ```
-CMakeLists.txt              # Root: C++26, vcpkg, 15+ dependencies
+CMakeLists.txt              # Root: C++26, vcpkg, 14 third-party dependencies
 .clang-format               # Google-based, indent=4, ColumnLimit=600 (118 lines)
+.gitignore                  # 41 lines: builds, IDE, generated code, OpenCode cache
+.gitattributes              # Git attributes (LFS, merge strategies)
 ├── common/                 # Static lib `common_pkg` (192 .hpp + 106 .cc)
 │   └── src/
-│       ├── interface/      # 18 interfaces (ICache, IConfigurable NVI, ITask, IRunnable,
-│       │                   #   IReadable, IFlushable, IYamlSerializable, etc.) with
-│       │                   #   task/ io/ serialization/ subdirectories
-│       ├── toolkit/        # StringToolkit, ObjectFactory<T>, registry, etc. (10 .hpp + 4 .cc)
-│       ├── aop/            # AOP utilities (1 .hpp + 1 .cc)
+│       ├── interface/      # 18 interfaces with 3 subdirectories:
+│       │                   #   io/ (IAppendable, IBuffer, ICloseable, IFlushable, IReadable)
+│       │                   #   serialization/ (IBoostSerializable, IJsonSerializable, ISerializer,
+│       │                   #                 IYamlConfigurable, IYamlSerializable)
+│       │                   #   task/ (IApplicationExecutor, IRunnable, IStartupTask, ITask, ITimerTask)
+│       ├── toolkit/        # StringToolkit, ObjectFactory<T>, StackTraceExceptionHandler,
+│       │                   #   ArraysToolkit, ClassToolkit, EnumToolkit, IntegerToolkit,
+│       │                   #   RadixToolkit, RegexToolkit, StaticObjectWrapper (10 .hpp + 4 .cc)
+│       ├── aop/            # FunctionProfilerAspect (1 .hpp + 1 .cc)
 │       ├── time/           # Date, Clock, SimpleDateFormatter (3 .hpp + 3 .cc)
 │       ├── gen/            # UUID, Snowflake, Random generators (3 .hpp + 3 .cc)
 │       ├── data_structure/ # 85 .hpp + 30 .cc across 20 subdirectories:
 │       │                   #   base_type/, concurrent/, deque/, filter/, geometry/,
-│       │                   #   graph/ + algorithm/, hash/, heap/, list/, map/,
-│       │                   #   persistent/, probabilistic/, queue/, set/, spatial/,
-│       │                   #   stack/, string/, top_k/, tree/, union_find/
-│       ├── cache/          # Cache interface headers (2 .hpp)
-│       ├── buffer/         # Buffer utilities (7 .hpp + 7 .cc)
-│       ├── io/             # IO tools with reader/ and writer/ subdirs (25 .hpp + 24 .cc)
-│       ├── serialization/  # Serialization tools (2 .hpp + 1 .cc)
-│       ├── filesystem/     # Filesystem tools with core/ and type/ subdirs (6 .hpp + 6 .cc)
-│       ├── auth/           # Authentication module (4 .hpp + 4 .cc)
-│       ├── crypto/         # Crypto module with hash/ and cipher/ subdirs (12 .hpp + 11 .cc)
-│       ├── system/         # System utilities (3 .hpp + 3 .cc)
-│       ├── thread/         # Thread utilities (5 .hpp + 4 .cc)
-│       ├── sql/            # SQL tools with sqlite/ and mysql/ subdirs (3 .hpp + 3 .cc)
-│       └── rpc/            # RPC utilities (3 .hpp + 2 .cc)
+│       │                   #   graph/ + algorithm/ (12 algorithm pairs), hash/, heap/,
+│       │                   #   list/, map/, persistent/, probabilistic/, queue/, set/,
+│       │                   #   spatial/, stack/, string/, top_k/, tree/ (8 sub-subdirs:
+│       │                   #   balanced/, core/, crypto/, lsm/, multiway/, node/,
+│       │                   #   range/, spatial/), union_find/
+│       ├── cache/          # Header-only (2 .hpp)
+│       ├── buffer/         # ByteBuffer, CharBuffer, etc. (7 .hpp + 7 .cc)
+│       ├── io/             # Console + reader (14 .hpp + 14 .cc) + writer (10 .hpp + 9 .cc)
+│       ├── serialization/  # JsonObjectSerializer, YamlObjectSerializer (2 .hpp + 1 .cc)
+│       ├── filesystem/     # core/ (Directory, File, Path) + type/ (BmpImage, CsvFile, YamlToolkit) (6 .hpp + 6 .cc)
+│       ├── auth/           # AuthenticationException, PasswordPolicy, UserAuthenticator, UserCredentials (4 .hpp + 4 .cc)
+│       ├── crypto/         # CryptoToolKit, OpenSSLToolkit + cipher/ + hash/ (12 .hpp + 11 .cc)
+│       ├── system/         # FunctionProfiler, SystemInfo, SystemPerformanceMonitor (3 .hpp + 3 .cc)
+│       ├── thread/         # AutoJoinThread, ThreadPool, etc. (5 .hpp + 4 .cc)
+│       ├── sql/            # PasswordSQL + sqlite/ + mysql/ (3 .hpp + 3 .cc)
+│       └── rpc/            # GrpcConnectivityManager, RpcMetadata (3 .hpp + 2 .cc)
 ├── proto/                  # gRPC codegen lib `grpc_service`
 │   ├── src/RpcService.proto
-│   └── generated/          # Auto-generated (gitignored)
+│   └── generated/          # .pb.h, .pb.cc, .grpc.pb.h, .grpc.pb.cc (gitignored)
 ├── log/                    # glog wrapper lib `glog_service`
+│   └── src/
+│       ├── config/         # GLogConfigurator
+│       ├── formatter/      # PrefixFormatter
+│       └── param/          # GLogParam
 ├── client/                 # Executable `client_app`
-│   ├── src/config/application-dev.yml  # connects to localhost:50051
-│   └── src/config/ConfigParam.h        # .h suffix (only non-.hpp header in project)
+│   └── src/
+│       ├── main.cc
+│       ├── config/         # ConfigParam (.h suffix), ConfigParam.cc, application-dev.yml
+│       ├── auth/           # AuthRpcParam, AuthRpcService
+│       └── task/           # ClientTask
 ├── server/                 # Executable `server_app`
-│   └── src/config/application-dev.yml  # binds 0.0.0.0:50051
+│   └── src/
+│       ├── main.cc
+│       ├── config/         # ConfigParam (.hpp), ConfigParam.cc, application-dev.yml
+│       ├── auth/           # AuthRpcParam, AuthRpcService
+│       └── task/           # ServerTask
 ├── ci/
-│   ├── gtest/              # Per-directory test executables (ut_*), 180+ tests across 20 dirs
+│   ├── gtest/              # 20 dirs → 20 ut_* executables, ~180+ tests
 │   └── benchmark/          # Single `ci_benchmarks` executable, 6 source files
-├── runCfg/                 # IntelliJ run configuration XMLs (6 files)
-└── script/clean_work_space.py  # Removes cmake-build-* dirs
+├── runCfg/                 # IntelliJ run config XMLs (6 files)
+└── script/                 # clean_work_space.py (removes cmake-build-* dirs)
 ```
 
 ## Build
 
 ```powershell
-# Configure (vcpkg via $env:VCPKG_ROOT or explicit CMAKE_TOOLCHAIN_FILE)
+# Configure (prefers explicit CMAKE_TOOLCHAIN_FILE; falls back to $env:VCPKG_ROOT)
 cmake -S . -B build
 
-# Build all
+# Build all (default Debug; all targets)
 cmake --build build
 
 # Build specific target
@@ -64,7 +83,11 @@ cmake --build build --target client_app
 cmake --build build --target ci_benchmarks
 ```
 
-Default is `Debug`. MSVC gets `/utf-8` automatically. C++26.
+- **C++ standard**: C++26 (`CMAKE_CXX_STANDARD 26`)
+- **Build type**: Default Debug (auto-set if none specified); supports Release, MinSizeRel, RelWithDebInfo
+- **MSVC**: UTF-8 source/execution character set flags auto-added (`/utf-8` and friends)
+- **Toolchain**: vcpkg via `$env:VCPKG_ROOT` or explicit `CMAKE_TOOLCHAIN_FILE`
+- **Minimum CMake**: 3.30
 
 ## Tests
 
@@ -80,8 +103,12 @@ ctest --test-dir build -R "^ut_toolkit$" --extra-verbose
 ```
 
 Test executables are auto-discovered by directory under `ci/gtest/src/`.  
-Each directory → one `ut_<underscore_path>` executable (20 directories, 180+ tests).  
-Shared support sources (auth/config params) compile into every test exe — expect slower first build.
+20 directories → 20 `ut_<underscore_path>` executables:  
+`aop`, `auth`, `buffer`, `cache`, `client`, `crypto`, `data_structure`, `filesystem`,  
+`gen`, `interface`, `io`, `log`, `rpc`, `serialization`, `server`, `sql`, `system`,  
+`thread`, `time`, `toolkit`
+
+Each test exe compiles shared support sources (auth/config params from client/server) — expect slower first build. All tests runnable in parallel via `ctest -j N`.
 
 Benchmark sources (6 files) in `ci/benchmark/src/`:
 - `cache_benchmark.cc`, `crypto_benchmark.cc`, `data_structure_benchmark.cc`,
@@ -92,7 +119,7 @@ Benchmark sources (6 files) in `ci/benchmark/src/`:
 Only one proto: `proto/src/RpcService.proto` (AuthService: 6 RPCs).  
 Regenerate with `cmake --build build --target generate_proto`.  
 Requires `grpc_cpp_plugin` from vcpkg (`$env:VCPKG_ROOT/installed/x64-windows/tools/grpc/`).  
-Output goes to `proto/generated/` (gitignored; do not edit manually).
+Output goes to `proto/generated/` (4 files; gitignored; do not edit manually).
 
 ## Key conventions (non-default)
 
@@ -106,20 +133,41 @@ Output goes to `proto/generated/` (gitignored; do not edit manually).
 - **Cache hierarchy**: `ICache<Key, Value>` interface; `LRUCache` & `LFUCache` implementations.
 - **Thread safety**: ObjectFactory uses internal mutex (not thread-safe by default — check each class).
 - **Config**: YAML (`application-dev.yml`) loaded by `ConfigParam` singleton. Paths are relative to
-  the executable's working directory. `ConfigParam.h` uses `.h` suffix — the only non-`.hpp` header
-  in the project.
-- **glog**: All modules use glog. Both apps log to stderr with custom format by default.
-- **data_structure module**: Largest module in `common/` with ~85 header files and ~30 source files
-  across 20 subdirectories. Covers graph algorithms (BFS/DFS/Dijkstra/Kruskal/Prim/Bellman-Ford/
-  Tarjan/Floyd-Warshall), probabilistic data structures (BloomFilter, HyperLogLog, CountMinSketch,
-  TDigest, MinHash), spatial structures (RTree), persistent data structures, skip lists,
-  consistent hashing, union-find with rollback, Aho-Corasick string search, and more.
+  the executable's working directory. `client/src/config/ConfigParam.h` uses `.h` suffix — the only
+  non-`.hpp` header in the project.
+- **glog**: All modules use glog. Both apps log to stderr with custom format. The `glog_service` lib
+  wraps initialization (`GLogConfigurator`), prefix formatting (`PrefixFormatter`), and params (`GLogParam`).
+- **data_structure module**: Largest module in `common/` with ~85 .hpp and ~30 .cc files across 20
+  subdirectories. Covers graph algorithms (BFS, DFS, Dijkstra, KruskalMST, PrimMST, BellmanFord,
+  TarjanSCC, FloydWarshall, TopologicalSort, CycleDetection, BipartiteCheck, BridgesArticulation),
+  probabilistic data structures (BloomFilter, HyperLogLog, CountMinSketch, TDigest, MinHash),
+  spatial structures (RTree, KDTree, IntervalTree), persistent data structures (PersistentVector),
+  concurrent containers (MichaelScottQueue, TreiberStack, ConcurrentHashMap, SeqLock),
+  consistent hashing (ConsistentHash, CuckooHashMap, RobinHoodHashMap),
+  union-find with rollback (UnionSetWithRollback), Aho-Corasick string search,
+  and tree structures across 8 sub-subdirectories (AVL, RedBlack, Splay, Treap, B-Tree, B+Tree,
+  Trie, LSMTree, FenwickTree, SegmentTree, SparseTable, Quadtree, MerkleTree).
 
-## vcpkg dependencies
+## vcpkg dependencies (14)
 
-Boost serialization, glog, gtest, yaml-cpp, RapidJSON, OpenSSL, DirectXMath, Protobuf, gRPC, magic_enum, sqlite3, fmt, mysql-connector-cpp, benchmark.
+```
+Boost (serialization), glog, gtest, yaml-cpp, RapidJSON, OpenSSL, DirectXMath,
+Protobuf, gRPC, magic_enum, sqlite3, fmt, mysql-connector-cpp, benchmark
+```
 
+14 explicit `find_package` calls in root CMakeLists.txt, all managed through vcpkg.  
 Toolchain: set `$env:VCPKG_ROOT` or pass `-DCMAKE_TOOLCHAIN_FILE=...` on configure.
+
+## .gitignore highlights
+
+| Pattern | Purpose |
+|---|---|
+| `build/`, `cmake-build*` | CMake build output directories |
+| `proto/generated/` | Auto-generated gRPC stubs |
+| `.idea` | JetBrains IDE config |
+| `.cache/` | OpenCode artifact cache |
+| `/.agentbridge/` | OpenCode agent bridge |
+| `*.o`, `*.obj`, `*.lib`, `*.dll`, `*.exe` | Standard C/C++ build artifacts |
 
 ## OpenCode
 

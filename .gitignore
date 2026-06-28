@@ -35,7 +35,7 @@ proto/generated/
 *.exe
 *.out
 *.app
+# OpenCode artifacts (agentbridge, cache, workflow state)
 /.agentbridge/
-
-# OpenCode artifact 缓存
 .cache/
+artifact/
