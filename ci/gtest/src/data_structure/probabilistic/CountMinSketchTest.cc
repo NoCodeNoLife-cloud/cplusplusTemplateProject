@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/probabilistic/CountMinSketch.hpp"
+#include <cppforge/data_structure/probabilistic/CountMinSketch.hpp>
 
 #include <cstdint>
 #include <map>

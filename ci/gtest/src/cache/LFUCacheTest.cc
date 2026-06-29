@@ -8,7 +8,7 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "cache/LFUCache.hpp"
+#include <cppforge/cache/LFUCache.hpp>
 
 using namespace cppforge::cache;
 

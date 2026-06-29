@@ -11,7 +11,7 @@
 
 #include <gtest/gtest.h>
 
-#include "filesystem/type/CsvFile.hpp"
+#include <cppforge/filesystem/type/CsvFile.hpp>
 
 using namespace cppforge::filesystem::type;
 

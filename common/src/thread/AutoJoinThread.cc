@@ -5,7 +5,7 @@
  *          thread is joinable, ensuring clean thread lifecycle management.
  */
 
-#include "thread/AutoJoinThread.hpp"
+#include <cppforge/thread/AutoJoinThread.hpp>
 #include <thread>
 #include <utility>
 

@@ -7,7 +7,7 @@
  *          to another writer, and reset() clears for reuse.
  */
 
-#include "io/writer/CharArrayWriter.hpp"
+#include <cppforge/io/writer/CharArrayWriter.hpp>
 
 #include <stdexcept>
 

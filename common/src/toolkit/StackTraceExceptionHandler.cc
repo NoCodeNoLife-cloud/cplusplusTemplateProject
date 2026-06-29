@@ -7,7 +7,7 @@
  *          logging.
  */
 
-#include "toolkit/StackTraceExceptionHandler.hpp"
+#include <cppforge/toolkit/StackTraceExceptionHandler.hpp>
 
 #include <glog/logging.h>
 

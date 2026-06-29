@@ -7,7 +7,7 @@
 #include <sstream>
 #include <gtest/gtest.h>
 
-#include "interface/serialization/IBoostSerializable.hpp"
+#include <cppforge/interface/serialization/IBoostSerializable.hpp>
 
 using namespace cppforge::interface::serialization;
 

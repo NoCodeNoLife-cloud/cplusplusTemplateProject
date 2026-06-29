@@ -8,7 +8,7 @@
 #include <limits>
 #include <gtest/gtest.h>
 
-#include "toolkit/RadixToolkit.hpp"
+#include <cppforge/toolkit/RadixToolkit.hpp>
 
 using namespace cppforge::toolkit;
 

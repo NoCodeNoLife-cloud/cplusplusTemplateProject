@@ -13,7 +13,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "gen/RandomGenerator.hpp"
+#include <cppforge/gen/RandomGenerator.hpp>
 
 using namespace cppforge::gen;
 

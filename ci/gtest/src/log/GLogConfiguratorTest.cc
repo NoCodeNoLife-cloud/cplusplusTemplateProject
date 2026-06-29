@@ -9,8 +9,8 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
-#include "config/GLogConfigurator.hpp"
-#include "param/GLogParam.hpp"
+#include <cppforge/glog/config/GLogConfigurator.hpp>
+#include <cppforge/glog/param/GLogParam.hpp>
 
 using namespace cppforge::glog::config;
 

@@ -6,7 +6,7 @@
  *          and direct/array-backed buffer queries.
  */
 
-#include "buffer/ByteBuffer.hpp"
+#include <cppforge/buffer/ByteBuffer.hpp>
 
 #include <algorithm>
 #include <cstring>

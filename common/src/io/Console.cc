@@ -5,7 +5,7 @@
  *          carriage-return-based progress bar, and stdin/stdout interaction.
  */
 
-#include "io/Console.hpp"
+#include <cppforge/io/Console.hpp>
 
 namespace cppforge::io
 {

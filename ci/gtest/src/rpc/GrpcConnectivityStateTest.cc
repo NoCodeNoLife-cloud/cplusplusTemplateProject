@@ -11,7 +11,7 @@
 #include <gtest/gtest.h>
 #include <magic_enum/magic_enum.hpp>
 
-#include "rpc/GrpcConnectivityState.hpp"
+#include <cppforge/rpc/GrpcConnectivityState.hpp>
 
 using namespace cppforge::rpc;
 

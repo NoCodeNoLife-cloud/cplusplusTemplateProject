@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/io/ICloseable.hpp"
+#include <cppforge/interface/io/ICloseable.hpp>
 
 using namespace cppforge::interface::io;
 

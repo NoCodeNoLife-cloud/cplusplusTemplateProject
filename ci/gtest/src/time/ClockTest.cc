@@ -10,7 +10,7 @@
 #include <thread>
 #include <gtest/gtest.h>
 
-#include "time/Clock.hpp"
+#include <cppforge/time/Clock.hpp>
 
 using namespace cppforge::time;
 

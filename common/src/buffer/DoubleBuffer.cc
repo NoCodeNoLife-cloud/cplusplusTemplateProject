@@ -5,7 +5,7 @@
  *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
 
-#include "buffer/DoubleBuffer.hpp"
+#include <cppforge/buffer/DoubleBuffer.hpp>
 
 #include <algorithm>
 

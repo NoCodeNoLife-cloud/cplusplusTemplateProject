@@ -13,11 +13,11 @@
 #include <string_view>
 #include <unordered_map>
 #include <grpcpp/server_builder.h>
-#include <auth/AuthenticationException.hpp>
+#include <cppforge/auth/AuthenticationException.hpp>
 #include <generated/RpcService.grpc.pb.h>
 
 #include "auth/AuthRpcParam.hpp"
-#include "auth/UserAuthenticator.hpp"
+#include <cppforge/auth/UserAuthenticator.hpp>
 
 
 namespace server_app::auth

@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/IConfigurable.hpp"
+#include <cppforge/interface/IConfigurable.hpp>
 
 using namespace cppforge::interface::config;
 

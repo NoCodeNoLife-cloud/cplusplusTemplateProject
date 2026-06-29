@@ -6,7 +6,7 @@
  *          of number of edges for unweighted graphs.
  */
 
-#include "data_structure/graph/algorithm/BFS.hpp"
+#include <cppforge/data_structure/graph/algorithm/BFS.hpp>
 
 #include <vector>
 

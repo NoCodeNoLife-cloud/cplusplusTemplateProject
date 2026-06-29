@@ -11,8 +11,8 @@
 #include <string>
 
 #include "auth/AuthRpcService.hpp"
-#include "interface/task/ITask.hpp"
-#include "system/FunctionProfiler.hpp"
+#include <cppforge/interface/task/ITask.hpp>
+#include <cppforge/system/FunctionProfiler.hpp>
 
 namespace client_app::task
 {

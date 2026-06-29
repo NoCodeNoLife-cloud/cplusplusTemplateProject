@@ -16,7 +16,7 @@
 #include <random>      // std::mt19937
 #include <vector>
 
-#include "data_structure/tree/range/SparseTable.hpp"
+#include <cppforge/data_structure/tree/range/SparseTable.hpp>
 
 // ==================== Custom Merge Operations ====================
 

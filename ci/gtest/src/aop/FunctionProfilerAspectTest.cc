@@ -12,7 +12,7 @@
 #include <thread>
 #include <gtest/gtest.h>
 
-#include "aop/FunctionProfilerAspect.hpp"
+#include <cppforge/aop/FunctionProfilerAspect.hpp>
 
 using namespace cppforge::aop;
 

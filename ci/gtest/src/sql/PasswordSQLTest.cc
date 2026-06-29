@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "sql/PasswordSQL.hpp"
+#include <cppforge/sql/PasswordSQL.hpp>
 
 using namespace cppforge::sql;
 

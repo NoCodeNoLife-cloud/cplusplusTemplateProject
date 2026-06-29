@@ -6,7 +6,7 @@
  *          Subclasses override only the methods they need to transform.
  */
 
-#include "io/writer/AbstractFilterWriter.hpp"
+#include <cppforge/io/writer/AbstractFilterWriter.hpp>
 
 #include <stdexcept>
 

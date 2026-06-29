@@ -7,7 +7,7 @@
  *          buffered data is written out.
  */
 
-#include "io/writer/BufferedOutputStream.hpp"
+#include <cppforge/io/writer/BufferedOutputStream.hpp>
 
 #include <algorithm>
 #include <stdexcept>

@@ -7,7 +7,7 @@
  *          For undirected graphs, the immediate parent edge is excluded.
  */
 
-#include "data_structure/graph/algorithm/CycleDetection.hpp"
+#include <cppforge/data_structure/graph/algorithm/CycleDetection.hpp>
 
 #include <vector>
 #include <algorithm>

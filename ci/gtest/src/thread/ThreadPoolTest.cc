@@ -12,7 +12,7 @@
 #include <thread>
 #include <gtest/gtest.h>
 
-#include "thread/ThreadPool.hpp"
+#include <cppforge/thread/ThreadPool.hpp>
 
 using namespace cppforge::thread;
 

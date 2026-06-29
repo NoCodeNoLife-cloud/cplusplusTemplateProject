@@ -8,7 +8,7 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
-#include "interface/serialization/IYamlConfigurable.hpp"
+#include <cppforge/interface/serialization/IYamlConfigurable.hpp>
 
 using namespace cppforge::interface::serialization;
 

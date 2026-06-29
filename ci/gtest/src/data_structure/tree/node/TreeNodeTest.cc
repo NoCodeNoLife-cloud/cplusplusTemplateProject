@@ -8,7 +8,7 @@
 #include <memory>
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/node/TreeNode.hpp"
+#include <cppforge/data_structure/tree/node/TreeNode.hpp>
 
 using namespace cppforge::data_structure::tree::node;
 

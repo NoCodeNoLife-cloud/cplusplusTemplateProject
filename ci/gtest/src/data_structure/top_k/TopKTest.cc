@@ -10,7 +10,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/top_k/TopK.hpp"
+#include <cppforge/data_structure/top_k/TopK.hpp>
 
 using namespace cppforge::data_structure;
 

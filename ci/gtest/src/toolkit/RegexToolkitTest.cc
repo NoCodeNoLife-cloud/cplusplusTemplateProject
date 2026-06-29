@@ -9,7 +9,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "toolkit/RegexToolkit.hpp"
+#include <cppforge/toolkit/RegexToolkit.hpp>
 
 using namespace cppforge::toolkit;
 

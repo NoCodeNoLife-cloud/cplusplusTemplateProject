@@ -6,7 +6,7 @@
  *          decodes pixel data into a row-major byte array (BGRA format).
  */
 
-#include "filesystem/type/BmpImage.hpp"
+#include <cppforge/filesystem/type/BmpImage.hpp>
 
 #include <fstream>
 #include <stdexcept>

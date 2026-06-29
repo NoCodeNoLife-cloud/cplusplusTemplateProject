@@ -13,7 +13,7 @@
  * - Sanitizers (AddressSanitizer / ThreadSanitizer) are expected to pass.
  */
 
-#include "data_structure/concurrent/ConcurrentHashMap.hpp"
+#include <cppforge/data_structure/concurrent/ConcurrentHashMap.hpp>
 
 #include <gtest/gtest.h>
 

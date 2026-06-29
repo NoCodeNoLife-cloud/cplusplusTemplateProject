@@ -6,7 +6,7 @@
  *          before reading from the underlying stream.  Buffer overflow throws.
  */
 
-#include "io/reader/PushbackInputStream.hpp"
+#include <cppforge/io/reader/PushbackInputStream.hpp>
 
 #include <algorithm>
 #include <cstddef>

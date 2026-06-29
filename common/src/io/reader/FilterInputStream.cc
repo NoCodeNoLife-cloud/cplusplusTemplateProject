@@ -6,7 +6,7 @@
  *          methods they need to transform.
  */
 
-#include "io/reader/FilterInputStream.hpp"
+#include <cppforge/io/reader/FilterInputStream.hpp>
 
 #include <cstddef>
 #include <stdexcept>

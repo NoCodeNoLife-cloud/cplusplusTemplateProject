@@ -8,7 +8,7 @@
 #include <chrono>
 #include <gtest/gtest.h>
 
-#include "system/SystemPerformanceMonitor.hpp"
+#include <cppforge/system/SystemPerformanceMonitor.hpp>
 
 using namespace cppforge::system;
 

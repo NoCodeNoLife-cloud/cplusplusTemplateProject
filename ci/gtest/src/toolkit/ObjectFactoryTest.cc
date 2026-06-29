@@ -9,7 +9,7 @@
 #include <type_traits>
 #include <gtest/gtest.h>
 
-#include "toolkit/ObjectFactory.hpp"
+#include <cppforge/toolkit/ObjectFactory.hpp>
 
 using namespace cppforge::toolkit;
 

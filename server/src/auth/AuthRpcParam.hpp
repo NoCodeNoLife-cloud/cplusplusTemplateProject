@@ -11,7 +11,7 @@
 #include <string>
 #include <yaml-cpp/node/node.h>
 
-#include "interface/serialization/IYamlConfigurable.hpp"
+#include <cppforge/interface/serialization/IYamlConfigurable.hpp>
 
 namespace server_app::auth
 {

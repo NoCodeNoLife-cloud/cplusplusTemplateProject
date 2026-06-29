@@ -7,7 +7,7 @@
  *          combined with a scale factor (number of fractional digits).
  */
 
-#include "BigDecimal.hpp"
+#include <cppforge/data_structure/base_type/BigDecimal.hpp>
 
 #include <compare>
 #include <stdexcept>

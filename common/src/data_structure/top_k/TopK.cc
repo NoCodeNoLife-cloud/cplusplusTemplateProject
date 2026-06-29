@@ -7,7 +7,7 @@
  *          heap grows with every insertion.
  */
 
-#include "TopK.hpp"
+#include <cppforge/data_structure/top_k/TopK.hpp>
 
 #include <algorithm>
 #include <stdexcept>

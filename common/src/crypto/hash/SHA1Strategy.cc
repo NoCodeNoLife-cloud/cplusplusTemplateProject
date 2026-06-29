@@ -5,7 +5,7 @@
  *          interface.  Produces a 160-bit (20-byte) digest, hex-encoded.
  */
 
-#include "SHA1Strategy.hpp"
+#include <cppforge/crypto/hash/SHA1Strategy.hpp>
 
 #include <stdexcept>
 #include <fmt/format.h>

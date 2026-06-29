@@ -6,7 +6,7 @@
  *          instructions to reduce CPU contention.
  */
 
-#include "thread/SpinlockMutex.hpp"
+#include <cppforge/thread/SpinlockMutex.hpp>
 
 #include <atomic>
 #include <chrono>

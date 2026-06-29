@@ -9,7 +9,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-#include "interface/serialization/IJsonSerializable.hpp"
+#include <cppforge/interface/serialization/IJsonSerializable.hpp>
 
 using namespace cppforge::interface::serialization;
 

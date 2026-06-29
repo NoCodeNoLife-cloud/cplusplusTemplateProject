@@ -11,7 +11,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "sql/sqlite/SQLiteManager.hpp"
+#include <cppforge/sql/sqlite/SQLiteManager.hpp>
 
 using namespace cppforge::sql::sqlite;
 

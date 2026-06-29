@@ -7,7 +7,7 @@
 
 #include <glog/logging.h>
 
-#include "toolkit/StackTraceExceptionHandler.hpp"
+#include <cppforge/toolkit/StackTraceExceptionHandler.hpp>
 #include "task/ServerTask.hpp"
 
 int32_t main(const int32_t argc, char* argv[])

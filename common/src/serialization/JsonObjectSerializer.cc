@@ -5,7 +5,7 @@
  *          a registered mapping and converts to/from JSON tree structures.
  */
 
-#include "serialization/JsonObjectSerializer.hpp"
+#include <cppforge/serialization/JsonObjectSerializer.hpp>
 
 namespace cppforge::serialization
 {

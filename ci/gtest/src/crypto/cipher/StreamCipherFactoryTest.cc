@@ -5,8 +5,8 @@
  */
 
 #include <gtest/gtest.h>
-#include "crypto/cipher/ChaCha20Cipher.hpp"
-#include "crypto/cipher/StreamCipherFactory.hpp"
+#include <cppforge/crypto/cipher/ChaCha20Cipher.hpp>
+#include <cppforge/crypto/cipher/StreamCipherFactory.hpp>
 
 using namespace cppforge::crypto::cipher;
 

@@ -2,8 +2,8 @@
 #include <memory>
 #include <vector>
 
-#include "io/reader/BufferedInputStream.hpp"
-#include "io/reader/ByteArrayInputStream.hpp"
+#include <cppforge/io/reader/BufferedInputStream.hpp>
+#include <cppforge/io/reader/ByteArrayInputStream.hpp>
 
 using namespace cppforge::io::reader;
 

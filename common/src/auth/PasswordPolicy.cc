@@ -5,7 +5,7 @@
  *          length checks, history comparison, and composite score calculation.
  */
 
-#include "PasswordPolicy.hpp"
+#include <cppforge/auth/PasswordPolicy.hpp>
 
 #include <cctype>
 #include <fmt/format.h>

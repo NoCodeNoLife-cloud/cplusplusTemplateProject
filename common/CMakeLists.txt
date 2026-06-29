@@ -14,14 +14,13 @@ set(COMMON_FRAMEWORK common_pkg)
 # ── Sources ──────────────────────────────────────────────────────────────
 file(GLOB_RECURSE COMMON_SRC_FILES
     src/*.cc
-    src/*.hpp
 )
 
 # ── Library ──────────────────────────────────────────────────────────────
 add_library(${COMMON_FRAMEWORK} ${COMMON_SRC_FILES})
 
 target_include_directories(${COMMON_FRAMEWORK} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 target_link_libraries(${COMMON_FRAMEWORK} PRIVATE

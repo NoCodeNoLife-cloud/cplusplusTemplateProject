@@ -11,7 +11,7 @@
 #include <gtest/gtest.h>
 #include <yaml-cpp/yaml.h>
 
-#include "serialization/YamlObjectSerializer.hpp"
+#include <cppforge/serialization/YamlObjectSerializer.hpp>
 
 using namespace cppforge::serialization;
 

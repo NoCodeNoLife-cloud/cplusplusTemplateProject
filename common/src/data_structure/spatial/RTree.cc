@@ -13,7 +13,7 @@
  * below.
  */
 
-#include "data_structure/spatial/RTree.hpp"
+#include <cppforge/data_structure/spatial/RTree.hpp>
 
 namespace cppforge::data_structure::spatial
 {

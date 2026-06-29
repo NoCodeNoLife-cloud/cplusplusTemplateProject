@@ -5,7 +5,7 @@
  *          configurable delimiters, and header-driven column access.
  */
 
-#include "filesystem/type/CsvFile.hpp"
+#include <cppforge/filesystem/type/CsvFile.hpp>
 
 #include <fstream>
 #include <sstream>

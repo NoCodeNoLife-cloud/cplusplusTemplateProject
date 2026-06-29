@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include "data_structure/filter/CuckooFilter.hpp"
+#include <cppforge/data_structure/filter/CuckooFilter.hpp>
 
 using namespace cppforge::data_structure;
 

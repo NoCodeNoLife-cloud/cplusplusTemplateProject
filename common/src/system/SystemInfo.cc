@@ -5,7 +5,7 @@
  *          GetSystemInfo/GlobalMemoryStatusEx on Windows.
  */
 
-#include "system/SystemInfo.hpp"
+#include <cppforge/system/SystemInfo.hpp>
 
 #include <cstdint>
 #include <cwctype>

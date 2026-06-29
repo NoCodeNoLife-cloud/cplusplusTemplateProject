@@ -8,7 +8,7 @@
 
 #include <stdexcept>
 
-#include "io/writer/FilterOutputStream.hpp"
+#include <cppforge/io/writer/FilterOutputStream.hpp>
 
 namespace cppforge::io::writer
 {

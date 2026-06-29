@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/graph/Edge.hpp"
+#include <cppforge/data_structure/graph/Edge.hpp>
 
 using namespace cppforge::data_structure::graph;
 

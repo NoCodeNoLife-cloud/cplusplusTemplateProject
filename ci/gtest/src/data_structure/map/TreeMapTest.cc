@@ -10,7 +10,7 @@
 #include <utility>
 #include <gtest/gtest.h>
 
-#include "data_structure/map/TreeMap.hpp"
+#include <cppforge/data_structure/map/TreeMap.hpp>
 
 using namespace cppforge::data_structure::map;
 

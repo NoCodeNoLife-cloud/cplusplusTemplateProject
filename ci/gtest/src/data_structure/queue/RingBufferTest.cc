@@ -10,7 +10,7 @@
 #include <utility>
 #include <gtest/gtest.h>
 
-#include "data_structure/queue/RingBuffer.hpp"
+#include <cppforge/data_structure/queue/RingBuffer.hpp>
 
 using namespace cppforge::data_structure;
 

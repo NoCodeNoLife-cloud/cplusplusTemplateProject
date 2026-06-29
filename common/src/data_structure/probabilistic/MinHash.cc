@@ -7,7 +7,7 @@
  *          reducing code-bloat in large translation units.
  */
 
-#include "MinHash.hpp"
+#include <cppforge/data_structure/probabilistic/MinHash.hpp>
 
 #include <string>
 

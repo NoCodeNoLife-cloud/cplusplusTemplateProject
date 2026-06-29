@@ -11,7 +11,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "system/SystemInfo.hpp"
+#include <cppforge/system/SystemInfo.hpp>
 
 using namespace cppforge::system;
 

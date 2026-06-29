@@ -6,7 +6,7 @@
  *          to std::put_time for actual formatting.
  */
 
-#include "time/SimpleDateFormatter.hpp"
+#include <cppforge/time/SimpleDateFormatter.hpp>
 
 #include <ctime>
 #include <functional>

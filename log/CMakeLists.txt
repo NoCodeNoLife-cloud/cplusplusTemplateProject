@@ -13,14 +13,13 @@ set(LOG_SERVICE glog_service)
 # ── Sources ──────────────────────────────────────────────────────────────
 file(GLOB_RECURSE GLOG_SRC_FILES
     src/*.cc
-    src/*.hpp
 )
 
 # ── Library ──────────────────────────────────────────────────────────────
 add_library(${LOG_SERVICE} ${GLOG_SRC_FILES})
 
 target_include_directories(${LOG_SERVICE} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 target_link_libraries(${LOG_SERVICE} PUBLIC

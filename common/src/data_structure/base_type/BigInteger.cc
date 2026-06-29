@@ -6,7 +6,7 @@
  *          and exponentiation.  Uses a std::vector of base-10 digits.
  */
 
-#include "BigInteger.hpp"
+#include <cppforge/data_structure/base_type/BigInteger.hpp>
 
 #include <compare>
 #include <stdexcept>

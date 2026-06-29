@@ -8,7 +8,7 @@
 #include <memory>
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/core/BinaryTree.hpp"
+#include <cppforge/data_structure/tree/core/BinaryTree.hpp>
 
 using namespace cppforge::data_structure::tree::core;
 

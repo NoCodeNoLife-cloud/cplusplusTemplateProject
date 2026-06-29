@@ -9,7 +9,7 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/spatial/Quadtree.hpp"
+#include <cppforge/data_structure/tree/spatial/Quadtree.hpp>
 
 using namespace cppforge::data_structure::tree::spatial;
 

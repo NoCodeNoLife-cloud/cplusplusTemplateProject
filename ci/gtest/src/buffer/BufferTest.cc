@@ -11,13 +11,13 @@
 #include <cstdint>
 #include <vector>
 
-#include "buffer/ByteBuffer.hpp"
-#include "buffer/CharBuffer.hpp"
-#include "buffer/DoubleBuffer.hpp"
-#include "buffer/FloatBuffer.hpp"
-#include "buffer/IntBuffer.hpp"
-#include "buffer/LongBuffer.hpp"
-#include "buffer/ShortBuffer.hpp"
+#include <cppforge/buffer/ByteBuffer.hpp>
+#include <cppforge/buffer/CharBuffer.hpp>
+#include <cppforge/buffer/DoubleBuffer.hpp>
+#include <cppforge/buffer/FloatBuffer.hpp>
+#include <cppforge/buffer/IntBuffer.hpp>
+#include <cppforge/buffer/LongBuffer.hpp>
+#include <cppforge/buffer/ShortBuffer.hpp>
 
 using namespace cppforge::buffer;
 

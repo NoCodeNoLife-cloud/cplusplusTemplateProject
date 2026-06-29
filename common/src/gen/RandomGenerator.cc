@@ -6,7 +6,7 @@
  *          for non-deterministic initialisation.
  */
 
-#include "gen/RandomGenerator.hpp"
+#include <cppforge/gen/RandomGenerator.hpp>
 #include <fmt/format.h>
 #include <random>
 #include <string>

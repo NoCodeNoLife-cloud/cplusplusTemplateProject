@@ -6,7 +6,7 @@
  *          connection lifecycle and prepared statement binding.
  */
 
-#include "MySqlExecutor.hpp"
+#include <cppforge/sql/mysql/MySqlExecutor.hpp>
 
 #include <fmt/format.h>
 #include <glog/logging.h>

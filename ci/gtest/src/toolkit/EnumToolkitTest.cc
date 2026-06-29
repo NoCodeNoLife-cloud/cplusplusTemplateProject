@@ -8,7 +8,7 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "toolkit/EnumToolkit.hpp"
+#include <cppforge/toolkit/EnumToolkit.hpp>
 
 using namespace cppforge::toolkit;
 

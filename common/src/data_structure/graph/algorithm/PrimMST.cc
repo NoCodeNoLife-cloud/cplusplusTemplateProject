@@ -12,7 +12,7 @@
  *          non-tree node to the current tree. Time complexity: O(ElogV).
  */
 
-#include "data_structure/graph/algorithm/PrimMST.hpp"
+#include <cppforge/data_structure/graph/algorithm/PrimMST.hpp>
 
 #include <queue>
 

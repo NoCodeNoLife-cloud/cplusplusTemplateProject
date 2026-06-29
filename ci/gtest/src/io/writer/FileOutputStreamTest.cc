@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-#include "io/writer/FileOutputStream.hpp"
+#include <cppforge/io/writer/FileOutputStream.hpp>
 
 using namespace cppforge::io::writer;
 

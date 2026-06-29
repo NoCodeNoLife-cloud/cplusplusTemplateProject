@@ -11,7 +11,7 @@
 #include <gtest/gtest.h>
 #include <mysqlx/xdevapi.h>
 
-#include "sql/mysql/MySqlExecutor.hpp"
+#include <cppforge/sql/mysql/MySqlExecutor.hpp>
 
 using namespace cppforge::sql::mysql;
 

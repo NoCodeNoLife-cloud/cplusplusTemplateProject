@@ -6,7 +6,7 @@
  *          to ofstream, and close() flushes and closes the file handle.
  */
 
-#include "io/writer/FileOutputStream.hpp"
+#include <cppforge/io/writer/FileOutputStream.hpp>
 
 #include <glog/logging.h>
 

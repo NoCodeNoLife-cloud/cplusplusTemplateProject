@@ -6,7 +6,7 @@
  *          and available() defaults to 0.  Subclasses override for efficiency.
  */
 
-#include "io/reader/AbstractInputStream.hpp"
+#include <cppforge/io/reader/AbstractInputStream.hpp>
 
 #include <algorithm>
 #include <cstddef>

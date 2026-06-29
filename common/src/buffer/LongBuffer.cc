@@ -5,7 +5,7 @@
  *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
 
-#include "buffer/LongBuffer.hpp"
+#include <cppforge/buffer/LongBuffer.hpp>
 
 #include <fmt/format.h>
 

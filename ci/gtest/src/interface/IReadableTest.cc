@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/io/IReadable.hpp"
+#include <cppforge/interface/io/IReadable.hpp>
 
 using namespace cppforge::interface::io;
 

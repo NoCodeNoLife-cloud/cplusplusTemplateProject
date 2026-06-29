@@ -6,7 +6,7 @@
  *          the configurable threshold.
  */
 
-#include "aop/FunctionProfilerAspect.hpp"
+#include <cppforge/aop/FunctionProfilerAspect.hpp>
 
 #include <utility>
 #include <glog/logging.h>

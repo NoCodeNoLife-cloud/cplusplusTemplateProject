@@ -8,7 +8,7 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "data_structure/union_find/UnionSet.hpp"
+#include <cppforge/data_structure/union_find/UnionSet.hpp>
 
 using namespace cppforge::data_structure;
 

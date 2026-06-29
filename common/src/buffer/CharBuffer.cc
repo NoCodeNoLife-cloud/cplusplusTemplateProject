@@ -5,7 +5,7 @@
  *          bulk array transfer, flip/clear/rewind/compact, and state queries.
  */
 
-#include "buffer/CharBuffer.hpp"
+#include <cppforge/buffer/CharBuffer.hpp>
 
 #include <algorithm>
 #include <stdexcept>

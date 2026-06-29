@@ -9,7 +9,7 @@
  * Reference: Fan et al., "Cuckoo Filter: Practically Better Than Bloom" (2014).
  */
 
-#include "CuckooFilter.hpp"
+#include <cppforge/data_structure/filter/CuckooFilter.hpp>
 
 #include <string>
 

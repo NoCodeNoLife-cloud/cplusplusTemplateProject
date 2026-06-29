@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 #include <yaml-cpp/yaml.h>
 
-#include "interface/serialization/IYamlSerializable.hpp"
+#include <cppforge/interface/serialization/IYamlSerializable.hpp>
 
 using namespace cppforge::interface::serialization;
 

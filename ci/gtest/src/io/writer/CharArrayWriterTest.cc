@@ -11,7 +11,7 @@
 #include <string_view>
 #include <vector>
 
-#include "io/writer/CharArrayWriter.hpp"
+#include <cppforge/io/writer/CharArrayWriter.hpp>
 
 using namespace cppforge::io::writer;
 

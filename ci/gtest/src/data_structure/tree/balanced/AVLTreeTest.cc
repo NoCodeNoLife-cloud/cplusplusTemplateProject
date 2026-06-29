@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/balanced/AVLTree.hpp"
+#include <cppforge/data_structure/tree/balanced/AVLTree.hpp>
 
 using namespace cppforge::data_structure::tree::balanced;
 

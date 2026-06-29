@@ -5,7 +5,7 @@
  *          password hash, roles, and account status flags.
  */
 
-#include "UserCredentials.hpp"
+#include <cppforge/auth/UserCredentials.hpp>
 
 #include <chrono>
 #include <utility>

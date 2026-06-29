@@ -9,7 +9,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "toolkit/ArraysToolkit.hpp"
+#include <cppforge/toolkit/ArraysToolkit.hpp>
 
 using namespace cppforge::toolkit;
 

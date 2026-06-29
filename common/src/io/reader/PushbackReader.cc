@@ -6,7 +6,7 @@
  *          this buffer first.  Supports single-character and array unread.
  */
 
-#include "io/reader/PushbackReader.hpp"
+#include <cppforge/io/reader/PushbackReader.hpp>
 
 #include <algorithm>
 #include <stdexcept>

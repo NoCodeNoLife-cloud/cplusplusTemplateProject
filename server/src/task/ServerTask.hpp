@@ -9,7 +9,7 @@
 #pragma once
 #include <memory>
 
-#include "interface/task/ITask.hpp"
+#include <cppforge/interface/task/ITask.hpp>
 
 namespace server_app::task
 {

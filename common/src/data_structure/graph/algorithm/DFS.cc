@@ -6,7 +6,7 @@
  *          (covering all connected components).
  */
 
-#include "data_structure/graph/algorithm/DFS.hpp"
+#include <cppforge/data_structure/graph/algorithm/DFS.hpp>
 
 #include <vector>
 

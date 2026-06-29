@@ -5,7 +5,7 @@
  *          iteration over metadata key-value pairs.
  */
 
-#include "RpcMetadata.hpp"
+#include <cppforge/rpc/RpcMetadata.hpp>
 
 #include <unordered_map>
 #include <utility>

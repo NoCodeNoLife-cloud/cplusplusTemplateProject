@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/probabilistic/MinHash.hpp"
+#include <cppforge/data_structure/probabilistic/MinHash.hpp>
 
 #include <algorithm>
 #include <cmath>

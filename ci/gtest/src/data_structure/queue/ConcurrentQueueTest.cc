@@ -14,7 +14,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/queue/ConcurrentQueue.hpp"
+#include <cppforge/data_structure/queue/ConcurrentQueue.hpp>
 
 using namespace cppforge::data_structure;
 

@@ -9,7 +9,7 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "toolkit/IntegerToolkit.hpp"
+#include <cppforge/toolkit/IntegerToolkit.hpp>
 
 using namespace cppforge::toolkit;
 

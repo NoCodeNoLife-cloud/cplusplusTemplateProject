@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "io/writer/AbstractWriter.hpp"
+#include <cppforge/io/writer/AbstractWriter.hpp>
 
 using namespace cppforge::io::writer;
 

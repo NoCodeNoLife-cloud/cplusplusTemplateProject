@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "auth/PasswordPolicy.hpp"
+#include <cppforge/auth/PasswordPolicy.hpp>
 
 using namespace cppforge::auth;
 

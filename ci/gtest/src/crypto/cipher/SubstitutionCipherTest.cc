@@ -10,7 +10,7 @@
 
 #include <gtest/gtest.h>
 
-#include "crypto/cipher/SubstitutionCipher.hpp"
+#include <cppforge/crypto/cipher/SubstitutionCipher.hpp>
 
 using namespace cppforge::crypto::cipher;
 

@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/filter/BloomFilter.hpp"
+#include <cppforge/data_structure/filter/BloomFilter.hpp>
 
 using namespace cppforge::data_structure;
 

@@ -5,7 +5,7 @@
  *          and category label for structured error handling.
  */
 
-#include "AuthenticationException.hpp"
+#include <cppforge/auth/AuthenticationException.hpp>
 
 #include <string_view>
 

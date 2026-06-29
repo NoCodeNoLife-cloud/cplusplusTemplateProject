@@ -5,7 +5,7 @@
  *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
 
-#include "buffer/FloatBuffer.hpp"
+#include <cppforge/buffer/FloatBuffer.hpp>
 
 #include <algorithm>
 

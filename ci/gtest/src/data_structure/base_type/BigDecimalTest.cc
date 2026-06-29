@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/base_type/BigDecimal.hpp"
+#include <cppforge/data_structure/base_type/BigDecimal.hpp>
 
 using namespace cppforge::data_structure::base_type;
 

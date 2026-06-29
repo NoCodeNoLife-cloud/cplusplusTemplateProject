@@ -10,7 +10,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/multiway/Trie.hpp"
+#include <cppforge/data_structure/tree/multiway/Trie.hpp>
 
 using namespace cppforge::data_structure;
 using namespace cppforge::data_structure::tree::multiway;

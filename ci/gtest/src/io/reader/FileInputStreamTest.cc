@@ -11,7 +11,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-#include "io/reader/FileInputStream.hpp"
+#include <cppforge/io/reader/FileInputStream.hpp>
 
 using namespace cppforge::io::reader;
 

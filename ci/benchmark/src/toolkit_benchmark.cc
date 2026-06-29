@@ -13,10 +13,10 @@
 #include <string>
 #include <vector>
 
-#include "data_structure/filter/BloomFilter.hpp"
-#include "toolkit/StringToolkit.hpp"
-#include "toolkit/RegexToolkit.hpp"
-#include "toolkit/RadixToolkit.hpp"
+#include <cppforge/data_structure/filter/BloomFilter.hpp>
+#include <cppforge/toolkit/StringToolkit.hpp>
+#include <cppforge/toolkit/RegexToolkit.hpp>
+#include <cppforge/toolkit/RadixToolkit.hpp>
 
 // ══════════════════════════════════════════════════════════════════════════
 //  BloomFilter

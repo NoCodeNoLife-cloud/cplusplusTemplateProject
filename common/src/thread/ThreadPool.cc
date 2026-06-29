@@ -6,7 +6,7 @@
  *          and shutdown joins all threads after completing pending work.
  */
 
-#include "thread/ThreadPool.hpp"
+#include <cppforge/thread/ThreadPool.hpp>
 
 #include <atomic>
 #include <chrono>

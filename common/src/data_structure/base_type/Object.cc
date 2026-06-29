@@ -6,7 +6,7 @@
  *          support.  Subclasses override these for custom behaviour.
  */
 
-#include "Object.hpp"
+#include <cppforge/data_structure/base_type/Object.hpp>
 
 #include <memory>
 #include <string>

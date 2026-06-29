@@ -6,7 +6,7 @@
  *          through the forward/reverse permutation tables.
  */
 
-#include "SubstitutionCipher.hpp"
+#include <cppforge/crypto/cipher/SubstitutionCipher.hpp>
 
 #include <algorithm>
 #include <array>

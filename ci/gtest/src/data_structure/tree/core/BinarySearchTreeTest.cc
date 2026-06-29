@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/core/BinarySearchTree.hpp"
+#include <cppforge/data_structure/tree/core/BinarySearchTree.hpp>
 
 using namespace cppforge::data_structure::tree::core;
 

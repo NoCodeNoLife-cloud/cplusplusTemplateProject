@@ -25,7 +25,7 @@
 #include <thread>
 #include <vector>
 
-#include "data_structure/persistent/PersistentVector.hpp"
+#include <cppforge/data_structure/persistent/PersistentVector.hpp>
 
 using namespace cppforge::data_structure::persistent;
 

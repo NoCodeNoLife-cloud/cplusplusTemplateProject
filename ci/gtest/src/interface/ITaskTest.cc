@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/task/ITask.hpp"
+#include <cppforge/interface/task/ITask.hpp>
 
 using namespace cppforge::interface::task;
 

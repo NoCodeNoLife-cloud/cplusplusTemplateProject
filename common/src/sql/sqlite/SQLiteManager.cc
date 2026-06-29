@@ -6,7 +6,7 @@
  *          transaction control via BEGIN/COMMIT/ROLLBACK SQL commands.
  */
 
-#include "SQLiteManager.hpp"
+#include <cppforge/sql/sqlite/SQLiteManager.hpp>
 
 #include <fmt/format.h>
 #include <glog/logging.h>

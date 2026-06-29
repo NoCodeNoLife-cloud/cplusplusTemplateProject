@@ -10,7 +10,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/heap/Heap.hpp"
+#include <cppforge/data_structure/heap/Heap.hpp>
 
 using namespace cppforge::data_structure;
 

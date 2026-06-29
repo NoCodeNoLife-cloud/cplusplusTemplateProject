@@ -5,7 +5,7 @@
  *          that formats log messages with severity, timestamp, thread ID, and source location.
  */
 
-#include "PrefixFormatter.hpp"
+#include <cppforge/glog/formatter/PrefixFormatter.hpp>
 
 #include <iomanip>
 

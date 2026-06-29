@@ -16,7 +16,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/spatial/RTree.hpp"
+#include <cppforge/data_structure/spatial/RTree.hpp>
 
 using namespace cppforge::data_structure::spatial;
 

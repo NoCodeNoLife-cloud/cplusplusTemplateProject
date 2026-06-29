@@ -10,7 +10,7 @@
  *            Errors" (1970).
  */
 
-#include "BloomFilter.hpp"
+#include <cppforge/data_structure/filter/BloomFilter.hpp>
 
 #include <algorithm>
 #include <iterator>

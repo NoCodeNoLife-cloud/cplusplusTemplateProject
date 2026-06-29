@@ -6,7 +6,7 @@
  *          and noexcept guarantees for the segment-locked concurrent hash map.
  */
 
-#include "data_structure/concurrent/ConcurrentHashMap.hpp"
+#include <cppforge/data_structure/concurrent/ConcurrentHashMap.hpp>
 
 #include <gtest/gtest.h>
 

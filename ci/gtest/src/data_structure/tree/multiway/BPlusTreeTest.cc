@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/multiway/BPlusTree.hpp"
+#include <cppforge/data_structure/tree/multiway/BPlusTree.hpp>
 
 using namespace cppforge::data_structure::tree::multiway;
 

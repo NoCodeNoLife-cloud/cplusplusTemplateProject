@@ -5,7 +5,7 @@
  *          XORs with plaintext/ciphertext.  Key wraps around when exhausted.
  */
 
-#include "XorBitCipher.hpp"
+#include <cppforge/crypto/cipher/XorBitCipher.hpp>
 
 #include <algorithm>
 #include <ranges>

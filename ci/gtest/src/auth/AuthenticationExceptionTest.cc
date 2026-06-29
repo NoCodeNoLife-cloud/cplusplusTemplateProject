@@ -9,7 +9,7 @@
 #include <string_view>
 #include <gtest/gtest.h>
 
-#include "auth/AuthenticationException.hpp"
+#include <cppforge/auth/AuthenticationException.hpp>
 
 using namespace cppforge::auth;
 

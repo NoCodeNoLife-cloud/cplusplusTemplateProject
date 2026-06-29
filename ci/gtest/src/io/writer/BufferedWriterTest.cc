@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "io/writer/BufferedWriter.hpp"
+#include <cppforge/io/writer/BufferedWriter.hpp>
 
 using namespace cppforge::io::writer;
 

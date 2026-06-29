@@ -6,7 +6,7 @@
  *          sequences into single characters.  Validates continuation bytes.
  */
 
-#include "io/reader/InputStreamReader.hpp"
+#include <cppforge/io/reader/InputStreamReader.hpp>
 
 #include <fmt/format.h>
 

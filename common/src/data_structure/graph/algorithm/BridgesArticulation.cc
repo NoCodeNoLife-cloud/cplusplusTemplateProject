@@ -16,7 +16,7 @@
  *          Time complexity: O(V+E).
  */
 
-#include "data_structure/graph/algorithm/BridgesArticulation.hpp"
+#include <cppforge/data_structure/graph/algorithm/BridgesArticulation.hpp>
 
 #include <algorithm>
 

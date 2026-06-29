@@ -11,7 +11,7 @@
  *          i to j, enabling path reconstruction.
  */
 
-#include "data_structure/graph/algorithm/FloydWarshall.hpp"
+#include <cppforge/data_structure/graph/algorithm/FloydWarshall.hpp>
 
 namespace cppforge::data_structure::graph::algorithm
 {

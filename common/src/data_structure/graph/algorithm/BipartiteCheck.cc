@@ -7,7 +7,7 @@
  *          is not bipartite (it contains an odd-length cycle).
  */
 
-#include "data_structure/graph/algorithm/BipartiteCheck.hpp"
+#include <cppforge/data_structure/graph/algorithm/BipartiteCheck.hpp>
 
 #include <queue>
 

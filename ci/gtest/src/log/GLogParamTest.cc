@@ -10,7 +10,7 @@
 #include <gtest/gtest.h>
 #include <yaml-cpp/yaml.h>
 
-#include "param/GLogParam.hpp"
+#include <cppforge/glog/param/GLogParam.hpp>
 
 namespace
 {

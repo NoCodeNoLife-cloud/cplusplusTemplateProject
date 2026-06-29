@@ -7,7 +7,7 @@
  *          writes after close.
  */
 
-#include "io/writer/OutputStreamWriter.hpp"
+#include <cppforge/io/writer/OutputStreamWriter.hpp>
 
 #include <algorithm>
 #include <ios>

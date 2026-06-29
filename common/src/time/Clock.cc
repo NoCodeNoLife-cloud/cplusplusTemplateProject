@@ -6,7 +6,7 @@
  *          and conversion to nanoseconds/microseconds/milliseconds/seconds.
  */
 
-#include "time/Clock.hpp"
+#include <cppforge/time/Clock.hpp>
 
 #include <chrono>
 #include <ctime>

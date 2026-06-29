@@ -10,7 +10,7 @@
 #include <string_view>
 #include <vector>
 
-#include "io/writer/AbstractFilterWriter.hpp"
+#include <cppforge/io/writer/AbstractFilterWriter.hpp>
 
 using namespace cppforge::io::writer;
 

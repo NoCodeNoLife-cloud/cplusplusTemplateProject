@@ -11,7 +11,7 @@
 #include <gtest/gtest.h>
 #include <glog/logging.h>
 
-#include "formatter/PrefixFormatter.hpp"
+#include <cppforge/glog/formatter/PrefixFormatter.hpp>
 
 using namespace cppforge::glog::formatter;
 

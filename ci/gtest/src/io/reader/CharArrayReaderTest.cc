@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-#include "io/reader/CharArrayReader.hpp"
+#include <cppforge/io/reader/CharArrayReader.hpp>
 
 using namespace cppforge::io::reader;
 

@@ -6,13 +6,13 @@
  *          custom log format installation, and resource cleanup.
  */
 
-#include "GLogConfigurator.hpp"
+#include <cppforge/glog/config/GLogConfigurator.hpp>
 
 #include <thread>
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "formatter/PrefixFormatter.hpp"
+#include <cppforge/glog/formatter/PrefixFormatter.hpp>
 
 namespace cppforge::glog::config
 {

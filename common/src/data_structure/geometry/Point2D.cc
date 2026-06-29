@@ -7,7 +7,7 @@
  *          standard <cmath> functions.
  */
 
-#include "data_structure/geometry/Point2D.hpp"
+#include <cppforge/data_structure/geometry/Point2D.hpp>
 
 #include <cmath>
 #include <iomanip>

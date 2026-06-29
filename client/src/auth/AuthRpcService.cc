@@ -14,7 +14,7 @@
 #include <glog/logging.h>
 
 #include "auth/AuthRpcParam.hpp"
-#include "rpc/RpcMetadata.hpp"
+#include <cppforge/rpc/RpcMetadata.hpp>
 
 namespace client_app::auth
 {

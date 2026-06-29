@@ -8,7 +8,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "toolkit/StringToolkit.hpp"
+#include <cppforge/toolkit/StringToolkit.hpp>
 
 using namespace cppforge::toolkit;
 

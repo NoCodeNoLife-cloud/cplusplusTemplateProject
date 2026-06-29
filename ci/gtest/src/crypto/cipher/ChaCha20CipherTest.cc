@@ -9,7 +9,7 @@
 #include <ranges>
 #include <gtest/gtest.h>
 
-#include "crypto/cipher/ChaCha20Cipher.hpp"
+#include <cppforge/crypto/cipher/ChaCha20Cipher.hpp>
 
 using namespace cppforge::crypto::cipher;
 

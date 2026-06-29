@@ -10,7 +10,7 @@
 #include <utility>
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/range/SegmentTree.hpp"
+#include <cppforge/data_structure/tree/range/SegmentTree.hpp>
 
 using namespace cppforge::data_structure::tree::range;
 

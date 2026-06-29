@@ -12,7 +12,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-#include "serialization/JsonObjectSerializer.hpp"
+#include <cppforge/serialization/JsonObjectSerializer.hpp>
 
 using namespace cppforge::serialization;
 

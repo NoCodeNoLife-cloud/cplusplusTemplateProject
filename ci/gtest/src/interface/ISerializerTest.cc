@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <gtest/gtest.h>
 
-#include "interface/serialization/ISerializer.hpp"
+#include <cppforge/interface/serialization/ISerializer.hpp>
 
 using namespace cppforge::interface::serialization;
 

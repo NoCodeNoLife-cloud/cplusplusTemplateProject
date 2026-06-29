@@ -13,7 +13,7 @@
  * - Sanitizers (AddressSanitizer / ThreadSanitizer) are expected to pass.
  */
 
-#include "data_structure/concurrent/SeqLock.hpp"
+#include <cppforge/data_structure/concurrent/SeqLock.hpp>
 
 #include <gtest/gtest.h>
 

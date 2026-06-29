@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/task/IApplicationExecutor.hpp"
+#include <cppforge/interface/task/IApplicationExecutor.hpp>
 
 using namespace cppforge::interface::task;
 

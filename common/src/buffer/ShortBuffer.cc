@@ -5,7 +5,7 @@
  *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
 
-#include "buffer/ShortBuffer.hpp"
+#include <cppforge/buffer/ShortBuffer.hpp>
 
 #include <algorithm>
 

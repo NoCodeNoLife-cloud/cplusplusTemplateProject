@@ -11,7 +11,7 @@
 #include <grpcpp/grpcpp.h>
 #include <gtest/gtest.h>
 
-#include "rpc/GrpcConnectivityManager.hpp"
+#include <cppforge/rpc/GrpcConnectivityManager.hpp>
 
 using namespace cppforge::rpc;
 

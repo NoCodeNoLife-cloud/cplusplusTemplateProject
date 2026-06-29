@@ -7,7 +7,7 @@
 #include <string>
 #include <gtest/gtest.h>
 
-#include "interface/task/IRunnable.hpp"
+#include <cppforge/interface/task/IRunnable.hpp>
 
 using namespace cppforge::interface::task;
 

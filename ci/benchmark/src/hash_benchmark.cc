@@ -16,10 +16,10 @@
 #include <string>
 #include <vector>
 
-#include "data_structure/filter/CuckooFilter.hpp"
-#include "data_structure/hash/ConsistentHash.hpp"
-#include "data_structure/hash/CuckooHashMap.hpp"
-#include "data_structure/hash/RobinHoodHashMap.hpp"
+#include <cppforge/data_structure/filter/CuckooFilter.hpp>
+#include <cppforge/data_structure/hash/ConsistentHash.hpp>
+#include <cppforge/data_structure/hash/CuckooHashMap.hpp>
+#include <cppforge/data_structure/hash/RobinHoodHashMap.hpp>
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Helpers

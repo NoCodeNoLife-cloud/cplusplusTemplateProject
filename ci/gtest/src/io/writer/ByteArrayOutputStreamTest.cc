@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 
-#include "io/writer/ByteArrayOutputStream.hpp"
+#include <cppforge/io/writer/ByteArrayOutputStream.hpp>
 
 using namespace cppforge::io::writer;
 

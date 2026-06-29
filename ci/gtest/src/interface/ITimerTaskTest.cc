@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/task/ITimerTask.hpp"
+#include <cppforge/interface/task/ITimerTask.hpp>
 
 using namespace cppforge::interface::task;
 

@@ -10,7 +10,7 @@
 #include <thread>
 #include <gtest/gtest.h>
 
-#include "thread/AutoJoinThread.hpp"
+#include <cppforge/thread/AutoJoinThread.hpp>
 
 using namespace cppforge::thread;
 

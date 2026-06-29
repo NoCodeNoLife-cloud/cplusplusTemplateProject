@@ -6,7 +6,7 @@
  *          fixed-size ring buffer of samples for trend reporting.
  */
 
-#include "system/SystemPerformanceMonitor.hpp"
+#include <cppforge/system/SystemPerformanceMonitor.hpp>
 
 #include <chrono>
 #include <cstdint>

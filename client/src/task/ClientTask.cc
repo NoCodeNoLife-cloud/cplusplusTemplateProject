@@ -13,10 +13,10 @@
 
 #include "auth/AuthRpcService.hpp"
 #include "config/ConfigParam.h"
-#include "config/GLogConfigurator.hpp"
-#include "io/Console.hpp"
-#include "rpc/RpcMetadata.hpp"
-#include "system/SystemInfo.hpp"
+#include <cppforge/glog/config/GLogConfigurator.hpp>
+#include <cppforge/io/Console.hpp>
+#include <cppforge/rpc/RpcMetadata.hpp>
+#include <cppforge/system/SystemInfo.hpp>
 
 namespace client_app::task
 {

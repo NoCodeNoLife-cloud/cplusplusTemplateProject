@@ -10,7 +10,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/balanced/RedBlackTree.hpp"
+#include <cppforge/data_structure/tree/balanced/RedBlackTree.hpp>
 
 using namespace cppforge::data_structure::tree::balanced;
 using namespace cppforge::data_structure::tree::node;

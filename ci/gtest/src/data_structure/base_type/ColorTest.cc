@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/base_type/Color.hpp"
+#include <cppforge/data_structure/base_type/Color.hpp>
 
 using namespace cppforge::data_structure;
 

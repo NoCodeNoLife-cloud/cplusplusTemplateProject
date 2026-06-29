@@ -8,7 +8,7 @@
 #include <string>
 #include <utility>
 
-#include "data_structure/hash/LRUCache.hpp"
+#include <cppforge/data_structure/hash/LRUCache.hpp>
 
 using namespace cppforge::data_structure::hash;
 

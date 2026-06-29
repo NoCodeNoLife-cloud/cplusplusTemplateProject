@@ -6,7 +6,7 @@
  *          manages reconnection with backoff timers.
  */
 
-#include "GrpcConnectivityManager.hpp"
+#include <cppforge/rpc/GrpcConnectivityManager.hpp>
 
 #include <chrono>
 #include <thread>

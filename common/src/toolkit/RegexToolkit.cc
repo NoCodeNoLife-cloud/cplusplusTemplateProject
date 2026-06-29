@@ -6,7 +6,7 @@
  *          for substitution, and custom split using std::sregex_token_iterator.
  */
 
-#include "toolkit/RegexToolkit.hpp"
+#include <cppforge/toolkit/RegexToolkit.hpp>
 
 #include <regex>
 #include <stdexcept>

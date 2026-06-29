@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/crypto/MerkleTree.hpp"
+#include <cppforge/data_structure/tree/crypto/MerkleTree.hpp>
 
 #include <cstddef>
 #include <cstdint>

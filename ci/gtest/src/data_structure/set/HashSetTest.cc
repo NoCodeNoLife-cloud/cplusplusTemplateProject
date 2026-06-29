@@ -11,7 +11,7 @@
 #include <utility>
 #include <gtest/gtest.h>
 
-#include "data_structure/set/HashSet.hpp"
+#include <cppforge/data_structure/set/HashSet.hpp>
 
 using namespace cppforge::data_structure;
 

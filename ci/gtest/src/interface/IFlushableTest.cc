@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/io/IFlushable.hpp"
+#include <cppforge/interface/io/IFlushable.hpp>
 
 using namespace cppforge::interface::io;
 

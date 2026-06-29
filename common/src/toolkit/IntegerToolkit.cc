@@ -6,7 +6,7 @@
  *          bit-manipulation helpers (popcount, clz, ctz, rotl, rotr).
  */
 
-#include "IntegerToolkit.hpp"
+#include <cppforge/toolkit/IntegerToolkit.hpp>
 
 #include <cctype>
 #include <stdexcept>

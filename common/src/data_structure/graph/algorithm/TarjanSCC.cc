@@ -8,7 +8,7 @@
  *          that SCC. Time complexity: O(V+E).
  */
 
-#include "data_structure/graph/algorithm/TarjanSCC.hpp"
+#include <cppforge/data_structure/graph/algorithm/TarjanSCC.hpp>
 
 #include <algorithm>
 #include <stack>

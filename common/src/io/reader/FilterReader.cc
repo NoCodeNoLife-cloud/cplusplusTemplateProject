@@ -6,7 +6,7 @@
  *          methods they need to transform.
  */
 
-#include "io/reader/FilterReader.hpp"
+#include <cppforge/io/reader/FilterReader.hpp>
 
 #include <stdexcept>
 

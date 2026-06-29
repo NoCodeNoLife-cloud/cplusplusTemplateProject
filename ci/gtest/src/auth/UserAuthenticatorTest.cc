@@ -7,8 +7,8 @@
 
 #include <gtest/gtest.h>
 
-#include "auth/UserAuthenticator.hpp"
-#include "auth/AuthenticationException.hpp"
+#include <cppforge/auth/UserAuthenticator.hpp>
+#include <cppforge/auth/AuthenticationException.hpp>
 
 using namespace cppforge::auth;
 

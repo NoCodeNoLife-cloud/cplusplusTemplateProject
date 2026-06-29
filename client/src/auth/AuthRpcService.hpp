@@ -14,7 +14,7 @@
 #include <grpcpp/grpcpp.h>
 
 #include "generated/RpcService.grpc.pb.h"
-#include "rpc/GrpcConnectivityState.hpp"
+#include <cppforge/rpc/GrpcConnectivityState.hpp>
 
 namespace client_app::auth
 {

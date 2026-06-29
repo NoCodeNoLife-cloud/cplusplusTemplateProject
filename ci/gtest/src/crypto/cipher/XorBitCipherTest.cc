@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "crypto/cipher/XorBitCipher.hpp"
+#include <cppforge/crypto/cipher/XorBitCipher.hpp>
 
 using namespace cppforge::crypto::cipher;
 

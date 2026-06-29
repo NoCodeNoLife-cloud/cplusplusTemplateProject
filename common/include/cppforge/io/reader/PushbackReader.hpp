@@ -1,0 +1,142 @@
+/**
+ * @file PushbackReader.hpp
+ * @brief Character-input stream with pushback (unread) capability
+ * @details Allows characters to be "pushed back" (unread) into the stream,
+ *          enabling parser lookahead.  Supports unread of a single character
+ *          or a character array (up to 1 KB by default).  Does NOT support
+ *          mark/reset when pushback has been used.  Analogous to
+ *          java.io.PushbackReader.
+ *
+ * @par Thread Safety
+ * This class is **not** thread-safe.  External synchronisation is required
+ * for concurrent access.
+ *
+ * @par Usage Example
+ * @code
+ * PushbackReader reader(std::make_unique<StringReader>("abc"));
+ * auto ch = reader.read();  // 'a'
+ * reader.unread('X');
+ * ch = reader.read();       // 'X' (pushed back)
+ * @endcode
+ */
+
+#pragma once
+#include <algorithm>
+#include <optional>
+#include <vector>
+
+#include <cppforge/io/reader/FilterReader.hpp>
+
+namespace cppforge::io::reader
+{
+    /// @brief Provides a buffering wrapper around another reader, allowing characters to be "pushed back" into the stream.
+    /// @details The PushbackReader class allows characters to be pushed back into the stream after they have been read.
+    /// This is useful for situations where a program needs to look ahead in the input stream and then return to the
+    /// original position. The class maintains an internal buffer to store the pushed-back characters. When reading, it
+    /// first checks this buffer before reading from the underlying reader.
+    class PushbackReader final : public FilterReader
+    {
+    public:
+        explicit PushbackReader(std::shared_ptr<AbstractReader> reader);
+
+        PushbackReader(std::shared_ptr<AbstractReader> reader, size_t size);
+
+        /// @brief Closes this pushback reader and releases any system resources associated with it.
+        /// @details Once the stream has been closed, further read(), unread(), ready(), mark(),
+        /// reset(), or skip() invocations will throw an IOException.
+        /// Closing a previously closed stream has no effect.
+        void close()  override;
+
+        /// @brief Marks the current position in this stream.
+        /// @details A subsequent call to the reset() method repositions this stream at the last marked position so that
+        /// subsequent reads re-read the same bytes. The readAheadLimit argument tells this stream to allow that many bytes
+        /// to be read before the mark position gets invalidated.
+        /// @param readAheadLimit the maximum limit of bytes that can be read before the mark position becomes invalid
+        void mark(size_t readAheadLimit) override;
+
+        /// @brief Tests if this stream supports the mark() and reset() methods.
+        /// @details Whether mark() and reset() are supported is an invariant property of a particular stream instance.
+        /// The markSupported() method of FilterReader returns true.
+        /// @return true if this stream supports the mark() and reset() methods; false otherwise
+        [[nodiscard]] bool markSupported() const override;
+
+        /// @brief Reads a single character.
+        /// @details This method will block until a character is available, an I/O error occurs, or the end of the stream is
+        /// reached. If the pushback buffer is not empty, a character from the pushback buffer is returned. Otherwise, a
+        /// character from the underlying input stream is returned.
+        /// @return The character read, or std::nullopt if the end of the stream has been reached
+        [[nodiscard]] std::optional<char> read() override;
+
+        /// @brief Reads up to len characters of data from this stream into an array of characters.
+        /// @details This method will block until some input is available, an I/O error occurs, or the end of the stream is
+        /// reached. If the pushback buffer is not empty, characters from the pushback buffer are returned. Otherwise,
+        /// characters from the underlying input stream are returned.
+        /// @param cBuf the buffer into which the data is read
+        /// @param off the start offset in the destination array cBuf
+        /// @param len the maximum number of characters read
+        /// @return the total number of characters read into the buffer, or -1 if there is no more data because the end of
+        /// the stream has been reached
+        [[nodiscard]] int read(std::vector<char>& cBuf, size_t off, size_t len) override;
+
+        /// @brief Tells whether this stream is ready to be read.
+        /// @details A stream is ready to be read if there are characters available in the pushback buffer,
+        /// or if the underlying input stream is ready to be read.
+        /// @return true if the next read() is guaranteed not to block for input, false otherwise.
+        /// Note that returning false does not guarantee that the next read() will block.
+        [[nodiscard]] bool ready() const override;
+
+        /// @brief Repositions this stream to the position at the time the mark() method was last called on this stream.
+        /// @details This method will block until a character is available, an I/O error occurs, or the end of the stream is
+        /// reached. If the pushback buffer is not empty, a character from the pushback buffer is returned. Otherwise, a
+        /// character from the underlying input stream is returned.
+        void reset() override;
+
+        /// @brief Skips n characters from the input stream.
+        /// @details This method will block until n characters are available, an I/O error occurs, or the end of the stream
+        /// is reached. Characters in the pushback buffer are skipped first, then characters from the underlying input
+        /// stream are skipped.
+        /// @param n the number of characters to skip
+        /// @return the actual number of characters skipped
+        [[nodiscard]] size_t skip(size_t n) override;
+
+        /// @brief Pushes back all characters of the given array into the pushback buffer.
+        /// @details This method pushes back all characters of the given array into the pushback buffer.
+        /// The characters are pushed back in reverse order, so that the next read operation will read
+        /// the characters in the same order as they appear in the array.
+        /// @param cbuf the array of characters to push back
+        void unread(const std::vector<char>& cbuf) ;
+
+        /// @brief Pushes back a portion of the given character array into the pushback buffer.
+        /// @details This method pushes back len characters from the given array starting at offset off
+        /// into the pushback buffer. The characters are pushed back in reverse order, so that the next
+        /// read operation will read the characters in the same order as they appear in the array.
+        /// @param cBuf the array of characters to push back
+        /// @param off the start offset in the array
+        /// @param len the number of characters to push back
+        void unread(const std::vector<char>& cBuf, size_t off, size_t len);
+
+        /// @brief Pushes back a single character into the pushback buffer.
+        /// @details This method pushes back a single character into the pushback buffer.
+        /// The character is pushed back so that the next read operation will read this character.
+        /// @param c the character to push back
+        void unread(int32_t c);
+
+        /// @brief Checks if this reader has been closed.
+        /// @return true if this reader has been closed, false otherwise.
+        [[nodiscard]] bool isClosed() const override;
+
+    private:
+        /// @brief Validates that the stream is open for operations
+        /// @throws std::runtime_error if the stream is closed
+        void validateOpen() const;
+
+        /// @brief Validates that the pushback stream is not closed
+        /// @throws std::runtime_error if the stream is closed
+        void validateNotClosed() const;
+
+        static constexpr size_t DEFAULT_BUFFER_SIZE = 1024;
+        std::vector<char> buffer_;
+        size_t buffer_pos_{DEFAULT_BUFFER_SIZE};
+        bool closed_{false};
+    };
+}

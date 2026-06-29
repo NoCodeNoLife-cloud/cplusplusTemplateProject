@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "io/reader/Scanner.hpp"
+#include <cppforge/io/reader/Scanner.hpp>
 
 using namespace cppforge::io::reader;
 

@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/hash/ConsistentHash.hpp"
+#include <cppforge/data_structure/hash/ConsistentHash.hpp>
 
 #include <algorithm>
 #include <atomic>

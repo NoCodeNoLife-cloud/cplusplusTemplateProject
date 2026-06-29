@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/graph/algorithm/TarjanSCC.hpp"
+#include <cppforge/data_structure/graph/algorithm/TarjanSCC.hpp>
 
 using namespace cppforge::data_structure::graph;
 using namespace cppforge::data_structure::graph::algorithm;

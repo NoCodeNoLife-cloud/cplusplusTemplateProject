@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/graph/Graph.hpp"
+#include <cppforge/data_structure/graph/Graph.hpp>
 
 using namespace cppforge::data_structure::graph;
 

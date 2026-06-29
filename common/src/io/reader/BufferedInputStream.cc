@@ -6,7 +6,7 @@
  *          and mark/reset are supported up to the buffer capacity.
  */
 
-#include "io/reader/BufferedInputStream.hpp"
+#include <cppforge/io/reader/BufferedInputStream.hpp>
 
 #include <algorithm>
 #include <cstddef>

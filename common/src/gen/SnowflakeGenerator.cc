@@ -6,7 +6,7 @@
  *          counter.  Handles clock rollback gracefully.
  */
 
-#include "gen/SnowflakeGenerator.hpp"
+#include <cppforge/gen/SnowflakeGenerator.hpp>
 
 #include <fmt/format.h>
 #include <chrono>

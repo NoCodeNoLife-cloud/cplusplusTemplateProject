@@ -8,7 +8,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-#include "io/reader/AbstractReader.hpp"
+#include <cppforge/io/reader/AbstractReader.hpp>
 
 using namespace cppforge::io::reader;
 

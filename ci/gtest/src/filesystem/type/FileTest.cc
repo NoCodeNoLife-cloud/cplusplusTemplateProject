@@ -12,10 +12,10 @@
 
 #include <gtest/gtest.h>
 
-#include "filesystem/core/File.hpp"
+#include <cppforge/filesystem/core/File.hpp>
 
-#include "filesystem/core/Directory.hpp"
-#include "filesystem/core/Path.hpp"
+#include <cppforge/filesystem/core/Directory.hpp>
+#include <cppforge/filesystem/core/Path.hpp>
 
 using namespace cppforge::filesystem::core;
 namespace fs = std::filesystem;

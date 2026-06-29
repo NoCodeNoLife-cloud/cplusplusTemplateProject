@@ -6,7 +6,7 @@
  *          non-whitespace, and case conversion uses std::toupper/tolower.
  */
 
-#include "toolkit/StringToolkit.hpp"
+#include <cppforge/toolkit/StringToolkit.hpp>
 
 #include <cctype>
 #include <string>

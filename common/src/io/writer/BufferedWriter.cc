@@ -7,7 +7,7 @@
  *          separator before flushing.
  */
 
-#include "io/writer/BufferedWriter.hpp"
+#include <cppforge/io/writer/BufferedWriter.hpp>
 
 #include <stdexcept>
 

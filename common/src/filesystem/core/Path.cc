@@ -7,10 +7,10 @@
  *          circular header dependencies.
  */
 
-#include "filesystem/core/Path.hpp"
+#include <cppforge/filesystem/core/Path.hpp>
 
-#include "filesystem/core/File.hpp"
-#include "filesystem/core/Directory.hpp"
+#include <cppforge/filesystem/core/File.hpp>
+#include <cppforge/filesystem/core/Directory.hpp>
 
 #include <utility>
 

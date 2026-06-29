@@ -6,7 +6,7 @@
  *          nextTokens splits the entire input by a configurable delimiter.
  */
 
-#include "io/reader/Scanner.hpp"
+#include <cppforge/io/reader/Scanner.hpp>
 
 #include <istream>
 #include <limits>

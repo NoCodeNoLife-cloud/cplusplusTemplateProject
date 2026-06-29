@@ -5,10 +5,10 @@
  *          closedir) or Windows (FindFirstFile, FindNextFile) APIs.
  */
 
-#include "filesystem/core/Directory.hpp"
+#include <cppforge/filesystem/core/Directory.hpp>
 
-#include "filesystem/core/Path.hpp"
-#include "filesystem/core/File.hpp"
+#include <cppforge/filesystem/core/Path.hpp>
+#include <cppforge/filesystem/core/File.hpp>
 
 #include <chrono>
 #include <filesystem>

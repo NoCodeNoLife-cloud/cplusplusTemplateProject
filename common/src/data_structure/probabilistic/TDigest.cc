@@ -7,7 +7,7 @@
  *          early.
  */
 
-#include "TDigest.hpp"
+#include <cppforge/data_structure/probabilistic/TDigest.hpp>
 
 #include <cstdint>
 

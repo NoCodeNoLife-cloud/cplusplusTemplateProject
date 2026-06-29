@@ -5,7 +5,7 @@
  *          a fixed offset, preserving case and non-alphabetic characters.
  */
 
-#include "CaesarCipher.hpp"
+#include <cppforge/crypto/cipher/CaesarCipher.hpp>
 
 #include <algorithm>
 #include <limits>

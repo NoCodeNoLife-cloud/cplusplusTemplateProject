@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/io/IBuffer.hpp"
+#include <cppforge/interface/io/IBuffer.hpp>
 
 using namespace cppforge::interface::io;
 

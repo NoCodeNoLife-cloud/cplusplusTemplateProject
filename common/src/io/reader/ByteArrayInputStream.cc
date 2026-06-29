@@ -5,7 +5,7 @@
  *          position tracking, mark/reset, and available-byte counting.
  */
 
-#include "io/reader/ByteArrayInputStream.hpp"
+#include <cppforge/io/reader/ByteArrayInputStream.hpp>
 
 #include <algorithm>
 #include <cstddef>

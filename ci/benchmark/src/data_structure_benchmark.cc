@@ -14,12 +14,12 @@
 #include <random>
 #include <algorithm>
 
-#include "data_structure/heap/Heap.hpp"
-#include "data_structure/union_find/UnionSet.hpp"
-#include "data_structure/list/SkipList.hpp"
-#include "data_structure/tree/balanced/RedBlackTree.hpp"
-#include "data_structure/tree/core/BinarySearchTree.hpp"
-#include "data_structure/top_k/TopK.hpp"
+#include <cppforge/data_structure/heap/Heap.hpp>
+#include <cppforge/data_structure/union_find/UnionSet.hpp>
+#include <cppforge/data_structure/list/SkipList.hpp>
+#include <cppforge/data_structure/tree/balanced/RedBlackTree.hpp>
+#include <cppforge/data_structure/tree/core/BinarySearchTree.hpp>
+#include <cppforge/data_structure/top_k/TopK.hpp>
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Helpers

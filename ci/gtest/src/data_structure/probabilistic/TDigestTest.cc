@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/probabilistic/TDigest.hpp"
+#include <cppforge/data_structure/probabilistic/TDigest.hpp>
 
 #include <algorithm>
 #include <cmath>

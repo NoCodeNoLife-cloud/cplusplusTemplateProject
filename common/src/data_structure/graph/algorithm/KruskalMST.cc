@@ -9,7 +9,7 @@
  *          and union by rank (in unite) for near-constant time operations.
  */
 
-#include "data_structure/graph/algorithm/KruskalMST.hpp"
+#include <cppforge/data_structure/graph/algorithm/KruskalMST.hpp>
 
 #include <algorithm>
 

@@ -8,7 +8,7 @@
 #include <chrono>
 #include <gtest/gtest.h>
 
-#include "auth/UserCredentials.hpp"
+#include <cppforge/auth/UserCredentials.hpp>
 
 using namespace cppforge::auth;
 

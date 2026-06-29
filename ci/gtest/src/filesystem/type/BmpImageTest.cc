@@ -12,7 +12,7 @@
 
 #include <gtest/gtest.h>
 
-#include "filesystem/type/BmpImage.hpp"
+#include <cppforge/filesystem/type/BmpImage.hpp>
 
 using namespace cppforge::filesystem::type;
 

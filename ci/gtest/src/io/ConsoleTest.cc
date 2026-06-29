@@ -7,7 +7,7 @@
 #include <sstream>
 #include <gtest/gtest.h>
 
-#include "io/Console.hpp"
+#include <cppforge/io/Console.hpp>
 
 using namespace cppforge::io;
 

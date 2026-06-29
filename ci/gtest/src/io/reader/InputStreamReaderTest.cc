@@ -2,8 +2,8 @@
 #include <memory>
 #include <vector>
 
-#include "io/reader/InputStreamReader.hpp"
-#include "io/reader/StringReader.hpp"
+#include <cppforge/io/reader/InputStreamReader.hpp>
+#include <cppforge/io/reader/StringReader.hpp>
 
 using namespace cppforge::io::reader;
 

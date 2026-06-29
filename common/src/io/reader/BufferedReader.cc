@@ -6,7 +6,7 @@
  *          operate on the buffer, and readLine() scans for newline delimiters.
  */
 
-#include "io/reader/BufferedReader.hpp"
+#include <cppforge/io/reader/BufferedReader.hpp>
 
 #include <algorithm>
 #include <stdexcept>

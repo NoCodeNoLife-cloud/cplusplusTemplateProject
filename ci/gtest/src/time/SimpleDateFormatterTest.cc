@@ -10,7 +10,7 @@
 #include <stdexcept>
 #include <gtest/gtest.h>
 
-#include "time/SimpleDateFormatter.hpp"
+#include <cppforge/time/SimpleDateFormatter.hpp>
 
 using namespace cppforge::time;
 

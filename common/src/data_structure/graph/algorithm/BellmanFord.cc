@@ -11,7 +11,7 @@
  *          and detects if any edge can still be relaxed after V-1 rounds.
  */
 
-#include "data_structure/graph/algorithm/BellmanFord.hpp"
+#include <cppforge/data_structure/graph/algorithm/BellmanFord.hpp>
 
 namespace cppforge::data_structure::graph::algorithm
 {

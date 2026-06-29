@@ -6,7 +6,7 @@
  *          and available() uses seekg to compute remaining bytes.
  */
 
-#include "io/reader/FileInputStream.hpp"
+#include <cppforge/io/reader/FileInputStream.hpp>
 
 #include <algorithm>
 #include <cstddef>

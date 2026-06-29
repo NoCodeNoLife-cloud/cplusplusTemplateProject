@@ -12,7 +12,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "crypto/cipher/StreamCipher.hpp"
+#include <cppforge/crypto/cipher/StreamCipher.hpp>
 
 using namespace cppforge::crypto::cipher;
 

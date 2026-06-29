@@ -7,7 +7,7 @@
  *          early and reducing code-bloat in large translation units.
  */
 
-#include "CountMinSketch.hpp"
+#include <cppforge/data_structure/probabilistic/CountMinSketch.hpp>
 
 #include <string>
 

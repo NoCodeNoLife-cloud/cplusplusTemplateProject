@@ -10,7 +10,7 @@
  *            Encryption Function" (1987).
  */
 
-#include "data_structure/tree/crypto/MerkleTree.hpp"
+#include <cppforge/data_structure/tree/crypto/MerkleTree.hpp>
 
 #include <algorithm>
 #include <cstddef>

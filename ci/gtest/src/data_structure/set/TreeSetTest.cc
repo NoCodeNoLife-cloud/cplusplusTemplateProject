@@ -10,7 +10,7 @@
 #include <utility>
 #include <gtest/gtest.h>
 
-#include "data_structure/set/TreeSet.hpp"
+#include <cppforge/data_structure/set/TreeSet.hpp>
 
 using namespace cppforge::data_structure;
 

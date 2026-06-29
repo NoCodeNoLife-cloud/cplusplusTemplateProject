@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "crypto/cipher/CaesarCipher.hpp"
+#include <cppforge/crypto/cipher/CaesarCipher.hpp>
 
 using namespace cppforge::crypto::cipher;
 

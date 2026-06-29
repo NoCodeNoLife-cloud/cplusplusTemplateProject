@@ -6,7 +6,7 @@
  *          skip() discards characters, and ready() returns false by default.
  */
 
-#include "io/reader/AbstractReader.hpp"
+#include <cppforge/io/reader/AbstractReader.hpp>
 
 #include <algorithm>
 #include <stdexcept>

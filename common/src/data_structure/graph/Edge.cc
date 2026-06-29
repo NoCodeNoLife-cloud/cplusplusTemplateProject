@@ -5,7 +5,7 @@
  *          accessors and the reversed() method for undirected contexts.
  */
 
-#include "data_structure/graph/Edge.hpp"
+#include <cppforge/data_structure/graph/Edge.hpp>
 
 namespace cppforge::data_structure::graph
 {

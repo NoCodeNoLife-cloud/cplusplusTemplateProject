@@ -9,8 +9,8 @@
 #include <memory>
 #include <vector>
 
-#include "io/reader/FilterReader.hpp"
-#include "io/reader/CharArrayReader.hpp"
+#include <cppforge/io/reader/FilterReader.hpp>
+#include <cppforge/io/reader/CharArrayReader.hpp>
 
 using namespace cppforge::io::reader;
 

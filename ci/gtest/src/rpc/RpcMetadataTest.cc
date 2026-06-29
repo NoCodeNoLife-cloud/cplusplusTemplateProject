@@ -8,7 +8,7 @@
 #include <grpc/impl/connectivity_state.h>
 #include <gtest/gtest.h>
 
-#include "rpc/RpcMetadata.hpp"
+#include <cppforge/rpc/RpcMetadata.hpp>
 
 using namespace cppforge::rpc;
 

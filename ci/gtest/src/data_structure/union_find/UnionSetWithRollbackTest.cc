@@ -6,7 +6,7 @@
  *          and alternative index types.
  */
 
-#include "data_structure/union_find/UnionSetWithRollback.hpp"
+#include <cppforge/data_structure/union_find/UnionSetWithRollback.hpp>
 
 #include <cstddef>
 #include <cstdint>

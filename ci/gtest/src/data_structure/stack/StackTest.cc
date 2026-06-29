@@ -9,7 +9,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/stack/Stack.hpp"
+#include <cppforge/data_structure/stack/Stack.hpp>
 
 using namespace cppforge::data_structure;
 

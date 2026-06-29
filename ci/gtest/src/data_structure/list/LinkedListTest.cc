@@ -11,7 +11,7 @@
 #include <utility>
 #include <gtest/gtest.h>
 
-#include "data_structure/list/LinkedList.hpp"
+#include <cppforge/data_structure/list/LinkedList.hpp>
 
 using namespace cppforge::data_structure;
 

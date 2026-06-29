@@ -5,7 +5,7 @@
  *          commonly used HyperLogLog precision values.
  */
 
-#include "HyperLogLog.hpp"
+#include <cppforge/data_structure/probabilistic/HyperLogLog.hpp>
 
 namespace cppforge::data_structure::probabilistic
 {

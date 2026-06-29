@@ -7,7 +7,7 @@
  *          reset() clears for reuse.
  */
 
-#include "io/writer/ByteArrayOutputStream.hpp"
+#include <cppforge/io/writer/ByteArrayOutputStream.hpp>
 
 #include <stdexcept>
 #include <fmt/format.h>

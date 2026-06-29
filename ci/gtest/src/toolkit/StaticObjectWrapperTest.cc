@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <gtest/gtest.h>
 
-#include "toolkit/StaticObjectWrapper.hpp"
+#include <cppforge/toolkit/StaticObjectWrapper.hpp>
 
 using namespace cppforge::toolkit;
 

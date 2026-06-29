@@ -5,7 +5,7 @@
  *          interface.  Produces a 256-bit (32-byte) digest, hex-encoded.
  */
 
-#include "SHA256Strategy.hpp"
+#include <cppforge/crypto/hash/SHA256Strategy.hpp>
 
 #include <stdexcept>
 #include <fmt/format.h>

@@ -5,7 +5,7 @@
  *          base64 encoding/decoding, HMAC, and password hashing with salt.
  */
 
-#include "CryptoToolKit.hpp"
+#include <cppforge/crypto/CryptoToolKit.hpp>
 
 #include <algorithm>
 #include <glog/logging.h>

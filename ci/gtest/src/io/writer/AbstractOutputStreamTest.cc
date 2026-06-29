@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 
-#include "io/writer/AbstractOutputStream.hpp"
+#include <cppforge/io/writer/AbstractOutputStream.hpp>
 
 using namespace cppforge::io::writer;
 

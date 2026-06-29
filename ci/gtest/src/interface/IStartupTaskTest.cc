@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "interface/task/IStartupTask.hpp"
+#include <cppforge/interface/task/IStartupTask.hpp>
 
 using namespace cppforge::interface::task;
 

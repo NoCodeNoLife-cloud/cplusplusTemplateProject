@@ -10,8 +10,8 @@
 #include <benchmark/benchmark.h>
 #include <random>
 
-#include "cache/LRUCache.hpp"
-#include "cache/LFUCache.hpp"
+#include <cppforge/cache/LRUCache.hpp>
+#include <cppforge/cache/LFUCache.hpp>
 
 // ══════════════════════════════════════════════════════════════════════════
 //  LRUCache

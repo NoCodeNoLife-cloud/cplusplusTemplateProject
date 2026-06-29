@@ -5,7 +5,7 @@
  *          tracking, mark/reset, and close behaviour (string clear).
  */
 
-#include "io/reader/StringReader.hpp"
+#include <cppforge/io/reader/StringReader.hpp>
 
 #include <algorithm>
 #include <stdexcept>

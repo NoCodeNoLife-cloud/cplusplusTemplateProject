@@ -8,7 +8,7 @@
 #include <sstream>
 #include <gtest/gtest.h>
 
-#include "data_structure/geometry/Point2D.hpp"
+#include <cppforge/data_structure/geometry/Point2D.hpp>
 
 using namespace cppforge::data_structure::geometry;
 

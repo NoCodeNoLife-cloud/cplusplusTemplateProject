@@ -10,7 +10,7 @@
 #include <string_view>
 #include <gtest/gtest.h>
 
-#include "toolkit/StackTraceExceptionHandler.hpp"
+#include <cppforge/toolkit/StackTraceExceptionHandler.hpp>
 
 using namespace cppforge::toolkit;
 

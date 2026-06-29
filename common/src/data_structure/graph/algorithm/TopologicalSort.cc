@@ -7,7 +7,7 @@
  *          Both detect cycles and return an empty order if the graph is cyclic.
  */
 
-#include "data_structure/graph/algorithm/TopologicalSort.hpp"
+#include <cppforge/data_structure/graph/algorithm/TopologicalSort.hpp>
 
 #include <queue>
 #include <stack>

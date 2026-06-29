@@ -5,7 +5,7 @@
  *          "xor", "chacha20") to concrete StreamCipher constructors.
  */
 
-#include "StreamCipherFactory.hpp"
+#include <cppforge/crypto/cipher/StreamCipherFactory.hpp>
 
 #include <stdexcept>
 #include <string>
@@ -13,7 +13,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "ChaCha20Cipher.hpp"
+#include <cppforge/crypto/cipher/ChaCha20Cipher.hpp>
 
 namespace cppforge::crypto::cipher
 {

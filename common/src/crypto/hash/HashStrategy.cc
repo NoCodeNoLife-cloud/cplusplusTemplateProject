@@ -5,7 +5,7 @@
  *          including the hex-encoding helper shared by all strategy types.
  */
 
-#include "HashStrategy.hpp"
+#include <cppforge/crypto/hash/HashStrategy.hpp>
 
 #include <array>
 #include <fstream>

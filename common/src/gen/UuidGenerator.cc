@@ -6,7 +6,7 @@
  *          boost::uuids::to_string.
  */
 
-#include "gen/UuidGenerator.hpp"
+#include <cppforge/gen/UuidGenerator.hpp>
 
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>

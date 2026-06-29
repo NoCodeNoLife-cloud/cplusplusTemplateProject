@@ -11,7 +11,7 @@
 #include <thread>
 #include <gtest/gtest.h>
 
-#include "thread/DelayedTaskActuator.hpp"
+#include <cppforge/thread/DelayedTaskActuator.hpp>
 
 using namespace cppforge::thread;
 

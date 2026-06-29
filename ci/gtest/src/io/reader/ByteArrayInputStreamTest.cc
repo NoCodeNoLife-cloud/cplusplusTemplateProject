@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-#include "io/reader/ByteArrayInputStream.hpp"
+#include <cppforge/io/reader/ByteArrayInputStream.hpp>
 
 using namespace cppforge::io::reader;
 

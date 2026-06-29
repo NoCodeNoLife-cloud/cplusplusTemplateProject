@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/probabilistic/HyperLogLog.hpp"
+#include <cppforge/data_structure/probabilistic/HyperLogLog.hpp>
 
 #include <cmath>
 #include <cstdint>

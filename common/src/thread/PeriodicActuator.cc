@@ -6,7 +6,7 @@
  *          are synchronised via a mutex and atomic flag.
  */
 
-#include "thread/PeriodicActuator.hpp"
+#include <cppforge/thread/PeriodicActuator.hpp>
 
 #include <chrono>
 #include <memory>
@@ -15,7 +15,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "interface/task/ITimerTask.hpp"
+#include <cppforge/interface/task/ITimerTask.hpp>
 
 namespace cppforge::thread
 {

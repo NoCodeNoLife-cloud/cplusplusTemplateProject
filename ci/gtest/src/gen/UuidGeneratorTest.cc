@@ -13,7 +13,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "gen/UuidGenerator.hpp"
+#include <cppforge/gen/UuidGenerator.hpp>
 
 using namespace cppforge::gen;
 

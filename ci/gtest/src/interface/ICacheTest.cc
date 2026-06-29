@@ -10,7 +10,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "interface/ICache.hpp"
+#include <cppforge/interface/ICache.hpp>
 
 using namespace cppforge::interface::cache;
 

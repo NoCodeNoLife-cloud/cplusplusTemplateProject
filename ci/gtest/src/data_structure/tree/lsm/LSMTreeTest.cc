@@ -15,8 +15,8 @@
 #include <thread>
 #include <vector>
 
-#include "data_structure/tree/lsm/LSMTree.hpp"
-#include "data_structure/tree/lsm/LSMTreeOptions.hpp"
+#include <cppforge/data_structure/tree/lsm/LSMTree.hpp>
+#include <cppforge/data_structure/tree/lsm/LSMTreeOptions.hpp>
 
 using namespace cppforge::data_structure::tree::lsm;
 

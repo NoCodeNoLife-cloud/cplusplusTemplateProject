@@ -12,8 +12,8 @@
 #include <thread>
 #include <gtest/gtest.h>
 
-#include "thread/PeriodicActuator.hpp"
-#include "interface/task/ITimerTask.hpp"
+#include <cppforge/thread/PeriodicActuator.hpp>
+#include <cppforge/interface/task/ITimerTask.hpp>
 
 using namespace cppforge::thread;
 using namespace cppforge::interface::task;

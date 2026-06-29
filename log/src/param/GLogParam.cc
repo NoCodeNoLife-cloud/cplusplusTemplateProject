@@ -5,7 +5,7 @@
  *          including parameter accessors, YAML deserialization, and equality comparison.
  */
 
-#include "GLogParam.hpp"
+#include <cppforge/glog/param/GLogParam.hpp>
 
 #include <fmt/format.h>
 #include <yaml-cpp/yaml.h>

@@ -5,7 +5,7 @@
  *          parameterised statements to prevent SQL injection.
  */
 
-#include "PasswordSQL.hpp"
+#include <cppforge/sql/PasswordSQL.hpp>
 
 #include <stdexcept>
 

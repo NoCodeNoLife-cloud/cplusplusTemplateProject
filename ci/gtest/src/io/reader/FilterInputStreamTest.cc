@@ -9,8 +9,8 @@
 #include <memory>
 #include <vector>
 
-#include "io/reader/FilterInputStream.hpp"
-#include "io/reader/ByteArrayInputStream.hpp"
+#include <cppforge/io/reader/FilterInputStream.hpp>
+#include <cppforge/io/reader/ByteArrayInputStream.hpp>
 
 using namespace cppforge::io::reader;
 

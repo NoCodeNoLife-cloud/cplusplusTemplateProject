@@ -14,9 +14,9 @@
 #include <thread>
 #include <vector>
 
-#include "gen/RandomGenerator.hpp"
-#include "gen/SnowflakeGenerator.hpp"
-#include "thread/ThreadPool.hpp"
+#include <cppforge/gen/RandomGenerator.hpp>
+#include <cppforge/gen/SnowflakeGenerator.hpp>
+#include <cppforge/thread/ThreadPool.hpp>
 
 // ══════════════════════════════════════════════════════════════════════════
 //  ThreadPool

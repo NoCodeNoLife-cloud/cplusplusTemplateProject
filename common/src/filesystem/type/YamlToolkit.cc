@@ -5,7 +5,7 @@
  *          ParseString loads from memory, and ToString serialises a YAML::Node.
  */
 
-#include "filesystem/type/YamlToolkit.hpp"
+#include <cppforge/filesystem/type/YamlToolkit.hpp>
 
 #include <filesystem>
 #include <fstream>

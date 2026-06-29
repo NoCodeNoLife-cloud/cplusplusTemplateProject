@@ -12,7 +12,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "gen/SnowflakeGenerator.hpp"
+#include <cppforge/gen/SnowflakeGenerator.hpp>
 
 using namespace cppforge::gen;
 

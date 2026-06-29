@@ -9,7 +9,7 @@
 #include <utility>
 #include <gtest/gtest.h>
 
-#include "data_structure/hash/RobinHoodHashMap.hpp"
+#include <cppforge/data_structure/hash/RobinHoodHashMap.hpp>
 
 using namespace cppforge::data_structure::hash;
 

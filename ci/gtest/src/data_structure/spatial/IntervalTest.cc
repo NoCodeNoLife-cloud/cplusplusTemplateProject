@@ -9,7 +9,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/spatial/Interval.hpp"
+#include <cppforge/data_structure/spatial/Interval.hpp>
 
 using namespace cppforge::data_structure::spatial;
 

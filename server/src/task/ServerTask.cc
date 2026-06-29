@@ -13,7 +13,7 @@
 
 #include "auth/AuthRpcService.hpp"
 #include "config/ConfigParam.hpp"
-#include "config/GLogConfigurator.hpp"
+#include <cppforge/glog/config/GLogConfigurator.hpp>
 
 namespace server_app::task
 {

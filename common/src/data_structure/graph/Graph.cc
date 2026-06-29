@@ -6,13 +6,13 @@
  *          Uses a vector of adjacency lists indexed by vertex ID.
  */
 
-#include "data_structure/graph/Graph.hpp"
+#include <cppforge/data_structure/graph/Graph.hpp>
 
 #include <stdexcept>
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "data_structure/graph/Edge.hpp"
+#include <cppforge/data_structure/graph/Edge.hpp>
 
 namespace cppforge::data_structure::graph
 {

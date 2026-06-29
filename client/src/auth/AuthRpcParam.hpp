@@ -12,8 +12,8 @@
 #include <string>
 #include <yaml-cpp/node/node.h>
 
-#include "filesystem/type/YamlToolkit.hpp"
-#include "interface/serialization/IYamlConfigurable.hpp"
+#include <cppforge/filesystem/type/YamlToolkit.hpp>
+#include <cppforge/interface/serialization/IYamlConfigurable.hpp>
 
 namespace client_app::auth
 {

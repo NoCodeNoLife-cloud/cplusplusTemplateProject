@@ -7,7 +7,7 @@
  *          write(byte*, length) after bounds-checking.
  */
 
-#include "io/writer/AbstractOutputStream.hpp"
+#include <cppforge/io/writer/AbstractOutputStream.hpp>
 
 #include <fmt/format.h>
 

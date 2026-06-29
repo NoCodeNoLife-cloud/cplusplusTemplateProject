@@ -5,7 +5,7 @@
  *          offset/length bounds, position tracking, and mark/reset support.
  */
 
-#include "io/reader/CharArrayReader.hpp"
+#include <cppforge/io/reader/CharArrayReader.hpp>
 
 #include <algorithm>
 #include <iterator>

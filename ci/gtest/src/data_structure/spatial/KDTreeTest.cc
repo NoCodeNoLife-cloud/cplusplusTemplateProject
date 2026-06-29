@@ -19,9 +19,9 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/spatial/KDTree.hpp"
-#include "data_structure/geometry/Point2D.hpp"
-#include "data_structure/geometry/Point3D.hpp"
+#include <cppforge/data_structure/spatial/KDTree.hpp>
+#include <cppforge/data_structure/geometry/Point2D.hpp>
+#include <cppforge/data_structure/geometry/Point3D.hpp>
 
 using namespace cppforge::data_structure::spatial;
 using namespace cppforge::data_structure::geometry;

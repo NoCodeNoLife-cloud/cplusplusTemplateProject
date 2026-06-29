@@ -10,7 +10,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "crypto/CryptoToolKit.hpp"
+#include <cppforge/crypto/CryptoToolKit.hpp>
 
 using namespace cppforge::auth;
 using namespace cppforge::crypto;

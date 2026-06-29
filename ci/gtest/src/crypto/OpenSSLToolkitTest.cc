@@ -10,7 +10,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "crypto/OpenSSLToolkit.hpp"
+#include <cppforge/crypto/OpenSSLToolkit.hpp>
 
 using namespace cppforge::crypto;
 

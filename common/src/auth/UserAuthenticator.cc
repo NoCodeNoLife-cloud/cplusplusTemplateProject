@@ -5,15 +5,15 @@
  *          session token generation (UUID-based), and login/logout lifecycle.
  */
 
-#include "UserAuthenticator.hpp"
+#include <cppforge/auth/UserAuthenticator.hpp>
 
 #include <regex>
 #include <sstream>
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "crypto/CryptoToolKit.hpp"
-#include "auth/AuthenticationException.hpp"
+#include <cppforge/crypto/CryptoToolKit.hpp>
+#include <cppforge/auth/AuthenticationException.hpp>
 
 namespace
 {

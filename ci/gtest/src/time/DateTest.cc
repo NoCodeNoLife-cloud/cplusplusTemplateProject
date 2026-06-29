@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <gtest/gtest.h>
 
-#include "time/Date.hpp"
+#include <cppforge/time/Date.hpp>
 
 using namespace cppforge::time;
 

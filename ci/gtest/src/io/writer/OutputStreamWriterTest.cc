@@ -9,8 +9,8 @@
 #include <string>
 #include <vector>
 
-#include "io/writer/OutputStreamWriter.hpp"
-#include "io/writer/CharArrayWriter.hpp"
+#include <cppforge/io/writer/OutputStreamWriter.hpp>
+#include <cppforge/io/writer/CharArrayWriter.hpp>
 
 using namespace cppforge::io::writer;
 

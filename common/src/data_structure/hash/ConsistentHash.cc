@@ -15,7 +15,7 @@
  *            World Wide Web" (1997).
  */
 
-#include "data_structure/hash/ConsistentHash.hpp"
+#include <cppforge/data_structure/hash/ConsistentHash.hpp>
 
 #include <algorithm>
 #include <bit>

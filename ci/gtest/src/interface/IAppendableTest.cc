@@ -8,7 +8,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "interface/io/IAppendable.hpp"
+#include <cppforge/interface/io/IAppendable.hpp>
 
 using namespace cppforge::interface::io;
 

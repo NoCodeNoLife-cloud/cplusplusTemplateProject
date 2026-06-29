@@ -11,7 +11,7 @@
 
 #include <gtest/gtest.h>
 
-#include "filesystem/type/YamlToolkit.hpp"
+#include <cppforge/filesystem/type/YamlToolkit.hpp>
 
 using namespace cppforge::filesystem::type;
 namespace fs = std::filesystem;

@@ -5,13 +5,13 @@
  *          HashStrategy (SHA-1 or SHA-256) based on the requested bit count.
  */
 
-#include "SHAToolkit.hpp"
+#include <cppforge/crypto/hash/SHAToolkit.hpp>
 
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "SHA1Strategy.hpp"
-#include "SHA256Strategy.hpp"
+#include <cppforge/crypto/hash/SHA1Strategy.hpp>
+#include <cppforge/crypto/hash/SHA256Strategy.hpp>
 
 namespace cppforge::crypto::hash
 {

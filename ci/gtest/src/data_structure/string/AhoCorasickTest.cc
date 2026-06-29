@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/string/AhoCorasick.hpp"
+#include <cppforge/data_structure/string/AhoCorasick.hpp>
 
 #include <algorithm>
 #include <set>

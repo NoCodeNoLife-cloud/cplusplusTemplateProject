@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <gtest/gtest.h>
 
-#include "toolkit/ClassToolkit.hpp"
+#include <cppforge/toolkit/ClassToolkit.hpp>
 
 using namespace cppforge::toolkit;
 

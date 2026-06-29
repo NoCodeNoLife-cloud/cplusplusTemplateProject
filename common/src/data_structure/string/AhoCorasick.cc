@@ -20,7 +20,7 @@
  *   completed and are safe for concurrent invocation from multiple threads.
  */
 
-#include "data_structure/string/AhoCorasick.hpp"
+#include <cppforge/data_structure/string/AhoCorasick.hpp>
 
 #include <algorithm>
 #include <cassert>

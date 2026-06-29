@@ -10,7 +10,7 @@
 #include <utility>
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/core/BSTBase.hpp"
+#include <cppforge/data_structure/tree/core/BSTBase.hpp>
 
 using namespace cppforge::data_structure::tree::core;
 

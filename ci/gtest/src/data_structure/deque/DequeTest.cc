@@ -12,7 +12,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "data_structure/deque/Deque.hpp"
+#include <cppforge/data_structure/deque/Deque.hpp>
 
 using namespace cppforge::data_structure;
 

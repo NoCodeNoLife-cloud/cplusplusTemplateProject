@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "data_structure/tree/range/FenwickTree.hpp"
+#include <cppforge/data_structure/tree/range/FenwickTree.hpp>
 
 using namespace cppforge::data_structure::tree::range;
 

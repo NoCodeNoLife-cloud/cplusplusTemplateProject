@@ -11,7 +11,7 @@
 #include <thread>
 #include <gtest/gtest.h>
 
-#include "system/FunctionProfiler.hpp"
+#include <cppforge/system/FunctionProfiler.hpp>
 
 using namespace cppforge::system;
 

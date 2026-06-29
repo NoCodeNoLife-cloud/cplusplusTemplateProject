@@ -6,7 +6,7 @@
  *          in the parent profiler's call graph.
  */
 
-#include "system/FunctionProfiler.hpp"
+#include <cppforge/system/FunctionProfiler.hpp>
 
 #include <chrono>
 #include <stdexcept>

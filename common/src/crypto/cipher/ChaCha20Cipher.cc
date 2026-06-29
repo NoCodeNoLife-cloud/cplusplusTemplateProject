@@ -6,7 +6,7 @@
  *          Follows RFC 8439 IETF variant with 96-bit nonce.
  */
 
-#include "ChaCha20Cipher.hpp"
+#include <cppforge/crypto/cipher/ChaCha20Cipher.hpp>
 
 #include <algorithm>
 #include <stdexcept>

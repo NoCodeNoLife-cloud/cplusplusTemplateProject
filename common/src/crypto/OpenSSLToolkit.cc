@@ -5,7 +5,7 @@
  *          for AES, RAND_bytes for secure random, and PEM parsing for keys.
  */
 
-#include "crypto/OpenSSLToolkit.hpp"
+#include <cppforge/crypto/OpenSSLToolkit.hpp>
 
 #include <algorithm>
 #include <array>

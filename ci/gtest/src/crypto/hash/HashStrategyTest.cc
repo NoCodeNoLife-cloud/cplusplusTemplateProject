@@ -11,9 +11,9 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "crypto/hash/HashStrategy.hpp"
-#include "crypto/hash/SHA256Strategy.hpp"
-#include "crypto/hash/SHA1Strategy.hpp"
+#include <cppforge/crypto/hash/HashStrategy.hpp>
+#include <cppforge/crypto/hash/SHA256Strategy.hpp>
+#include <cppforge/crypto/hash/SHA1Strategy.hpp>
 
 using namespace cppforge::crypto::hash;
 

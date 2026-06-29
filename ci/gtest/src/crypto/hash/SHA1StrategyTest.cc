@@ -9,7 +9,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "crypto/hash/SHA1Strategy.hpp"
+#include <cppforge/crypto/hash/SHA1Strategy.hpp>
 
 using namespace cppforge::crypto::hash;
 

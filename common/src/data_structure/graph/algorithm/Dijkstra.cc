@@ -13,7 +13,7 @@
  *            (1959), Numerische Mathematik 1, 269â€?71.
  */
 
-#include "data_structure/graph/algorithm/Dijkstra.hpp"
+#include <cppforge/data_structure/graph/algorithm/Dijkstra.hpp>
 
 #include <queue>
 

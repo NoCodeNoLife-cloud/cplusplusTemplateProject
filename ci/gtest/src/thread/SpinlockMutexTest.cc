@@ -12,7 +12,7 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-#include "thread/SpinlockMutex.hpp"
+#include <cppforge/thread/SpinlockMutex.hpp>
 
 using namespace cppforge::thread;
 
