@@ -1,4 +1,4 @@
-# ══════════════════════════════════════════════════════════════════════════
+﻿# ══════════════════════════════════════════════════════════════════════════
 #  Common library — common_pkg
 # ══════════════════════════════════════════════════════════════════════════
 #
@@ -20,7 +20,8 @@ file(GLOB_RECURSE COMMON_SRC_FILES
 add_library(${COMMON_FRAMEWORK} ${COMMON_SRC_FILES})
 
 target_include_directories(${COMMON_FRAMEWORK} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(${COMMON_FRAMEWORK} PRIVATE
@@ -34,4 +35,16 @@ target_link_libraries(${COMMON_FRAMEWORK} PRIVATE
     fmt::fmt
     glog::glog
     unofficial::mysql-connector-cpp::connector
+)
+
+# ── Install ───────────────────────────────────────────────────────────────
+install(TARGETS ${COMMON_FRAMEWORK}
+    EXPORT cppforgeTargets
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+)
+
+install(DIRECTORY include/cppforge
+    DESTINATION include
 )

@@ -1,0 +1,8 @@
+metadata:
+  phase: execute
+  bus_stage: T1
+  tier: standard
+  project: cppforge
+  branch: refactor/phase-2
+
+tasks: []

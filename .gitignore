@@ -1,4 +1,4 @@
-# Prerequisites
+﻿# Prerequisites
 *.d
 
 cmake-build*
@@ -39,3 +39,6 @@ proto/generated/
 /.agentbridge/
 .cache/
 artifact/
+
+# Generated version header
+common/include/cppforge/Version.h

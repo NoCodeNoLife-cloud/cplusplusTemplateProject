@@ -1,4 +1,4 @@
-# ══════════════════════════════════════════════════════════════════════════
+﻿# ══════════════════════════════════════════════════════════════════════════
 #  Root project — cpp_project
 # ══════════════════════════════════════════════════════════════════════════
 #
@@ -45,7 +45,18 @@ endif ()
 set(MAIN_PROJECT cpp_project)
 project(${MAIN_PROJECT} VERSION 0.1.0 DESCRIPTION "cppforge" LANGUAGES CXX)
 
+include(GNUInstallDirs)
+
+# ── Version header ────────────────────────────────────────────────────────
+configure_file(
+    common/include/cppforge/Version.h.in
+    common/include/cppforge/Version.h
+    @ONLY
+)
+
 enable_testing()
+
+option(BUILD_EXAMPLES "Build example applications" OFF)
 
 # ── Package dependencies ─────────────────────────────────────────────────
 # All third-party libraries are managed through vcpkg
@@ -73,3 +84,33 @@ add_subdirectory(log)
 add_subdirectory(client)
 add_subdirectory(server)
 add_subdirectory(ci)
+
+# ── Examples ──────────────────────────────────────────────────────────────
+if(BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+# ── Install ───────────────────────────────────────────────────────────────
+install(EXPORT cppforgeTargets
+    NAMESPACE cppforge::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/cppforge
+    FILE cppforgeTargets.cmake
+)
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    cmake/cppforge-config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/cppforge-config.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/cppforge
+)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/cppforge-config-version.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/cppforge-config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/cppforge-config-version.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/cppforge
+)
