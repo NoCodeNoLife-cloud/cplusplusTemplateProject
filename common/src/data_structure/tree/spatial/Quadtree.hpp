@@ -23,7 +23,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure::tree::spatial
+namespace cppforge::data_structure::tree::spatial
 {
     /// @brief A 2D point with x and y coordinates
     /// Used as the spatial key for Quadtree operations.

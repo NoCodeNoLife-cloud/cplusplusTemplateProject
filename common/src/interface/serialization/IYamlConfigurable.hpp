@@ -9,7 +9,7 @@
 #pragma once
 #include <filesystem>
 
-namespace common::interface::serialization
+namespace cppforge::interface::serialization
 {
     /// @brief Interface for classes that can be configured from YAML files
     /// @details This interface defines a contract for objects that can deserialize

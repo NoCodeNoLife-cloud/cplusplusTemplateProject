@@ -1,6 +1,6 @@
 /**
  * @file Directory.cc
- * @brief Directory implementation â€” opendir/readdir traversal
+ * @brief Directory implementation â€?opendir/readdir traversal
  * @details Implements directory operations using POSIX (opendir, readdir,
  *          closedir) or Windows (FindFirstFile, FindNextFile) APIs.
  */
@@ -17,7 +17,7 @@
 
 #include <glog/logging.h>
 
-namespace common::filesystem::core
+namespace cppforge::filesystem::core
 {
     Directory::Directory(std::filesystem::path filePath)
         : dir_path_(std::move(filePath))
@@ -321,4 +321,4 @@ namespace common::filesystem::core
         return files;
     }
 
-}  // namespace common::filesystem::core
+}  // namespace cppforge::filesystem::core

@@ -19,7 +19,7 @@
 #include <thread>
 #include <vector>
 
-using namespace common::data_structure::hash;
+using namespace cppforge::data_structure::hash;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Test fixture
@@ -140,7 +140,7 @@ TEST_F(ConsistentHashTest, SingleNode_Counters)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  3. Multiple nodes — basic correctness
+//  3. Multiple nodes �?basic correctness
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -240,7 +240,7 @@ TEST_F(ConsistentHashTest, Determinism_SameKeySameNode)
     for (const auto& key : keys)
     {
         const auto first = ring.getNode(key);
-        // Call many times — must always return the same result
+        // Call many times �?must always return the same result
         for (int trial = 0; trial < 10; ++trial)
         {
             EXPECT_EQ(ring.getNode(key), first);
@@ -249,7 +249,7 @@ TEST_F(ConsistentHashTest, Determinism_SameKeySameNode)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  5. Node addition & removal — minimal remapping invariant
+//  5. Node addition & removal �?minimal remapping invariant
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -291,7 +291,7 @@ TEST_F(ConsistentHashTest, AddNode_MinimalRemapping)
         }
     }
 
-    // Expected remapping ≈ 1 / (INITIAL_NODES + 1) ≈ 9.1%
+    // Expected remapping �?1 / (INITIAL_NODES + 1) �?9.1%
     // Allow generous bounds: [5%, 20%]
     const double ratio = static_cast<double>(moved) / static_cast<double>(KEY_COUNT);
     EXPECT_GT(ratio, 0.05);
@@ -463,7 +463,7 @@ TEST_F(ConsistentHashTest, StatisticalDistribution_FairlyUniform)
     }
 
     // Each node should get roughly KEY_COUNT / NODE_COUNT keys.
-    // Allow a generous band of [60%, 140%] — perfect uniformity is not
+    // Allow a generous band of [60%, 140%] �?perfect uniformity is not
     // guaranteed with a finite vnode count.
     for (const auto& [node, count] : counts)
     {

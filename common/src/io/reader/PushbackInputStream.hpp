@@ -20,7 +20,7 @@
 
 #include "FilterInputStream.hpp"
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     /// @brief A pushback input stream allows bytes to be pushed back into the stream.
     /// This class wraps another input stream and provides the ability to "unread" bytes,

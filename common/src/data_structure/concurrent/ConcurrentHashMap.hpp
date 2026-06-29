@@ -1,6 +1,6 @@
 /**
  * @file ConcurrentHashMap.hpp
- * @brief ConcurrentHashMap â€” segment-locked concurrent hash map
+ * @brief ConcurrentHashMap â€?segment-locked concurrent hash map
  * @details A thread-safe hash map using striped locking with per-segment
  *          std::shared_mutex.  The hash space is divided into 2^SegmentBits
  *          segments, each protected by an independent read-write lock.
@@ -15,7 +15,7 @@
  * @par Thread Safety
  * All public methods are thread-safe.  Concurrent reads on the same segment
  * are allowed; writes serialize per segment.  Iteration via for_each holds
- * a shared lock on each segment in turn â€” no snapshot consistency guarantee
+ * a shared lock on each segment in turn â€?no snapshot consistency guarantee
  * across segments.
  *
  * Reference: Doug Lea, "ConcurrentHashMap in JSR 166" (Java), adapted for
@@ -38,7 +38,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace common::data_structure::concurrent
+namespace cppforge::data_structure::concurrent
 {
     /// @brief A thread-safe hash map with striped locking and per-segment
     ///        rehash.
@@ -107,7 +107,7 @@ namespace common::data_structure::concurrent
 
         // Prevent pathological segment counts (practical sanity limit).
         static_assert(SEGMENT_COUNT <= 65536,
-                      "SEGMENT_COUNT exceeds 65536 â€” use fewer segment bits");
+                      "SEGMENT_COUNT exceeds 65536 â€?use fewer segment bits");
 
         // Ensure hash / equality functors are safe to move in noexcept contexts.
         static_assert(std::is_nothrow_move_constructible_v<Hasher>,
@@ -257,7 +257,7 @@ namespace common::data_structure::concurrent
             return *this;
         }
 
-        /// @brief Destructor â€” frees all nodes and bucket arrays.
+        /// @brief Destructor â€?frees all nodes and bucket arrays.
         ~ConcurrentHashMap() noexcept
         {
             destroy_all_segments();
@@ -330,7 +330,7 @@ namespace common::data_structure::concurrent
                     cur = cur->next;
                 }
 
-                // Key not found â€” insert.
+                // Key not found â€?insert.
                 seg.buckets[bucket_idx] = new Node(std::move(key), std::move(value),
                                                    seg.buckets[bucket_idx]);
                 seg.size.fetch_add(1, std::memory_order_relaxed);
@@ -627,4 +627,4 @@ namespace common::data_structure::concurrent
         }
     };
 
-} // namespace common::data_structure::concurrent
+} // namespace cppforge::data_structure::concurrent

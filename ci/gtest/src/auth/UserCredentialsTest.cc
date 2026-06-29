@@ -10,7 +10,7 @@
 
 #include "auth/UserCredentials.hpp"
 
-using namespace common::auth;
+using namespace cppforge::auth;
 
 /**
  * @brief Test fixture for UserCredentialsTest tests
@@ -329,7 +329,7 @@ TEST_F(UserCredentialsTest, IsLocked_ZeroMaxAttempts)
     // last_failed_attempt_ = time_point::min() makes timesince huge
     EXPECT_FALSE(creds.is_locked(std::chrono::minutes{5}, 0));
 
-    // After one failure: attempts >= 0 (true) and timesince â‰ˆ 0 < 5min
+    // After one failure: attempts >= 0 (true) and timesince â‰?0 < 5min
     creds.increment_failed_attempts();
     EXPECT_TRUE(creds.is_locked(std::chrono::minutes{5}, 0));
 }
@@ -375,7 +375,7 @@ TEST_F(UserCredentialsTest, IsLocked_ZeroDuration)
     UserCredentials creds("user", "hash", "salt");
 
     creds.increment_failed_attempts();
-    // Timesince >= 0, so < 0 is false â†’ not locked
+    // Timesince >= 0, so < 0 is false â†?not locked
     EXPECT_FALSE(creds.is_locked(std::chrono::minutes{0}, 5));
 }
 

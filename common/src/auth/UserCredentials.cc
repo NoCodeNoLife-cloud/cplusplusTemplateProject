@@ -1,6 +1,6 @@
 /**
  * @file UserCredentials.cc
- * @brief UserCredentials implementation â€” getters/setters for credential fields
+ * @brief UserCredentials implementation â€?getters/setters for credential fields
  * @details Implements the credential data object: accessors for username,
  *          password hash, roles, and account status flags.
  */
@@ -12,7 +12,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::auth
+namespace cppforge::auth
 {
     UserCredentials::UserCredentials(std::string username, std::string hashed_password, std::string salt)
         : username_(std::move(username)),

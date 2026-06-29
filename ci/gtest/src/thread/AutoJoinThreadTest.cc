@@ -12,7 +12,7 @@
 
 #include "thread/AutoJoinThread.hpp"
 
-using namespace common::thread;
+using namespace cppforge::thread;
 
 /// @brief Test fixture for AutoJoinThread tests.
 class AutoJoinThreadTest : public testing::Test

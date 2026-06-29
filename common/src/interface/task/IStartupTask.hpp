@@ -9,7 +9,7 @@
 
 #pragma once
 
-namespace common::interface::task
+namespace cppforge::interface::task
 {
     /// @brief Interface for startup tasks that need to be executed when the service starts.
     /// Startup tasks are used to perform initialization operations that are required

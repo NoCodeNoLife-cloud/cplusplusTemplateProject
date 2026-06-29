@@ -1,6 +1,6 @@
 /**
  * @file AhoCorasick.cc
- * @brief AhoCorasick implementation — completed transition table (zero-backtracking)
+ * @brief AhoCorasick implementation �?completed transition table (zero-backtracking)
  * @details Implements the IACAutomaton interface using a Trie with fail links.
  *          The build phase uses BFS to compute fail pointers, merge output lists,
  *          and then completes the transition table (@c trans_) so that every
@@ -27,7 +27,7 @@
 #include <queue>
 #include <stdexcept>
 
-namespace common::data_structure::string
+namespace cppforge::data_structure::string
 {
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -172,8 +172,8 @@ void AhoCorasick::build()
 
     // ── Step 5: Complete the transition table (zero-backtracking) ──────
     // For every state s and every byte c, compute the effective transition:
-    //   if goto_[s*256 + c] != -1 → trans_ = goto_[s*256 + c]
-    //   else → trans_ = trans_[fail_[s]*256 + c]  (recursive completion)
+    //   if goto_[s*256 + c] != -1 �?trans_ = goto_[s*256 + c]
+    //   else �?trans_ = trans_[fail_[s]*256 + c]  (recursive completion)
     //
     // States are processed in BFS order so that fail_[s] (which has strictly
     // smaller depth than s) is guaranteed to be already completed.
@@ -210,7 +210,7 @@ void AhoCorasick::build()
 
     built_ = true;
 
-    // Release goto_ — trans_ is now the sole transition table.
+    // Release goto_ �?trans_ is now the sole transition table.
     { std::vector<int32_t> empty; goto_.swap(empty); }
 }
 
@@ -297,7 +297,7 @@ void AhoCorasick::mergeOutput(std::size_t state, std::size_t failState)
 
     for (const auto patIdx : src)
     {
-        // Linear dedup scan — output lists are typically small, so this is
+        // Linear dedup scan �?output lists are typically small, so this is
         // acceptable for Task 1.  A more efficient approach (e.g. a bitset
         // or hash set) can be adopted in Task 2.
         bool found = false;
@@ -342,4 +342,4 @@ void AhoCorasick::flattenOutput()
     output_.shrink_to_fit();
 }
 
-} // namespace common::data_structure::string
+} // namespace cppforge::data_structure::string

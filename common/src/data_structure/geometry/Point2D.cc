@@ -1,6 +1,6 @@
 /**
  * @file Point2D.cc
- * @brief Point2D implementation â€” arithmetic, distance, stream output
+ * @brief Point2D implementation â€?arithmetic, distance, stream output
  * @details Implements 2D point arithmetic (addition, subtraction, scalar
  *          multiplication), Euclidean and squared-distance calculations, and
  *          stream formatting.  Delegates all mathematical operations to
@@ -13,7 +13,7 @@
 #include <iomanip>
 #include <iostream>
 
-namespace common::data_structure::geometry
+namespace cppforge::data_structure::geometry
 {
     Point2D::Point2D()  = default;
 

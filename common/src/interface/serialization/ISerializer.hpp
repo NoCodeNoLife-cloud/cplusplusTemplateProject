@@ -9,7 +9,7 @@
 #pragma once
 #include <string>
 
-namespace common::interface::serialization
+namespace cppforge::interface::serialization
 {
     /// @brief Abstract base class defining the interface for object serialization/deserialization
     /// @tparam T The type of object to be serialized/deserialized

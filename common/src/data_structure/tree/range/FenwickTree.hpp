@@ -1,6 +1,6 @@
 /**
  * @file FenwickTree.hpp
- * @brief Fenwick Tree (Binary Indexed Tree) â€” O(log n) prefix sum & point update
+ * @brief Fenwick Tree (Binary Indexed Tree) â€?O(log n) prefix sum & point update
  * @details A Fenwick tree provides O(log n) point updates and prefix-sum queries
  *          using a compact array representation.  Each index i stores a partial
  *          sum covering the range (i - LSB(i), i].  Supports range sum queries
@@ -27,7 +27,7 @@
 #include <stdexcept>
 #include <vector>
 
-namespace common::data_structure::tree::range
+namespace cppforge::data_structure::tree::range
 {
     /// @brief A Fenwick Tree (Binary Indexed Tree) for point updates and prefix/range sum queries.
     /// @tparam T The type of elements stored. Must support default construction, copy,

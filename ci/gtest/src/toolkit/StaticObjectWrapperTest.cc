@@ -10,7 +10,7 @@
 
 #include "toolkit/StaticObjectWrapper.hpp"
 
-using namespace common::toolkit;
+using namespace cppforge::toolkit;
 
 /**
  * @brief Test fixture for StaticObjectWrapperTest tests
@@ -223,7 +223,7 @@ TEST_F(StaticObjectWrapperTest, Destroy)
 
 /**
  * @brief Test isInitialized state tracking
- * @details Verifies state transitions: init â†’ true, destroy â†’ false
+ * @details Verifies state transitions: init â†?true, destroy â†?false
  */
 TEST_F(StaticObjectWrapperTest, IsInitializedStateTracking)
 {
@@ -243,7 +243,7 @@ TEST_F(StaticObjectWrapperTest, IsInitializedStateTracking)
 
 /**
  * @brief Test multiple calls to init (only first should take effect)
- * @details Verifies std::call_once semantics â€” subsequent init() calls are ignored
+ * @details Verifies std::call_once semantics â€?subsequent init() calls are ignored
  */
 TEST_F(StaticObjectWrapperTest, MultipleInitCalls)
 {

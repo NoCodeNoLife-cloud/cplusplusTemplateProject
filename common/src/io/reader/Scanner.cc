@@ -1,6 +1,6 @@
 /**
  * @file Scanner.cc
- * @brief Scanner implementation â€” token parsing, numeric conversion, delimiter split
+ * @brief Scanner implementation â€?token parsing, numeric conversion, delimiter split
  * @details Implements token-based input parsing: nextInt/nextDouble use
  *          std::sto* for conversion; getNextToken skips whitespace delimiters;
  *          nextTokens splits the entire input by a configurable delimiter.
@@ -14,7 +14,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     Scanner::Scanner(std::istream& input_stream) : input_(input_stream)
     {

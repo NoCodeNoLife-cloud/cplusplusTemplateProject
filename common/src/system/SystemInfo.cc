@@ -1,6 +1,6 @@
 /**
  * @file SystemInfo.cc
- * @brief SystemInfo implementation â€” platform-specific system query wrappers
+ * @brief SystemInfo implementation â€?platform-specific system query wrappers
  * @details Implements system information queries: sysinfo()/uname() on Linux,
  *          GetSystemInfo/GlobalMemoryStatusEx on Windows.
  */
@@ -15,7 +15,7 @@
 #include <windows.h>
 #include <fmt/format.h>
 
-namespace common::system
+namespace cppforge::system
 {
     namespace
     {

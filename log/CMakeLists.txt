@@ -19,9 +19,12 @@ file(GLOB_RECURSE GLOG_SRC_FILES
 # ── Library ──────────────────────────────────────────────────────────────
 add_library(${LOG_SERVICE} ${GLOG_SRC_FILES})
 
-target_include_directories(${LOG_SERVICE} PRIVATE
+target_include_directories(${LOG_SERVICE} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../common/src
+)
+
+target_link_libraries(${LOG_SERVICE} PUBLIC
+    common_pkg
 )
 
 target_link_libraries(${LOG_SERVICE} PRIVATE

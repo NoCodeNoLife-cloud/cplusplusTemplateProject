@@ -20,16 +20,16 @@
 #include "data_structure/spatial/Interval.hpp"
 #include "data_structure/spatial/IntervalTree.hpp"
 
-using namespace common::data_structure::spatial;
+using namespace cppforge::data_structure::spatial;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Type aliases for common IntervalTree variants
 // ══════════════════════════════════════════════════════════════════════════
 
-/// Integer interval tree with string payload — primary test variant.
+/// Integer interval tree with string payload �?primary test variant.
 using IntStringTree = IntervalTree<int, std::string>;
 
-/// Double interval tree with int payload — alternate template variant.
+/// Double interval tree with int payload �?alternate template variant.
 using DoubleIntTree = IntervalTree<double, int>;
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -299,7 +299,7 @@ TEST_F(IntervalTreeTest, Remove_SameIntervalWrongData_LeavesCorrectEntry)
     tree.insert(Interval<int>(0, 10), "B");
     ASSERT_EQ(tree.size(), 2);
 
-    // Remove "A" — "B" should remain
+    // Remove "A" �?"B" should remain
     EXPECT_TRUE(tree.remove(Interval<int>(0, 10), "A"));
     EXPECT_EQ(tree.size(), 1);
 
@@ -387,7 +387,7 @@ TEST_F(IntervalTreeTest, QueryOverlap_SomeOverlap_ReturnsCorrectSubset)
     tree.insert(Interval<int>(25, 35), "D");
 
     const auto results = tree.queryOverlap(Interval<int>(8, 12));
-    // Overlaps with [0,10) and [5,15) — not with [20,30) or [25,35)
+    // Overlaps with [0,10) and [5,15) �?not with [20,30) or [25,35)
     ASSERT_EQ(results.size(), 2);
     EXPECT_NE(std::find(results.begin(), results.end(), "A"), results.end());
     EXPECT_NE(std::find(results.begin(), results.end(), "B"), results.end());
@@ -427,7 +427,7 @@ TEST_F(IntervalTreeTest, QueryOverlap_AllOverlap_ReturnsAll)
 /**
  * @brief Edge-touching intervals overlap (high == other.low).
  * @details Per Interval semantics, intervals that touch at an edge should
- *          overlap because [0,5) contains 4 and [5,10) contains 5 — they
+ *          overlap because [0,5) contains 4 and [5,10) contains 5 �?they
  *          don't share any point, so they do NOT overlap. Actually let's
  *          check the semantics: overlap condition is
  *          !(high_ <= other.low_ || other.high_ <= low_).
@@ -436,7 +436,7 @@ TEST_F(IntervalTreeTest, QueryOverlap_AllOverlap_ReturnsAll)
  *          intervals do NOT overlap with half-open semantics. The test name
  *          says "should overlap" but per the reference docs:
  *          "including edge-touching where one interval's high equals the
- *          other's low" — wait, the overlaps() comment says that. Let me
+ *          other's low" �?wait, the overlaps() comment says that. Let me
  *          re-check the implementation:
  *
  *          return !(high_ <= other.low_ || other.high_ <= low_);
@@ -458,7 +458,7 @@ TEST_F(IntervalTreeTest, QueryOverlap_EdgeTouching_DoesNotOverlap)
     tree.insert(Interval<int>(0, 5), "A");
     tree.insert(Interval<int>(5, 10), "B");
 
-    // Query [5,10) — [5,10) overlaps itself, but [0,5) ends at 5 so no overlap
+    // Query [5,10) �?[5,10) overlaps itself, but [0,5) ends at 5 so no overlap
     const auto results = tree.queryOverlap(Interval<int>(5, 10));
     ASSERT_EQ(results.size(), 1);
     EXPECT_EQ(results[0], "B");
@@ -701,7 +701,7 @@ TEST_F(IntervalTreeTest, MoveAssignment_SelfMove_IsSafe)
     tree.insert(Interval<int>(0, 10), "A");
     tree.insert(Interval<int>(20, 30), "B");
 
-    // Self-assignment via std::move — should be safe
+    // Self-assignment via std::move �?should be safe
     tree = std::move(tree);  // NOLINT
 
     // After self-move, the object should still be in a valid (unspecified but
@@ -880,7 +880,7 @@ TEST_F(IntervalTreeTest, LargeScale_Stress)
     EXPECT_EQ(tree.size(), static_cast<size_t>(N));
     EXPECT_TRUE(tree.verifyIntegrity());
 
-    // Query a selection of points — each should find exactly one interval
+    // Query a selection of points �?each should find exactly one interval
     for (int i = 0; i < N; i += 50)
     {
         const int point = i * 100 + 25;
@@ -930,7 +930,7 @@ TEST_F(IntervalTreeTest, LargeScale_Stress)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief IntervalTree<double, int> variant — insert and query.
+ * @brief IntervalTree<double, int> variant �?insert and query.
  * @details Verifies that the tree works correctly with double endpoints
  *          and int payload
  */
@@ -960,7 +960,7 @@ TEST_F(IntervalTreeTest, DoubleIntVariant_InsertAndQuery)
 }
 
 /**
- * @brief IntervalTree<double, int> variant — remove and clear.
+ * @brief IntervalTree<double, int> variant �?remove and clear.
  * @details Verifies remove and clear operations with double+int types
  */
 TEST_F(IntervalTreeTest, DoubleIntVariant_RemoveAndClear)
@@ -986,7 +986,7 @@ TEST_F(IntervalTreeTest, DoubleIntVariant_RemoveAndClear)
 }
 
 /**
- * @brief IntervalTree<double, int> variant — move semantics.
+ * @brief IntervalTree<double, int> variant �?move semantics.
  * @details Verifies move constructor with double+int types
  */
 TEST_F(IntervalTreeTest, DoubleIntVariant_MoveConstructor)
@@ -1005,7 +1005,7 @@ TEST_F(IntervalTreeTest, DoubleIntVariant_MoveConstructor)
 }
 
 /**
- * @brief IntervalTree<double, int> variant — large-scale stress.
+ * @brief IntervalTree<double, int> variant �?large-scale stress.
  * @details Stress test with double+int types to ensure template flexibility
  */
 TEST_F(IntervalTreeTest, DoubleIntVariant_LargeScale)
@@ -1060,7 +1060,7 @@ TEST_F(IntervalTreeTest, SharedEndpointIntervals_CorrectResults)
     EXPECT_TRUE(tree.insert(Interval<int>(5, 10), "B"));
     EXPECT_TRUE(tree.insert(Interval<int>(0, 10), "C"));
 
-    // Point 4 — inside A and C, not B
+    // Point 4 �?inside A and C, not B
     {
         const auto r = tree.queryPoint(4);
         ASSERT_EQ(r.size(), 2);
@@ -1068,7 +1068,7 @@ TEST_F(IntervalTreeTest, SharedEndpointIntervals_CorrectResults)
         EXPECT_NE(std::find(r.begin(), r.end(), "C"), r.end());
     }
 
-    // Point 5 — inside B and C, not A (exclusive at high)
+    // Point 5 �?inside B and C, not A (exclusive at high)
     {
         const auto r = tree.queryPoint(5);
         ASSERT_EQ(r.size(), 2);

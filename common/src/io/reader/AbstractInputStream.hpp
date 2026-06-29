@@ -19,7 +19,7 @@
 
 #include "interface/io/ICloseable.hpp"
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     /// @brief Abstract base class for all input streams.
     /// Provides standard input stream functionality that can be extended by concrete implementations.

@@ -1,6 +1,6 @@
 /**
  * @file CryptoToolKit.cc
- * @brief CryptoToolKit implementation â€” hashing, encoding, password utilities
+ * @brief CryptoToolKit implementation â€?hashing, encoding, password utilities
  * @details Implements static utility methods: hash computation via OpenSSL,
  *          base64 encoding/decoding, HMAC, and password hashing with salt.
  */
@@ -11,7 +11,7 @@
 #include <glog/logging.h>
 #include <openssl/rand.h>
 
-namespace common::crypto
+namespace cppforge::crypto
 {
     std::string CryptoToolKit::generate_salt()
     {

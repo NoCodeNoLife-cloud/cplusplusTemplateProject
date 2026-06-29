@@ -10,7 +10,7 @@
 
 #include "system/SystemPerformanceMonitor.hpp"
 
-using namespace common::system;
+using namespace cppforge::system;
 
 /**
  * @brief Test fixture for SystemPerformanceMonitorTest tests
@@ -24,7 +24,7 @@ protected:
 
     void TearDown() override
     {
-        // No runtime state to clean up â€” all methods are stateless reads
+        // No runtime state to clean up â€?all methods are stateless reads
     }
 };
 

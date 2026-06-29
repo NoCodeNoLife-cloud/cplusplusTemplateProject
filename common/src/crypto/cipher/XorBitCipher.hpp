@@ -4,7 +4,7 @@
  * @details Implements a simple XOR cipher where plaintext is XORed with a
  *          repeating key stream.  Both encryption and decryption use the same
  *          XOR operation (symmetric).  NOT cryptographically secure for
- *          production use â€” suitable for obfuscation and educational purposes.
+ *          production use â€?suitable for obfuscation and educational purposes.
  *
  * @par Thread Safety
  * This class is **not** thread-safe.  External synchronisation is required
@@ -17,7 +17,7 @@
 
 #include "StreamCipher.hpp"
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     /**
      * @class XorBitCipher

@@ -32,7 +32,7 @@ namespace server_app::auth
     ///     .serverAddress("0.0.0.0:50051")
     ///     .build();
     /// @endcode
-    class AuthRpcParam final : public common::interface::serialization::IYamlConfigurable
+    class AuthRpcParam final : public cppforge::interface::serialization::IYamlConfigurable
     {
     public:
         AuthRpcParam();

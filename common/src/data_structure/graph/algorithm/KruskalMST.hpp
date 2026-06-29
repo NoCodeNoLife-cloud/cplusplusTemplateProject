@@ -13,7 +13,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Kruskal's Minimum Spanning Tree algorithm
     /// @details Processes edges in ascending weight order, adding each edge if it

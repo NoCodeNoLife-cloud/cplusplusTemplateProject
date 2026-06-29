@@ -10,7 +10,7 @@
  *
  *          Memory management uses a concurrent free pool (itself a Treiber
  *          stack with tagged-pointer ABA prevention).  Popped nodes are pushed
- *          to the free pool for reuse — never freed during normal operation.
+ *          to the free pool for reuse �?never freed during normal operation.
  *          Push attempts to pop from the free pool first; only when the pool
  *          is empty does it allocate a new node via `new`.  This design avoids
  *          use-after-free without requiring epoch-based reclamation or hazard
@@ -51,7 +51,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace common::data_structure::concurrent
+namespace cppforge::data_structure::concurrent
 {
     /// @brief Lock-free LIFO stack with tagged-pointer ABA protection.
     ///
@@ -89,7 +89,7 @@ namespace common::data_structure::concurrent
         /// @brief Constructs an empty stack.
         TreiberStack() = default;
 
-        /// @brief Destructor — drains the stack and free pool, deletes all
+        /// @brief Destructor �?drains the stack and free pool, deletes all
         ///        remaining nodes.
         ~TreiberStack() noexcept override;
 
@@ -99,11 +99,11 @@ namespace common::data_structure::concurrent
 
         // ── Move ───────────────────────────────────────────────────────
 
-        /// @brief Move constructor — transfers all nodes from @p other.
+        /// @brief Move constructor �?transfers all nodes from @p other.
         /// @param other The stack to move from.  Left in a valid empty state.
         TreiberStack(TreiberStack&& other) noexcept;
 
-        /// @brief Move assignment — releases current resources, then
+        /// @brief Move assignment �?releases current resources, then
         ///        transfers ownership of @p other's nodes.
         /// @param other The stack to move from.
         /// @return Reference to this stack.
@@ -300,11 +300,11 @@ namespace common::data_structure::concurrent
                 // (which was the free-list chain pointer) to 0 so it is
                 // ready for stack insertion.
                 head_node->next.store(0, std::memory_order_relaxed);
-                // The optional is still engaged (moved-from) — push will
+                // The optional is still engaged (moved-from) �?push will
                 // replace it via emplace() when the node is reused.
                 return head_node;
             }
-            // CAS failed — retry with the updated old_head.
+            // CAS failed �?retry with the updated old_head.
         }
     }
 
@@ -312,7 +312,7 @@ namespace common::data_structure::concurrent
     void TreiberStack<T>::push_free_node(Node* node) noexcept
     {
         // Link the node into the free list.  The optional value is not reset
-        // here — it remains engaged (moved-from) to avoid races where another
+        // here �?it remains engaged (moved-from) to avoid races where another
         // thread holds a pointer to this node and may dereference the optional.
         // push() will replace the value via emplace() when the node is reused.
 
@@ -330,7 +330,7 @@ namespace common::data_structure::concurrent
             {
                 return;  // Successfully pushed.
             }
-            // CAS failed — reload old_head and retry.
+            // CAS failed �?reload old_head and retry.
         }
     }
 
@@ -381,7 +381,7 @@ namespace common::data_structure::concurrent
                 size_.fetch_add(1, std::memory_order_relaxed);
                 return;
             }
-            // CAS failed — reload old_top and retry.
+            // CAS failed �?reload old_top and retry.
         }
     }
 
@@ -413,7 +413,7 @@ namespace common::data_structure::concurrent
                 // its value for the next pop attempt.
 
                 // Defensive check: if the value was concurrently emplaced
-                // (emplace temporarily empties the optional), retry — top_
+                // (emplace temporarily empties the optional), retry �?top_
                 // must have changed since the node was recycled.
                 if (!top_node->value.has_value())
                 {
@@ -428,14 +428,14 @@ namespace common::data_structure::concurrent
                                                std::memory_order_release,
                                                std::memory_order_relaxed))
                 {
-                    // CAS succeeded — we own the node exclusively.
+                    // CAS succeeded �?we own the node exclusively.
                     // Recycle the node in the free pool.
                     push_free_node(top_node);
 
                     size_.fetch_sub(1, std::memory_order_relaxed);
                     return extracted_value;
                 }
-                // CAS failed — discard the copy, retry the loop.
+                // CAS failed �?discard the copy, retry the loop.
             }
             else
             {
@@ -445,7 +445,7 @@ namespace common::data_structure::concurrent
                                                std::memory_order_release,
                                                std::memory_order_relaxed))
                 {
-                    // CAS succeeded — we own the node exclusively.
+                    // CAS succeeded �?we own the node exclusively.
                     // (Defensive has_value check for robustness.)
                     if (!top_node->value.has_value())
                     {
@@ -465,7 +465,7 @@ namespace common::data_structure::concurrent
                     size_.fetch_sub(1, std::memory_order_relaxed);
                     return extracted_value;
                 }
-                // CAS failed — retry the loop.
+                // CAS failed �?retry the loop.
             }
         }
     }
@@ -502,7 +502,7 @@ namespace common::data_structure::concurrent
                     break;
                 }
                 // Save next before destroying (next field may be modified
-                // if this node was also in the free pool — but since we
+                // if this node was also in the free pool �?but since we
                 // are single-threaded here, this is safe).
                 uintptr_t next_tagged = cur->next.load(std::memory_order_relaxed);
                 cur->value.reset();
@@ -535,4 +535,4 @@ namespace common::data_structure::concurrent
         }
     }
 
-} // namespace common::data_structure::concurrent
+} // namespace cppforge::data_structure::concurrent

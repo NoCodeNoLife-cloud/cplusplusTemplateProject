@@ -24,7 +24,7 @@
 
 #include "AbstractOutputStream.hpp"
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     /// @brief A class for writing data to a file.
     /// @details This class provides methods for writing bytes to a file, either

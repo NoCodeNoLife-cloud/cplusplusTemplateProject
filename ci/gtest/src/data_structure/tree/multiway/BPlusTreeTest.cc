@@ -9,7 +9,7 @@
 
 #include "data_structure/tree/multiway/BPlusTree.hpp"
 
-using namespace common::data_structure::tree::multiway;
+using namespace cppforge::data_structure::tree::multiway;
 
 /**
  * @brief Test fixture for BPlusTree tests
@@ -434,7 +434,7 @@ TEST_F(BPlusTreeTest, Height_AfterInserts_Reasonable)
     for (int32_t i = 0; i < 100; ++i)
         tree.insert(i, std::to_string(i));
     int32_t h = tree.height();
-    // t=2 => max fanout = 4 => min height â‰ˆ ceil(log4(100)) â‰ˆ 4
+    // t=2 => max fanout = 4 => min height â‰?ceil(log4(100)) â‰?4
     EXPECT_GE(h, 1);
     EXPECT_LE(h, 6);
 }

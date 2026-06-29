@@ -1,6 +1,6 @@
 /**
  * @file RpcMetadata.cc
- * @brief RpcMetadata implementation â€” key-value storage and iteration
+ * @brief RpcMetadata implementation â€?key-value storage and iteration
  * @details Implements RPC metadata management: insert, lookup, erase, and
  *          iteration over metadata key-value pairs.
  */
@@ -11,7 +11,7 @@
 #include <utility>
 #include <fmt/format.h>
 
-namespace common::rpc
+namespace cppforge::rpc
 {
     std::string RpcMetadata::grpcStateToString(const grpc_connectivity_state state)
     {

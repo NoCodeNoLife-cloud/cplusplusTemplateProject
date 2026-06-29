@@ -1,6 +1,6 @@
 /**
  * @file BTree.hpp
- * @brief B-tree with configurable minimum degree â€” O(log n) all operations
+ * @brief B-tree with configurable minimum degree â€?O(log n) all operations
  * @details A self-balancing tree that maintains sorted data with multiple keys
  *          per node.  Each node can hold multiple keys and child pointers,
  *          minimising I/O for block-oriented storage systems.  This
@@ -29,7 +29,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure::tree::multiway
+namespace cppforge::data_structure::tree::multiway
 {
     /// @brief A B-tree (balanced tree) with configurable minimum degree
     /// @details Properties (t = Order, minimum degree >= 2):

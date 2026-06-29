@@ -69,7 +69,7 @@ static std::vector<std::string> generate_string_keys(const size_t n)
 //  ConsistentHash
 // ══════════════════════════════════════════════════════════════════════════
 
-/// @brief ConsistentHash node insertion throughput — ring is freshly
+/// @brief ConsistentHash node insertion throughput �?ring is freshly
 ///        constructed each iteration.
 static void BM_ConsistentHash_AddNode(benchmark::State& state)
 {
@@ -79,7 +79,7 @@ static void BM_ConsistentHash_AddNode(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::hash::ConsistentHash ring;
+        cppforge::data_structure::hash::ConsistentHash ring;
         for (size_t i = 0; i < n; ++i)
         {
             ring.addNode(node_names[i], 3);
@@ -96,7 +96,7 @@ static void BM_ConsistentHash_GetNode(benchmark::State& state)
     const auto n = static_cast<size_t>(state.range(0));
     const auto node_names = generate_node_names(n);
 
-    common::data_structure::hash::ConsistentHash ring;
+    cppforge::data_structure::hash::ConsistentHash ring;
     for (const auto& name : node_names)
         ring.addNode(name, 3);
 
@@ -122,7 +122,7 @@ static void BM_ConsistentHash_GetNodes_Replicas3(benchmark::State& state)
     const auto n = static_cast<size_t>(state.range(0));
     const auto node_names = generate_node_names(n);
 
-    common::data_structure::hash::ConsistentHash ring;
+    cppforge::data_structure::hash::ConsistentHash ring;
     for (const auto& name : node_names)
         ring.addNode(name, 3);
 
@@ -142,7 +142,7 @@ static void BM_ConsistentHash_GetNodes_Replicas3(benchmark::State& state)
 }
 BENCHMARK(BM_ConsistentHash_GetNodes_Replicas3)->Range(64, 8 << 10);
 
-/// @brief ConsistentHash node removal throughput — pacing timing excludes
+/// @brief ConsistentHash node removal throughput �?pacing timing excludes
 ///        re-population.
 static void BM_ConsistentHash_RemoveNode(benchmark::State& state)
 {
@@ -153,7 +153,7 @@ static void BM_ConsistentHash_RemoveNode(benchmark::State& state)
     {
         (void)_;
         state.PauseTiming();
-        common::data_structure::hash::ConsistentHash ring;
+        cppforge::data_structure::hash::ConsistentHash ring;
         for (const auto& name : node_names)
         {
             ring.addNode(name, 3);
@@ -182,7 +182,7 @@ static void BM_RobinHoodMap_Insert(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::hash::RobinHoodHashMap<int, int> map;
+        cppforge::data_structure::hash::RobinHoodHashMap<int, int> map;
         for (size_t i = 0; i < n; ++i)
         {
             map.insert(data[i], data[i]);
@@ -192,13 +192,13 @@ static void BM_RobinHoodMap_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_RobinHoodMap_Insert)->Range(64, 8 << 10);
 
-/// @brief RobinHoodHashMap find throughput — all queries target present keys.
+/// @brief RobinHoodHashMap find throughput �?all queries target present keys.
 static void BM_RobinHoodMap_Find_Hit(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto data = generate_shuffled(n);
 
-    common::data_structure::hash::RobinHoodHashMap<int, int> map;
+    cppforge::data_structure::hash::RobinHoodHashMap<int, int> map;
     for (const auto v : data) map.insert(v, v);
 
     auto rng = make_rng();
@@ -213,13 +213,13 @@ static void BM_RobinHoodMap_Find_Hit(benchmark::State& state)
 }
 BENCHMARK(BM_RobinHoodMap_Find_Hit)->Range(64, 8 << 10);
 
-/// @brief RobinHoodHashMap find throughput — all queries target absent keys.
+/// @brief RobinHoodHashMap find throughput �?all queries target absent keys.
 static void BM_RobinHoodMap_Find_Miss(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto data = generate_shuffled(n);
 
-    common::data_structure::hash::RobinHoodHashMap<int, int> map;
+    cppforge::data_structure::hash::RobinHoodHashMap<int, int> map;
     for (const auto v : data) map.insert(v, v);
 
     auto rng = make_rng();
@@ -235,7 +235,7 @@ static void BM_RobinHoodMap_Find_Miss(benchmark::State& state)
 }
 BENCHMARK(BM_RobinHoodMap_Find_Miss)->Range(64, 8 << 10);
 
-/// @brief RobinHoodHashMap erase throughput — pacing timing excludes
+/// @brief RobinHoodHashMap erase throughput �?pacing timing excludes
 ///        re-population.
 static void BM_RobinHoodMap_Erase(benchmark::State& state)
 {
@@ -246,7 +246,7 @@ static void BM_RobinHoodMap_Erase(benchmark::State& state)
     {
         (void)_;
         state.PauseTiming();
-        common::data_structure::hash::RobinHoodHashMap<int, int> map;
+        cppforge::data_structure::hash::RobinHoodHashMap<int, int> map;
         for (const auto v : data) map.insert(v, v);
         state.ResumeTiming();
 
@@ -272,7 +272,7 @@ static void BM_CuckooMap_Insert(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::hash::CuckooHashMap<int, int> map;
+        cppforge::data_structure::hash::CuckooHashMap<int, int> map;
         for (size_t i = 0; i < n; ++i)
         {
             map.insert(data[i], data[i]);
@@ -282,13 +282,13 @@ static void BM_CuckooMap_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_CuckooMap_Insert)->Range(64, 8 << 10);
 
-/// @brief CuckooHashMap find throughput — all queries target present keys.
+/// @brief CuckooHashMap find throughput �?all queries target present keys.
 static void BM_CuckooMap_Find_Hit(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto data = generate_shuffled(n);
 
-    common::data_structure::hash::CuckooHashMap<int, int> map;
+    cppforge::data_structure::hash::CuckooHashMap<int, int> map;
     for (const auto v : data) map.insert(v, v);
 
     auto rng = make_rng();
@@ -303,13 +303,13 @@ static void BM_CuckooMap_Find_Hit(benchmark::State& state)
 }
 BENCHMARK(BM_CuckooMap_Find_Hit)->Range(64, 8 << 10);
 
-/// @brief CuckooHashMap find throughput — all queries target absent keys.
+/// @brief CuckooHashMap find throughput �?all queries target absent keys.
 static void BM_CuckooMap_Find_Miss(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto data = generate_shuffled(n);
 
-    common::data_structure::hash::CuckooHashMap<int, int> map;
+    cppforge::data_structure::hash::CuckooHashMap<int, int> map;
     for (const auto v : data) map.insert(v, v);
 
     auto rng = make_rng();
@@ -325,7 +325,7 @@ static void BM_CuckooMap_Find_Miss(benchmark::State& state)
 }
 BENCHMARK(BM_CuckooMap_Find_Miss)->Range(64, 8 << 10);
 
-/// @brief CuckooHashMap erase throughput — pacing timing excludes
+/// @brief CuckooHashMap erase throughput �?pacing timing excludes
 ///        re-population.
 static void BM_CuckooMap_Erase(benchmark::State& state)
 {
@@ -336,7 +336,7 @@ static void BM_CuckooMap_Erase(benchmark::State& state)
     {
         (void)_;
         state.PauseTiming();
-        common::data_structure::hash::CuckooHashMap<int, int> map;
+        cppforge::data_structure::hash::CuckooHashMap<int, int> map;
         for (const auto v : data) map.insert(v, v);
         state.ResumeTiming();
 
@@ -363,7 +363,7 @@ static void BM_CuckooFilter_Insert(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::CuckooFilter<std::string> filter(
+        cppforge::data_structure::CuckooFilter<std::string> filter(
             static_cast<uint64_t>(n));
         for (size_t i = 0; i < n; ++i)
         {
@@ -375,13 +375,13 @@ static void BM_CuckooFilter_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_CuckooFilter_Insert)->Range(64, 8 << 10);
 
-/// @brief CuckooFilter contains throughput — all queries target present keys.
+/// @brief CuckooFilter contains throughput �?all queries target present keys.
 static void BM_CuckooFilter_Contains_Hit(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto keys = generate_string_keys(n);
 
-    common::data_structure::CuckooFilter<std::string> filter(
+    cppforge::data_structure::CuckooFilter<std::string> filter(
         static_cast<uint64_t>(n));
     for (const auto& k : keys) filter.insert(k);
 
@@ -397,13 +397,13 @@ static void BM_CuckooFilter_Contains_Hit(benchmark::State& state)
 }
 BENCHMARK(BM_CuckooFilter_Contains_Hit)->Range(64, 8 << 10);
 
-/// @brief CuckooFilter contains throughput — all queries target absent keys
+/// @brief CuckooFilter contains throughput �?all queries target absent keys
 ///        from a disjoint key space.
 static void BM_CuckooFilter_Contains_Miss(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
 
-    common::data_structure::CuckooFilter<std::string> filter(
+    cppforge::data_structure::CuckooFilter<std::string> filter(
         static_cast<uint64_t>(n));
     for (size_t i = 0; i < n; ++i)
         filter.insert("key_" + std::to_string(i));
@@ -425,7 +425,7 @@ static void BM_CuckooFilter_Contains_Miss(benchmark::State& state)
 }
 BENCHMARK(BM_CuckooFilter_Contains_Miss)->Range(64, 8 << 10);
 
-/// @brief CuckooFilter remove throughput — pacing timing excludes
+/// @brief CuckooFilter remove throughput �?pacing timing excludes
 ///        re-population.
 static void BM_CuckooFilter_Remove(benchmark::State& state)
 {
@@ -436,7 +436,7 @@ static void BM_CuckooFilter_Remove(benchmark::State& state)
     {
         (void)_;
         state.PauseTiming();
-        common::data_structure::CuckooFilter<std::string> filter(
+        cppforge::data_structure::CuckooFilter<std::string> filter(
             static_cast<uint64_t>(n));
         for (const auto& k : keys) filter.insert(k);
         state.ResumeTiming();

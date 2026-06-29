@@ -9,8 +9,8 @@
 
 #include "data_structure/graph/algorithm/BridgesArticulation.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for BridgesArticulation tests

@@ -10,7 +10,7 @@
 
 #include "rpc/RpcMetadata.hpp"
 
-using namespace common::rpc;
+using namespace cppforge::rpc;
 
 /**
  * @brief Test fixture for RpcMetadataTest tests

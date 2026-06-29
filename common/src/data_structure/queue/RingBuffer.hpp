@@ -34,7 +34,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief A fixed-capacity circular buffer with overwrite-on-full semantics.
     ///

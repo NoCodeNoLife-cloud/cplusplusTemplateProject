@@ -12,8 +12,8 @@
 
 #include "crypto/CryptoToolKit.hpp"
 
-using namespace common::auth;
-using namespace common::crypto;
+using namespace cppforge::auth;
+using namespace cppforge::crypto;
 
 /**
  * @brief Test fixture for CryptoToolKitTest tests

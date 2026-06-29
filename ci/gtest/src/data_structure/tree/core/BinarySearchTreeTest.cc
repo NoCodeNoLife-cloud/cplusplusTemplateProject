@@ -9,7 +9,7 @@
 
 #include "data_structure/tree/core/BinarySearchTree.hpp"
 
-using namespace common::data_structure::tree::core;
+using namespace cppforge::data_structure::tree::core;
 
 /**
  * @brief Test fixture for BinarySearchTree tests

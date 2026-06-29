@@ -8,7 +8,7 @@
 
 #include "data_structure/base_type/Color.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 /**
  * @brief Test fixture for Color tests

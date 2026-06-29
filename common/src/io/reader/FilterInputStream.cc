@@ -1,6 +1,6 @@
 /**
  * @file FilterInputStream.cc
- * @brief FilterInputStream implementation â€” delegating all calls to underlying
+ * @brief FilterInputStream implementation â€?delegating all calls to underlying
  * @details Implements the decorator: every public method delegates to the
  *          stored AbstractInputStream pointer.  Subclasses override only the
  *          methods they need to transform.
@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     FilterInputStream::FilterInputStream(std::unique_ptr<AbstractInputStream> inputStream)  : input_stream_(std::move(inputStream))
     {

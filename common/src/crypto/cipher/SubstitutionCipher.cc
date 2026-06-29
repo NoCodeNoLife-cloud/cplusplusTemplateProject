@@ -1,6 +1,6 @@
 /**
  * @file SubstitutionCipher.cc
- * @brief SubstitutionCipher implementation â€” key scheduling and character mapping
+ * @brief SubstitutionCipher implementation â€?key scheduling and character mapping
  * @details Implements monoalphabetic substitution: the key schedules a
  *          permutation of the alphabet, and encrypt/decrypt map characters
  *          through the forward/reverse permutation tables.
@@ -15,7 +15,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     namespace
     {

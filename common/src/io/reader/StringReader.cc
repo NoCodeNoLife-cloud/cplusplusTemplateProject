@@ -1,6 +1,6 @@
 /**
  * @file StringReader.cc
- * @brief StringReader implementation â€” in-memory character stream from string
+ * @brief StringReader implementation â€?in-memory character stream from string
  * @details Implements character reading from a std::string with position
  *          tracking, mark/reset, and close behaviour (string clear).
  */
@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     StringReader::StringReader(std::string s) : source_(std::move(s)), position_(0), mark_position_(0), mark_set_(false), closed_(false)
     {

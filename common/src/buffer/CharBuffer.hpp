@@ -17,7 +17,7 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     /// @brief A character buffer that implements the IBuffer interface.
     /// @details This class provides functionality for managing a buffer of characters,

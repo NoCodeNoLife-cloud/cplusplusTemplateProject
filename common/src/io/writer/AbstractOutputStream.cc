@@ -1,6 +1,6 @@
 /**
  * @file AbstractOutputStream.cc
- * @brief AbstractOutputStream implementation â€” default vector-based write logic
+ * @brief AbstractOutputStream implementation â€?default vector-based write logic
  * @details Provides default implementations for the vector-based write()
  *          overloads: write(vector) calls write(vector, 0, size), and
  *          write(vector, offset, len) delegates to the pure-virtual
@@ -11,7 +11,7 @@
 
 #include <fmt/format.h>
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     void AbstractOutputStream::write(const std::vector<std::byte>& buffer)
     {

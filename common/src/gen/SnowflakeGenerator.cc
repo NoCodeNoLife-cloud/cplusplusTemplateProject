@@ -1,6 +1,6 @@
 /**
  * @file SnowflakeGenerator.cc
- * @brief SnowflakeGenerator implementation â€” timestamp + worker + sequence ID composition
+ * @brief SnowflakeGenerator implementation â€?timestamp + worker + sequence ID composition
  * @details Implements 64-bit ID generation: extracts system time (ms), composes
  *          the ID from epoch offset, worker ID, and per-millisecond sequence
  *          counter.  Handles clock rollback gracefully.
@@ -14,19 +14,19 @@
 #include <thread>
 #include <glog/logging.h>
 
-namespace common::gen
+namespace cppforge::gen
 {
     SnowflakeGenerator::SnowflakeGenerator(int16_t machine_id, int16_t datacenter_id)
     {
         if (machine_id < 0 || machine_id > SnowflakeOption::max_machine_id_)
         {
             DLOG(WARNING) << fmt::format("SnowflakeGenerator: Machine ID {} out of range (0-31)", machine_id);
-            throw std::invalid_argument("common::SnowflakeGenerator::SnowflakeGenerator: Machine ID out of range (0-31)");
+            throw std::invalid_argument("cppforge::SnowflakeGenerator::SnowflakeGenerator: Machine ID out of range (0-31)");
         }
         if (datacenter_id < 0 || datacenter_id > SnowflakeOption::max_datacenter_id_)
         {
             DLOG(WARNING) << fmt::format("SnowflakeGenerator: Datacenter ID {} out of range (0-31)", datacenter_id);
-            throw std::invalid_argument("common::SnowflakeGenerator::SnowflakeGenerator: Datacenter ID out of range (0-31)");
+            throw std::invalid_argument("cppforge::SnowflakeGenerator::SnowflakeGenerator: Datacenter ID out of range (0-31)");
         }
         machine_id_ = machine_id;
         datacenter_id_ = datacenter_id;

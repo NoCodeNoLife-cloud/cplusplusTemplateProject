@@ -12,9 +12,9 @@
 
 #include "data_structure/tree/balanced/RedBlackTree.hpp"
 
-using namespace common::data_structure::tree::balanced;
-using namespace common::data_structure::tree::node;
-using namespace common::data_structure;
+using namespace cppforge::data_structure::tree::balanced;
+using namespace cppforge::data_structure::tree::node;
+using namespace cppforge::data_structure;
 
 /**
  * @brief Test fixture for RedBlackTree tests

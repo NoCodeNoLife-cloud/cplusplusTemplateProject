@@ -15,7 +15,7 @@
 #include "crypto/hash/SHA256Strategy.hpp"
 #include "crypto/hash/SHA1Strategy.hpp"
 
-using namespace common::crypto::hash;
+using namespace cppforge::crypto::hash;
 
 /**
  * @brief Test fixture for HashStrategyTest tests

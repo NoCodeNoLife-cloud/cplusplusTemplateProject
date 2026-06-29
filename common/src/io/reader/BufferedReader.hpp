@@ -23,7 +23,7 @@
 
 #include "AbstractReader.hpp"
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     /// @brief Buffered character-input stream.
     class BufferedReader final : public AbstractReader

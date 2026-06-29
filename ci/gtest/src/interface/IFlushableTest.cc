@@ -8,7 +8,7 @@
 
 #include "interface/io/IFlushable.hpp"
 
-using namespace common::interface::io;
+using namespace cppforge::interface::io;
 
 namespace
 {

@@ -22,7 +22,7 @@
 #include "interface/io/ICloseable.hpp"
 #include "interface/io/IFlushable.hpp"
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     /// @brief Abstract base class for writers that provides basic functionality for writing characters and strings.
     class AbstractWriter : public interface::io::ICloseable,

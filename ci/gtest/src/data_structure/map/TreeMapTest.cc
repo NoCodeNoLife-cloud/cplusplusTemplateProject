@@ -12,7 +12,7 @@
 
 #include "data_structure/map/TreeMap.hpp"
 
-using namespace common::data_structure::map;
+using namespace cppforge::data_structure::map;
 
 // Compile-time noexcept guarantees
 static_assert(std::is_nothrow_move_constructible_v<TreeMap<int, std::string>>);

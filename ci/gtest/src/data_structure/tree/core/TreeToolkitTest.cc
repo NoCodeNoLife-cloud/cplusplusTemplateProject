@@ -15,7 +15,7 @@
 #include "data_structure/tree/core/TreeToolkit.hpp"
 #include "data_structure/tree/core/BinaryTree.hpp"
 
-using namespace common::data_structure::tree::core;
+using namespace cppforge::data_structure::tree::core;
 
 class TreeToolkitTest : public testing::Test
 {
@@ -412,7 +412,7 @@ TEST_F(TreeToolkitTest, ComplexTree_HeightAndSize)
 }
 
 // ============================================================================
-//  Template Flexibility â€” custom node type
+//  Template Flexibility â€?custom node type
 // ============================================================================
 
 namespace

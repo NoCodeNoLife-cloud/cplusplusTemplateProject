@@ -1,6 +1,6 @@
 /**
  * @file InputStreamReader.cc
- * @brief InputStreamReader implementation â€” byte-to-char UTF-8 decoding
+ * @brief InputStreamReader implementation â€?byte-to-char UTF-8 decoding
  * @details Implements the byte-to-character bridge: reads bytes from the
  *          underlying AbstractInputStream and decodes multi-byte UTF-8
  *          sequences into single characters.  Validates continuation bytes.
@@ -10,7 +10,7 @@
 
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     InputStreamReader::InputStreamReader(std::shared_ptr<AbstractReader> input) : reader_(std::move(input))
     {

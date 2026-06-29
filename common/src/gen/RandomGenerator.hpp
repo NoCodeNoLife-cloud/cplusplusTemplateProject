@@ -24,7 +24,7 @@
 #include <string>
 #include <mutex>
 
-namespace common::gen
+namespace cppforge::gen
 {
     /// @brief A thread-safe random number generator using Mersenne Twister engine
     /// @details This class provides various methods for generating random numbers,

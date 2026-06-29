@@ -1,10 +1,10 @@
 /**
  * @file CaesarCipher.hpp
- * @brief Caesar (shift) cipher â€” simple substitution for educational use
+ * @brief Caesar (shift) cipher â€?simple substitution for educational use
  * @details Implements the classic Caesar cipher where each letter is shifted
  *          by a fixed number of positions.  Supports both encryption and
  *          decryption.  Preserves letter case and non-alphabetic characters.
- *          NOT cryptographically secure â€” for educational purposes only.
+ *          NOT cryptographically secure â€?for educational purposes only.
  *
  * @par Thread Safety
  * This class is const-only thread-safe.
@@ -15,12 +15,12 @@
 #include <string_view>
 
 /**
- * @namespace common::crypto::cipher
+ * @namespace cppforge::crypto::cipher
  * @brief Cryptographic cipher implementations
  * @details Contains classical and modern cipher algorithms including
  *          substitution ciphers, stream ciphers, and block ciphers.
  */
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     /**
      * @class CaesarCipher
@@ -36,12 +36,12 @@ namespace common::crypto::cipher
      *
      * @par Usage Example:
      * @code
-     * common::crypto::cipher::CaesarCipher cipher(3);
+     * cppforge::crypto::cipher::CaesarCipher cipher(3);
      * std::string encrypted = cipher.Encrypt("Hello, World!"); // "Khoor, Zruog!"
      * std::string decrypted = cipher.Decrypt(encrypted);         // "Hello, World!"
      *
      * // Static utility for one-shot operations
-     * auto result = common::crypto::cipher::CaesarCipher::Encrypt("Attack", 5);
+     * auto result = cppforge::crypto::cipher::CaesarCipher::Encrypt("Attack", 5);
      * @endcode
      */
     class CaesarCipher final

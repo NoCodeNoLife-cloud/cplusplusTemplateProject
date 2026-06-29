@@ -12,7 +12,7 @@
 
 #include "data_structure/set/TreeSet.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 // Compile-time noexcept guarantees
 static_assert(std::is_nothrow_move_constructible_v<TreeSet<int>>);

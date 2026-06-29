@@ -1,6 +1,6 @@
 /**
  * @file AbstractReader.cc
- * @brief AbstractReader implementation â€” default read/skip/ready/mark logic
+ * @brief AbstractReader implementation â€?default read/skip/ready/mark logic
  * @details Provides default implementations for AbstractReader methods:
  *          single-character read() delegates to the array-based read(),
  *          skip() discards characters, and ready() returns false by default.
@@ -13,7 +13,7 @@
 #include <vector>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     std::optional<char> AbstractReader::read()
     {

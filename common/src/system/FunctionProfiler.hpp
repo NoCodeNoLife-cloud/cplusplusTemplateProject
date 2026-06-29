@@ -15,7 +15,7 @@
 #include <chrono>
 #include <string>
 
-namespace common::system
+namespace cppforge::system
 {
     /// @brief A utility class for profiling function execution time.
     /// @details This class provides functionality to measure and print the execution time

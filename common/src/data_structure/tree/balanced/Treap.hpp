@@ -18,7 +18,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure::tree::balanced
+namespace cppforge::data_structure::tree::balanced
 {
     /// @brief A randomized binary search tree (Treap)
     /// @details Treaps combine BST and heap properties. Each node stores a key and a

@@ -13,7 +13,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/access.hpp>
 
-namespace common::interface::serialization
+namespace cppforge::interface::serialization
 {
     /// @brief Interface for Boost serialization
     /// This interface provides a common base for objects that can be serialized using Boost.Serialization.

@@ -10,7 +10,7 @@
 
 #include "data_structure/tree/node/TreeNode.hpp"
 
-using namespace common::data_structure::tree::node;
+using namespace cppforge::data_structure::tree::node;
 
 /**
  * @brief Test fixture for TreeNode tests

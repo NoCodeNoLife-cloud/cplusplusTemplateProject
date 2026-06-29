@@ -1,6 +1,6 @@
 /**
  * @file BigInteger.cc
- * @brief BigInteger implementation â€” arbitrary-precision non-negative integers
+ * @brief BigInteger implementation â€?arbitrary-precision non-negative integers
  * @details Implements arithmetic operations for arbitrary-precision non-negative
  *          integers: addition, subtraction, multiplication, division, modulo,
  *          and exponentiation.  Uses a std::vector of base-10 digits.
@@ -15,7 +15,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::data_structure::base_type
+namespace cppforge::data_structure::base_type
 {
     BigInteger::BigInteger()  : value_(0)
     {

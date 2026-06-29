@@ -13,7 +13,7 @@
 
 #include "rpc/GrpcConnectivityState.hpp"
 
-using namespace common::rpc;
+using namespace cppforge::rpc;
 
 /**
  * @brief Test fixture for GrpcConnectivityState tests

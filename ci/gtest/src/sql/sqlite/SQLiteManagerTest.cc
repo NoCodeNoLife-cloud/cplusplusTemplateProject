@@ -13,7 +13,7 @@
 
 #include "sql/sqlite/SQLiteManager.hpp"
 
-using namespace common::sql::sqlite;
+using namespace cppforge::sql::sqlite;
 
 static constexpr auto TEST_DB_NAME = "test_sqlite_manager.db";
 

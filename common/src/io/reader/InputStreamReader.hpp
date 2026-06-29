@@ -1,6 +1,6 @@
 /**
  * @file InputStreamReader.hpp
- * @brief Byte-to-character bridge (UTF-8 only) â€” adapts InputStream to Reader
+ * @brief Byte-to-character bridge (UTF-8 only) â€?adapts InputStream to Reader
  * @details A bridge from byte streams to character streams.  Reads bytes from
  *          an AbstractInputStream and decodes them as UTF-8 into characters.
  *          Currently limited to UTF-8 encoding.  Analogous to java.io.InputStreamReader.
@@ -26,7 +26,7 @@
 
 #include "AbstractReader.hpp"
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     /// @brief InputStreamReader is a class for reading characters from a byte stream.
     /// This class inherits from AbstractReader and provides functionality to read characters

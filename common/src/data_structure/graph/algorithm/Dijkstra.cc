@@ -1,6 +1,6 @@
 /**
  * @file Dijkstra.cc
- * @brief Dijkstra's shortest path algorithm â€” priority-queue implementation
+ * @brief Dijkstra's shortest path algorithm â€?priority-queue implementation
  * @details Implements single-source shortest paths for graphs with non-negative
  *          edge weights.  Uses a std::priority_queue (min-heap) to extract the
  *          minimum-distance node in O(log V).  Each edge is relaxed at most
@@ -10,14 +10,14 @@
  *          guards against negative distances to prevent overflow.
  *
  * Reference: Dijkstra, "A Note on Two Problems in Connexion with Graphs"
- *            (1959), Numerische Mathematik 1, 269â€“271.
+ *            (1959), Numerische Mathematik 1, 269â€?71.
  */
 
 #include "data_structure/graph/algorithm/Dijkstra.hpp"
 
 #include <queue>
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     namespace
     {

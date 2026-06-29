@@ -1,6 +1,6 @@
 /**
  * @file ClassToolkit.hpp
- * @brief RTTI and reflection utilities â€” class name demangling, type info
+ * @brief RTTI and reflection utilities â€?class name demangling, type info
  * @details Provides static utility methods for C++ runtime type information:
  *          demangle() converts std::type_info::name() to human-readable form,
  *          className() returns the type name of any expression via templates.
@@ -21,7 +21,7 @@
 #include <vector>
 #include <boost/type_index.hpp>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     template <typename T>
     struct ReflectTraits;

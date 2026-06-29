@@ -1,6 +1,6 @@
 /**
  * @file File.cc
- * @brief File implementation â€” platform-specific stat, readdir, fopen
+ * @brief File implementation â€?platform-specific stat, readdir, fopen
  * @details Implements file operations using POSIX (stat, open, read, write)
  *          or Windows (GetFileAttributesEx, CreateFile, ReadFile) APIs.
  */
@@ -31,7 +31,7 @@
 #include <windows.h>
 #endif
 
-namespace common::filesystem::core
+namespace cppforge::filesystem::core
 {
     File::File(const std::string& path) : file_path_(path)
     {
@@ -527,4 +527,4 @@ namespace common::filesystem::core
         return Directory(file_path_.parent_path());
     }
 
-}  // namespace common::filesystem::core
+}  // namespace cppforge::filesystem::core

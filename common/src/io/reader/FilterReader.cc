@@ -1,6 +1,6 @@
 /**
  * @file FilterReader.cc
- * @brief FilterReader implementation â€” delegating all calls to underlying
+ * @brief FilterReader implementation â€?delegating all calls to underlying
  * @details Implements the decorator: every public method delegates to the
  *          stored AbstractReader pointer.  Subclasses override only the
  *          methods they need to transform.
@@ -10,7 +10,7 @@
 
 #include <stdexcept>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     FilterReader::FilterReader(std::shared_ptr<AbstractReader> reader) : in_(std::move(reader))
     {

@@ -20,7 +20,7 @@
 
 #include "BSTBase.hpp"
 
-namespace common::data_structure::tree::core
+namespace cppforge::data_structure::tree::core
 {
     /// @brief A binary search tree implementation.
     /// @tparam T The type of data stored in the tree.

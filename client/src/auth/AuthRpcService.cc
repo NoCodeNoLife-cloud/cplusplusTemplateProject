@@ -51,22 +51,22 @@ namespace client_app::auth
         const auto channel = grpc::CreateCustomChannel(server_address, grpc::InsecureChannelCredentials(), channel_args);
 
         // Log initial channel state
-        const auto initial_state = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(true));
-        DLOG(INFO) << fmt::format("Channel state after creation: {}", common::rpc::RpcMetadata::grpcStateToString(initial_state));
+        const auto initial_state = cppforge::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(true));
+        DLOG(INFO) << fmt::format("Channel state after creation: {}", cppforge::rpc::RpcMetadata::grpcStateToString(initial_state));
 
         // Wait for connection with timeout
         if (!channel->WaitForConnected(std::chrono::system_clock::now() + std::chrono::seconds(5)))
         {
-            const auto final_state = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(false));
-            const auto error_msg = fmt::format("Failed to connect to gRPC server at {} within timeout period. Final state: {}", server_address, common::rpc::RpcMetadata::grpcStateToString(final_state));
+            const auto final_state = cppforge::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(false));
+            const auto error_msg = fmt::format("Failed to connect to gRPC server at {} within timeout period. Final state: {}", server_address, cppforge::rpc::RpcMetadata::grpcStateToString(final_state));
             LOG(ERROR) << error_msg;
             throw std::runtime_error(error_msg);
         }
 
         DLOG(INFO) << fmt::format("Successfully connected to gRPC server at {}", server_address);
 
-        const auto final_state = common::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(false));
-        DLOG(INFO) << fmt::format("Final connection state: {}", common::rpc::RpcMetadata::grpcStateToString(final_state));
+        const auto final_state = cppforge::rpc::RpcMetadata::grpcStateToEnum(channel->GetState(false));
+        DLOG(INFO) << fmt::format("Final connection state: {}", cppforge::rpc::RpcMetadata::grpcStateToString(final_state));
 
         s_instance = std::unique_ptr<AuthRpcService>(new AuthRpcService(channel));
     }
@@ -180,17 +180,17 @@ namespace client_app::auth
 
     /// @brief Get the underlying channel's current connectivity state
     /// @return Current GrpcConnectivityState of the channel
-    common::rpc::GrpcConnectivityState AuthRpcService::getConnectivityState() const
+    cppforge::rpc::GrpcConnectivityState AuthRpcService::getConnectivityState() const
     {
         const grpc_connectivity_state raw_state = channel_->GetState(false);
-        return common::rpc::RpcMetadata::grpcStateToEnum(raw_state);
+        return cppforge::rpc::RpcMetadata::grpcStateToEnum(raw_state);
     }
 
     /// @brief Check if the client channel is ready for RPC calls
     /// @return True if channel is in READY state
     bool AuthRpcService::isReady() const
     {
-        return getConnectivityState() == common::rpc::GrpcConnectivityState::READY;
+        return getConnectivityState() == cppforge::rpc::GrpcConnectivityState::READY;
     }
 
     /// @brief Execute RPC call with error handling and logging

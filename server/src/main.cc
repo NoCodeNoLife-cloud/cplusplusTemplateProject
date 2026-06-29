@@ -20,11 +20,11 @@ int32_t main(const int32_t argc, char* argv[])
     }
     catch (const std::exception& ex)
     {
-        common::toolkit::StackTraceExceptionHandler::logException(ex);
+        cppforge::toolkit::StackTraceExceptionHandler::logException(ex);
     }
     catch (...)
     {
-        common::toolkit::StackTraceExceptionHandler::logUnknownException();
+        cppforge::toolkit::StackTraceExceptionHandler::logUnknownException();
     }
     return 1;
 }

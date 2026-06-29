@@ -13,7 +13,7 @@
 
 #include "io/writer/CharArrayWriter.hpp"
 
-using namespace common::io::writer;
+using namespace cppforge::io::writer;
 
 /// @brief Test fixture for CharArrayWriter tests.
 class CharArrayWriterTest : public testing::Test

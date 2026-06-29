@@ -9,7 +9,7 @@
 
 #include "io/Console.hpp"
 
-using namespace common::io;
+using namespace cppforge::io;
 
 /**
  * @brief Test fixture for Console tests
@@ -114,11 +114,11 @@ TEST_F(ConsoleTest, Reader_ReturnsCin)
     EXPECT_EQ(&Console::reader(), &std::cin);
 }
 
-/** @brief Test that Console implements the IFlushable interface. @details Verifies that a Console instance can be dynamically cast to common::interface::io::IFlushable. */
+/** @brief Test that Console implements the IFlushable interface. @details Verifies that a Console instance can be dynamically cast to cppforge::interface::io::IFlushable. */
 TEST_F(ConsoleTest, ImplementsIFlushable)
 {
     Console console;
-    EXPECT_TRUE(dynamic_cast<common::interface::io::IFlushable*>(&console) != nullptr);
+    EXPECT_TRUE(dynamic_cast<cppforge::interface::io::IFlushable*>(&console) != nullptr);
 }
 
 /** @brief Test that flushSafe() returns true on a healthy Console. @details Verifies that flushSafe() succeeds and returns true under normal conditions. */

@@ -11,7 +11,7 @@
 
 #include "data_structure/spatial/Interval.hpp"
 
-using namespace common::data_structure::spatial;
+using namespace cppforge::data_structure::spatial;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Type aliases for common Interval variants used throughout the tests
@@ -315,7 +315,7 @@ TEST_F(IntervalTest, ContainsPoint_AboveHigh_ReturnsFalse)
 
 /**
  * @brief An empty interval contains no point, even at its endpoints.
- * @details [5, 5).contains(5) → low <= 5 (true) && 5 < high (false) → false.
+ * @details [5, 5).contains(5) �?low <= 5 (true) && 5 < high (false) �?false.
  */
 TEST_F(IntervalTest, ContainsPoint_EmptyInterval_ReturnsFalse)
 {
@@ -535,7 +535,7 @@ TEST_F(IntervalTest, Compare_Spaceship_Identical_Equivalent)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  9. Template variants — float
+//  9. Template variants �?float
 // ══════════════════════════════════════════════════════════════════════════
 
 /**

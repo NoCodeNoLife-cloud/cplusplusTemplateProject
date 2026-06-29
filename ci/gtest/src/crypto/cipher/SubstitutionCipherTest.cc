@@ -12,7 +12,7 @@
 
 #include "crypto/cipher/SubstitutionCipher.hpp"
 
-using namespace common::crypto::cipher;
+using namespace cppforge::crypto::cipher;
 
 /// @brief Test fixture for SubstitutionCipher tests.
 class SubstitutionCipherTest : public testing::Test
@@ -79,7 +79,7 @@ TEST_F(SubstitutionCipherTest, NegativeShift)
 }
 
 /** @brief Large shift values wrap around modulo 26.
- *  @details Verifies that a shift of 29 (â‰¡ 3 mod 26) produces identical output to a shift of 3, confirming proper modulo normalization. */
+ *  @details Verifies that a shift of 29 (â‰?3 mod 26) produces identical output to a shift of 3, confirming proper modulo normalization. */
 TEST_F(SubstitutionCipherTest, LargeShiftNormalization)
 {
     const SubstitutionCipher cipher1(29);
@@ -145,7 +145,7 @@ TEST_F(SubstitutionCipherTest, NonAlphabeticCharacters)
 }
 
 /** @brief Encryption preserves character case.
- *  @details Verifies that the shifted character retains its original case â€” lowercase maps to lowercase, uppercase to uppercase. */
+ *  @details Verifies that the shifted character retains its original case â€?lowercase maps to lowercase, uppercase to uppercase. */
 TEST_F(SubstitutionCipherTest, CasePreservation)
 {
     const SubstitutionCipher cipher(3);

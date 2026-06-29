@@ -20,7 +20,7 @@ file(GLOB_RECURSE COMMON_SRC_FILES
 # ── Library ──────────────────────────────────────────────────────────────
 add_library(${COMMON_FRAMEWORK} ${COMMON_SRC_FILES})
 
-target_include_directories(${COMMON_FRAMEWORK} PRIVATE
+target_include_directories(${COMMON_FRAMEWORK} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
@@ -30,10 +30,9 @@ target_link_libraries(${COMMON_FRAMEWORK} PRIVATE
     rapidjson
     OpenSSL::SSL OpenSSL::Crypto
     magic_enum::magic_enum
-    Microsoft::DirectXMath
+    $<$<PLATFORM_ID:Windows>:Microsoft::DirectXMath>
     unofficial::sqlite3::sqlite3
     fmt::fmt
     glog::glog
-    glog_service
     unofficial::mysql-connector-cpp::connector
 )

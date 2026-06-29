@@ -1,6 +1,6 @@
 /**
  * @file BmpImage.hpp
- * @brief BMP image file reader â€” header parsing and pixel data access
+ * @brief BMP image file reader â€?header parsing and pixel data access
  * @description Reads BMP (Bitmap) image files, parsing the file header,
  *          DIB header, and pixel data.  Supports 24-bit and 32-bit BMP
  *          formats.  Provides pixel access by coordinate and basic image
@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-namespace common::filesystem::type
+namespace cppforge::filesystem::type
 {
     /// @brief A class for creating and manipulating 24-bit BMP images
     /// @details This class allows creating BMP images from scratch or loading from files,

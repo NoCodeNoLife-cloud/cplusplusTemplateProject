@@ -9,7 +9,7 @@
 
 #pragma once
 
-namespace common::interface::task
+namespace cppforge::interface::task
 {
     /**
      * @brief Abstract interface class for tasks

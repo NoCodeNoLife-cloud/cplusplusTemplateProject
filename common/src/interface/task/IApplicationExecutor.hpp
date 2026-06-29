@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-namespace common::interface::task
+namespace cppforge::interface::task
 {
     /// @brief Interface for application execution functionality.
     /// This interface defines the contract for classes that execute applications

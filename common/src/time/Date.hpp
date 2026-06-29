@@ -22,7 +22,7 @@
 #include <cstdint>
 #include <string>
 
-namespace common::time
+namespace cppforge::time
 {
     /// @brief A class representing a specific instant in time, with millisecond precision.
     /// The class represents a specific point in time, measured in milliseconds

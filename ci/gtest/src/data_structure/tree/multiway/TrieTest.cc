@@ -12,8 +12,8 @@
 
 #include "data_structure/tree/multiway/Trie.hpp"
 
-using namespace common::data_structure;
-using namespace common::data_structure::tree::multiway;
+using namespace cppforge::data_structure;
+using namespace cppforge::data_structure::tree::multiway;
 
 class TrieTest : public testing::Test
 {

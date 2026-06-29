@@ -9,8 +9,8 @@
 
 #include "data_structure/graph/algorithm/KruskalMST.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for KruskalMST tests
@@ -25,7 +25,7 @@ protected:
 /**
  * @brief Test Kruskal's algorithm on a simple 4-node graph
  * @details Verifies that the MST selects the 3 cheapest edges,
- *          total weight = 6, excluding the expensive edge (0â†’3, weight 10)
+ *          total weight = 6, excluding the expensive edge (0â†?, weight 10)
  */
 TEST_F(KruskalMSTTest, Compute_SimpleGraph)
 {

@@ -1,6 +1,6 @@
 /**
  * @file MySqlExecutor.cc
- * @brief MySqlExecutor implementation â€” query execution, connection management
+ * @brief MySqlExecutor implementation â€?query execution, connection management
  * @details Implements MySQL query execution: connects to MySQL server via
  *          mysql_real_connect, executes queries via mysql_query, and manages
  *          connection lifecycle and prepared statement binding.
@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::sql::mysql
+namespace cppforge::sql::mysql
 {
     MySqlExecutor::MySqlExecutor() : session_(nullptr),
                                      port_(33060)

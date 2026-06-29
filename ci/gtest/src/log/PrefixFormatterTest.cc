@@ -13,7 +13,7 @@
 
 #include "formatter/PrefixFormatter.hpp"
 
-using namespace glog::formatter;
+using namespace cppforge::glog::formatter;
 
 /**
  * @brief Verify prefix output matches expected format

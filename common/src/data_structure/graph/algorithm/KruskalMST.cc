@@ -13,7 +13,7 @@
 
 #include <algorithm>
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     namespace
     {

@@ -3,7 +3,7 @@
  * @brief Prefix tree (Trie) for efficient string-key storage and prefix matching
  * @details A trie (prefix tree) that stores strings by their constituent
  *          characters along a tree path.  Provides O(k) insert, search, and
- *          prefix-match operations where k is the key length â€” independent of
+ *          prefix-match operations where k is the key length â€?independent of
  *          the total number of stored keys.  Each node holds a pointer to
  *          an associated value type V (null if the path does not form a
  *          complete key).
@@ -26,7 +26,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace common::data_structure::tree::multiway
+namespace cppforge::data_structure::tree::multiway
 {
     /**
      * @class   Trie

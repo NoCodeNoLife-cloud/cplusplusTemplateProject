@@ -23,7 +23,7 @@ namespace client_app::auth
     class AuthRpcService
     {
     public:
-        /// @brief Default constructor deleted (singleton â€” use init()/getInstance())
+        /// @brief Default constructor deleted (singleton â€?use init()/getInstance())
         AuthRpcService() = delete;
 
         /// @brief Singleton instance access
@@ -88,7 +88,7 @@ namespace client_app::auth
 
         /// @brief Get the underlying channel's current connectivity state
         /// @return Current GrpcConnectivityState of the channel
-        [[nodiscard]] common::rpc::GrpcConnectivityState getConnectivityState() const ;
+        [[nodiscard]] cppforge::rpc::GrpcConnectivityState getConnectivityState() const ;
 
         /// @brief Check if the client channel is ready for RPC calls
         /// @return True if channel is in READY state

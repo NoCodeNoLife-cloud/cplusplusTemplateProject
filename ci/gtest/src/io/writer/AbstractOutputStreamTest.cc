@@ -11,7 +11,7 @@
 
 #include "io/writer/AbstractOutputStream.hpp"
 
-using namespace common::io::writer;
+using namespace cppforge::io::writer;
 
 namespace
 {

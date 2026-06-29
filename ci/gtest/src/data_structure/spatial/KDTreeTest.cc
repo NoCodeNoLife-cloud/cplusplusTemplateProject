@@ -23,8 +23,8 @@
 #include "data_structure/geometry/Point2D.hpp"
 #include "data_structure/geometry/Point3D.hpp"
 
-using namespace common::data_structure::spatial;
-using namespace common::data_structure::geometry;
+using namespace cppforge::data_structure::spatial;
+using namespace cppforge::data_structure::geometry;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Type aliases for common KDTree variants used throughout the tests
@@ -36,7 +36,7 @@ using KDTreeArr2D = KDTree<std::array<double, 2>, 2>;
 /// 3-D tree using std::array<double, 3>
 using KDTreeArr3D = KDTree<std::array<double, 3>, 3>;
 
-/// 1-D tree — edge case (minimum dimensionality)
+/// 1-D tree �?edge case (minimum dimensionality)
 using KDTreeArr1D = KDTree<std::array<double, 1>, 1>;
 
 /// 2-D tree using geometry::Point2D (specialized accessor)
@@ -334,7 +334,7 @@ TEST_F(KDTreeTest, NearestNeighbor_FindsClosest)
 {
     KDTreeArr2D tree;
     tree.build({{0.0, 0.0}, {100.0, 100.0}, {1.0, 1.0}});
-    // Query at (0.9, 0.9) — (1.0, 1.0) is the nearest
+    // Query at (0.9, 0.9) �?(1.0, 1.0) is the nearest
     const auto nn = tree.nearestNeighbor({0.9, 0.9});
     ASSERT_TRUE(nn.has_value());
     EXPECT_EQ((*nn)[0], 1.0);
@@ -350,7 +350,7 @@ TEST_F(KDTreeTest, NearestNeighbor_MultiplePoints_CorrectResult)
     KDTreeArr2D tree;
     tree.build({{5.0, 5.0}, {0.0, 0.0}, {10.0, 0.0},
                 {0.0, 10.0}, {10.0, 10.0}});
-    // Query at (3.0, 4.0) — closest is (5.0, 5.0)
+    // Query at (3.0, 4.0) �?closest is (5.0, 5.0)
     const auto nn = tree.nearestNeighbor({3.0, 4.0});
     ASSERT_TRUE(nn.has_value());
     EXPECT_EQ((*nn)[0], 5.0);
@@ -744,10 +744,10 @@ TEST_F(KDTreeTest, KDTree1D_DuplicateInsert_ReturnsFalse)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  11. Higher-dimensional KDTree (K=4) — generic duplicate-detection path
+//  11. Higher-dimensional KDTree (K=4) �?generic duplicate-detection path
 // ══════════════════════════════════════════════════════════════════════════
 
-/// 4-D tree — exercises the K > 3 coordinate-wise duplicate check.
+/// 4-D tree �?exercises the K > 3 coordinate-wise duplicate check.
 using KDTreeArr4D = KDTree<std::array<double, 4>, 4>;
 
 /**
@@ -877,7 +877,7 @@ TEST_F(KDTreeTest, MoveAssignment_SelfMove_IsSafe)
 {
     KDTreeArr2D tree;
     tree.build({{1.0, 1.0}, {2.0, 2.0}});
-    // Self-assignment via std::move — should be safe
+    // Self-assignment via std::move �?should be safe
     tree = std::move(tree);
     // After self-move, the object should still be in a valid (unspecified but
     // destructible) state.  Best effort: ensure we can still call methods
@@ -1018,7 +1018,7 @@ TEST_F(KDTreeTest, PointsWithSameAxisValue_Works)
 }
 
 /**
- * @brief Many identical points (same coordinates) — only the first is stored.
+ * @brief Many identical points (same coordinates) �?only the first is stored.
  * @details Verifies that inserting the same point many times only stores the first and rejects duplicates
  */
 TEST_F(KDTreeTest, ManyDuplicateInserts_OnlyFirstStored)

@@ -12,7 +12,7 @@
 
 #pragma once
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief Enumeration representing various colors.
     /// Each color is assigned a unique integer value.

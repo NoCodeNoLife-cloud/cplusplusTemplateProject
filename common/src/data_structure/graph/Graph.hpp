@@ -26,7 +26,7 @@
 
 #include "Edge.hpp"
 
-namespace common::data_structure::graph
+namespace cppforge::data_structure::graph
 {
 /// @brief A class representing a graph data structure
 /// @details This class provides functionality to create a graph with a specified number of nodes,

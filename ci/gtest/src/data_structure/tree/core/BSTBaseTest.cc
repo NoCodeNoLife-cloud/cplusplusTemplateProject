@@ -12,7 +12,7 @@
 
 #include "data_structure/tree/core/BSTBase.hpp"
 
-using namespace common::data_structure::tree::core;
+using namespace cppforge::data_structure::tree::core;
 
 /**
  * @brief Minimal concrete derived class for testing BSTBase.

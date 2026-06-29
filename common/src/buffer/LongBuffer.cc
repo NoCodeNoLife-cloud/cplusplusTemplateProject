@@ -1,6 +1,6 @@
 /**
  * @file LongBuffer.cc
- * @brief LongBuffer implementation â€” get/put/flip/compact/array operations
+ * @brief LongBuffer implementation â€?get/put/flip/compact/array operations
  * @details Implements int64 buffer operations: absolute and relative get/put,
  *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
@@ -9,7 +9,7 @@
 
 #include <fmt/format.h>
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     LongBuffer::LongBuffer(const std::size_t capacity)
     {

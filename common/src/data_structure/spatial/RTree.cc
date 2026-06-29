@@ -15,7 +15,7 @@
 
 #include "data_structure/spatial/RTree.hpp"
 
-namespace common::data_structure::spatial
+namespace cppforge::data_structure::spatial
 {
 
 // ── 2-D instantiations ─────────────────────────────────────────────────
@@ -50,4 +50,4 @@ template class RTree<double, 4, 10>;
 
 /// @endcond
 
-} // namespace common::data_structure::spatial
+} // namespace cppforge::data_structure::spatial

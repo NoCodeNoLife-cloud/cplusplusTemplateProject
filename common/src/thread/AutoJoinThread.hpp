@@ -20,7 +20,7 @@
 #include <thread>
 #include <utility>
 
-namespace common::thread
+namespace cppforge::thread
 {
     /// @brief A wrapper class for std::thread that automatically joins the thread in its destructor.
     class AutoJoinThread

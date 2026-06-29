@@ -43,7 +43,7 @@ endif ()
 
 # ── Project declaration ──────────────────────────────────────────────────
 set(MAIN_PROJECT cpp_project)
-project(${MAIN_PROJECT})
+project(${MAIN_PROJECT} VERSION 0.1.0 DESCRIPTION "cppforge" LANGUAGES CXX)
 
 enable_testing()
 
@@ -55,7 +55,9 @@ find_package(gtest CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
 find_package(RapidJSON CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED)
-find_package(directxmath CONFIG REQUIRED)
+if(WIN32)
+    find_package(directxmath CONFIG REQUIRED)
+endif()
 find_package(Protobuf CONFIG REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)

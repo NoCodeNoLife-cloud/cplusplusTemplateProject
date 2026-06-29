@@ -12,7 +12,7 @@
 #include "io/writer/OutputStreamWriter.hpp"
 #include "io/writer/CharArrayWriter.hpp"
 
-using namespace common::io::writer;
+using namespace cppforge::io::writer;
 
 /// @brief Test fixture for OutputStreamWriter tests using CharArrayWriter.
 class OutputStreamWriterTest : public testing::Test

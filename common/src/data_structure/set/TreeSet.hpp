@@ -34,7 +34,7 @@
 #include "data_structure/tree/balanced/AVLTree.hpp"
 #include "data_structure/tree/node/TreeNode.hpp"
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief An ordered set backed by a self-balancing AVL tree.
     ///

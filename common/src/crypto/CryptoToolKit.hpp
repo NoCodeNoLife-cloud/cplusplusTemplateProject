@@ -1,6 +1,6 @@
 /**
  * @file CryptoToolKit.hpp
- * @brief Cryptographic utility toolkit â€” hashing, encoding, key derivation
+ * @brief Cryptographic utility toolkit â€?hashing, encoding, key derivation
  * @details Provides static utility methods for common cryptographic operations:
  *          hash computation (SHA-1, SHA-256), base64 encoding/decoding,
  *          HMAC, and password hashing.  Delegates to OpenSSL where available.
@@ -14,7 +14,7 @@
 
 #include "auth/AuthenticationException.hpp"
 
-namespace common::crypto
+namespace cppforge::crypto
 {
     /// @brief Cryptographic utilities for password hashing and secure comparisons
     class CryptoToolKit

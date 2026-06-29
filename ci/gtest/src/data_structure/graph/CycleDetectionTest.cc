@@ -10,8 +10,8 @@
 
 #include "data_structure/graph/algorithm/CycleDetection.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for CycleDetection tests
@@ -25,7 +25,7 @@ protected:
 
 /**
  * @brief Test directed cycle detection on an acyclic graph
- * @details Verifies that a linear DAG (0â†’1â†’2â†’3) has no cycles
+ * @details Verifies that a linear DAG (0â†?â†?â†?) has no cycles
  */
 TEST_F(CycleDetectionTest, DetectDirected_NoCycle)
 {
@@ -41,7 +41,7 @@ TEST_F(CycleDetectionTest, DetectDirected_NoCycle)
 
 /**
  * @brief Test directed cycle detection on a graph with a cycle
- * @details Verifies that a 3-node directed cycle (0â†’1â†’2â†’0) is correctly detected
+ * @details Verifies that a 3-node directed cycle (0â†?â†?â†?) is correctly detected
  */
 TEST_F(CycleDetectionTest, DetectDirected_HasCycle)
 {
@@ -57,7 +57,7 @@ TEST_F(CycleDetectionTest, DetectDirected_HasCycle)
 
 /**
  * @brief Test directed cycle detection with a self-loop
- * @details Verifies that a self-loop edge (0â†’0) is detected as a cycle
+ * @details Verifies that a self-loop edge (0â†?) is detected as a cycle
  */
 TEST_F(CycleDetectionTest, DetectDirected_SelfLoop)
 {

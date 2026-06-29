@@ -16,7 +16,7 @@ namespace server_app::task
     /// @brief ServerTask is responsible for managing the main service loop
     /// @details This class coordinates various subsystems within the application server,
     /// initializes the gRPC server, loads configurations, and manages the server lifecycle.
-    class ServerTask final : public common::interface::task::ITask
+    class ServerTask final : public cppforge::interface::task::ITask
     {
     public:
         /// @brief Construct a ServerTask with the specified name

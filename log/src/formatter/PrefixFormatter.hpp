@@ -10,7 +10,7 @@
 #include <iosfwd>
 #include <glog/logging.h>
 
-namespace glog::formatter
+namespace cppforge::glog::formatter
 {
     /// @brief Custom formatter for glog prefix
     /// Provides a customizable prefix format for glog logging messages

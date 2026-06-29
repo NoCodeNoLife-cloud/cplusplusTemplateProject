@@ -9,7 +9,7 @@
 #pragma once
 #include <cstdint>
 
-namespace common::data_structure::graph
+namespace cppforge::data_structure::graph
 {
     /// @brief Visitor interface for graph traversal callbacks
     /// @details Implement this interface to observe or intercept traversal events.

@@ -12,7 +12,7 @@
 
 #include "data_structure/top_k/TopK.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 /**
  * @brief Test fixture for TopKTest tests

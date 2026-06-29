@@ -48,7 +48,7 @@ static void BM_SkipList_Insert(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::SkipList<int> sl;
+        cppforge::data_structure::SkipList<int> sl;
         for (size_t i = 0; i < n; ++i)
         {
             sl.insert(data[i]);
@@ -58,12 +58,12 @@ static void BM_SkipList_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_SkipList_Insert)->Range(8, 8 << 10);
 
-/// @brief SkipList search throughput — all queries target present keys.
+/// @brief SkipList search throughput �?all queries target present keys.
 static void BM_SkipList_Search_Hit(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto data = generate_shuffled(n);
-    common::data_structure::SkipList<int> sl;
+    cppforge::data_structure::SkipList<int> sl;
     for (auto v : data) sl.insert(v);
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution dist(0, static_cast<int>(n - 1));
@@ -77,7 +77,7 @@ static void BM_SkipList_Search_Hit(benchmark::State& state)
 }
 BENCHMARK(BM_SkipList_Search_Hit)->Range(8, 8 << 10);
 
-/// @brief SkipList erase throughput — pacing timing excludes re-population.
+/// @brief SkipList erase throughput �?pacing timing excludes re-population.
 static void BM_SkipList_Erase(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -87,7 +87,7 @@ static void BM_SkipList_Erase(benchmark::State& state)
     {
         (void)_;
         state.PauseTiming();
-        common::data_structure::SkipList<int> sl;
+        cppforge::data_structure::SkipList<int> sl;
         for (auto v : data) sl.insert(v);
         state.ResumeTiming();
 
@@ -113,7 +113,7 @@ static void BM_RedBlackTree_Insert(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::tree::balanced::RedBlackTree<int> rbt;
+        cppforge::data_structure::tree::balanced::RedBlackTree<int> rbt;
         for (size_t i = 0; i < n; ++i)
         {
             rbt.insert(data[i]);
@@ -131,7 +131,7 @@ static void BM_RedBlackTree_Insert_Sorted(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::tree::balanced::RedBlackTree<int> rbt;
+        cppforge::data_structure::tree::balanced::RedBlackTree<int> rbt;
         for (size_t i = 0; i < n; ++i)
         {
             rbt.insert(static_cast<int>(i));
@@ -154,7 +154,7 @@ static void BM_BST_Insert(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::tree::core::BinarySearchTree<int> bst;
+        cppforge::data_structure::tree::core::BinarySearchTree<int> bst;
         for (size_t i = 0; i < n; ++i)
         {
             bst.insert(data[i]);
@@ -164,12 +164,12 @@ static void BM_BST_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_BST_Insert)->Range(8, 8 << 10);
 
-/// @brief BST search throughput — all queries target present keys.
+/// @brief BST search throughput �?all queries target present keys.
 static void BM_BST_Find(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto data = generate_shuffled(n);
-    common::data_structure::tree::core::BinarySearchTree<int> bst;
+    cppforge::data_structure::tree::core::BinarySearchTree<int> bst;
     for (const auto v : data) bst.insert(v);
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution dist(0, static_cast<int>(n - 1));
@@ -183,7 +183,7 @@ static void BM_BST_Find(benchmark::State& state)
 }
 BENCHMARK(BM_BST_Find)->Range(8, 8 << 10);
 
-/// @brief BST erase throughput — pacing timing excludes re-population.
+/// @brief BST erase throughput �?pacing timing excludes re-population.
 static void BM_BST_Remove(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -193,7 +193,7 @@ static void BM_BST_Remove(benchmark::State& state)
     {
         (void)_;
         state.PauseTiming();
-        common::data_structure::tree::core::BinarySearchTree<int> bst;
+        cppforge::data_structure::tree::core::BinarySearchTree<int> bst;
         for (const auto v : data) bst.insert(v);
         state.ResumeTiming();
 
@@ -209,18 +209,18 @@ BENCHMARK(BM_BST_Remove)->Range(8, 8 << 10);
 //  TopK
 // ══════════════════════════════════════════════════════════════════════════
 
-/// @brief TopK::add throughput — pacing excludes container re-creation.
+/// @brief TopK::add throughput �?pacing excludes container re-creation.
 static void BM_TopK_Add(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto data = generate_shuffled(n);
-    common::data_structure::TopK topk(static_cast<int32_t>(n));
+    cppforge::data_structure::TopK topk(static_cast<int32_t>(n));
 
     for (auto _ : state)
     {
         (void)_;
         state.PauseTiming();
-        topk = common::data_structure::TopK(static_cast<int32_t>(n));
+        topk = cppforge::data_structure::TopK(static_cast<int32_t>(n));
         state.ResumeTiming();
 
         for (const auto v : data)
@@ -237,7 +237,7 @@ static void BM_TopK_GetTopK(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
     const auto data = generate_shuffled(n);
-    common::data_structure::TopK topk(static_cast<int32_t>(n));
+    cppforge::data_structure::TopK topk(static_cast<int32_t>(n));
     for (const auto v : data) topk.add(v);
 
     for (auto _ : state)
@@ -263,7 +263,7 @@ static void BM_Heap_Push(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::Heap<int> heap;
+        cppforge::data_structure::Heap<int> heap;
         for (size_t i = 0; i < n; ++i)
         {
             heap.push(dist(rng));
@@ -273,7 +273,7 @@ static void BM_Heap_Push(benchmark::State& state)
 }
 BENCHMARK(BM_Heap_Push)->Range(64, 8 << 10);
 
-/// @brief Min-heap pop throughput — pacing excludes re-population.
+/// @brief Min-heap pop throughput �?pacing excludes re-population.
 static void BM_Heap_Pop(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -284,7 +284,7 @@ static void BM_Heap_Pop(benchmark::State& state)
     {
         (void)_;
         state.PauseTiming();
-        common::data_structure::Heap<int> heap;
+        cppforge::data_structure::Heap<int> heap;
         for (size_t i = 0; i < n; ++i) heap.push(dist(rng));
         state.ResumeTiming();
 
@@ -308,7 +308,7 @@ static void BM_Heap_BulkConstruction(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::Heap<int> heap(data.begin(), data.end());
+        cppforge::data_structure::Heap<int> heap(data.begin(), data.end());
         benchmark::DoNotOptimize(heap.size());
     }
 }
@@ -321,7 +321,7 @@ static void BM_Heap_PushPop_Interleaved(benchmark::State& state)
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution dist(0, 1000000);
 
-    common::data_structure::Heap<int> heap;
+    cppforge::data_structure::Heap<int> heap;
     for (size_t i = 0; i < n; ++i) heap.push(dist(rng));
 
     for (auto _ : state)
@@ -341,7 +341,7 @@ BENCHMARK(BM_Heap_PushPop_Interleaved)->Range(64, 8 << 10);
 static void BM_UnionSet_Find(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
-    common::data_structure::UnionSet<int> us;
+    cppforge::data_structure::UnionSet<int> us;
     for (size_t i = 0; i < n; ++i)
     {
         (void)us.unionSets(static_cast<int>(i), static_cast<int>(i + 1));
@@ -365,7 +365,7 @@ static void BM_UnionSet_Union(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::data_structure::UnionSet<int> us;
+        cppforge::data_structure::UnionSet<int> us;
         for (size_t i = 0; i < n; ++i)
         {
         (void)us.unionSets(static_cast<int>(i), static_cast<int>(i + 1));

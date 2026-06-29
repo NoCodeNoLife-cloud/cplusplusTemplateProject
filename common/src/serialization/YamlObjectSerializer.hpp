@@ -19,7 +19,7 @@
 
 #include "interface/serialization/ISerializer.hpp"
 
-namespace common::serialization
+namespace cppforge::serialization
 {
     /// @brief Concrete implementation of ISerializer for serializing and deserializing objects to and from YAML format.
     /// @tparam T The type of object to be serialized/deserialized.

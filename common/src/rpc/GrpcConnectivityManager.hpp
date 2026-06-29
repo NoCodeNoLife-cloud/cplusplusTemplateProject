@@ -30,7 +30,7 @@
 #include "GrpcConnectivityState.hpp"
 #include "RpcMetadata.hpp"
 
-namespace common::rpc
+namespace cppforge::rpc
 {
     /// @brief Manages gRPC channel connectivity state and provides monitoring capabilities
     class GrpcConnectivityManager

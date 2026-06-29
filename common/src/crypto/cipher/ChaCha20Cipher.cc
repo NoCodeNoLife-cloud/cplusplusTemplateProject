@@ -1,6 +1,6 @@
 /**
  * @file ChaCha20Cipher.cc
- * @brief ChaCha20Cipher implementation â€” quarter-round, block generation, encrypt
+ * @brief ChaCha20Cipher implementation â€?quarter-round, block generation, encrypt
  * @details Implements the ChaCha20 stream cipher core: quarter-round function,
  *          block generation (double-rounds), and keystream XOR encryption.
  *          Follows RFC 8439 IETF variant with 96-bit nonce.
@@ -15,7 +15,7 @@
 #include <openssl/crypto.h>
 #include <openssl/err.h>
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     ChaCha20Cipher::ChaCha20Cipher()  : ctx_(nullptr), key_{}, nonce_{}, initialized_(false)
     {

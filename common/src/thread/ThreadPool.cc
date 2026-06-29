@@ -1,6 +1,6 @@
 /**
  * @file ThreadPool.cc
- * @brief ThreadPool implementation â€” worker loop, task queue, shutdown
+ * @brief ThreadPool implementation â€?worker loop, task queue, shutdown
  * @details Implements the thread pool: worker threads loop popping tasks from
  *          a BlockingQueue, enqueue() submits tasks packaged as std::packaged_task,
  *          and shutdown joins all threads after completing pending work.
@@ -21,7 +21,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::thread
+namespace cppforge::thread
 {
     ThreadPool::ThreadPool(const size_t core_threads, const size_t max_threads, const size_t queue_size, const std::chrono::milliseconds idle_time) : core_thread_count_(core_threads), max_thread_count_(max_threads), max_queue_size_(queue_size), thread_idle_time_(idle_time)
     {

@@ -19,7 +19,7 @@
 #include <string_view>
 #include <vector>
 
-namespace common::data_structure::hash
+namespace cppforge::data_structure::hash
 {
     /// @brief Node identifier for physical servers / cache instances.
     ///        Users should provide a globally unique name per physical node,
@@ -102,4 +102,4 @@ namespace common::data_structure::hash
         [[nodiscard]] virtual uint64_t virtualNodeCount() const = 0;
     };
 
-} // namespace common::data_structure::hash
+} // namespace cppforge::data_structure::hash

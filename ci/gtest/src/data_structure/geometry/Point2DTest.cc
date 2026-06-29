@@ -10,7 +10,7 @@
 
 #include "data_structure/geometry/Point2D.hpp"
 
-using namespace common::data_structure::geometry;
+using namespace cppforge::data_structure::geometry;
 
 /**
  * @brief Test fixture for Point2D tests

@@ -33,7 +33,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure::hash
+namespace cppforge::data_structure::hash
 {
     /// @brief A hash map using open addressing with Robin Hood hashing.
     /// @tparam K Key type (must be copyable).

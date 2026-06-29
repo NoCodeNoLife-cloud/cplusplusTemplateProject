@@ -29,7 +29,7 @@
 #include <thread>
 #include <vector>
 
-using namespace common::data_structure::concurrent;
+using namespace cppforge::data_structure::concurrent;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Helpers
@@ -96,7 +96,7 @@ protected:
 };
 
 // ══════════════════════════════════════════════════════════════════════════
-//  1. Concurrent read (get) — no data race
+//  1. Concurrent read (get) �?no data race
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -212,7 +212,7 @@ TEST_F(ConcurrentHashMapConcurrentTest, ConcurrentInsert_DisjointKeys_CorrectSiz
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief All threads race to insert the same key — only one should succeed.
+ * @brief All threads race to insert the same key �?only one should succeed.
  * @details 8 threads all call insert("shared", value) on the same key.
  *          Only the first insertion (winner of the lock race) should return
  *          true; subsequent attempts return false.  Final size must be 1.
@@ -263,7 +263,7 @@ TEST_F(ConcurrentHashMapConcurrentTest, ConcurrentInsert_SameKey_OnlyOneSucceeds
  * @details Each thread repeatedly performs a random operation (insert,
  *          insert_or_assign, get, contains, erase) from a bounded key
  *          space for a fixed duration (~2 s).  After all threads stop,
- *          the map state is validated — no crashes, no memory errors.
+ *          the map state is validated �?no crashes, no memory errors.
  */
 TEST_F(ConcurrentHashMapConcurrentTest, MixedReadWrite_NoCrash)
 {
@@ -331,7 +331,7 @@ TEST_F(ConcurrentHashMapConcurrentTest, MixedReadWrite_NoCrash)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  5. Concurrent erase — no double-free
+//  5. Concurrent erase �?no double-free
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -394,7 +394,7 @@ TEST_F(ConcurrentHashMapConcurrentTest, ConcurrentErase_Disjoint_NoDoubleFree)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief One thread repeatedly clears while others insert — no crash.
+ * @brief One thread repeatedly clears while others insert �?no crash.
  * @details A writer thread calls clear() in a tight loop, while 4 producer
  *          threads continuously insert new entries.  After a short duration,
  *          all threads stop.  The test validates that no deadlock,
@@ -455,7 +455,7 @@ TEST_F(ConcurrentHashMapConcurrentTest, ClearDuringInsert_NoCrash)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief for_each traversal while other threads insert/erase — no corruption.
+ * @brief for_each traversal while other threads insert/erase �?no corruption.
  * @details One thread repeatedly calls for_each (which takes shared_lock on
  *          each segment), while other threads insert and erase keys.  The
  *          traversal should never crash or produce an inconsistent view
@@ -543,7 +543,7 @@ TEST_F(ConcurrentHashMapConcurrentTest, HighContention_TwoSegments_Correctness)
     constexpr int            KEYS_PER_THREAD = 250;
     constexpr int            TOTAL = NUM_THREADS * KEYS_PER_THREAD;
 
-    // Only 2 segments → high contention.
+    // Only 2 segments �?high contention.
     ConcurrentHashMap<int, int, std::hash<int>, std::equal_to<int>, 1> map;
 
     SpinBarrier              barrier(NUM_THREADS);

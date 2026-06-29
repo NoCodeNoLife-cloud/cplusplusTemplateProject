@@ -9,7 +9,7 @@
 
 #include "data_structure/graph/Graph.hpp"
 
-using namespace common::data_structure::graph;
+using namespace cppforge::data_structure::graph;
 
 /**
  * @brief Test fixture for Graph tests

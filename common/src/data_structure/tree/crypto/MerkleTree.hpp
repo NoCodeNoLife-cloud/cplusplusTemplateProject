@@ -1,6 +1,6 @@
 /**
  * @file MerkleTree.hpp
- * @brief Merkle Tree â€” cryptographic integrity via SHA-256 hash tree
+ * @brief Merkle Tree â€?cryptographic integrity via SHA-256 hash tree
  * @details A Merkle tree (binary hash tree) where each leaf stores the
  *          SHA-256 hash of a data block and each internal node stores the
  *          SHA-256 hash of its two children concatenated.  The root hash
@@ -28,10 +28,10 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure::tree::crypto
+namespace cppforge::data_structure::tree::crypto
 {
 
-/// @brief A Merkle proof â€” the minimum set of sibling hashes needed to
+/// @brief A Merkle proof â€?the minimum set of sibling hashes needed to
 ///        reconstruct the root hash from a leaf.
 ///
 /// @details The proof contains an ordered list of sibling hashes (bottom-up:
@@ -59,7 +59,7 @@ struct MerkleProof
     std::vector<bool> isLeft;                   ///< true if sibling is on the left.
 };
 
-/// @brief Merkle Tree â€” a SHA-256 based binary hash tree for data integrity.
+/// @brief Merkle Tree â€?a SHA-256 based binary hash tree for data integrity.
 ///
 /// @details Each leaf is the SHA-256 hash of a data block; each internal
 ///          node is the SHA-256 hash of its left and right children
@@ -104,7 +104,7 @@ public:
     /// @brief Default constructor creates an empty Merkle tree (no leaves).
     MerkleTree() = default;
 
-    /// @brief Move constructor â€” transfers ownership of tree resources.
+    /// @brief Move constructor â€?transfers ownership of tree resources.
     /// @details After the move, the source tree is left in a valid empty
     ///          state (leaf_count_ == 0).
     MerkleTree(MerkleTree&& other) noexcept
@@ -112,7 +112,7 @@ public:
         , leaf_count_(std::exchange(other.leaf_count_, 0))
     {}
 
-    /// @brief Move assignment â€” transfers ownership of tree resources.
+    /// @brief Move assignment â€?transfers ownership of tree resources.
     /// @details After the move, the source tree is left in a valid empty
     ///          state (leaf_count_ == 0).
     /// @return Reference to this.
@@ -126,10 +126,10 @@ public:
         return *this;
     }
 
-    /// @brief Copy constructor â€” deep copies the entire tree.
+    /// @brief Copy constructor â€?deep copies the entire tree.
     MerkleTree(const MerkleTree& other) = default;
 
-    /// @brief Copy assignment â€” deep copies the entire tree.
+    /// @brief Copy assignment â€?deep copies the entire tree.
     /// @return Reference to this.
     auto operator=(const MerkleTree& other) -> MerkleTree& = default;
 
@@ -231,4 +231,4 @@ private:
     size_t leaf_count_ = 0;                    ///< Number of leaves.
 };
 
-}  // namespace common::data_structure::tree::crypto
+}  // namespace cppforge::data_structure::tree::crypto

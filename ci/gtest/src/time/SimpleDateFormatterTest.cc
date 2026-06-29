@@ -12,7 +12,7 @@
 
 #include "time/SimpleDateFormatter.hpp"
 
-using namespace common::time;
+using namespace cppforge::time;
 
 /**
  * @brief Test fixture for SimpleDateFormatterTest tests

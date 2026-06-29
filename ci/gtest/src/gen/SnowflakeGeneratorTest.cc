@@ -14,7 +14,7 @@
 
 #include "gen/SnowflakeGenerator.hpp"
 
-using namespace common::gen;
+using namespace cppforge::gen;
 
 /**
  * @brief Test fixture for SnowflakeGeneratorTest tests

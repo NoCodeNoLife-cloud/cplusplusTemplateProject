@@ -13,7 +13,7 @@
 
 #include "system/SystemInfo.hpp"
 
-using namespace common::system;
+using namespace cppforge::system;
 
 /**
  * @brief Test fixture for SystemInfoTest tests

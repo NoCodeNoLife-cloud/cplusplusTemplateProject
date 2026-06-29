@@ -23,7 +23,7 @@
 #include <atomic>
 #include <chrono>
 
-namespace common::thread
+namespace cppforge::thread
 {
     /// @brief A spinlock mutex implementation using atomic_flag for synchronization.
     /// This class provides a simple and efficient synchronization mechanism

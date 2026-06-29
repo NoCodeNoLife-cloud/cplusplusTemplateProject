@@ -1,6 +1,6 @@
 /**
  * @file MerkleTree.cc
- * @brief MerkleTree implementation — SHA-256 hash tree with Merkle proofs
+ * @brief MerkleTree implementation �?SHA-256 hash tree with Merkle proofs
  * @details Provides the full implementation of the Merkle tree and proof
  *          system.  SHA-256 hashing is performed via OpenSSL's EVP API.
  *          The tree uses a level-by-level vector storage:
@@ -22,11 +22,11 @@
 
 #include <openssl/evp.h>
 
-namespace common::data_structure::tree::crypto
+namespace cppforge::data_structure::tree::crypto
 {
 
 // ══════════════════════════════════════════════════════════════════════════
-//  Private helpers — SHA-256 via OpenSSL EVP API
+//  Private helpers �?SHA-256 via OpenSSL EVP API
 // ══════════════════════════════════════════════════════════════════════════
 
 auto MerkleTree::sha256(std::span<const uint8_t> data) -> std::vector<uint8_t>
@@ -294,7 +294,7 @@ auto MerkleTree::getProof(size_t leafIndex) const -> std::optional<MerkleProof>
 
         if (position % 2 == 0)
         {
-            // ── Even position → this node is a LEFT child ──
+            // ── Even position �?this node is a LEFT child ──
             // The sibling is the RIGHT child at position + 1 (if it exists).
             const size_t siblingIdx = position + 1;
             if (siblingIdx < currentLevel.size())
@@ -312,7 +312,7 @@ auto MerkleTree::getProof(size_t leafIndex) const -> std::optional<MerkleProof>
         }
         else
         {
-            // ── Odd position → this node is a RIGHT child ──
+            // ── Odd position �?this node is a RIGHT child ──
             // The sibling is the LEFT child at position - 1.
             proof.siblings.push_back(currentLevel[position - 1]);
             proof.isLeft.push_back(true);  // sibling is on the left
@@ -358,4 +358,4 @@ auto MerkleTree::verifyProof(
     return current == rootHash;
 }
 
-}  // namespace common::data_structure::tree::crypto
+}  // namespace cppforge::data_structure::tree::crypto

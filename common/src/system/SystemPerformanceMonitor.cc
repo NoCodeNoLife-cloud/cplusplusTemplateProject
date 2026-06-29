@@ -1,6 +1,6 @@
 /**
  * @file SystemPerformanceMonitor.cc
- * @brief SystemPerformanceMonitor implementation â€” metric sampling and rolling window
+ * @brief SystemPerformanceMonitor implementation â€?metric sampling and rolling window
  * @details Implements periodic metric sampling: reads /proc/stat and
  *          /proc/meminfo on Linux, uses PDH APIs on Windows.  Maintains a
  *          fixed-size ring buffer of samples for trend reporting.
@@ -13,7 +13,7 @@
 #include <thread>
 #include <windows.h>
 
-namespace common::system
+namespace cppforge::system
 {
     ULARGE_INTEGER SystemPerformanceMonitor::FileTimeToULARGEInteger(const FILETIME& ft)
     {

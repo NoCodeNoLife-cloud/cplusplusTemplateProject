@@ -1,6 +1,6 @@
 /**
  * @file MichaelScottQueueTest.cc
- * @brief Unit tests for MichaelScottQueue — single-threaded functional and
+ * @brief Unit tests for MichaelScottQueue �?single-threaded functional and
  *        multithreaded concurrent tests
  * @details Comprehensive tests covering construction, basic operations,
  *          FIFO ordering, edge cases, move semantics, and concurrent
@@ -32,7 +32,7 @@
 #include <utility>
 #include <vector>
 
-using namespace common::data_structure::concurrent;
+using namespace cppforge::data_structure::concurrent;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Test fixture
@@ -218,7 +218,7 @@ TEST_F(MichaelScottQueueTest, InterleavedEnqueueDequeue)
 }
 
 /**
- * @brief Enqueue N items, dequeue N items — verify order and values.
+ * @brief Enqueue N items, dequeue N items �?verify order and values.
  * @details Exercises bulk insertion and full drain.
  */
 TEST_F(MichaelScottQueueTest, BulkEnqueueDequeue)
@@ -359,7 +359,7 @@ TEST_F(MichaelScottQueueTest, LargeMovableType)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  6. Interface completeness — IConcurrentQueue methods are callable
+//  6. Interface completeness �?IConcurrentQueue methods are callable
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -467,7 +467,7 @@ private:
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Multiple producers and consumers — verify no data loss.
+ * @brief Multiple producers and consumers �?verify no data loss.
  * @details 4 producer threads each enqueue CONCUR_TOTAL_ITEMS / 4 items.
  *          4 consumer threads dequeue until all items are consumed.
  *          Every item must be consumed exactly once, and the overall FIFO
@@ -651,7 +651,7 @@ TEST_F(MichaelScottQueueTest, ConcurrentAllProducersConsumers_Stress)
     {
         if (std::chrono::steady_clock::now() >= deadline)
         {
-            break;  // Timed out — will fail below.
+            break;  // Timed out �?will fail below.
         }
         std::this_thread::yield();
     }
@@ -673,7 +673,7 @@ TEST_F(MichaelScottQueueTest, ConcurrentAllProducersConsumers_Stress)
         EXPECT_EQ(c, 1) << "Item " << i << " was consumed " << c << " times";
     }
 
-    // Queue should be empty (or nearly so — allow a small race window).
+    // Queue should be empty (or nearly so �?allow a small race window).
     EXPECT_TRUE(q.empty());
     EXPECT_EQ(q.size(), 0);
 }
@@ -683,7 +683,7 @@ TEST_F(MichaelScottQueueTest, ConcurrentAllProducersConsumers_Stress)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief All threads enqueue concurrently — validate final size and content.
+ * @brief All threads enqueue concurrently �?validate final size and content.
  * @details 8 threads each enqueue 1000 items.  After all join, dequeue
  *          and verify that all items are present exactly once.
  */
@@ -726,7 +726,7 @@ TEST_F(MichaelScottQueueTest, ConcurrentEnqueueOnly_SizeCorrect)
         const auto val = q.try_dequeue();
         if (!val.has_value())
         {
-            break;  // Queue empty before all items drained — will fail below.
+            break;  // Queue empty before all items drained �?will fail below.
         }
         seen[static_cast<std::size_t>(*val)]++;
     }
@@ -743,7 +743,7 @@ TEST_F(MichaelScottQueueTest, ConcurrentEnqueueOnly_SizeCorrect)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Concurrent mixed enqueue/dequeue — no crash or data corruption.
+ * @brief Concurrent mixed enqueue/dequeue �?no crash or data corruption.
  * @details Each thread repeatedly enqueues or dequeues from a shared queue
  *          for a fixed duration (~2 s).  After all threads stop, the total
  *          produced vs consumed counts are validated (may not be exact due
@@ -801,7 +801,7 @@ TEST_F(MichaelScottQueueTest, MixedEnqueueDequeue_NoCorruption)
     // with internal invariants (no wraparound, no corruption).
     EXPECT_LE(s, static_cast<std::size_t>(ops_done.load() / 2 + CONCUR_NUM_THREADS));
 
-    // Drain remaining items — must not crash.
+    // Drain remaining items �?must not crash.
     int drain_count = 0;
     while (q.try_dequeue().has_value())
     {

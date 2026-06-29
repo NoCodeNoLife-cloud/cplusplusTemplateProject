@@ -1,6 +1,6 @@
 /**
  * @file RedBlackTree.hpp
- * @brief Red-Black tree â€” self-balancing BST with O(log n) guaranteed ops
+ * @brief Red-Black tree â€?self-balancing BST with O(log n) guaranteed ops
  * @details A self-balancing binary search tree that maintains five red-black
  *          invariants (root is black, no adjacent red nodes, equal black-height
  *          on every path).  Guarantees O(log n) worst-case insert, erase, and
@@ -24,7 +24,7 @@
 #include "data_structure/base_type/Color.hpp"
 #include "data_structure/tree/node/RedBlackTreeNode.hpp"
 
-namespace common::data_structure::tree::balanced
+namespace cppforge::data_structure::tree::balanced
 {
     using tree::node::RedBlackTreeNode;
     /// @brief A red-black tree implementation

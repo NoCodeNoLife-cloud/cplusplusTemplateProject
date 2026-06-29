@@ -17,7 +17,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Bellman-Ford shortest path algorithm
     /// @details Supports negative edge weights and detects negative cycles.

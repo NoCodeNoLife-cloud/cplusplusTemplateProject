@@ -1,6 +1,6 @@
 /**
  * @file MinHash.cc
- * @brief MinHash probabilistic Jaccard similarity estimator — explicit instantiations
+ * @brief MinHash probabilistic Jaccard similarity estimator �?explicit instantiations
  * @details This file provides explicit template instantiations for commonly used
  *          MinHash configurations and item types. Forces the compiler to generate
  *          code for these specialisations, catching compilation errors early and
@@ -11,12 +11,12 @@
 
 #include <string>
 
-namespace common::data_structure::probabilistic
+namespace cppforge::data_structure::probabilistic
 {
     // ── Default configuration ──
 
     /// @brief Explicit instantiation of the default MinHash
-    ///        (SignatureSize=128, MinHashDefaultHash) — all non-template members.
+    ///        (SignatureSize=128, MinHashDefaultHash) �?all non-template members.
     template class MinHash<>;
 
     // ── Template member instantiations for common item types ──
@@ -28,4 +28,4 @@ namespace common::data_structure::probabilistic
     template void MinHash<>::insert<uint32_t>(const uint32_t&);
     template void MinHash<>::insert<uint64_t>(const uint64_t&);
 
-} // namespace common::data_structure::probabilistic
+} // namespace cppforge::data_structure::probabilistic

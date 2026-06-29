@@ -10,7 +10,7 @@
 #include "auth/UserAuthenticator.hpp"
 #include "auth/AuthenticationException.hpp"
 
-using namespace common::auth;
+using namespace cppforge::auth;
 
 /**
  * @brief Test fixture for UserAuthenticatorTest tests

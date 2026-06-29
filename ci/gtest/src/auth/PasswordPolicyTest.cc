@@ -9,7 +9,7 @@
 
 #include "auth/PasswordPolicy.hpp"
 
-using namespace common::auth;
+using namespace cppforge::auth;
 
 /**
  * @brief Test fixture for PasswordPolicy tests

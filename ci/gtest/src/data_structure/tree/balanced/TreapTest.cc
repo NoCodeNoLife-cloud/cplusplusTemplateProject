@@ -9,7 +9,7 @@
 
 #include "data_structure/tree/balanced/Treap.hpp"
 
-using namespace common::data_structure::tree::balanced;
+using namespace cppforge::data_structure::tree::balanced;
 
 /**
  * @brief Test fixture for Treap tests

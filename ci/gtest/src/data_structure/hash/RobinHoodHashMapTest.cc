@@ -11,7 +11,7 @@
 
 #include "data_structure/hash/RobinHoodHashMap.hpp"
 
-using namespace common::data_structure::hash;
+using namespace cppforge::data_structure::hash;
 
 /**
  * @brief Test fixture for RobinHoodHashMap tests

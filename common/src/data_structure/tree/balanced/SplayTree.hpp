@@ -1,6 +1,6 @@
 /**
  * @file SplayTree.hpp
- * @brief Self-adjusting splay tree â€” amortised O(log n) ops with locality
+ * @brief Self-adjusting splay tree â€?amortised O(log n) ops with locality
  * @details A self-adjusting BST that moves recently accessed nodes to the root
  *          via splay rotations.  Frequently accessed elements are found faster
  *          (working-set property).  All operations have amortised O(log n)
@@ -26,7 +26,7 @@
 
 #include "data_structure/tree/node/TreeNode.hpp"
 
-namespace common::data_structure::tree::balanced
+namespace cppforge::data_structure::tree::balanced
 {
     using tree::node::TreeNode;
     /// @brief A self-adjusting binary search tree (Splay Tree)

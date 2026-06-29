@@ -6,7 +6,7 @@
 #include "io/reader/BufferedReader.hpp"
 #include "io/reader/StringReader.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /// @brief Test fixture for BufferedReader tests.
 class BufferedReaderTest : public testing::Test

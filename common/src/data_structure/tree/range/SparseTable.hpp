@@ -1,6 +1,6 @@
 /**
  * @file SparseTable.hpp
- * @brief Sparse Table â€” O(1) range query on static arrays (idempotent ops)
+ * @brief Sparse Table â€?O(1) range query on static arrays (idempotent ops)
  * @details A sparse table is a static data structure that precomputes the
  *          results of an idempotent merge operation for all intervals whose
  *          length is a power of two.  Range queries are answered in O(1) by
@@ -36,7 +36,7 @@
 #include <utility>       // std::move, std::swap
 #include <vector>
 
-namespace common::data_structure::tree::range
+namespace cppforge::data_structure::tree::range
 {
     /// @brief Detail helpers and custom merge operations.
     namespace detail
@@ -259,4 +259,4 @@ namespace common::data_structure::tree::range
         [[no_unique_address]] MergeOp merge_{};
         std::vector<std::vector<T>> st_;
     };
-} // namespace common::data_structure::tree::range
+} // namespace cppforge::data_structure::tree::range

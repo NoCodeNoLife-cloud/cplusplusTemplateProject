@@ -1,6 +1,6 @@
 /**
  * @file FunctionProfiler.cc
- * @brief FunctionProfiler implementation â€” timer start/stop, call-graph recording
+ * @brief FunctionProfiler implementation â€?timer start/stop, call-graph recording
  * @details Implements RAII profiling: constructor captures entry time,
  *          destructor captures exit time and records the elapsed duration
  *          in the parent profiler's call graph.
@@ -15,7 +15,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::system
+namespace cppforge::system
 {
     FunctionProfiler::FunctionProfiler(std::string function_name, const bool autoStart) : function_name_(std::move(function_name))
     {

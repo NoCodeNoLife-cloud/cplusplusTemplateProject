@@ -1,6 +1,6 @@
 /**
  * @file RandomGenerator.cc
- * @brief RandomGenerator implementation â€” Mersenne Twister distribution wrappers
+ * @brief RandomGenerator implementation â€?Mersenne Twister distribution wrappers
  * @details Implements PRNG methods wrapping std::mt19937_64 with uniform,
  *          normal, and bernoulli distributions.  Seeds from std::random_device
  *          for non-deterministic initialisation.
@@ -14,7 +14,7 @@
 #include <mutex>
 #include <glog/logging.h>
 
-namespace common::gen
+namespace cppforge::gen
 {
     RandomGenerator::RandomGenerator() : engine_(std::random_device{}())
     {
@@ -44,7 +44,7 @@ namespace common::gen
         if (min > max)
         {
             DLOG(WARNING) << fmt::format("RandomGenerator nextInt: min ({}) > max ({})", min, max);
-            throw std::invalid_argument("common::RandomGenerator::nextInt: min cannot be greater than max");
+            throw std::invalid_argument("cppforge::RandomGenerator::nextInt: min cannot be greater than max");
         }
         std::lock_guard lock(mutex_);
         std::uniform_int_distribution dist(min, max);
@@ -63,7 +63,7 @@ namespace common::gen
         if (trueProbability < 0.0 || trueProbability > 1.0)
         {
             DLOG(WARNING) << fmt::format("RandomGenerator nextBool: probability {} out of range [0, 1]", trueProbability);
-            throw std::invalid_argument("common::RandomGenerator::nextBool: probability must be in [0, 1]");
+            throw std::invalid_argument("cppforge::RandomGenerator::nextBool: probability must be in [0, 1]");
         }
         std::lock_guard lock(mutex_);
         if (trueProbability == 0.0)
@@ -83,7 +83,7 @@ namespace common::gen
         if (min >= max)
         {
             DLOG(WARNING) << fmt::format("RandomGenerator nextDouble: min ({}) >= max ({})", min, max);
-            throw std::invalid_argument("common::RandomGenerator::nextDouble: min must be less than max");
+            throw std::invalid_argument("cppforge::RandomGenerator::nextDouble: min must be less than max");
         }
         std::lock_guard lock(mutex_);
         std::uniform_real_distribution dist(min, max);
@@ -95,7 +95,7 @@ namespace common::gen
         if (charset.empty())
         {
             DLOG(WARNING) << "RandomGenerator nextString: charset is empty";
-            throw std::invalid_argument("common::RandomGenerator::nextString: charset cannot be empty");
+            throw std::invalid_argument("cppforge::RandomGenerator::nextString: charset cannot be empty");
         }
         if (length == 0)
         {
@@ -121,7 +121,7 @@ namespace common::gen
         if (stddev <= 0.0)
         {
             DLOG(WARNING) << fmt::format("RandomGenerator nextGaussian: stddev ({}) must be positive", stddev);
-            throw std::invalid_argument("common::RandomGenerator::nextGaussian: stddev must be positive");
+            throw std::invalid_argument("cppforge::RandomGenerator::nextGaussian: stddev must be positive");
         }
         std::lock_guard lock(mutex_);
         std::normal_distribution dist(mean, stddev);

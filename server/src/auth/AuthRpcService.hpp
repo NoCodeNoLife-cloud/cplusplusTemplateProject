@@ -28,7 +28,7 @@ namespace server_app::auth
     class AuthRpcService final : public rpc::AuthService::Service
     {
     public:
-        /// @brief Default constructor deleted (singleton â€” use init()/getInstance())
+        /// @brief Default constructor deleted (singleton â€?use init()/getInstance())
         AuthRpcService() = delete;
 
         /// @brief Singleton instance access
@@ -91,7 +91,7 @@ namespace server_app::auth
         explicit AuthRpcService(const std::string& db_path);
 
         /// @brief Authenticator instance for managing user accounts
-        common::auth::UserAuthenticator authenticator_;
+        cppforge::auth::UserAuthenticator authenticator_;
 
         /// @brief Map exception types to error codes using table-driven approach
         static const std::unordered_map<std::string_view, int> error_map_;
@@ -100,7 +100,7 @@ namespace server_app::auth
         /// @param e AuthenticationException to handle
         /// @param response Response to populate with error details
         /// @return Appropriate gRPC status
-        [[nodiscard]] static grpc::Status HandleAuthException(const common::auth::AuthenticationException& e, rpc::AuthResponse* response);
+        [[nodiscard]] static grpc::Status HandleAuthException(const cppforge::auth::AuthenticationException& e, rpc::AuthResponse* response);
 
         /// @brief Loaded RPC configuration options
         AuthRpcParam options_;

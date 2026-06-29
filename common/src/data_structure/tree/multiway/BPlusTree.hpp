@@ -1,6 +1,6 @@
 /**
  * @file BPlusTree.hpp
- * @brief B+ tree with leaf-linked list â€” O(log n) ops + efficient range scans
+ * @brief B+ tree with leaf-linked list â€?O(log n) ops + efficient range scans
  * @details A B+ tree variant where all key-value pairs reside in leaf nodes
  *          and internal nodes serve purely as routers.  Leaf nodes form a
  *          sequential linked list, enabling efficient range queries without
@@ -28,7 +28,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure::tree::multiway
+namespace cppforge::data_structure::tree::multiway
 {
     /// @brief A B+Tree with configurable minimum degree
     /// @details All values reside in leaf nodes. Internal nodes store only routing keys.
@@ -178,7 +178,7 @@ namespace common::data_structure::tree::multiway
         {
             if (node->leaf_)
             {
-                // Check for duplicate key â†’ update value
+                // Check for duplicate key â†?update value
                 for (int32_t i = 0; i < node->count_; ++i)
                 {
                     if (!comp_(node->keys_[i], key) && !comp_(key, node->keys_[i]))

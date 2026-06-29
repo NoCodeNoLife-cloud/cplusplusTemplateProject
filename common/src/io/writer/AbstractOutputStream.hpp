@@ -23,7 +23,7 @@
 #include "interface/io/ICloseable.hpp"
 #include "interface/io/IFlushable.hpp"
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     /// @brief Abstract base class for all output stream implementations.
     /// @details This class provides the basic contract for writing data to an output stream.

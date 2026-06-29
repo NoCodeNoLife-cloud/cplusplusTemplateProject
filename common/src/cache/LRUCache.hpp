@@ -33,7 +33,7 @@
 #include <fmt/format.h>
 #include "interface/ICache.hpp"
 
-namespace common::cache
+namespace cppforge::cache
 {
     /// @brief Template class implementing an LRU (Least Recently Used) cache
     /// @tparam Key Type of the key used to identify cache entries

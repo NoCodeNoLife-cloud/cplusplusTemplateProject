@@ -18,7 +18,7 @@
 #include "data_structure/graph/IGraphVisitor.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Breadth-First Search algorithm implementation
     /// @details All methods are static. Use BFS::traverse() for traversal or

@@ -1,6 +1,6 @@
 /**
  * @file UserCredentials.hpp
- * @brief User credential value object â€” username, password hash, roles
+ * @brief User credential value object â€?username, password hash, roles
  * @description Holds user authentication data: username/email, salted password
  *          hash (not plaintext), assigned roles/permissions, and account
  *          status (active/locked/expired).  Used as the data transfer object
@@ -14,7 +14,7 @@
 #include <chrono>
 #include <string>
 
-namespace common::auth
+namespace cppforge::auth
 {
     /// @brief User credentials storage with security features
     class UserCredentials

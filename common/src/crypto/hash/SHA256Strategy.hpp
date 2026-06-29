@@ -1,6 +1,6 @@
 /**
  * @file SHA256Strategy.hpp
- * @brief SHA-256 hash strategy â€” 256-bit digest via OpenSSL
+ * @brief SHA-256 hash strategy â€?256-bit digest via OpenSSL
  * @details Implements the HashStrategy interface using the SHA-256 algorithm
  *          (256-bit output).  Wraps OpenSSL's EVP_Digest API.  Provides
  *          collision-resistant hashing suitable for digital signatures,
@@ -20,7 +20,7 @@
 
 #include "HashStrategy.hpp"
 
-namespace common::crypto::hash
+namespace cppforge::crypto::hash
 {
     /**
      * @brief Concrete strategy implementation for SHA-256 hash algorithm.

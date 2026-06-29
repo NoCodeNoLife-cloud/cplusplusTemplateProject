@@ -1,6 +1,6 @@
 /**
  * @file StringToolkit.hpp
- * @brief String utility functions â€” split, join, trim, case conversion
+ * @brief String utility functions â€?split, join, trim, case conversion
  * @details Provides static utility methods for string manipulation:
  *          split by delimiter, join with separator, trim whitespace,
  *          toUpper/toLower conversion, substring search/replace, and
@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     /// @brief A utility class for string manipulation operations.
     /// This class provides static methods for common string operations such as splitting and concatenating strings.

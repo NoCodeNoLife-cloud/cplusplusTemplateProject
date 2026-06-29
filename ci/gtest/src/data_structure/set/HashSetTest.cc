@@ -13,7 +13,7 @@
 
 #include "data_structure/set/HashSet.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 // Compile-time noexcept guarantees
 static_assert(std::is_nothrow_move_constructible_v<HashSet<int>>);

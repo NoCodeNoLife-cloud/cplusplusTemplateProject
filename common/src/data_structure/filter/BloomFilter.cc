@@ -1,6 +1,6 @@
 /**
  * @file BloomFilter.cc
- * @brief Bloom filter implementation â€” parameter computation and membership ops
+ * @brief Bloom filter implementation â€?parameter computation and membership ops
  * @details Implements BloomFilter construction, insert, contains, and clear
  *          operations.  Also provides BloomParameters::compute_optimal_parameters()
  *          which determines the optimal bit-array size and hash-function count
@@ -20,7 +20,7 @@
 #include <vector>
 #include <fmt/format.h>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     // BloomParameters implementation
     BloomParameters::BloomParameters()  : minimum_size(1), maximum_size(std::numeric_limits<uint64_t>::max()), minimum_number_of_hashes(1), maximum_number_of_hashes(std::numeric_limits<uint32_t>::max()), projected_element_count(10000), false_positive_probability(1.0 / static_cast<double>(projected_element_count)), random_seed(0xA5A5A5A55A5A5A5AULL)

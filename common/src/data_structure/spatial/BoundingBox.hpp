@@ -31,7 +31,7 @@
 #include <numeric>
 #include <type_traits>
 
-namespace common::data_structure::spatial
+namespace cppforge::data_structure::spatial
 {
     // ── Helper: subscript-detection concept (iterator constructor) ──
 
@@ -44,10 +44,8 @@ namespace common::data_structure::spatial
         t[i];
     };
 
-    // ═══════════════════════════════════════════════════════════════════════
-    //  BoundingBox
-    // ═══════════════════════════════════════════════════════════════════════
-
+    // ══════════════════════════════════════════════════════════════════════�?    //  BoundingBox
+    // ══════════════════════════════════════════════════════════════════════�?
     /// @brief N-dimensional axis-aligned bounding box.
     ///
     /// Represents an axis-aligned hyper-rectangle defined by a minimum
@@ -83,7 +81,7 @@ namespace common::data_structure::spatial
 
         // ── Constructors ─────────────────────────────────────────────────
 
-        /// @brief Default constructor — zero-initialises both corners.
+        /// @brief Default constructor �?zero-initialises both corners.
         BoundingBox() = default;
 
         /// @brief Constructs a box from explicit minimum and maximum corners.
@@ -433,4 +431,4 @@ namespace common::data_structure::spatial
         std::array<CoordT, Dims> max_{};   ///< Maximum corner coordinates
     };
 
-} // namespace common::data_structure::spatial
+} // namespace cppforge::data_structure::spatial

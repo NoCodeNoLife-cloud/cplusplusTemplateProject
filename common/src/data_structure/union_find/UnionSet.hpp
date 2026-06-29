@@ -31,15 +31,15 @@
 #include <cstdint>
 #include <unordered_map>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief A Union-Find (Disjoint Set Union) with path compression + union by rank.
     ///
     /// @tparam T Element type (any hashable type usable as unordered_map key).
     ///
     /// Uses two unordered_maps for storage:
-    /// - parent: element â†’ its representative parent
-    /// - rank:   element â†’ rank (tree height upper bound) for union by rank
+    /// - parent: element â†?its representative parent
+    /// - rank:   element â†?rank (tree height upper bound) for union by rank
     ///
     /// @par Thread Safety
     /// This class is **not** thread-safe.  The internal maps are mutated on

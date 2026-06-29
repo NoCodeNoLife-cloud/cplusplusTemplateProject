@@ -1,6 +1,6 @@
 /**
  * @file PushbackInputStream.cc
- * @brief PushbackInputStream implementation â€” unread byte buffer management
+ * @brief PushbackInputStream implementation â€?unread byte buffer management
  * @details Implements byte pushback: unread() stores bytes in a pushback
  *          buffer, and subsequent read() operations consume from this buffer
  *          before reading from the underlying stream.  Buffer overflow throws.
@@ -13,7 +13,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     PushbackInputStream::PushbackInputStream(std::unique_ptr<AbstractInputStream> inputStream, const size_t bufferSize) : FilterInputStream(std::move(inputStream)), pushback_buffer_(bufferSize), buffer_pos_(bufferSize)
     {

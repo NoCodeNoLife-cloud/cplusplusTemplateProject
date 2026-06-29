@@ -18,7 +18,7 @@
 
 #include "AbstractOutputStream.hpp"
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     /// @brief A filter output stream that wraps another output stream.
     /// @details This class provides a base for output stream filters that modify or enhance

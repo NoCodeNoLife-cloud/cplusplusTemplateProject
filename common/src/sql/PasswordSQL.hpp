@@ -17,7 +17,7 @@
 
 #include "sql/sqlite/SQLiteManager.hpp"
 
-namespace common::sql
+namespace cppforge::sql
 {
     /// @brief Manages user authentication and password operations using SQLite database
     class PasswordSQL

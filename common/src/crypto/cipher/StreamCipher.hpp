@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     /**
      * @class StreamCipher

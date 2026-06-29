@@ -1,6 +1,6 @@
 /**
  * @file SHA256Strategy.cc
- * @brief SHA256Strategy implementation â€” EVP_Digest wrapper for SHA-256
+ * @brief SHA256Strategy implementation â€?EVP_Digest wrapper for SHA-256
  * @details Implements SHA-256 hash computation using OpenSSL's EVP_Digest
  *          interface.  Produces a 256-bit (32-byte) digest, hex-encoded.
  */
@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::crypto::hash
+namespace cppforge::crypto::hash
 {
     namespace
     {

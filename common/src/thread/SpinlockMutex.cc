@@ -1,6 +1,6 @@
 /**
  * @file SpinlockMutex.cc
- * @brief SpinlockMutex implementation â€” atomic_flag busy-wait with pause
+ * @brief SpinlockMutex implementation â€?atomic_flag busy-wait with pause
  * @details Implements spinlock using std::atomic_flag::test_and_set with
  *          acquire-release semantics.  Uses platform-specific pause/yield
  *          instructions to reduce CPU contention.
@@ -17,7 +17,7 @@
 #include <immintrin.h>
 #endif
 
-namespace common::thread
+namespace cppforge::thread
 {
     void SpinlockMutex::lock()
     {

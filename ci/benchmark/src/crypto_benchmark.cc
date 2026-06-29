@@ -19,15 +19,15 @@
 //  PBKDF2-HMAC-SHA256 (hash_password)
 // ══════════════════════════════════════════════════════════════════════════
 
-/// @brief PBKDF2 with 10 000 iterations (low iteration count).
+/// @brief PBKDF2 with 10�?00 iterations (low iteration count).
 static void BM_PBKDF2_LowIterations(benchmark::State& state)
 {
     const std::string password = "TestPassword123!@#";
-    const std::string salt = common::crypto::CryptoToolKit::generate_salt();
+    const std::string salt = cppforge::crypto::CryptoToolKit::generate_salt();
     for (auto _ : state)
     {
         (void)_;
-        benchmark::DoNotOptimize(common::crypto::CryptoToolKit::hash_password(password, salt, 10000));
+        benchmark::DoNotOptimize(cppforge::crypto::CryptoToolKit::hash_password(password, salt, 10000));
     }
 }
 BENCHMARK(BM_PBKDF2_LowIterations);
@@ -36,11 +36,11 @@ BENCHMARK(BM_PBKDF2_LowIterations);
 static void BM_PBKDF2_DefaultIterations(benchmark::State& state)
 {
     const std::string password = "TestPassword123!@#";
-    const std::string salt = common::crypto::CryptoToolKit::generate_salt();
+    const std::string salt = cppforge::crypto::CryptoToolKit::generate_salt();
     for (auto _ : state)
     {
         (void)_;
-        benchmark::DoNotOptimize(common::crypto::CryptoToolKit::hash_password(password, salt));
+        benchmark::DoNotOptimize(cppforge::crypto::CryptoToolKit::hash_password(password, salt));
     }
 }
 BENCHMARK(BM_PBKDF2_DefaultIterations)->Iterations(5);
@@ -57,7 +57,7 @@ static void BM_SecureCompare(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        bool eq = common::crypto::CryptoToolKit::secure_compare(a, b);
+        bool eq = cppforge::crypto::CryptoToolKit::secure_compare(a, b);
         benchmark::DoNotOptimize(eq);
     }
 }
@@ -77,7 +77,7 @@ static void BM_AES256CBC_Encrypt(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        benchmark::DoNotOptimize(common::crypto::OpenSSLToolkit::encryptAES256CBC(plaintext, password));
+        benchmark::DoNotOptimize(cppforge::crypto::OpenSSLToolkit::encryptAES256CBC(plaintext, password));
     }
 }
 BENCHMARK(BM_AES256CBC_Encrypt)->Arg(64)->Arg(1024)->Arg(16384);
@@ -88,12 +88,12 @@ static void BM_AES256CBC_Decrypt(benchmark::State& state)
     const std::string password = "StrongPassword123!";
     const auto data_size = static_cast<size_t>(state.range(0));
     const std::string plaintext(data_size, 'A');
-    const auto ciphertext = common::crypto::OpenSSLToolkit::encryptAES256CBC(plaintext, password);
+    const auto ciphertext = cppforge::crypto::OpenSSLToolkit::encryptAES256CBC(plaintext, password);
 
     for (auto _ : state)
     {
         (void)_;
-        benchmark::DoNotOptimize(common::crypto::OpenSSLToolkit::decryptAES256CBC(ciphertext, password));
+        benchmark::DoNotOptimize(cppforge::crypto::OpenSSLToolkit::decryptAES256CBC(ciphertext, password));
     }
 }
 BENCHMARK(BM_AES256CBC_Decrypt)->Arg(64)->Arg(1024)->Arg(16384);
@@ -125,7 +125,7 @@ static void BM_ChaCha20_Encrypt(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        auto cipher = common::crypto::cipher::ChaCha20Cipher();
+        auto cipher = cppforge::crypto::cipher::ChaCha20Cipher();
         cipher.initialize(key, nonce);
         benchmark::DoNotOptimize(cipher.encrypt(plaintext));
     }
@@ -145,7 +145,7 @@ static void BM_SHA256_SmallData(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::crypto::hash::SHA256Strategy hasher;
+        cppforge::crypto::hash::SHA256Strategy hasher;
         (void)hasher.update(data.data(), data.size());
         benchmark::DoNotOptimize(hasher.finalize());
     }
@@ -162,7 +162,7 @@ static void BM_SHA256_ChunkedUpdate(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::crypto::hash::SHA256Strategy hasher;
+        cppforge::crypto::hash::SHA256Strategy hasher;
         for (size_t offset = 0; offset < total_size; offset += chunk_size)
         {
             (void)hasher.update(data.data() + offset, std::min(chunk_size, total_size - offset));

@@ -1,6 +1,6 @@
 /**
  * @file HashStrategy.cc
- * @brief HashStrategy base implementation â€” default compute routing
+ * @brief HashStrategy base implementation â€?default compute routing
  * @details Provides default implementations for the HashStrategy interface,
  *          including the hex-encoding helper shared by all strategy types.
  */
@@ -11,7 +11,7 @@
 #include <fstream>
 #include <glog/logging.h>
 
-namespace common::crypto::hash
+namespace cppforge::crypto::hash
 {
     std::optional<std::string> HashStrategy::toHexString(const std::vector<uint8_t>& digest, const size_t expected_size)
     {

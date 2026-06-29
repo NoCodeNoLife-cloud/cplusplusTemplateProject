@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-namespace common::crypto
+namespace cppforge::crypto
 {
     /// @brief Utility class for OpenSSL cryptographic operations.
     /// This class provides methods for key derivation, encryption, and decryption

@@ -1,6 +1,6 @@
 /**
  * @file ByteArrayInputStream.cc
- * @brief ByteArrayInputStream implementation â€” in-memory byte stream
+ * @brief ByteArrayInputStream implementation â€?in-memory byte stream
  * @details Implements reading from a std::vector<std::byte> buffer with
  *          position tracking, mark/reset, and available-byte counting.
  */
@@ -13,7 +13,7 @@
 #include <string>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     ByteArrayInputStream::ByteArrayInputStream(const std::vector<std::byte>& buf) : buffer_(buf)
     {

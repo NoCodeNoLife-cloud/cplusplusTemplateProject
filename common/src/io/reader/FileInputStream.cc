@@ -1,6 +1,6 @@
 /**
  * @file FileInputStream.cc
- * @brief FileInputStream implementation â€” ifstream-based binary file reading
+ * @brief FileInputStream implementation â€?ifstream-based binary file reading
  * @details Implements file-backed byte input: open() checks file existence and
  *          sets up std::ifstream in binary mode, read() delegates to ifstream,
  *          and available() uses seekg to compute remaining bytes.
@@ -15,7 +15,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     FileInputStream::FileInputStream(const std::string& name)
     {

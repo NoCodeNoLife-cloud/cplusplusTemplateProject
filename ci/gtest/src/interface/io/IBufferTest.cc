@@ -10,7 +10,7 @@
 
 #include "interface/io/IBuffer.hpp"
 
-using namespace common::interface::io;
+using namespace cppforge::interface::io;
 
 /**
  * @brief Minimal concrete stub implementing IBuffer for contract testing.

@@ -22,7 +22,7 @@
 #include "AbstractWriter.hpp"
 #include "interface/io/IAppendable.hpp"
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     /// @brief A buffered writer that writes data to an output stream with buffering.
     /// This class provides efficient writing operations by buffering the output data

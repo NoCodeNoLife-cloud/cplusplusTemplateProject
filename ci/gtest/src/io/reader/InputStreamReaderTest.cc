@@ -5,7 +5,7 @@
 #include "io/reader/InputStreamReader.hpp"
 #include "io/reader/StringReader.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /// @brief Test fixture for InputStreamReader tests.
 class InputStreamReaderTest : public testing::Test
@@ -16,14 +16,14 @@ protected:
 
     void SetUp() override
     {
-        // "h€llo" �?�?(U+20AC) is 3 bytes in UTF-8: E2 82 AC
+        // "h€llo" �?�?(U+20AC) is 3 bytes in UTF-8: E2 82 AC
         inner_ = std::make_shared<StringReader>(std::string("h\xE2\x82\xAC"
                                                              "llo"));
         reader_ = std::make_unique<InputStreamReader>(inner_);
     }
 };
 
-/** @brief Test reading a UTF-8 stream byte by byte. @details Verifies that the 7-byte stream "h€llo" (ASCII 'h', 3-byte €, "llo") is read as individual bytes including the UTF-8 continuation bytes. */
+/** @brief Test reading a UTF-8 stream byte by byte. @details Verifies that the 7-byte stream "h€llo" (ASCII 'h', 3-byte �? "llo") is read as individual bytes including the UTF-8 continuation bytes. */
 TEST_F(InputStreamReaderTest, ReadByteByByte)
 {
     EXPECT_EQ(reader_->read(), 'h');
@@ -36,7 +36,7 @@ TEST_F(InputStreamReaderTest, ReadByteByByte)
     EXPECT_FALSE(reader_->read().has_value());
 }
 
-/** @brief Test reading UTF-8 bytes into a buffer. @details Verifies that read(buf, off, len) correctly copies the raw UTF-8 bytes including the first 3 bytes of the € character. */
+/** @brief Test reading UTF-8 bytes into a buffer. @details Verifies that read(buf, off, len) correctly copies the raw UTF-8 bytes including the first 3 bytes of the �?character. */
 TEST_F(InputStreamReaderTest, ReadIntoBuffer)
 {
     std::vector<char> buf(3);
@@ -169,7 +169,7 @@ TEST_F(InputStreamReaderTest, Read2ByteSequence)
 /**
  * @brief Test mixed 1/2/3/4-byte UTF-8 sequences
  * @details Verifies that a stream containing 1-byte 'a', 2-byte é (C3 A9),
- *          3-byte € (E2 82 AC), and 4-byte 😀 (F0 9F 98 80) is read
+ *          3-byte �?(E2 82 AC), and 4-byte 😀 (F0 9F 98 80) is read
  *          correctly as 10 individual bytes.
  */
 TEST_F(InputStreamReaderTest, MixedCharacterWidths)

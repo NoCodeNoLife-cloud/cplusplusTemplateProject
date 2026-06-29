@@ -1,6 +1,6 @@
 /**
  * @file File.hpp
- * @brief File abstraction — path, metadata, read/write, directory operations
+ * @brief File abstraction �?path, metadata, read/write, directory operations
  * @description Represents a file on the filesystem.  Provides operations for
  *          path manipulation, metadata query (size, last modified, permissions),
  *          read/write content, and directory listing/creation/deletion.
@@ -25,7 +25,7 @@
 #include <string>
 
 // ── Forward declarations ──────────────────────────────────────────
-namespace common::filesystem::core
+namespace cppforge::filesystem::core
 {
 class Path;
 class Directory;
@@ -84,4 +84,4 @@ private:
     std::filesystem::path file_path_{};
 };
 
-}  // namespace common::filesystem::core
+}  // namespace cppforge::filesystem::core

@@ -5,7 +5,7 @@
 #include "io/reader/BufferedInputStream.hpp"
 #include "io/reader/ByteArrayInputStream.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /// @brief Test fixture for BufferedInputStream tests.
 class BufferedInputStreamTest : public testing::Test

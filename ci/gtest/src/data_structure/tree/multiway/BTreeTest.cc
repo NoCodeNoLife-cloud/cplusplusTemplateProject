@@ -9,7 +9,7 @@
 
 #include "data_structure/tree/multiway/BTree.hpp"
 
-using namespace common::data_structure::tree::multiway;
+using namespace cppforge::data_structure::tree::multiway;
 
 /**
  * @brief Test fixture for BTree tests
@@ -430,7 +430,7 @@ TEST_F(BTreeTest, Height_AfterInserts_Reasonable)
     for (int32_t i = 0; i < 100; ++i)
         tree.insert(i);
     int32_t h = tree.height();
-    // Order=3 => max fanout = 2*Order = 6 => min height = ceil(log6(100)) â‰ˆ 3
+    // Order=3 => max fanout = 2*Order = 6 => min height = ceil(log6(100)) â‰?3
     EXPECT_GE(h, 1);
     EXPECT_LE(h, 6);
 }

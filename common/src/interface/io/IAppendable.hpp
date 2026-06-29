@@ -13,7 +13,7 @@
 #include <string>
 #include <string_view>
 
-namespace common::interface::io
+namespace cppforge::interface::io
 {
     /// @brief Interface for appendable objects.
     /// This interface provides methods for appending characters and strings to objects.

@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 
-using namespace common::data_structure::probabilistic;
+using namespace cppforge::data_structure::probabilistic;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Test Fixture
@@ -153,7 +153,7 @@ TEST_F(MinHashTest, Insert_TwoIdenticalSets_JaccardOne)
 }
 
 /**
- * @brief Test that two disjoint (completely different) sets yield jaccard ≈ 0.
+ * @brief Test that two disjoint (completely different) sets yield jaccard �?0.
  * @details With SignatureSize=128 and entirely disjoint items, the probability
  *          of any hash collision across all 128 slots is negligible, so the
  *          estimated Jaccard should be zero.
@@ -174,7 +174,7 @@ TEST_F(MinHashTest, Insert_PartialOverlap_JaccardBetween)
 {
     const auto a = makeSet({"a", "b", "c", "d", "e"});
     const auto b = makeSet({"c", "d", "e", "f", "g"});
-    // True Jaccard: |{c,d,e}| / |{a,b,c,d,e,f,g}| = 3/7 ≈ 0.4286
+    // True Jaccard: |{c,d,e}| / |{a,b,c,d,e,f,g}| = 3/7 �?0.4286
     const double sim = a.jaccard(b);
     EXPECT_GT(sim, 0.0);
     EXPECT_LT(sim, 1.0);
@@ -441,7 +441,7 @@ TEST_F(MinHashTest, CustomSignatureSize_256_Works)
 /**
  * @brief Test that MinHash<64> produces compatible jaccard estimates.
  * @details Two MinHash<64> instances with the same data should yield jaccard
- *          = 1.0, and disjoint data should yield ≈ 0.0.
+ *          = 1.0, and disjoint data should yield �?0.0.
  */
 TEST_F(MinHashTest, CustomSignatureSize_64_JaccardCorrect)
 {
@@ -472,7 +472,7 @@ TEST_F(MinHashTest, Copy_Construct_Independent)
     MinHash<> copy(original);
     EXPECT_DOUBLE_EQ(copy.jaccard(original), 1.0);
 
-    // Modify the copy — original must be unchanged
+    // Modify the copy �?original must be unchanged
     copy.insert("delta");
     EXPECT_LT(copy.jaccard(original), 1.0);
     // original still has jaccard 1.0 with itself
@@ -492,7 +492,7 @@ TEST_F(MinHashTest, Copy_Assign_Independent)
     assigned = original;
     EXPECT_DOUBLE_EQ(assigned.jaccard(original), 1.0);
 
-    // Modify assigned — original must be unchanged
+    // Modify assigned �?original must be unchanged
     assigned.insert("w");
     EXPECT_LT(assigned.jaccard(original), 1.0);
     EXPECT_DOUBLE_EQ(original.jaccard(original), 1.0);

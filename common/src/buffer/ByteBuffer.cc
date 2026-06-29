@@ -1,6 +1,6 @@
 /**
  * @file ByteBuffer.cc
- * @brief ByteBuffer implementation â€” get/put/flip/compact/array operations
+ * @brief ByteBuffer implementation â€?get/put/flip/compact/array operations
  * @details Implements byte buffer operations: absolute and relative get/put,
  *          bulk array transfer, flip/clear/rewind/compact state transitions,
  *          and direct/array-backed buffer queries.
@@ -13,7 +13,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     ByteBuffer::ByteBuffer(const size_t capacity) : buffer_(capacity)
     {

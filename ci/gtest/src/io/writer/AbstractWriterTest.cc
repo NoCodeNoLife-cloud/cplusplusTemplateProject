@@ -11,7 +11,7 @@
 
 #include "io/writer/AbstractWriter.hpp"
 
-using namespace common::io::writer;
+using namespace cppforge::io::writer;
 
 /**
  * @brief Minimal concrete stub for testing AbstractWriter base class behavior.

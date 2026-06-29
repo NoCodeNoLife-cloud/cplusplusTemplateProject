@@ -1,6 +1,6 @@
 /**
  * @file Clock.cc
- * @brief Clock implementation â€” elapsed-time measurement helpers
+ * @brief Clock implementation â€?elapsed-time measurement helpers
  * @details Implements start/stop/pause/resume for elapsed-time measurement
  *          using std::chrono::high_resolution_clock.  Supports lap timing
  *          and conversion to nanoseconds/microseconds/milliseconds/seconds.
@@ -30,7 +30,7 @@ namespace
     }
 }
 
-namespace common::time
+namespace cppforge::time
 {
     std::string Clock::getCurrentDateTimeString()
     {

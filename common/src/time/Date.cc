@@ -1,6 +1,6 @@
 /**
  * @file Date.cc
- * @brief Date implementation â€” chrono conversion, arithmetic, string formatting
+ * @brief Date implementation â€?chrono conversion, arithmetic, string formatting
  * @details Implements Date as a value type: stores time since epoch in ms,
  *          supports arithmetic with std::chrono::duration, comparison, and
  *          formatting via std::put_time / strftime.
@@ -18,7 +18,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::time
+namespace cppforge::time
 {
     namespace
     {

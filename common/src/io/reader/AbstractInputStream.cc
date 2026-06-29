@@ -1,6 +1,6 @@
 /**
  * @file AbstractInputStream.cc
- * @brief AbstractInputStream implementation â€” default read/skip/available logic
+ * @brief AbstractInputStream implementation â€?default read/skip/available logic
  * @details Provides default implementations for AbstractInputStream methods:
  *          single-byte read() delegates to array read(), skip() via read(),
  *          and available() defaults to 0.  Subclasses override for efficiency.
@@ -16,7 +16,7 @@
 #include <vector>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     void AbstractInputStream::mark(std::int32_t readLimit)
     {

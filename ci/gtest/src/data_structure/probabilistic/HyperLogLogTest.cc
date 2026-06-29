@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 
-using namespace common::data_structure::probabilistic;
+using namespace cppforge::data_structure::probabilistic;
 
 // ---------------------------------------------------------------------------
 //  Test fixture
@@ -457,7 +457,7 @@ TEST_F(HyperLogLogTest, MemoryUsage_Reasonable)
 }
 
 // ---------------------------------------------------------------------------
-//  Type insertion â€” various data types
+//  Type insertion â€?various data types
 // ---------------------------------------------------------------------------
 
 /**
@@ -562,7 +562,7 @@ TEST_F(HyperLogLogTest, Insert_ZeroBytes_DoesNotCrash)
 }
 
 // ---------------------------------------------------------------------------
-//  Determinism â€” same data -> same estimate
+//  Determinism â€?same data -> same estimate
 // ---------------------------------------------------------------------------
 
 /**

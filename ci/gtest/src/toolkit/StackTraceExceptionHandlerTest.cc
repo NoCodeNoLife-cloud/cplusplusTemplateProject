@@ -12,7 +12,7 @@
 
 #include "toolkit/StackTraceExceptionHandler.hpp"
 
-using namespace common::toolkit;
+using namespace cppforge::toolkit;
 
 /**
  * @brief Test fixture for StackTraceExceptionHandler tests

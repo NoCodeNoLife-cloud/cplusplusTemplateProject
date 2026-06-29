@@ -14,7 +14,7 @@
 
 #include "filesystem/type/BmpImage.hpp"
 
-using namespace common::filesystem::type;
+using namespace cppforge::filesystem::type;
 
 class BmpImageTest : public testing::Test
 {

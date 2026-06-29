@@ -32,7 +32,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace common::thread
+namespace cppforge::thread
 {
     /// @brief A thread pool implementation that manages a pool of worker threads to execute tasks asynchronously
     /// The ThreadPool class provides a way to manage a collection of threads and distribute work among them.

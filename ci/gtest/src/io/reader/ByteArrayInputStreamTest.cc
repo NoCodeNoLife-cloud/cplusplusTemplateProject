@@ -3,7 +3,7 @@
 
 #include "io/reader/ByteArrayInputStream.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /// @brief Test fixture for ByteArrayInputStream tests.
 class ByteArrayInputStreamTest : public testing::Test

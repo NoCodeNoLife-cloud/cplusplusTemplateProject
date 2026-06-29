@@ -22,7 +22,7 @@
 
 #include "io/writer/AbstractOutputStream.hpp"
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     /// @brief A ByteArrayOutputStream is an output stream that writes data into a byte array.
     /// The buffer automatically grows as data is written to it.

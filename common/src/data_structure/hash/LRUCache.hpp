@@ -1,6 +1,6 @@
 /**
  * @file LRUCache.hpp
- * @brief LRU cache with O(1) get/put â€” hash map + doubly linked list
+ * @brief LRU cache with O(1) get/put â€?hash map + doubly linked list
  * @details A Least-Recently-Used cache providing O(1) get and put operations.
  *          Uses a hash map for key-to-node lookup and a doubly linked list
  *          to maintain access-order.  On cache hit the accessed entry is
@@ -32,7 +32,7 @@
 #include <unordered_map>
 #include <utility>
 
-namespace common::data_structure::hash
+namespace cppforge::data_structure::hash
 {
     /// @brief A Least Recently Used (LRU) cache with O(1) get/put operations.
     /// @tparam K Key type (must be hashable and equality-comparable).

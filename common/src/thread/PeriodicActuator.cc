@@ -1,6 +1,6 @@
 /**
  * @file PeriodicActuator.cc
- * @brief PeriodicActuator implementation â€” timer loop, start/stop lifecycle
+ * @brief PeriodicActuator implementation â€?timer loop, start/stop lifecycle
  * @details Implements the periodic execution loop: uses std::this_thread::sleep_for
  *          or std::chrono::steady_clock for fixed-rate timing.  start/stop
  *          are synchronised via a mutex and atomic flag.
@@ -17,7 +17,7 @@
 
 #include "interface/task/ITimerTask.hpp"
 
-namespace common::thread
+namespace cppforge::thread
 {
     PeriodicActuator::PeriodicActuator(std::shared_ptr<interface::task::ITimerTask> task, const std::chrono::milliseconds interval) : task_(std::move(task)), interval_(interval)
     {

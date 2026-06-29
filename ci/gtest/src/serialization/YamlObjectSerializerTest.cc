@@ -13,7 +13,7 @@
 
 #include "serialization/YamlObjectSerializer.hpp"
 
-using namespace common::serialization;
+using namespace cppforge::serialization;
 
 namespace
 {

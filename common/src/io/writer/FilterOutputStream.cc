@@ -1,6 +1,6 @@
 /**
  * @file FilterOutputStream.cc
- * @brief FilterOutputStream implementation â€” delegating all calls to underlying
+ * @brief FilterOutputStream implementation â€?delegating all calls to underlying
  * @details Implements the byte-output decorator: every public method delegates
  *          to the stored AbstractOutputStream pointer after ensureOpen checks.
  *          Subclasses override only the methods they need to transform.
@@ -10,7 +10,7 @@
 
 #include "io/writer/FilterOutputStream.hpp"
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     FilterOutputStream::FilterOutputStream(std::shared_ptr<AbstractOutputStream> outputStream) : output_stream_(std::move(outputStream))
     {

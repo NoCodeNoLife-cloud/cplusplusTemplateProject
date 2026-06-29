@@ -1,6 +1,6 @@
 /**
  * @file KDTree.hpp
- * @brief KD-Tree — K-dimensional spatial partitioning tree
+ * @brief KD-Tree �?K-dimensional spatial partitioning tree
  * @details A space-partitioning data structure for organising points in
  *          K-dimensional space.  Supports optimal median-based bulk
  *          construction, incremental insertion, nearest-neighbour (NN),
@@ -61,10 +61,10 @@
 #include "data_structure/geometry/Point2D.hpp"
 #include "data_structure/geometry/Point3D.hpp"
 
-namespace common::data_structure::spatial
+namespace cppforge::data_structure::spatial
 {
     // ══════════════════════════════════════════════════════════════════════
-    //  KDTreeAccessor — coordinate extraction trait
+    //  KDTreeAccessor �?coordinate extraction trait
     // ══════════════════════════════════════════════════════════════════════
 
     /// @brief Primary template: requires @c operator[] on the point type.
@@ -123,7 +123,7 @@ namespace common::data_structure::spatial
     };
 
     // ══════════════════════════════════════════════════════════════════════
-    //  KDTree — K-dimensional tree
+    //  KDTree �?K-dimensional tree
     // ══════════════════════════════════════════════════════════════════════
 
     /// @brief A K-dimensional tree for spatial searches.
@@ -664,4 +664,4 @@ namespace common::data_structure::spatial
         size_t                   size_ = 0;
     };
 
-} // namespace common::data_structure::spatial
+} // namespace cppforge::data_structure::spatial

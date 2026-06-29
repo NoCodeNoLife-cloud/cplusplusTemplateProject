@@ -1,6 +1,6 @@
 /**
  * @file CuckooFilter.hpp
- * @brief Cuckoo filter — probabilistic set membership with deletion support
+ * @brief Cuckoo filter �?probabilistic set membership with deletion support
  * @details A cuckoo filter is a probabilistic data structure for approximate
  *          set membership queries.  Like a Bloom filter, it supports insertion
  *          and querying with a configurable false-positive rate.  Unlike a
@@ -34,10 +34,10 @@
 #include <functional>
 #include <vector>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     // ══════════════════════════════════════════════════════════════════════
-    //  FingerprintSize — compile-time fingerprint bit-width tag
+    //  FingerprintSize �?compile-time fingerprint bit-width tag
     // ══════════════════════════════════════════════════════════════════════
 
     /// @brief A compile-time tag for fingerprint bit width.
@@ -79,7 +79,7 @@ namespace common::data_structure
     using fingerprint_storage_t = FingerprintStorageType<T>::type;
 
     // ══════════════════════════════════════════════════════════════════════
-    //  CuckooFilter — template class declaration
+    //  CuckooFilter �?template class declaration
     // ══════════════════════════════════════════════════════════════════════
 
     /// @brief A cuckoo filter for probabilistic set membership with deletion.
@@ -183,7 +183,7 @@ namespace common::data_structure
                 return (++displacement_counter_) % count_;
             }
 
-            /// @brief Equality comparison — compares logical content only.
+            /// @brief Equality comparison �?compares logical content only.
             /// @details The mutable displacement counter is excluded from
             ///          comparison since it is not part of the logical state.
             [[nodiscard]] friend auto operator==(const Bucket& lhs,
@@ -235,7 +235,7 @@ namespace common::data_structure
             element_count_ = 0;
         }
 
-        // Default copy / move / dtor — std::vector handles it.
+        // Default copy / move / dtor �?std::vector handles it.
         CuckooFilter(const CuckooFilter&)            = default;
         CuckooFilter(CuckooFilter&&) noexcept        = default;
         auto operator=(const CuckooFilter&) -> CuckooFilter& = default;
@@ -328,7 +328,7 @@ namespace common::data_structure
             return static_cast<uint64_t>(fp) * 0x9E3779B97F4A7C15ULL;
         }
 
-        /// @brief Extract the fingerprint from a hash value, mapping 0 → 1.
+        /// @brief Extract the fingerprint from a hash value, mapping 0 �?1.
         [[nodiscard]] auto extract_fingerprint(uint64_t hash) const noexcept -> fp_type_
         {
             const auto fp = static_cast<fp_type_>(hash & FINGERPRINT_MASK_());
@@ -392,12 +392,12 @@ namespace common::data_structure
         }
 
         // Cuckoo displacement: repeatedly evict and relocate fingerprints.
-        // Uses a trail buffer to ensure atomicity — if displacement fails,
+        // Uses a trail buffer to ensure atomicity �?if displacement fails,
         // all modifications are rolled back.
         auto cur_bucket_idx = bucket1;
         auto cur_fp         = fp;
 
-        // Rollback trail — stores (bucket_idx, slot_idx, old_fingerprint).
+        // Rollback trail �?stores (bucket_idx, slot_idx, old_fingerprint).
         // 128 entries is far more than needed (typical displacement: 1-5
         // iterations).  If trail overflows, the last entry is still tracked
         // for partial rollback.
@@ -437,7 +437,7 @@ namespace common::data_structure
                 return true;
             }
 
-            // Alternate bucket is also full — continue displacing
+            // Alternate bucket is also full �?continue displacing
             cur_bucket_idx = alt_bucket;
             cur_fp         = evicted_fp;
         }
@@ -542,4 +542,4 @@ namespace common::data_structure
         }
     }
 
-} // namespace common::data_structure
+} // namespace cppforge::data_structure

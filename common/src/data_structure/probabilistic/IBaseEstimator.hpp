@@ -16,7 +16,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace common::data_structure::probabilistic
+namespace cppforge::data_structure::probabilistic
 {
     /// @brief Abstract interface for cardinality estimators.
     ///
@@ -53,4 +53,4 @@ namespace common::data_structure::probabilistic
         [[nodiscard]] virtual uint64_t memoryUsage() const = 0;
     };
 
-} // namespace common::data_structure::probabilistic
+} // namespace cppforge::data_structure::probabilistic

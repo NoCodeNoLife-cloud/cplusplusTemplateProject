@@ -17,7 +17,7 @@
 #include "filesystem/core/Directory.hpp"
 #include "filesystem/core/Path.hpp"
 
-using namespace common::filesystem::core;
+using namespace cppforge::filesystem::core;
 namespace fs = std::filesystem;
 
 class FileTest : public testing::Test
@@ -592,7 +592,7 @@ TEST_F(FileTest, GetParentDirectory)
 }
 
 /**
- * @brief Test round-trip conversion File â†’ Path â†’ File
+ * @brief Test round-trip conversion File â†?Path â†?File
  * @details Verifies that converting a File to a Path and back via
  *          toFile() preserves the original path
  */

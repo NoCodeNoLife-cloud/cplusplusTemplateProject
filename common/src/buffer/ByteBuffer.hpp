@@ -24,7 +24,7 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     /// @brief A byte buffer implementation that manages a fixed-size buffer of bytes.
     /// This class provides methods for putting and getting bytes, supporting both

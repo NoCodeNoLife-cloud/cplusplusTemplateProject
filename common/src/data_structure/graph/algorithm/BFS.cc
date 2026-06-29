@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     TraversalResult BFS::traverse(const Graph& graph, const int32_t start,
                                    IGraphVisitor* visitor)

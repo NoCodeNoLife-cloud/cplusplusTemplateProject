@@ -5,7 +5,7 @@
 
 #include "io/reader/Scanner.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /// @brief Test fixture for Scanner tests.
 class ScannerTest : public testing::Test

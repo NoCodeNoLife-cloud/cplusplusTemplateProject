@@ -17,7 +17,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Floyd-Warshall all-pairs shortest path algorithm
     /// @details Computes the full distance matrix and a next-node matrix for

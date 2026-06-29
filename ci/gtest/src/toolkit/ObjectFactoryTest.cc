@@ -11,7 +11,7 @@
 
 #include "toolkit/ObjectFactory.hpp"
 
-using namespace common::toolkit;
+using namespace cppforge::toolkit;
 
 /**
  * @brief Test fixture for ObjectFactoryTest tests
@@ -448,12 +448,12 @@ TEST_F(ObjectFactoryTest, Inheritance_FromIStartupTask)
 {
     ObjectFactory<IShape>::clearRegistry();
     static_assert(
-        std::is_base_of_v<common::interface::task::IStartupTask, ObjectFactory<IShape>>,
+        std::is_base_of_v<cppforge::interface::task::IStartupTask, ObjectFactory<IShape>>,
         "ObjectFactory should inherit from IStartupTask"
     );
 
     ShapeFactory factory;
-    common::interface::task::IStartupTask* task = &factory;
+    cppforge::interface::task::IStartupTask* task = &factory;
 
     EXPECT_TRUE(task->execute());
 }

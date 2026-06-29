@@ -1,6 +1,6 @@
 /**
  * @file FileOutputStream.cc
- * @brief FileOutputStream implementation â€” ofstream-based binary file writing
+ * @brief FileOutputStream implementation â€?ofstream-based binary file writing
  * @details Implements file-backed byte output: open() sets up std::ofstream
  *          in binary mode with configurable append/truncate, write() delegates
  *          to ofstream, and close() flushes and closes the file handle.
@@ -10,7 +10,7 @@
 
 #include <glog/logging.h>
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     FileOutputStream::FileOutputStream(const std::string& name, const bool append)
     {

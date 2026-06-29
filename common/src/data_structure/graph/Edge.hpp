@@ -13,7 +13,7 @@
 #pragma once
 #include <cstdint>
 
-namespace common::data_structure::graph
+namespace cppforge::data_structure::graph
 {
     /// @brief Data structure for representing an edge in a graph
     /// @details This class stores information about an edge, including

@@ -9,7 +9,7 @@
 
 #include "interface/task/IRunnable.hpp"
 
-using namespace common::interface::task;
+using namespace cppforge::interface::task;
 
 namespace
 {

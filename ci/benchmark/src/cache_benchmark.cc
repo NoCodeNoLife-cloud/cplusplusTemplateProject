@@ -21,7 +21,7 @@
 static void BM_LRUCache_Put(benchmark::State& state)
 {
     const auto capacity = static_cast<int>(state.range(0));
-    common::cache::LRUCache<int, int> cache(capacity);
+    cppforge::cache::LRUCache<int, int> cache(capacity);
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution dist(0, capacity * 2);
 
@@ -36,7 +36,7 @@ BENCHMARK(BM_LRUCache_Put)->Arg(16)->Arg(128)->Arg(1024);
 static void BM_LRUCache_Get_Hit(benchmark::State& state)
 {
     const auto capacity = static_cast<int>(state.range(0));
-    common::cache::LRUCache<int, int> cache(capacity);
+    cppforge::cache::LRUCache<int, int> cache(capacity);
     for (int i = 0; i < capacity; ++i) (void)cache.put(i, i);
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution dist(0, capacity - 1);
@@ -52,7 +52,7 @@ BENCHMARK(BM_LRUCache_Get_Hit)->Arg(16)->Arg(128)->Arg(1024);
 static void BM_LRUCache_Get_Miss(benchmark::State& state)
 {
     const auto capacity = static_cast<int>(state.range(0));
-    common::cache::LRUCache<int, int> cache(capacity);
+    cppforge::cache::LRUCache<int, int> cache(capacity);
     for (int i = 0; i < capacity; ++i) (void)cache.put(i, i);
 
     for (auto _ : state)
@@ -66,7 +66,7 @@ BENCHMARK(BM_LRUCache_Get_Miss)->Arg(16)->Arg(128)->Arg(1024);
 static void BM_LRUCache_Put_Evict(benchmark::State& state)
 {
     const auto capacity = static_cast<int>(state.range(0));
-    common::cache::LRUCache<int, int> cache(capacity);
+    cppforge::cache::LRUCache<int, int> cache(capacity);
 
     for (auto _ : state)
     {
@@ -86,7 +86,7 @@ BENCHMARK(BM_LRUCache_Put_Evict)->Arg(16)->Arg(128)->Arg(1024);
 static void BM_LFUCache_Put(benchmark::State& state)
 {
     const auto capacity = static_cast<int>(state.range(0));
-    common::cache::LFUCache<int, int> cache(capacity);
+    cppforge::cache::LFUCache<int, int> cache(capacity);
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution dist(0, capacity * 2);
 
@@ -101,7 +101,7 @@ BENCHMARK(BM_LFUCache_Put)->Arg(16)->Arg(128)->Arg(1024);
 static void BM_LFUCache_Get_Hit(benchmark::State& state)
 {
     const auto capacity = static_cast<int>(state.range(0));
-    common::cache::LFUCache<int, int> cache(capacity);
+    cppforge::cache::LFUCache<int, int> cache(capacity);
     for (int i = 0; i < capacity; ++i) (void)cache.put(i, i);
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution dist(0, capacity - 1);
@@ -117,7 +117,7 @@ BENCHMARK(BM_LFUCache_Get_Hit)->Arg(16)->Arg(128)->Arg(1024);
 static void BM_LFUCache_Put_Evict(benchmark::State& state)
 {
     const auto capacity = static_cast<int>(state.range(0));
-    common::cache::LFUCache<int, int> cache(capacity);
+    cppforge::cache::LFUCache<int, int> cache(capacity);
 
     for (auto _ : state)
     {

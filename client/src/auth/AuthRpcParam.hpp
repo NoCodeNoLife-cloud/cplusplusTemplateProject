@@ -29,7 +29,7 @@ namespace client_app::auth
     ///     .serverAddress("localhost:50051")
     ///     .build();
     /// @endcode
-    class AuthRpcParam final : public common::interface::serialization::IYamlConfigurable
+    class AuthRpcParam final : public cppforge::interface::serialization::IYamlConfigurable
     {
     public:
         /// @brief Constructor with explicit parameter initialization

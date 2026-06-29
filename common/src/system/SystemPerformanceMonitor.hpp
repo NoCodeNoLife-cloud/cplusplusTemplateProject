@@ -1,6 +1,6 @@
 /**
  * @file SystemPerformanceMonitor.hpp
- * @brief Real-time system performance monitoring â€” CPU, memory, I/O
+ * @brief Real-time system performance monitoring â€?CPU, memory, I/O
  * @description Periodically samples system performance metrics: CPU usage
  *          (per-core and aggregate), memory usage (RSS, virtual), disk I/O,
  *          and network throughput.  Stores a rolling window of samples for
@@ -15,7 +15,7 @@
 #include <cstdint>
 #include <windows.h>
 
-namespace common::system
+namespace cppforge::system
 {
     /// @brief Structure to hold system memory usage information
     /// This struct contains the total physical memory, available memory, used memory,

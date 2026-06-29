@@ -12,7 +12,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Cycle detection algorithms
     /// @details Supports both directed and undirected graph cycle detection.

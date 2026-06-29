@@ -12,7 +12,7 @@
 
 #include "io/writer/AbstractFilterWriter.hpp"
 
-using namespace common::io::writer;
+using namespace cppforge::io::writer;
 
 namespace
 {

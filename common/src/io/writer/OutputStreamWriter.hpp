@@ -1,6 +1,6 @@
 /**
  * @file OutputStreamWriter.hpp
- * @brief Character-to-byte bridge (UTF-8 only) â€” adapts Writer to OutputStream
+ * @brief Character-to-byte bridge (UTF-8 only) â€?adapts Writer to OutputStream
  * @details A bridge from character streams to byte streams.  Encodes characters
  *          as UTF-8 and writes them to an underlying AbstractOutputStream.
  *          Currently limited to UTF-8 encoding.  Provides charset name querying.
@@ -26,7 +26,7 @@
 
 #include "AbstractWriter.hpp"
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     /// @brief A writer that converts character streams to byte streams using a specified charset.
     /// @details OutputStreamWriter is a bridge from character streams to byte streams: Characters written to it

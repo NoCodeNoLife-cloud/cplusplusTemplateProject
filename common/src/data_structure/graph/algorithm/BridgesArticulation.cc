@@ -8,7 +8,7 @@
  *          (v cannot reach u or any ancestor without crossing (u,v)).
  *
  *          Articulation point detection:
- *          - Root of DFS tree: articulation point if it has â‰¥ 2 children
+ *          - Root of DFS tree: articulation point if it has â‰?2 children
  *          - Non-root: node u is articulation point if low[v] >= tin[u]
  *            for any child v (v cannot reach u's ancestors without going
  *            through u).
@@ -20,7 +20,7 @@
 
 #include <algorithm>
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     namespace
     {

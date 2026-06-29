@@ -19,7 +19,7 @@
 
 #include "data_structure/base_type/Color.hpp"
 
-namespace common::data_structure::tree::node
+namespace cppforge::data_structure::tree::node
 {
     /// @brief A node in a Red-Black Tree
     /// @tparam T The type of data stored in the node

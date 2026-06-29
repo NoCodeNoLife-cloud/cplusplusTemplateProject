@@ -24,9 +24,6 @@ add_executable(${CI_BENCHMARK_TARGET} ${CI_BENCHMARK_SRC_FILES})
 # ── Include directories ────────────────────────────────────────────────
 target_include_directories(${CI_BENCHMARK_TARGET} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../common/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../proto
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../log/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../client/src
 )
 
@@ -38,7 +35,7 @@ target_link_libraries(${CI_BENCHMARK_TARGET} PRIVATE
     yaml-cpp::yaml-cpp
     rapidjson
     OpenSSL::SSL OpenSSL::Crypto
-    Microsoft::DirectXMath
+    $<$<PLATFORM_ID:Windows>:Microsoft::DirectXMath>
     magic_enum::magic_enum
     common_pkg
     glog_service

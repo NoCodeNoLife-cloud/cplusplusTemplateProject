@@ -1,6 +1,6 @@
 /**
  * @file PushbackReader.cc
- * @brief PushbackReader implementation â€” character unread buffer management
+ * @brief PushbackReader implementation â€?character unread buffer management
  * @details Implements character pushback: unread() stores characters in a
  *          pushback buffer, and subsequent read() operations consume from
  *          this buffer first.  Supports single-character and array unread.
@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     PushbackReader::PushbackReader(std::shared_ptr<AbstractReader> reader) : PushbackReader(std::move(reader), DEFAULT_BUFFER_SIZE)
     {

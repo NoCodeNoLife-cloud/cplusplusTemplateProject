@@ -13,7 +13,7 @@
 
 #include "thread/DelayedTaskActuator.hpp"
 
-using namespace common::thread;
+using namespace cppforge::thread;
 
 /// @brief Test fixture for DelayedTaskActuator tests.
 class DelayedTaskActuatorTest : public testing::Test

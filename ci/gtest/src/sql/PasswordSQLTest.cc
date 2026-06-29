@@ -9,7 +9,7 @@
 
 #include "sql/PasswordSQL.hpp"
 
-using namespace common::sql;
+using namespace cppforge::sql;
 
 /**
  * @brief Test fixture for PasswordSQL tests

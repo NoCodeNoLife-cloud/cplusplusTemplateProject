@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 
-using namespace common::data_structure::probabilistic;
+using namespace cppforge::data_structure::probabilistic;
 
 // ---------------------------------------------------------------------------
 //  Test fixture
@@ -153,7 +153,7 @@ TEST_F(CountMinSketchTest, Add_ZeroCount_NoEffect)
 {
     CountMinSketch<1024, 3> cms;
     cms.add("item_a", 5);
-    cms.add("item_b", 0);  // zero count â€” should be a no-op
+    cms.add("item_b", 0);  // zero count â€?should be a no-op
     EXPECT_GE(cms.estimate("item_a"), 5);
     EXPECT_EQ(cms.estimate("item_b"), 0);
 }
@@ -507,7 +507,7 @@ TEST_F(CountMinSketchTest, WidthOne_AllItemsMapToSameCounter)
 TEST_F(CountMinSketchTest, SmallWidth_CollisionsObservable)
 {
     CountMinSketch<4, 2> cms;
-    // Add many distinct int items to a very small sketch â€” collisions are
+    // Add many distinct int items to a very small sketch â€?collisions are
     // virtually guaranteed
     for (int i = 0; i < 100; ++i)
     {
@@ -521,7 +521,7 @@ TEST_F(CountMinSketchTest, SmallWidth_CollisionsObservable)
     }
 
     // At least some items should be overestimated due to collisions in such
-    // a tiny sketch â€” verify the totalCount accounts for all inserts
+    // a tiny sketch â€?verify the totalCount accounts for all inserts
     EXPECT_GE(cms.totalCount(), 100);
 }
 
@@ -681,7 +681,7 @@ TEST_F(CountMinSketchTest, CopyConstruct_IndependentCopy)
     EXPECT_EQ(copy.estimate("alpha"), original.estimate("alpha"));
     EXPECT_EQ(copy.estimate("beta"), original.estimate("beta"));
 
-    // Modify the copy â€” original must be unchanged
+    // Modify the copy â€?original must be unchanged
     copy.add("alpha", 5);
     EXPECT_GT(copy.estimate("alpha"), original.estimate("alpha"));
 }
@@ -760,13 +760,13 @@ TEST_F(CountMinSketchTest, Estimate_UnknownItem_ReturnsZero)
  * @details Verifies that adding with large uint32_t count values is handled
  *          without overflow or exception. Note: if counters wrap around
  *          (uint32_t overflow), the non-underestimation guarantee is broken.
- *          This test documents that limitation â€” the user is responsible for
+ *          This test documents that limitation â€?the user is responsible for
  *          ensuring counts stay well below uint32_t max.
  */
 TEST_F(CountMinSketchTest, Add_LargeCount_NoCrash)
 {
     CountMinSketch<1024, 3> cms;
-    // Add a very large count â€” should not throw or crash
+    // Add a very large count â€?should not throw or crash
     EXPECT_NO_THROW(cms.add("big", std::numeric_limits<uint32_t>::max()));
     EXPECT_GE(cms.estimate("big"), std::numeric_limits<uint32_t>::max());
     // total count should reflect this large addition

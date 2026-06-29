@@ -9,7 +9,7 @@
 
 #include "interface/serialization/IYamlSerializable.hpp"
 
-using namespace common::interface::serialization;
+using namespace cppforge::interface::serialization;
 
 namespace
 {

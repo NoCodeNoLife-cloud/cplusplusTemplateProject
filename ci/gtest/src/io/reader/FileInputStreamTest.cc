@@ -13,7 +13,7 @@
 
 #include "io/reader/FileInputStream.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /**
  * @brief Test fixture for FileInputStreamTest tests

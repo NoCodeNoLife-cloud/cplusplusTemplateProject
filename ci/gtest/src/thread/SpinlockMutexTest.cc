@@ -14,7 +14,7 @@
 
 #include "thread/SpinlockMutex.hpp"
 
-using namespace common::thread;
+using namespace cppforge::thread;
 
 /// @brief Test fixture for SpinlockMutex tests.
 class SpinlockMutexTest : public testing::Test

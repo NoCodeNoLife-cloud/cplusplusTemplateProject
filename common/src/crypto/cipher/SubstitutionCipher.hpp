@@ -3,7 +3,7 @@
  * @brief Monoalphabetic substitution cipher with configurable alphabet
  * @details Implements a monoalphabetic substitution cipher using a keyed
  *          permutation of the alphabet.  Supports encryption, decryption,
- *          and key scheduling.  NOT cryptographically secure â€” for
+ *          and key scheduling.  NOT cryptographically secure â€?for
  *          educational purposes and legacy protocol compatibility only.
  *
  * @par Thread Safety
@@ -16,7 +16,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     /**
      * @class SubstitutionCipher
@@ -44,7 +44,7 @@ namespace common::crypto::cipher
      *          DO NOT use for production encryption of sensitive information.
      *
      * @invariant encode_map_ and decode_map_ are inverse mappings satisfying:\n
-     *            âˆ€c âˆˆ [A-Za-z], decode_map_[encode_map_[c]] == c
+     *            âˆ€c âˆ?[A-Za-z], decode_map_[encode_map_[c]] == c
      */
     class SubstitutionCipher final
     {
@@ -191,7 +191,7 @@ namespace common::crypto::cipher
          */
         static char TransformChar(char c, const std::array<char, 26>& map);
 
-        std::array<char, ALPHABET_SIZE> encode_map_{}; ///< Forward encryption mapping, index 0='A' â†’ 25='Z'
-        std::array<char, ALPHABET_SIZE> decode_map_{}; ///< Reverse decryption mapping, index 0='A' â†’ 25='Z'
+        std::array<char, ALPHABET_SIZE> encode_map_{}; ///< Forward encryption mapping, index 0='A' â†?25='Z'
+        std::array<char, ALPHABET_SIZE> decode_map_{}; ///< Reverse decryption mapping, index 0='A' â†?25='Z'
     };
 }

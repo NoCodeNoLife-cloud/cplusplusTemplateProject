@@ -28,7 +28,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief A LIFO stack adapter over a configurable container.
     ///

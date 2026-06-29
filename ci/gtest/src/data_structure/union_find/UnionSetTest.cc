@@ -10,7 +10,7 @@
 
 #include "data_structure/union_find/UnionSet.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 /**
  * @brief Test fixture for UnionSet tests

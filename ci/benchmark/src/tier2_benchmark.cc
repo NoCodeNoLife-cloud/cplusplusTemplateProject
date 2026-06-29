@@ -25,7 +25,7 @@
 /// @brief ThreadPool submit + future::get round-trip latency (empty task).
 static void BM_ThreadPool_Submit_Get(benchmark::State& state)
 {
-    common::thread::ThreadPool pool(4, 8, 1024, std::chrono::seconds(60));
+    cppforge::thread::ThreadPool pool(4, 8, 1024, std::chrono::seconds(60));
 
     for (auto _ : state)
     {
@@ -40,7 +40,7 @@ BENCHMARK(BM_ThreadPool_Submit_Get);
 /// @brief ThreadPool submit + get with a 1 µs simulated workload.
 static void BM_ThreadPool_Submit_Sleep1us(benchmark::State& state)
 {
-    common::thread::ThreadPool pool(4, 8, 1024, std::chrono::seconds(60));
+    cppforge::thread::ThreadPool pool(4, 8, 1024, std::chrono::seconds(60));
 
     for (auto _ : state)
     {
@@ -58,7 +58,7 @@ BENCHMARK(BM_ThreadPool_Submit_Sleep1us);
 static void BM_ThreadPool_BatchThroughput(benchmark::State& state)
 {
     const auto batch_size = static_cast<int>(state.range(0));
-    common::thread::ThreadPool pool(4, 8, 65536, std::chrono::seconds(60));
+    cppforge::thread::ThreadPool pool(4, 8, 65536, std::chrono::seconds(60));
     std::atomic counter{0};
 
     for (auto _ : state)
@@ -81,7 +81,7 @@ static void BM_ThreadPool_NoTaskOverhead(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        common::thread::ThreadPool pool(2, 4, 64, std::chrono::seconds(60));
+        cppforge::thread::ThreadPool pool(2, 4, 64, std::chrono::seconds(60));
         auto fut = pool.submit([] { return 1; });
         benchmark::DoNotOptimize(fut.get());
     }
@@ -95,7 +95,7 @@ BENCHMARK(BM_ThreadPool_NoTaskOverhead);
 /// @brief SnowflakeGenerator sequential ID generation throughput.
 static void BM_SnowflakeGenerator_NextId(benchmark::State& state)
 {
-    common::gen::SnowflakeGenerator gen(1, 1);
+    cppforge::gen::SnowflakeGenerator gen(1, 1);
 
     for (auto _ : state)
     {
@@ -110,10 +110,10 @@ BENCHMARK(BM_SnowflakeGenerator_NextId);
 //  RandomGenerator
 // ══════════════════════════════════════════════════════════════════════════
 
-/// @brief Uniform random int in [0, 1 000 000].
+/// @brief Uniform random int in [0, 1�?00�?00].
 static void BM_RandomGenerator_NextInt(benchmark::State& state)
 {
-    common::gen::RandomGenerator rng;
+    cppforge::gen::RandomGenerator rng;
 
     for (auto _ : state)
     {
@@ -127,7 +127,7 @@ BENCHMARK(BM_RandomGenerator_NextInt);
 /// @brief Uniform random double in [0.0, 1.0).
 static void BM_RandomGenerator_NextDouble(benchmark::State& state)
 {
-    common::gen::RandomGenerator rng;
+    cppforge::gen::RandomGenerator rng;
 
     for (auto _ : state)
     {
@@ -141,7 +141,7 @@ BENCHMARK(BM_RandomGenerator_NextDouble);
 /// @brief Random boolean generation throughput.
 static void BM_RandomGenerator_NextBool(benchmark::State& state)
 {
-    common::gen::RandomGenerator rng;
+    cppforge::gen::RandomGenerator rng;
 
     for (auto _ : state)
     {
@@ -155,7 +155,7 @@ BENCHMARK(BM_RandomGenerator_NextBool);
 /// @brief Random alphanumeric string generation at various lengths.
 static void BM_RandomGenerator_NextString(benchmark::State& state)
 {
-    common::gen::RandomGenerator rng;
+    cppforge::gen::RandomGenerator rng;
     const auto len = static_cast<size_t>(state.range(0));
 
     for (auto _ : state)
@@ -170,7 +170,7 @@ BENCHMARK(BM_RandomGenerator_NextString)->Arg(8)->Arg(64)->Arg(256);
 /// @brief Gaussian (normal) distribution sample throughput.
 static void BM_RandomGenerator_NextGaussian(benchmark::State& state)
 {
-    common::gen::RandomGenerator rng;
+    cppforge::gen::RandomGenerator rng;
 
     for (auto _ : state)
     {

@@ -1,6 +1,6 @@
 /**
  * @file StackTraceExceptionHandler.cc
- * @brief StackTraceExceptionHandler implementation â€” backtrace capture/format
+ * @brief StackTraceExceptionHandler implementation â€?backtrace capture/format
  * @details Implements platform-specific stack trace capture: uses execinfo.h
  *          (backtrace/backtrace_symbols) on Linux and CaptureStackBackTrace
  *          on Windows.  Formats captured frames into a readable string for
@@ -11,7 +11,7 @@
 
 #include <glog/logging.h>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     void StackTraceExceptionHandler::logMessage(const std::string_view message, const std::string_view prefix)
     {

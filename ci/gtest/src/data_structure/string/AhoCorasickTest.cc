@@ -1,6 +1,6 @@
 /**
  * @file AhoCorasickTest.cc
- * @brief Unit tests for the Aho-Corasick automaton (Task 1 — fail-link backtracking)
+ * @brief Unit tests for the Aho-Corasick automaton (Task 1 �?fail-link backtracking)
  * @details Comprehensive test suite covering:
  *          - Construction and empty-state behaviour
  *          - Insertion and pattern counting
@@ -17,7 +17,7 @@
  *
  * @par Reference
  *   Aho, A.V. and Corasick, M.J., "Efficient string matching: an aid to
- *   bibliographic search", Communications of the ACM, 18(6):333–340, 1975.
+ *   bibliographic search", Communications of the ACM, 18(6):333�?40, 1975.
  */
 
 #include <gtest/gtest.h>
@@ -33,7 +33,7 @@
 #include <tuple>
 #include <vector>
 
-using namespace common::data_structure::string;
+using namespace cppforge::data_structure::string;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Test fixture
@@ -525,12 +525,12 @@ TEST_F(AhoCorasickTest, Boundary_EmptyPattern_AfterValidInsert)
     EXPECT_EQ(ac.patternCount(), 1U);
     EXPECT_EQ(ac.getPattern(0), "hello");
 
-    // Now attempt to insert an empty pattern — must throw and leave state intact
+    // Now attempt to insert an empty pattern �?must throw and leave state intact
     EXPECT_THROW(ac.insert(""), std::invalid_argument);
     EXPECT_EQ(ac.patternCount(), 1U);
     EXPECT_EQ(ac.getPattern(0), "hello");
 
-    // Build and match — the valid pattern must still work
+    // Build and match �?the valid pattern must still work
     ac.build();
     const auto triples = buildAndMatch(ac, "hello world");
     ASSERT_EQ(triples.size(), 1U);
@@ -573,7 +573,7 @@ TEST_F(AhoCorasickTest, Boundary_EmptyPattern_AfterBuild_ThrowsInvalidArgument)
     ac.insert("valid");
     ac.build();
 
-    // The empty check fires first — expecting invalid_argument, not runtime_error
+    // The empty check fires first �?expecting invalid_argument, not runtime_error
     EXPECT_THROW(ac.insert(""), std::invalid_argument);
 
     // Match results must be unchanged
@@ -610,7 +610,7 @@ TEST_F(AhoCorasickTest, Boundary_PatternLongerThanText)
  * @brief Non-ASCII bytes (e.g. UTF-8 encoded characters) are matched correctly.
  * @details The automaton operates on raw bytes (ALPHABET_SIZE = 256), so
  *          multi-byte UTF-8 sequences are treated as individual byte patterns.
- *          This test uses the UTF-8 encoding of "é" (U+00E9 → 0xC3 0xA9).
+ *          This test uses the UTF-8 encoding of "é" (U+00E9 �?0xC3 0xA9).
  */
 TEST_F(AhoCorasickTest, Boundary_NonAsciiBytes)
 {
@@ -695,13 +695,13 @@ TEST_F(AhoCorasickTest, Interface_ErrorHandling)
 {
     auto ac = std::unique_ptr<IACAutomaton>(new ACA());
 
-    // match() before build() → runtime_error
+    // match() before build() �?runtime_error
     EXPECT_THROW(static_cast<void>(ac->match("text")), std::runtime_error);
 
-    // getPattern() on empty automaton → out_of_range
+    // getPattern() on empty automaton �?out_of_range
     EXPECT_THROW(static_cast<void>(ac->getPattern(0)), std::out_of_range);
 
-    // insert after build → runtime_error
+    // insert after build �?runtime_error
     ac->insert("pattern");
     ac->build();
     EXPECT_THROW(ac->insert("another"), std::runtime_error);
@@ -737,7 +737,7 @@ TEST_F(AhoCorasickTest, Interface_ClassicExample)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  8. Additional regression — getPattern returns original string  (1 test)
+//  8. Additional regression �?getPattern returns original string  (1 test)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -759,7 +759,7 @@ TEST_F(AhoCorasickTest, GetPattern_ReturnsOriginalString)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  9. matchEach — zero-allocation callback API  (4 tests)
+//  9. matchEach �?zero-allocation callback API  (4 tests)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -943,7 +943,7 @@ TEST_F(AhoCorasickTest, MatchEach_CollectInVector_EqualsMatch)
 
 /**
  * @brief Count matches via callback and verify against match().size().
- * @details Demonstrates the zero-allocation counting use case — the callback
+ * @details Demonstrates the zero-allocation counting use case �?the callback
  *          increments a counter without constructing a result vector.
  */
 TEST_F(AhoCorasickTest, MatchEach_CountMatches)
@@ -968,8 +968,8 @@ TEST_F(AhoCorasickTest, MatchEach_CountMatches)
 /**
  * @brief fail_[s] > s scenario: patterns {"ab", "b"}.
  * @details In this case:
- *          - State chain: 0→('a')→1→('b')→2
- *          - New state:   0→('b')→3
+ *          - State chain: 0�?'a')�?�?'b')�?
+ *          - New state:   0�?'b')�?
  *          - fail_[2] = 3, and 3 > 2 (the fail state has a higher index).
  *          This exercises the completed transition table path where the
  *          fail-link target lies *ahead* of the source state in the linear
@@ -982,8 +982,8 @@ TEST_F(AhoCorasickTest, MatchEach_CountMatches)
 TEST_F(AhoCorasickTest, ZeroBacktracking_FailGtState)
 {
     ACA ac;
-    ac.insert("ab");  // state 0→('a')→1→('b')→2
-    ac.insert("b");   // state 0→('b')→3
+    ac.insert("ab");  // state 0�?'a')�?�?'b')�?
+    ac.insert("b");   // state 0�?'b')�?
     ac.build();
 
     // Verify matchEach and match both agree
@@ -1010,7 +1010,7 @@ TEST_F(AhoCorasickTest, ZeroBacktracking_FailGtState)
  *          the large trans_ table does not cause crashes, memory corruption,
  *          or incorrect matches.
  *
- *          The completed transition table size = 502 × 256 ≈ 128K entries
+ *          The completed transition table size = 502 × 256 �?128K entries
  *          (~512 KiB for int32_t), which is well within reasonable bounds
  *          but exercises allocator and cache behaviour.
  */
@@ -1239,7 +1239,7 @@ TEST_F(AhoCorasickTest, ThreadSafety_MixedMatchAndMatchEach)
  *          verifies that:
  *          1. Calling insert() after build() throws std::runtime_error.
  *          2. The automaton's match results are unaffected by the failed
- *             insertion — i.e. the automaton state is rolled back or
+ *             insertion �?i.e. the automaton state is rolled back or
  *             unchanged.
  *
  *          This differs from the existing Insert_AfterBuild_Throws test
@@ -1258,10 +1258,10 @@ TEST_F(AhoCorasickTest, EdgeCase_InsertAfterBuild_ThrowStateUnchanged)
     // Capture baseline match results
     const auto baseline = ac.match(text);
 
-    // Attempt insert after build → must throw
+    // Attempt insert after build �?must throw
     EXPECT_THROW(ac.insert("delta"), std::runtime_error);
 
-    // Verify that the automaton state is unchanged — match results
+    // Verify that the automaton state is unchanged �?match results
     // must be identical to the baseline.
     const auto after = ac.match(text);
 
@@ -1279,9 +1279,9 @@ TEST_F(AhoCorasickTest, EdgeCase_InsertAfterBuild_ThrowStateUnchanged)
  * @details build() has an early-return guard (`if (built_) return;`),
  *          so a second call is a no-op.  This test explicitly verifies
  *          that:
- *          1. Build → match produces a known result.
+ *          1. Build �?match produces a known result.
  *          2. A second build() call does not corrupt the transition
- *             table — match after the second build() produces the
+ *             table �?match after the second build() produces the
  *             same result.
  *
  *          This complements the existing Boundary_BuildIdempotent test
@@ -1296,7 +1296,7 @@ TEST_F(AhoCorasickTest, EdgeCase_BuildTwice_TransTableStable)
                         "zeta", "eta", "theta", "iota", "kappa"});
     ac.build();
 
-    // First match — establish a baseline
+    // First match �?establish a baseline
     const std::string text =
         "alpha beta gamma delta epsilon zeta eta theta iota kappa";
     const auto firstBaseline = ac.match(text);
@@ -1304,7 +1304,7 @@ TEST_F(AhoCorasickTest, EdgeCase_BuildTwice_TransTableStable)
     // Call build() a second time (should be a no-op)
     ac.build();
 
-    // Second match — must be identical to the baseline
+    // Second match �?must be identical to the baseline
     const auto secondBaseline = ac.match(text);
 
     ASSERT_EQ(firstBaseline.size(), secondBaseline.size());

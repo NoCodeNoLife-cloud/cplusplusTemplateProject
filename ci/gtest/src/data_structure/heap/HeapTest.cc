@@ -12,7 +12,7 @@
 
 #include "data_structure/heap/Heap.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 /**
  * @brief Test fixture for HeapTest tests

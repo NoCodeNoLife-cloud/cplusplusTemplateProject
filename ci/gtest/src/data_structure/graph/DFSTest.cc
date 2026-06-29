@@ -9,8 +9,8 @@
 
 #include "data_structure/graph/algorithm/DFS.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for DFS algorithm tests
@@ -25,7 +25,7 @@ protected:
 /**
  * @brief Test DFS traversal on a simple linear graph
  * @details Verifies that DFS visits nodes in depth-first order along a line
- *          graph: 0â†’1â†’2â†’3
+ *          graph: 0â†?â†?â†?
  */
 TEST_F(DFSTest, Traverse_SimpleLine)
 {

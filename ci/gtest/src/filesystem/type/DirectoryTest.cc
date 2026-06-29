@@ -17,7 +17,7 @@
 #include "filesystem/core/Path.hpp"
 #include "filesystem/core/File.hpp"
 
-using namespace common::filesystem::core;
+using namespace cppforge::filesystem::core;
 namespace fs = std::filesystem;
 
 class DirectoryTest : public testing::Test

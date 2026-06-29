@@ -9,8 +9,8 @@
 
 #include "data_structure/graph/algorithm/PrimMST.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for PrimMST tests
@@ -25,7 +25,7 @@ protected:
 /**
  * @brief Test Prim's algorithm on a simple 4-node graph
  * @details Verifies that the MST includes the 3 cheapest edges and
- *          excludes the expensive edge (0â†’3, weight 10). Total weight = 6.
+ *          excludes the expensive edge (0â†?, weight 10). Total weight = 6.
  */
 TEST_F(PrimMSTTest, Compute_SimpleGraph)
 {

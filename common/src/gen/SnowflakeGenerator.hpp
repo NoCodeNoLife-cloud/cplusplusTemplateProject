@@ -24,7 +24,7 @@
 #include <cstdint>
 #include <mutex>
 
-namespace common::gen
+namespace cppforge::gen
 {
     /// @brief Configuration options for Snowflake ID generation
     struct SnowflakeOption
@@ -52,7 +52,7 @@ namespace common::gen
     /// This implementation is thread-safe using a mutex to protect internal state during ID generation.
     /// Example usage:
     /// @code
-    ///   common::SnowflakeGenerator generator(1, 1);
+    ///   cppforge::SnowflakeGenerator generator(1, 1);
     ///   int64_t id = generator.NextId();
     /// @endcode
     class SnowflakeGenerator

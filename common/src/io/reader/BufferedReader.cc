@@ -1,6 +1,6 @@
 /**
  * @file BufferedReader.cc
- * @brief BufferedReader implementation â€” buffered character I/O and readLine
+ * @brief BufferedReader implementation â€?buffered character I/O and readLine
  * @details Implements buffered character input: fillBuffer() refills the
  *          8 KB buffer from the underlying AbstractReader, read() and skip()
  *          operate on the buffer, and readLine() scans for newline delimiters.
@@ -13,7 +13,7 @@
 #include <utility>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     BufferedReader::BufferedReader(std::unique_ptr<AbstractReader> reader, const size_t size) : reader_(std::move(reader)), buffer_size_(size)
     {

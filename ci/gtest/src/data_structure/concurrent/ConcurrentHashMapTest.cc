@@ -1,6 +1,6 @@
 /**
  * @file ConcurrentHashMapTest.cc
- * @brief Unit tests for ConcurrentHashMap — single-threaded functional tests
+ * @brief Unit tests for ConcurrentHashMap �?single-threaded functional tests
  * @details Comprehensive single-threaded tests covering construction, basic
  *          operations, boundary conditions, iteration, load-factor management,
  *          and noexcept guarantees for the segment-locked concurrent hash map.
@@ -18,7 +18,7 @@
 #include <utility>
 #include <vector>
 
-using namespace common::data_structure::concurrent;
+using namespace cppforge::data_structure::concurrent;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Custom types for testing
@@ -36,7 +36,7 @@ struct Point
     }
 };
 
-/// @brief Hash functor for Point — simple combine of x and y.
+/// @brief Hash functor for Point �?simple combine of x and y.
 struct PointHash
 {
     [[nodiscard]] auto operator()(const Point& p) const -> std::size_t
@@ -46,7 +46,7 @@ struct PointHash
     }
 };
 
-/// @brief A key whose hash is always zero — forces every key into the same
+/// @brief A key whose hash is always zero �?forces every key into the same
 ///        segment (segment 0) and the same bucket (bucket 0), so that chain
 ///        order is fully deterministic (head-insertion order).
 struct ControlledKey
@@ -180,7 +180,7 @@ TEST_F(ConcurrentHashMapTest, MoveAssignment_SelfAssign_NoOp)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  2. Basic operations — insert / get / contains
+//  2. Basic operations �?insert / get / contains
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -312,13 +312,13 @@ TEST_F(ConcurrentHashMapTest, Erase_MissingKey_ReturnsFalse)
  * @brief Erase the head (first) node in a chain.
  * @details Uses a ZeroHash to force all keys into the same bucket so chain
  *          position is deterministic.  With head-insertion, keys 1,2,3
- *          produce chain 3→2→1.  Erasing key 3 (head) must unlink correctly.
+ *          produce chain 3�?�?.  Erasing key 3 (head) must unlink correctly.
  */
 TEST_F(ConcurrentHashMapTest, Erase_HeadNode)
 {
     ConcurrentHashMap<ControlledKey, int, ZeroHash> map;
 
-    // Insert 1,2,3 → chain: 3→2→1 (head insertion).
+    // Insert 1,2,3 �?chain: 3�?�? (head insertion).
     ASSERT_TRUE(map.insert({1}, 10));
     ASSERT_TRUE(map.insert({2}, 20));
     ASSERT_TRUE(map.insert({3}, 30));
@@ -333,8 +333,8 @@ TEST_F(ConcurrentHashMapTest, Erase_HeadNode)
 
 /**
  * @brief Erase a middle node in a chain.
- * @details After erasing 3 (head) and inserting 4,5, chain is 5→4→2→1.
- *          Erasing 2 (middle) must correctly link 4→1.
+ * @details After erasing 3 (head) and inserting 4,5, chain is 5�?�?�?.
+ *          Erasing 2 (middle) must correctly link 4�?.
  */
 TEST_F(ConcurrentHashMapTest, Erase_MiddleNode)
 {
@@ -343,13 +343,13 @@ TEST_F(ConcurrentHashMapTest, Erase_MiddleNode)
     ASSERT_TRUE(map.insert({1}, 10));
     ASSERT_TRUE(map.insert({2}, 20));
     ASSERT_TRUE(map.insert({3}, 30));
-    ASSERT_TRUE(map.erase({3}));  // remove head → chain: 2→1
+    ASSERT_TRUE(map.erase({3}));  // remove head �?chain: 2�?
 
-    // Insert 4,5 → chain: 5→4→2→1
+    // Insert 4,5 �?chain: 5�?�?�?
     ASSERT_TRUE(map.insert({4}, 40));
     ASSERT_TRUE(map.insert({5}, 50));
 
-    // Erase middle node (key 2, which is third in chain 5→4→2→1).
+    // Erase middle node (key 2, which is third in chain 5�?�?�?).
     EXPECT_TRUE(map.erase({2}));
     EXPECT_EQ(map.size(), 3);
     EXPECT_FALSE(map.contains({2}));
@@ -365,7 +365,7 @@ TEST_F(ConcurrentHashMapTest, Erase_MiddleNode)
 
 /**
  * @brief Erase a tail (last) node in a chain.
- * @details Chain is 5→4→1 after middle erase.  Erasing 1 (tail) must set
+ * @details Chain is 5�?�? after middle erase.  Erasing 1 (tail) must set
  *          prev->next to nullptr.
  */
 TEST_F(ConcurrentHashMapTest, Erase_TailNode)
@@ -380,7 +380,7 @@ TEST_F(ConcurrentHashMapTest, Erase_TailNode)
     ASSERT_TRUE(map.insert({5}, 50));
     ASSERT_TRUE(map.erase({2}));   // middle
 
-    // Chain is now 5→4→1.  Erase tail (key 1).
+    // Chain is now 5�?�?.  Erase tail (key 1).
     EXPECT_TRUE(map.erase({1}));
     EXPECT_EQ(map.size(), 2);
     EXPECT_FALSE(map.contains({1}));
@@ -389,7 +389,7 @@ TEST_F(ConcurrentHashMapTest, Erase_TailNode)
 }
 
 /**
- * @brief Erase and re-insert — verify the key can be re-added.
+ * @brief Erase and re-insert �?verify the key can be re-added.
  * @details After erasing a key, inserting it again must succeed.
  */
 TEST_F(ConcurrentHashMapTest, EraseThenInsert_SameKey_Succeeds)
@@ -441,7 +441,7 @@ TEST_F(ConcurrentHashMapTest, Clear_EmptyMap_NoOp)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Insert 2000 entries, verify all are retrievable — exercises rehash.
+ * @brief Insert 2000 entries, verify all are retrievable �?exercises rehash.
  * @details With default SegmentBits=6 (64 segments) and 16 initial buckets
  *          per segment, inserting 2000 entries forces many segments to rehash
  *          (threshold ~12 entries per segment).  All data must survive.
@@ -634,14 +634,14 @@ TEST_F(ConcurrentHashMapTest, LoadFactorAfterBulkInsert)
     EXPECT_GT(map.bucket_count(), initial_buckets);
     // Load factor must be positive and non-zero.
     EXPECT_GT(map.load_factor(), 0.0);
-    // Load factor should be below the default max (0.75) — after inserts,
+    // Load factor should be below the default max (0.75) �?after inserts,
     // it will be <= max_load_factor_ (some segments may be just under).
     EXPECT_LE(map.load_factor(), 0.75);
 }
 
 /**
  * @brief load_factor returns 0.0 for an empty map.
- * @details Edge case: no buckets → load factor is zero.
+ * @details Edge case: no buckets �?load factor is zero.
  */
 TEST_F(ConcurrentHashMapTest, LoadFactor_EmptyMap_Zero)
 {
@@ -666,7 +666,7 @@ static_assert(std::is_nothrow_move_assignable_v<ConcurrentHashMap<int, std::stri
               "ConcurrentHashMap move assignment must be noexcept");
 
 // ══════════════════════════════════════════════════════════════════════════
-//  10. Interface completeness — all IConcurrentMap methods are callable
+//  10. Interface completeness �?all IConcurrentMap methods are callable
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -733,7 +733,7 @@ TEST_F(ConcurrentHashMapTest, FullInterfaceSmoke)
 }
 
 /**
- * @brief Large number of entries with string keys — stress test.
+ * @brief Large number of entries with string keys �?stress test.
  * @details Inserts 5000 entries using string keys to exercise the hasher
  *          and rehash logic with non-trivial key types.
  */

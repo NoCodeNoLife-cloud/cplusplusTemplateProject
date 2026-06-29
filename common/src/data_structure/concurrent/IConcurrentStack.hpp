@@ -14,7 +14,7 @@
 #include <cstddef>
 #include <optional>
 
-namespace common::data_structure::concurrent
+namespace cppforge::data_structure::concurrent
 {
     /// @brief Thread-safe LIFO stack interface.
     ///
@@ -68,4 +68,4 @@ namespace common::data_structure::concurrent
         [[nodiscard]] virtual auto empty() const -> bool = 0;
     };
 
-} // namespace common::data_structure::concurrent
+} // namespace cppforge::data_structure::concurrent

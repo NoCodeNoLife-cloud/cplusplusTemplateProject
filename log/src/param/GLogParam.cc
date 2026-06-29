@@ -10,7 +10,7 @@
 #include <fmt/format.h>
 #include <yaml-cpp/yaml.h>
 
-namespace glog::param
+namespace cppforge::glog::param
 {
     GLogParam::GLogParam(const int32_t min_log_level, std::string log_name, const bool log_to_stderr,
                          const bool custom_log_format)
@@ -103,7 +103,7 @@ namespace glog::param
     }
 }
 
-bool YAML::convert<glog::param::GLogParam>::decode(const Node& node, glog::param::GLogParam& rhs)
+bool YAML::convert<cppforge::glog::param::GLogParam>::decode(const Node& node, cppforge::glog::param::GLogParam& rhs)
 {
     if (!node.IsMap())
     {
@@ -129,7 +129,7 @@ bool YAML::convert<glog::param::GLogParam>::decode(const Node& node, glog::param
     return true;
 }
 
-YAML::Node YAML::convert<glog::param::GLogParam>::encode(const glog::param::GLogParam& rhs)
+YAML::Node YAML::convert<cppforge::glog::param::GLogParam>::encode(const cppforge::glog::param::GLogParam& rhs)
 {
     Node node;
     node["minLogLevel"] = rhs.minLogLevel();

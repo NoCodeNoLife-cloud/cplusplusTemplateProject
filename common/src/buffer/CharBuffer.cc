@@ -1,6 +1,6 @@
 /**
  * @file CharBuffer.cc
- * @brief CharBuffer implementation â€” get/put/flip/compact/array operations
+ * @brief CharBuffer implementation â€?get/put/flip/compact/array operations
  * @details Implements char buffer operations: absolute and relative get/put,
  *          bulk array transfer, flip/clear/rewind/compact, and state queries.
  */
@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     CharBuffer::CharBuffer(const size_t cap) : buffer_(cap, '\0')
     {

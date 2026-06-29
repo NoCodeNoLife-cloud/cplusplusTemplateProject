@@ -1,6 +1,6 @@
 /**
  * @file IntegerToolkit.hpp
- * @brief Integer utility functions â€” parsing, formatting, bit manipulation
+ * @brief Integer utility functions â€?parsing, formatting, bit manipulation
  * @details Provides static utility methods for integer operations:
  *          parsing integers from strings with radix support, formatting
  *          integers as hex/octal/binary strings, and bit manipulation
@@ -17,7 +17,7 @@
 #include <string>
 #include <utility>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     /// @brief A utility class for integer operations
     /// @details Provides various integer conversion and manipulation functions

@@ -16,7 +16,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace common::data_structure::union_find;
+using namespace cppforge::data_structure::union_find;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Test Fixture
@@ -195,7 +195,7 @@ TEST_F(UnionSetWithRollbackTest, Rollback_ToInitialState_AllIsolated)
 
     const auto s0 = dsu.snapshot();
 
-    // Perform several unions — all should succeed on distinct pairs
+    // Perform several unions �?all should succeed on distinct pairs
     for (std::size_t i = 0; i < kN; i += 2)
     {
         EXPECT_TRUE(dsu.unionSets(i, i + 1));
@@ -232,21 +232,21 @@ TEST_F(UnionSetWithRollbackTest, Rollback_MultipleSnapshots_SelectiveUndo)
 
     EXPECT_TRUE(dsu.unionSets(2, 3));
 
-    // Rollback to s1 — undoes only union(2,3)
+    // Rollback to s1 �?undoes only union(2,3)
     dsu.rollback(s1);
     EXPECT_TRUE(dsu.connected(0, 1));
     EXPECT_FALSE(dsu.connected(2, 3));
 
-    // Rollback to s0 — undoes everything
+    // Rollback to s0 �?undoes everything
     dsu.rollback(s0);
     EXPECT_FALSE(dsu.connected(0, 1));
 }
 
 /**
  * @brief Test nested snapshot rollback (intermediate state then full undo)
- * @details s0 → union(0,1) → s1 → union(2,3) → s2 → union(4,5)
- *          rollback s1 → only (0,1) connected, (2,3) and (4,5) disconnected
- *          rollback s0 → everything disconnected
+ * @details s0 �?union(0,1) �?s1 �?union(2,3) �?s2 �?union(4,5)
+ *          rollback s1 �?only (0,1) connected, (2,3) and (4,5) disconnected
+ *          rollback s0 �?everything disconnected
  */
 TEST_F(UnionSetWithRollbackTest, Rollback_NestedSnapshots_IntermediateAndFullUndo)
 {
@@ -261,13 +261,13 @@ TEST_F(UnionSetWithRollbackTest, Rollback_NestedSnapshots_IntermediateAndFullUnd
     const auto s2 = dsu.snapshot();
     EXPECT_TRUE(dsu.unionSets(4, 5));
 
-    // Rollback to intermediate state s1 — only union(0,1) remains
+    // Rollback to intermediate state s1 �?only union(0,1) remains
     dsu.rollback(s1);
     EXPECT_TRUE(dsu.connected(0, 1));
     EXPECT_FALSE(dsu.connected(2, 3));
     EXPECT_FALSE(dsu.connected(4, 5));
 
-    // Rollback to initial state s0 — all isolated
+    // Rollback to initial state s0 �?all isolated
     dsu.rollback(s0);
     EXPECT_FALSE(dsu.connected(0, 1));
     EXPECT_FALSE(dsu.connected(2, 3));
@@ -277,7 +277,7 @@ TEST_F(UnionSetWithRollbackTest, Rollback_NestedSnapshots_IntermediateAndFullUnd
 /**
  * @brief Test rollback when no mutations occurred between snapshot and rollback
  * @details Taking a snapshot and then immediately rolling back to it should
- *          be a no-op — all connectivity should be unchanged.
+ *          be a no-op �?all connectivity should be unchanged.
  */
 TEST_F(UnionSetWithRollbackTest, Rollback_NoChanges_NoEffect)
 {
@@ -338,10 +338,10 @@ TEST_F(UnionSetWithRollbackTest, Rollback_AllUnions_RevertsAll)
 TEST_F(UnionSetWithRollbackTest, Rollback_RankEqualMerge_CorrectUndo)
 {
     // Strategy:
-    //   union(0,1) — both rank 0 → rank[0]=1  (root of {0,1})
-    //   union(2,3) — both rank 0 → rank[2]=1  (root of {2,3})
-    //   Now roots 0 and 2 both have rank 1 → union(0,2) is rank-equal
-    //   → 2 records pushed.  Rollback must restore both.
+    //   union(0,1) �?both rank 0 �?rank[0]=1  (root of {0,1})
+    //   union(2,3) �?both rank 0 �?rank[2]=1  (root of {2,3})
+    //   Now roots 0 and 2 both have rank 1 �?union(0,2) is rank-equal
+    //   �?2 records pushed.  Rollback must restore both.
     UnionSetWithRollback<> dsu(10);
     const auto s0 = dsu.snapshot();
 
@@ -449,7 +449,7 @@ TEST_F(UnionSetWithRollbackTest, SetCount_AfterUnionAndRollback_CorrectTracking)
 
     EXPECT_EQ(dsu.setCount(), kN);
 
-    // Step 1: single union → setCount-1
+    // Step 1: single union �?setCount-1
     EXPECT_TRUE(dsu.unionSets(0, 1));
     EXPECT_EQ(dsu.setCount(), kN - 1);
 
@@ -459,14 +459,14 @@ TEST_F(UnionSetWithRollbackTest, SetCount_AfterUnionAndRollback_CorrectTracking)
     EXPECT_TRUE(dsu.unionSets(4, 5));
     EXPECT_EQ(dsu.setCount(), kN - 3);
 
-    // Step 3: rollback s1 — undoes (2,3) and (4,5) but keeps (0,1)
+    // Step 3: rollback s1 �?undoes (2,3) and (4,5) but keeps (0,1)
     dsu.rollback(s1);
     EXPECT_EQ(dsu.setCount(), kN - 1);
     EXPECT_TRUE(dsu.connected(0, 1));
     EXPECT_FALSE(dsu.connected(2, 3));
     EXPECT_FALSE(dsu.connected(4, 5));
 
-    // Step 4: rollback to zero (initial state) — undo (0,1) too
+    // Step 4: rollback to zero (initial state) �?undo (0,1) too
     dsu.rollback(0);
     EXPECT_EQ(dsu.setCount(), kN);
     for (std::size_t i = 0; i < kN; ++i)
@@ -497,7 +497,7 @@ TEST_F(UnionSetWithRollbackTest, SetCount_RepeatCycle_Consistent)
     dsu.rollback(s0);
     EXPECT_EQ(dsu.setCount(), kN);
 
-    // Union again — should work identically
+    // Union again �?should work identically
     EXPECT_TRUE(dsu.unionSets(0, 1));
     EXPECT_EQ(dsu.setCount(), kN - 1);
 

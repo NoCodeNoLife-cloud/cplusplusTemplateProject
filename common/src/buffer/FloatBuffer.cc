@@ -1,6 +1,6 @@
 /**
  * @file FloatBuffer.cc
- * @brief FloatBuffer implementation â€” get/put/flip/compact/array operations
+ * @brief FloatBuffer implementation â€?get/put/flip/compact/array operations
  * @details Implements float buffer operations: absolute and relative get/put,
  *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     FloatBuffer::FloatBuffer(const size_t capacity)
     {

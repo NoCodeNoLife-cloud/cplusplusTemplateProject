@@ -13,7 +13,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Bipartite graph checking algorithm
     /// @details Attempts to 2-color the graph using BFS. If a conflict is found

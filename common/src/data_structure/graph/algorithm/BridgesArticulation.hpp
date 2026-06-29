@@ -15,7 +15,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Bridges and articulation points detection
     /// @details Uses a single DFS pass to compute tin and low values, identifying

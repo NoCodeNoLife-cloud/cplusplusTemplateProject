@@ -10,8 +10,8 @@
 
 #include "data_structure/graph/algorithm/BFS.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for BFS algorithm tests
@@ -25,7 +25,7 @@ protected:
 
 /**
  * @brief Test BFS traversal on a simple linear graph
- * @details Verifies that BFS visits nodes in order 0â†’1â†’2â†’3 along a line graph
+ * @details Verifies that BFS visits nodes in order 0â†?â†?â†? along a line graph
  */
 TEST_F(BFSTest, Traverse_SimpleLine)
 {

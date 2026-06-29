@@ -1,6 +1,6 @@
 /**
  * @file IntegerToolkit.cc
- * @brief IntegerToolkit implementation â€” parsing, formatting, bit ops
+ * @brief IntegerToolkit implementation â€?parsing, formatting, bit ops
  * @details Implements integer utility methods: string-to-int parsing with
  *          radix validation, int-to-hex/octal/binary formatting, and
  *          bit-manipulation helpers (popcount, clz, ctz, rotl, rotr).
@@ -15,7 +15,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     std::string IntegerToolkit::intToRoman(const int32_t num)
     {

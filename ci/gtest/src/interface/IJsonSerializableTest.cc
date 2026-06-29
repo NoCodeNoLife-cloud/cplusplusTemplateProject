@@ -11,7 +11,7 @@
 
 #include "interface/serialization/IJsonSerializable.hpp"
 
-using namespace common::interface::serialization;
+using namespace cppforge::interface::serialization;
 
 namespace
 {

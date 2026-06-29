@@ -10,7 +10,7 @@
 
 #include "data_structure/tree/core/BinaryTree.hpp"
 
-using namespace common::data_structure::tree::core;
+using namespace cppforge::data_structure::tree::core;
 
 /**
  * @brief Test fixture for BinaryTree tests

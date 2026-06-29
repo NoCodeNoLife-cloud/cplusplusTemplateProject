@@ -23,7 +23,7 @@
 #include "AbstractWriter.hpp"
 #include "interface/io/IAppendable.hpp"
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     /// @brief A class for writing character data to a buffer in memory.
     /// CharArrayWriter is a utility class that allows you to write character data

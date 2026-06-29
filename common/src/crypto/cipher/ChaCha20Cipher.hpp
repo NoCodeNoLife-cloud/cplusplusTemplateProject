@@ -1,6 +1,6 @@
 /**
  * @file ChaCha20Cipher.hpp
- * @brief ChaCha20 stream cipher â€” RFC 8439 implementation
+ * @brief ChaCha20 stream cipher â€?RFC 8439 implementation
  * @details Implements the ChaCha20 stream cipher (IETF variant) as defined
  *          in RFC 8439.  Uses a 256-bit key and 96-bit nonce/IV.  The cipher
  *          generates a pseudorandom keystream that is XORed with plaintext.
@@ -27,7 +27,7 @@
 
 #include "StreamCipher.hpp"
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     /**
      * @class ChaCha20Cipher

@@ -12,7 +12,7 @@
 
 #include "data_structure/tree/range/SegmentTree.hpp"
 
-using namespace common::data_structure::tree::range;
+using namespace cppforge::data_structure::tree::range;
 
 namespace
 {

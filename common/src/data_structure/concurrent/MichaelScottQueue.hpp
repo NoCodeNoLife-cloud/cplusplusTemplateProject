@@ -10,7 +10,7 @@
  *
  *          Memory management uses a concurrent free pool (Treiber stack with
  *          its own tagged-pointer ABA prevention).  Dequeued nodes are pushed
- *          to the free pool for reuse — never freed during normal operation.
+ *          to the free pool for reuse �?never freed during normal operation.
  *          Enqueue attempts to pop from the free pool first; only when the
  *          pool is empty does it allocate a new node via `new`.  This design
  *          avoids use-after-free without requiring epoch-based reclamation
@@ -55,7 +55,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace common::data_structure::concurrent
+namespace cppforge::data_structure::concurrent
 {
     /// @brief Lock-free MPMC queue with tagged-pointer ABA protection.
     ///
@@ -93,7 +93,7 @@ namespace common::data_structure::concurrent
         /// @brief Constructs an empty queue with an initial dummy head node.
         MichaelScottQueue();
 
-        /// @brief Destructor — drains the queue and free pool, deletes all
+        /// @brief Destructor �?drains the queue and free pool, deletes all
         ///        remaining nodes.
         ~MichaelScottQueue() noexcept override;
 
@@ -103,11 +103,11 @@ namespace common::data_structure::concurrent
 
         // ── Move ───────────────────────────────────────────────────────
 
-        /// @brief Move constructor — transfers all nodes from @p other.
+        /// @brief Move constructor �?transfers all nodes from @p other.
         /// @param other The queue to move from.  Left in a valid empty state.
         MichaelScottQueue(MichaelScottQueue&& other) noexcept;
 
-        /// @brief Move assignment — releases current resources, then
+        /// @brief Move assignment �?releases current resources, then
         ///        transfers ownership of @p other's nodes.
         /// @param other The queue to move from.
         /// @return Reference to this queue.
@@ -324,11 +324,11 @@ namespace common::data_structure::concurrent
                 // (which was the free-list chain pointer) to 0 so it is
                 // ready for queue insertion.
                 head_node->next.store(0, std::memory_order_relaxed);
-                // The optional is still engaged (moved-from) — enqueue will
+                // The optional is still engaged (moved-from) �?enqueue will
                 // replace it via emplace() when the node is reused.
                 return head_node;
             }
-            // CAS failed — retry with the updated old_head.
+            // CAS failed �?retry with the updated old_head.
         }
     }
 
@@ -336,7 +336,7 @@ namespace common::data_structure::concurrent
     void MichaelScottQueue<T>::push_free_node(Node* node) noexcept
     {
         // Link the node into the free list.  The optional value is not reset
-        // here — it remains engaged (moved-from) to avoid races where another
+        // here �?it remains engaged (moved-from) to avoid races where another
         // thread holds a pointer to this node and may dereference the optional.
         // enqueue() will replace the value via emplace() when the node is
         // reused.
@@ -355,7 +355,7 @@ namespace common::data_structure::concurrent
             {
                 return;  // Successfully pushed.
             }
-            // CAS failed — reload old_head and retry.
+            // CAS failed �?reload old_head and retry.
         }
     }
 
@@ -399,7 +399,7 @@ namespace common::data_structure::concurrent
             {
                 if (next_node == nullptr)
                 {
-                    // Tail is at the last node — try to append.
+                    // Tail is at the last node �?try to append.
                     // Tag on `next` is ignored (always 0 when null).
                     uintptr_t expected = 0;
                     uintptr_t desired  = pack_ptr(node, 0);
@@ -410,7 +410,7 @@ namespace common::data_structure::concurrent
                         // Successfully linked the new node.
                         size_.fetch_add(1, std::memory_order_relaxed);
 
-                        // Try to advance tail (may fail — another thread
+                        // Try to advance tail (may fail �?another thread
                         // may help or the next enqueue will fix it).
                         auto new_tail = pack_ptr(node,
                                                  static_cast<uint16_t>(unpack_tag(tail_tagged) + 1));
@@ -422,7 +422,7 @@ namespace common::data_structure::concurrent
                 }
                 else
                 {
-                    // Tail is lagging — help advance it.
+                    // Tail is lagging �?help advance it.
                     auto new_tail = pack_ptr(next_node,
                                              static_cast<uint16_t>(unpack_tag(tail_tagged) + 1));
                     tail_.compare_exchange_weak(tail_tagged, new_tail,
@@ -457,7 +457,7 @@ namespace common::data_structure::concurrent
                         return std::nullopt;  // Empty.
                     }
 
-                    // Tail is lagging — help advance it.
+                    // Tail is lagging �?help advance it.
                     auto new_tail = pack_ptr(next_node,
                                              static_cast<uint16_t>(unpack_tag(tail_tagged) + 1));
                     tail_.compare_exchange_weak(tail_tagged, new_tail,
@@ -478,7 +478,7 @@ namespace common::data_structure::concurrent
 
                         // Defensive check: if the value was concurrently
                         // emplaced (emplace temporarily empties the optional),
-                        // retry — head must have changed since the node was
+                        // retry �?head must have changed since the node was
                         // recycled.
                         if (!next_node->value.has_value())
                         {
@@ -491,14 +491,14 @@ namespace common::data_structure::concurrent
                                                         std::memory_order_release,
                                                         std::memory_order_relaxed))
                         {
-                            // CAS succeeded — we own the node exclusively.
+                            // CAS succeeded �?we own the node exclusively.
                             // Recycle the old dummy in the free pool.
                             push_free_node(head_node);
 
                             size_.fetch_sub(1, std::memory_order_relaxed);
                             return extracted_value;
                         }
-                        // CAS failed — discard the copy, retry the loop.
+                        // CAS failed �?discard the copy, retry the loop.
                     }
                     else
                     {
@@ -508,7 +508,7 @@ namespace common::data_structure::concurrent
                                                         std::memory_order_release,
                                                         std::memory_order_relaxed))
                         {
-                            // CAS succeeded — we own the node exclusively.
+                            // CAS succeeded �?we own the node exclusively.
                             // (Defensive has_value check for robustness.)
                             if (!next_node->value.has_value())
                             {
@@ -523,7 +523,7 @@ namespace common::data_structure::concurrent
                             size_.fetch_sub(1, std::memory_order_relaxed);
                             return extracted_value;
                         }
-                        // CAS failed — retry the loop.
+                        // CAS failed �?retry the loop.
                     }
                 }
             }
@@ -562,7 +562,7 @@ namespace common::data_structure::concurrent
                     break;
                 }
                 // Save next before destroying (next field may be modified
-                // if this node was also in the free pool — but since we
+                // if this node was also in the free pool �?but since we
                 // are single-threaded here, this is safe).
                 uintptr_t next_tagged = cur->next.load(std::memory_order_relaxed);
                 cur->value.reset();
@@ -595,4 +595,4 @@ namespace common::data_structure::concurrent
         }
     }
 
-} // namespace common::data_structure::concurrent
+} // namespace cppforge::data_structure::concurrent

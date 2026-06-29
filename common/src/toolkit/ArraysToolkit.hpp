@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     /// @brief Utility class for array operations.
     /// @details This class provides static methods to perform various operations on arrays,

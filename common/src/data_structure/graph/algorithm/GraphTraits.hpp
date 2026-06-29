@@ -13,7 +13,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Represents an edge with full source-target-weight information
     /// @details Unlike the internal Edge class (which only stores to + weight),

@@ -10,8 +10,8 @@
 
 #include "data_structure/graph/algorithm/TarjanSCC.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for TarjanSCC tests
@@ -25,7 +25,7 @@ protected:
 
 /**
  * @brief Test SCC detection on a graph where every node is its own SCC
- * @details In a graph with edges 0â†’1 and 2â†’3 (no cycles), each node
+ * @details In a graph with edges 0â†? and 2â†? (no cycles), each node
  *          forms its own SCC, yielding 4 components
  */
 TEST_F(TarjanSCCTest, Compute_SingleNodes)
@@ -56,7 +56,7 @@ TEST_F(TarjanSCCTest, Compute_SimpleCycle)
 
 /**
  * @brief Test SCC detection on a graph with mixed components
- * @details Contains a 3-node cycle (0â†’1â†’2â†’0) plus a chain (1â†’3â†’4)
+ * @details Contains a 3-node cycle (0â†?â†?â†?) plus a chain (1â†?â†?)
  *          yielding at least 2 SCCs
  */
 TEST_F(TarjanSCCTest, Compute_ComplexGraph)
@@ -85,7 +85,7 @@ TEST_F(TarjanSCCTest, Compute_ComplexGraph)
 
 /**
  * @brief Test SCC detection on a linear (acyclic) directed graph
- * @details In a line 0â†’1â†’2â†’3 each node forms its own SCC, yielding 4 components
+ * @details In a line 0â†?â†?â†? each node forms its own SCC, yielding 4 components
  */
 TEST_F(TarjanSCCTest, Compute_LinearGraph)
 {

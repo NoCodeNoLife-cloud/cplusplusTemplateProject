@@ -14,7 +14,7 @@
 
 #include "data_structure/queue/Queue.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 // Compile-time noexcept guarantees
 static_assert(std::is_nothrow_move_constructible_v<Queue<int>>);

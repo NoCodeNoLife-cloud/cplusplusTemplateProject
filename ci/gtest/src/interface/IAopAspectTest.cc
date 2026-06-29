@@ -10,7 +10,7 @@
 
 #include "interface/IAopAspect.hpp"
 
-using namespace common::interface::aop;
+using namespace cppforge::interface::aop;
 
 namespace
 {

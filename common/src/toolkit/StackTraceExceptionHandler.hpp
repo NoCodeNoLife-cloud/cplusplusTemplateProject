@@ -10,7 +10,7 @@
 #include <stacktrace>
 #include <string_view>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     /// @brief Utility class for logging exceptions with stack trace information
     class StackTraceExceptionHandler final

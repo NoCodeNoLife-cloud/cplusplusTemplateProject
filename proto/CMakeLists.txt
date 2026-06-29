@@ -25,6 +25,7 @@ set(PROTO_HDRS "")
 find_program(gRPC_CPP_PLUGIN_EXECUTABLE
     NAMES grpc_cpp_plugin
     PATHS
+        "$ENV{VCPKG_ROOT}/installed/$ENV{VCPKG_TARGET_TRIPLET}/tools/grpc"
         "$ENV{VCPKG_ROOT}/installed/x64-windows/tools/grpc"
         "$ENV{ProgramFiles}/gRPC/bin"
         "/usr/local/bin"

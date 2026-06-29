@@ -18,7 +18,7 @@
 #include "data_structure/tree/lsm/LSMTree.hpp"
 #include "data_structure/tree/lsm/LSMTreeOptions.hpp"
 
-using namespace common::data_structure::tree::lsm;
+using namespace cppforge::data_structure::tree::lsm;
 
 // ── Test fixture ──────────────────────────────────────────────────────────
 
@@ -239,7 +239,7 @@ TEST_F(LSMTreeTest, Flush_ForcesSSTableCreation)
     LSMTree<int, std::string> tree(tinyOpts);
     EXPECT_EQ(tree.sstableCount(0), 0);
 
-    // Insert 4 entries — should not yet trigger a flush.
+    // Insert 4 entries �?should not yet trigger a flush.
     for (int i = 0; i < 4; ++i)
     {
         tree.put(i, "v" + std::to_string(i));
@@ -345,7 +345,7 @@ TEST_F(LSMTreeTest, Tombstone_SurvivesFlush)
     tree.put(1, "one");
     tree.flush(); // flush key 1 to L0
 
-    tree.remove(1); // delete — tombstone goes into memtable
+    tree.remove(1); // delete �?tombstone goes into memtable
     tree.flush(); // flush tombstone to L0
 
     // Tombstone should shadow the older value.
@@ -376,7 +376,7 @@ TEST_F(LSMTreeTest, Tombstone_SurvivesCompaction)
     tree.remove(1);
     tree.flush(); // L0 SSTable 2: {1: tombstone}
 
-    // Force compaction of L0 → L1.
+    // Force compaction of L0 �?L1.
     tree.compact();
 
     // After compaction, key 1 should be deleted, key 2 should survive.
@@ -408,7 +408,7 @@ TEST_F(LSMTreeTest, Tombstone_CancelsValueInCompaction)
     tree.remove(1);
     tree.flush(); // L0 SSTable B: {1: tombstone}
 
-    // Tree now has 2 SSTables in L0 → compaction threshold reached.
+    // Tree now has 2 SSTables in L0 �?compaction threshold reached.
     // The next put() will trigger compaction via maybeSealAndFlush.
     tree.put(99, "keep"); // triggers compaction
 
@@ -748,7 +748,7 @@ TEST_F(LSMTreeTest, LevelCount)
     EXPECT_EQ(tree.levelCount(), 0);
 
     tree.put(1, "one");
-    // Data is still in MemTable — no levels used yet.
+    // Data is still in MemTable �?no levels used yet.
     EXPECT_EQ(tree.levelCount(), 0);
 
     tree.flush();
@@ -830,9 +830,9 @@ TEST_F(LSMTreeTest, Tombstone_VsNewerValueAcrossCompaction)
     // Scenario:
     //   Level 0: SSTable A {1: "old"}
     //   Level 0: SSTable B {1: tombstone}  (deletion)
-    //   Compaction A+B → Level 1: {1: tombstone kept}
+    //   Compaction A+B �?Level 1: {1: tombstone kept}
     //   Level 0: SSTable C {1: "new"}      (re-insert)
-    //   Compaction C + Level 1 tombstone → Level 1: {1: "new"}
+    //   Compaction C + Level 1 tombstone �?Level 1: {1: "new"}
     LSMTreeOptions tinyOpts = opts_;
     tinyOpts.memtable_size = 4;
     tinyOpts.l0_compaction_threshold = 2;

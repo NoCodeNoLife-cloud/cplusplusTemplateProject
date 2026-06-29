@@ -14,7 +14,7 @@
 
 #include "crypto/cipher/StreamCipher.hpp"
 
-using namespace common::crypto::cipher;
+using namespace cppforge::crypto::cipher;
 
 namespace
 {

@@ -1,6 +1,6 @@
 /**
  * @file CuckooFilter.cc
- * @brief Cuckoo filter — explicit template instantiations
+ * @brief Cuckoo filter �?explicit template instantiations
  * @details Provides explicit instantiations of the CuckooFilter class template
  *          for the most commonly used element types.  This reduces compile
  *          times and symbol emissions in translation units that include the
@@ -13,7 +13,7 @@
 
 #include <string>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
 
     // ── Explicit instantiations for common key types ───────────────────
@@ -27,4 +27,4 @@ namespace common::data_structure
     template class CuckooFilter<uint64_t>;
     template class CuckooFilter<int64_t>;
 
-} // namespace common::data_structure
+} // namespace cppforge::data_structure

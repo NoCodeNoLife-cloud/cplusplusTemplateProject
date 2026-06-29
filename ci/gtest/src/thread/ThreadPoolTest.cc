@@ -14,7 +14,7 @@
 
 #include "thread/ThreadPool.hpp"
 
-using namespace common::thread;
+using namespace cppforge::thread;
 
 /// @brief Test fixture for ThreadPool tests.
 class ThreadPoolTest : public testing::Test

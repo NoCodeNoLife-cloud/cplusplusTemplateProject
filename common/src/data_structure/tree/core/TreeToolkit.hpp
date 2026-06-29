@@ -18,7 +18,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace common::data_structure::tree::core
+namespace cppforge::data_structure::tree::core
 {
     /// @brief Utility class for generic tree operations.
     /// @details Provides static methods for common recursive tree computations

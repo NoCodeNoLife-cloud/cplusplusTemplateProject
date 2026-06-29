@@ -43,7 +43,7 @@
 #include <stdexcept>
 #include <vector>
 
-namespace common::data_structure::union_find
+namespace cppforge::data_structure::union_find
 {
 
 /// @brief A Union-Find (Disjoint Set Union) with rollback support.
@@ -82,7 +82,7 @@ public:
     /// @param x  Element index to find.
     /// @return The root index of the set containing x.
     /// @par Complexity
-    /// O(Î±(n)) amortised â€” no path compression, only rank-based depth bound.
+    /// O(Î±(n)) amortised â€?no path compression, only rank-based depth bound.
     [[nodiscard]] auto find(Index x) const noexcept -> Index;
 
     /// @brief Checks if elements x and y belong to the same set.
@@ -222,7 +222,7 @@ auto UnionSetWithRollback<Index>::unionSets(const Index x,
 
     if (rank_[rx] < rank_[ry])
     {
-        // Attach rx under ry â€” 1 parent change
+        // Attach rx under ry â€?1 parent change
         history_.push_back({rx, parent_[rx], std::nullopt});
         parent_[rx] = ry;
         --set_count_;
@@ -231,14 +231,14 @@ auto UnionSetWithRollback<Index>::unionSets(const Index x,
 
     if (rank_[rx] > rank_[ry])
     {
-        // Attach ry under rx â€” 1 parent change
+        // Attach ry under rx â€?1 parent change
         history_.push_back({ry, parent_[ry], std::nullopt});
         parent_[ry] = rx;
         --set_count_;
         return true;
     }
 
-    // Attach ry under rx, then increase rank of rx â€” 2 changes
+    // Attach ry under rx, then increase rank of rx â€?2 changes
     history_.push_back({ry, parent_[ry], std::nullopt});
     parent_[ry] = rx;
 
@@ -306,4 +306,4 @@ auto UnionSetWithRollback<Index>::clear() noexcept -> void
     history_.clear();
 }
 
-} // namespace common::data_structure::union_find
+} // namespace cppforge::data_structure::union_find

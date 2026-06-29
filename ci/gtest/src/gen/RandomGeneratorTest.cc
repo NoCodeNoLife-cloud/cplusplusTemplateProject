@@ -15,7 +15,7 @@
 
 #include "gen/RandomGenerator.hpp"
 
-using namespace common::gen;
+using namespace cppforge::gen;
 
 /**
  * @brief Test fixture for RandomGeneratorTest tests

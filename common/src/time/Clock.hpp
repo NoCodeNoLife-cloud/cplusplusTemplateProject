@@ -22,7 +22,7 @@
 #include <chrono>
 #include <string>
 
-namespace common::time
+namespace cppforge::time
 {
     /// @brief Utility class for time-related operations
     class Clock

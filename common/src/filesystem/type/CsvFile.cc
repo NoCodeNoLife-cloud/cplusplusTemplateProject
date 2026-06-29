@@ -1,6 +1,6 @@
 /**
  * @file CsvFile.cc
- * @brief CsvFile implementation â€” CSV parsing, quoting, row iteration
+ * @brief CsvFile implementation â€?CSV parsing, quoting, row iteration
  * @details Implements CSV parsing: handles quoted fields, escaped quotes,
  *          configurable delimiters, and header-driven column access.
  */
@@ -93,7 +93,7 @@ namespace
     }
 }
 
-namespace common::filesystem::type
+namespace cppforge::filesystem::type
 {
     CsvFile::CsvFile(const std::string& file_path) : file_path_(file_path)
     {

@@ -35,7 +35,7 @@
 #include <utility>
 #include <stdexcept>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief A thread-safe MPMC queue with blocking and non-blocking operations.
     ///

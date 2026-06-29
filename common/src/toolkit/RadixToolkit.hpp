@@ -1,6 +1,6 @@
 /**
  * @file RadixToolkit.hpp
- * @brief Radix conversion utilities â€” base-N encoding/decoding
+ * @brief Radix conversion utilities â€?base-N encoding/decoding
  * @details Provides static methods for converting between numeric values and
  *          their string representations in arbitrary bases (2..36).  Supports
  *          encoding integers as base-N strings and decoding strings back to
@@ -20,7 +20,7 @@
 #include <string_view>
 #include <type_traits>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     /**
      * @class RadixToolkit

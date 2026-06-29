@@ -24,7 +24,7 @@
 #include <string_view>
 #include <type_traits>
 
-namespace common::data_structure::probabilistic
+namespace cppforge::data_structure::probabilistic
 {
     /// @brief Default hash functor for MinHash.
     ///
@@ -231,7 +231,7 @@ namespace common::data_structure::probabilistic
         }
 
         /// @brief Returns the approximate memory usage in bytes.
-        /// @return sizeof(*this) â€” the signature array is embedded inline.
+        /// @return sizeof(*this) â€?the signature array is embedded inline.
         [[nodiscard]] auto memoryUsage() const noexcept -> uint64_t
         {
             return sizeof(*this);
@@ -256,4 +256,4 @@ namespace common::data_structure::probabilistic
         [[no_unique_address]] Hash hash_;
     };
 
-} // namespace common::data_structure::probabilistic
+} // namespace cppforge::data_structure::probabilistic

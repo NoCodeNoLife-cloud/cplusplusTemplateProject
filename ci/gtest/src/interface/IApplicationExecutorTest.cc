@@ -8,7 +8,7 @@
 
 #include "interface/task/IApplicationExecutor.hpp"
 
-using namespace common::interface::task;
+using namespace cppforge::interface::task;
 
 namespace
 {

@@ -1,6 +1,6 @@
 /**
  * @file TDigest.cc
- * @brief T-Digest approximate quantile estimation â€” explicit instantiations
+ * @brief T-Digest approximate quantile estimation â€?explicit instantiations
  * @details This file provides an explicit template instantiation for the
  *          default compression parameter, forcing the compiler to generate
  *          all template member functions and catching compilation errors
@@ -11,7 +11,7 @@
 
 #include <cstdint>
 
-namespace common::data_structure::probabilistic
+namespace cppforge::data_structure::probabilistic
 {
     /// @brief Explicit instantiation for the default compression (100).
     ///
@@ -20,4 +20,4 @@ namespace common::data_structure::probabilistic
     /// and memory (~1.6 KB).
     template class TDigest<100>;
 
-} // namespace common::data_structure::probabilistic
+} // namespace cppforge::data_structure::probabilistic

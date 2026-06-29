@@ -15,7 +15,7 @@
 #include <string>
 #include <string_view>
 
-namespace common::auth
+namespace cppforge::auth
 {
     /// @brief Custom exception class for authentication-related errors
     class AuthenticationException : public std::runtime_error

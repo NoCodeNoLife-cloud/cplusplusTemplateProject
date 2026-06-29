@@ -1,6 +1,6 @@
 /**
  * @file OutputStreamWriter.cc
- * @brief OutputStreamWriter implementation â€” char-to-byte UTF-8 encoding
+ * @brief OutputStreamWriter implementation â€?char-to-byte UTF-8 encoding
  * @details Implements the character-to-byte bridge: write()/append() encode
  *          characters as multi-byte UTF-8 sequences and forward them to the
  *          underlying AbstractOutputStream.  Tracks closed state to prevent
@@ -13,7 +13,7 @@
 #include <ios>
 #include <stdexcept>
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     OutputStreamWriter::OutputStreamWriter(std::unique_ptr<AbstractWriter> outputStream, const std::string& charsetName) : output_writer_(std::move(outputStream)), charset_(charsetName), closed_(false)
     {

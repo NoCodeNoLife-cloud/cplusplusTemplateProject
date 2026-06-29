@@ -1,6 +1,6 @@
 /**
  * @file Console.hpp
- * @brief Console I/O utilities â€” colour output, progress bar, prompts
+ * @brief Console I/O utilities â€?colour output, progress bar, prompts
  * @description Provides static methods for interactive console I/O: coloured
  *          text output (ANSI escape codes), progress bar display, user prompt
  *          with confirmation, and formatted table output.  Works on both
@@ -20,7 +20,7 @@
 
 #include "interface/io/IFlushable.hpp"
 
-namespace common::io
+namespace cppforge::io
 {
     /// @brief Provides console input/output operations with formatting capabilities.
     /// This class implements the IFlushable interface and offers methods for formatted

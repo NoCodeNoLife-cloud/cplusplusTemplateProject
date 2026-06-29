@@ -1,6 +1,6 @@
 /**
  * @file AhoCorasick.hpp
- * @brief Aho-Corasick automaton — completed transition table (zero-backtracking)
+ * @brief Aho-Corasick automaton �?completed transition table (zero-backtracking)
  * @details A production-grade Aho-Corasick multi-pattern string matcher.
  *          Uses a Struct-of-Arrays (SoA) layout for cache-friendly traversal.
  *          During @c build() the goto table is completed into @c trans_ so that
@@ -46,7 +46,7 @@
 #include <string_view>
 #include <vector>
 
-namespace common::data_structure::string
+namespace cppforge::data_structure::string
 {
     /// @brief Aho-Corasick automaton with completed transition table (zero-backtracking).
     class AhoCorasick final : public IACAutomaton
@@ -66,12 +66,12 @@ namespace common::data_structure::string
         /// @brief Default destructor.
         ~AhoCorasick() override = default;
 
-        // ── Copy semantics (deleted — vectors are too large) ─────────────
+        // ── Copy semantics (deleted �?vectors are too large) ─────────────
 
         AhoCorasick(const AhoCorasick&) = delete;
         auto operator=(const AhoCorasick&) -> AhoCorasick& = delete;
 
-        // ── Move semantics (default — flat vectors move efficiently) ─────
+        // ── Move semantics (default �?flat vectors move efficiently) ─────
 
         AhoCorasick(AhoCorasick&&) = default;
         auto operator=(AhoCorasick&&) -> AhoCorasick& = default;
@@ -201,4 +201,4 @@ namespace common::data_structure::string
         void flattenOutput();
     };
 
-} // namespace common::data_structure::string
+} // namespace cppforge::data_structure::string

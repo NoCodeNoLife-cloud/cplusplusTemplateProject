@@ -1,6 +1,6 @@
 /**
  * @file AuthenticationException.cc
- * @brief AuthenticationException implementation â€” error code and message
+ * @brief AuthenticationException implementation â€?error code and message
  * @details Implements the authentication exception with error code assignment
  *          and category label for structured error handling.
  */
@@ -9,7 +9,7 @@
 
 #include <string_view>
 
-namespace common::auth
+namespace cppforge::auth
 {
     AuthenticationException::AuthenticationException(const std::string& message) : std::runtime_error(message)
     {

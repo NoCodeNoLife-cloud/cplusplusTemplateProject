@@ -10,7 +10,7 @@
 #include <cstddef>
 #include <optional>
 
-namespace common::interface::cache
+namespace cppforge::interface::cache
 {
     /// @brief Abstract interface for cache implementations
     /// @tparam Key Type of the key used to identify cache entries

@@ -3,7 +3,7 @@
  * @brief Dijkstra's shortest path algorithm
  * @details Computes single-source shortest paths in graphs with non-negative edge weights.
  *          Uses a priority queue (min-heap) for efficient extraction of the minimum-distance node.
- *          Does NOT handle negative edge weights â€” use BellmanFord for graphs with negative weights.
+ *          Does NOT handle negative edge weights â€?use BellmanFord for graphs with negative weights.
  *
  * @par Thread Safety
  * This class provides only static methods and holds no internal state.
@@ -16,7 +16,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Dijkstra's shortest path algorithm implementation
     /// @details Uses std::priority_queue as a min-heap. Time complexity: O((V+E)logV).

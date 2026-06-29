@@ -1,6 +1,6 @@
 /**
  * @file SystemInfo.hpp
- * @brief System information queries â€” OS, CPU, memory, hostname
+ * @brief System information queries â€?OS, CPU, memory, hostname
  * @description Provides static methods for querying system-level information:
  *          operating system name/version, CPU architecture and core count,
  *          total/available physical memory, hostname, and process ID.
@@ -15,7 +15,7 @@
 #include <vector>
 #include <windows.h>
 
-namespace common::system
+namespace cppforge::system
 {
     /// @brief Structure to hold motherboard information
     struct MotherboardInfo

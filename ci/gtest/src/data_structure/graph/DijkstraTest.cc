@@ -10,8 +10,8 @@
 
 #include "data_structure/graph/algorithm/Dijkstra.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for Dijkstra algorithm tests
@@ -25,7 +25,7 @@ protected:
 
 /**
  * @brief Test Dijkstra on a simple three-node line graph
- * @details Verifies shortest distances: 0â†’1 (2) + 1â†’2 (3) = 5
+ * @details Verifies shortest distances: 0â†? (2) + 1â†? (3) = 5
  */
 TEST_F(DijkstraTest, ShortestPath_Simple)
 {
@@ -40,8 +40,8 @@ TEST_F(DijkstraTest, ShortestPath_Simple)
 
 /**
  * @brief Test Dijkstra on a graph with multiple alternative paths
- * @details Verifies that Dijkstra finds the optimal path 0â†’1â†’2â†’3 (total 4)
- *          over the more direct but expensive 0â†’2â†’3 path
+ * @details Verifies that Dijkstra finds the optimal path 0â†?â†?â†? (total 4)
+ *          over the more direct but expensive 0â†?â†? path
  */
 TEST_F(DijkstraTest, ShortestPath_Complex)
 {

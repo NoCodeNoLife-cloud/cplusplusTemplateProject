@@ -1,6 +1,6 @@
 /**
  * @file TDigest.hpp
- * @brief T-Digest â€” approximate quantile estimation
+ * @brief T-Digest â€?approximate quantile estimation
  * @details T-Digest is a probabilistic data structure for approximating
  *          quantiles and cumulative distribution functions from streaming
  *          data.  Uses the buffer-and-merge variant (Ted Dunning, 2013).
@@ -21,13 +21,13 @@
 #include <stdexcept>
 #include <vector>
 
-namespace common::data_structure::probabilistic
+namespace cppforge::data_structure::probabilistic
 {
     /// @brief T-Digest for streaming quantile estimation.
     ///
     /// @tparam Compression Controls the sizeâ€“accuracy trade-off.
     ///         Higher values yield more accurate quantiles at the cost
-    ///         of more centroids (â‰ˆ Compression/2).  Default 100 is
+    ///         of more centroids (â‰?Compression/2).  Default 100 is
     ///         suitable for most use cases (~50 centroids, ~1 KB).
     ///
     /// @par Algorithm
@@ -52,7 +52,7 @@ namespace common::data_structure::probabilistic
     /// @par Memory
     /// Approximately (Compression / 2) Centroid structs, each 16 bytes,
     /// plus a similar-sized transient buffer.  Default (Compression=100):
-    /// â‰ˆ 50 centroids + 50 buffer slots â‰ˆ 1.6 KB.
+    /// â‰?50 centroids + 50 buffer slots â‰?1.6 KB.
     ///
     /// @par Reference
     /// Dunning, "Computing Extremely Accurate Quantiles Using T-Digests"
@@ -65,8 +65,8 @@ namespace common::data_structure::probabilistic
     /// {
     ///     td.add(v);
     /// }
-    /// double med = td.quantile(0.5);   // â‰ˆ 5.5
-    /// double cdf = td.cdf(7.0);        // â‰ˆ 0.6
+    /// double med = td.quantile(0.5);   // â‰?5.5
+    /// double cdf = td.cdf(7.0);        // â‰?0.6
     /// @endcode
     template <size_t Compression = 100>
     class TDigest final
@@ -195,7 +195,7 @@ namespace common::data_structure::probabilistic
 
         /// @brief Estimates the cumulative distribution function at a value.
         ///
-        /// Returns the fraction of observed data points that are â‰¤ @p value.
+        /// Returns the fraction of observed data points that are â‰?@p value.
         /// @param value The value to evaluate.
         /// @return Estimated CDF at @p value, in [0, 1].
         [[nodiscard]] auto cdf(double value) const -> double
@@ -268,7 +268,7 @@ namespace common::data_structure::probabilistic
         }
 
         /// @brief Returns the number of compressed centroids.
-        /// @return Centroid count (â‰ˆ Compression/2 after steady state).
+        /// @return Centroid count (â‰?Compression/2 after steady state).
         [[nodiscard]] auto centroidCount() const -> size_t
         {
             return centroids_.size();
@@ -535,4 +535,4 @@ namespace common::data_structure::probabilistic
         uint64_t totalWeight_ = 0;
     };
 
-} // namespace common::data_structure::probabilistic
+} // namespace cppforge::data_structure::probabilistic

@@ -1,6 +1,6 @@
 /**
  * @file CharArrayWriter.cc
- * @brief CharArrayWriter implementation â€” dynamic char vector management
+ * @brief CharArrayWriter implementation â€?dynamic char vector management
  * @details Implements in-memory character output: write()/append() append to
  *          the internal vector (doubling capacity when full), toCharArray()
  *          returns a copy, toString() for string output, writeTo() copies
@@ -11,7 +11,7 @@
 
 #include <stdexcept>
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     CharArrayWriter::CharArrayWriter(const int32_t initialSize)
     {

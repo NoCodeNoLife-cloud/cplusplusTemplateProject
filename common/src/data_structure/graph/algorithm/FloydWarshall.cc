@@ -13,7 +13,7 @@
 
 #include "data_structure/graph/algorithm/FloydWarshall.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     AllPairsShortestPathResult FloydWarshall::compute(const Graph& graph)
     {

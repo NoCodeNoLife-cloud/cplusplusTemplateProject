@@ -1,6 +1,6 @@
 /**
  * @file AutoJoinThread.cc
- * @brief AutoJoinThread implementation â€” RAII join wrapper
+ * @brief AutoJoinThread implementation â€?RAII join wrapper
  * @details Implements the RAII thread wrapper: destructor calls join() if the
  *          thread is joinable, ensuring clean thread lifecycle management.
  */
@@ -9,7 +9,7 @@
 #include <thread>
 #include <utility>
 
-namespace common::thread
+namespace cppforge::thread
 {
     AutoJoinThread::AutoJoinThread(AutoJoinThread&& other) noexcept : thread_(std::move(other.thread_))
     {

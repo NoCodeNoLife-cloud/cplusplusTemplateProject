@@ -1,6 +1,6 @@
 /**
  * @file SHAToolkit.cc
- * @brief SHAToolkit implementation â€” convenience wrappers for SHA computation
+ * @brief SHAToolkit implementation â€?convenience wrappers for SHA computation
  * @details Implements static convenience methods that route to the correct
  *          HashStrategy (SHA-1 or SHA-256) based on the requested bit count.
  */
@@ -13,7 +13,7 @@
 #include "SHA1Strategy.hpp"
 #include "SHA256Strategy.hpp"
 
-namespace common::crypto::hash
+namespace cppforge::crypto::hash
 {
     SHAToolkit::SHAToolkit(std::unique_ptr<HashStrategy> strategy) : strategy_(std::move(strategy))
     {

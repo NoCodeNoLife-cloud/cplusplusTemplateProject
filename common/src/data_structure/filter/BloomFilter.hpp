@@ -33,7 +33,7 @@
 #include <string>
 #include <vector>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     static constexpr std::size_t BITS_PER_CHAR = 0x08;
 

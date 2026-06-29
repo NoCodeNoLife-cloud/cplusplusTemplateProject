@@ -10,7 +10,7 @@
 
 #include "toolkit/StringToolkit.hpp"
 
-using namespace common::toolkit;
+using namespace cppforge::toolkit;
 
 /**
  * @brief Test fixture for StringToolkit tests
@@ -96,7 +96,7 @@ TEST_F(StringToolkitTest, SplitWithEmpty_TrailingDelimiter)
 }
 
 /**
- * @brief Test split by string delimiter â€” basic case
+ * @brief Test split by string delimiter â€?basic case
  * @details Verifies multi-character delimiter splits correctly
  */
 TEST_F(StringToolkitTest, SplitByString_Basic)
@@ -401,7 +401,7 @@ TEST_F(StringToolkitTest, ToUpperCase_Basic)
 
 /**
  * @brief Test toUpperCase on an already-uppercase string
- * @details Verifies idempotency â€” uppercase input yields same output
+ * @details Verifies idempotency â€?uppercase input yields same output
  */
 TEST_F(StringToolkitTest, ToUpperCase_AlreadyUpper)
 {
@@ -441,7 +441,7 @@ TEST_F(StringToolkitTest, ToLowerCase_Basic)
 
 /**
  * @brief Test toLowerCase on an already-lowercase string
- * @details Verifies idempotency â€” lowercase input yields same output
+ * @details Verifies idempotency â€?lowercase input yields same output
  */
 TEST_F(StringToolkitTest, ToLowerCase_AlreadyLower)
 {

@@ -11,7 +11,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-namespace common::interface::serialization
+namespace cppforge::interface::serialization
 {
     /// @brief Interface for JSON serializable objects.
     /// This interface defines the contract for objects that can be serialized to

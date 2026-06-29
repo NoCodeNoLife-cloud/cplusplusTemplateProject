@@ -13,7 +13,7 @@
 
 #include "system/FunctionProfiler.hpp"
 
-using namespace common::system;
+using namespace cppforge::system;
 
 /// @brief Test fixture for FunctionProfiler tests.
 class FunctionProfilerTest : public testing::Test

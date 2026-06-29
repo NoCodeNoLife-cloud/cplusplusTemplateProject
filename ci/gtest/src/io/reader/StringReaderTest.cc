@@ -4,7 +4,7 @@
 
 #include "io/reader/StringReader.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /// @brief Test fixture for StringReader tests.
 class StringReaderTest : public testing::Test

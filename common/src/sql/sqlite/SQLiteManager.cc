@@ -1,6 +1,6 @@
 /**
  * @file SQLiteManager.cc
- * @brief SQLiteManager implementation â€” sqlite3 C API wrapper
+ * @brief SQLiteManager implementation â€?sqlite3 C API wrapper
  * @details Implements SQLite database operations: open/close via sqlite3_open,
  *          query execution via sqlite3_exec and sqlite3_prepare, and
  *          transaction control via BEGIN/COMMIT/ROLLBACK SQL commands.
@@ -12,7 +12,7 @@
 #include <glog/logging.h>
 #include <stdexcept>
 
-namespace common::sql::sqlite
+namespace cppforge::sql::sqlite
 {
     SQLiteManager::SQLiteManager() : db_(nullptr, &sqlite3_close)
     {

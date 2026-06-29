@@ -13,7 +13,7 @@
 
 #include "data_structure/graph/algorithm/BellmanFord.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     ShortestPathResult BellmanFord::shortestPath(const Graph& graph, const int32_t start)
     {
@@ -110,7 +110,7 @@ namespace common::data_structure::graph::algorithm
                 const auto v_idx = static_cast<size_t>(v);
                 if (dist[u_idx] + edge.weight() < dist[v_idx])
                 {
-                    return true;  // Can still relax â†’ negative cycle
+                    return true;  // Can still relax â†?negative cycle
                 }
             }
         }

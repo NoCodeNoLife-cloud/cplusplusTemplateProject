@@ -1,6 +1,6 @@
 /**
  * @file Object.cc
- * @brief Object base class â€” toString, hashCode, equals defaults
+ * @brief Object base class â€?toString, hashCode, equals defaults
  * @details Implements the virtual methods of the Object base class, providing
  *          default toString (type-info-based) and optional hashCode/equals
  *          support.  Subclasses override these for custom behaviour.
@@ -13,7 +13,7 @@
 #include <typeinfo>
 #include <glog/logging.h>
 
-namespace common::data_structure::base_type
+namespace cppforge::data_structure::base_type
 {
     const std::type_info& Object::getClass() const
     {

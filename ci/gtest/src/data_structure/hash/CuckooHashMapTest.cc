@@ -13,7 +13,7 @@
 
 #include "data_structure/hash/CuckooHashMap.hpp"
 
-using namespace common::data_structure::hash;
+using namespace cppforge::data_structure::hash;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Test fixture
@@ -533,7 +533,7 @@ TEST_F(CuckooHashMapTest, BucketCount_ReturnsSumOfBothTables)
 TEST_F(CuckooHashMapTest, Iteration_CoversAllThreeRegions)
 {
     // Custom hasher that returns constant 0, making every key share the same
-    // h1 and h2 positions — this forces the cuckoo-kick chain into the stash
+    // h1 and h2 positions �?this forces the cuckoo-kick chain into the stash
     struct ZeroHasher
     {
         std::size_t operator()(int) const { return 0; }

@@ -17,7 +17,7 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     /// @brief A buffer that stores 64-bit signed integers
     class LongBuffer final : public interface::io::IBuffer

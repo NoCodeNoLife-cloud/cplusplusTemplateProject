@@ -9,7 +9,7 @@
 
 #pragma once
 
-namespace common::interface::config
+namespace cppforge::interface::config
 {
     /// @brief Interface for configurable services.
     /// @details This interface provides a contract for services that require configuration.

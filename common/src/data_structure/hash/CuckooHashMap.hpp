@@ -8,7 +8,7 @@
  *          (kicked) to its alternate position.  After MAX_KICKS displacements
  *          without success, the entry is placed in the stash.  If the stash
  *          is also full, the tables are grown and all entries rehashed.
- *          Erase marks the slot empty with no back-shift needed â€” the two
+ *          Erase marks the slot empty with no back-shift needed â€?the two
  *          candidate positions guarantee find correctness without tombstones.
  *
  * @par Thread Safety
@@ -41,7 +41,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure::hash
+namespace cppforge::data_structure::hash
 {
     /// @brief A hash map using Cuckoo hashing with two tables and a stash.
     /// @tparam K Key type.
@@ -868,7 +868,7 @@ namespace common::data_structure::hash
                 }
             }
 
-            // MAX_KICKS exceeded â€” try stash
+            // MAX_KICKS exceeded â€?try stash
             for (auto& s : stash_)
             {
                 if (s.state == Slot::EMPTY)
@@ -880,7 +880,7 @@ namespace common::data_structure::hash
                 }
             }
 
-            // Stash full â€” rehash and retry
+            // Stash full â€?rehash and retry
             rehash_impl(table1_.size() * 2);
             return insert_new_entry(std::move(entry));
         }
@@ -930,7 +930,7 @@ namespace common::data_structure::hash
                 }
             }
 
-            // Extremely rare â€” grow and retry
+            // Extremely rare â€?grow and retry
             rehash_impl(table1_.size() * 2);
             insert_no_resize(std::move(entry));
         }
@@ -1020,7 +1020,7 @@ namespace common::data_structure::hash
 
                 const Slot* iter = (r == start_region) ? scan : begin_ptr;
 
-                // Intra-allocation scan â€” normal < is safe (same allocation)
+                // Intra-allocation scan â€?normal < is safe (same allocation)
                 while (iter < end_ptr)
                 {
                     if (iter->state == Slot::OCCUPIED)
@@ -1194,4 +1194,4 @@ namespace common::data_structure::hash
             }
         }
     };
-}  // namespace common::data_structure::hash
+}  // namespace cppforge::data_structure::hash

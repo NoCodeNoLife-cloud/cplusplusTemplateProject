@@ -1,6 +1,6 @@
 /**
  * @file Graph.cc
- * @brief Graph implementation â€” adjacency-list management
+ * @brief Graph implementation â€?adjacency-list management
  * @details Implements the adjacency-list-based graph: edge addition,
  *          neighbour retrieval, degree queries, and edge removal.
  *          Uses a vector of adjacency lists indexed by vertex ID.
@@ -14,7 +14,7 @@
 
 #include "data_structure/graph/Edge.hpp"
 
-namespace common::data_structure::graph
+namespace cppforge::data_structure::graph
 {
     Graph::Graph(const int32_t n) : num_nodes_(n)
     {

@@ -37,7 +37,7 @@
 #include "data_structure/tree/balanced/AVLTree.hpp"
 #include "data_structure/tree/node/TreeNode.hpp"
 
-namespace common::data_structure::map
+namespace cppforge::data_structure::map
 {
     namespace detail
     {
@@ -339,4 +339,4 @@ namespace common::data_structure::map
         }
     };
 
-} // namespace common::data_structure::map
+} // namespace cppforge::data_structure::map

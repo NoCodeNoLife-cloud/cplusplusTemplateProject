@@ -9,7 +9,7 @@
 
 #pragma once
 
-namespace common::interface::task
+namespace cppforge::interface::task
 {
     /// @brief Interface for timer tasks that can be executed by a timer.
     /// This interface defines the contract for tasks that can be scheduled

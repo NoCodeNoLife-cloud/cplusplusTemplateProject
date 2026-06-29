@@ -16,9 +16,9 @@
 #include <functional>
 #include <optional>
 
-namespace common::data_structure::concurrent
+namespace cppforge::data_structure::concurrent
 {
-    /// @brief Thread-safe associative map interface (key â†’ value).
+    /// @brief Thread-safe associative map interface (key â†?value).
     ///
     /// Maps keys to values with thread-safe insert, lookup, erase, and
     /// traversal operations.  All public methods are safe to call from
@@ -122,4 +122,4 @@ namespace common::data_structure::concurrent
         virtual void for_each_impl(std::function<void(const K&, const V&)>) const = 0;
     };
 
-} // namespace common::data_structure::concurrent
+} // namespace cppforge::data_structure::concurrent

@@ -1,6 +1,6 @@
 /**
  * @file BigDecimal.cc
- * @brief BigDecimal implementation â€” arbitrary-precision decimal arithmetic
+ * @brief BigDecimal implementation â€?arbitrary-precision decimal arithmetic
  * @details Implements arithmetic operations for arbitrary-precision decimal
  *          numbers: addition, subtraction, multiplication, division, and
  *          rounding.  The value is represented as an unscaled BigInteger
@@ -16,7 +16,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::data_structure::base_type
+namespace cppforge::data_structure::base_type
 {
     BigDecimal::BigDecimal(const std::string& str) : value_(0)
     {

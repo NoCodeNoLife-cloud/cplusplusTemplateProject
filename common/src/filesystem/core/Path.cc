@@ -1,6 +1,6 @@
 /**
  * @file Path.cc
- * @brief Path implementation — delegates to std::filesystem::path
+ * @brief Path implementation �?delegates to std::filesystem::path
  * @details All string-based path operations forward to the standard
  *          library.  Cross-class conversions (toFile, toDirectory)
  *          include the respective headers at .cc level only, avoiding
@@ -14,7 +14,7 @@
 
 #include <utility>
 
-namespace common::filesystem::core
+namespace cppforge::filesystem::core
 {
 // ── Construction ────────────────────────────────────────────
 
@@ -133,4 +133,4 @@ auto Path::toDirectory() const -> Directory
     return Directory(path_);
 }
 
-}  // namespace common::filesystem::core
+}  // namespace cppforge::filesystem::core

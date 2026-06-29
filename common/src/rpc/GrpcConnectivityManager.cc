@@ -1,6 +1,6 @@
 /**
  * @file GrpcConnectivityManager.cc
- * @brief GrpcConnectivityManager implementation â€” channel watch, health ping
+ * @brief GrpcConnectivityManager implementation â€?channel watch, health ping
  * @details Implements gRPC channel connectivity: watches state changes via
  *          grpc::Channel::GetState, runs health pings on idle channels, and
  *          manages reconnection with backoff timers.
@@ -12,7 +12,7 @@
 #include <thread>
 #include <utility>
 
-namespace common::rpc
+namespace cppforge::rpc
 {
     GrpcConnectivityManager::GrpcConnectivityManager(const std::shared_ptr<grpc::Channel>& channel)
         : channel_(channel), is_monitoring_(false), last_known_state_(GrpcConnectivityState::IDLE)
@@ -105,4 +105,4 @@ namespace common::rpc
     {
         return getCurrentState() == GrpcConnectivityState::READY;
     }
-} // namespace common::rpc
+} // namespace cppforge::rpc

@@ -1,6 +1,6 @@
 /**
  * @file StreamCipherFactory.cc
- * @brief StreamCipherFactory implementation â€” cipher type registration and creation
+ * @brief StreamCipherFactory implementation â€?cipher type registration and creation
  * @details Implements factory dispatch: maps cipher type strings ("caesar",
  *          "xor", "chacha20") to concrete StreamCipher constructors.
  */
@@ -15,7 +15,7 @@
 
 #include "ChaCha20Cipher.hpp"
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     std::unique_ptr<StreamCipher> StreamCipherFactory::create(Algorithm algo)
     {

@@ -17,7 +17,7 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     /// @brief A buffer that stores 32-bit integers.
     /// @details This class provides a way to store and manipulate a sequence of 32-bit integers in a buffer.

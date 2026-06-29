@@ -12,7 +12,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Topological sort algorithms for directed acyclic graphs
     /// @details sort() uses DFS-based post-order traversal, sortKahn() uses

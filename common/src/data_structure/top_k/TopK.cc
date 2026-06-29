@@ -1,6 +1,6 @@
 /**
  * @file TopK.cc
- * @brief TopK implementation â€” min-heap-based stream Top-K tracking
+ * @brief TopK implementation â€?min-heap-based stream Top-K tracking
  * @details Implements the bounded and unbounded modes of the TopK class.
  *          In bounded mode, a std::priority_queue (min-heap) of capacity K
  *          retains only the K largest elements seen.  In unbounded mode, the
@@ -13,7 +13,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     TopK::TopK() : max_capacity_(0)
     {

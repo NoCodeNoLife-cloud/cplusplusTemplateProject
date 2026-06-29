@@ -22,7 +22,7 @@
 // MySQL Connector/C++ 8.0+ X DevAPI headers
 #include <mysqlx/xdevapi.h>
 
-namespace common::sql::mysql
+namespace cppforge::sql::mysql
 {
     /// @brief Represents a single value in a query result that can be NULL, integer, double, or string
     using QueryValue = std::variant<std::monostate, int64_t, double, std::string>;

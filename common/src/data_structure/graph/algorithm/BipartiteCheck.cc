@@ -11,7 +11,7 @@
 
 #include <queue>
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     BipartiteResult BipartiteCheck::check(const Graph& graph)
     {

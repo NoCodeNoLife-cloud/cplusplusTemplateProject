@@ -15,8 +15,8 @@
 #include "thread/PeriodicActuator.hpp"
 #include "interface/task/ITimerTask.hpp"
 
-using namespace common::thread;
-using namespace common::interface::task;
+using namespace cppforge::thread;
+using namespace cppforge::interface::task;
 
 namespace
 {

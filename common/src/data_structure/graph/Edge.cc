@@ -1,13 +1,13 @@
 /**
  * @file Edge.cc
- * @brief Edge implementation â€” accessors and reversed-edge construction
+ * @brief Edge implementation â€?accessors and reversed-edge construction
  * @details Implements the Edge data type including source/target/weight
  *          accessors and the reversed() method for undirected contexts.
  */
 
 #include "data_structure/graph/Edge.hpp"
 
-namespace common::data_structure::graph
+namespace cppforge::data_structure::graph
 {
     Edge::Edge(const int32_t to, const int32_t weight)  : to_(to), weight_(weight)
     {

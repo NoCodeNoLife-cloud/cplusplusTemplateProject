@@ -14,7 +14,7 @@
 
 #include "aop/FunctionProfilerAspect.hpp"
 
-using namespace common::aop;
+using namespace cppforge::aop;
 
 /**
  * @brief Test fixture for FunctionProfilerAspect tests

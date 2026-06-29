@@ -21,7 +21,7 @@
 #include <string>
 #include <boost/uuid/uuid.hpp>
 
-namespace common::gen
+namespace cppforge::gen
 {
     /// @brief A utility class for generating UUIDs.
     /// This class provides functionality to generate random UUID strings.

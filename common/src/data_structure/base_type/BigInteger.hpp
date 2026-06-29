@@ -16,7 +16,7 @@
 #include <string>
 #include <boost/multiprecision/cpp_int.hpp>
 
-namespace common::data_structure::base_type
+namespace cppforge::data_structure::base_type
 {
     /// @brief A class representing a big integer using boost::multiprecision::cpp_int
     class BigInteger

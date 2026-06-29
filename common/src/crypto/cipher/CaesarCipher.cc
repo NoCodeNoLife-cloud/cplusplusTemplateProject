@@ -1,6 +1,6 @@
 /**
  * @file CaesarCipher.cc
- * @brief CaesarCipher implementation â€” shift encryption/decryption
+ * @brief CaesarCipher implementation â€?shift encryption/decryption
  * @details Implements the Caesar cipher: shift each alphabetic character by
  *          a fixed offset, preserving case and non-alphabetic characters.
  */
@@ -12,7 +12,7 @@
 #include <ranges>
 #include <glog/logging.h>
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     CaesarCipher::CaesarCipher(const int shift) : shift_(NormalizeShift(shift))
     {

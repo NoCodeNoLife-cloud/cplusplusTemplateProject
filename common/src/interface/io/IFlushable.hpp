@@ -8,7 +8,7 @@
 
 #pragma once
 
-namespace common::interface::io
+namespace cppforge::interface::io
 {
     /// @brief Interface for flushable objects.
     /// This interface defines a contract for objects that can be flushed,

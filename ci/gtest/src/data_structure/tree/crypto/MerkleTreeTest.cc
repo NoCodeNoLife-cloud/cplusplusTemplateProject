@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 
-using namespace common::data_structure::tree::crypto;
+using namespace cppforge::data_structure::tree::crypto;
 
 // ── Test Fixture ──────────────────────────────────────────────────────────
 
@@ -612,9 +612,9 @@ TEST_F(MerkleTreeTest, GetProof_ThreeLeaves_SiblingOrderCorrect)
         ASSERT_TRUE(proof.has_value());
         EXPECT_EQ(proof->siblings.size(), 2);
         EXPECT_EQ(proof->isLeft.size(), 2);
-        // First sibling: self-concatenation → sibling on the right.
+        // First sibling: self-concatenation �?sibling on the right.
         EXPECT_FALSE(proof->isLeft[0]);
-        // Second sibling: left child of root → sibling on the left.
+        // Second sibling: left child of root �?sibling on the left.
         EXPECT_TRUE(proof->isLeft[1]);
     }
 }
@@ -931,7 +931,7 @@ TEST_F(MerkleTreeTest, MoveConstructor_TransfersResources)
     EXPECT_EQ(moved.leafCount(), originalLeafCount);
     EXPECT_EQ(moved.rootHash(), originalRoot);
 
-    // original is now in a valid but unspecified state — at minimum,
+    // original is now in a valid but unspecified state �?at minimum,
     // leafCount must be 0 per default-constructed state (or moved-from).
     // We only guarantee no crashes; the standard moved-from state is empty.
     EXPECT_EQ(original.leafCount(), 0);

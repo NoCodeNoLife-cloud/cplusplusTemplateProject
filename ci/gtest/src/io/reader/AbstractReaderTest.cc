@@ -10,7 +10,7 @@
 
 #include "io/reader/AbstractReader.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /**
  * @brief Minimal concrete stub for testing AbstractReader base class behavior.

@@ -10,7 +10,7 @@
 
 #include "cache/LFUCache.hpp"
 
-using namespace common::cache;
+using namespace cppforge::cache;
 
 /**
  * @brief Test fixture for LFUCacheTest tests
@@ -426,12 +426,12 @@ TEST_F(LFUCacheTest, Eviction_ComplexFrequencyDistribution)
     EXPECT_TRUE(cache.put(3, "three")); // freq=1
     EXPECT_TRUE(cache.put(4, "four"));  // freq=1
 
-    // Increase frequencies: 1â†’3, 2â†’2, 3â†’1, 4â†’1
+    // Increase frequencies: 1â†?, 2â†?, 3â†?, 4â†?
     (void)cache.get(1);
     (void)cache.get(1);
     (void)cache.get(2);
 
-    // Freq: 1â†’3, 2â†’2, 3â†’1 (LRU: 3â†’4), 4â†’1 (LRU: 4â†’3)
+    // Freq: 1â†?, 2â†?, 3â†? (LRU: 3â†?), 4â†? (LRU: 4â†?)
     // Add 5: should evict 3 (lowest freq=1, LRU among 3,4 is 3)
     EXPECT_TRUE(cache.put(5, "five"));
     EXPECT_FALSE(cache.contains(3));

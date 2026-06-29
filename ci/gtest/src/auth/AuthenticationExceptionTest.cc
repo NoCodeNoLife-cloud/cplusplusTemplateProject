@@ -11,7 +11,7 @@
 
 #include "auth/AuthenticationException.hpp"
 
-using namespace common::auth;
+using namespace cppforge::auth;
 
 /**
  * @brief Test fixture for AuthenticationExceptionTest tests
@@ -105,7 +105,7 @@ TEST_F(AuthenticationExceptionTest, SpecialCharactersInMessage)
  */
 TEST_F(AuthenticationExceptionTest, UnicodeMessage)
 {
-    const std::string message = "认证失败：用户名或密码错误 🔐";
+    const std::string message = "认证失败：用户名或密码错�?🔐";
     const AuthenticationException ex(message);
 
     EXPECT_STREQ(ex.what(), message.c_str());

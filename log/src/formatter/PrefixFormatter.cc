@@ -9,7 +9,7 @@
 
 #include <iomanip>
 
-namespace glog::formatter
+namespace cppforge::glog::formatter
 {
     auto PrefixFormatter::MyPrefixFormatter(std::ostream& s, const google::LogMessage& m, [[maybe_unused]] void* data) noexcept -> void
     {

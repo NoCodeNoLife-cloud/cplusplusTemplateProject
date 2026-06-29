@@ -1,6 +1,6 @@
 /**
  * @file SQLiteManager.hpp
- * @brief SQLite database manager â€” connection, query, transaction control
+ * @brief SQLite database manager â€?connection, query, transaction control
  * @description Manages a SQLite database connection.  Provides open/close,
  *          DDL execution (CREATE TABLE, etc.), DML (INSERT, SELECT), and
  *          transaction management (BEGIN, COMMIT, ROLLBACK).  Wraps the
@@ -18,7 +18,7 @@
 #include <string_view>
 #include <vector>
 
-namespace common::sql::sqlite
+namespace cppforge::sql::sqlite
 {
     /// @brief SQLite database executor with RAII management and parameterized queries
     class SQLiteManager

@@ -1,6 +1,6 @@
 /**
  * @file Point3D.cc
- * @brief Point3D implementation â€” 3D arithmetic, distance, stream output
+ * @brief Point3D implementation â€?3D arithmetic, distance, stream output
  * @details Implements 3D point arithmetic (addition, subtraction, scalar
  *          multiplication), Euclidean and squared-distance calculations, and
  *          stream formatting.  Delegates all mathematical operations to
@@ -13,7 +13,7 @@
 #include <iomanip>
 #include <iostream>
 
-namespace common::data_structure::geometry
+namespace cppforge::data_structure::geometry
 {
     Point3D::Point3D()  = default;
 

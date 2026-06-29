@@ -73,7 +73,7 @@
 #include <xmmintrin.h>
 #endif
 
-namespace common::data_structure::concurrent
+namespace cppforge::data_structure::concurrent
 {
 
 // ── SeqLockable concept ──────────────────────────────────────────────────
@@ -226,7 +226,7 @@ public:
 
     // ── Construction / destruction ───────────────────────────────────────
 
-    /// @brief Default constructor — value-initialises the protected data.
+    /// @brief Default constructor �?value-initialises the protected data.
     SeqLock() {}
 
     /// @brief Constructs the seqlock with an initial value.
@@ -240,7 +240,7 @@ public:
     SeqLock(const SeqLock&) = delete;
     auto operator=(const SeqLock&) -> SeqLock& = delete;
 
-    /// @brief Move constructor — transfers the sequence counter and data.
+    /// @brief Move constructor �?transfers the sequence counter and data.
     /// @param other The seqlock to move from.  Left in a valid empty state.
     SeqLock(SeqLock&& other) noexcept;
 
@@ -442,11 +442,11 @@ auto SeqLock<T>::load() const -> T
 
     for (;;)
     {
-        // R1 — read the sequence counter (acquire ensures subsequent
+        // R1 �?read the sequence counter (acquire ensures subsequent
         //       loads are not hoisted before this point).
         seq0 = seq_.load(std::memory_order_acquire);
 
-        // Writer is active — spin-wait, then retry.
+        // Writer is active �?spin-wait, then retry.
         if (seq0 & 1)
         {
             spin_wait();
@@ -457,14 +457,14 @@ auto SeqLock<T>::load() const -> T
         // data_ copy (R2) before the seq_ load (R1).
         compiler_barrier();
 
-        // R2 — copy the protected data.
+        // R2 �?copy the protected data.
         copy = data_;
 
         // Compiler barrier: prevents the compiler from moving the
         // data_ copy (R2) after the seq_ re-read (R3).
         compiler_barrier();
 
-        // R3 — re-read the sequence counter.
+        // R3 �?re-read the sequence counter.
         seq1 = seq_.load(std::memory_order_acquire);
 
         // If both reads match and the value is even, the snapshot is
@@ -474,7 +474,7 @@ auto SeqLock<T>::load() const -> T
             return copy;
         }
 
-        // Mismatch (a writer modified seq between R1 and R3) — retry.
+        // Mismatch (a writer modified seq between R1 and R3) �?retry.
     }
 }
 
@@ -488,7 +488,7 @@ auto SeqLock<T>::try_load() const -> std::optional<T>
 
     if (seq0 & 1)
     {
-        // Writer is active — cannot obtain a consistent snapshot
+        // Writer is active �?cannot obtain a consistent snapshot
         // without spinning.
         return std::nullopt;
     }
@@ -504,7 +504,7 @@ auto SeqLock<T>::try_load() const -> std::optional<T>
         return copy;
     }
 
-    // Writer modified seq during the copy — inconsistent.
+    // Writer modified seq during the copy �?inconsistent.
     return std::nullopt;
 }
 
@@ -597,7 +597,7 @@ public:
         impl_.store(value);
     }
 
-    /// @brief Shared read — returns a consistent snapshot.
+    /// @brief Shared read �?returns a consistent snapshot.
     ///
     /// Acquires the internal mutex in shared mode, then delegates to SeqLock.
     /// @return A consistent copy of the protected data.
@@ -631,4 +631,4 @@ private:
     SeqLock<T>                impl_;
 };
 
-} // namespace common::data_structure::concurrent
+} // namespace cppforge::data_structure::concurrent

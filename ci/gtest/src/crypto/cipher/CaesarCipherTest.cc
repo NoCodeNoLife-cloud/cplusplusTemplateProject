@@ -8,7 +8,7 @@
 
 #include "crypto/cipher/CaesarCipher.hpp"
 
-using namespace common::crypto::cipher;
+using namespace cppforge::crypto::cipher;
 
 /**
  * @brief Test fixture for CaesarCipherTest tests

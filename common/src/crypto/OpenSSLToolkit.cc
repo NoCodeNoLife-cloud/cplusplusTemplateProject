@@ -1,6 +1,6 @@
 /**
  * @file OpenSSLToolkit.cc
- * @brief OpenSSLToolkit implementation â€” EVP digest, AES encrypt, RAND bytes
+ * @brief OpenSSLToolkit implementation â€?EVP digest, AES encrypt, RAND bytes
  * @details Implements the OpenSSL C++ wrapper: EVP_Digest for hash, EVP_CIPHER
  *          for AES, RAND_bytes for secure random, and PEM parsing for keys.
  */
@@ -19,7 +19,7 @@
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 
-namespace common::crypto
+namespace cppforge::crypto
 {
     void OpenSSLToolkit::deriveKey(const std::string& password, std::array<unsigned char, kKeySize>& key, const std::array<unsigned char, kSaltSize>& salt)
     {

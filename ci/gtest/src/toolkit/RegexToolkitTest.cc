@@ -11,7 +11,7 @@
 
 #include "toolkit/RegexToolkit.hpp"
 
-using namespace common::toolkit;
+using namespace cppforge::toolkit;
 
 /**
  * @brief Test fixture for RegexToolkitTest tests

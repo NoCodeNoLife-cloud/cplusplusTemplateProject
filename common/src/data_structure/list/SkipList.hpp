@@ -27,7 +27,7 @@
 #include <random>
 #include <vector>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief A probabilistic skip list with expected O(log n) operations.
     ///

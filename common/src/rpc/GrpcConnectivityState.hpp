@@ -11,7 +11,7 @@
 
 #pragma once
 
-namespace common::rpc
+namespace cppforge::rpc
 {
     /// @brief Enumeration representing gRPC channel connectivity states
     /// @details This enum maps to the underlying gRPC connectivity state machine,

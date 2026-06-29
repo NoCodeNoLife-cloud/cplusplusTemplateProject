@@ -32,7 +32,7 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief A double-ended queue backed by a circular buffer.
     ///

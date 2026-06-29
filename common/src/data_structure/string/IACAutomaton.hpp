@@ -8,7 +8,7 @@
  *          n is the text length and m is the total number of matches.
  *
  * Reference: Aho, A.V. and Corasick, M.J., "Efficient string matching: an aid to
- *            bibliographic search", Communications of the ACM, 18(6):333â€“340, 1975.
+ *            bibliographic search", Communications of the ACM, 18(6):333â€?40, 1975.
  */
 
 #pragma once
@@ -19,7 +19,7 @@
 #include <string_view>
 #include <vector>
 
-namespace common::data_structure::string
+namespace cppforge::data_structure::string
 {
     /// @brief Describes a single match found by the automaton.
     struct MatchResult
@@ -113,4 +113,4 @@ namespace common::data_structure::string
         getPattern(std::size_t index) const = 0;
     };
 
-} // namespace common::data_structure::string
+} // namespace cppforge::data_structure::string

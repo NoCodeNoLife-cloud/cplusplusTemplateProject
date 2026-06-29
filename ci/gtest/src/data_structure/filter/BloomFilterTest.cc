@@ -9,7 +9,7 @@
 
 #include "data_structure/filter/BloomFilter.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 /**
  * @brief Test fixture for BloomFilter tests

@@ -13,7 +13,7 @@
 
 #include "param/GLogParam.hpp"
 
-namespace glog::config
+namespace cppforge::glog::config
 {
     /// @brief Configures Google Logging (glog) library with specified parameters
     /// @details This class handles the initialization and configuration of the glog library

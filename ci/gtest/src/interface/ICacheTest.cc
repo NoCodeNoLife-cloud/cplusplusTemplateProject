@@ -12,7 +12,7 @@
 
 #include "interface/ICache.hpp"
 
-using namespace common::interface::cache;
+using namespace cppforge::interface::cache;
 
 /**
  * @brief Minimal concrete stub implementing ICache for contract testing.

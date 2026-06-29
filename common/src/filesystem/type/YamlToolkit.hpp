@@ -14,7 +14,7 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 
-namespace common::filesystem::type
+namespace cppforge::filesystem::type
 {
     /// @brief A utility class for performing CRUD operations on YAML files.
     /// @details This class provides static methods to create, read, update, and delete YAML files,

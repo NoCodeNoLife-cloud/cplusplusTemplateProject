@@ -10,7 +10,7 @@
 
 #include "io/reader/AbstractInputStream.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /**
  * @brief Minimal concrete stub for testing AbstractInputStream base class behavior.
@@ -93,7 +93,7 @@ TEST_F(AbstractInputStreamTest, ReadIntoBuffer)
     EXPECT_EQ(buf[1], std::byte{0x42});
     EXPECT_EQ(buf[2], std::byte{0x43});
     EXPECT_EQ(buf[3], std::byte{0x44});
-    // EOF not yet set â€” base read(buf) resets eof_ and no extra read() triggers it
+    // EOF not yet set â€?base read(buf) resets eof_ and no extra read() triggers it
     EXPECT_FALSE(stream_->isEof());
     // One more read() triggers EOF
     EXPECT_EQ(stream_->read(), static_cast<std::byte>(-1));
@@ -347,7 +347,7 @@ TEST_F(AbstractInputStreamTest, SequentialReadBuffer)
     EXPECT_EQ(buf2[0], std::byte{0x43});
     EXPECT_EQ(buf2[1], std::byte{0x44});
 
-    // Not yet eof â€” an extra read() triggers it
+    // Not yet eof â€?an extra read() triggers it
     EXPECT_FALSE(stream_->isEof());
     EXPECT_EQ(stream_->read(), static_cast<std::byte>(-1));
     EXPECT_TRUE(stream_->isEof());

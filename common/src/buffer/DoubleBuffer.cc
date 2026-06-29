@@ -1,6 +1,6 @@
 /**
  * @file DoubleBuffer.cc
- * @brief DoubleBuffer implementation â€” get/put/flip/compact/array operations
+ * @brief DoubleBuffer implementation â€?get/put/flip/compact/array operations
  * @details Implements double buffer operations: absolute and relative get/put,
  *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     DoubleBuffer::DoubleBuffer(const size_t capacity)
     {

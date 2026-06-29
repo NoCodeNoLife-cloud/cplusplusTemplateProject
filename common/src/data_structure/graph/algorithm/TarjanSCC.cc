@@ -4,7 +4,7 @@
  * @details A single DFS pass assigns each node a unique index and computes
  *          a lowlink value (the smallest index reachable via the DFS subtree
  *          and at most one back edge). When a node's index equals its lowlink,
- *          it is the root of an SCC â€” all nodes on the stack above it form
+ *          it is the root of an SCC â€?all nodes on the stack above it form
  *          that SCC. Time complexity: O(V+E).
  */
 
@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <stack>
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     namespace
     {

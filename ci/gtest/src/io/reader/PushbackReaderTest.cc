@@ -5,7 +5,7 @@
 #include "io/reader/PushbackReader.hpp"
 #include "io/reader/StringReader.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /// @brief Test fixture for PushbackReader tests.
 class PushbackReaderTest : public testing::Test

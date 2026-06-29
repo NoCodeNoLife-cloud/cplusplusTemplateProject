@@ -18,7 +18,7 @@
 #include <string_view>
 #include <vector>
 
-namespace common::crypto::hash
+namespace cppforge::crypto::hash
 {
     /**
      * @brief Abstract strategy interface for hash algorithms.

@@ -24,7 +24,7 @@
 #include "interface/io/ICloseable.hpp"
 #include "interface/io/IReadable.hpp"
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     /// @brief Abstract base class for reading character streams.
     /// This class provides a standard interface for reading character data from various sources.

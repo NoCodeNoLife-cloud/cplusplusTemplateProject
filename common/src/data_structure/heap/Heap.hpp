@@ -36,14 +36,14 @@
 #include <utility>
 #include <vector>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief A generic binary heap with configurable ordering.
     ///
     /// @tparam T       Element type (must satisfy std::copyable).
     /// @tparam Compare Comparison functor defining the heap order.
-    ///                 std::less<T>  â†’ max-heap (root is largest).
-    ///                 std::greater<T> â†’ min-heap (root is smallest).
+    ///                 std::less<T>  â†?max-heap (root is largest).
+    ///                 std::greater<T> â†?min-heap (root is smallest).
     ///
     /// @par Thread Safety
     /// This class is **not** thread-safe.  External synchronisation is required

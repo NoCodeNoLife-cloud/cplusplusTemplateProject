@@ -1,6 +1,6 @@
 /**
  * @file IntBuffer.cc
- * @brief IntBuffer implementation â€” get/put/flip/compact/array operations
+ * @brief IntBuffer implementation â€?get/put/flip/compact/array operations
  * @details Implements int32 buffer operations: absolute and relative get/put,
  *          bulk array transfer, and buffer state management (flip/clear/compact).
  */
@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     IntBuffer::IntBuffer(const size_t capacity)
     {

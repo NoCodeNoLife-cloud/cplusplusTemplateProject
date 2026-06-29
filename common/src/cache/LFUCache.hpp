@@ -36,7 +36,7 @@
 
 #include "interface/ICache.hpp"
 
-namespace common::cache
+namespace cppforge::cache
 {
     /// @brief Template class implementing an LFU (Least Frequently Used) cache
     /// @tparam Key Type of the key used to identify cache entries

@@ -25,7 +25,7 @@ namespace server_app::task
 
     void ServerTask::init()
     {
-        const glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().applicationDevConfigPath()};
+        const cppforge::glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().applicationDevConfigPath()};
         log_configurator.execute();
         DLOG(INFO) << fmt::format("Initializing ServerTask with config path: {}", config::ConfigParam::getInstance().applicationDevConfigPath());
     }

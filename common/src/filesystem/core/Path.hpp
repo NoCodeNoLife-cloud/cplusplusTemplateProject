@@ -26,13 +26,13 @@
 #include <string>
 
 // ── Forward declarations ──────────────────────────────────────────
-namespace common::filesystem::core
+namespace cppforge::filesystem::core
 {
 class File;
 class Directory;
-}  // namespace common::filesystem::core
+}  // namespace cppforge::filesystem::core
 
-namespace common::filesystem::core
+namespace cppforge::filesystem::core
 {
 // ── Path (value type) ─────────────────────────────────────────────
 class Path final
@@ -84,13 +84,13 @@ private:
     std::filesystem::path path_;
 };
 
-}  // namespace common::filesystem::core
+}  // namespace cppforge::filesystem::core
 
 // ── std::hash specialization ─────────────────────────────────────
 template <>
-struct std::hash<common::filesystem::core::Path>
+struct std::hash<cppforge::filesystem::core::Path>
 {
-    [[nodiscard]] auto operator()(const common::filesystem::core::Path& p) const noexcept -> size_t
+    [[nodiscard]] auto operator()(const cppforge::filesystem::core::Path& p) const noexcept -> size_t
     {
         return p.hashCode();
     }

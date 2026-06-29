@@ -7,7 +7,7 @@
  *          std::call_once or C++11 magic statics.
  *
  * @par Thread Safety
- * Thread-safe by design â€” get() provides safe access after lazy init.
+ * Thread-safe by design â€?get() provides safe access after lazy init.
  */
 
 #pragma once
@@ -16,7 +16,7 @@
 #include <stdexcept>
 #include <type_traits>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     /// @brief A wrapper class for static object initialization and management.
     /// Ensures thread-safe initialization of static objects with lazy initialization support.

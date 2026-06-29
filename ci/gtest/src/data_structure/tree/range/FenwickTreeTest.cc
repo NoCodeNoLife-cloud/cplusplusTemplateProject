@@ -9,7 +9,7 @@
 
 #include "data_structure/tree/range/FenwickTree.hpp"
 
-using namespace common::data_structure::tree::range;
+using namespace cppforge::data_structure::tree::range;
 
 class FenwickTreeTest : public testing::Test
 {

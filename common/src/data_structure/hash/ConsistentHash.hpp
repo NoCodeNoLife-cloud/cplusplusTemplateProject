@@ -1,6 +1,6 @@
 /**
  * @file ConsistentHash.hpp
- * @brief ConsistentHash — consistent hash ring with virtual nodes
+ * @brief ConsistentHash �?consistent hash ring with virtual nodes
  * @details A production-grade consistent hash ring that maps keys to nodes
  *          using a circular hash space with virtual nodes for improved load
  *          distribution.  When nodes are added or removed, only O(1/N) of
@@ -23,7 +23,7 @@
 #include <string_view>
 #include <vector>
 
-namespace common::data_structure::hash
+namespace cppforge::data_structure::hash
 {
     /// @brief A production-grade consistent hash ring with virtual nodes.
     ///
@@ -32,14 +32,14 @@ namespace common::data_structure::hash
     /// via an internal std::mutex.
     ///
     /// @par Hash Function
-    /// Uses MurmurHash2-64A with the MurmurHash3 fmix64 finaliser — the
-    /// same hash used by the project's HyperLogLog implementation — for
+    /// Uses MurmurHash2-64A with the MurmurHash3 fmix64 finaliser �?the
+    /// same hash used by the project's HyperLogLog implementation �?for
     /// fast, well-distributed 64-bit hashes.
     ///
     /// @par Virtual Nodes
     /// Each physical node is represented by multiple virtual replicas on
     /// the ring.  The default of 3 virtual nodes is suitable for simple
-    /// setups; for production clusters we recommend 100–200 virtual nodes
+    /// setups; for production clusters we recommend 100�?00 virtual nodes
     /// per physical node for balanced distributions.
     ///
     /// @par Usage Example
@@ -120,7 +120,7 @@ namespace common::data_structure::hash
             uint32_t index;        ///< Virtual replica index [0, count).
         };
 
-        /// @brief Ring storage: hash value → virtual node.
+        /// @brief Ring storage: hash value �?virtual node.
         ///        Using std::map for O(log N) lookup with natural ordering.
         using Ring = std::map<uint64_t, VNode>;
 
@@ -129,7 +129,7 @@ namespace common::data_structure::hash
         mutable std::mutex mutex_;
         Ring ring_;                                     ///< Circular hash space.
         std::map<NodeName, uint32_t, std::less<>>
-            nodeVNodeCounts_;                           ///< Physical node → virtual count.
+            nodeVNodeCounts_;                           ///< Physical node �?virtual count.
 
         // ── Internal helpers ───────────────────────────────────────────
 
@@ -152,4 +152,4 @@ namespace common::data_structure::hash
                                                    uint32_t index);
     };
 
-} // namespace common::data_structure::hash
+} // namespace cppforge::data_structure::hash

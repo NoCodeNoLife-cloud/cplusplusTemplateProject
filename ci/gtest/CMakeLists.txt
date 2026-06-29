@@ -20,9 +20,6 @@ set(CI_GTEST_SHARED_SRC
 # ── Common include directories ─────────────────────────────────────────
 set(CI_GTEST_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../common/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../proto
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../log/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../client/src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../server/src
 )
@@ -35,7 +32,7 @@ set(CI_GTEST_LIBS
     yaml-cpp::yaml-cpp
     rapidjson
     OpenSSL::SSL OpenSSL::Crypto
-    Microsoft::DirectXMath
+    $<$<PLATFORM_ID:Windows>:Microsoft::DirectXMath>
     magic_enum::magic_enum
     Boost::serialization
     common_pkg

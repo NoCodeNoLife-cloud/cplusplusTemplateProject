@@ -21,7 +21,7 @@
 
 #include "interface/task/IStartupTask.hpp"
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     /// @brief A factory class for creating objects of type T.
     /// @tparam T The base type of objects that this factory can create.

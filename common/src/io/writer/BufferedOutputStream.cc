@@ -1,6 +1,6 @@
 /**
  * @file BufferedOutputStream.cc
- * @brief BufferedOutputStream implementation â€” buffer flush, write-through
+ * @brief BufferedOutputStream implementation â€?buffer flush, write-through
  * @details Implements buffered byte output: write() copies data to the
  *          internal buffer (via memcpy), flushBuffer() writes the buffer
  *          to the underlying stream, and flush()/close() ensure all
@@ -12,7 +12,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     BufferedOutputStream::BufferedOutputStream(std::unique_ptr<AbstractOutputStream> out) : BufferedOutputStream(std::move(out), DEFAULT_BUFFER_SIZE)
     {

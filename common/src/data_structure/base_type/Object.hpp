@@ -15,7 +15,7 @@
 #include <memory>
 #include <string>
 
-namespace common::data_structure::base_type
+namespace cppforge::data_structure::base_type
 {
     /// @brief Base class for all objects in the system.
     /// @details This class provides basic functionality for type information, hashing, string representation,

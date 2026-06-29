@@ -1,6 +1,6 @@
 /**
  * @file UserAuthenticator.cc
- * @brief UserAuthenticator implementation â€” login, session, credential store
+ * @brief UserAuthenticator implementation â€?login, session, credential store
  * @details Implements user authentication: credential validation against store,
  *          session token generation (UUID-based), and login/logout lifecycle.
  */
@@ -45,7 +45,7 @@ namespace
     }
 }
 
-namespace common::auth
+namespace cppforge::auth
 {
     UserAuthenticator::UserAuthenticator(const std::string& db_path, const PasswordPolicy& policy) : password_policy_(policy), password_sql_(db_path)
     {

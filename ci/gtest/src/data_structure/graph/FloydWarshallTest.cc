@@ -10,8 +10,8 @@
 
 #include "data_structure/graph/algorithm/FloydWarshall.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for FloydWarshall tests
@@ -26,7 +26,7 @@ protected:
 /**
  * @brief Test Floyd-Warshall on a simple line graph
  * @details Verifies all-pairs shortest distances in a 4-node line graph:
- *          distance 0â†’3 = 6, 2â†’3 = 3, and no negative cycle
+ *          distance 0â†? = 6, 2â†? = 3, and no negative cycle
  */
 TEST_F(FloydWarshallTest, Compute_SimpleGraph)
 {
@@ -87,7 +87,7 @@ TEST_F(FloydWarshallTest, Compute_SingleNode)
 /**
  * @brief Test Floyd-Warshall with intermediate path optimization
  * @details Verifies that the algorithm finds shorter paths via intermediate nodes:
- *          0â†’2 = 7 (via 1) instead of direct 10
+ *          0â†? = 7 (via 1) instead of direct 10
  */
 TEST_F(FloydWarshallTest, Compute_WithIntermediate)
 {

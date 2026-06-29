@@ -11,7 +11,7 @@
 
 #include "data_structure/list/SkipList.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 /**
  * @brief Test fixture for SkipListTest tests

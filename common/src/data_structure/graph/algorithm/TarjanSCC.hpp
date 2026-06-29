@@ -14,7 +14,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Tarjan's algorithm for finding strongly connected components
     /// @details A single DFS pass assigns indices and tracks reachable ancestors

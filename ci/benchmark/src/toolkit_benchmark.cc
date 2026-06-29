@@ -22,10 +22,10 @@
 //  BloomFilter
 // ══════════════════════════════════════════════════════════════════════════
 
-/// @brief Creates a BloomFilter configured for @p expected_elements with 1 % FP rate.
-static common::data_structure::BloomFilter create_bloom(const size_t expected_elements)
+/// @brief Creates a BloomFilter configured for @p expected_elements with 1�? FP rate.
+static cppforge::data_structure::BloomFilter create_bloom(const size_t expected_elements)
 {
-    common::data_structure::BloomParameters params;
+    cppforge::data_structure::BloomParameters params;
     params.projected_element_count = expected_elements;
     params.false_positive_probability = 0.01;
     params.minimum_size = 1;
@@ -33,7 +33,7 @@ static common::data_structure::BloomFilter create_bloom(const size_t expected_el
     params.minimum_number_of_hashes = 1;
     params.maximum_number_of_hashes = 20;
     (void)params.compute_optimal_parameters();
-    return common::data_structure::BloomFilter(params);
+    return cppforge::data_structure::BloomFilter(params);
 }
 
 /// @brief BloomFilter insert throughput with random string keys.
@@ -53,7 +53,7 @@ static void BM_BloomFilter_Insert(benchmark::State& state)
 }
 BENCHMARK(BM_BloomFilter_Insert)->Arg(1000)->Arg(10000);
 
-/// @brief BloomFilter contains throughput — all queries target present keys.
+/// @brief BloomFilter contains throughput �?all queries target present keys.
 static void BM_BloomFilter_Contains_Hit(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -74,7 +74,7 @@ static void BM_BloomFilter_Contains_Hit(benchmark::State& state)
 }
 BENCHMARK(BM_BloomFilter_Contains_Hit)->Arg(1000)->Arg(10000);
 
-/// @brief BloomFilter contains throughput — all queries target absent keys.
+/// @brief BloomFilter contains throughput �?all queries target absent keys.
 static void BM_BloomFilter_Contains_Miss(benchmark::State& state)
 {
     const auto n = static_cast<size_t>(state.range(0));
@@ -105,7 +105,7 @@ static void BM_StringToolkit_Split(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        auto parts = common::toolkit::StringToolkit::split(text, ',');
+        auto parts = cppforge::toolkit::StringToolkit::split(text, ',');
         benchmark::DoNotOptimize(parts);
     }
 }
@@ -119,7 +119,7 @@ static void BM_StringToolkit_ReplaceAll(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        auto result = common::toolkit::StringToolkit::replaceAll(text, "XYZ", "REPLACED");
+        auto result = cppforge::toolkit::StringToolkit::replaceAll(text, "XYZ", "REPLACED");
         benchmark::DoNotOptimize(result);
     }
 }
@@ -133,7 +133,7 @@ static void BM_StringToolkit_Repeat(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        auto result = common::toolkit::StringToolkit::repeat(base, state.range(0));
+        auto result = cppforge::toolkit::StringToolkit::repeat(base, state.range(0));
         benchmark::DoNotOptimize(result);
     }
 }
@@ -147,7 +147,7 @@ static void BM_StringToolkit_Trim(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        auto result = common::toolkit::StringToolkit::trim(text);
+        auto result = cppforge::toolkit::StringToolkit::trim(text);
         benchmark::DoNotOptimize(result);
     }
 }
@@ -161,7 +161,7 @@ static void BM_StringToolkit_ToUpperCase(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        auto result = common::toolkit::StringToolkit::toUpperCase(text);
+        auto result = cppforge::toolkit::StringToolkit::toUpperCase(text);
         benchmark::DoNotOptimize(result);
     }
 }
@@ -179,7 +179,7 @@ static void BM_RegexToolkit_IsMatch(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        bool match = common::toolkit::RegexToolkit::is_match("user.name+tag@example.com", pattern);
+        bool match = cppforge::toolkit::RegexToolkit::is_match("user.name+tag@example.com", pattern);
         benchmark::DoNotOptimize(match);
     }
 }
@@ -195,7 +195,7 @@ static void BM_RegexToolkit_GetMatches(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        auto matches = common::toolkit::RegexToolkit::get_matches(text, pattern);
+        auto matches = cppforge::toolkit::RegexToolkit::get_matches(text, pattern);
         benchmark::DoNotOptimize(matches);
     }
 }
@@ -211,7 +211,7 @@ static void BM_RegexToolkit_ReplaceAll(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        auto result = common::toolkit::RegexToolkit::replace_all(text, pattern, "_");
+        auto result = cppforge::toolkit::RegexToolkit::replace_all(text, pattern, "_");
         benchmark::DoNotOptimize(result);
     }
 }
@@ -221,7 +221,7 @@ BENCHMARK(BM_RegexToolkit_ReplaceAll)->Arg(100)->Arg(1000);
 //  RadixToolkit
 // ══════════════════════════════════════════════════════════════════════════
 
-/// @brief RadixToolkit::convert_to_string throughput across bases 2–36.
+/// @brief RadixToolkit::convert_to_string throughput across bases 2�?6.
 static void BM_RadixToolkit_ConvertToString(benchmark::State& state)
 {
     const auto base = static_cast<int>(state.range(0));
@@ -230,7 +230,7 @@ static void BM_RadixToolkit_ConvertToString(benchmark::State& state)
     {
         constexpr uint64_t value = 0xDEADBEEFCAFEBABEULL;
         (void)_;
-        auto s = common::toolkit::RadixToolkit::convert_to_string(value, base, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        auto s = cppforge::toolkit::RadixToolkit::convert_to_string(value, base, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         benchmark::DoNotOptimize(s);
     }
 }
@@ -248,7 +248,7 @@ static void BM_RadixToolkit_ConvertFromString(benchmark::State& state)
     for (auto _ : state)
     {
         (void)_;
-        auto val = common::toolkit::RadixToolkit::convert_from_string<uint64_t>(str, base);
+        auto val = cppforge::toolkit::RadixToolkit::convert_from_string<uint64_t>(str, base);
         benchmark::DoNotOptimize(val);
     }
 }

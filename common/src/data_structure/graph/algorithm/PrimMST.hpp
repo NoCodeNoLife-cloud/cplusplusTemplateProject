@@ -13,7 +13,7 @@
 #include "data_structure/graph/Graph.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Prim's Minimum Spanning Tree algorithm
     /// @details Grows the MST one node at a time by adding the cheapest edge

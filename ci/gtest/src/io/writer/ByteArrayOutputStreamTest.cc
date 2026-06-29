@@ -11,7 +11,7 @@
 
 #include "io/writer/ByteArrayOutputStream.hpp"
 
-using namespace common::io::writer;
+using namespace cppforge::io::writer;
 
 /// @brief Test fixture for ByteArrayOutputStream tests.
 class ByteArrayOutputStreamTest : public testing::Test

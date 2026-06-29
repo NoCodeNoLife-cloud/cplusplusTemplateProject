@@ -1,6 +1,6 @@
 /**
  * @file XorBitCipher.cc
- * @brief XorBitCipher implementation â€” repeating-key XOR encryption/decryption
+ * @brief XorBitCipher implementation â€?repeating-key XOR encryption/decryption
  * @details Implements symmetric XOR cipher: iterates through key bytes and
  *          XORs with plaintext/ciphertext.  Key wraps around when exhausted.
  */
@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <glog/logging.h>
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     void XorBitCipher::initialize(const std::vector<uint8_t>& key,
                                   const std::vector<uint8_t>& /* nonce */)

@@ -1,6 +1,6 @@
 /**
  * @file RegexToolkit.cc
- * @brief RegexToolkit implementation â€” regex match/search/replace/split
+ * @brief RegexToolkit implementation â€?regex match/search/replace/split
  * @details Implements static regex utility methods: std::regex_match for
  *          full validation, std::regex_search for extraction, std::regex_replace
  *          for substitution, and custom split using std::sregex_token_iterator.
@@ -15,7 +15,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     bool RegexToolkit::is_match(const std::string& text, const std::string& pattern, const std::regex_constants::syntax_option_type flags)
     {

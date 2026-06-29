@@ -1,6 +1,6 @@
 /**
  * @file TreiberStackTest.cc
- * @brief Unit tests for TreiberStack — single-threaded functional and
+ * @brief Unit tests for TreiberStack �?single-threaded functional and
  *        multithreaded concurrent tests
  * @details Comprehensive tests covering construction, basic operations,
  *          LIFO ordering, edge cases, move semantics, and concurrent
@@ -32,7 +32,7 @@
 #include <utility>
 #include <vector>
 
-using namespace common::data_structure::concurrent;
+using namespace cppforge::data_structure::concurrent;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Test fixture
@@ -169,7 +169,7 @@ TEST_F(TreiberStackTest, InterleavedPushPop)
     s.push(2);
     s.push(3);
 
-    // Pop some — should see 3, then 2.
+    // Pop some �?should see 3, then 2.
     EXPECT_EQ(*s.try_pop(), 3);
     EXPECT_EQ(*s.try_pop(), 2);
 
@@ -177,7 +177,7 @@ TEST_F(TreiberStackTest, InterleavedPushPop)
     s.push(4);
     s.push(5);
 
-    // Pop remaining — LIFO: 5, 4, 1.
+    // Pop remaining �?LIFO: 5, 4, 1.
     EXPECT_EQ(*s.try_pop(), 5);
     EXPECT_EQ(*s.try_pop(), 4);
     EXPECT_EQ(*s.try_pop(), 1);
@@ -186,7 +186,7 @@ TEST_F(TreiberStackTest, InterleavedPushPop)
 }
 
 /**
- * @brief Push N items, pop N items — verify reverse order and values.
+ * @brief Push N items, pop N items �?verify reverse order and values.
  * @details Exercises bulk insertion and full drain on a stack.
  */
 TEST_F(TreiberStackTest, BulkPushPop)
@@ -269,7 +269,7 @@ TEST_F(TreiberStackTest, PushPopCycle_MultipleTimes)
         EXPECT_TRUE(s.empty());
         EXPECT_EQ(s.size(), 0);
 
-        // Pop again — must still be nullopt.
+        // Pop again �?must still be nullopt.
         EXPECT_FALSE(s.try_pop().has_value());
     }
 }
@@ -361,7 +361,7 @@ TEST_F(TreiberStackTest, LargeMovableType)
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-//  6. Interface completeness — IConcurrentStack methods are callable
+//  6. Interface completeness �?IConcurrentStack methods are callable
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -382,7 +382,7 @@ TEST_F(TreiberStackTest, FullInterfaceSmoke)
     s.push(2);
     EXPECT_EQ(s.size(), 2);
 
-    // Pop — LIFO gives last-pushed first.
+    // Pop �?LIFO gives last-pushed first.
     EXPECT_EQ(*s.try_pop(), 2);
     EXPECT_EQ(s.size(), 1);
 
@@ -637,7 +637,7 @@ TEST_F(TreiberStackTest, ConcurrentAllPushPop_Stress)
     {
         if (std::chrono::steady_clock::now() >= deadline)
         {
-            break;  // Timed out — will fail below.
+            break;  // Timed out �?will fail below.
         }
         std::this_thread::yield();
     }
@@ -659,7 +659,7 @@ TEST_F(TreiberStackTest, ConcurrentAllPushPop_Stress)
         EXPECT_EQ(c, 1) << "Item " << i << " was consumed " << c << " times";
     }
 
-    // Stack should be empty (or nearly so — allow a small race window).
+    // Stack should be empty (or nearly so �?allow a small race window).
     EXPECT_TRUE(stack.empty());
     EXPECT_EQ(stack.size(), 0);
 }
@@ -669,7 +669,7 @@ TEST_F(TreiberStackTest, ConcurrentAllPushPop_Stress)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief All threads push concurrently — validate final size and content.
+ * @brief All threads push concurrently �?validate final size and content.
  * @details 8 threads each push 1000 items.  After all join, pop
  *          and verify that all items are present exactly once.
  */
@@ -712,7 +712,7 @@ TEST_F(TreiberStackTest, ConcurrentPushOnly_SizeCorrect)
         const auto val = stack.try_pop();
         if (!val.has_value())
         {
-            break;  // Stack empty before all items drained — will fail below.
+            break;  // Stack empty before all items drained �?will fail below.
         }
         seen[static_cast<std::size_t>(*val)]++;
     }
@@ -729,7 +729,7 @@ TEST_F(TreiberStackTest, ConcurrentPushOnly_SizeCorrect)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
- * @brief Concurrent mixed push/pop — no crash or data corruption.
+ * @brief Concurrent mixed push/pop �?no crash or data corruption.
  * @details Each thread repeatedly pushes or pops from a shared stack
  *          for a fixed duration (~2 s).  After all threads stop, the total
  *          produced vs consumed counts are validated (may not be exact due
@@ -787,7 +787,7 @@ TEST_F(TreiberStackTest, MixedPushPop_NoCorruption)
     // with internal invariants (no wraparound, no corruption).
     EXPECT_LE(s, static_cast<std::size_t>(ops_done.load() / 2 + CONCUR_NUM_THREADS));
 
-    // Drain remaining items — must not crash.
+    // Drain remaining items �?must not crash.
     int drain_count = 0;
     while (stack.try_pop().has_value())
     {

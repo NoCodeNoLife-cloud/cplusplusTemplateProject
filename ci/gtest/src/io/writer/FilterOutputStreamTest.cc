@@ -12,7 +12,7 @@
 #include "io/writer/FilterOutputStream.hpp"
 #include "io/writer/ByteArrayOutputStream.hpp"
 
-using namespace common::io::writer;
+using namespace cppforge::io::writer;
 
 /// @brief Test fixture for FilterOutputStream tests using ByteArrayOutputStream.
 class FilterOutputStreamTest : public testing::Test

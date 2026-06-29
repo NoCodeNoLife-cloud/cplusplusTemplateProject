@@ -1,6 +1,6 @@
 /**
  * @file SimpleDateFormatter.cc
- * @brief SimpleDateFormatter implementation â€” pattern parsing and strftime wrapper
+ * @brief SimpleDateFormatter implementation â€?pattern parsing and strftime wrapper
  * @details Implements pattern-based date formatting: converts Java-style
  *          patterns ("yyyy-MM-dd") to strftime format strings and delegates
  *          to std::put_time for actual formatting.
@@ -17,7 +17,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::time
+namespace cppforge::time
 {
     SimpleDateFormatter::SimpleDateFormatter(const std::string& pattern)
     {

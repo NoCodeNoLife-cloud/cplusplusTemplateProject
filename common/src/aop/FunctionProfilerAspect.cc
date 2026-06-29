@@ -1,6 +1,6 @@
 /**
  * @file FunctionProfilerAspect.cc
- * @brief FunctionProfilerAspect implementation â€” timer RAII logic
+ * @brief FunctionProfilerAspect implementation â€?timer RAII logic
  * @details Implements the AOP profiler aspect: constructor starts a timer,
  *          destructor stops it and logs the elapsed duration if it exceeds
  *          the configurable threshold.
@@ -11,7 +11,7 @@
 #include <utility>
 #include <glog/logging.h>
 
-namespace common::aop
+namespace cppforge::aop
 {
     FunctionProfilerAspect::FunctionProfilerAspect(std::string function_name) : profiler_(function_name), function_name_(std::move(function_name))
     {

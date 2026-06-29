@@ -11,7 +11,7 @@
 
 #include "data_structure/tree/spatial/Quadtree.hpp"
 
-using namespace common::data_structure::tree::spatial;
+using namespace cppforge::data_structure::tree::spatial;
 
 /**
  * @brief Test fixture for Quadtree tests

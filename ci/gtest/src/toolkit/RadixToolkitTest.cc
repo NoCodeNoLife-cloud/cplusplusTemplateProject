@@ -10,7 +10,7 @@
 
 #include "toolkit/RadixToolkit.hpp"
 
-using namespace common::toolkit;
+using namespace cppforge::toolkit;
 
 /**
  * @brief Test fixture for RadixToolkitTest tests

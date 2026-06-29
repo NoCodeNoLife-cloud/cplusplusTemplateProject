@@ -21,7 +21,7 @@
 #pragma once
 #include <iosfwd>
 
-namespace common::data_structure::geometry
+namespace cppforge::data_structure::geometry
 {
     /// @brief A 3D geometric point with double precision.
     ///

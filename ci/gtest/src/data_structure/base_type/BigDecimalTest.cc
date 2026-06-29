@@ -9,7 +9,7 @@
 
 #include "data_structure/base_type/BigDecimal.hpp"
 
-using namespace common::data_structure::base_type;
+using namespace cppforge::data_structure::base_type;
 
 /**
  * @brief Test fixture for BigDecimal tests

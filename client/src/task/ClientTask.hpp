@@ -16,7 +16,7 @@
 
 namespace client_app::task
 {
-    class ClientTask final : public common::interface::task::ITask
+    class ClientTask final : public cppforge::interface::task::ITask
     {
     public:
         /// @brief Default constructor explicitly deleted to enforce parameterized construction
@@ -77,6 +77,6 @@ namespace client_app::task
         /// @details Logs OS version and CPU model to the application log
         static void logClientInfo() ;
 
-        common::system::FunctionProfiler timer_;
+        cppforge::system::FunctionProfiler timer_;
     };
 }

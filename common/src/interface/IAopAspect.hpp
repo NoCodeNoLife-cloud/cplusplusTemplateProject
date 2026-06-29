@@ -13,7 +13,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace common::interface::aop
+namespace cppforge::interface::aop
 {
     /// @brief Interface class for Aspect-Oriented Programming (AOP) functionalities.
     /// This class provides a template-based interface for implementing AOP concepts

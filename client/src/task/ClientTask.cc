@@ -27,7 +27,7 @@ namespace client_app::task
 
     void ClientTask::init()
     {
-        const glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().applicationDevConfigPath()};
+        const cppforge::glog::config::GLogConfigurator log_configurator{config::ConfigParam::getInstance().applicationDevConfigPath()};
         log_configurator.execute();
         DLOG(INFO) << fmt::format("Initializing GLog configuration from: {}, configuration initialized successfully", config::ConfigParam::getInstance().applicationDevConfigPath());
 
@@ -44,7 +44,7 @@ namespace client_app::task
         const auto& client = auth::AuthRpcService::getInstance();
 
         // Log initial connection state
-        DLOG(INFO) << "Initial connection state: " << common::rpc::RpcMetadata::grpcStateToString(client.getConnectivityState());
+        DLOG(INFO) << "Initial connection state: " << cppforge::rpc::RpcMetadata::grpcStateToString(client.getConnectivityState());
 
         const std::string username = logIn(client);
 
@@ -70,14 +70,14 @@ namespace client_app::task
         // Check if the RPC client is ready before proceeding
         if (!auth_rpc_client.isReady())
         {
-            LOG(WARNING) << "RPC client is not ready. Current state: " << common::rpc::RpcMetadata::grpcStateToString(auth_rpc_client.getConnectivityState());
+            LOG(WARNING) << "RPC client is not ready. Current state: " << cppforge::rpc::RpcMetadata::grpcStateToString(auth_rpc_client.getConnectivityState());
         }
 
         // Authenticate user
         DLOG(INFO) << "Please enter your username: ";
-        const std::string username = common::io::Console::readLine();
+        const std::string username = cppforge::io::Console::readLine();
         DLOG(INFO) << "Please enter your password: ";
-        const std::string password = common::io::Console::readLine();
+        const std::string password = cppforge::io::Console::readLine();
         DLOG(INFO) << fmt::format("Login attempt for user: {}", username);
 
         // Try to authenticate user
@@ -116,7 +116,7 @@ namespace client_app::task
     bool ClientTask::shouldCreateNewAccount()
     {
         DLOG(INFO) << "User does not exist, do you want to create a new account? [y/n] ";
-        const std::string createNewAccount = common::io::Console::readLine();
+        const std::string createNewAccount = cppforge::io::Console::readLine();
         return createNewAccount == "y" || createNewAccount == "Y";
     }
 
@@ -149,12 +149,12 @@ namespace client_app::task
     // ReSharper disable once CppMemberFunctionMayBeStatic
     void ClientTask::task(const auth::AuthRpcService& auth_rpc_client)
     {
-        DLOG(INFO) << "Current connection state: " << common::rpc::RpcMetadata::grpcStateToString(auth_rpc_client.getConnectivityState());
+        DLOG(INFO) << "Current connection state: " << cppforge::rpc::RpcMetadata::grpcStateToString(auth_rpc_client.getConnectivityState());
         // Implement actual task logic here
     }
 
     void ClientTask::logClientInfo()
     {
-        DLOG(INFO) << fmt::format("OS Version: {}, CPU Model: {}, Memory Details: {}, Graphics Card Info: {}", common::system::SystemInfo::GetOSVersion(), common::system::SystemInfo::GetCpuModelFromRegistry(), common::system::SystemInfo::GetMemoryDetails(), common::system::SystemInfo::GetGraphicsCardInfo());
+        DLOG(INFO) << fmt::format("OS Version: {}, CPU Model: {}, Memory Details: {}, Graphics Card Info: {}", cppforge::system::SystemInfo::GetOSVersion(), cppforge::system::SystemInfo::GetCpuModelFromRegistry(), cppforge::system::SystemInfo::GetMemoryDetails(), cppforge::system::SystemInfo::GetGraphicsCardInfo());
     }
 }

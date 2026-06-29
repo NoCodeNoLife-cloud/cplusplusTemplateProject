@@ -1,6 +1,6 @@
 /**
  * @file RegexToolkit.hpp
- * @brief Regular expression utilities â€” match, search, replace, split
+ * @brief Regular expression utilities â€?match, search, replace, split
  * @details Provides static convenience methods for common regex operations
  *          wrapping std::regex: full match, partial search, token replace,
  *          and string splitting by pattern.  Reduces boilerplate for common
@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     class RegexToolkit
     {

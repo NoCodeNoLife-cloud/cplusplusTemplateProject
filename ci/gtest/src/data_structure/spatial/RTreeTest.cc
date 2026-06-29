@@ -18,7 +18,7 @@
 
 #include "data_structure/spatial/RTree.hpp"
 
-using namespace common::data_structure::spatial;
+using namespace cppforge::data_structure::spatial;
 
 // ══════════════════════════════════════════════════════════════════════════
 //  Type aliases for common variants used throughout the tests
@@ -57,7 +57,7 @@ protected:
 };
 
 // ══════════════════════════════════════════════════════════════════════════
-//  1. BoundingBox — geometric primitives (dependency validation)
+//  1. BoundingBox �?geometric primitives (dependency validation)
 // ══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -327,7 +327,7 @@ TEST_F(RTreeTest, Insert_MultipleItems_BelowCapacity)
 /**
  * @brief Multiple items sharing the same bounding box are all stored
  *        and returned by search.
- * @details RTree is a multi-map — it does not deduplicate entries.
+ * @details RTree is a multi-map �?it does not deduplicate entries.
  */
 TEST_F(RTreeTest, Insert_ItemsWithSameBBox)
 {
@@ -393,7 +393,7 @@ TEST_F(RTreeTest, Insert_3D_RTree)
 
 /**
  * @brief Searching an empty tree returns an empty vector.
- * @details No crash or error — just an empty result.
+ * @details No crash or error �?just an empty result.
  */
 TEST_F(RTreeTest, Search_EmptyTree_ReturnsEmpty)
 {
@@ -549,7 +549,7 @@ TEST_F(RTreeTest, Split_MultipleSplits)
     }
 
     EXPECT_EQ(tree.size(), kCount);
-    EXPECT_GE(tree.height(), 2);  // multiple splits → height > 1
+    EXPECT_GE(tree.height(), 2);  // multiple splits �?height > 1
 
     // Large query covering all items.
     const auto results = tree.search(Box({-1.0, -1.0}, {31.0, 16.0}));
@@ -792,7 +792,7 @@ TEST_F(RTreeTest, NearestNeighbor_PointInsideBox)
     tree.insert(Box({0.0, 0.0}, {5.0, 5.0}), 100);
     tree.insert(Box({10.0, 10.0}, {15.0, 15.0}), 200);
 
-    // Query point (3,3) is inside the first box → distance 0.
+    // Query point (3,3) is inside the first box �?distance 0.
     const auto result = tree.nearestNeighbor(std::array{3.0, 3.0}, 2);
     ASSERT_EQ(result.size(), 2);
     EXPECT_EQ(result[0].first, 100);
@@ -897,7 +897,7 @@ TEST_F(RTreeTest, MoveAssignment_TransfersState)
 }
 
 /**
- * @brief Insert → Remove → Insert round-trip works correctly.
+ * @brief Insert �?Remove �?Insert round-trip works correctly.
  * @details After a cycle of insertions and removals, the tree continues
  *          to function and has the expected state.
  */
@@ -934,7 +934,7 @@ TEST_F(RTreeTest, Insert_Remove_Insert_Roundtrip)
 
 /**
  * @brief Large-scale insertion (100 items) followed by multiple searches
- *        — stress test for structural integrity.
+ *        �?stress test for structural integrity.
  * @details Inserts items on a 10×10 grid, then runs 10 search queries
  *          on various regions.  Every search must complete without error
  *          and the full-coverage query must return all 100 items.

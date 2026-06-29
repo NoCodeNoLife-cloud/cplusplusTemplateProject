@@ -26,7 +26,7 @@
 
 #include "data_structure/hash/RobinHoodHashMap.hpp"
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief A hash set built on Robin Hood open-addressing hashing.
     ///

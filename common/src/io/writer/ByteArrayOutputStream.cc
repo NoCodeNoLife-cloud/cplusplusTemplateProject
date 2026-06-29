@@ -1,6 +1,6 @@
 /**
  * @file ByteArrayOutputStream.cc
- * @brief ByteArrayOutputStream implementation â€” dynamic byte vector management
+ * @brief ByteArrayOutputStream implementation â€?dynamic byte vector management
  * @details Implements in-memory byte output: write() appends to the internal
  *          vector (doubling capacity when full), toByteArray() returns a copy,
  *          toString() for text, writeTo() copies to another stream, and
@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     ByteArrayOutputStream::ByteArrayOutputStream() : buf_(32)
     {

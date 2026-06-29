@@ -18,7 +18,7 @@
 #include "interface/IAopAspect.hpp"
 #include "system/FunctionProfiler.hpp"
 
-namespace common::aop
+namespace cppforge::aop
 {
     /// @brief This class is an aspect for profiling function execution time.
     /// @details It implements the IAopAspect interface to provide entry and exit points

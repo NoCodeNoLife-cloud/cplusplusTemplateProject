@@ -25,7 +25,7 @@
 
 #include "AbstractReader.hpp"
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     /// @brief A StringReader class that reads data from a string.
     /// @details This class implements the AbstractReader interface to provide functionality

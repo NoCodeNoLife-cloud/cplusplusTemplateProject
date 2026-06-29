@@ -14,7 +14,7 @@
 
 #include "serialization/JsonObjectSerializer.hpp"
 
-using namespace common::serialization;
+using namespace cppforge::serialization;
 
 /// @brief Test fixture for JsonObjectSerializer tests.
 class JsonObjectSerializerTest : public testing::Test

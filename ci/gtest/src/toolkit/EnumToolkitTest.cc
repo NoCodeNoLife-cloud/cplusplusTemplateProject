@@ -10,7 +10,7 @@
 
 #include "toolkit/EnumToolkit.hpp"
 
-using namespace common::toolkit;
+using namespace cppforge::toolkit;
 
 /**
  * @brief Test fixture for EnumToolkitTest tests

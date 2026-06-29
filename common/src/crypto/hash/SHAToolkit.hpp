@@ -1,6 +1,6 @@
 /**
  * @file SHAToolkit.hpp
- * @brief SHA hash utilities â€” convenience methods for SHA-1 / SHA-256
+ * @brief SHA hash utilities â€?convenience methods for SHA-1 / SHA-256
  * @details Provides static convenience methods for computing SHA digests
  *          from strings, byte arrays, and files.  Routes to the appropriate
  *          HashStrategy (SHA1Strategy or SHA256Strategy) based on the
@@ -15,7 +15,7 @@
 
 #include "HashStrategy.hpp"
 
-namespace common::crypto::hash
+namespace cppforge::crypto::hash
 {
     /**
      * @brief Unified toolkit for SHA hash algorithms using Strategy pattern.

@@ -1,6 +1,6 @@
 /**
  * @file BufferedInputStream.cc
- * @brief BufferedInputStream implementation â€” buffer fill, mark/reset, read
+ * @brief BufferedInputStream implementation â€?buffer fill, mark/reset, read
  * @details Implements buffered byte input: fillBuffer() refills the internal
  *          8 KB buffer from the underlying stream, read() copies from buffer,
  *          and mark/reset are supported up to the buffer capacity.
@@ -14,7 +14,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     BufferedInputStream::BufferedInputStream(std::unique_ptr<AbstractInputStream> in)  : BufferedInputStream(std::move(in), DEFAULT_BUFFER_SIZE)
     {

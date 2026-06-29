@@ -9,7 +9,7 @@
 
 #include "data_structure/tree/balanced/SplayTree.hpp"
 
-using namespace common::data_structure::tree::balanced;
+using namespace cppforge::data_structure::tree::balanced;
 
 /**
  * @brief Test fixture for SplayTree tests
@@ -43,7 +43,7 @@ TEST_F(SplayTreeTest, Insert_SingleNode_FindReturnsTrue)
 
 /**
  * @brief Test that the last inserted node becomes root after splay
- * @details Verifies splay semantics â€” the last inserted value is at the root
+ * @details Verifies splay semantics â€?the last inserted value is at the root
  */
 TEST_F(SplayTreeTest, Insert_LastInsertedBecomesRoot)
 {
@@ -149,7 +149,7 @@ TEST_F(SplayTreeTest, Insert_ComplexOrder_InorderCorrect)
 
 /**
  * @brief Test that find splays the found node to root
- * @details Verifies splay semantics â€” accessing a node brings it to the root
+ * @details Verifies splay semantics â€?accessing a node brings it to the root
  */
 TEST_F(SplayTreeTest, Find_SplaysFoundNodeToRoot)
 {

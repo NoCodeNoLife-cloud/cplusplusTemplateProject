@@ -1,6 +1,6 @@
 /**
  * @file PasswordSQL.cc
- * @brief PasswordSQL implementation â€” parameterised query template building
+ * @brief PasswordSQL implementation â€?parameterised query template building
  * @details Implements SQL query templates for password operations, using
  *          parameterised statements to prevent SQL injection.
  */
@@ -11,7 +11,7 @@
 
 #include <glog/logging.h>
 
-namespace common::sql
+namespace cppforge::sql
 {
     bool PasswordSQL::HasAnyEmpty(const std::initializer_list<std::string>& params)
     {

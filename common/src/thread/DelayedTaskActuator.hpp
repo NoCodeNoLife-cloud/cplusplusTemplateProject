@@ -22,7 +22,7 @@
 #include <thread>
 #include <unordered_map>
 
-namespace common::thread
+namespace cppforge::thread
 {
     /// @brief A class that executes tasks with a specified delay.
     /// @tparam ResultType The type of the result returned by the task.

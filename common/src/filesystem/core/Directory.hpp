@@ -1,6 +1,6 @@
 /**
  * @file Directory.hpp
- * @brief Directory abstraction — listing, creation, recursive traversal
+ * @brief Directory abstraction �?listing, creation, recursive traversal
  * @description Represents a filesystem directory.  Provides operations for
  *          listing contents, creating/deleting directories, recursive
  *          traversal (depth-first), and filtering by extension or name
@@ -19,7 +19,7 @@
 #include <vector>
 
 // ── Forward declarations ──────────────────────────────────────────
-namespace common::filesystem::core
+namespace cppforge::filesystem::core
 {
 class Path;
 class File;
@@ -75,4 +75,4 @@ private:
     std::filesystem::path dir_path_;
 };
 
-}  // namespace common::filesystem::core
+}  // namespace cppforge::filesystem::core

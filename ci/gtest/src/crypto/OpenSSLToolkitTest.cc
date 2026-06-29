@@ -12,7 +12,7 @@
 
 #include "crypto/OpenSSLToolkit.hpp"
 
-using namespace common::crypto;
+using namespace cppforge::crypto;
 
 /**
  * @brief Test deriveKey produces consistent output

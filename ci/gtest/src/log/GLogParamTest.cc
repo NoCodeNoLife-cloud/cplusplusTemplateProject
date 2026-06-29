@@ -60,7 +60,7 @@ namespace
  */
 TEST_F(GLogParamTest, DefaultConstruction)
 {
-    const glog::param::GLogParam param;
+    const cppforge::glog::param::GLogParam param;
     EXPECT_EQ(param.minLogLevel(), 0);
     EXPECT_EQ(param.logName(), "");
     EXPECT_FALSE(param.logToStderr());
@@ -73,7 +73,7 @@ TEST_F(GLogParamTest, DefaultConstruction)
  */
 TEST_F(GLogParamTest, ParameterizedConstruction)
 {
-    const glog::param::GLogParam param(3, "test_log", true, true);
+    const cppforge::glog::param::GLogParam param(3, "test_log", true, true);
     EXPECT_EQ(param.minLogLevel(), 3);
     EXPECT_EQ(param.logName(), "test_log");
     EXPECT_TRUE(param.logToStderr());
@@ -86,7 +86,7 @@ TEST_F(GLogParamTest, ParameterizedConstruction)
  */
 TEST_F(GLogParamTest, ParameterizedConstructionDefaultCustomFormat)
 {
-    const glog::param::GLogParam param(0, "default_fmt", false);
+    const cppforge::glog::param::GLogParam param(0, "default_fmt", false);
     EXPECT_FALSE(param.customLogFormat());
 }
 
@@ -96,7 +96,7 @@ TEST_F(GLogParamTest, ParameterizedConstructionDefaultCustomFormat)
  */
 TEST_F(GLogParamTest, MinLogLevelSetter)
 {
-    glog::param::GLogParam param;
+    cppforge::glog::param::GLogParam param;
     param.minLogLevel(5);
     EXPECT_EQ(param.minLogLevel(), 5);
 }
@@ -107,7 +107,7 @@ TEST_F(GLogParamTest, MinLogLevelSetter)
  */
 TEST_F(GLogParamTest, LogNameSetter)
 {
-    glog::param::GLogParam param;
+    cppforge::glog::param::GLogParam param;
     param.logName("custom_name");
     EXPECT_EQ(param.logName(), "custom_name");
 }
@@ -118,7 +118,7 @@ TEST_F(GLogParamTest, LogNameSetter)
  */
 TEST_F(GLogParamTest, LogToStderrSetter)
 {
-    glog::param::GLogParam param;
+    cppforge::glog::param::GLogParam param;
     param.logToStderr(true);
     EXPECT_TRUE(param.logToStderr());
 }
@@ -129,7 +129,7 @@ TEST_F(GLogParamTest, LogToStderrSetter)
  */
 TEST_F(GLogParamTest, CustomLogFormatSetter)
 {
-    glog::param::GLogParam param;
+    cppforge::glog::param::GLogParam param;
     param.customLogFormat(true);
     EXPECT_TRUE(param.customLogFormat());
 }
@@ -140,7 +140,7 @@ TEST_F(GLogParamTest, CustomLogFormatSetter)
  */
 TEST_F(GLogParamTest, DeserializeFromFlatYaml)
 {
-    glog::param::GLogParam param;
+    cppforge::glog::param::GLogParam param;
     EXPECT_NO_THROW(param.deserializeFromYamlFile(testFile_));
     EXPECT_EQ(param.minLogLevel(), 1);
     EXPECT_EQ(param.logName(), "standalone_log");
@@ -154,7 +154,7 @@ TEST_F(GLogParamTest, DeserializeFromFlatYaml)
  */
 TEST_F(GLogParamTest, DeserializeFromNestedYaml)
 {
-    glog::param::GLogParam param;
+    cppforge::glog::param::GLogParam param;
     EXPECT_NO_THROW(param.deserializeFromYamlFile(nestedFile_));
     EXPECT_EQ(param.minLogLevel(), 2);
     EXPECT_EQ(param.logName(), "nested_log");
@@ -168,7 +168,7 @@ TEST_F(GLogParamTest, DeserializeFromNestedYaml)
  */
 TEST_F(GLogParamTest, DeserializeFromNonExistentFileThrows)
 {
-    glog::param::GLogParam param;
+    cppforge::glog::param::GLogParam param;
     auto nonexistent = std::filesystem::temp_directory_path() / "nonexistent_glog_param.yaml";
     EXPECT_THROW(param.deserializeFromYamlFile(nonexistent), std::runtime_error);
 }
@@ -179,8 +179,8 @@ TEST_F(GLogParamTest, DeserializeFromNonExistentFileThrows)
  */
 TEST_F(GLogParamTest, EqualityOperator)
 {
-    const glog::param::GLogParam a(1, "eq_log", true, false);
-    const glog::param::GLogParam b(1, "eq_log", true, false);
+    const cppforge::glog::param::GLogParam a(1, "eq_log", true, false);
+    const cppforge::glog::param::GLogParam b(1, "eq_log", true, false);
     EXPECT_TRUE(a == b);
     EXPECT_FALSE(a != b);
 }
@@ -191,8 +191,8 @@ TEST_F(GLogParamTest, EqualityOperator)
  */
 TEST_F(GLogParamTest, InequalityOperator)
 {
-    const glog::param::GLogParam a(1, "log_a", true, false);
-    const glog::param::GLogParam b(2, "log_b", false, true);
+    const cppforge::glog::param::GLogParam a(1, "log_a", true, false);
+    const cppforge::glog::param::GLogParam b(2, "log_b", false, true);
     EXPECT_TRUE(a != b);
     EXPECT_FALSE(a == b);
 }
@@ -203,12 +203,12 @@ TEST_F(GLogParamTest, InequalityOperator)
  */
 TEST_F(GLogParamTest, YamlEncodeDecodeRoundTrip)
 {
-    const glog::param::GLogParam original(3, "roundtrip", true, true);
+    const cppforge::glog::param::GLogParam original(3, "roundtrip", true, true);
     YAML::Node node;
-    node = YAML::convert<glog::param::GLogParam>::encode(original);
+    node = YAML::convert<cppforge::glog::param::GLogParam>::encode(original);
 
-    glog::param::GLogParam decoded;
-    ASSERT_TRUE(YAML::convert<glog::param::GLogParam>::decode(node, decoded));
+    cppforge::glog::param::GLogParam decoded;
+    ASSERT_TRUE(YAML::convert<cppforge::glog::param::GLogParam>::decode(node, decoded));
     EXPECT_EQ(original, decoded);
 }
 
@@ -219,8 +219,8 @@ TEST_F(GLogParamTest, YamlEncodeDecodeRoundTrip)
 TEST_F(GLogParamTest, YamlDecodeNonMapNodeReturnsFalse)
 {
     const YAML::Node scalar_node = YAML::Node("hello");
-    glog::param::GLogParam param;
-    EXPECT_FALSE(YAML::convert<glog::param::GLogParam>::decode(scalar_node, param));
+    cppforge::glog::param::GLogParam param;
+    EXPECT_FALSE(YAML::convert<cppforge::glog::param::GLogParam>::decode(scalar_node, param));
 }
 
 /**
@@ -229,7 +229,7 @@ TEST_F(GLogParamTest, YamlDecodeNonMapNodeReturnsFalse)
  */
 TEST_F(GLogParamTest, LogNameReturnsReferenceNotCopy)
 {
-    glog::param::GLogParam param;
+    cppforge::glog::param::GLogParam param;
     param.logName("ref_check");
     const auto& ref = param.logName();
     EXPECT_EQ(ref, "ref_check");

@@ -1,6 +1,6 @@
 /**
  * @file BufferedWriter.cc
- * @brief BufferedWriter implementation â€” character buffer, newLine, flush
+ * @brief BufferedWriter implementation â€?character buffer, newLine, flush
  * @details Implements buffered character output: write()/append() fill the
  *          1 KB buffer, checkAndFlush() writes the buffer to the underlying
  *          writer when full, and newLine() appends the platform's line
@@ -11,7 +11,7 @@
 
 #include <stdexcept>
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     BufferedWriter::BufferedWriter(std::unique_ptr<std::ofstream> os, const size_t size) : output_stream_(std::move(os)), buffer_size_(size)
     {

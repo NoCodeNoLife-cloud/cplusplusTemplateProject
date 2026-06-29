@@ -10,7 +10,7 @@
 
 #include "time/Date.hpp"
 
-using namespace common::time;
+using namespace cppforge::time;
 
 /**
  * @brief Test fixture for DateTest tests

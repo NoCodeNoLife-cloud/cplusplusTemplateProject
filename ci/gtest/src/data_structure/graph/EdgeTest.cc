@@ -8,7 +8,7 @@
 
 #include "data_structure/graph/Edge.hpp"
 
-using namespace common::data_structure::graph;
+using namespace cppforge::data_structure::graph;
 
 /**
  * @brief Test fixture for Edge tests

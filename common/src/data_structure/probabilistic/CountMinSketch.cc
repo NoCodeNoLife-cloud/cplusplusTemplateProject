@@ -1,6 +1,6 @@
 /**
  * @file CountMinSketch.cc
- * @brief Count-Min Sketch probabilistic frequency estimator — explicit instantiations
+ * @brief Count-Min Sketch probabilistic frequency estimator �?explicit instantiations
  * @details This file provides explicit template instantiations for commonly used
  *          CountMinSketch configurations and item types. Forces the compiler to
  *          generate code for these specialisations, catching compilation errors
@@ -11,12 +11,12 @@
 
 #include <string>
 
-namespace common::data_structure::probabilistic
+namespace cppforge::data_structure::probabilistic
 {
     // ── Default configuration ──
 
     /// @brief Explicit instantiation of the default CountMinSketch
-    ///        (Width=65536, Depth=5, HashStd) — all non-template members.
+    ///        (Width=65536, Depth=5, HashStd) �?all non-template members.
     template class CountMinSketch<>;
 
     // ── Template member instantiations for common item types ──
@@ -35,4 +35,4 @@ namespace common::data_structure::probabilistic
     template auto CountMinSketch<>::estimate<uint32_t>(const uint32_t&) const -> uint32_t;
     template auto CountMinSketch<>::estimate<uint64_t>(const uint64_t&) const -> uint32_t;
 
-} // namespace common::data_structure::probabilistic
+} // namespace cppforge::data_structure::probabilistic

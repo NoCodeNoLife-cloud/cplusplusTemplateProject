@@ -17,7 +17,7 @@
 
 #include "data_structure/tree/node/TreeNode.hpp"
 
-namespace common::data_structure::tree::core
+namespace cppforge::data_structure::tree::core
 {
     using tree::node::TreeNode;
     /// @brief CRTP base for binary search tree implementations

@@ -1,6 +1,6 @@
 /**
  * @file SHA1Strategy.cc
- * @brief SHA1Strategy implementation â€” EVP_Digest wrapper for SHA-1
+ * @brief SHA1Strategy implementation â€?EVP_Digest wrapper for SHA-1
  * @details Implements SHA-1 hash computation using OpenSSL's EVP_Digest
  *          interface.  Produces a 160-bit (20-byte) digest, hex-encoded.
  */
@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::crypto::hash
+namespace cppforge::crypto::hash
 {
     namespace
     {

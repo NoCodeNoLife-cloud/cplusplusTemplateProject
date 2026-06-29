@@ -1,6 +1,6 @@
 /**
  * @file YamlToolkit.cc
- * @brief YamlToolkit implementation â€” yaml-cpp parse/emit wrappers
+ * @brief YamlToolkit implementation â€?yaml-cpp parse/emit wrappers
  * @details Implements YAML utility methods: ParseFile loads YAML from disk,
  *          ParseString loads from memory, and ToString serialises a YAML::Node.
  */
@@ -12,7 +12,7 @@
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-namespace common::filesystem::type
+namespace cppforge::filesystem::type
 {
     bool YamlToolkit::create(const std::string& filepath, const YAML::Node& data)
     {

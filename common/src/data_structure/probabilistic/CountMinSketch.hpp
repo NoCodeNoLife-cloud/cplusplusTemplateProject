@@ -23,7 +23,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace common::data_structure::probabilistic
+namespace cppforge::data_structure::probabilistic
 {
     /// @brief Default hash functor for CountMinSketch.
     ///
@@ -241,4 +241,4 @@ namespace common::data_structure::probabilistic
         [[no_unique_address]] Hash hash_;
     };
 
-} // namespace common::data_structure::probabilistic
+} // namespace cppforge::data_structure::probabilistic

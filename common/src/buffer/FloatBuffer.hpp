@@ -16,7 +16,7 @@
 
 #include "interface/io/IBuffer.hpp"
 
-namespace common::buffer
+namespace cppforge::buffer
 {
     /// @brief A buffer that stores float values.
     /// @details This class provides methods to put and get float values from a buffer.

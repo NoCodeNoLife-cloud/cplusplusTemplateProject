@@ -1,6 +1,6 @@
 /**
  * @file UserAuthenticator.hpp
- * @brief User authentication service â€” login, session, credential validation
+ * @brief User authentication service â€?login, session, credential validation
  * @description Authenticates users against a credential store (database/LDAP).
  *          Manages login/logout workflows, session token generation, and
  *          credential validation.  Uses PasswordPolicy for strength checking
@@ -21,7 +21,7 @@
 #include "UserCredentials.hpp"
 #include "sql/PasswordSQL.hpp"
 
-namespace common::auth
+namespace cppforge::auth
 {
     /// @brief Result of an authentication attempt
     struct AuthResult

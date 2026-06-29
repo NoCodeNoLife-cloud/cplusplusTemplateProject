@@ -1,13 +1,13 @@
 /**
  * @file JsonObjectSerializer.cc
- * @brief JsonObjectSerializer implementation â€” toJson/fromJson type mapping
+ * @brief JsonObjectSerializer implementation â€?toJson/fromJson type mapping
  * @details Implements JSON serialisation: traverses object member fields via
  *          a registered mapping and converts to/from JSON tree structures.
  */
 
 #include "serialization/JsonObjectSerializer.hpp"
 
-namespace common::serialization
+namespace cppforge::serialization
 {
     std::string JsonObjectSerializer::getStringOrDefault(const rapidjson::Value& json, const std::string& key, const std::string& defaultValue)
     {

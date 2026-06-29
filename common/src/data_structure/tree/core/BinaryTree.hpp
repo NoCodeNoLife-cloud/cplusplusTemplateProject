@@ -3,7 +3,7 @@
  * @brief Generic binary tree with pre/in/post-order traversal
  * @details A general-purpose binary tree structure supporting traversal in
  *          pre-order, in-order, and post-order.  Unlike BinarySearchTree,
- *          no ordering invariant is enforced â€” nodes store arbitrary values.
+ *          no ordering invariant is enforced â€?nodes store arbitrary values.
  *          Uses std::unique_ptr for automatic child memory management.
  *
  * @par Thread Safety
@@ -22,7 +22,7 @@
 
 #include "data_structure/tree/core/TreeToolkit.hpp"
 
-namespace common::data_structure::tree::core
+namespace cppforge::data_structure::tree::core
 {
     /// @brief A general binary tree implementation.
     /// Unlike BinarySearchTree, this tree does not enforce any ordering invariant.

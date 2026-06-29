@@ -5,7 +5,7 @@
 #include "io/reader/PushbackInputStream.hpp"
 #include "io/reader/ByteArrayInputStream.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /// @brief Test fixture for PushbackInputStream tests.
 class PushbackInputStreamTest : public testing::Test

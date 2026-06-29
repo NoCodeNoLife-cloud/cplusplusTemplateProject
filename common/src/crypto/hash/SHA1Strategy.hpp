@@ -1,6 +1,6 @@
 /**
  * @file SHA1Strategy.hpp
- * @brief SHA-1 hash strategy â€” 160-bit digest via OpenSSL
+ * @brief SHA-1 hash strategy â€?160-bit digest via OpenSSL
  * @details Implements the HashStrategy interface using the SHA-1 algorithm
  *          (160-bit output).  Wraps OpenSSL's EVP_Digest API.  SHA-1 is
  *          considered cryptographically broken for collision resistance;
@@ -20,7 +20,7 @@
 
 #include "HashStrategy.hpp"
 
-namespace common::crypto::hash
+namespace cppforge::crypto::hash
 {
     /**
      * @brief Concrete strategy implementation for SHA-1 hash algorithm.

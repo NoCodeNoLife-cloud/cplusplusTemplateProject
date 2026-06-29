@@ -12,7 +12,7 @@
 #include "config/GLogConfigurator.hpp"
 #include "param/GLogParam.hpp"
 
-using namespace glog::config;
+using namespace cppforge::glog::config;
 
 /// @brief Test fixture for GLogConfigurator tests.
 class GLogConfiguratorTest : public testing::Test
@@ -166,7 +166,7 @@ glog:
     GLogConfigurator config(tmp_yaml_);
     EXPECT_EQ(config.getConfig().logName(), "original");
 
-    glog::param::GLogParam new_config;
+    cppforge::glog::param::GLogParam new_config;
     new_config.logName("updated");
     new_config.minLogLevel(3);
     config.updateConfig(new_config);

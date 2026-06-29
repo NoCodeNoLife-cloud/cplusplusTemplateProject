@@ -17,7 +17,7 @@
 
 #include "GrpcConnectivityState.hpp"
 
-namespace common::rpc
+namespace cppforge::rpc
 {
     /// @brief Utility class for RPC metadata operations
     class RpcMetadata

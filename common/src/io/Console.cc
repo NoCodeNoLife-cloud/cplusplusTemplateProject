@@ -1,13 +1,13 @@
 /**
  * @file Console.cc
- * @brief Console implementation â€” ANSI escape codes, progress bar rendering
+ * @brief Console implementation â€?ANSI escape codes, progress bar rendering
  * @details Implements console I/O methods: ANSI escape sequences for colour,
  *          carriage-return-based progress bar, and stdin/stdout interaction.
  */
 
 #include "io/Console.hpp"
 
-namespace common::io
+namespace cppforge::io
 {
     std::mutex Console::s_mutex_;
 

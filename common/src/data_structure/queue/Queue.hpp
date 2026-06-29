@@ -30,7 +30,7 @@
 #include <stdexcept>
 #include <utility>
 
-namespace common::data_structure
+namespace cppforge::data_structure
 {
     /// @brief A queue data structure implementation using linked nodes with smart pointers
     /// @tparam T The type of elements stored in the queue

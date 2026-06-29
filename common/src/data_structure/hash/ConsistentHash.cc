@@ -1,6 +1,6 @@
 /**
  * @file ConsistentHash.cc
- * @brief ConsistentHash implementation — virtual-node consistent hashing
+ * @brief ConsistentHash implementation �?virtual-node consistent hashing
  * @details Implements the IHashRing interface using a std::map as a circular
  *          hash ring.  Each physical node is represented by multiple virtual
  *          replicas (VNode) distributed around the ring for improved load
@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include <utility>
 
-namespace common::data_structure::hash
+namespace cppforge::data_structure::hash
 {
 
 // ══════════════════════════════════════════════════════════════════════════
@@ -239,4 +239,4 @@ auto ConsistentHash::vNodeName(const NodeName& node, uint32_t index)
     return node + '#' + std::to_string(index);
 }
 
-} // namespace common::data_structure::hash
+} // namespace cppforge::data_structure::hash

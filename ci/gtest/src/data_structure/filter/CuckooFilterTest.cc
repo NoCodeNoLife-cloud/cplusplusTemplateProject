@@ -15,7 +15,7 @@
 
 #include "data_structure/filter/CuckooFilter.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 /**
  * @brief Test fixture for CuckooFilter tests
@@ -190,7 +190,7 @@ TEST_F(CuckooFilterTest, Remove_ExistingKey_ReturnsTrue)
 /**
  * @brief Test that after removal, contains returns false
  * @details Verifies that removing a key causes contains() to report it as
- *          absent. This is a guaranteed property â€” no false negatives.
+ *          absent. This is a guaranteed property â€?no false negatives.
  */
 TEST_F(CuckooFilterTest, Remove_ExistingKey_AfterRemove_ContainsReturnsFalse)
 {
@@ -214,7 +214,7 @@ TEST_F(CuckooFilterTest, Remove_NonExistentKey_ReturnsFalse)
 }
 
 /**
- * @brief Test insert â†’ remove â†’ reinsert workflow
+ * @brief Test insert â†?remove â†?reinsert workflow
  * @details Verifies that a key can be removed and then reinserted, and that
  *          contains() correctly reports its presence after reinsertion.
  */
@@ -280,7 +280,7 @@ TEST_F(CuckooFilterTest, Insert_FillToCapacity_AllSucceed)
  */
 TEST_F(CuckooFilterTest, Insert_ExceedCapacity_ReturnsFalse)
 {
-    // 1 bucket â†’ 4 slots; both bucket indices map to the same bucket
+    // 1 bucket â†?4 slots; both bucket indices map to the same bucket
     CuckooFilter<int> filter(1);
 
     // Insert many keys with distinct values; some will definitely fail
@@ -321,7 +321,7 @@ TEST_F(CuckooFilterTest, Insert_Fail_ElementCountConsistent)
     // Filter should be full now and further inserts should fail
     const auto count_before = filter.element_count();
 
-    // Try more inserts â€” they should all fail
+    // Try more inserts â€?they should all fail
     for (int j = 0; j < 100; ++j)
     {
         EXPECT_FALSE(filter.insert(i + j));
@@ -610,7 +610,7 @@ TEST_F(CuckooFilterTest, CustomHash_Works)
 }
 
 /**
- * @brief Test CuckooFilter with a custom hash functor â€” remove operation.
+ * @brief Test CuckooFilter with a custom hash functor â€?remove operation.
  * @details Verifies that remove() works correctly with a custom hash.
  */
 TEST_F(CuckooFilterTest, CustomHash_Remove_Works)

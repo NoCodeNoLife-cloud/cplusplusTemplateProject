@@ -19,7 +19,7 @@
 #include "buffer/LongBuffer.hpp"
 #include "buffer/ShortBuffer.hpp"
 
-using namespace common::buffer;
+using namespace cppforge::buffer;
 
 /// @brief Typed test fixture for common IBuffer interface behavior across all buffer types.
 template <typename T>

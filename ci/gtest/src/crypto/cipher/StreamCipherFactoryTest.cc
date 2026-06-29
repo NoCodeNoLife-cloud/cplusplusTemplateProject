@@ -8,7 +8,7 @@
 #include "crypto/cipher/ChaCha20Cipher.hpp"
 #include "crypto/cipher/StreamCipherFactory.hpp"
 
-using namespace common::crypto::cipher;
+using namespace cppforge::crypto::cipher;
 
 /**
  * @brief Test fixture for StreamCipherFactoryTest tests

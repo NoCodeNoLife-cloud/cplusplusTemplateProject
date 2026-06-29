@@ -16,7 +16,7 @@
 
 #include "data_structure/queue/ConcurrentQueue.hpp"
 
-using namespace common::data_structure;
+using namespace cppforge::data_structure;
 
 /**
  * @brief Test fixture for ConcurrentQueue tests

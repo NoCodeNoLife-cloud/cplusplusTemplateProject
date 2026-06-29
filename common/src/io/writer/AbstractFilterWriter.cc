@@ -1,6 +1,6 @@
 /**
  * @file AbstractFilterWriter.cc
- * @brief AbstractFilterWriter implementation â€” delegating all calls to underlying
+ * @brief AbstractFilterWriter implementation â€?delegating all calls to underlying
  * @details Implements the character-writer decorator: every public method
  *          (write/append/flush/close) delegates to the stored AbstractWriter.
  *          Subclasses override only the methods they need to transform.
@@ -10,7 +10,7 @@
 
 #include <stdexcept>
 
-namespace common::io::writer
+namespace cppforge::io::writer
 {
     AbstractFilterWriter::AbstractFilterWriter(std::unique_ptr<AbstractWriter> outputWriter) : output_writer_(std::move(outputWriter))
     {

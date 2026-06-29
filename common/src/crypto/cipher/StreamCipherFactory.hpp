@@ -17,7 +17,7 @@
 
 #include "StreamCipher.hpp"
 
-namespace common::crypto::cipher
+namespace cppforge::crypto::cipher
 {
     /**
      * @class StreamCipherFactory

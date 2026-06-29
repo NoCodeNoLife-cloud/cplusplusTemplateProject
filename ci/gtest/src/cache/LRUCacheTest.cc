@@ -10,7 +10,7 @@
 
 #include "cache/LRUCache.hpp"
 
-using namespace common::cache;
+using namespace cppforge::cache;
 
 /**
  * @brief Test fixture for LRUCacheTest tests

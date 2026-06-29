@@ -11,7 +11,7 @@
 
 #include "crypto/cipher/ChaCha20Cipher.hpp"
 
-using namespace common::crypto::cipher;
+using namespace cppforge::crypto::cipher;
 
 /**
  * @brief Test fixture for ChaCha20CipherTest tests

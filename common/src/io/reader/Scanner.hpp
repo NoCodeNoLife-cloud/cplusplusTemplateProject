@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     /// @brief A utility class for scanning and parsing input streams.
     /// The Scanner class provides methods for reading various data types from an input stream,

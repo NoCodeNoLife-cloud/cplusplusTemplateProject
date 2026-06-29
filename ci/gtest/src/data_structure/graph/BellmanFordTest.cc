@@ -10,8 +10,8 @@
 
 #include "data_structure/graph/algorithm/BellmanFord.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for BellmanFord algorithm tests
@@ -26,7 +26,7 @@ protected:
 /**
  * @brief Test Bellman-Ford on a simple three-node line graph
  * @details Verifies that shortest distances are computed correctly with
- *          positive edge weights: 0â†’1 (2) + 1â†’2 (3) = 5
+ *          positive edge weights: 0â†? (2) + 1â†? (3) = 5
  */
 TEST_F(BellmanFordTest, ShortestPath_Simple)
 {
@@ -42,7 +42,7 @@ TEST_F(BellmanFordTest, ShortestPath_Simple)
 /**
  * @brief Test Bellman-Ford with mixed positive and negative edge weights
  * @details Verifies correct distance calculation when negative edges
- *          produce shorter alternative paths: 0â†’1â†’2 = 1 (via 4 + -3)
+ *          produce shorter alternative paths: 0â†?â†? = 1 (via 4 + -3)
  */
 TEST_F(BellmanFordTest, ShortestPath_NegativeWeights)
 {

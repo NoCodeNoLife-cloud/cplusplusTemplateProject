@@ -10,8 +10,8 @@
 #include "data_structure/tree/node/RedBlackTreeNode.hpp"
 #include "data_structure/base_type/Color.hpp"
 
-using namespace common::data_structure;
-using namespace common::data_structure::tree::node;
+using namespace cppforge::data_structure;
+using namespace cppforge::data_structure::tree::node;
 
 class RBTreeNodeTest : public testing::Test
 {

@@ -1,6 +1,6 @@
 /**
  * @file StringToolkit.cc
- * @brief StringToolkit implementation â€” split, join, trim, case conversion
+ * @brief StringToolkit implementation â€?split, join, trim, case conversion
  * @details Implements string utility methods: split uses std::getline or
  *          find_first_of, join uses ostringstream, trim finds first/last
  *          non-whitespace, and case conversion uses std::toupper/tolower.
@@ -14,7 +14,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace common::toolkit
+namespace cppforge::toolkit
 {
     std::string StringToolkit::toUpperCase(const std::string& str)
     {

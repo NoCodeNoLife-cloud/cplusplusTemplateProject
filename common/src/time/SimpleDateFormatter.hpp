@@ -20,7 +20,7 @@
 #include <chrono>
 #include <string>
 
-namespace common::time
+namespace cppforge::time
 {
     /// @brief A utility class for formatting and parsing dates based on a pattern.
     /// The class provides methods to format `std::tm` objects into

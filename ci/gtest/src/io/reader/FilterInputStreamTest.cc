@@ -12,7 +12,7 @@
 #include "io/reader/FilterInputStream.hpp"
 #include "io/reader/ByteArrayInputStream.hpp"
 
-using namespace common::io::reader;
+using namespace cppforge::io::reader;
 
 /**
  * @brief Test fixture for FilterInputStreamTest tests

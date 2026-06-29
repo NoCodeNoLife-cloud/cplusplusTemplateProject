@@ -18,7 +18,7 @@
 #include "data_structure/graph/IGraphVisitor.hpp"
 #include "data_structure/graph/algorithm/GraphTraits.hpp"
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     /// @brief Depth-First Search algorithm implementation
     /// @details All methods are static. Supports single-source traversal,

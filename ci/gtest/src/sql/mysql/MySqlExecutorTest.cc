@@ -13,7 +13,7 @@
 
 #include "sql/mysql/MySqlExecutor.hpp"
 
-using namespace common::sql::mysql;
+using namespace cppforge::sql::mysql;
 
 // Test database configuration
 static constexpr auto TEST_DB_HOST = "localhost";

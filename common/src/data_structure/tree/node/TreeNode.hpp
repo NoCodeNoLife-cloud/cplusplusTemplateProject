@@ -25,7 +25,7 @@
 
 #include "data_structure/tree/core/TreeToolkit.hpp"
 
-namespace common::data_structure::tree::node
+namespace cppforge::data_structure::tree::node
 {
     /// @brief A tree node class that contains a value and pointers to left and right children.
     /// @tparam T The type of the value stored in the node.

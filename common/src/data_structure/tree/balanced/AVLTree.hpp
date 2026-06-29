@@ -23,7 +23,7 @@
 
 #include "data_structure/tree/core/BSTBase.hpp"
 
-namespace common::data_structure::tree::balanced
+namespace cppforge::data_structure::tree::balanced
 {
     using tree::node::TreeNode;
     /// @brief A self-balancing binary search tree implementation (AVL Tree)

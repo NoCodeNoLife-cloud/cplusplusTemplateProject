@@ -28,7 +28,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace common::data_structure::tree::range
+namespace cppforge::data_structure::tree::range
 {
     /// @brief A segment tree data structure for range queries and point updates.
     /// @tparam T The type of elements stored in the segment tree.

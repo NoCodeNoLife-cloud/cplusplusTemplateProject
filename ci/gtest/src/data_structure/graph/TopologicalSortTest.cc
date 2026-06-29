@@ -10,8 +10,8 @@
 
 #include "data_structure/graph/algorithm/TopologicalSort.hpp"
 
-using namespace common::data_structure::graph;
-using namespace common::data_structure::graph::algorithm;
+using namespace cppforge::data_structure::graph;
+using namespace cppforge::data_structure::graph::algorithm;
 
 /**
  * @brief Test fixture for TopologicalSort tests
@@ -25,7 +25,7 @@ protected:
 
 /**
  * @brief Test DFS-based topological sort on a simple DAG
- * @details Verifies that a linear DAG (0â†’1â†’2â†’3) produces a valid topological order
+ * @details Verifies that a linear DAG (0â†?â†?â†?) produces a valid topological order
  */
 TEST_F(TopologicalSortTest, Sort_DAG)
 {
@@ -61,7 +61,7 @@ TEST_F(TopologicalSortTest, Sort_HasCycle)
 /**
  * @brief Test Kahn's (BFS-based) topological sort on a simple DAG
  * @details Verifies that Kahn's algorithm produces a valid topological order
- *          for a linear DAG (0â†’1â†’2â†’3)
+ *          for a linear DAG (0â†?â†?â†?)
  */
 TEST_F(TopologicalSortTest, SortKahn_DAG)
 {

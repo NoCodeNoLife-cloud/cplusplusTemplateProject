@@ -19,7 +19,7 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
-namespace common::serialization
+namespace cppforge::serialization
 {
     /// @class JsonObjectSerializer
     /// @brief A utility class for serializing and deserializing JSON objects using RapidJSON.

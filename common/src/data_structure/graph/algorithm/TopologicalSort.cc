@@ -2,8 +2,8 @@
  * @file TopologicalSort.cc
  * @brief Topological sort algorithms implementation
  * @details Two implementations:
- *          1. sort(): DFS-based â€” performs DFS post-order traversal, reverses the result
- *          2. sortKahn(): Kahn's algorithm â€” repeatedly removes nodes with zero in-degree
+ *          1. sort(): DFS-based â€?performs DFS post-order traversal, reverses the result
+ *          2. sortKahn(): Kahn's algorithm â€?repeatedly removes nodes with zero in-degree
  *          Both detect cycles and return an empty order if the graph is cyclic.
  */
 
@@ -13,7 +13,7 @@
 #include <stack>
 #include <algorithm>
 
-namespace common::data_structure::graph::algorithm
+namespace cppforge::data_structure::graph::algorithm
 {
     namespace
     {

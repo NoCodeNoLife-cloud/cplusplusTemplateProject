@@ -14,7 +14,7 @@
 
 #include "formatter/PrefixFormatter.hpp"
 
-namespace glog::config
+namespace cppforge::glog::config
 {
     std::once_flag GLogConfigurator::glog_init_flag_;
     std::atomic<bool> GLogConfigurator::glog_initialized_{false};

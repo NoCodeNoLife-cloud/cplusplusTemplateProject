@@ -25,7 +25,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace common::data_structure::probabilistic
+namespace cppforge::data_structure::probabilistic
 {
     /// @brief HyperLogLog cardinality estimator with bias corrections.
     ///
@@ -47,7 +47,7 @@ namespace common::data_structure::probabilistic
     ///
     /// @par Memory
     /// m = 2^Precision bytes for registers plus class overhead (~40 bytes).
-    /// Precision=14 â†’ ~16 KB, Precision=16 â†’ ~64 KB.
+    /// Precision=14 â†?~16 KB, Precision=16 â†?~64 KB.
     ///
     /// @par Reference
     /// Flajolet et al., "HyperLogLog: the analysis of a near-optimal
@@ -409,4 +409,4 @@ namespace common::data_structure::probabilistic
         }
     };
 
-} // namespace common::data_structure::probabilistic
+} // namespace cppforge::data_structure::probabilistic

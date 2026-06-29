@@ -1,6 +1,6 @@
 /**
  * @file CharArrayReader.cc
- * @brief CharArrayReader implementation â€” in-memory character stream
+ * @brief CharArrayReader implementation â€?in-memory character stream
  * @details Implements character reading from a std::vector<char> with
  *          offset/length bounds, position tracking, and mark/reset support.
  */
@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <fmt/format.h>
 
-namespace common::io::reader
+namespace cppforge::io::reader
 {
     CharArrayReader::CharArrayReader(const std::vector<char>& buffer) : buf_(buffer), count_(buffer.size())
     {

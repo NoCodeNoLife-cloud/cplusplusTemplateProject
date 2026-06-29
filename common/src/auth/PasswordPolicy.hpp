@@ -1,6 +1,6 @@
 /**
  * @file PasswordPolicy.hpp
- * @brief Password strength policy enforcement â€” length, complexity, history
+ * @brief Password strength policy enforcement â€?length, complexity, history
  * @description Enforces password security rules: minimum/maximum length,
  *          character class requirements (uppercase, lowercase, digit, special),
  *          history-based reuse prevention, and configurable expiration.
@@ -14,7 +14,7 @@
 #pragma once
 #include <string>
 
-namespace common::auth
+namespace cppforge::auth
 {
     /// @brief Password policy configuration class with configurable security rules
     class PasswordPolicy

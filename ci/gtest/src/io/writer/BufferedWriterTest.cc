@@ -13,7 +13,7 @@
 
 #include "io/writer/BufferedWriter.hpp"
 
-using namespace common::io::writer;
+using namespace cppforge::io::writer;
 
 /// @brief Test fixture for BufferedWriter tests using a temporary file.
 class BufferedWriterTest : public testing::Test
