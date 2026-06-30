@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <filesystem>
+#include <cppforge/di/IServiceCollection.hpp>
 
 namespace grpc { class Channel; }
 
@@ -23,6 +24,11 @@ namespace cppforge::starter::auth
         /// @param channel The gRPC channel to use for communication
         /// @return Unique pointer to the created AuthRpcClient
         static std::unique_ptr<AuthRpcClient> createClient(const std::shared_ptr<grpc::Channel>& channel);
+
+        /// @brief Register auth services with DI container
+        /// @param collection The service collection to register with
+        /// @param db_path Path to SQLite database file (for server)
+        static void registerServices(di::IServiceCollection& collection, const std::string& db_path);
 
         AuthServiceFactory() = delete;
     };
