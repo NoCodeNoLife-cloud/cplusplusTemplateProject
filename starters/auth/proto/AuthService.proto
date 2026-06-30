@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package rpc;
+package cppforge.starter.auth;
 
 // Authentication service for user management operations
 service AuthService {

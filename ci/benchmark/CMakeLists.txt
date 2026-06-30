@@ -1,4 +1,4 @@
-# ══════════════════════════════════════════════════════════════════════════
+﻿# ══════════════════════════════════════════════════════════════════════════
 #  Benchmark target — ci_benchmarks
 # ══════════════════════════════════════════════════════════════════════════
 #
@@ -39,7 +39,7 @@ target_link_libraries(${CI_BENCHMARK_TARGET} PRIVATE
     magic_enum::magic_enum
     common_pkg
     glog_service
-    grpc_service
+    starter_auth
     fmt::fmt
     unofficial::sqlite3::sqlite3
     unofficial::mysql-connector-cpp::connector

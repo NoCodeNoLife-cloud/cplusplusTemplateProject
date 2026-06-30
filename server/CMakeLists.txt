@@ -1,4 +1,4 @@
-# ══════════════════════════════════════════════════════════════════════════
+﻿# ══════════════════════════════════════════════════════════════════════════
 #  Server executable — server_app
 # ══════════════════════════════════════════════════════════════════════════
 #
@@ -32,7 +32,7 @@ target_link_libraries(${SERVER_PROJECT} PRIVATE
     magic_enum::magic_enum
     common_pkg
     glog_service
-    grpc_service
+    starter_auth
     fmt::fmt
     unofficial::sqlite3::sqlite3
 )

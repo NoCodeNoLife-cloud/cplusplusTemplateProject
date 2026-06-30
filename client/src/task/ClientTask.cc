@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file ClientTask.cc
  * @brief Implementation of the client task functionality
  * @details This file contains the implementation of ClientTask class methods,
@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "auth/AuthRpcService.hpp"
+#include <cppforge/starter/auth/AuthRpcClient.hpp>
 #include "config/ConfigParam.h"
 #include <cppforge/glog/config/GLogConfigurator.hpp>
 #include <cppforge/io/Console.hpp>
@@ -40,8 +40,8 @@ namespace client_app::task
     {
         init();
 
-        auth::AuthRpcService::init(config::ConfigParam::getInstance().applicationDevConfigPath());
-        const auto& client = auth::AuthRpcService::getInstance();
+        cppforge::starter::auth::AuthRpcClient::init(config::ConfigParam::getInstance().applicationDevConfigPath());
+        const auto& client = cppforge::starter::auth::AuthRpcClient::getInstance();
 
         // Log initial connection state
         DLOG(INFO) << "Initial connection state: " << cppforge::rpc::RpcMetadata::grpcStateToString(client.getConnectivityState());
@@ -63,7 +63,7 @@ namespace client_app::task
         DLOG(INFO) << "Application finished successfully.";
     }
 
-    std::string ClientTask::logIn(const auth::AuthRpcService& auth_rpc_client)
+    std::string ClientTask::logIn(const cppforge::starter::auth::AuthRpcClient& auth_rpc_client)
     {
         DLOG(INFO) << "Starting authentication process";
 
@@ -120,7 +120,7 @@ namespace client_app::task
         return createNewAccount == "y" || createNewAccount == "Y";
     }
 
-    void ClientTask::registerNewUser(const auth::AuthRpcService& auth_rpc_client, const std::string& username, const std::string& password)
+    void ClientTask::registerNewUser(const cppforge::starter::auth::AuthRpcClient& auth_rpc_client, const std::string& username, const std::string& password)
     {
         DLOG(INFO) << "Registering user...";
         const auto registerUserResponse = auth_rpc_client.RegisterUser(username, password);
@@ -134,7 +134,7 @@ namespace client_app::task
         DLOG(INFO) << fmt::format("Registered user successfully, return value: {}", registerUserResponse.message());
     }
 
-    void ClientTask::logOut(const auth::AuthRpcService& auth_rpc_client, const std::string& username)
+    void ClientTask::logOut(const cppforge::starter::auth::AuthRpcClient& auth_rpc_client, const std::string& username)
     {
         if (const auto deleteUserResponse = auth_rpc_client.DeleteUser(username); !deleteUserResponse.success())
         {
@@ -147,7 +147,7 @@ namespace client_app::task
     }
 
     // ReSharper disable once CppMemberFunctionMayBeStatic
-    void ClientTask::task(const auth::AuthRpcService& auth_rpc_client)
+    void ClientTask::task(const cppforge::starter::auth::AuthRpcClient& auth_rpc_client)
     {
         DLOG(INFO) << "Current connection state: " << cppforge::rpc::RpcMetadata::grpcStateToString(auth_rpc_client.getConnectivityState());
         // Implement actual task logic here

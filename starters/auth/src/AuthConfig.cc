@@ -1,12 +1,12 @@
-/**
- * @file AuthRpcParam.cc
- * @brief Implementation of gRPC service configuration options
- * @details This file contains the implementation of AuthRpcServiceOptions class methods,
- *          including builder pattern, YAML deserialization, and parameter validation
- *          for gRPC server configuration.
+﻿/**
+ * @file AuthConfig.cc
+ * @brief Implementation of unified authentication RPC configuration options
+ * @details This file contains the implementation of AuthConfig class methods,
+ *          including builder pattern, YAML deserialization, and parameter validation.
+ *          Merged from server-side and client-side AuthRpcParam implementations.
  */
 
-#include "AuthRpcParam.hpp"
+#include <cppforge/starter/auth/AuthConfig.hpp>
 
 #include <functional>
 #include <utility>
@@ -16,88 +16,88 @@
 
 #include <cppforge/filesystem/type/YamlToolkit.hpp>
 
-namespace server_app::auth
+namespace cppforge::starter::auth
 {
-    AuthRpcParam::AuthRpcParam() = default;
+    AuthConfig::AuthConfig() = default;
 
-    AuthRpcParam::AuthRpcParam(const int32_t max_connection_idle_ms, const int32_t max_connection_age_ms, const int32_t max_connection_age_grace_ms, const int32_t keepalive_time_ms, const int32_t keepalive_timeout_ms, const int32_t keepalive_permit_without_calls, std::string server_address) : max_connection_idle_ms_(max_connection_idle_ms), max_connection_age_ms_(max_connection_age_ms), max_connection_age_grace_ms_(max_connection_age_grace_ms), keepalive_time_ms_(keepalive_time_ms), keepalive_timeout_ms_(keepalive_timeout_ms),
-                                                                                                                                                                                                                                                                                                      keepalive_permit_without_calls_(keepalive_permit_without_calls), server_address_(std::move(server_address))
+    AuthConfig::AuthConfig(const int32_t max_connection_idle_ms, const int32_t max_connection_age_ms, const int32_t max_connection_age_grace_ms, const int32_t keepalive_time_ms, const int32_t keepalive_timeout_ms, const int32_t keepalive_permit_without_calls, std::string server_address) : max_connection_idle_ms_(max_connection_idle_ms), max_connection_age_ms_(max_connection_age_ms), max_connection_age_grace_ms_(max_connection_age_grace_ms), keepalive_time_ms_(keepalive_time_ms), keepalive_timeout_ms_(keepalive_timeout_ms),
+        keepalive_permit_without_calls_(keepalive_permit_without_calls), server_address_(std::move(server_address))
     {
         validateParameters();
     }
 
-    int32_t AuthRpcParam::maxConnectionIdleMs() const
+    int32_t AuthConfig::maxConnectionIdleMs() const
     {
         return max_connection_idle_ms_;
     }
 
-    void AuthRpcParam::maxConnectionIdleMs(const int32_t value)
+    void AuthConfig::maxConnectionIdleMs(const int32_t value)
     {
         max_connection_idle_ms_ = value;
     }
 
-    int32_t AuthRpcParam::maxConnectionAgeMs() const
+    int32_t AuthConfig::maxConnectionAgeMs() const
     {
         return max_connection_age_ms_;
     }
 
-    void AuthRpcParam::maxConnectionAgeMs(const int32_t value)
+    void AuthConfig::maxConnectionAgeMs(const int32_t value)
     {
         max_connection_age_ms_ = value;
     }
 
-    int32_t AuthRpcParam::maxConnectionAgeGraceMs() const
+    int32_t AuthConfig::maxConnectionAgeGraceMs() const
     {
         return max_connection_age_grace_ms_;
     }
 
-    void AuthRpcParam::maxConnectionAgeGraceMs(const int32_t value)
+    void AuthConfig::maxConnectionAgeGraceMs(const int32_t value)
     {
         max_connection_age_grace_ms_ = value;
     }
 
-    int32_t AuthRpcParam::keepaliveTimeMs() const
+    int32_t AuthConfig::keepaliveTimeMs() const
     {
         return keepalive_time_ms_;
     }
 
-    void AuthRpcParam::keepaliveTimeMs(const int32_t value)
+    void AuthConfig::keepaliveTimeMs(const int32_t value)
     {
         keepalive_time_ms_ = value;
     }
 
-    int32_t AuthRpcParam::keepaliveTimeoutMs() const
+    int32_t AuthConfig::keepaliveTimeoutMs() const
     {
         return keepalive_timeout_ms_;
     }
 
-    void AuthRpcParam::keepaliveTimeoutMs(const int32_t value)
+    void AuthConfig::keepaliveTimeoutMs(const int32_t value)
     {
         keepalive_timeout_ms_ = value;
     }
 
-    int32_t AuthRpcParam::keepalivePermitWithoutCalls() const
+    int32_t AuthConfig::keepalivePermitWithoutCalls() const
     {
         return keepalive_permit_without_calls_;
     }
 
-    void AuthRpcParam::keepalivePermitWithoutCalls(const int32_t value)
+    void AuthConfig::keepalivePermitWithoutCalls(const int32_t value)
     {
         keepalive_permit_without_calls_ = value;
     }
 
     // ReSharper disable once CppDFAConstantFunctionResult
-    const std::string& AuthRpcParam::serverAddress() const
+    const std::string& AuthConfig::serverAddress() const
     {
         return server_address_;
     }
 
-    void AuthRpcParam::serverAddress(const std::string& value)
+    void AuthConfig::serverAddress(const std::string& value)
     {
         server_address_ = value;
     }
 
-    void AuthRpcParam::deserializeFromYamlFile(const std::filesystem::path& path)
+    void AuthConfig::deserializeFromYamlFile(const std::filesystem::path& path)
     {
         if (!std::filesystem::exists(path))
         {
@@ -111,7 +111,7 @@ namespace server_app::auth
             const YAML::Node root = cppforge::filesystem::type::YamlToolkit::read(path.string());
             const YAML::Node grpcNode = cppforge::filesystem::type::YamlToolkit::getNodeOrRoot(root, "grpc");
 
-            // Table-driven configuration loading for gRPC parameters
+            // Table-driven configuration loading for all 7 gRPC parameters
             const std::vector<std::pair<std::string, std::function<void()>>> config_handlers = {
                 {
                     "maxConnectionIdleMs", [&]
@@ -167,13 +167,13 @@ namespace server_app::auth
         }
         catch (const YAML::Exception& e)
         {
-            const std::string error_msg = fmt::format("Failed to parse YAML file '{}': {}", path.string(), e.what());
+            const std::string error_msg = fmt::format("Failed to parse YAML file ''{}'': {}", path.string(), e.what());
             LOG(ERROR) << error_msg;
             throw std::runtime_error(std::move(error_msg));
         }
         catch (const std::exception& e)
         {
-            const std::string error_msg = fmt::format("Error processing configuration file '{}': {}", path.string(), e.what());
+            const std::string error_msg = fmt::format("Error processing configuration file ''{}'': {}", path.string(), e.what());
             LOG(ERROR) << error_msg;
             throw std::runtime_error(std::move(error_msg));
         }
@@ -181,7 +181,7 @@ namespace server_app::auth
         validateParameters();
     }
 
-    void AuthRpcParam::validateParameters() const
+    void AuthConfig::validateParameters() const
     {
         // Table-driven validation for numeric parameter checks
         const std::vector numeric_validations = {
@@ -216,62 +216,62 @@ namespace server_app::auth
         }
     }
 
-    AuthRpcParam::Builder& AuthRpcParam::Builder::maxConnectionIdleMs(const int32_t value)
+    AuthConfig::Builder& AuthConfig::Builder::maxConnectionIdleMs(const int32_t value)
     {
         max_connection_idle_ms_ = value;
         return *this;
     }
 
-    AuthRpcParam::Builder& AuthRpcParam::Builder::maxConnectionAgeMs(const int32_t value)
+    AuthConfig::Builder& AuthConfig::Builder::maxConnectionAgeMs(const int32_t value)
     {
         max_connection_age_ms_ = value;
         return *this;
     }
 
-    AuthRpcParam::Builder& AuthRpcParam::Builder::maxConnectionAgeGraceMs(const int32_t value)
+    AuthConfig::Builder& AuthConfig::Builder::maxConnectionAgeGraceMs(const int32_t value)
     {
         max_connection_age_grace_ms_ = value;
         return *this;
     }
 
-    AuthRpcParam::Builder& AuthRpcParam::Builder::keepaliveTimeMs(const int32_t value)
+    AuthConfig::Builder& AuthConfig::Builder::keepaliveTimeMs(const int32_t value)
     {
         keepalive_time_ms_ = value;
         return *this;
     }
 
-    AuthRpcParam::Builder& AuthRpcParam::Builder::keepaliveTimeoutMs(const int32_t value)
+    AuthConfig::Builder& AuthConfig::Builder::keepaliveTimeoutMs(const int32_t value)
     {
         keepalive_timeout_ms_ = value;
         return *this;
     }
 
-    AuthRpcParam::Builder& AuthRpcParam::Builder::keepalivePermitWithoutCalls(const int32_t value)
+    AuthConfig::Builder& AuthConfig::Builder::keepalivePermitWithoutCalls(const int32_t value)
     {
         keepalive_permit_without_calls_ = value;
         return *this;
     }
 
-    AuthRpcParam::Builder& AuthRpcParam::Builder::serverAddress(const std::string& value)
+    AuthConfig::Builder& AuthConfig::Builder::serverAddress(const std::string& value)
     {
         server_address_ = value;
         return *this;
     }
 
-    AuthRpcParam AuthRpcParam::Builder::build() const
+    AuthConfig AuthConfig::Builder::build() const
     {
-        AuthRpcParam options{max_connection_idle_ms_, max_connection_age_ms_, max_connection_age_grace_ms_, keepalive_time_ms_, keepalive_timeout_ms_, keepalive_permit_without_calls_, server_address_};
+        AuthConfig options{max_connection_idle_ms_, max_connection_age_ms_, max_connection_age_grace_ms_, keepalive_time_ms_, keepalive_timeout_ms_, keepalive_permit_without_calls_, server_address_};
         options.validateParameters();
         return options;
     }
 
-    AuthRpcParam::Builder AuthRpcParam::builder()
+    AuthConfig::Builder AuthConfig::builder()
     {
         return Builder{};
     }
 }
 
-bool YAML::convert<server_app::auth::AuthRpcParam>::decode(const Node& node, server_app::auth::AuthRpcParam& rhs)
+bool YAML::convert<cppforge::starter::auth::AuthConfig>::decode(const Node& node, cppforge::starter::auth::AuthConfig& rhs)
 {
     const std::vector<std::pair<std::string, std::function<void()>>> config_handlers = {
         {
@@ -328,7 +328,7 @@ bool YAML::convert<server_app::auth::AuthRpcParam>::decode(const Node& node, ser
     return true;
 }
 
-YAML::Node YAML::convert<server_app::auth::AuthRpcParam>::encode(const server_app::auth::AuthRpcParam& rhs)
+YAML::Node YAML::convert<cppforge::starter::auth::AuthConfig>::encode(const cppforge::starter::auth::AuthConfig& rhs)
 {
     Node node;
     node["maxConnectionIdleMs"] = rhs.maxConnectionIdleMs();

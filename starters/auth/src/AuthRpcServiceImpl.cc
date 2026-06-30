@@ -1,35 +1,33 @@
-/**
- * @file AuthRpcService.cc
+﻿/**
+ * @file AuthRpcServiceImpl.cc
  * @brief Implementation of authentication RPC service
- * @details This file contains the implementation of AuthRpcService class methods,
+ * @details This file contains the implementation of AuthRpcServiceImpl class methods,
  *          including user registration, authentication, password management,
  *          account deletion, and exception handling for gRPC requests.
  */
-#include "AuthRpcService.hpp"
+#include <cppforge/starter/auth/AuthRpcServiceImpl.hpp>
 
 #include <string_view>
 #include <unordered_map>
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-namespace server_app::auth
+namespace cppforge::starter::auth
 {
     namespace
     {
-        std::unique_ptr<AuthRpcService> s_instance = nullptr;
+        std::unique_ptr<AuthRpcServiceImpl> s_instance = nullptr;
     }
 
-    /// @brief Map exception types to error codes using table-driven approach
-    const std::unordered_map<std::string_view, int> AuthRpcService::error_map_ = {
-        {"already exists", 409}, // Conflict
-        {"not found", 404}, // Not found
-        {"locked", 423}, // Locked
-        {"Invalid password", 401} // Unauthorized
+    const std::unordered_map<std::string_view, int> AuthRpcServiceImpl::error_map_ = {
+        {"already exists", 409},
+        {"not found", 404},
+        {"locked", 423},
+        {"Invalid password", 401}
     };
 
-    /// @brief Helper function to validate request parameters
     template <typename RequestType, typename ValidatorFunc>
-    [[nodiscard]] static std::optional<grpc::Status> ValidateRequest(const RequestType* request, ValidatorFunc&& validator, const std::string& error_msg, rpc::AuthResponse* response)
+    [[nodiscard]] static std::optional<grpc::Status> ValidateRequest(const RequestType* request, ValidatorFunc&& validator, const std::string& error_msg, cppforge::starter::auth::AuthResponse* response)
     {
         if (!request || !validator(request))
         {
@@ -38,35 +36,35 @@ namespace server_app::auth
             response->set_error_code(400);
             return grpc::Status{grpc::StatusCode::INVALID_ARGUMENT, "Invalid request parameters"};
         }
-        return std::nullopt; // No error, continue with normal processing
+        return std::nullopt;
     }
 
-    void AuthRpcService::init(const std::filesystem::path& config_path)
+    void AuthRpcServiceImpl::init(const std::filesystem::path& config_path)
     {
-        LOG_IF(FATAL, s_instance) << "AuthRpcService already initialized";
+        LOG_IF(FATAL, s_instance) << "AuthRpcServiceImpl already initialized";
 
         DLOG(INFO) << "Setting up gRPC server configuration";
 
-        AuthRpcParam rpc_options;
+        AuthConfig rpc_options;
         rpc_options.deserializeFromYamlFile(config_path);
 
         DLOG(INFO) << fmt::format("gRPC configuration loaded successfully - Max Connection Idle: {}ms, Max Connection Age: {}ms, Keepalive Time: {}ms, Keepalive Timeout: {}ms, Permit Without Calls: {}, Server Address: {}",
             rpc_options.maxConnectionIdleMs(), rpc_options.maxConnectionAgeMs(), rpc_options.keepaliveTimeMs(),
             rpc_options.keepaliveTimeoutMs(), rpc_options.keepalivePermitWithoutCalls(), rpc_options.serverAddress());
 
-        s_instance = std::unique_ptr<AuthRpcService>(new AuthRpcService("./users.db"));
+        s_instance = std::unique_ptr<AuthRpcServiceImpl>(new AuthRpcServiceImpl("./users.db"));
         s_instance->options_ = std::move(rpc_options);
     }
 
-    AuthRpcService& AuthRpcService::getInstance()
+    AuthRpcServiceImpl& AuthRpcServiceImpl::getInstance()
     {
-        LOG_IF(FATAL, !s_instance) << "AuthRpcService not initialized. Call init() first.";
+        LOG_IF(FATAL, !s_instance) << "AuthRpcServiceImpl not initialized. Call init() first.";
         return *s_instance;
     }
 
-    void AuthRpcService::start()
+    void AuthRpcServiceImpl::start()
     {
-        LOG_IF(FATAL, !s_instance) << "AuthRpcService not initialized. Call init() first.";
+        LOG_IF(FATAL, !s_instance) << "AuthRpcServiceImpl not initialized. Call init() first.";
 
         const std::string server_address = options_.serverAddress();
         DLOG(INFO) << fmt::format("Configuring server to listen on: {}", server_address);
@@ -103,7 +101,7 @@ namespace server_app::auth
         server_->Wait();
     }
 
-    void AuthRpcService::shutdown()
+    void AuthRpcServiceImpl::shutdown()
     {
         if (server_)
         {
@@ -113,24 +111,23 @@ namespace server_app::auth
         }
     }
 
-    const AuthRpcParam& AuthRpcService::getOptions() const
+    const AuthConfig& AuthRpcServiceImpl::getOptions() const
     {
         return options_;
     }
 
-    AuthRpcService::~AuthRpcService()
+    AuthRpcServiceImpl::~AuthRpcServiceImpl()
     {
         shutdown();
     }
 
-    AuthRpcService::AuthRpcService(const std::string& db_path) : authenticator_(db_path)
+    AuthRpcServiceImpl::AuthRpcServiceImpl(const std::string& db_path) : authenticator_(db_path)
     {
     }
 
-    [[nodiscard]] grpc::Status AuthRpcService::RegisterUser(grpc::ServerContext* /*context*/, const rpc::RegisterUserRequest* const request, rpc::AuthResponse* const response)
+    [[nodiscard]] grpc::Status AuthRpcServiceImpl::RegisterUser(grpc::ServerContext* /*context*/, const cppforge::starter::auth::RegisterUserRequest* const request, cppforge::starter::auth::AuthResponse* const response)
     {
-        // Validate request parameters using table-driven validation
-        const auto validation_status = ValidateRequest(request, [](const rpc::RegisterUserRequest* req)
+        const auto validation_status = ValidateRequest(request, [](const cppforge::starter::auth::RegisterUserRequest* req)
         {
             return !req->username().empty() && !req->password().empty();
         }, "Invalid request: username and password are required", response);
@@ -162,10 +159,9 @@ namespace server_app::auth
         }
     }
 
-    [[nodiscard]] grpc::Status AuthRpcService::AuthenticateUser(grpc::ServerContext* /*context*/, const rpc::AuthenticateUserRequest* const request, rpc::AuthResponse* const response)
+    [[nodiscard]] grpc::Status AuthRpcServiceImpl::AuthenticateUser(grpc::ServerContext* /*context*/, const cppforge::starter::auth::AuthenticateUserRequest* const request, cppforge::starter::auth::AuthResponse* const response)
     {
-        // Validate request parameters using table-driven validation
-        const auto validation_status = ValidateRequest(request, [](const rpc::AuthenticateUserRequest* req)
+        const auto validation_status = ValidateRequest(request, [](const cppforge::starter::auth::AuthenticateUserRequest* req)
         {
             return !req->username().empty() && !req->password().empty();
         }, "Invalid request: username and password are required", response);
@@ -198,10 +194,9 @@ namespace server_app::auth
         }
     }
 
-    [[nodiscard]] grpc::Status AuthRpcService::ChangePassword(grpc::ServerContext* /*context*/, const rpc::ChangePasswordRequest* const request, rpc::AuthResponse* const response)
+    [[nodiscard]] grpc::Status AuthRpcServiceImpl::ChangePassword(grpc::ServerContext* /*context*/, const cppforge::starter::auth::ChangePasswordRequest* const request, cppforge::starter::auth::AuthResponse* const response)
     {
-        // Validate request parameters using table-driven validation
-        const auto validation_status = ValidateRequest(request, [](const rpc::ChangePasswordRequest* req)
+        const auto validation_status = ValidateRequest(request, [](const cppforge::starter::auth::ChangePasswordRequest* req)
         {
             return !req->username().empty() && !req->current_password().empty() && !req->new_password().empty();
         }, "Invalid request: username, current password, and new password are required", response);
@@ -235,10 +230,9 @@ namespace server_app::auth
         }
     }
 
-    [[nodiscard]] grpc::Status AuthRpcService::ResetPassword(grpc::ServerContext* /*context*/, const rpc::ResetPasswordRequest* const request, rpc::AuthResponse* const response)
+    [[nodiscard]] grpc::Status AuthRpcServiceImpl::ResetPassword(grpc::ServerContext* /*context*/, const cppforge::starter::auth::ResetPasswordRequest* const request, cppforge::starter::auth::AuthResponse* const response)
     {
-        // Validate request parameters using table-driven validation
-        const auto validation_status = ValidateRequest(request, [](const rpc::ResetPasswordRequest* req)
+        const auto validation_status = ValidateRequest(request, [](const cppforge::starter::auth::ResetPasswordRequest* req)
         {
             return !req->username().empty() && !req->new_password().empty();
         }, "Invalid request: username and new password are required", response);
@@ -271,10 +265,9 @@ namespace server_app::auth
         }
     }
 
-    [[nodiscard]] grpc::Status AuthRpcService::DeleteUser(grpc::ServerContext* /*context*/, const rpc::DeleteUserRequest* const request, rpc::AuthResponse* const response)
+    [[nodiscard]] grpc::Status AuthRpcServiceImpl::DeleteUser(grpc::ServerContext* /*context*/, const cppforge::starter::auth::DeleteUserRequest* const request, cppforge::starter::auth::AuthResponse* const response)
     {
-        // Validate request parameters using table-driven validation
-        const auto validation_status = ValidateRequest(request, [](const rpc::DeleteUserRequest* req)
+        const auto validation_status = ValidateRequest(request, [](const cppforge::starter::auth::DeleteUserRequest* req)
         {
             return !req->username().empty();
         }, "Invalid request: username is required", response);
@@ -301,10 +294,9 @@ namespace server_app::auth
         }
     }
 
-    [[nodiscard]] grpc::Status AuthRpcService::UserExists(grpc::ServerContext* /*context*/, const rpc::UserExistsRequest* const request, rpc::AuthResponse* const response)
+    [[nodiscard]] grpc::Status AuthRpcServiceImpl::UserExists(grpc::ServerContext* /*context*/, const cppforge::starter::auth::UserExistsRequest* const request, cppforge::starter::auth::AuthResponse* const response)
     {
-        // Validate request parameters using table-driven validation
-        const auto validation_status = ValidateRequest(request, [](const rpc::UserExistsRequest* req)
+        const auto validation_status = ValidateRequest(request, [](const cppforge::starter::auth::UserExistsRequest* req)
         {
             return !req->username().empty();
         }, "Invalid request: username is required", response);
@@ -331,15 +323,14 @@ namespace server_app::auth
         }
     }
 
-    [[nodiscard]] grpc::Status AuthRpcService::HandleAuthException(const cppforge::auth::AuthenticationException& e, rpc::AuthResponse* const response)
+    [[nodiscard]] grpc::Status AuthRpcServiceImpl::HandleAuthException(const cppforge::auth::AuthenticationException& e, cppforge::starter::auth::AuthResponse* const response)
     {
         response->set_success(false);
         response->set_message(e.what());
 
         const std::string error_msg = e.what();
-        response->set_error_code(400); // Default error code (Bad request)
+        response->set_error_code(400);
 
-        // Use range-based for loop to check for error patterns
         for (const auto& [pattern, code] : error_map_)
         {
             if (error_msg.find(pattern) != std::string::npos)

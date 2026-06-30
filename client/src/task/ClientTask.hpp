@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file ClientTask.hpp
  * @brief Client task implementation for the application
  * @details This header defines the ClientTask class that manages the client application
@@ -10,7 +10,7 @@
 #include <memory>
 #include <string>
 
-#include "auth/AuthRpcService.hpp"
+#include <cppforge/starter/auth/AuthRpcClient.hpp>
 #include <cppforge/interface/task/ITask.hpp>
 #include <cppforge/system/FunctionProfiler.hpp>
 
@@ -49,7 +49,7 @@ namespace client_app::task
         /// @brief Logs a message indicating that the client is logging in
         /// @param auth_rpc_client Reference to the RPC client for authentication
         /// @return Username of the authenticated user
-        [[nodiscard]] static std::string logIn(const auth::AuthRpcService& auth_rpc_client);
+        [[nodiscard]] static std::string logIn(const cppforge::starter::auth::AuthRpcClient& auth_rpc_client);
 
         /// @brief Check if a new account should be created
         /// @return True if user wants to create a new account
@@ -60,18 +60,18 @@ namespace client_app::task
         /// @param username Username for the new account
         /// @param password Password for the new account
         /// @throws std::runtime_error if registration fails
-        static void registerNewUser(const auth::AuthRpcService& auth_rpc_client, const std::string& username, const std::string& password);
+        static void registerNewUser(const cppforge::starter::auth::AuthRpcClient& auth_rpc_client, const std::string& username, const std::string& password);
 
         // Changed return type to void since it throws on failure
 
         /// @brief Logs a message indicating that the client is logging out
         /// @param auth_rpc_client Reference to the RPC client for logout operations
         /// @param username Username of the user to log out
-        static void logOut(const auth::AuthRpcService& auth_rpc_client, const std::string& username) ;
+        static void logOut(const cppforge::starter::auth::AuthRpcClient& auth_rpc_client, const std::string& username) ;
 
         /// @brief Main task
         /// @param auth_rpc_client Reference to the RPC client for executing tasks
-        static void task(const auth::AuthRpcService& auth_rpc_client) ;
+        static void task(const cppforge::starter::auth::AuthRpcClient& auth_rpc_client) ;
 
         /// @brief Logs client system information
         /// @details Logs OS version and CPU model to the application log

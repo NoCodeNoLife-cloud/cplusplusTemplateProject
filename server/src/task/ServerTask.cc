@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file ServerTask.cc
  * @brief Implementation of server task functionality
  * @details This file contains the implementation of ServerTask class methods,
@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 
-#include "auth/AuthRpcService.hpp"
+#include <cppforge/starter/auth/AuthRpcServiceImpl.hpp>
 #include "config/ConfigParam.hpp"
 #include <cppforge/glog/config/GLogConfigurator.hpp>
 
@@ -36,8 +36,8 @@ namespace server_app::task
         {
             init();
 
-            auth::AuthRpcService::init(config::ConfigParam::getInstance().applicationDevConfigPath());
-            auth::AuthRpcService::getInstance().start();
+            cppforge::starter::auth::AuthRpcServiceImpl::init(config::ConfigParam::getInstance().applicationDevConfigPath());
+            cppforge::starter::auth::AuthRpcServiceImpl::getInstance().start();
         }
         catch (const std::exception& e)
         {

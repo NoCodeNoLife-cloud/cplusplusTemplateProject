@@ -1,4 +1,4 @@
-# ══════════════════════════════════════════════════════════════════════════
+﻿# ══════════════════════════════════════════════════════════════════════════
 #  GTest unit tests �?per-directory parallel executables
 # ══════════════════════════════════════════════════════════════════════════
 #
@@ -11,8 +11,6 @@
 
 # ── Shared support sources ─────────────────────────────────────────────
 set(CI_GTEST_SHARED_SRC
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../client/src/auth/AuthRpcParam.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../server/src/auth/AuthRpcParam.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/../../server/src/config/ConfigParam.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/../../client/src/config/ConfigParam.cc
 )
@@ -37,7 +35,7 @@ set(CI_GTEST_LIBS
     Boost::serialization
     common_pkg
     glog_service
-    grpc_service
+    starter_auth
     fmt::fmt
     unofficial::sqlite3::sqlite3
     unofficial::mysql-connector-cpp::connector
