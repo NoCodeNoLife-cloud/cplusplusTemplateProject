@@ -38,7 +38,7 @@ proto/generated/
 # OpenCode artifacts (agentbridge, cache, workflow state)
 /.agentbridge/
 .cache/
-artifact/
+.artifact/
 
 # Generated version header
 common/include/cppforge/Version.h
