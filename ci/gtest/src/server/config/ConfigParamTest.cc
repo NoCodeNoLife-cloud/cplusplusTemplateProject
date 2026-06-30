@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../../server/src/config/ConfigParam.hpp"
+#include <config/ConfigParam.hpp>
 
 using namespace server_app::config;
 

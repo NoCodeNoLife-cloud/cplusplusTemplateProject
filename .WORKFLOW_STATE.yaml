@@ -1,36 +1,23 @@
-metadata:
+﻿metadata:
   phase: EXECUTE
-  bus_stage: T3
-  tier: standard
+  bus_stage: COMMIT
+  tier: cleanup
   project: cppforge
-  branch: refactor/phase-6
+  branch: main
 
 tasks:
-  - id: task-6-5
-    title: "GitHub Actions CI"
+  - id: cleanup-residuals
+    title: "Clean up phase migration residuals"
     status: completed
     acceptance_criteria:
-      - "ci.yml created with build matrix"
-      - "vcpkg install, CMake configure, build, test steps"
-      - "install-verify job checks installed artifacts"
-    rollback_plan: "Delete ci.yml"
-  - id: task-6-6
-    title: "Doxygen Configuration"
-    status: completed
-    acceptance_criteria:
-      - "Doxyfile created with correct INPUT paths"
-      - "docs.yml created for doc generation"
-    rollback_plan: "Delete Doxyfile and docs.yml"
-  - id: task-6-fix
-    title: "Fix Phase 6 P0 Blockers and P1 Warnings"
+      - "Doxyfile deleted"
+      - "CMakeLists.txt comment fixed"
+      - "Relative include fixed"
+    rollback_plan: "git checkout -- CMakeLists.txt ci/gtest/src/server/config/ConfigParamTest.cc; git checkout HEAD -- Doxyfile"
+
+  - id: commit-cleanup
+    title: "Commit cleanup changes"
     status: in_progress
     acceptance_criteria:
-      - "JWT uses RapidJSON"
-      - "Signature uses CRYPTO_memcmp"
-      - "setSecret removed"
-      - "L2 cache warning added"
-      - "Span thread safety docs added"
-      - "TaskScheduler running check added"
-      - "CI cache and vcpkg pin fixed"
-      - "Default JWT secret warning added"
-    rollback_plan: "Revert via git checkout"
+      - "All changes committed"
+    rollback_plan: "git revert HEAD"

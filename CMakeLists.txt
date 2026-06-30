@@ -4,7 +4,7 @@
 #
 # Top-level CMake configuration for the entire C++ project.
 # Defines global compiler settings, toolchain, dependencies, and
-# sub-project entry points (common, proto, log, client, server, ci).
+# sub-project entry points (common, log, starters, client, server, ci).
 #
 # ══════════════════════════════════════════════════════════════════════════
 
