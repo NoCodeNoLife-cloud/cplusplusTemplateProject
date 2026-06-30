@@ -1,1 +1,5 @@
-﻿add_subdirectory(auth)
+add_subdirectory(auth)
+add_subdirectory(cache)
+add_subdirectory(scheduler)
+add_subdirectory(security)
+add_subdirectory(tracing)

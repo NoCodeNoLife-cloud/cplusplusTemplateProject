@@ -1,66 +1,36 @@
-﻿metadata:
+metadata:
   phase: EXECUTE
-  bus_stage: T4
+  bus_stage: T3
   tier: standard
   project: cppforge
-  branch: refactor/phase-5
+  branch: refactor/phase-6
 
 tasks:
-  - id: task-5-1
-    title: "HTTP Interfaces"
+  - id: task-6-5
+    title: "GitHub Actions CI"
     status: completed
     acceptance_criteria:
-      - "IHttpServer.hpp, IHttpRequest.hpp, IHttpResponse.hpp, HttpStatus.hpp created"
-      - "All interfaces have pure virtual methods and virtual destructors"
-    rollback_plan: "Delete the 4 header files"
-  - id: task-5-2
-    title: "Middleware Chain"
+      - "ci.yml created with build matrix"
+      - "vcpkg install, CMake configure, build, test steps"
+      - "install-verify job checks installed artifacts"
+    rollback_plan: "Delete ci.yml"
+  - id: task-6-6
+    title: "Doxygen Configuration"
     status: completed
     acceptance_criteria:
-      - "IMiddleware.hpp, MiddlewareChain.hpp/.cc created"
-      - "Middleware chain executes in order, supports short-circuit"
-    rollback_plan: "Delete middleware files"
-  - id: task-5-3
-    title: "Router"
-    status: completed
-    acceptance_criteria:
-      - "Router.hpp/.cc created with get/post/put/del methods"
-      - "Route matching by method and path"
-    rollback_plan: "Delete router files"
-  - id: task-5-4
-    title: "Metrics"
-    status: completed
-    acceptance_criteria:
-      - "IMetricsRegistry.hpp, Counter.hpp, Gauge.hpp, Histogram.hpp, PrometheusExporter.hpp/.cc created"
-      - "Prometheus text format serialization works"
-    rollback_plan: "Delete metrics files"
-  - id: task-5-5
-    title: "Health Check"
-    status: completed
-    acceptance_criteria:
-      - "IHealthCheck.hpp, HealthEndpoint.hpp/.cc created"
-      - "JSON output with UP/DOWN status"
-    rollback_plan: "Delete health files"
-  - id: task-5-6
-    title: "Event Bus"
-    status: completed
-    acceptance_criteria:
-      - "IEventBus.hpp, EventBus.hpp/.cc created"
-      - "Thread-safe pub/sub"
-    rollback_plan: "Delete event bus files"
-  - id: task-5-7
-    title: "Config Hot-Reload"
-    status: completed
-    acceptance_criteria:
-      - "ConfigWatcher.hpp/.cc created"
-      - "File change detection with callback"
-    rollback_plan: "Delete config watcher files"
-  - id: task-5-8
-    title: "Tests - Fix include + create EventBusTest + ConfigWatcherTest"
+      - "Doxyfile created with correct INPUT paths"
+      - "docs.yml created for doc generation"
+    rollback_plan: "Delete Doxyfile and docs.yml"
+  - id: task-6-fix
+    title: "Fix Phase 6 P0 Blockers and P1 Warnings"
     status: in_progress
     acceptance_criteria:
-      - "HealthEndpoint.hpp include path fixed"
-      - "EventBusTest.cc created with comprehensive tests"
-      - "ConfigWatcherTest.cc created with file-change tests"
-      - "Build and tests pass"
-    rollback_plan: "Revert include fix, delete new test files"
+      - "JWT uses RapidJSON"
+      - "Signature uses CRYPTO_memcmp"
+      - "setSecret removed"
+      - "L2 cache warning added"
+      - "Span thread safety docs added"
+      - "TaskScheduler running check added"
+      - "CI cache and vcpkg pin fixed"
+      - "Default JWT secret warning added"
+    rollback_plan: "Revert via git checkout"

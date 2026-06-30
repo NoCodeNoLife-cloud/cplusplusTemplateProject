@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [main, refactor/*]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        build_type: [Debug, Release]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Cache vcpkg
+      uses: actions/cache@v4
+      id: vcpkg-cache
+      with:
+        path: |
+          vcpkg/buildtrees
+          vcpkg/packages
+          vcpkg/downloads
+          vcpkg/installed
+        key: vcpkg-${{ matrix.os }}-${{ matrix.build_type }}-${{ hashFiles('vcpkg.json') }}
+        restore-keys: |
+          vcpkg-${{ matrix.os }}-${{ matrix.build_type }}-
+
+    - name: Install vcpkg
+      if: steps.vcpkg-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        if [ ! -d "vcpkg" ]; then
+          git clone --depth 1 --branch 2024.02.14 https://github.com/microsoft/vcpkg.git
+        fi
+        if [ "$RUNNER_OS" = "Windows" ]; then
+          ./vcpkg/bootstrap-vcpkg.bat
+        else
+          ./vcpkg/bootstrap-vcpkg.sh
+        fi
+
+    - name: Configure CMake
+      run: >
+        cmake -S . -B build
+        -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+    - name: Build
+      run: cmake --build build --config ${{ matrix.build_type }}
+
+    - name: Test
+      run: ctest --test-dir build -C ${{ matrix.build_type }} -j 4 --output-on-failure
+
+  install-verify:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Cache vcpkg
+      uses: actions/cache@v4
+      id: vcpkg-cache-verify
+      with:
+        path: |
+          vcpkg/buildtrees
+          vcpkg/packages
+          vcpkg/downloads
+          vcpkg/installed
+        key: vcpkg-${{ runner.os }}-Release-${{ hashFiles('vcpkg.json') }}
+        restore-keys: |
+          vcpkg-${{ runner.os }}-Release-
+
+    - name: Install vcpkg
+      if: steps.vcpkg-cache-verify.outputs.cache-hit != 'true'
+      run: |
+        if [ ! -d "vcpkg" ]; then
+          git clone --depth 1 --branch 2024.02.14 https://github.com/microsoft/vcpkg.git
+        fi
+        ./vcpkg/bootstrap-vcpkg.sh
+
+    - name: Build and Install
+      run: |
+        cmake -S . -B build \
+          -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake \
+          -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --config Release
+        cmake --install build --prefix ./install
+
+    - name: Verify Install
+      run: |
+        test -f install/lib/libcommon_pkg.a || test -f install/lib/common_pkg.lib
+        test -d install/include/cppforge
+        test -d install/include/cppforge/toolkit
